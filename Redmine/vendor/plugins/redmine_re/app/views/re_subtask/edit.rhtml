@@ -1,0 +1,32 @@
+<h2>Subtask</h2>
+
+<%= error_messages_for :re_subtask %>
+
+
+<% form_for :re_subtask, :url => {:action => "edit"}, :class => 'tabular' do |f| %>
+    <%= hidden_field_tag :project_id, @project.id %>
+
+    <div class="box">
+
+
+  <% f.fields_for :re_artifact_attributes do |re_artifact| %>
+        <%= render "re_artifact/shared_fields", :f => re_artifact %>
+   <% end %>
+
+      <p>
+        <%= f.label :description, 'Description' %> <%= f.text_field :description %>
+      </p>
+            <p>
+        <%= f.label :re_task_id, 're_task_id' %> <%= f.text_field :re_task_id %>
+      </p>
+
+      <p>
+        <%= submit_tag 'Save', :action => :edit %>
+      </p>
+
+    </div>
+
+    <%= javascript_tag "Form.Element.focus('re_subtask_re_artifact_attributes_name');" %>
+<% end %>
+
+<%= link_to 'Back', :action => :index, :project_id => @project.id %>

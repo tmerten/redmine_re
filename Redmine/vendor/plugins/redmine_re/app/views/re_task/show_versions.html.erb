@@ -1,0 +1,46 @@
+<h2>Task Versions</h2>
+
+<style>
+td {
+  width:300px;
+}
+thead {
+  background-color:#507aaa;
+  color:#f8f8f8;
+}
+tr#odd {
+  background-color:#a5bfff;
+}
+#taskinfo {
+  margin-left:20px;
+}
+</style>
+
+
+
+	<div id="taskinfo">
+       <h4><%= @task.re_artifact.name %> </h4>
+		<h5>Versionen:</h5>
+		<table>
+		<thead><tr><td>Nr:</td><td>Description</td><td>Updated</td><td>Versioned By Artifact</td><td>action</td></tr></thead>
+			<% @task.versions.each_with_index do |taskVersion, i| %>
+				<tr class="<%= cycle('odd', 'even') %>">
+
+                <td><%= taskVersion.version %></td>
+                <td><%= taskVersion.description %></td>
+                <td><%= taskVersion.updated_at.to_s + " by " + taskVersion.updated_by.to_s %></td>
+
+                <td><%= taskVersion.versioned_by_artifact_id%></td>
+
+                <% if(taskVersion.version != @task.version) %>
+                    <td><%= link_to "ChangeToThis", :action => "change_version", :id => @task.id, :project_id => @project.id, :version => taskVersion.version  %></td>
+				<% else %>
+                    <td><%= "current" %></td>
+                <% end %>
+
+                </tr>
+
+			<% end %>
+		</table>
+	</div>
+<h4></h4>

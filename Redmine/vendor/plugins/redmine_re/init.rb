@@ -14,7 +14,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
     permission( :re,
       {
         :requirements => [:index, :treeview],
-        :re_goal => [:index, :edit, :new, :delete]
+        :re_goal => [:index, :edit, :new, :delete] ,
+        :re_task => [:index, :edit, :new, :delete, :show_versions, :change_version] ,
+        :re_subtask => [:index, :edit, :new, :delete, :show_versions, :change_version]
       },
       :public => true
     )

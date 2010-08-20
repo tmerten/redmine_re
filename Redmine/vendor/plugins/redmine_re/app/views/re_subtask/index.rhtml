@@ -1,0 +1,35 @@
+<h3><%= l(:requirements_overview) %></h3>
+
+<%# content_for :header_tags do %>
+  <%#= stylesheet_link_tag "example.css", :plugin => "meetings", :media => "screen" %>
+<%# end %>
+<table>
+    <thead>
+        <tr>
+          <% for column in ReSubtask.content_columns %>
+                <td><b><%= column.name %></b></td>
+              <% end %>
+          <% for column in ReArtifact.content_columns %>
+                          <td><b><%= column.name %></b></td>
+        <% end %>
+        <td>Edit</td>
+        </tr>
+    </thead>
+    <tbody>
+        <% for subtask in @subtasks do %>
+            <tr>
+              <% for column in ReSubtask.content_columns %>
+                <td><%= subtask.send(column.name) %></td>
+              <% end %>
+
+              <% for column in ReArtifact.content_columns %>
+                <td><%= subtask.re_artifact.send(column.name) %></td>
+              <% end %>
+              <td><%= link_to 'edit', :action => 'edit', :id =>subtask.id, :project_id => @project.id %></td>
+              <td><%= link_to 'Show Versions', :action => 'show_versions', :id =>subtask.id, :project_id => @project.id %></td>              
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+<%= link_to 'Create Subtask', :action => 'edit', :project_id => @project.id %>  |
