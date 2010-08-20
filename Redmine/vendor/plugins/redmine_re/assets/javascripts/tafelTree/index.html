@@ -1,0 +1,319 @@
+<html>
+<head>
+	<title>OpenOfficeGeneration Documentation</title>
+	<link rel="stylesheet" type="text/css" href="css/tree.css" />
+	<style>
+	body {
+	background-color: #FFEEFF;
+	}
+	.mover {
+	background-color: #FF9999;
+	color: #FFEEEE;
+	}
+	
+	.special {
+	color: #CC0000;
+	}
+	
+	.tafelTree h3, .tafelTree p, .tafelTree ol {
+	margin: 0;
+	padding: 0;
+	}
+	
+	.tafelTree p {
+	padding-bottom: 1em;
+	}
+	
+	.tafelTree h3 {
+	color: #009900;
+	}
+	</style>
+	<script type="text/javascript" src="js/prototype.js"></script>
+	<script type="text/javascript" src="js/scriptaculous.js"></script>
+	<script type="text/javascript" src="Tree-optimized.js"></script>
+	<script type="text/javascript">
+	function opp(branch, response){
+		return response;
+	}
+	var struct = [
+		{
+		'id' : 'root0',
+		'txt' : 'root 0'
+		},
+		{
+		'id':'root1',
+		'txt':'TafelTree JS',
+		'img':'base.gif',
+		'items':[
+			{
+			'id':'child1',
+			'txt':'L\'objet en question',
+			'items':[
+				{
+				'id':'child2',
+				'txt':'<span>Ses méthodes</span>'
+				},
+				{
+				'id':'3',
+				'txt':'Ses propriétés',
+				'checkbox':false
+				},
+				{
+				'id':'child4',
+				'txt':'Ses functions utilisateur (genre onclick)',
+				'onclick':function(branch){alert("le texte de ce noeud est le suivant : \n" + branch.struct.txt);},
+				'items' : [
+					{
+					'id' : 'blu',
+					'txt' : 'hop',
+					'check':1
+					}
+				]
+				},
+				{
+				'id':'child10',
+				'txt':"<div><h3>On peut même mettre de l\'HTML</h3><p>Y\'a rien besoin de spécial, juste avoir :</p><ol><li>des notions du HTML</li><li>de l'imagination</li><li>Echapper les simples quotes (\\' au lieu de \')</li></ol></div>"
+				},
+				{
+				'id':'child4t',
+				'txt':'Ici, on a une classe CSS particulière',
+				'style' : 'special'
+				},
+				{
+				'id':'child8',
+				'txt':'Celui-ci est draggable',
+				'ondrop':function(move, here){return true;}
+				}
+			]
+			},
+			{
+			'id':'child5',
+			'txt':'Les événements',
+			'items':[
+				{
+				'id':'child6',
+				'txt':'Un petit mouseover et mouseout',
+				'img':'globe.gif',
+				'onmouseover':function(branch){branch.addClass('mover');}, 
+				'onmouseout':function(branch){branch.removeClass('mover');}
+				},
+				{
+				'id':'child7',
+				'txt':'Avec un double clic',
+				'ondblclick':function(branch){alert('double-clic sur ' + branch.getId());}
+				},
+				{
+				'id':'ouvertureinfinie',
+				'txt':'Ici, il y a une infinité d\'enfants',
+				'onopenpopulate':function(branch, response){return true;},
+				'openlink':'open.php',
+				'canhavechildren':true,
+				'onopenpopulate':null,
+				'openlink':'server/open.php'
+				},
+				{
+				'id':'child9',
+				'txt':'Contenu éditable',
+				'acceptdrop':false,
+				'editable':true,
+				'onedit':function(branch, newv, oldv){return newv;}
+				}
+			]
+			},
+			{
+			'id':'pb',
+			'txt':'Poubelle',
+			'img':'trash.gif',
+			'imgopen':'trashfull.gif',
+			'imgclose':'trashfull.gif',
+			'draggable':false,
+			'last': true
+			}
+		]
+		}
+	];
+	var struct2 = [
+	{
+	'id' : 'root043',
+	'txt' : 'root 0'
+	}];
+	var tree1 = null;
+	var tree2 = null;
+	function TafelTreeInit () {
+		tree2 = new TafelTree('test2', struct2, {
+			'generate':true
+		});
+		tree1 = new TafelTree('test1', struct, {
+			'generate':true,
+			'imgBase' : 'imgs/',
+			'openAtLoad':true,
+			'cookies':true,
+			'onDrop':drop,
+			'multiline':true,
+			'defaultImg':'page.gif',
+			'defaultImgSelected':'globe.gif',
+			'defaultImgOpen':'folderopen.gif',
+			'defaultImgClose':'folder.gif',
+			'defaultImgCloseSelected':'unlock.gif',
+			'defaultImgOpenSelected':'imgfolder.gif',
+			'rtlMode':false,
+			'dropALT':false,
+			'checkboxes':true,
+			'onClick' : testParent,
+			'behaviourDrop':'child',
+			'dropALT' : false,
+			'dropCTRL' : false,
+			'bind':[tree2]
+		});
+		var b = tree1.getBranchById('root043');
+		alert(b);
+	}
+
+	function glu (branch) {
+		return (branch.children.length > 0) ? true : false;
+	}
+
+	function testParent (branch) {
+		var p = tree1.getBranches(glu);
+		var str = '';
+		for (var i = 0; i < p.length; i++) {
+			str += p[i].getText() + ' : ' + p[i].children.length + "\n";
+		}
+		alert(str);
+	}
+	function drop () {
+		return true;
+	}
+	function tojson(){
+		//tree1.debug(tree1.serialize(true));
+		var branch = tree1.getBranchById('child5');
+		//tree1.debug(branch.serialize(true));
+		tree1.restoreDefault();
+	}
+	</script>
+</head>
+<body>
+<div id="test2"></div>
+<a href="#" onclick="tojson()">Serialise</a>
+<div class="body">
+	<img class="titre" src="imgs/doc.jpg" alt="doc" title="doc" />
+	<h1>Génération de Treeview <span>(Javascript)</span></h1>
+	<h2>Treeview basé sur la libraire <a href="http://script.aculo.us" target="_blank">Script Aculous</a></h2>
+	<!--<ul id="menu">
+		<li><a href="index.html">Accueil</a></li>
+		<li><a href="install.html">Installation</a></li>
+		<li><a href="exemples.html">Exemples</a></li>
+		<li><a href="doc.html">Doc</a></li>
+		<li><a href="forum.html">Forum</a></li>
+		<li><a href="liens.html">Liens</a></li>
+		<li class="ici"><a href="arbre.php">Treeview</a></li>
+	</ul>-->
+	<div id="contenu">
+		<div class="gauche">
+			<h3>Treeview - Accueil</h3>
+			<div id="test1"></div>
+			<h4>Comment commencer ?</h4>
+			<p>C'est très simple, procédons donc pas-à-pas. D'abord, on inclu tous les fichiers nécessaires Javascript et CSS
+			entre les balises &lt;head>&lt;/head></p>
+			<code>
+&lt;link rel="stylesheet" type="text/css" href="css/tree.css" />
+<br />&lt;script type="text/javascript" src="js/prototype.js">&lt;/script>
+<br />&lt;script type="text/javascript" src="js/scriptaculous.js">&lt;/script>
+<br />&lt;script type="text/javascript" src="Tree.js">&lt;/script>
+			</code>
+			<p>La CSS est celle contenue dans le dossier CSS du zip. Quand au scripts JS, il faut savoir qu'il est basé sur la 
+			librairie de Script Aculous. Il faut donc intégrer la librairie prototype.js ainsi que scriptaculous.js. Toutes
+			les deux sont contenues dans le dossier JS. Mais si tu as déjà script aculous quelque part, tu n'es pas obligé
+			de le remettre.</p>
+			<p>La dernière librairie, c'est Tree.js. C'est le corps du programme.</p>
+			<h4>Créer un arbre</h4>
+			<p>Voici donc comment créer un arbre très simple</p>
+			<code>
+&lt;script type="text/javascript">
+<br />var struct = [
+<br />{
+<br />'id':'root1',
+<br />'txt':'Element racine',
+<br />'img':'page.gif', // Image s'il n'a pas d'enfants
+<br />'imgopen':'folderopen.gif', // Image s'il a des enfants et qu'il est ouvert
+<br />'imgclose':'folder.gif', // Image s'il a des enfants et qu'il est fermé
+<br />'items':[
+<br />&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />&nbsp;&nbsp;&nbsp;&nbsp;'id':'child1',
+<br />&nbsp;&nbsp;&nbsp;&nbsp;'txt':'Un enfant',
+<br />&nbsp;&nbsp;&nbsp;&nbsp;'img':'page.gif'
+<br />&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />]
+<br />}
+<br />];
+<br />var tree = new TafelTree('test2', struct, 'tree/imgs/', '100%', 'auto');
+<br />tree.generate();
+<br />&lt;/script>
+			</code>
+			<script type="text/javascript">
+			function load1 () {
+				var struct = [
+				{
+				'id':'root1',
+				'txt':'Element racine',
+				'img':'page.gif', // Image s'il n'a pas d'enfants
+				'imgopen':'folderopen.gif', // Image s'il a des enfants et qu'il est ouvert
+				'imgclose':'folder.gif', // Image s'il a des enfants et qu'il est fermé
+				'items':[
+					{
+					'id':'child1',
+					'txt':'Un enfant',
+					'img':'page.gif'
+					}
+				]
+				}
+				];
+				var tree2 = new TafelTree('test2', struct, 'imgs/', '100%', 'auto');
+				tree2.generate();
+			}
+			Event.observe(window, 'load', load1, false);
+			</script>
+			<div id="test2"></div>
+			<p><a href="download/tafeltree.zip">Download de l'arbre</a></p>
+		</div><!--
+		<div class="droite">
+			<div>
+				<h4>Dernières mise-à-jour</h4>
+				<p>La dernière mise à jour date du 21 oaût 2006.</p>
+				<p><a href="download/tafeltree.zip">Téléchargez ici!</a></p>
+				<cite>Par Tafel</cite>
+			</div>
+			<div>
+				<h4>Accueil</h4>
+				<p>Les bases. Comment créer un arbre, la logique du truc, tout ça tout ça</p>
+				<p><a href="arbre.php">Voir la page</a></p>
+				<cite>Par Tafel</cite>
+			</div>
+			<div>
+				<h4>TafelTree</h4>
+				<p>L'arbre en détail.</p>
+				<p><a href="arbre4.html">Voir la page</a></p>
+				<cite>Par Tafel</cite>
+			</div>
+			<div>
+				<h4>TafelTreeBranch</h4>
+				<p>Les actions sur la branche. Sa structure et ses méthodes</p>
+				<p><a href="arbre4.html">Voir la page</a></p>
+				<cite>Par Tafel</cite>
+			</div>
+			<div>
+				<h4>Documentation</h4>
+				<p>Une doc rapide et plus ou moins exhaustive</p>
+				<p><a href="arbre4.html">Voir la page</a></p>
+				<cite>Par Tafel</cite>
+			</div>
+		</div>-->
+	</div>
+	<div class="bottom">
+		<p>OpenOffice Generation PHP + Treeview JS</p>
+		<p>Le 26 août 2006, <a href="#" onClick="gereStyle()">Tafel</a>. Optimisé pour Mozilla Firefox</p>
+	</div>
+</div>
+	
+</body>
+</html>

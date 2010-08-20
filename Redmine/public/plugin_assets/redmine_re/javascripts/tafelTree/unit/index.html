@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Page title</title>
+	<script src="../js/prototype.js" type="text/javascript"></script>
+	<script src="../js/scriptaculous.js" type="text/javascript"></script>
+	<script src="../js/util.js" type="text/javascript"></script>
+	<script src="../js/unittest.js" type="text/javascript"></script>
+	<!-- other JavaScript includes -->
+	<script src="../Tree.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="test.css" type="text/css" />
+	<link rel="stylesheet" href="../css/tree.css" type="text/css" />
+</head>
+<body>
+
+<!-- Log output -->
+<div id="testlog"> </div>
+
+<h3>Tree 1</h3>
+<div id="tree1"></div>
+<h3>Tree 2</h3>
+<div id="tree2"></div>
+<h3>Tree 3</h3>
+<div id="tree3"></div>
+
+
+<!-- Tests follow -->
+<script type="text/javascript" language="javascript">
+// <![CDATA[
+	var tree1 = null;
+	var tree2 = null;
+	var tree3 = null;
+	function dd (drag, drop) { return true; };
+	function open (branch, response) { return true; };
+	
+	new Test.Unit.Runner({
+    
+	setup: function() { with(this) {
+		var struct1 = [
+			{
+			'id':'root1',
+			'txt':'Root 1',
+			'img':'base.gif',
+			'items': [
+				{'id':'child','txt':'Child 1','img':'page.gif','imgopen':'folderopen.gif','imgclose':'folder.gif'}
+			]
+		}
+		];
+		if (!tree1) {
+			tree1 = new TafelTree('tree1', struct1, '../imgs/');
+			tree1.enableCheckboxesThreeState(true);
+			tree1.setOnDrop(dd);
+			tree1.setOnOpenPopulate(open, 'open.php');
+			tree1.enableCookies(false);
+    		tree1.generate();
+		}
+		var struct2 = [
+			{
+			'id':'root1_t2',
+			'txt':'Root 2',
+			'img':'base.gif',
+			'items': [
+				{'id':'child_t2','txt':'Child 2','img':'page.gif','imgopen':'folderopen.gif','imgclose':'folder.gif'},
+				{'id':'child2_t2','txt':'Child','img':'page.gif','imgopen':'folderopen.gif','imgclose':'folder.gif'
+				}
+			]
+		}
+		];
+		if (!tree2) {
+			tree2 = new TafelTree('tree2', struct2, '../imgs/');
+			tree2.setOnDrop(dd);
+			tree2.enableCookies(false);
+    		tree2.generate();
+		}
+		var struct3 = [
+			{
+			'id':'root1_t3',
+			'txt':'Root 3',
+			'img':'base.gif',
+			'items': [
+				{'id':'child_t3','txt':'Child 3','img':'page.gif','imgopen':'folderopen.gif','imgclose':'folder.gif'}
+			]
+		}
+		];
+		if (!tree3) {
+			tree3 = new TafelTree('tree3', struct3, '../imgs/');
+			tree3.setOnDrop(dd);
+			tree3.enableCookies(false);
+    		tree3.generate();
+		}
+    }},
+    
+    teardown: function() { with(this) {
+    }},
+    
+    testGetBranchById: function() { with(this) {
+    	var r = tree1.getBranchById('root1');
+    	assertEqual('root1', r.getId());
+    }},
+    
+    testInsertBranch: function() { with(this) {
+    	var item1 = {'id':'child_last','txt':'child_last','img':'page.gif'};
+    	var item2 = {'id':'child_first','txt':'child_first','img':'page.gif'};
+    	var item3 = {'id':'child_before','txt':'child_before','img':'page.gif'};
+    	var item4 = {'id':'child_after','txt':'child_after','img':'page.gif'};
+    	tree1.insertBranch('child', item1, false, false);
+    	tree1.insertBranch('child', item2, false, true);
+    	tree1.insertBranch('child', item3, true, true);
+    	tree1.insertBranch('child', item4, true, false);
+    	var b1 = tree1.getBranchById('child_last');
+    	var b2 = tree1.getBranchById('child_first');
+    	var b3 = tree1.getBranchById('child_before');
+    	var b4 = tree1.getBranchById('child_after');
+    	assertEqual(item1.id, b1.getId());
+    	assertEqual(item2.id, b2.getId());
+    	assertEqual(item3.id, b3.getId());
+    	assertEqual(item4.id, b4.getId());
+    }},
+    
+    testBindUniDirectional: function() { with(this) {
+    	tree1.bindAsUnidirectional(tree2);
+    	assertEqual(true, tree1.isBindedWith(tree2));
+    	assertEqual('', tree2.isBindedWith(tree1));
+    }},
+    
+    testBindBiDirectional: function() { with(this) {
+    	tree3.bind(tree2);
+    	assertEqual(true, tree3.isBindedWith(tree2));
+    	assertEqual(true, tree2.isBindedWith(tree3));
+    	assertEqual(true, tree1.isBindedWith(tree2));
+    }},
+    
+    testCountBranches: function() { with(this) {
+    	assertEqual(6, tree1.countBranches());
+    }},
+    
+    testGetOpenedBranches: function() { with(this) {
+    	var b = tree1.getOpenedBranches();
+    	assertEqual(2, b.length);
+    	assertEqual('root1', b[0].getId());
+    	assertEqual('child', b[1].getId());
+    }},
+    
+    testGetCheckedBranches: function() { with(this) {
+    	var b = tree1.getCheckedBranches();
+    	assertEqual(0, b.length);
+    }},
+    
+    testBranchOperations: function() { with(this) {
+    	var b = tree1.getBranchById('child');
+    	b.check(1);
+    	b.openIt(false);
+    	assertEqual(1, b.struct.check);
+    	assertEqual(true, b.isChecked());
+    	assertEqual('', b.struct.open);
+    	assertEqual('', b.isOpened());
+    }},
+    
+    testBranchMoves: function() { with(this) {
+    	var b1 = tree3.getBranchById('child_t3');
+    	b1.move('child');
+    	assertEqual('', tree1.getBranchById('child_t3'));
+    	var b2 = tree2.getBranchById('child_t2');
+    	b2.move('child_t3');
+    	assertNotEqual('', tree3.getBranchById('child_t2'));
+    }}    
+	}, "testlog");
+// ]]>
+</script>
+
+</body>
+</html>

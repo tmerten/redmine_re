@@ -1,0 +1,28 @@
+# German strings go here for Rails i18n
+en:
+  # general stuff
+  re_requirements: 'Anforderungen'
+  re_save: 'Speichern'
+  re_edit: 'Editieren'
+  re_requirements_overview: 'Anforderungsübersicht'
+
+  # columns
+  re_column_name: 'Name'
+  re_column_created_at: 'Erstellt'
+  re_column_updated_at: 'Letze Änderung'
+  re_column_priority: 'Priorität'
+  re_column_artifact_type: 'Art'
+  re_column_edit: 'Editieren'
+
+  # re_artifact
+  re_artifact_name: 'Name'
+  re_artifact_priority: 'Priorität'
+
+  # re_goals
+  re_create_goal: 'Neues Ziel'
+  re_show_goals: 'Zeige Ziele'
+  re_goal: 'Ziel'
+  re_goal_description: 'Beschreibung'
+  re_column_description: 'Beschreibung'
+
+

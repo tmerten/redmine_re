@@ -1,0 +1,8 @@
+/* load the default Redmine stylesheet */
+@import url(../../../stylesheets/application.css);
+
+/* add the h-brs logo to the header (image size: 275 ? 31px) */
+#header {
+    background: #507AAA url(../images/h-brs-logo.png) no-repeat 2px;
+    background-position:center 7px;
+}

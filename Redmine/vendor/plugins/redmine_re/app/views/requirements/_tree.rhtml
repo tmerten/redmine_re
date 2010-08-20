@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    var treeData = [ <%= jsontree.to_s %> ];
+</script>
+
+<div id="tree" />
+
+<script type="text/javascript">
+
+    // We declare the tree outside of the function. This way it's
+    // accessible from any function
+    var tree = null;
+
+    // Tree initialisation. This function is called automatically
+    // when the page finish to load
+    function TafelTreeInit() {
+        tree = new TafelTree('tree', treeData, {
+            'generate' : true,
+            'imgBase' : '<%=image_path('tree', :plugin => 'redmine_re').split('?')[0] %>/',
+            'width' : '100%', // default value : 100%
+            'height' : '150px', // default value : auto
+            'openAtLoad' : false,
+            'cookies' : false
+        });
+    }
+</script>

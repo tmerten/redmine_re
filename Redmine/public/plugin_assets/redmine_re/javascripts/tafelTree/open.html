@@ -1,0 +1,93 @@
+<html>
+<head>
+	<title>OpenOfficeGeneration Documentation</title>
+	<link rel="stylesheet" type="text/css" href="css/tree.css" />
+	<style>
+	body {
+	background-color: #FFFFFF;
+	}
+	.mover {
+	background-color: #FF9999;
+	color: #FFEEEE;
+	}
+	
+	.special {
+	color: #CC0000;
+	}
+	
+	.tafelTree h3, .tafelTree p, .tafelTree ol {
+	margin: 0;
+	padding: 0;
+	}
+	
+	.tafelTree p {
+	padding-bottom: 1em;
+	}
+	
+	.tafelTree h3 {
+	color: #009900;
+	}
+	</style>
+	<script type="text/javascript" src="js/prototype.js"></script>
+	<script type="text/javascript" src="js/scriptaculous.js"></script>
+	<script type="text/javascript" src="Tree.js"></script>
+</head>
+<body>
+
+			<script type="text/javascript">
+			function funcOpen (branch, response) {
+				// Ici tu peux traiter le retour et retourner true si
+				// tu veux insérer les enfants, false si tu veux pas
+				return true;
+			}
+			var tree = null;
+			function TafelTreeInit () {
+				var struct = [
+				{
+				'id':'root1',
+				'txt':'Element racine',
+				'items':[
+					{
+					'id':'child1',
+					'txt':'Un enfant',
+					'canhavechildren' : true
+					},
+					{
+					'id':'child2',
+					'txt':'Un enfant 2'
+					},
+					{
+					'id':'child3',
+					'txt':'Un enfant 3',
+					'canhavechildren' : true
+					},
+					{
+					'id':'child4',
+					'txt':'Un enfant 4',
+					'canhavechildren' : true
+					}
+				]
+				}
+				];
+				tree = new TafelTree('test', struct, {
+					'generate' : true,
+					'imgBase' : 'imgs/',
+					'defaultImg' : 'page.gif',
+					'defaultImgOpen' : 'folderopen.gif',
+					'defaultImgClose' : 'folder.gif',
+					'onOpenPopulate' : [funcOpen, 'sampleOpen1.php']
+				});
+			}
+
+			function effet () {
+				var branch = tree.getBranchById('child1');
+				branch.refreshChildren();
+			}
+			</script>
+			<div id="test"></div>
+			<p><a href="#" onclick="effet()">Effet</a></p>
+
+
+	
+</body>
+</html>
