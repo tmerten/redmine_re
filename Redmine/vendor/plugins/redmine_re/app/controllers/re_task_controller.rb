@@ -52,13 +52,18 @@ class ReTaskController < RedmineReController
     @re_task = ReTask.find_by_id(params[:id])
   end
 
+  ##
+  # shows all versions
   def show_versions
     @task = ReTask.find(params[:id] ) # :include => :re_artifact)
   end
 
+  ##
+  # reverts to an older version
   def change_version
     targetVersion = params[:version]
     @task = ReTask.find(params[:id])
+
     if(@task.revert_to!(targetVersion))
       flash[:notice] = 'Task version changed sucessfully'
     end
