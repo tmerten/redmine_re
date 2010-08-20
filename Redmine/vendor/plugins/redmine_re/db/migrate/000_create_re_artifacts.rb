@@ -6,7 +6,7 @@ class CreateReArtifacts < ActiveRecord::Migration
       t.column :updated_at, :date
       t.column :priority, :integer
 
-      t.references :superclass, :polymorphic => true
+      t.references :artifact, :polymorphic => true
 
       t.column :author_id, :integer, :default => 0
       t.column :project_id, :integer, :default => 0      

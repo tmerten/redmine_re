@@ -2,8 +2,7 @@ class CreateReGoals < ActiveRecord::Migration
   def self.up
     create_table :re_goals do |t|
       t.column :description, :string
-
-      t.references :superclass
+      t.references :artifact
       end
   end
 

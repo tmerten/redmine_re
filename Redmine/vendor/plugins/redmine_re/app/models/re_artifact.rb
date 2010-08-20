@@ -1,7 +1,7 @@
 class ReArtifact < ActiveRecord::Base
   unloadable
 
-  belongs_to :superclass, :dependent => :destroy, :polymorphic => true
+  belongs_to :artifact, :dependent => :destroy, :polymorphic => true
 
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
