@@ -26,3 +26,9 @@ en:
   re_goal: 'Goal'
   re_goal_description: 'Description'
   re_column_description: 'Description'
+
+  # re_tasks
+  re_show_tasks: 'Show Tasks'
+
+  # re_subtasks
+  re_show_subtasks: 'Show Subtasks'
