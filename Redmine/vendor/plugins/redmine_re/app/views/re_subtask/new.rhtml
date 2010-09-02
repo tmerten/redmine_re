@@ -3,14 +3,20 @@
 <%= error_messages_for :re_subtask %>
 
 
-<% form_for :re_subtask, :url => {:action => "update", :id => @re_subtask}, :class => 'tabular' do |f| %>
+<% form_for :re_subtask, :url => {:action => "create"}, :class => 'tabular' do |f| %>
     <%= hidden_field_tag :project_id, @project.id %>
 
     <div class="box">
 
 
-  <% f.fields_for @re_subtask.re_artifact do |re_artifact| %>
-          <%= render "re_artifact/shared_fields", :f => re_artifact %>
+  <% f.fields_for :re_artifact do |re_artifact| %>
+        <p>
+          <%= re_artifact.label :name, l(:re_artifact_name) %> <%= re_artifact.text_field :name %>
+        </p>
+
+        <p>
+          <%= re_artifact.label :priority, l(:re_artifact_priority) %> <%= re_artifact.text_field :priority %>
+        </p>
    <% end %>
 
       <p>

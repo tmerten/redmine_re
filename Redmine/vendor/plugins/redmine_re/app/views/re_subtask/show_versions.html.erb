@@ -11,6 +11,9 @@ thead {
 tr#odd {
   background-color:#a5bfff;
 }
+tr.marked {
+  background-color: #ffd365;
+}
 #subtaskinfo {
   margin-left:20px;
 }
@@ -23,8 +26,11 @@ tr#odd {
 		<table>
 		<thead><tr><td>Nr:</td><td>description</td><td>solution</td><td>action</td></tr></thead>
 			<% @subtask.versions.each_with_index do |subtaskVersion, i| %>
-				<tr class="<%= cycle('odd', 'even') %>">
-
+                <% if !(@markedVersionNr.to_i == subtaskVersion.version.to_i) %>
+				    <tr class="<%= cycle('odd', 'even') %>">
+                <% else %>
+                    <tr class="marked">
+                <% end %>
                 <td><%= subtaskVersion.version %></td>
                 <td><%= subtaskVersion.description %></td>
 				<td><%= subtaskVersion.solution %></td>

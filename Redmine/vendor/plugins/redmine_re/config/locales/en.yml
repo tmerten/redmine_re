@@ -26,12 +26,18 @@ en:
   re_goal: 'Goal'
   re_goal_description: 'Description'
   re_column_description: 'Description'
-
+  
   # re_tasks
+  re_create_task: 'New Task'
   re_show_tasks: 'Show Tasks'
+  re_task: 'Task'
+  re_task_description: 'Description'
 
   # re_subtasks
+  re_create_subtask: 'New Subtask'
   re_show_subtasks: 'Show Subtasks'
+  re_subtask: 'Subtask'
+  re_subtask_description: 'Description'
 
   # fields
   field_re_artifact: 'field artifact'

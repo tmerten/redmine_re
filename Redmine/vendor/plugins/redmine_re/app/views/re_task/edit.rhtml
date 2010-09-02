@@ -14,11 +14,11 @@
       <% end %>
 
       <p>
-        <%= f.label :description, 'Description' %> <%= f.text_field :description %>
+        <%= f.label :description, l(:re_task_description) %> <%= f.text_field :description %>
       </p>
 
       <p>
-        <%= submit_tag 'Save', :action => :edit %>
+        <%= submit_tag l(:re_save), :action => :edit %>
       </p>
 
     </div>
