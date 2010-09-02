@@ -6,7 +6,7 @@ class ReArtifact < ActiveRecord::Base
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   
-  validates_presence_of :project, :author, :name, :artifact
+  validates_presence_of :project, :author, :name
   validates_uniqueness_of :name
   
 end

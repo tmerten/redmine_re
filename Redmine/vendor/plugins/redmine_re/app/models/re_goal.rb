@@ -3,7 +3,5 @@ class ReGoal < ActiveRecord::Base
 
   has_one :re_artifact, :dependent => :destroy, :as => :artifact
   accepts_nested_attributes_for :re_artifact, :allow_destroy => true
-
-  validates_presence_of :re_artifact
   
 end

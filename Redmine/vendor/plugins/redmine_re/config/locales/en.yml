@@ -32,3 +32,6 @@ en:
 
   # re_subtasks
   re_show_subtasks: 'Show Subtasks'
+
+  # fields
+  field_re_artifact: 'field artifact'

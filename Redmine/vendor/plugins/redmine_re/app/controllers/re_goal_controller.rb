@@ -20,10 +20,12 @@ class ReGoalController < RedmineReController
   # edit can be used for new/edit and update
   def edit
     @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact) || ReGoal.new
-    @re_goal.build_re_artifact unless @re_goal.re_artifact
+    @re_goal.re_artifact = ReArtifact.new unless @re_goal.re_artifact
 
     if request.post?
-      @re_goal.attributes = params[:re_goal]
+      # Todo: Author-id to be extracted from session
+      params["re_goal"]["re_artifact_attributes"].merge Hash["project_id" => params[:id], "author_id" => '1']
+      @re_goal.attributes = params[:re_goal]  # due to nested attributes the new ReArtifact is updated as well
       add_hidden_re_artifact_attributes @re_goal.re_artifact
 
       flash[:notice] = 'Goal successfully saved' if save_ok = @re_goal.save
