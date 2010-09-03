@@ -23,8 +23,6 @@ class ReGoalController < RedmineReController
     @re_goal.re_artifact = ReArtifact.new unless @re_goal.re_artifact
 
     if request.post?
-      # Todo: Author-id to be extracted from session
-      params["re_goal"]["re_artifact_attributes"].merge Hash["project_id" => params[:id], "author_id" => '1']
       @re_goal.attributes = params[:re_goal]  # due to nested attributes the new ReArtifact is updated as well
       add_hidden_re_artifact_attributes @re_goal.re_artifact
 
