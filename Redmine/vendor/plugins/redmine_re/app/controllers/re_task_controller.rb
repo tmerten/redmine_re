@@ -20,6 +20,7 @@ class ReTaskController < RedmineReController
     if request.post?
       @re_task.attributes = params[:re_task]
       add_hidden_re_artifact_attributes @re_task.re_artifact
+      @re_task.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
 
       flash[:notice] = 'Task successfully saved' unless save_ok = @re_task.save
       # we won't put errors in the flash, since they can be displayed in the errors object

@@ -29,6 +29,7 @@ en:
   re_show_goals: 'Show Goals'
   re_goal: 'Goal'
   re_goal_description: 'Description'
+  re_create_child_goal: 'Create Child of Type Goal'
 
   
   # re_tasks
@@ -36,6 +37,7 @@ en:
   re_show_tasks: 'Show Tasks'
   re_task: 'Task'
   re_task_description: 'Description'
+  re_create_child_task: 'Create Child of Type Task'
 
   # re_subtasks
   re_create_subtask: 'New Subtask'

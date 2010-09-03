@@ -5,7 +5,7 @@
 
 <% form_for :re_task, :url => {:action => "edit"}, :class => 'tabular' do |f| %>
     <%= hidden_field_tag :project_id, @project.id %>
-
+    <%= hidden_field_tag :parent_id, params[:parent_id] %>
     <div class="box">
 
 

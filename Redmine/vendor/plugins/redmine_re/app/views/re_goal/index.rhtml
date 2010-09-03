@@ -27,7 +27,8 @@
                 <td><%= goal.re_artifact.send(column.name) %></td>
               <% end %>
               <td><%= link_to l(:re_edit), :action => 'edit', :id => goal.id, :project_id => @project.id %></td>
-              <td><%= link_to l(:re_create_child), :controller => 're_goal', :action => 'edit', :project_id => @project.id, :parent_id => goal.id %></td>
+              <td><%= link_to l(:re_create_child_goal), :controller => 're_goal', :action => 'edit', :project_id => @project.id, :parent_id => goal.id %></td>
+              <td><%= link_to l(:re_create_child_task), :controller => 're_task', :action => 'edit', :project_id => @project.id, :parent_id => goal.id %></td>
             </tr>
         <% end %>
     </tbody>
