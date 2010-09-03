@@ -4,9 +4,9 @@
 
 <% form_for :re_goal, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
     <%= hidden_field_tag :project_id, @project.id %>
+    <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
     <div class="box">
-
       <% f.fields_for :re_artifact_attributes do |re_artifact| %>
         <%= render "re_artifact/shared_fields", :f => re_artifact %>
       <% end %>

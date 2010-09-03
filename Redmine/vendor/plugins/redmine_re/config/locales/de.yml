@@ -4,25 +4,28 @@ en:
   re_requirements: 'Anforderungen'
   re_save: 'Speichern'
   re_edit: 'Editieren'
-  re_requirements_overview: 'Anforderungsübersicht'
+  re_requirements_overview: 'Anforderungs&uuml;bersicht'
+  re_create_child: 'Erzeuge Kind'
 
   # columns
   re_column_name: 'Name'
   re_column_created_at: 'Erstellt'
-  re_column_updated_at: 'Letze Änderung'
-  re_column_priority: 'Priorität'
+  re_column_updated_at: 'Letze &Auml;nderung'
+  re_column_priority: 'Priorit&auml;t'
   re_column_artifact_type: 'Art'
   re_column_edit: 'Editieren'
+  re_column_create_child: 'Erzeuge Kind'
+  re_column_description: 'Beschreibung'
 
   # re_artifact
   re_artifact_name: 'Name'
-  re_artifact_priority: 'Priorität'
+  re_artifact_priority: 'Priorit&auml;t'
 
   # re_goals
   re_create_goal: 'Neues Ziel'
   re_show_goals: 'Zeige Ziele'
   re_goal: 'Ziel'
   re_goal_description: 'Beschreibung'
-  re_column_description: 'Beschreibung'
+
 
 

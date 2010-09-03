@@ -21,10 +21,14 @@ class ReGoalController < RedmineReController
   def edit
     @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact) || ReGoal.new
     @re_goal.re_artifact = ReArtifact.new unless @re_goal.re_artifact
-
+    
     if request.post?
+      # params[:re_goal][:re_artifact_attributes].merge Hash[:parent_artifact_id, params[:parent_id]]  if params[:parent_id]
       @re_goal.attributes = params[:re_goal]  # due to nested attributes the new ReArtifact is updated as well
+
+      @re_goal.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
       add_hidden_re_artifact_attributes @re_goal.re_artifact
+
 
       flash[:notice] = 'Goal successfully saved' if save_ok = @re_goal.save
       # we won't put save errors in the flash, since they are displayed in the errors object
