@@ -43,6 +43,9 @@ class RedmineReController < ApplicationController
   #  * e.g. Workarea -> Task -> Subtask
   # * one could use (I should refactor "one could use a") a pre-definable parent-child-model for automatically sorting
   #   artifacts
+  # --> first solution: Each re_artifact can have a child of any type. This is implemented as a basic version.
+  # Later on one can restrict which artifact can have which kind of children (maybe even by the help of a
+  # configuration file.
   # ++
   def render_to_json_tree(re_artifact)
     @jsontree += '{'
@@ -59,6 +62,26 @@ class RedmineReController < ApplicationController
       @jsontree += ']'
     end
     @jsontree += '}'
+  end
+
+  # Launches generation of JSON-Tree for artifacts belonging to the given project
+  # If artifact id is given, only the branch starting with this artifact is transformed into JSON
+  # If no artifact id is given, all artifacts of the project are transformed in several JSON-trees
+  def treeview
+    @jsontree = ""
+    artifacts = []
+    if params[:id]
+      # Create only one branch starting with artifact with given id if id is given
+      artifacts << ReArtifact.find_by_id_and_project_id(params[:id], params[:project_id])
+    else
+      artifacts += ReArtifact.find_all_by_parent_artifact_id_and_project_id(nil, params[:project_id]) 
+    end
+    for artifact in artifacts
+      render_to_json_tree(artifact)
+      if (artifact != artifacts.last)
+        @jsontree += ","
+      end
+    end
   end
 
 end

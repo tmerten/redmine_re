@@ -45,5 +45,9 @@ en:
   re_subtask: 'Subtask'
   re_subtask_description: 'Description'
 
+  # re_tree
+  re_show_tree: 'Show Tree'
+  re_show_general_tree_view: 'Show Overall Tree'
+  
   # fields
   field_re_artifact: 'field artifact'

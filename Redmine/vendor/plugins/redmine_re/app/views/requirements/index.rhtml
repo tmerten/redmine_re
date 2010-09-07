@@ -24,6 +24,8 @@
               <% association_id = artifact.artifact ? artifact.artifact_id : artifact.id %>
               <td><%= link_to l(:re_edit) , :controller => controller_name, :action => 'edit', :id => association_id, :project_id => @project.id %></td>
               <td><%= link_to l(:re_delete) , :controller => controller_name, :action => 'delete', :id => association_id, :project_id => @project.id %></td>
+              <td><%= link_to l(:re_show_tree) , :controller => 'requirements', :action => 'treeview', :id => artifact.id, :project_id => @project.id %></td>
+
             </tr>
         <% end %>
     </tbody>
@@ -31,4 +33,5 @@
 
 <%= link_to l(:re_show_goals), :controller => 're_goal', :action => 'index', :project_id => @project.id %> |
 <%= link_to l(:re_show_tasks), :controller => 're_task', :action => 'index', :project_id => @project.id %> |
-<%= link_to l(:re_show_subtasks), :controller => 're_subtask', :action => 'index', :project_id => @project.id %>
+<%= link_to l(:re_show_subtasks), :controller => 're_subtask', :action => 'index', :project_id => @project.id %> |
+<%= link_to l(:re_show_general_tree_view), :action => 'treeview', :method => 'post', :project_id => @project.id %>
