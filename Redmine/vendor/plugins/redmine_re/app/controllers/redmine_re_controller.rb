@@ -51,6 +51,7 @@ class RedmineReController < ApplicationController
     @jsontree += '{'
     @jsontree += '"id" : "' + re_artifact.id.to_s + '", '
     @jsontree += '"txt" : "' + re_artifact.name.to_s + '"'
+    @jsontree += ', "img" : "' + re_artifact.artifact_type.to_s.underscore.concat('.gif" ') 
     if (!re_artifact.children.empty?)
       @jsontree += ',"items" : ['
       for child in re_artifact.children
