@@ -49,11 +49,12 @@ class RedmineReController < ApplicationController
   # ++
   def render_to_json_tree(re_artifact)
     @jsontree += '{'
-    @jsontree += '"id" : "' + re_artifact.id.to_s + '", '
-    @jsontree += '"txt" : "' + re_artifact.name.to_s + '"'
+    @jsontree += '"id" : "' + re_artifact.id.to_s + '"'
+    @jsontree += ', "txt" : "' + re_artifact.name.to_s + '"'
+    @jsontree += ', "ondrop" : "my_drop"'
     @jsontree += ', "img" : "' + re_artifact.artifact_type.to_s.underscore.concat('.gif" ') 
     if (!re_artifact.children.empty?)
-      @jsontree += ',"items" : ['
+      @jsontree += ', "items" : ['
       for child in re_artifact.children
         render_to_json_tree(child)
         if (child != re_artifact.children.last)
@@ -83,6 +84,10 @@ class RedmineReController < ApplicationController
         @jsontree += ","
       end
     end
+  end
+
+  def drop_function
+    sdfsdf
   end
 
 end
