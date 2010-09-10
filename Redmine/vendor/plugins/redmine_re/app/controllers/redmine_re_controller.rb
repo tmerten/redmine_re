@@ -4,7 +4,9 @@
 class RedmineReController < ApplicationController
   unloadable
 
-  before_filter :find_project, :authorize
+  before_filter :find_project, :authorize,
+                :except =>  :delegate_tree_drop
+
 
   layout 'base' # uses Redmines Base layout for the header
 
@@ -84,10 +86,6 @@ class RedmineReController < ApplicationController
         @jsontree += ","
       end
     end
-  end
-
-  def drop_function
-    sdfsdf
   end
 
 end
