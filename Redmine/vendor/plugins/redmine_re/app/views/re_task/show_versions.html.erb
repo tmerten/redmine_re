@@ -22,19 +22,21 @@ tr#odd {
        <h4><%= @task.re_artifact.name %> </h4>
 		<h5>Versionen:</h5>
 		<table>
-		<thead><tr><td>Nr:</td><td>Description</td><td>Updated</td><td>Versioned By Artifact</td><td>action</td></tr></thead>
+		<thead><tr><td>Nr:</td><td>Description</td><td>Updated</td><td>Updated by</td><td>Versioned By Artifact</td><td>action</td></tr></thead>
 			<% @task.versions.each_with_index do |taskVersion, i| %>
 				<tr class="<%= cycle('odd', 'even') %>">
 
                 <td><%= taskVersion.version %></td>
                 <td><%= taskVersion.description %></td>
-                <td><%= taskVersion.updated_at.to_s + " by " + taskVersion.updated_by.to_s %></td>
+                <td><%= taskVersion.updated_at.to_s  %></td>
+                  <% user = User.find(taskVersion.updated_by) %>
+                <td><%= link_to user.login, :controller => "users", :action => "show", :id => user %></td>  <%# TODO helper method %>
 
-                <% re_artifact = ReArtifact.all[taskVersion.versioned_by_artifact_id.to_i - 1] %>
                    
                 <td>
-                     <% if taskVersion.versioned_by_artifact_id %>    <%=# TODO: In Task Version neue spalte mit version des artifacts welches versionierung verusacht hat %>
-                        <%= link_to re_artifact.artifact_type , :controller => re_artifact.artifact_type.underscore, :action => "show_versions", :id => re_artifact.artifact_id , :project_id => @project.id, :version => (re_artifact.artifact.versions.detect{|v| v.updated_at == taskVersion.updated_at}).version %>
+                     <% if taskVersion.versioned_by_artifact_id %>    <%# TODO: In Task Version neue spalte mit version des artifacts welches versionierung verusacht hat %>
+                      <% re_artifact = ReArtifact.find(taskVersion.versioned_by_artifact_id.to_i) %>        
+                      <%= link_to re_artifact.artifact_type , :controller => re_artifact.artifact_type.underscore, :action => "show_versions", :id => re_artifact.artifact_id , :project_id => @project.id, :version => (re_artifact.artifact.versions.detect{|v| v.updated_at == taskVersion.updated_at}).version %>
                      <% end %>
                 </td>
                 <% if(taskVersion.version != @task.version) %>

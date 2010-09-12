@@ -12,10 +12,11 @@ class ReSubtaskController < RedmineReController
 
   def new
     @re_subtask = ReSubtask.new
-    @re_subtask.re_task_id = params[:task_id]
+    @re_subtask.re_task_id = params[:task_id] #TODO task_id etfernen und durch re_Artifact => parent_id ersetzen  (db remove column oder migration down and up
   end
 
   def create
+    #TODO eventuell wieder new/create/update in edit verschmelzen
     # create ReArtifact and delete key from params(to prevent HashWithIndifferentAccess Error when creating re_subtask )
     @re_artifact = ReArtifact.new(params[:re_subtask].delete(:re_artifact))
     add_hidden_re_artifact_attributes @re_artifact
@@ -23,7 +24,8 @@ class ReSubtaskController < RedmineReController
     # create Subtask and add Reference to ReArtifact
     @re_subtask = ReSubtask.new(params[:re_subtask])
     @re_subtask.re_artifact = @re_artifact
-
+    @re_subtask.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
+    
     # save Subtask and implicit ReArtifact
     save_ok = @re_subtask.save
 
@@ -39,7 +41,7 @@ class ReSubtaskController < RedmineReController
      @re_subtask = ReSubtask.find(params[:id])
   end
 
-  def update
+   def update
      @re_subtask = ReSubtask.find(params[:id])
 
      #  update ReArtifact and delete key from params(to prevent HashWithIndifferentAccess Error when updating re_subtask )
@@ -51,7 +53,7 @@ class ReSubtaskController < RedmineReController
 
      if update_ok
        flash[:notice] = 'Subtask was successfully updated.'
-       # we won't put errors in the flash, since they can be displayed in the errors object   
+       # we won't put errors in the flash, since they can be displayed in the errors object
        redirect_to :action => 'index', :project_id => @project.id and return
      end
   end

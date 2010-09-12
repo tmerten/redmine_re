@@ -26,7 +26,7 @@
                 <td><%= task.re_artifact.send(column.name) %></td>
               <% end %>
               <td><%= link_to 'edit', :action => 'edit', :id =>task.id, :project_id => @project.id %> |</td>
-              <td><%= link_to 'Add Subtask', :controller => :re_subtask, :action => 'new', :task_id =>task.id, :project_id => @project.id %> |</td>  
+              <td><%= link_to 'Add Subtask', :controller => :re_subtask, :action => 'new', :task_id =>task.id, :project_id => @project.id, :parent_id =>task.re_artifact.id %> |</td>  
               <td><%= link_to 'Show Versions', :action => 'show_versions', :id =>task.id, :project_id => @project.id %></td>
             </tr>
         <% end %>
