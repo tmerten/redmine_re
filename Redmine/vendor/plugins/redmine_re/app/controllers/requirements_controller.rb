@@ -12,6 +12,7 @@ class RequirementsController < RedmineReController
     child = ReArtifact.find_by_id(moved_artifact_id)
     child.parent_artifact_id = new_parent_id
     child.save!
+    render :nothing => true
   end
 
 
