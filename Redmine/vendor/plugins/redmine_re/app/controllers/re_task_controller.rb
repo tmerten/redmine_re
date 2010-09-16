@@ -18,9 +18,24 @@ class ReTaskController < RedmineReController
     @re_task.build_re_artifact unless @re_task.re_artifact
 
     if request.post?
+      # Params Hash anpassen
+
+      ## 1. Den Key re_artifact in re_artifact_attributes kopieren und löschen
+      ### Params Hash aktuell BSP: "re_task"=>{"re_artifact"=>{"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
+      params[:re_task][:re_artifact_attributes] = params[:re_task].delete(:re_artifact)
+
+      ### Params Hash aktuell BSP:"re_task"=>{"re_artifact_attributes"=>{"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
+
+      ## 2. Den Key re_artifact_attributes die id hinzufügen, weil sonst bei Edit neues ReArtifact erzeugt wird da keine Id gefunden wird
+      params[:re_task][:re_artifact_attributes][:id] = @re_task.re_artifact.id
+
+      ### Params Hash aktuell BSP:"re_task"=>{"re_artifact_attributes"=>{ "id"=>37,"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
+
+      # dies funktioniert nun (nur mit re_artifact_attributes key halt)
       @re_task.attributes = params[:re_task]
       add_hidden_re_artifact_attributes @re_task.re_artifact
       @re_task.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
+      
       # Todo: Abklären, wo ReArtifact gespeichert wird. Geht das über re_task.save automatisch?
       flash[:notice] = 'Task successfully saved' unless save_ok = @re_task.save
       # we won't put errors in the flash, since they can be displayed in the errors object

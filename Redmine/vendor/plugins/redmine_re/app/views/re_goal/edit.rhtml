@@ -7,7 +7,7 @@
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
     <div class="box">
-      <% f.fields_for :re_artifact_attributes do |re_artifact| %>
+      <% f.fields_for @re_goal.re_artifact do |re_artifact| %>
         <%= render "re_artifact/shared_fields", :f => re_artifact %>
       <% end %>
 

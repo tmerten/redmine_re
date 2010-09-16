@@ -11,5 +11,4 @@ class ReTask < ActiveRecord::Base
   
    validates_presence_of :re_artifact
 
-  
 end

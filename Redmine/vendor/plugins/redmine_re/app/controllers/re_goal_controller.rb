@@ -19,23 +19,34 @@ class ReGoalController < RedmineReController
   ##
   # edit can be used for new/edit and update
   def edit
-    @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact) || ReGoal.new
-    @re_goal.re_artifact = ReArtifact.new unless @re_goal.re_artifact
-    
-    if request.post?
-      # params[:re_goal][:re_artifact_attributes].merge Hash[:parent_artifact_id, params[:parent_id]]  if params[:parent_id]
-      @re_goal.attributes = params[:re_goal]  # due to nested attributes the new ReArtifact is updated as well
+      @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact) || ReGoal.new
+      @re_goal.build_re_artifact unless @re_goal.re_artifact
 
-      @re_goal.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
-      add_hidden_re_artifact_attributes @re_goal.re_artifact
+      if request.post?
+        # Params Hash anpassen
 
+        ## 1. Den Key re_artifact in re_artifact_attributes kopieren und löschen
+        ### Params Hash aktuell BSP: "re_task"=>{"re_artifact"=>{"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
+        params[:re_goal][:re_artifact_attributes] = params[:re_goal].delete(:re_artifact)
 
-      flash[:notice] = 'Goal successfully saved' if save_ok = @re_goal.save
-      # we won't put save errors in the flash, since they are displayed in the errors object
+        ### Params Hash aktuell BSP:"re_task"=>{"re_artifact_attributes"=>{"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
 
-      redirect_to :action => 'index', :project_id => @project.id and return if save_ok
-    end
+        ## 2. Den Key re_artifact_attributes die id hinzufügen, weil sonst bei Edit neues ReArtifact erzeugt wird da keine Id gefunden wird
+        params[:re_goal][:re_artifact_attributes][:id] = @re_goal.re_artifact.id
 
+        ### Params Hash aktuell BSP:"re_task"=>{"re_artifact_attributes"=>{ "id"=>37,"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
+
+        # dies funktioniert nun (nur mit re_artifact_attributes key halt)
+        @re_goal.attributes = params[:re_goal]
+        add_hidden_re_artifact_attributes @re_goal.re_artifact
+        @re_goal.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
+
+        # Todo: Abklären, wo ReArtifact gespeichert wird. Geht das über re_task.save automatisch?
+        flash[:notice] = 'Goal successfully saved' unless save_ok = @re_goal.save
+        # we won't put errors in the flash, since they can be displayed in the errors object
+
+        redirect_to :action => 'index', :project_id => @project.id and return if save_ok
+      end
   end
 
   ##

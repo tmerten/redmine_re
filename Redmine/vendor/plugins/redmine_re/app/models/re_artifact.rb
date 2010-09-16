@@ -13,5 +13,6 @@ class ReArtifact < ActiveRecord::Base
 
   validates_presence_of :project, :author, :name
   validates_uniqueness_of :name
+
   
 end
