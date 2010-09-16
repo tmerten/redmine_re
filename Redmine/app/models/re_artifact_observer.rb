@@ -13,12 +13,30 @@ class ReArtifactObserver < ActiveRecord::Observer
    #=> Nach langem debuggen habe ich mich zu der dirty lösung entschieden immer beim 2. Save den Vorgan auszufuehren
    #=> Also immer wenn die Anzahl der save's eine gerade zahl ist
    def after_save(re_artifact)
+     #-----nur da weil ReGoal noch keine versionierung hat und sonst fehler bei erstellung oder edit
+     return if re_artifact.artifact.class.to_s == "ReGoal"
+     #----------
      @@save_count += 1
      isEven = @@save_count % 2 == 0
-     if isEven #wenn gerade
+                               #TODO nach revert to von re_artifact attributen realisieren
        versioning_parent(re_artifact)
      end
+     update_extra_version_columns(re_artifact)
    end
+    # Setzt die eigenen zu Versiontabelle hinzugefügten Spalten
+    def update_extra_version_columns(re_artifact)
+       #aktuellv ersion herausfinden etwas umständlich aber momentan sicher das korrekt version gewählt wird auch wenn man revert macht
+       versionNr = re_artifact.artifact.version
+       Rails.logger.debug("############ versionnr: " + versionNr.to_s)
+       version   = re_artifact.artifact.versions.find_by_version(versionNr)
+       Rails.logger.debug("############ version: " + version.inspect)
+
+       version.updated_by        = User.current.id
+       version.artifact_name     = re_artifact.name
+       version.artifact_priority = re_artifact.priority
+
+       version.save
+    end
 
     def versioning_parent(re_artifact)
        return if re_artifact.parent.nil? #Nur wenn ein parent existiert
@@ -31,13 +49,11 @@ class ReArtifactObserver < ActiveRecord::Observer
 
        #--- Version mit zusatzinformation updaten ---
        # Den verursacher(child) zwischenspeichern
-       savedParentVersion.versioned_by_artifact_id = re_artifact.id
+       savedParentVersion.versioned_by_artifact_id      = re_artifact.id
+       savedParentVersion.versioned_by_artifact_version = re_artifact.artifact.version
 
-       savedParentVersion.updated_by = User.current.id
-       savedParentVersion.artifact_name = parent.re_artifact.name
-       savedParentVersion.artifact_priority = parent.re_artifact.priority
-       #---
+
+       update_extra_version_columns(parent.re_artifact)#TODO testen ob mit changetothis bei subtask funktioniert
 
        savedParentVersion.save
-    end
   end

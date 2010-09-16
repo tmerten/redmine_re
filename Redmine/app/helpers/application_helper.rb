@@ -801,5 +801,18 @@ module ApplicationHelper
       {:href => url_for(:params => url_params)}
     )
   end
+
+  # added to can be used in all views of the re_plugin 
+  def link_to_artifact_version(artifact_id, artifact_version, project_id)
+    return if artifact_id.nil?
+    re_artifact = ReArtifact.find(artifact_id.to_i)
+    link_to re_artifact.artifact_type , :controller => re_artifact.artifact_type.underscore, :action => "show_versions", :id => re_artifact.artifact_id , :project_id => project_id, :version => artifact_version
+  end
+  
+  # added to can be used in all views of the re_plugin P.S link_to_user helper gibt es schon(s.o) 
+  def link_to_user_by_id(user_id)
+    user = User.find(user_id)
+    link_to user.login, :controller => "users", :action => "show", :id => user
+  end
   
 end
