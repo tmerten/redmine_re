@@ -36,8 +36,7 @@ class ReSubtaskController < RedmineReController
         # dies funktioniert nun (nur mit re_artifact_attributes key halt)
         @re_subtask.attributes = params[:re_subtask]
         add_hidden_re_artifact_attributes @re_subtask.re_artifact
-        @re_subtask.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
-
+        @re_subtask.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id] and @re_subtask.new_record?
         # Todo: Abklären, wo ReArtifact gespeichert wird. Geht das über re_task.save automatisch?
         flash[:notice] = 'Subtask successfully saved' unless save_ok = @re_subtask.save
         # we won't put errors in the flash, since they can be displayed in the errors object
@@ -77,10 +76,10 @@ class ReSubtaskController < RedmineReController
     @subtask = ReSubtask.find(params[:id] ) # :include => :re_artifact)
     @markedVersionNr = params[:version]
   end
-
+                    
   ##
   # reverts to an older version
-  def change_version
+  def change_version               #TODO auch re_artifact name und priority wiederherstellen dirty: in oberserver re_artifact attribute immer updaten von aktueller version
     targetVersion = params[:version]
     @subtask = ReSubtask.find(params[:id])
     if(@subtask.revert_to!(targetVersion))

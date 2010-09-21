@@ -39,7 +39,7 @@ class ReGoalController < RedmineReController
         # dies funktioniert nun (nur mit re_artifact_attributes key halt)
         @re_goal.attributes = params[:re_goal]
         add_hidden_re_artifact_attributes @re_goal.re_artifact
-        @re_goal.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
+        @re_goal.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id] and @re_goal.new_record?
 
         # Todo: Abklären, wo ReArtifact gespeichert wird. Geht das über re_task.save automatisch?
         flash[:notice] = 'Goal successfully saved' unless save_ok = @re_goal.save

@@ -34,7 +34,7 @@ class ReTaskController < RedmineReController
       # dies funktioniert nun (nur mit re_artifact_attributes key halt)
       @re_task.attributes = params[:re_task]
       add_hidden_re_artifact_attributes @re_task.re_artifact
-      @re_task.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id]
+      @re_task.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id] and @re_task.new_record?
       
       # Todo: Abklären, wo ReArtifact gespeichert wird. Geht das über re_task.save automatisch?
       flash[:notice] = 'Task successfully saved' unless save_ok = @re_task.save
