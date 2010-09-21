@@ -26,19 +26,35 @@ class ReArtifactObserver < ActiveRecord::Observer
      end
    end
 
+    # dummy noch nicht genutzt
+    def after_revert(re_artifact)
+      Rails.logger.debug("###############AFTER REVVVVVVVVVVERRT")
+       versionNr = re_artifact.artifact.version
+
+     #TODO Bug wenn von kleinere version zu höchste(last) reverted wird
+         version   = re_artifact.artifact.versions.find_by_version(versionNr)
+
+         # ReArtifact attribute immer wieder aktualisieren
+         re_artifact.name = version.artifact_name
+         re_artifact.priority = version.artifact_priority
+
+         re_artifact.save
+
+    end
+
     # Setzt die eigenen zu Versiontabelle hinzugefügten Spalten
     def update_extra_version_columns(re_artifact)
        #aktuellv ersion herausfinden etwas umständlich aber momentan sicher das korrekt version gewählt wird auch wenn man revert macht
        versionNr = re_artifact.artifact.version
-       Rails.logger.debug("############ versionnr: " + versionNr.to_s)
-       version   = re_artifact.artifact.versions.find_by_version(versionNr)
-       Rails.logger.debug("############ version: " + version.inspect)
+        if(versionNr.to_i == re_artifact.artifact.versions.last.version.to_i)  # für revert to . Nur updaten wenn neue version bzw wenn editiert wurde, jedoch noch BUG siehe after_revert
+         version   = re_artifact.artifact.versions.find_by_version(versionNr)
 
-       version.updated_by        = User.current.id
-       version.artifact_name     = re_artifact.name
-       version.artifact_priority = re_artifact.priority
+         version.updated_by        = User.current.id
+         version.artifact_name     = re_artifact.name
+         version.artifact_priority = re_artifact.priority
 
-       version.save
+         version.save
+       end
     end
 
     def versioning_parent(re_artifact)
@@ -55,7 +71,7 @@ class ReArtifactObserver < ActiveRecord::Observer
        savedParentVersion.versioned_by_artifact_id      = re_artifact.id
        savedParentVersion.versioned_by_artifact_version = re_artifact.artifact.version
 
-       update_extra_version_columns(parent.re_artifact)#TODO testen ob mit changetothis bei subtask funktioniert
+       update_extra_version_columns(parent.re_artifact) #TODO testen ob mit changetothis bei subtask funktioniert
 
        savedParentVersion.save
     end

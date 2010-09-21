@@ -79,10 +79,11 @@ class ReSubtaskController < RedmineReController
                     
   ##
   # reverts to an older version
-  def change_version               #TODO auch re_artifact name und priority wiederherstellen dirty: in oberserver re_artifact attribute immer updaten von aktueller version
+  def change_version               #TODO auch re_artifact name und priority wiederherstellen dirty: in oberserver re_artifact attribute immer updaten von aktueller version. momentan versuch mit notify.. siehe unten
     targetVersion = params[:version]
     @subtask = ReSubtask.find(params[:id])
     if(@subtask.revert_to!(targetVersion))
+      @subtask.re_artifact.send(:notify, :after_revert)  # observer after_revert methode ausführen( nötig um werte von re_artifact zu reverten)
       flash[:notice] = 'Subtask version changed sucessfully'
     end
 
