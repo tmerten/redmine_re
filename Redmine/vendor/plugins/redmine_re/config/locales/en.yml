@@ -6,6 +6,7 @@ en:
   re_edit: 'edit'
   re_delete: 'delete'
   re_requirements_overview: 'Requirements Overview'
+  re_sidebar: 'Create Artifacts'
   re_create_child: 'Create Child'
 
   # columns
@@ -18,11 +19,11 @@ en:
   re_column_delete: 'Delete'
   re_column_create_child: 'Create Child'
   re_column_description: 'Description'
+  re_column_tree: 'Tree'
 
   # re_artifact
   re_artifact_name: 'Name'
   re_artifact_priority: 'Priority'
-
 
   # re_goals
   re_create_goal: 'New Goal'
@@ -51,3 +52,4 @@ en:
   
   # fields
   field_re_artifact: 'field artifact'
+
