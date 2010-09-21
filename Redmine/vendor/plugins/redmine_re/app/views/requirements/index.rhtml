@@ -12,6 +12,7 @@
               <% end %>
           <td><b><%= l(:re_column_edit) %></b></td>
           <td><b><%= l(:re_column_delete) %></b></td>
+          <td><b><%= l(:re_column_tree) %></b></td>
         </tr>
     </thead>
     <tbody>
@@ -20,7 +21,7 @@
               <% for column in ReArtifact.content_columns %>
                 <td><%= artifact.send(column.name) %></td>
               <% end %>
-              <% controller_name = artifact.artifact ? artifact.artifact_type.to_s.underscore : 'requirements'%>
+              <% controller_name = artifact.artifact ? artifact.artifact_type.to_s.underscore : ''%>
               <% association_id = artifact.artifact ? artifact.artifact_id : artifact.id %>
               <td><%= link_to l(:re_edit) , :controller => controller_name, :action => 'edit', :id => association_id, :project_id => @project.id %></td>
               <td><%= link_to l(:re_delete) , :controller => controller_name, :action => 'delete', :id => association_id, :project_id => @project.id %></td>
@@ -35,3 +36,7 @@
 <%= link_to l(:re_show_tasks), :controller => 're_task', :action => 'index', :project_id => @project.id %> |
 <%= link_to l(:re_show_subtasks), :controller => 're_subtask', :action => 'index', :project_id => @project.id %> |
 <%= link_to l(:re_show_general_tree_view), :action => 'treeview', :method => 'post', :project_id => @project.id %>
+
+<% content_for :sidebar do %>
+    <%= render :partial => 'requirements/sidebar' %>
+<% end %>
