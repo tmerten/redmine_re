@@ -16,13 +16,16 @@ class ReArtifactObserver < ActiveRecord::Observer
      #-----nur da weil ReGoal noch keine versionierung hat und sonst fehler bei erstellung oder edit
      return if re_artifact.artifact.class.to_s == "ReGoal"
      #----------
+
      @@save_count += 1
      isEven = @@save_count % 2 == 0
-                               #TODO nach revert to von re_artifact attributen realisieren
+
+     if isEven #wenn gerade        #TODO nach revert to von re_artifact attributen realisieren
+       update_extra_version_columns(re_artifact)
        versioning_parent(re_artifact)
      end
-     update_extra_version_columns(re_artifact)
    end
+
     # Setzt die eigenen zu Versiontabelle hinzugefügten Spalten
     def update_extra_version_columns(re_artifact)
        #aktuellv ersion herausfinden etwas umständlich aber momentan sicher das korrekt version gewählt wird auch wenn man revert macht
@@ -52,8 +55,8 @@ class ReArtifactObserver < ActiveRecord::Observer
        savedParentVersion.versioned_by_artifact_id      = re_artifact.id
        savedParentVersion.versioned_by_artifact_version = re_artifact.artifact.version
 
-
        update_extra_version_columns(parent.re_artifact)#TODO testen ob mit changetothis bei subtask funktioniert
 
        savedParentVersion.save
-  end
+    end
+end
