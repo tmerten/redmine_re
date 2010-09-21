@@ -3,12 +3,12 @@
 <h4><%= l(:re_goal) %></h4>
 
 <ul>
-  <li><%= link_to l(:re_create_goal), :controller => 're_goal', :action => 'new', :method => :post %></li>
+  <li><%= link_to l(:re_create_goal), :controller => 're_goal', :action => 'edit', :method => :post, :project_id => @project.id %></li>
 </ul>
 
 <h4><%= l(:re_task) %></h4>
 
 <ul>
-  <li><%= link_to l(:re_create_task), :controller => 're_task', :action => 'new', :method => :post %></li>
-  <li><%= link_to l(:re_create_subtask), :controller => 're_subtask', :action => 'new', :method => :post %></li>
+  <li><%= link_to l(:re_create_task), :controller => 're_task', :action => 'edit', :method => :post, :project_id => @project.id %></li>
+  <li><%= link_to l(:re_create_subtask), :controller => 're_subtask', :action => 'edit', :method => :post, :project_id => @project.id %></li>
 </ul>
