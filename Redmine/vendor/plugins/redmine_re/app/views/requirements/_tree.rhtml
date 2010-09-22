@@ -10,9 +10,8 @@
     // accessible from any function
     var tree = null;
 
-    // Tree initialisation. This function is called automatically
-    // when the page finish to load
-    function TafelTreeInit() {
+    // Tree initialisation.
+    var initTree = function TafelTreeInit() {
         tree = new TafelTree('tree', treeData, {
             'generate' : true,
             'imgBase' : '<%=image_path('tafeltree', :plugin => 'redmine_re').split('?')[0] %>/',
@@ -23,6 +22,11 @@
             'onDrop' : my_drop
         });
     }
+
+    // This function is called automatically
+    // when the page finishes to load
+    // (and can be called manually on success of an ajax call
+    initTree();
 
     function my_drop (branch_move, branch_here, drop_finished, new_branch) {
         // Beware, the function is called twice. One time before drop

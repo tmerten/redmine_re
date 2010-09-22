@@ -13,6 +13,7 @@
 <p id='showtree'><%= link_to_remote( 'Show Tree',
     :update => 'treebar',
     :url => {:action => :treeview, :method => 'post', :project_id => @project.id},
+    :success => "initTree()",
     :complete => "showTreeBar()"
     ) %></p>
 <p id='hidetree' style='display:none;'><%= link_to_function('Hide Tree', "Element.hide('treebar'); Element.hide('hidetree'); Element.show('showtree')") %></p>
@@ -59,11 +60,13 @@
 <% end %>
 
 <script type="text/javascript">
-  <%#= visual_effect :fade, 'hidetree', :duration =>0 %>
+    <%#= visual_effect :fade, 'hidetree', :duration =>0 %>
+    // Tree initialisation.
 
-  var showTreeBar = function() {
-    <%= visual_effect :appear, 'treebar', :duration => 0 %>
-    <%= visual_effect :fade, 'showtree', :duration => 0 %>
-    <%= visual_effect :appear, 'hidetree', :duration => 0 %>
-  }
+    var showTreeBar;
+    showTreeBar = function() {
+        <%= visual_effect :appear, 'treebar', :duration => 0.5 %>
+        <%= visual_effect :fade, 'showtree', :duration => 0 %>
+        <%= visual_effect :appear, 'hidetree', :duration => 0 %>
+    };
 </script>

@@ -3,8 +3,6 @@ class RequirementsController < RedmineReController
 
   def index
     @artifacts  = ReArtifact.find_all_by_project_id(@project.id)
-    @jsontree = ''
-    treeview
     @artifacts = [] if @artifacts == nil
   end
 
