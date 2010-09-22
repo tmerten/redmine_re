@@ -1,0 +1,16 @@
+.treebar {
+    float: left;
+    width: 15%;
+    position: relative;
+    z-index: 9;
+    padding-top: 5pt;
+    padding-right: 5pt;
+    padding-bottom: 5pt;
+    padding-left: 5pt;
+    margin-top: 5pt;
+    margin-right: 10pt;
+    margin-bottom: 0pt;
+    margin-left: 0pt;
+    min-height: 250px;
+    background-color: white;
+}

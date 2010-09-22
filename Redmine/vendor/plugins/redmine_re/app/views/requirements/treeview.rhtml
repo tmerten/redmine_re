@@ -1,13 +1,6 @@
-<%= stylesheet_link_tag 'tree.css', :plugin => "redmine_re", :media => 'all' %>
-<%= javascript_include_tag :defaults %>
-<%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
-
-<h2>Artifacts Treeview</h2>
+<h4>Treeview</h4>
 
 <%= render "tree", :jsonTree => @jsonTree %>
-
-
-<%= link_to 'Erstelle Artefakt', :action => 'new', :method => :post %>
 
 <!-- Einbindung des Scripts und des Stylesheets, um das Contextmenü zu erzeugen -->
 <%= javascript_include_tag 'context_menu' %>
@@ -15,5 +8,4 @@
 
 <!-- Erzeugung eines neuen, noch nicht sichtbaren Contextmenüs -->
 <div id="context-menu" style="display: none;"></div>
-<%= javascript_tag "new ContextMenu('#{url_for(:controller => 'artifacts', :action => 'context_menu')}')" %>
-
+<%# = javascript_tag "new ContextMenu('#{url_for(:controller => 'artifacts', :action => 'context_menu')}')" %>

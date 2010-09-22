@@ -1,5 +1,22 @@
-<h3><%= l(:re_requirements_overview) %></h3>
+<%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+<%= stylesheet_link_tag 'tafelTree.css', :plugin => "redmine_re", :media => 'all' %>
+<%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag :defaults %>
+
+<div id='treebar' class='treebar' style='display:none;'>
+    <h3><%= l(:re_treeview) %></h3>
+    Could not load tree
+</div>
+
+<h3><%= l(:re_requirements_overview) %></h3>
+
+<p id='showtree'><%= link_to_remote( 'Show Tree',
+    :update => 'treebar',
+    :url => {:action => :treeview, :method => 'post', :project_id => @project.id},
+    :complete => "showTreeBar()"
+    ) %></p>
+<p id='hidetree' style='display:none;'><%= link_to_function('Hide Tree', "Element.hide('treebar'); Element.hide('hidetree'); Element.show('showtree')") %></p>
+
 
 <%# content_for :header_tags do %>
   <%#= stylesheet_link_tag "example.css", :plugin => "meetings", :media => "screen" %>
@@ -40,3 +57,13 @@
 <% content_for :sidebar do %>
     <%= render :partial => 'requirements/sidebar' %>
 <% end %>
+
+<script type="text/javascript">
+  <%#= visual_effect :fade, 'hidetree', :duration =>0 %>
+
+  var showTreeBar = function() {
+    <%= visual_effect :appear, 'treebar', :duration => 0 %>
+    <%= visual_effect :fade, 'showtree', :duration => 0 %>
+    <%= visual_effect :appear, 'hidetree', :duration => 0 %>
+  }
+</script>
