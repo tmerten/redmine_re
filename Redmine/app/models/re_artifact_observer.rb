@@ -21,58 +21,16 @@ class ReArtifactObserver < ActiveRecord::Observer
      isEven = @@save_count % 2 == 0
 
      if isEven #wenn gerade        #TODO nach revert to von re_artifact attributen realisieren
-       update_extra_version_columns(re_artifact)
-       versioning_parent(re_artifact)
+       re_artifact.update_extra_version_columns unless re_artifact.isReverting
+       re_artifact.versioning_parent
      end
    end
 
-    # dummy noch nicht genutzt
+    def before_revert(re_artifact)
+      re_artifact.isReverting = true
+    end
+
     def after_revert(re_artifact)
-      Rails.logger.debug("###############AFTER REVVVVVVVVVVERRT")
-       versionNr = re_artifact.artifact.version
-
-     #TODO Bug wenn von kleinere version zu höchste(last) reverted wird
-         version   = re_artifact.artifact.versions.find_by_version(versionNr)
-
-         # ReArtifact attribute immer wieder aktualisieren
-         re_artifact.name = version.artifact_name
-         re_artifact.priority = version.artifact_priority
-
-         re_artifact.save
-
-    end
-
-    # Setzt die eigenen zu Versiontabelle hinzugefügten Spalten
-    def update_extra_version_columns(re_artifact)
-       #aktuellv ersion herausfinden etwas umständlich aber momentan sicher das korrekt version gewählt wird auch wenn man revert macht
-       versionNr = re_artifact.artifact.version
-        if(versionNr.to_i == re_artifact.artifact.versions.last.version.to_i)  # für revert to . Nur updaten wenn neue version bzw wenn editiert wurde, jedoch noch BUG siehe after_revert
-         version   = re_artifact.artifact.versions.find_by_version(versionNr)
-
-         version.updated_by        = User.current.id
-         version.artifact_name     = re_artifact.name
-         version.artifact_priority = re_artifact.priority
-
-         version.save
-       end
-    end
-
-    def versioning_parent(re_artifact)
-       return if re_artifact.parent.nil? #Nur wenn ein parent existiert
-
-       parent = re_artifact.parent.artifact
-       parent.save  # Neue version vom parent(ohne veränderung von attributen)
-
-       # gespeicherte Version zwischenspeichern
-       savedParentVersion = parent.versions.last
-
-       #--- Version mit zusatzinformation updaten ---
-       # Den verursacher(child) zwischenspeichern
-       savedParentVersion.versioned_by_artifact_id      = re_artifact.id
-       savedParentVersion.versioned_by_artifact_version = re_artifact.artifact.version
-
-       update_extra_version_columns(parent.re_artifact) #TODO testen ob mit changetothis bei subtask funktioniert
-
-       savedParentVersion.save
+       re_artifact.revert
     end
 end
