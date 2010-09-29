@@ -70,7 +70,7 @@ class RedmineReController < ApplicationController
   # If artifact id is given, only the branch starting with this artifact is transformed into JSON
   # If no artifact id is given, all artifacts of the project are transformed in several JSON-trees
   def treeview
-    @jsontree = ""
+    @jsontree = "["
     artifacts = []
     if params[:id]
       # Create only one branch starting with artifact with given id if id is given
@@ -84,6 +84,10 @@ class RedmineReController < ApplicationController
         @jsontree += ","
       end
     end
-    render(:layout => false) if request.xhr?
+    @jsontree += "]"
+
+    @jsontree = '[{"id" : "1", "txt" : "FirstTaskArtifact"}]'
+    
+    render :json => @jsontree if request.xhr?
   end
 end

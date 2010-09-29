@@ -3,18 +3,18 @@
 <%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag :defaults %>
 
+
 <div id='treebar' class='treebar' style='display:none;'>
     <h3><%= l(:re_treeview) %></h3>
-    Could not load tree
+    <div id='tree'></div>
 </div>
 
 <h3><%= l(:re_requirements_overview) %></h3>
 
 <p id='showtree'><%= link_to_remote( 'Show Tree',
-    :update => 'treebar',
     :url => {:action => :treeview, :method => 'post', :project_id => @project.id},
-    :success => "initTree()",
-    :complete => "showTreeBar()"
+    :success => "showTreeBar(request.responseText)",
+    :failure => "TODO()"
     ) %></p>
 <p id='hidetree' style='display:none;'><%= link_to_function('Hide Tree', "Element.hide('treebar'); Element.hide('hidetree'); Element.show('showtree')") %></p>
 
@@ -61,12 +61,54 @@
 
 <script type="text/javascript">
     <%#= visual_effect :fade, 'hidetree', :duration =>0 %>
-    // Tree initialisation.
+    // We declare the tree outside of the function. This way it's
+    // accessible from any function
+    var tree = null;
 
-    var showTreeBar;
-    showTreeBar = function() {
-        <%= visual_effect :appear, 'treebar', :duration => 0.5 %>
+
+    function showTreeBar(treeData) {
+        var data = null;
+        data = new Object(treeData);
+        tree = new TafelTree('tree', data, {
+            'imgBase' : '<%= image_path('tafeltree', :plugin => 'redmine_re').split('?')[0] %>/',
+            'width' : '100%', // default value : 100%
+            'height' : 'auto', // default value : auto
+            'openAtLoad' : true,
+            'cookies' : false,
+            'onDrop' : my_drop
+        });
+        <%= visual_effect :appear, 'treebar', :duration => 0 %>
         <%= visual_effect :fade, 'showtree', :duration => 0 %>
         <%= visual_effect :appear, 'hidetree', :duration => 0 %>
+        tree.generate(); /* still won't work -> debugging in firebug says treeData seems ok...?? */
+    };
+
+    // This function is called automatically
+    // when the page finishes to load
+    // (and can be called manually on success of an ajax call
+    // initTree();
+
+    function my_drop (branch_move, branch_here, drop_finished, new_branch) {
+        // Beware, the function is called twice. One time before drop
+        // happens, one time after. Here, we check before drop
+        // happens
+        if (!drop_finished) {
+            // Tests
+            if (true) {
+                // OK, the branch will be dropped here
+                return true;
+            } else {
+                // Here, the branch won't be dropped and will return
+                // at her place
+                return false;
+            }
+        } else {
+            /* ich bin mir ziemlich sicher, dass es für XMLHttpRequests auch Rails-Helper bzw. etwas von Prototype gibt ...
+             * schau mal den generierten Code dieser Seite im Browser an. Der "ShowTree"-Helper generiert new Ajax.Request(...) */
+            var request = new XMLHttpRequest();
+            var url = '/requirements/delegate_tree_drop?new_parent_id=' + branch_here.getId() + ';moved_artifact_id=' + branch_move.getId();
+            request.open('get', url, true);
+            request.send(null)
+        }
     };
 </script>
