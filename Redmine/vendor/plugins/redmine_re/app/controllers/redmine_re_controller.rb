@@ -86,7 +86,7 @@ class RedmineReController < ApplicationController
     end
     @jsontree += "]"
 
-    @jsontree = '[{"id" : "1", "txt" : "FirstTaskArtifact"}]'
+    #@jsontree = '[{"id" : "1", "txt" : "FirstTaskArtifact"}]'
     
     render :json => @jsontree if request.xhr?
   end
