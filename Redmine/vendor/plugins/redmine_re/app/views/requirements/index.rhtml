@@ -1,59 +1,50 @@
 <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 <%= stylesheet_link_tag 'tafelTree.css', :plugin => "redmine_re", :media => 'all' %>
 <%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'prototype' %>
 <%= javascript_include_tag :defaults %>
 
 
-<div id='treebar' class='treebar' style='display:none;'>
-    <h3><%= l(:re_treeview) %></h3>
-    <div id='tree'></div>
-</div>
+<!--<div id='treebar' class='treebar'>-->
+    <!--<h3><%#= l(:re_treeview) %></h3>-->
+<!--</div>-->
 
-<h3><%= l(:re_requirements_overview) %></h3>
+<!--
+<h3><%#= l(:re_requirements) %></h3>
 
-<p id='showtree'><%= link_to_remote( 'Show Tree',
+<p id='showtree'><%#= link_to_remote( 'Show Tree',
     :url => {:action => :treeview, :method => 'post', :project_id => @project.id},
     :success => "showTreeBar(request.responseText)",
     :failure => "TODO()"
     ) %></p>
-<p id='hidetree' style='display:none;'><%= link_to_function('Hide Tree', "Element.hide('treebar'); Element.hide('hidetree'); Element.show('showtree')") %></p>
+<p id='hidetree' style='display:none;'><%#= link_to_function('Hide Tree', "Element.hide('treebar'); Element.hide('hidetree'); Element.show('showtree')") %></p>
+-->
 
 
 <%# content_for :header_tags do %>
   <%#= stylesheet_link_tag "example.css", :plugin => "meetings", :media => "screen" %>
 <%# end %>
 <table>
-    <thead>
-        <tr>
-          <% for column in ReArtifact.content_columns %>
-                <td><b><%= l('re_column_' + column.name) %></b></td>
-              <% end %>
-          <td><b><%= l(:re_column_edit) %></b></td>
-          <td><b><%= l(:re_column_delete) %></b></td>
-          <td><b><%= l(:re_column_tree) %></b></td>
-        </tr>
-    </thead>
+    <colgroup>
+        <col width="50%">
+        <col>
+    </colgroup>
     <tbody>
-        <% for artifact in @artifacts do %>
-            <tr>
-              <% for column in ReArtifact.content_columns %>
-                <td><%= artifact.send(column.name) %></td>
-              <% end %>
-              <% controller_name = artifact.artifact ? artifact.artifact_type.to_s.underscore : ''%>
-              <% association_id = artifact.artifact ? artifact.artifact_id : artifact.id %>
-              <td><%= link_to l(:re_edit) , :controller => controller_name, :action => 'edit', :id => association_id, :project_id => @project.id %></td>
-              <td><%= link_to l(:re_delete) , :controller => controller_name, :action => 'delete', :id => association_id, :project_id => @project.id %></td>
-              <td><%= link_to l(:re_show_tree) , :controller => 'requirements', :action => 'treeview', :id => artifact.id, :project_id => @project.id %></td>
+        <tr hight="50%" valign="top">
+            <td><%= render :partial => "filter" %></td>
+            <td><%= render :partial => "bread_crumb_navigation" %></td>
+        </tr>
+        <tr valign="top">
+            <td><div id='tree' class='tree'><%= render :partial => "tree" %></div></td>
+            <td><div id='detail_view' class='detail_view'>Hier soll sich was aendern!</div></td>
+        </tr>
+        <tr>
 
-            </tr>
-        <% end %>
+        </tr>
     </tbody>
 </table>
 
-<%= link_to l(:re_show_goals), :controller => 're_goal', :action => 'index', :project_id => @project.id %> |
-<%= link_to l(:re_show_tasks), :controller => 're_task', :action => 'index', :project_id => @project.id %> |
-<%= link_to l(:re_show_subtasks), :controller => 're_subtask', :action => 'index', :project_id => @project.id %> |
-<%= link_to l(:re_show_general_tree_view), :action => 'treeview', :method => 'post', :project_id => @project.id %>
+
 
 <% content_for :sidebar do %>
     <%= render :partial => 'requirements/sidebar' %>

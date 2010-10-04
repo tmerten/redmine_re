@@ -1,3 +1,7 @@
+.detail_view {
+    overflow: scroll;
+}
+
 .treebar {
     float: left;
     width: 15%;
@@ -12,5 +16,9 @@
     margin-bottom: 0pt;
     margin-left: 0pt;
     min-height: 250px;
-    background-color: white;
+    background-color: yellow;
+}
+
+.tree {
+    overflow: scroll
 }

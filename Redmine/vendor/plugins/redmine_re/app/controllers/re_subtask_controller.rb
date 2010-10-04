@@ -6,7 +6,7 @@ class ReSubtaskController < RedmineReController
                          :joins => :re_artifact,
                          :conditions => { :re_artifacts => { :project_id => @project.id} }
     )
-
+    render :layout => :false
    
   end
 

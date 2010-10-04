@@ -6,6 +6,12 @@ class ReTaskController < RedmineReController
                          :joins => :re_artifact,
                          :conditions => { :re_artifacts => { :project_id => @project.id} }
     )
+    render :layout => 'false'
+  end
+
+  def test
+    render :text => "<h1>Dies ist ein Test</h1>"
+
   end
 
   def new

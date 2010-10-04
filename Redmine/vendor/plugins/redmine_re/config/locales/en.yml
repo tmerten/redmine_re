@@ -39,6 +39,7 @@ en:
   re_task: 'Task'
   re_task_description: 'Description'
   re_create_child_task: 'Create Child of Type Task'
+  re_task_overview: 'Overview of Tasks'
 
   # re_subtasks
   re_create_subtask: 'New Subtask'
