@@ -1,18 +1,11 @@
+<div id="tree"></div>
 
-
-<div id="tree">
-
-
-<script type="text/javascript">
-    var treeData = <%= @jsontree.to_s %>;
-</script>
-
-  
 <script type="text/javascript">
 
     // We declare the tree outside of the function. This way it's
     // accessible from any function
     var tree = null;
+    var treeData = <%= @jsontree.to_s %>;
 
     // Tree initialisation.
     var initTree = function TafelTreeInit() {
@@ -47,6 +40,8 @@
                 return false;
             }
         } else {
+            /* ich bin mir ziemlich sicher, dass es für XMLHttpRequests auch Rails-Helper bzw. etwas von Prototype gibt ...
+             * schau mal den generierten Code dieser Seite im Browser an. Der "ShowTree"-Helper generiert new Ajax.Request(...) */
             var request = new XMLHttpRequest();
             var url = '/requirements/delegate_tree_drop?new_parent_id=' + branch_here.getId() + ';moved_artifact_id=' + branch_move.getId();
             request.open('get', url, true);
@@ -55,4 +50,3 @@
     }
 
 </script>
-</div>

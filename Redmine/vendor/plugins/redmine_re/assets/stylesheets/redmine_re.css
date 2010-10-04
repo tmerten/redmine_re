@@ -4,7 +4,7 @@
 
 .treebar {
     float: left;
-    width: 15%;
+    width: 250px;
     position: relative;
     z-index: 9;
     padding-top: 5pt;
@@ -16,9 +16,6 @@
     margin-bottom: 0pt;
     margin-left: 0pt;
     min-height: 250px;
-    background-color: yellow;
-}
-
-.tree {
+    /*background-color: yellow;*/
     overflow: scroll
 }

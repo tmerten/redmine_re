@@ -1,6 +1,10 @@
 class RequirementsController < RedmineReController
   unloadable
 
+  include ActionView::Helpers::PrototypeHelper
+  include ActionView::Helpers::JavaScriptHelper
+
+
   def index
     @artifacts  = ReArtifact.find_all_by_project_id(@project.id)
     @artifacts = [] if @artifacts == nil
@@ -47,7 +51,9 @@ class RequirementsController < RedmineReController
   def render_to_json_tree(re_artifact)
     @jsontree += '{'
     @jsontree += '"id" : "' + re_artifact.id.to_s + '"'
-    @jsontree += ', "txt" : "' + re_artifact.name.to_s + '"'
+    @jsontree += ', "txt" : "' + re_artifact.name.to_s
+    #@jsontree += '<a href="http://gmx.de">x</a>' # this won't work! only onclick event works!
+    @jsontree += '"'
     @jsontree += ', "ondrop" : "my_drop"'
     @jsontree += ', "img" : "' + re_artifact.artifact_type.to_s.underscore.concat('.gif" ')
     if (!re_artifact.children.empty?)
