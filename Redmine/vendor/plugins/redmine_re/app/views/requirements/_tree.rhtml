@@ -16,7 +16,7 @@
             'height' : 'auto', // default value : auto
             'openAtLoad' : true,
             'cookies' : false,
-            'onDrop' : my_drop
+            'onDrop' : tree_node_drop
         });
     }
 
@@ -25,7 +25,25 @@
     // (and can be called manually on success of an ajax call
     initTree();
 
-    function my_drop (branch_move, branch_here, drop_finished, new_branch) {
+    function tree_node_click (html, event, whatsoever) {
+        alert('html: ' + html + ' event ' + event + ' no more arguments given by the tree ' + whatsoever);
+        /*new Ajax.Updater({}, '/requirements/some/' + id, {asynchronous:true, evalScripts:true, parameters:'authenticity_token=' + encodeURIComponent('4z+QuWrwlcTPoK7i/79IT6+rmtDQUAlIttTvAdFHuEg=')});
+        */
+
+        /*
+        Daniela:
+        Der Baum scheint ja das html der Node auszugeben (s. alert).
+
+        Du könntest versuchen daraus die ID zu filtern, das in den Link für den Ajax.updater zu geben
+        im Controller das entsprechende Artefakt zu holen, den Typ auszulesen und daraufhin den Link
+        auf den richtigen Controller zu setzen bzw. (viel schwieriger) ein entsprechendes Menü-Partial
+        (show, edit, delete...) zu rendern...
+         */
+        return false;
+    };
+
+
+    function tree_node_drop (branch_move, branch_here, drop_finished, new_branch) {
         // Beware, the function is called twice. One time before drop
         // happends, one time after. Here, we check before drop
         // happends
@@ -47,6 +65,7 @@
             request.open('get', url, true);
             request.send(null)
         }
+        return false; /*to present on_click from invoking */
     }
 
 </script>
