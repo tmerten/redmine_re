@@ -27,18 +27,16 @@ class ReGoalController < RedmineReController
         parent_id = params[:id]
         @re_artifact = ReArtifact.find_by_id(parent_id)
         params[:id] = @re_artifact.artifact_id
+        # If no parent_id is transmitted, we don't create a new artifact but edit one
+        # Therefore, a valid parent_artifact_id is existent and has to be read out
+        if params[:parent_id] == nil
+          params[:parent_id] = parent_id
+        end
       end
       @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact) || ReGoal.new
       @re_goal.build_re_artifact unless @re_goal.re_artifact
-      # If no parent_id is transmitted, we don't create a new artifact but edit one
-      # Therefore, a valid parent_artifact_id is existent and has to be read out
-      if params[:parent_id] == nil
-        params[:parent_id] = @re_goal.re_artifact.parent_artifact_id
-      end
-
       if request.post?
         # Params Hash anpassen
-
         ## 1. Den Key re_artifact in re_artifact_attributes kopieren und löschen
         ### Params Hash aktuell BSP: "re_task"=>{"re_artifact"=>{"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
         params[:re_goal][:re_artifact_attributes] = params[:re_goal].delete(:re_artifact)
@@ -54,12 +52,11 @@ class ReGoalController < RedmineReController
         @re_goal.attributes = params[:re_goal]
         add_hidden_re_artifact_attributes @re_goal.re_artifact
         @re_goal.re_artifact.parent_artifact_id = params[:parent_id] if params[:parent_id] and @re_goal.new_record?
-
         # Todo: Abklären, wo ReArtifact gespeichert wird. Geht das über re_task.save automatisch?
         flash[:notice] = 'Goal successfully saved' unless save_ok = @re_goal.save
         # we won't put errors in the flash, since they can be displayed in the errors object
 
-        redirect_to :action => 'index', :project_id => @project.id and return if save_ok
+        #redirect_to :action => 'index', :project_id => @project.id and return if save_ok
       end
       render :layout => false
   end
