@@ -30,10 +30,10 @@
         var controller = branch.getIcon();
         controller = controller.substr(0, controller.length - '.gif'.length);
 
-        var url = '/' + controller + '/edit/' + id;
+        var url = '/' + controller + '/edit/' + id + '?project_id=<%= @project.id -%>';
 
         //Usage of prototype Ajax request builder
-        new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true});
+        new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});
         // Thorsten, den Helper kann ich nicht einsetzten, weil er nicht dynamisch ist -->
         // die URL ergibt sich ja erst aus dem OnClick, und darauf kann ich aus dem Ruby-
         // code ja zum Zeitpunkt der Auswertung noch nicht zugreifen...
