@@ -29,8 +29,7 @@
         var id = branch.getId();
         var controller = branch.getIcon();
         controller = controller.substr(0, controller.length - '.gif'.length);
-
-        var url = '/' + controller + '/edit/' + id + '?project_id=<%= @project.id -%>';
+        var url = '/' + controller + '/edit/'+ id + '?project_id=<%= @project.id -%>'; 
 
         //Usage of prototype Ajax request builder
         new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});

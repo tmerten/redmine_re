@@ -16,8 +16,21 @@ class ReSubtaskController < RedmineReController
 
   # edit can be used for new/edit and update
   def edit
+      if request.get?
+        # Parameter id contains id of ReArtifact, not of ReSubtask as it should be
+        # This has to be changed here as it is not possible to build
+        # a dynamic Ajax-Updater with data from clicked tree-element
+        parent_id = params[:id]
+        @re_artifact = ReArtifact.find_by_id(parent_id)
+        params[:id] = @re_artifact.artifact_id
+      end
       @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact) || ReSubtask.new
       @re_subtask.build_re_artifact unless @re_subtask.re_artifact
+      # If no parent_id is transmitted, we don't create a new artifact but edit one
+      # Therefore, a valid parent_artifact_id is existent and has to be read out
+      if params[:parent_id] == nil
+        params[:parent_id] = @re_subtask.re_artifact.parent_artifact_id
+      end
 
       if request.post?
         # Params Hash anpassen
@@ -43,7 +56,7 @@ class ReSubtaskController < RedmineReController
 
         redirect_to :action => 'index', :project_id => @project.id and return if save_ok
       end
-
+      render :layout => false
     end
 
 
