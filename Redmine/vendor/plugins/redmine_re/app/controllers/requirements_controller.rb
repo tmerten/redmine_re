@@ -25,6 +25,10 @@ class RequirementsController < RedmineReController
     @jsontree += "]"
   end
 
+  ##
+  # The following method is called via JavaScript Tafeltree by an ajax request.
+  # It transmits the drops done in the tree to the database in order to last
+  # longer than the next refresh of the browser.
   def delegate_tree_drop
     new_parent_id = params[:new_parent_id]
     moved_artifact_id = params[:moved_artifact_id]
@@ -32,6 +36,15 @@ class RequirementsController < RedmineReController
     child.parent_artifact_id = new_parent_id
     child.save!
     render :nothing => true
+  end
+
+  ##
+  # The following method is called via JavaScript Tafeltree by an ajax update request.
+  # It transmits the call to the according controller which should render the detail view
+  def delegate_tree_node_click
+    artifact = ReArtifact.find_by_id(params[:id])
+    controller = artifact.artifact_type.underscore
+    redirect_to url_for :controller => controller, :action => 'index', :id => params[:id], :parent_id => artifact.parent_artifact_id, :project_id => artifact.project_id 
   end
 
   ##

@@ -4,9 +4,9 @@ class ReTaskController < RedmineReController
   def index
     @tasks = ReTask.find(:all,
                          :joins => :re_artifact,
-                         :conditions => { :re_artifacts => { :project_id => @project.id} }
+                         :conditions => { :re_artifacts => { :project_id => params[:project_id]} }
     )
-    render :layout => 'false'
+    render :layout => false
   end
 
   def test
@@ -71,6 +71,7 @@ class ReTaskController < RedmineReController
   ##
   # unused right now
   def show
+    fghfgh
     @re_task = ReTask.find_by_id(params[:id])
   end
 

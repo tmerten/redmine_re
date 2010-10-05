@@ -8,7 +8,7 @@ class ReGoalController < RedmineReController
     )
     # (faster but less readable) alternative using a left join as an example
     #@goals = ReGoal.find_by_sql('select G.id, G.description from re_goals G LEFT JOIN re_artifacts A on G.id = A.artifact_id where A.artifact_type = "ReGoal" and A.project_id =1  ')
-    render :layout => :false
+    render :layout => false
   end
 
   ##

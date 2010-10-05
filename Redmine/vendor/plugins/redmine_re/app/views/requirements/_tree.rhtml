@@ -25,20 +25,16 @@
     // (and can be called manually on success of an ajax call
     initTree();
 
-    function tree_node_click (html, event, whatsoever) {
-        alert('html: ' + html + ' event ' + event + ' no more arguments given by the tree ' + whatsoever);
-        /*new Ajax.Updater({}, '/requirements/some/' + id, {asynchronous:true, evalScripts:true, parameters:'authenticity_token=' + encodeURIComponent('4z+QuWrwlcTPoK7i/79IT6+rmtDQUAlIttTvAdFHuEg=')});
-        */
-
-        /*
-        Daniela:
-        Der Baum scheint ja das html der Node auszugeben (s. alert).
-
-        Du könntest versuchen daraus die ID zu filtern, das in den Link für den Ajax.updater zu geben
-        im Controller das entsprechende Artefakt zu holen, den Typ auszulesen und daraufhin den Link
-        auf den richtigen Controller zu setzen bzw. (viel schwieriger) ein entsprechendes Menü-Partial
-        (show, edit, delete...) zu rendern...
-         */
+    function tree_node_click (html) {
+        var string = '' + html;
+        var id = string.match(/id\s:\s\d*/)[0].substring(5);
+        var url = '/requirements/delegate_tree_node_click?id=' + id;
+        //Usage of prototype Ajax request builder
+        new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true});
+        // Thorsten, den Helper kann ich nicht einsetzten, weil er nicht dynamisch ist -->
+        // die URL ergibt sich ja erst aus dem OnClick, und darauf kann ich aus dem Ruby-
+        // code ja zum Zeitpunkt der Auswertung noch nicht zugreifen...
+        <%#= remote_function(:update => "detail_view", :url => { :action => url }) %>
         return false;
     };
 
@@ -58,12 +54,11 @@
                 return false;
             }
         } else {
-            /* ich bin mir ziemlich sicher, dass es für XMLHttpRequests auch Rails-Helper bzw. etwas von Prototype gibt ...
-             * schau mal den generierten Code dieser Seite im Browser an. Der "ShowTree"-Helper generiert new Ajax.Request(...) */
-            var request = new XMLHttpRequest();
+
             var url = '/requirements/delegate_tree_drop?new_parent_id=' + branch_here.getId() + ';moved_artifact_id=' + branch_move.getId();
-            request.open('get', url, true);
-            request.send(null)
+            // Usage of prototype Ajax request builder
+            new Ajax.Request(url, {method: 'get'})
+
         }
         return false; /*to present on_click from invoking */
     }
