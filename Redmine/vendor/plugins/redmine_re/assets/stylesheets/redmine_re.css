@@ -1,5 +1,5 @@
 .detail_view {
-    overflow: scroll;
+    position:absolute; left: 275px;
 }
 
 .treebar {
@@ -16,8 +16,7 @@
     margin-bottom: 0pt;
     margin-left: 0pt;
     min-height: 250px;
-    /*background-color: yellow;*/
-    overflow: scroll
+
 }
 
 .recopyright {
