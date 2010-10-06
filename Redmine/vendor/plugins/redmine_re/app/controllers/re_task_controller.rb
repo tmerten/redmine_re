@@ -6,7 +6,6 @@ class ReTaskController < RedmineReController
                          :joins => :re_artifact,
                          :conditions => { :re_artifacts => { :project_id => params[:project_id]} }
     )
-    render :layout => false
   end
 
 
@@ -63,7 +62,6 @@ class ReTaskController < RedmineReController
 
       redirect_to :action => 'index', :project_id => @project.id and return if save_ok
     end
-    render :layout => false
   end
 
     ##

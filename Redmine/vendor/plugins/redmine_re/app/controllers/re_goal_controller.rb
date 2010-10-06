@@ -6,9 +6,6 @@ class ReGoalController < RedmineReController
                          :joins => :re_artifact,
                          :conditions => {:re_artifacts => {:project_id => @project.id}}
     )
-    # (faster but less readable) alternative using a left join as an example
-    #@goals = ReGoal.find_by_sql('select G.id, G.description from re_goals G LEFT JOIN re_artifacts A on G.id = A.artifact_id where A.artifact_type = "ReGoal" and A.project_id =1  ')
-    render :layout => false
   end
 
   ##
@@ -60,7 +57,6 @@ class ReGoalController < RedmineReController
 
         redirect_to :action => 'index', :project_id => @project.id and return if save_ok
       end
-      render :layout => false
   end
 
   ##

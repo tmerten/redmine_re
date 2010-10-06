@@ -9,7 +9,7 @@ class RedmineReController < ApplicationController
   before_filter :authorize,
                 :except =>  [:delegate_tree_drop, :delegate_tree_node_click]
 
-  layout 'base' # uses Redmines Base layout for the header
+  layout proc{ |c| c.request.xhr? ? false : "base" } # uses Redmines Base layout for the header unless it is an ajax-request
   menu_item :re # marks 'Requirements' (css class=re) as the selected menu item
 
   ##

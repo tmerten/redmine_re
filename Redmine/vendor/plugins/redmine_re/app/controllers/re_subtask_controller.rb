@@ -6,8 +6,6 @@ class ReSubtaskController < RedmineReController
                          :joins => :re_artifact,
                          :conditions => { :re_artifacts => { :project_id => @project.id} }
     )
-    render :layout => false
-   
   end
 
   def new
@@ -34,8 +32,6 @@ class ReSubtaskController < RedmineReController
         end
       end
 
-      #render :text => 'Parent_id: ' + params[:parent_id].to_s + '    Re_artifact_id: ' + re_artifact_id + '    Subtask_id: ' + params[:id].to_s
-            
       if request.post?
         # Params Hash anpassen
 
@@ -60,7 +56,6 @@ class ReSubtaskController < RedmineReController
 
         redirect_to :action => 'index', :project_id => @project.id and return if save_ok
       end
-      render :layout => false
     end
 
 
