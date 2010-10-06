@@ -16,22 +16,26 @@ class ReSubtaskController < RedmineReController
 
   # edit can be used for new/edit and update
   def edit
-      if request.get?
+      #if request.get?
         # Parameter id contains id of ReArtifact, not of ReSubtask as it should be
         # This has to be changed here as it is not possible to build
         # a dynamic Ajax-Updater with data from clicked tree-element
-        parent_id = params[:id]
-        @re_artifact = ReArtifact.find_by_id(parent_id)
+        re_artifact_id = params[:id]
+        @re_artifact = ReArtifact.find_by_id(re_artifact_id)
         params[:id] = @re_artifact.artifact_id
-      end
+      #end
       @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact) || ReSubtask.new
       @re_subtask.build_re_artifact unless @re_subtask.re_artifact
       # If no parent_id is transmitted, we don't create a new artifact but edit one
       # Therefore, a valid parent_artifact_id is existent and has to be read out
-      if params[:parent_id] == nil
-        params[:parent_id] = @re_subtask.re_artifact.parent_artifact_id
+      if request.get?
+        if params[:parent_id] == nil
+          params[:parent_id] = @re_subtask.re_artifact.parent_artifact_id
+        end
       end
 
+      #render :text => 'Parent_id: ' + params[:parent_id].to_s + '    Re_artifact_id: ' + re_artifact_id + '    Subtask_id: ' + params[:id].to_s
+            
       if request.post?
         # Params Hash anpassen
 
@@ -43,7 +47,7 @@ class ReSubtaskController < RedmineReController
 
         ## 2. Den Key re_artifact_attributes die id hinzufügen, weil sonst bei Edit neues ReArtifact erzeugt wird da keine Id gefunden wird
         params[:re_subtask][:re_artifact_attributes][:id] = @re_subtask.re_artifact.id
-
+        #render :text => 're_artifact_attribute_hash: ' + params[:re_subtask][:re_artifact_attributes].to_s
         ### Params Hash aktuell BSP:"re_task"=>{"re_artifact_attributes"=>{ "id"=>37,"name"=>"TaskArtifactEditTesterV3", "priority"=>"777777"}
 
         # dies funktioniert nun (nur mit re_artifact_attributes key halt)

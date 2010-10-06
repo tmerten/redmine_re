@@ -4,8 +4,10 @@
 class RedmineReController < ApplicationController
   unloadable
 
-  before_filter :find_project #, :authorize,
-                #:except =>  {:delegate_tree_drop, :index}
+  before_filter :find_project
+
+  before_filter :authorize,
+                :except =>  [:delegate_tree_drop, :delegate_tree_node_click]
 
   layout 'base' # uses Redmines Base layout for the header
   menu_item :re # marks 'Requirements' (css class=re) as the selected menu item

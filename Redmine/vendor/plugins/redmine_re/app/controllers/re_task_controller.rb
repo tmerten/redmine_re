@@ -9,10 +9,6 @@ class ReTaskController < RedmineReController
     render :layout => false
   end
 
-  def test
-    render :text => "<h1>Dies ist ein Test</h1>"
-
-  end
 
   def new
     edit
@@ -20,21 +16,27 @@ class ReTaskController < RedmineReController
 
   # edit can be used for new/edit and update
   def edit
-    if request.get?
+    # ToDo: Abklaeren, warum man die ID-Anpassung auch bei Post machen muss:
+    # Vom Logischen her sollte es eigentlich so sein, dass dies nur bei get
+    # noetig ist, da die neue ID eigentlich an das Formular und somit an das
+    # post weitergeleitet werden sollte.
+    #if request.get?
         # Parameter id contains id of ReArtifact, not of ReSubtask as it should be
         # This has to be changed here as it is not possible to build
         # a dynamic Ajax-Updater with data from clicked tree-element
-        parent_id = params[:id]
-        @re_artifact = ReArtifact.find_by_id(parent_id)
+        re_artifact_id = params[:id]
+        @re_artifact = ReArtifact.find_by_id(re_artifact_id)
         params[:id] = @re_artifact.artifact_id
-      end
+    #end
     @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact) || ReTask.new
     @re_task.build_re_artifact unless @re_task.re_artifact
     # If no parent_id is transmitted, we don't create a new artifact but edit one
     # Therefore, a valid parent_artifact_id is existent and has to be read out
-    if params[:parent_id] == nil
-      params[:parent_id] = @re_task.re_artifact.parent_artifact_id
-    end
+    if request.get?
+        if params[:parent_id] == nil
+          params[:parent_id] = @re_task.re_artifact.parent_artifact_id
+        end
+      end
 
     if request.post?
       # Params Hash anpassen

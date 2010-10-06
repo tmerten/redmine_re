@@ -12,7 +12,6 @@
           <% for column in ReArtifact.content_columns %>
                           <td><b><%= column.name %></b></td>
         <% end %>
-        <td>Edit</td>
         </tr>
     </thead>
     <tbody>
@@ -25,8 +24,7 @@
               <% for column in ReArtifact.content_columns %>
                 <td><%= subtask.re_artifact.send(column.name) %></td>
               <% end %>
-              <td><%= link_to 'edit', :action => 'edit', :id =>subtask.id, :project_id => @project.id %></td>
-              <td><%= link_to 'Show Versions', :action => 'show_versions', :id =>subtask.id, :project_id => @project.id %></td>              
+              <td><%= link_to 'Show Versions', :action => 'show_versions', :id =>subtask.id, :project_id => @project.id %></td>
             </tr>
         <% end %>
     </tbody>
