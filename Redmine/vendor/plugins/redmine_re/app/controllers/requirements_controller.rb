@@ -8,7 +8,8 @@ class RequirementsController < RedmineReController
   def index
     @artifacts  = ReArtifact.find_all_by_project_id(@project.id)
     @artifacts = [] if @artifacts == nil
-    @jsontree = "["
+    # jsontree will start with project as one and only node
+    @jsontree = '[ {"id": "project_' + @project.id.to_s + '", "txt" : "' + @project.name.to_s + '", "items" : ['
     artifacts = []
     if params[:id]
       # Create only one branch starting with artifact with given id if id is given
@@ -22,7 +23,7 @@ class RequirementsController < RedmineReController
         @jsontree += ","
       end
     end
-    @jsontree += "]"
+    @jsontree += "] } ]"
   end
 
   ##
@@ -33,7 +34,13 @@ class RequirementsController < RedmineReController
     new_parent_id = params[:new_parent_id]
     moved_artifact_id = params[:moved_artifact_id]
     child = ReArtifact.find_by_id(moved_artifact_id)
-    child.parent_artifact_id = new_parent_id
+    if new_parent_id.index('project') != nil
+      # Element is dropped under root node which is the project new parent-id has to become nil.
+      child.parent_artifact_id = nil
+    else
+      # Element is dropped under other artifact
+      child.parent_artifact_id = new_parent_id
+    end
     child.save!
     render :nothing => true
   end
@@ -63,7 +70,7 @@ class RequirementsController < RedmineReController
   def render_to_json_tree(re_artifact)
     @jsontree += '{'
     @jsontree += '"id" : "' + re_artifact.id.to_s + '"'
-    @jsontree += ', "txt" : "' + re_artifact.name.to_s
+    @jsontree += ', "txt" : "' + re_artifact.name.to_s    # for tests: + re_artifact.id.to_s + ' parent: ' + re_artifact.parent_artifact_id.to_s
     #@jsontree += '<a href="http://gmx.de">x</a>' # this won't work! only onclick event works!
     @jsontree += '"'
     #@jsontree += ', "ondrop" : "tree_node_drop"'
