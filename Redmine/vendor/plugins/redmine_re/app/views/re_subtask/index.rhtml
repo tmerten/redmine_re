@@ -24,6 +24,7 @@
               <% for column in ReArtifact.content_columns %>
                 <td><%= subtask.re_artifact.send(column.name) %></td>
               <% end %>
+              <td><%= link_to 'Destroy', :action => 'delete', :id =>subtask.id, :project_id => @project.id %></td>
               <td><%= link_to 'Show Versions', :action => 'show_versions', :id =>subtask.id, :project_id => @project.id %></td>
             </tr>
         <% end %>

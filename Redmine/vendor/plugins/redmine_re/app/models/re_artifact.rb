@@ -6,7 +6,7 @@ class ReArtifact < ActiveRecord::Base
            :foreign_key => "parent_artifact_id"
   belongs_to :parent, :class_name => 'ReArtifact', :foreign_key => 'parent_artifact_id'
 
-  belongs_to :artifact, :dependent => :destroy, :polymorphic => true
+  belongs_to :artifact, :polymorphic => true
 
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'

@@ -63,20 +63,24 @@ class ReTaskController < RedmineReController
 
       redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
     end
-#    render :update do |page|
-#      page.replace_html
-#    end
   end
 
     ##
   # deletes and updates the flash with either success, id not found error or deletion error
   def delete
-    @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact)
+    @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact) 
     if !@re_task
-      flash[:error] = 'Could not find a task with this ' + params[:id] + ' to delete'
+      flash[:error] = 'Could not find a task with id ' + params[:id] + ' to delete'
     else
+      # might be replaced by :dependend => :nullify in artifact model
+      children = []
+      children << @re_task.re_artifact.children
       name = @re_task.re_artifact.name
       if ReTask.delete(@re_task.id)
+        for child in children do
+          child.parent_artifact_id = nil
+          child.save
+        end
         flash[:notice] = 'The Task "' + name + '" has been deleted'
       else
         flash[:error] = 'The Task "' + name + '" could not be deleted'

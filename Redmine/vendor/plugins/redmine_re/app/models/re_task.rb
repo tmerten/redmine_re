@@ -3,7 +3,7 @@ class ReTask < ActiveRecord::Base
   
    acts_as_versioned
 
-   has_one :re_artifact, :as => :artifact
+   has_one :re_artifact, :dependent => :destroy, :as => :artifact
    has_many :re_subtasks
 
    accepts_nested_attributes_for :re_artifact, :allow_destroy => true

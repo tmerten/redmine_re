@@ -67,9 +67,16 @@ class ReSubtaskController < RedmineReController
     if !@re_subtask
       flash[:error] = 'Could not find a subtask with this ' + params[:id] + ' to delete'
     else
+      # might be replaced by :dependend => :nullify in artifact model
+      children = []
+      children << @re_subtask.re_artifact.children
       name = @re_subtask.re_artifact.name
       if ReSubtask.delete(@re_subtask.id)
         flash[:notice] = 'The Subtask "' + name + '" has been deleted'
+        for child in children do
+          child.parent_artifact_id = nil
+          child.save
+        end
       else
         flash[:error] = 'The Subtask "' + name + '" could not be deleted'
       end
