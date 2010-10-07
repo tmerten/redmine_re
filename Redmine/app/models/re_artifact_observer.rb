@@ -13,8 +13,9 @@ class ReArtifactObserver < ActiveRecord::Observer
    #=> Nach langem debuggen habe ich mich zu der dirty lösung entschieden immer beim 2. Save den Vorgan auszufuehren
    #=> Also immer wenn die Anzahl der save's eine gerade zahl ist
    def after_save(re_artifact)
+     # TEMPORAER AUSSTELLUNG DER VERSIONIERUNG, DA ES SONST PROBLEME BEIM EDIT GIBT!!!
      #-----nur da weil ReGoal noch keine versionierung hat und sonst fehler bei erstellung oder edit
-     return if re_artifact.artifact.class.to_s == "ReGoal"
+     return #if re_artifact.artifact.class.to_s == "ReGoal"
      #----------
 
      @@save_count += 1
