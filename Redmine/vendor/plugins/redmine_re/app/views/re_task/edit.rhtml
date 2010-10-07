@@ -3,7 +3,7 @@
 <%= error_messages_for :re_task %>
 
 
-<% form_for :re_task, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
+<% remote_form_for :re_task, :update => :detail_view, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
     <%= hidden_field_tag :project_id, params[:project_id] %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
     <div class="box">

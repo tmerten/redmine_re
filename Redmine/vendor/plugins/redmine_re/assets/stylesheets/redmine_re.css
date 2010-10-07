@@ -1,10 +1,11 @@
 .detail_view {
     position:absolute; left: 275px;
+    width: 50%
 }
 
 .treebar {
     float: left;
-    width: 250px;
+    width: 25%;
     position: relative;
     z-index: 9;
     padding-top: 5pt;

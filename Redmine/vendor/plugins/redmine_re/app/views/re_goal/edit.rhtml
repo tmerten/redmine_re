@@ -2,7 +2,7 @@
 
 <%= error_messages_for :re_goal %>
 
-<% form_for :re_goal, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
+<% remote_form_for :re_goal, :update => :detail_view, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
     <%= hidden_field_tag :project_id, @project.id %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
 

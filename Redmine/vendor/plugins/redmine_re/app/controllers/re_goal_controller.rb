@@ -6,6 +6,7 @@ class ReGoalController < RedmineReController
                          :joins => :re_artifact,
                          :conditions => {:re_artifacts => {:project_id => @project.id}}
     )
+    render :layout => false if params[:layout] == 'false'
   end
 
   ##
@@ -55,7 +56,7 @@ class ReGoalController < RedmineReController
         flash[:notice] = 'Goal successfully saved' unless save_ok = @re_goal.save
         # we won't put errors in the flash, since they can be displayed in the errors object
 
-        redirect_to :action => 'index', :project_id => @project.id and return if save_ok
+        redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
       end
   end
 

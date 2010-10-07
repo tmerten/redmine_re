@@ -6,6 +6,7 @@ class ReTaskController < RedmineReController
                          :joins => :re_artifact,
                          :conditions => { :re_artifacts => { :project_id => params[:project_id]} }
     )
+    render :layout => false if params[:layout] == 'false'
   end
 
 
@@ -60,8 +61,11 @@ class ReTaskController < RedmineReController
       flash[:notice] = 'Task successfully saved' unless save_ok = @re_task.save
       # we won't put errors in the flash, since they can be displayed in the errors object
 
-      redirect_to :action => 'index', :project_id => @project.id and return if save_ok
+      redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
     end
+#    render :update do |page|
+#      page.replace_html
+#    end
   end
 
     ##
