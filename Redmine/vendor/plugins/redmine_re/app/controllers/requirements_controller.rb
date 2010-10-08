@@ -80,7 +80,7 @@ class RequirementsController < RedmineReController
 
     # like this it works
     @jsontree += ', "onclick" : "tree_node_click"'
-    
+    @jsontree += ', "ondblclick" : "tree_node_double_click"'    
     @jsontree += ', "img" : "' + re_artifact.artifact_type.to_s.underscore.concat('.gif" ')
     if (!re_artifact.children.empty?)
       @jsontree += ', "items" : ['
@@ -93,6 +93,15 @@ class RequirementsController < RedmineReController
       @jsontree += ']'
     end
     @jsontree += '}'
+  end
+
+  # first tries to enable a contextmenu in artifact tree
+  def context_menu
+    @artifact =  ReArtifact.find_by_id(params[:id])
+    @subartifact_controller = @artifact.artifact_type.to_s.underscore
+    @back = params[:back_url] || request.env['HTTP_REFERER']
+
+    render :layout => false
   end
 
 

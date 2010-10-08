@@ -16,7 +16,7 @@
     </thead>
     <tbody>
         <% for task in @tasks do %>
-            <tr>
+            <tr class="<%= cycle('odd', 'even') %>">
               <% for column in ReTask.content_columns %>
                 <td><%= task.send(column.name) %></td>
               <% end %>
