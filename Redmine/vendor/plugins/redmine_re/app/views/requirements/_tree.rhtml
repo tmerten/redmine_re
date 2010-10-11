@@ -66,6 +66,7 @@
     }
 
     function tree_node_click (branch, e) {
+        e=e || window.event;
         var id = branch.getId();
         var url = '/requirements/context_menu/'+ id + '?project_id=<%= @project.id -%>';
         var mouse_x = Event.pointerX(e);
@@ -87,9 +88,8 @@
 				 max_width = mouse_x + 2*menu_width;
 				 max_height = mouse_y + menu_height;
 
-				 var ws = window_size();
-				 window_width = ws.width;
-				 window_height = ws.height;
+                 window_width = document.viewport.getWidth();
+                 window_height = document.viewport.getHeight();
 
 				 /* display the menu above and/or to the left of the click if needed */
 				 if (max_width > window_width) {
@@ -118,20 +118,6 @@
         
     }
 
-    function window_size() {
-        var w;
-        var h;
-        if (window.innerWidth) {
-        w = window.innerWidth;
-        h = window.innerHeight;
-        } else if (document.documentElement) {
-        w = document.documentElement.clientWidth;
-        h = document.documentElement.clientHeight;
-        } else {
-        w = document.body.clientWidth;
-        h = document.body.clientHeight;
-        }
-        return {width: w, height: h};
-    }
+   
 
 </script>
