@@ -3,7 +3,9 @@ class ReArtifact < ActiveRecord::Base
 
   has_many :children,
            :class_name => "ReArtifact",
-           :foreign_key => "parent_artifact_id"
+           :foreign_key => "parent_artifact_id",
+           :dependent => :nullify
+  
   belongs_to :parent, :class_name => 'ReArtifact', :foreign_key => 'parent_artifact_id'
 
   belongs_to :artifact, :polymorphic => true

@@ -72,15 +72,8 @@ class ReTaskController < RedmineReController
     if !@re_task
       flash[:error] = 'Could not find a task with id ' + params[:id] + ' to delete'
     else
-      # might be replaced by :dependend => :nullify in artifact model
-      children = []
-      children << @re_task.re_artifact.children
       name = @re_task.re_artifact.name
-      if ReTask.delete(@re_task.id)
-        for child in children do
-          child.parent_artifact_id = nil
-          child.save
-        end
+      if ReTask.destroy(@re_task.id)
         flash[:notice] = 'The Task "' + name + '" has been deleted'
       else
         flash[:error] = 'The Task "' + name + '" could not be deleted'
