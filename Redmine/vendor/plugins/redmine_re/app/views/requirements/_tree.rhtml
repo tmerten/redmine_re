@@ -2,16 +2,6 @@
 
 <script type="text/javascript">
 
-  //Global declaration of Eventobserver
-  document.captureEvents(Event.MOUSEMOVE);
-  var event;
-  document.onmousemove = getEvent;
-
-
-    function getEvent(e) {
-        event = e;
-    }
-
     // We declare the tree outside of the function. This way it's
     // accessible from any function
     var tree = null;
@@ -75,12 +65,11 @@
         return false; /*to present on_click from invoking */
     }
 
-    function tree_node_click (branch) {
+    function tree_node_click (branch, e) {
         var id = branch.getId();
         var url = '/requirements/context_menu/'+ id + '?project_id=<%= @project.id -%>';
-
-        var mouse_x = event.clientX;
-        var mouse_y = event.clientY;
+        var mouse_x = Event.pointerX(e);
+        var mouse_y = Event.pointerY(e);
         var render_x = mouse_x;
         var render_y = mouse_y;
         var dims;
@@ -144,6 +133,5 @@
         }
         return {width: w, height: h};
     }
-
 
 </script>
