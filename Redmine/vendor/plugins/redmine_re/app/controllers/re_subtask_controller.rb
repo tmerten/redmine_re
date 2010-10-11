@@ -55,7 +55,11 @@ class ReSubtaskController < RedmineReController
         flash[:notice] = 'Subtask successfully saved' unless save_ok = @re_subtask.save
         # we won't put errors in the flash, since they can be displayed in the errors object
 
-        redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
+        if request.xhr?
+          redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
+        else
+          redirect_to :action => 'index', :project_id => @project.id and return if save_ok
+        end
       end
     end
 
@@ -75,7 +79,11 @@ class ReSubtaskController < RedmineReController
         flash[:error] = 'The Subtask "' + name + '" could not be deleted'
       end
     end
-    redirect_to :action => 'index', :project_id => @project.id
+    if request.xhr?
+      redirect_to :action => 'index', :project_id => @project.id, :layout => 'false'
+    else
+      redirect_to :action => 'index', :project_id => @project.id
+    end
   end
 
   ##

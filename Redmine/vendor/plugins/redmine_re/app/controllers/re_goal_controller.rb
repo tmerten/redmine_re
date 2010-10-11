@@ -56,7 +56,11 @@ class ReGoalController < RedmineReController
         flash[:notice] = 'Goal successfully saved' unless save_ok = @re_goal.save
         # we won't put errors in the flash, since they can be displayed in the errors object
 
-        redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
+        if request.xhr?
+          redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
+        else
+          redirect_to :action => 'index', :project_id => @project.id and return if save_ok
+        end
       end
   end
 
@@ -67,13 +71,18 @@ class ReGoalController < RedmineReController
     if !@re_goal
       flash[:error] = 'Could not find a goal with this ' + params[:id] + ' to delete'
     else
+      name = @re_goal.re_artifact.name
       if ReGoal.destroy(@re_goal.id)
         flash[:notice] = 'The Goal "' + name + '" has been deleted'
       else
         flash[:error] = 'The Goal "' + name + '" could not be deleted'
       end
     end
-    redirect_to :action => 'index', :project_id => @project.id
+    if request.xhr?
+      redirect_to :action => 'index', :project_id => @project.id, :layout => 'false'
+    else
+      redirect_to :action => 'index', :project_id => @project.id
+    end
   end
 
   ##
