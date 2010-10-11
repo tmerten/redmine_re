@@ -68,14 +68,13 @@ class ReGoalController < RedmineReController
       flash[:error] = 'Could not find a goal with this ' + params[:id] + ' to delete'
     else
       # might be replaced by :dependend => :nullify in artifact model
-      children = []
-      children << @re_goal.re_artifact.children
+      children = @re_goal.re_artifact.children
       name = @re_goal.re_artifact.name
       for child in children do
           child.parent_artifact_id = nil
           child.save
       end
-      if ReGoal.delete(@re_goal.id)
+      if ReGoal.destroy(@re_goal.id)
         flash[:notice] = 'The Goal "' + name + '" has been deleted'
       else
         flash[:error] = 'The Goal "' + name + '" could not be deleted'
