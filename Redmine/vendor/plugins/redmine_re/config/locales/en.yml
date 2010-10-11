@@ -8,6 +8,7 @@ en:
   re_requirements_overview: 'Requirements Overview'
   re_sidebar: 'Create Artifacts'
   re_create_child: 'Create Child'
+  re_delete_confirm: 'Do you really want to delete {{what}}?'
 
   # columns
   re_column_name: 'Name'
