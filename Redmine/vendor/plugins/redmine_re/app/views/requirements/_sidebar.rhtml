@@ -1,41 +1,55 @@
-<%= javascript_include_tag 'prototype' %>
+<div id="reSideBar">
+
+  <a href="#" id="reSideBarTab"><img src="<%=image_path('sidebar/slide_button.gif', :plugin => 'redmine_re') %>" alt="sideBar" title="reSideBar"/></a>
+
+  <div id="reSideBarContents" style="display:none;">
+    <div id="reSideBarContentsInner">
+      <h2><%= l(:re_sidebar) %></h2>
+
+      <h3><%= l(:re_goal) %></h3>
+
+      <ul>
+        <li><%= link_to_remote l(:re_create_goal),
+                               :url => {:controller => 're_goal', :action => 'edit', :project_id => @project.id},
+                               :method => :get,
+                               :update => :detail_view %>
+        </li>
+        <li><%= link_to_remote l(:re_show_goals),
+                               :url => {:controller => 're_goal', :action => 'index', :project_id => @project.id},
+                               :update => :detail_view %></li>
+      </ul>
+
+      <h3><%= l(:re_task) %><br/></h3>
+
+      <ul>
+        <li><%= link_to_remote l(:re_show_subtasks),
+                               :url => {:controller => 're_subtask', :action => 'index', :project_id => @project.id},
+                               :update => :detail_view %>
+        </li>
+        <li><%= link_to_remote l(:re_create_subtask),
+                               :url => {:controller => 're_subtask', :action => 'edit', :project_id => @project.id},
+                               :method => :get,
+                               :update => :detail_view %>
+        </li>
+        <li><%= link_to_remote l(:re_create_task),
+                               :controller => 're_task', :action => 'edit', :project_id => @project.id,
+                               :method => :get,
+                               :update => :detail_view %>
+        </li>
+        <li><%= link_to_remote l(:re_show_tasks),
+                               :url => {:controller => 're_task', :action => 'index', :project_id => @project.id},
+                               :update => :detail_view %>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+</div>
 
 
-<h3><%= l(:re_sidebar) %></h3>
-
-<h4><%= l(:re_goal) %></h4>
-
-<ul>
-  <li><%= link_to_remote    l(:re_create_goal),
-                            :url => {:controller => 're_goal', :action => 'edit', :project_id => @project.id},
-                            :method => :get,
-                            :update => :detail_view %>
-  </li>
-  <li><%= link_to_remote    l(:re_show_goals),
-                            :url => {:controller => 're_goal', :action => 'index', :project_id => @project.id},
-                            :update => :detail_view %></li>
-</ul>
-
-<h4><%= l(:re_task) %></h4>
-
-<ul>
-
-  <li><%= link_to_remote    l(:re_show_subtasks),
-                            :url => {:controller => 're_subtask', :action => 'index', :project_id => @project.id},
-                            :update => :detail_view %>
-  </li>
-  <li><%= link_to_remote    l(:re_create_subtask),
-                            :url => {:controller => 're_subtask', :action => 'edit', :project_id => @project.id},
-                            :method => :get,
-                            :update => :detail_view %>
-  </li>
-  <li><%= link_to_remote    l(:re_create_task),
-                            :controller => 're_task', :action => 'edit', :project_id => @project.id,
-                            :method => :get,
-                            :update => :detail_view %>
-  </li>
-  <li><%= link_to_remote    l(:re_show_tasks),
-                            :url => {:controller => 're_task', :action => 'index', :project_id => @project.id},
-                            :update => :detail_view %>
-  </li>
-</ul>
+<script type="text/javascript">
+    //<![CDATA[
+    var sideBar = new ReSideBar('reSideBar');
+    //]]>
+</script>

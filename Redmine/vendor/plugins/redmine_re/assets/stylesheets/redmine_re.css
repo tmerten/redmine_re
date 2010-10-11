@@ -23,3 +23,98 @@
 .recopyright {
     font-size: 0.9em;
 }
+
+#reSideBar{
+    text-align:left;
+}
+
+#reSideBar{
+	position: absolute;
+	width: auto;
+	height: auto;
+	top: 140px;
+	right:0px;
+}
+
+#reSideBar h2{
+	color:#FFFFFF;
+	font-size:110%;
+	margin:10px 10px 10px 10px;
+	font-weight:bold !important;
+    border-bottom-style: none;
+}
+
+#reSideBar h2 span{
+	font-size:125%;
+	font-weight:normal !important;
+}
+
+#reSideBar h3{
+	color:#FFFFFF;
+	font-size:100%;
+	margin:10px 10px 10px 10px;
+	font-weight:bold !important;
+}
+
+#reSideBar h3 span{
+	font-size:115%;
+	font-weight:normal !important;
+}
+
+#reSideBar ul{
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 20px;
+}
+
+#reSideBar li{
+	padding:3px;
+	list-style-type:none;
+	color:#FFFFFF;
+}
+
+#reSideBar li a:hover {
+    background-color: #759fcf;
+}
+
+#reSideBar li a{
+	width:100%;
+}
+
+#reSideBar li a:link,
+#reSideBar li a:visited{
+	color:#FFFFFF;
+	font-family:verdana;
+	font-size:100%;
+	text-decoration:none;
+	display:block;
+	margin:0px 0px 0px 0px;
+	padding:0px;
+	width:100%;
+}
+
+#reSideBar li a:hover{
+	color:#FFFFFF;
+	text-decoration:underline;
+}
+
+#reSideBarTab{
+	float:left;
+	height:137px;
+	width:28px;
+}
+
+#reSideBarTab img{
+	border:0px solid #FFFFFF;
+}
+
+#reSideBarContents{
+    background-color:#507aaa;
+	float:left;
+	overflow:hidden !important;
+	width:200px;
+	height:400px;
+}
+
+#reSideBarContentsInner{
+	width:200px;
+}

@@ -11,7 +11,7 @@
     var initTree = function TafelTreeInit() {
         tree = new TafelTree('tree', treeData, {
             'generate' : true,
-            'imgBase' : '<%=image_path('tafeltree', :plugin => 'redmine_re').split('?')[0] %>/',
+            'imgBase' : '<%= image_path('tafeltree', :plugin => 'redmine_re').split('?')[0] %>/',
             'width' : '100%', // default value : 100%
             'height' : 'auto', // default value : auto
             'openAtLoad' : true,
@@ -26,6 +26,7 @@
     // when the page finishes to load
     // (and can be called manually on success of an ajax call
     initTree();
+
 
     function tree_node_double_click (branch) {
         var id = branch.getId();
@@ -117,9 +118,7 @@
          Effect.Appear('context-menu', {duration: 0.20});
          if (window.parseStylesheets) { window.parseStylesheets(); } // IE
         //menu.style.display = 'block';
-        
     }
-
    
 
 </script>
