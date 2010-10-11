@@ -2,6 +2,16 @@
 
 <script type="text/javascript">
 
+  //Global declaration of Eventobserver
+  document.captureEvents(Event.MOUSEMOVE);
+  var event;
+  document.onmousemove = getEvent;
+
+
+    function getEvent(e) {
+        event = e;
+    }
+
     // We declare the tree outside of the function. This way it's
     // accessible from any function
     var tree = null;
@@ -65,11 +75,12 @@
         return false; /*to present on_click from invoking */
     }
 
-    function tree_node_click (branch, e) {
+    function tree_node_click (branch) {
         var id = branch.getId();
         var url = '/requirements/context_menu/'+ id + '?project_id=<%= @project.id -%>';
-        var mouse_x = Event.pointerX(e);
-        var mouse_y = Event.pointerY(e);
+
+        var mouse_x = event.clientX;
+        var mouse_y = event.clientY;
         var render_x = mouse_x;
         var render_y = mouse_y;
         var dims;
@@ -106,10 +117,10 @@
 				 }
 				 if (render_x <= 0) render_x = 1;
 				 if (render_y <= 0) render_y = 1;
-				 //$('context-menu').style['left'] = (render_x + 'px');
-				 //$('context-menu').style['top'] = (render_y + 'px');
-                 $('context-menu').style['left'] = ('400px');
-				 $('context-menu').style['top'] = ('400px');
+				 $('context-menu').style['left'] = (render_x + 'px');
+				 $('context-menu').style['top'] = (render_y + 'px');
+                 //$('context-menu').style['left'] = ('400px');
+				 //$('context-menu').style['top'] = ('400px');
                  Element.update('context-menu', '');
 
          Effect.Appear('context-menu', {duration: 0.20});
@@ -133,5 +144,6 @@
         }
         return {width: w, height: h};
     }
+
 
 </script>
