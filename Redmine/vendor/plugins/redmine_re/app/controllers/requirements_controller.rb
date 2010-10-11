@@ -79,8 +79,6 @@ class RequirementsController < RedmineReController
     # it did not work, when specifying a full function call with arguments!
 
     # like this it works
-    @jsontree += ', "onclick" : "tree_node_click"'
-    @jsontree += ', "ondblclick" : "tree_node_double_click"'    
     @jsontree += ', "img" : "' + re_artifact.artifact_type.to_s.underscore.concat('.gif" ')
     if (!re_artifact.children.empty?)
       @jsontree += ', "items" : ['

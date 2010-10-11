@@ -16,6 +16,8 @@
             'height' : 'auto', // default value : auto
             'openAtLoad' : true,
             'cookies' : false,
+            'onClick' : tree_node_click,
+            'onDblClick' : tree_node_double_click,
             'onDrop' : tree_node_drop
         });
     }
@@ -66,11 +68,11 @@
     }
 
     function tree_node_click (branch, e) {
-        e=e || window.event;
+        var event = e || window.event; // || window.event to work with IE
         var id = branch.getId();
         var url = '/requirements/context_menu/'+ id + '?project_id=<%= @project.id -%>';
-        var mouse_x = Event.pointerX(e);
-        var mouse_y = Event.pointerY(e);
+        var mouse_x = Event.pointerX(event);
+        var mouse_y = Event.pointerY(event);
         var render_x = mouse_x;
         var render_y = mouse_y;
         var dims;
