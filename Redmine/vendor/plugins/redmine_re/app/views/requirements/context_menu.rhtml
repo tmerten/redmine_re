@@ -2,9 +2,9 @@
 	  <%= call_hook(:view_artifacts_context_menu_start, {:artifacts => @artifacts, :back => @back }) %>
 
 	<% if !@artifact.nil? -%>
-	        <li><%= context_menu_link 'Edit', {:controller => @subartifact_controller, :action => 'edit', :id => @artifact.id},
+	        <li><%= context_menu_link 'Edit', {:controller => @subartifact_controller, :action => 'edit', :id => @artifact.id, :project_id => @artifact.project_id},
 	                :class => 'icon-edit', :disabled => false %></li>
-	        <li><%= context_menu_link 'Delete', {:controller => @subartifact_controller, :action => 'delete', :id => @artifact.id},
+	        <li><%= context_menu_link 'Delete', {:controller => @subartifact_controller, :action => 'delete', :id => @artifact.id, :project_id => @artifact.project_id},
 	                            :method => :post, :confirm => 'Do you really want to delete this artefact?', :class => 'icon-del', :disabled => false %></li>
 	        <li class="folder">
 	                <a href="#" class="submenu" onclick="return false;">Zugeordnete Artefakte</a>
