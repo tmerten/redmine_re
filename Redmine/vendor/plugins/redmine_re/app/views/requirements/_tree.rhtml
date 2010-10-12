@@ -33,17 +33,16 @@
     // when the page finishes to load
     // (and can be called manually on success of an ajax call
     initTree();
-    
-    Event.observe(document.body, 'click', hide_context_menu_handler.bindAsEventListener());
+    Event.observe(document.body, 'click', hide_context_menu.bindAsEventListener());
 
-    function hide_context_menu_handler (e){
+
+    function hide_context_menu (e){
         var target = Event.element(e);
         if (!target.hasClassName('tafelTreecontent'))  {
             // Element is definitively outside of the tree as tree nodes are in td-tags
             Effect.Fade('context-menu', {duration: 0.10});
         }
     }
-
 
 
     function tree_node_double_click (branch) {
