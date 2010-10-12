@@ -15,14 +15,6 @@ class ReSubtaskController < RedmineReController
 
   # edit can be used for new/edit and update
   def edit
-      #if request.get?
-        # Parameter id contains id of ReArtifact, not of ReSubtask as it should be
-        # This has to be changed here as it is not possible to build
-        # a dynamic Ajax-Updater with data from clicked tree-element
-        re_artifact_id = params[:id]
-        @re_artifact = ReArtifact.find_by_id(re_artifact_id)
-        params[:id] = @re_artifact.artifact_id
-      #end
       @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact) || ReSubtask.new
       @re_subtask.build_re_artifact unless @re_subtask.re_artifact
       # If no parent_id is transmitted, we don't create a new artifact but edit one
@@ -30,6 +22,7 @@ class ReSubtaskController < RedmineReController
       if request.get?
         if params[:parent_id] == nil
           params[:parent_id] = @re_subtask.re_artifact.parent_artifact_id
+          render :layout => false if params[:layout] = 'false'
         end
       end
 
@@ -71,7 +64,6 @@ class ReSubtaskController < RedmineReController
     if !@re_subtask
       flash[:error] = 'Could not find a subtask with this ' + params[:id] + ' to delete'
     else
-      # might be replaced by :dependend => :nullify in artifact model
       name = @re_subtask.re_artifact.name
       if ReSubtask.destroy(@re_subtask.id)
         flash[:notice] = 'The Subtask "' + name + '" has been deleted'

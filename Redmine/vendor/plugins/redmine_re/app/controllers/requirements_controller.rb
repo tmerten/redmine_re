@@ -96,6 +96,9 @@ class RequirementsController < RedmineReController
   # first tries to enable a contextmenu in artifact tree
   def context_menu
     @artifact =  ReArtifact.find_by_id(params[:id])
+
+    render :text => "Could not find artifact.", :status => 500 unless @artifact
+
     @subartifact_controller = @artifact.artifact_type.to_s.underscore
     @back = params[:back_url] || request.env['HTTP_REFERER']
 

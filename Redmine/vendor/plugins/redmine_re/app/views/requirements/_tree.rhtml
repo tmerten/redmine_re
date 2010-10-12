@@ -47,9 +47,9 @@
 
     function tree_node_double_click (branch) {
         var id = branch.getId();
-        var controller = branch.getIcon();
-        controller = controller.substr(0, controller.length - '.gif'.length);
-        var url = '/' + controller + '/edit/'+ id + '?project_id=<%= @project.id -%>'; 
+        /*var controller = branch.getIcon();
+        controller = controller.substr(0, controller.length - '.gif'.length); */
+        var url = '/re_artifact/edit/'+ id + '?project_id=<%= @project.id -%>'; 
 
         //Usage of prototype Ajax request builder
         new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});

@@ -5,7 +5,7 @@
 
 <div id="reSideBar">
 
-  <a href="#" id="reSideBarTab"><img src="<%=image_path('sidebar/slide_button.gif', :plugin => 'redmine_re') %>" alt="sideBar" title="reSideBar"/></a>
+  <a href="#" id="reSideBarTab" accesskey="n"><img src="<%=image_path('sidebar/slide_button.gif', :plugin => 'redmine_re') %>" alt="sideBar" title="reSideBar"/></a>
 
   <div id="reSideBarContents" style="display:none;">
     <div id="reSideBarContentsInner">
@@ -27,6 +27,15 @@
       <h3><%= l(:re_task) %><br/></h3>
 
       <ul>
+        <li><%= link_to_remote l(:re_create_task),
+                               :url => {:controller => 're_task', :action => 'edit', :project_id => @project.id},
+                               :method => :get,
+                               :update => :detail_view %>
+        </li>
+        <li><%= link_to_remote l(:re_show_tasks),
+                               :url => {:controller => 're_task', :action => 'index', :project_id => @project.id},
+                               :update => :detail_view %>
+        </li>
         <li><%= link_to_remote l(:re_show_subtasks),
                                :url => {:controller => 're_subtask', :action => 'index', :project_id => @project.id},
                                :update => :detail_view %>
@@ -34,15 +43,6 @@
         <li><%= link_to_remote l(:re_create_subtask),
                                :url => {:controller => 're_subtask', :action => 'edit', :project_id => @project.id},
                                :method => :get,
-                               :update => :detail_view %>
-        </li>
-        <li><%= link_to_remote l(:re_create_task),
-                               :controller => 're_task', :action => 'edit', :project_id => @project.id,
-                               :method => :get,
-                               :update => :detail_view %>
-        </li>
-        <li><%= link_to_remote l(:re_show_tasks),
-                               :url => {:controller => 're_task', :action => 'index', :project_id => @project.id},
                                :update => :detail_view %>
         </li>
       </ul>
@@ -54,6 +54,8 @@
 
 <script type="text/javascript">
     //<![CDATA[
-    var sideBar = new ReSideBar('reSideBar');
+   Event.observe(window, 'load', function() {
+        var sideBar = new ReSideBar('reSideBar');
+    });
     //]]>
 </script>

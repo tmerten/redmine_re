@@ -2,12 +2,12 @@
 	  <%= call_hook(:view_artifacts_context_menu_start, {:artifacts => @artifacts, :back => @back }) %>
 
 	<% if !@artifact.nil? -%>
-	        <li><%= context_menu_link_remote 'Edit',    {:controller => @subartifact_controller, :action => 'edit', :id => @artifact.id, :project_id => @artifact.project_id},
+	        <li><%= context_menu_link_remote 'Edit',    {:controller => 're_artifact', :action => 'edit', :id => @artifact.id, :project_id => @artifact.project_id},
 	                                                    'detail_view',
                                                         :method => :get,
                                                         :class => 'icon-edit',
                                                         :disabled => false %></li>
-	        <li><%= context_menu_link_remote 'Delete',  { :controller => @subartifact_controller, :action => 'delete', :id => @artifact.artifact_id, :project_id => @artifact.project_id},
+	        <li><%= context_menu_link_remote 'Delete',  { :controller => 're_artifact', :action => 'delete', :id => @artifact.artifact_id, :project_id => @artifact.project_id},
 	                                                    'detail_view',
                                                         :confirm => t(:re_delete_confirm, {:what=>@artifact.name}),
                                                         :class => 'icon-del',

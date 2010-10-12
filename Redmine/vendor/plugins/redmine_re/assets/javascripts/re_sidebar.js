@@ -1,7 +1,7 @@
 /*
  This class initializes and slides the bar to the right.
 
- it uses the css "stylesheets/redmine_re.css" TODO: create my own file
+ it uses the css "stylesheets/re_sidebar.css"
  and the images "images/sidebar/*.gif"
  */
 var ReSideBar;

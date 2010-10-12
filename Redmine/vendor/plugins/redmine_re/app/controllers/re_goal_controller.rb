@@ -18,14 +18,6 @@ class ReGoalController < RedmineReController
   ##
   # edit can be used for new/edit and update
   def edit
-      #if request.get?
-        # Parameter id contains id of ReArtifact, not of ReSubtask as it should be
-        # This has to be changed here as it is not possible to build
-        # a dynamic Ajax-Updater with data from clicked tree-element
-        re_artifact_id = params[:id]
-        @re_artifact = ReArtifact.find_by_id(re_artifact_id)
-        params[:id] = @re_artifact.artifact_id
-      #end
       @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact) || ReGoal.new
       @re_goal.build_re_artifact unless @re_goal.re_artifact
       # If no parent_id is transmitted, we don't create a new artifact but edit one
@@ -33,6 +25,7 @@ class ReGoalController < RedmineReController
       if request.get?
         if params[:parent_id] == nil
           params[:parent_id] = @re_goal.re_artifact.parent_artifact_id
+          render :layout => false if params[:layout] = 'false'
         end
       end
       if request.post?
