@@ -1,15 +1,16 @@
-<%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
-<%= stylesheet_link_tag 'tafelTree.css', :plugin => "redmine_re", :media => 'all' %>
-<%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
-<%= javascript_include_tag :defaults %> <%# includes: prototype, effects, dragdrop, controls, application%>
-<%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
-<%= javascript_include_tag 're_sidebar.js', :plugin => 'redmine_re' %>
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+    <%= stylesheet_link_tag 'tafelTree.css', :plugin => "redmine_re", :media => 'all' %>
+    <%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
 
+    <%= javascript_include_tag :defaults %> <%# includes: prototype, effects, dragdrop, controls, application%>
+    <%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
+    <%= javascript_include_tag 're_sidebar.js', :plugin => 'redmine_re' %>
+<% end %>
 
 <div id='treebar' class='treebar'>
     <%= render :partial => "filter" %>
-    <div id='tree' class='tree'><%= render :partial => "tree" %></div>
-    <!-- Creation of yet invisible context menu -->
+    <%= render :partial => "tree" %>
 </div>
 
 <%= render :partial => "bread_crumb_navigation" %>
