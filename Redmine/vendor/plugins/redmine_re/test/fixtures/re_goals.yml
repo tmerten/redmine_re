@@ -1,7 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
-  id: 1
-  description: MyString
-two:
-  id: 2
-  description: MyString
+geringe_latenz:
+  description: Das System soll innerhalb von 1 sec auf Anfragen reagieren.
+  
+benutzerfreundlichkeit:
+  description: Das System soll eine leicht verständliche Benutzerführung haben.
