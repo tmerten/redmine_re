@@ -1,11 +1,6 @@
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
-    <%= stylesheet_link_tag 'tafelTree.css', :plugin => "redmine_re", :media => 'all' %>
-    <%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
-
     <%= javascript_include_tag :defaults %> <%# includes: prototype, effects, dragdrop, controls, application%>
-    <%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
-    <%= javascript_include_tag 're_sidebar.js', :plugin => 'redmine_re' %>
+    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 <% end %>
 
 <div id='treebar' class='treebar'>

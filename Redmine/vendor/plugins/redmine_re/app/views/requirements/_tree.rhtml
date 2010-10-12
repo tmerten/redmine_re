@@ -1,3 +1,9 @@
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'tafelTree.css', :plugin => "redmine_re", :media => 'all' %>
+    <%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
+    <%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
+<% end%>
+
 <div id="tree"></div>
 
 <script type="text/javascript">
@@ -66,7 +72,7 @@
             new Ajax.Request(url, {method: 'get'})
 
         }
-        return false; /*to present on_click from invoking */
+        return false; /*to prevent on_click from invoking */
     }
 
     function tree_node_click (branch, e) {

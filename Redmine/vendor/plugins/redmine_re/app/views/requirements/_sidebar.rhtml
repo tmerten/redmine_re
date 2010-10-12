@@ -1,3 +1,8 @@
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 're_sidebar.js', :plugin => 'redmine_re' %>
+    <%= stylesheet_link_tag 're_sidebar.css', :plugin => 'redmine_re', :media => 'all' %>
+<% end %>
+
 <div id="reSideBar">
 
   <a href="#" id="reSideBarTab"><img src="<%=image_path('sidebar/slide_button.gif', :plugin => 'redmine_re') %>" alt="sideBar" title="reSideBar"/></a>
