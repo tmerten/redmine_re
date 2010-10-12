@@ -33,13 +33,14 @@
     // when the page finishes to load
     // (and can be called manually on success of an ajax call
     initTree();
+    
     Event.observe(document.body, 'click', hide_context_menu_handler.bindAsEventListener());
 
     function hide_context_menu_handler (e){
         var target = Event.element(e);
         if (!target.hasClassName('tafelTreecontent'))  {
             // Element is definitively outside of the tree as tree nodes are in td-tags
-            Effect.Fade('context-menu', {duration: 0.10});        
+            Effect.Fade('context-menu', {duration: 0.10});
         }
     }
 
@@ -47,16 +48,10 @@
 
     function tree_node_double_click (branch) {
         var id = branch.getId();
-        /*var controller = branch.getIcon();
-        controller = controller.substr(0, controller.length - '.gif'.length); */
-        var url = '/re_artifact/edit/'+ id + '?project_id=<%= @project.id -%>'; 
+        var url = '/re_artifact/edit/'+ id + '?project_id=<%= @project.id -%>';
 
         //Usage of prototype Ajax request builder
         new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});
-        // Thorsten, den Helper kann ich nicht einsetzten, weil er nicht dynamisch ist -->
-        // die URL ergibt sich ja erst aus dem OnClick, und darauf kann ich aus dem Ruby-
-        // code ja zum Zeitpunkt der Auswertung noch nicht zugreifen...
-        <%#= remote_function(:update => "detail_view", :url => { :action => url }) %>
         return false;
     };
 
@@ -85,10 +80,10 @@
         return false; /*to prevent on_click from invoking */
     }
 
-    function tree_node_click (branch, e) {
+    function tree_node_click(branch, e) {
         var event = e || window.event; // || window.event to work with IE
         var id = branch.getId();
-        var url = '/requirements/context_menu/'+ id + '?project_id=<%= @project.id -%>';
+        var url = '/requirements/context_menu/' + id + '?project_id=<%= @project.id -%>';
         var mouse_x = Event.pointerX(event);
         var mouse_y = Event.pointerY(event);
         var render_x = mouse_x;
@@ -103,38 +98,39 @@
         new Ajax.Updater('context-menu', url, {asynchronous:true, evalScripts:true, method:'get'});
         menu = document.getElementById('context-menu');
         dims = menu.getDimensions();
-				 menu_width = dims.width;
-				 menu_height = dims.height;
-				 max_width = mouse_x + 2*menu_width;
-				 max_height = mouse_y + menu_height;
+        menu_width = dims.width;
+        menu_height = dims.height;
+        max_width = mouse_x + 2 * menu_width;
+        max_height = mouse_y + menu_height;
 
-                 window_width = document.viewport.getWidth();
-                 window_height = document.viewport.getHeight();
+        window_width = document.viewport.getWidth();
+        window_height = document.viewport.getHeight();
 
-				 /* display the menu above and/or to the left of the click if needed */
-				 if (max_width > window_width) {
-				   render_x -= menu_width;
-				   $('context-menu').addClassName('reverse-x');
-				 } else {
-					 $('context-menu').removeClassName('reverse-x');
-				 }
-				 if (max_height > window_height) {
-				   render_y -= menu_height;
-				   $('context-menu').addClassName('reverse-y');
-				 } else {
-					 $('context-menu').removeClassName('reverse-y');
-				 }
-				 if (render_x <= 0) render_x = 1;
-				 if (render_y <= 0) render_y = 1;
-				 $('context-menu').style['left'] = (render_x + 'px');
-				 $('context-menu').style['top'] = (render_y + 'px');
-                 //$('context-menu').style['left'] = ('400px');
-				 //$('context-menu').style['top'] = ('400px');
-                 Element.update('context-menu', '');
+        /* display the menu above and/or to the left of the click if needed */
+        if (max_width > window_width) {
+            render_x -= menu_width;
+            $('context-menu').addClassName('reverse-x');
+        } else {
+            $('context-menu').removeClassName('reverse-x');
+        }
+        if (max_height > window_height) {
+            render_y -= menu_height;
+            $('context-menu').addClassName('reverse-y');
+        } else {
+            $('context-menu').removeClassName('reverse-y');
+        }
+        if (render_x <= 0) render_x = 1;
+        if (render_y <= 0) render_y = 1;
+        $('context-menu').style['left'] = (render_x + 'px');
+        $('context-menu').style['top'] = (render_y + 'px');
+        //$('context-menu').style['left'] = ('400px');
+        //$('context-menu').style['top'] = ('400px');
+        Element.update('context-menu', '');
 
-         Effect.Appear('context-menu', {duration: 0.20});
-         if (window.parseStylesheets) { window.parseStylesheets(); } // IE
-        //menu.style.display = 'block';
+        Effect.Appear('context-menu', {duration: 0.20});
+        if (window.parseStylesheets) {
+            window.parseStylesheets();
+        } // IE
     }
 
     //]]>

@@ -9,7 +9,9 @@ class RequirementsController < RedmineReController
     @artifacts  = ReArtifact.find_all_by_project_id(@project.id)
     @artifacts = [] if @artifacts == nil
     # jsontree will start with project as one and only node
-    @jsontree = '[ {"id": "project_' + @project.id.to_s + '", "txt" : "' + @project.name.to_s + '", "items" : ['
+    @jsontree = '[ {"id": "project_' + @project.id.to_s + '", "txt" : "' + @project.name.to_s + '",'
+    @jsontree += '"onclick":false, "ondblclick":false,'
+    @jsontree += '"items" : ['
     artifacts = []
     if params[:id]
       # Create only one branch starting with artifact with given id if id is given
