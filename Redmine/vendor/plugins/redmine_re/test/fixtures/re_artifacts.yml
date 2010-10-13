@@ -1,15 +1,16 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-benutzerfreundlichkeit:
+art_benutzerfreundlichkeit:
   name: benutzerfreundlichkeit
   priority: 1
   author: users_001
   project: projects_002
-  artifact: benutzerfreundlichkeit (re_goal)
+  artifact: goa_benutzerfreundlichkeit (ReGoal)
 
-geringe_latenz:
+art_geringe_latenz:
   name: geringe_latenz
   priority: 5
-  author: users_004
+  author: users_002
   project: projects_004
-  artifact: geringe_latenz (re_goal)
+  parent: art_benutzerfreundlichkeit
+  artifact: goa_geringe_latenz (ReGoal)
