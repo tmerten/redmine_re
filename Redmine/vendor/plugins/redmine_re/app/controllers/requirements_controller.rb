@@ -43,6 +43,7 @@ class RequirementsController < RedmineReController
       # Element is dropped under other artifact
       child.parent_artifact_id = new_parent_id
     end
+    child.state = state::DROPING    #Zustand (fuer observer)
     child.save!
     render :nothing => true
   end

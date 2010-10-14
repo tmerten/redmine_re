@@ -17,11 +17,12 @@ class ReArtifact < ActiveRecord::Base
   validates_uniqueness_of :name
 
   # Methoden
-  attr_accessor :isReverting # Als Zustand noetig fuer(observer)
+  attr_accessor :state # Als Zustand noetig fuer(observer)
+ 
 
   def revert
        #TODO neue version erstellen wenn reverted
-       self.isReverting = false
+       self.state = State::IDLE
 
        versionNr = self.artifact.version
        version   = self.artifact.versions.find_by_version(versionNr)
@@ -38,12 +39,34 @@ class ReArtifact < ActiveRecord::Base
      versionNr = self.artifact.version
      version   = self.artifact.versions.find_by_version(versionNr)
 
-     version.updated_by        = User.current.id
-     version.artifact_name     = self.name
-     version.artifact_priority = self.priority
+     version.updated_by         = User.current.id
+     version.artifact_name      = self.name
+     version.artifact_priority  = self.priority
+     version.parent_artifact_id = self.parent_artifact_id
 
      version.save
   end
+
+#  def create_new_version
+#     versionNr = self.artifact.version
+#     version   = self.artifact.versions.find_by_version(versionNr)
+#     Rails.logger.debug("####### create new version#########1 version" + version.inspect )
+#     new_version = version.clone
+#     Rails.logger.debug("####### create new version#########2 version/ new version" + version.inspect + "\n" + new_version.inspect)
+#
+#     new_version.version = new_version.version.to_i + 1
+#     #new_version.id += 1
+#     Rails.logger.debug("####### create new version######### version/ new version" + version.inspect + "\n" + new_version.inspect + "\n artifact vers" + self.artifact.version.to_s)
+#
+#
+#     self.artifact.without_revision do
+#        self.artifact.version  = new_version.version
+#        self.artifact.save
+#     end
+#     Rails.logger.debug("####### create new version######### artifact" + self.artifact.inspect)
+#
+#     new_version.save
+#  end
 
   # Versioniert das Elternartifact
   def versioning_parent
