@@ -18,17 +18,27 @@ class ReArtifactObserver < ActiveRecord::Observer
      return #if re_artifact.artifact.class.to_s == "ReGoal"
      #----------
 
+     # Wenn ein ReArtifact verschoben wird also sich der parent ändert
+     # Hier wird nur einmal after save aufgerufen daher save_count nicht von interesse
+     if( re_artifact.state == State::DROPING )
+        #re_artifact.create_new_version             #TODO : vorher neue version erstellen muss man noch überlegen
+        re_artifact.update_extra_version_columns
+        re_artifact.versioning_parent
+        re_artifact.state == State::IDLE
+     end
+     
+      Rails.logger.debug("###### after save observer###{Time.now.to_s}#Save_count:#{@@save_count}#1 ReArtifact:" + re_artifact.inspect)
      @@save_count += 1
      isEven = @@save_count % 2 == 0
 
-     if isEven #wenn gerade        #TODO nach revert to von re_artifact attributen realisieren
-       re_artifact.update_extra_version_columns unless re_artifact.isReverting
+     if isEven #wenn gerade
+       re_artifact.update_extra_version_columns unless re_artifact.state == State::REVERTING
        re_artifact.versioning_parent
      end
    end
 
     def before_revert(re_artifact)
-      re_artifact.isReverting = true
+      re_artifact.state = State::REVERTING
     end
 
     def after_revert(re_artifact)
