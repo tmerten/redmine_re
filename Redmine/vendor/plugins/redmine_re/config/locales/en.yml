@@ -32,7 +32,6 @@ en:
   re_goal: 'Goal'
   re_goal_description: 'Description'
   re_create_child_goal: 'Create Child of Type Goal'
-
   
   # re_tasks
   re_create_task: 'New Task'
@@ -55,3 +54,5 @@ en:
   # fields
   field_re_artifact: 'field artifact'
 
+  # sidebar
+  re_sidebar_hover: 'Click here to create new elements'

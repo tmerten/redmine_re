@@ -20,7 +20,7 @@
 # Settings can be defined through the application in Admin -> Settings
 
 app_title:
-  default: KoREM - Redmine
+  default: Redmine
 app_subtitle:
   default: Project and Requirements Management
 welcome_text:
