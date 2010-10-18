@@ -31,4 +31,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 
   # ReArtifact can be added to the activity view
   #activity_provider :re_artifact
+
+  #Observers
+  config.active_record.observers = :re_artifact_observer
 end

@@ -15,7 +15,7 @@ class ReArtifactObserver < ActiveRecord::Observer
    def after_save(re_artifact)
      # TEMPORAER AUSSTELLUNG DER VERSIONIERUNG, DA ES SONST PROBLEME BEIM EDIT GIBT!!!
      #-----nur da weil ReGoal noch keine versionierung hat und sonst fehler bei erstellung oder edit
-     return #if re_artifact.artifact.class.to_s == "ReGoal"
+     return if re_artifact.artifact.class.to_s == "ReGoal"
      #----------
 
      # Wenn ein ReArtifact verschoben wird also sich der parent ändert
