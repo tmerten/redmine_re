@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   width="32px"
+   height="32px"
+   viewBox="0 0 32 32"
+   enable-background="new 0 0 32 32"
+   xml:space="preserve"
+   id="svg2"
+   >
+
+<metadata><rdf:RDF>
+
+   <cc:Work rdf:about="">
+   <dc:format>image/svg+xml</dc:format>
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+   <dc:title>PICOL Icon</dc:title>
+   <dc:date>2009-03-15</dc:date>
+   <dc:creator><cc:Agent><dc:title>Melih Bilgil</dc:title></cc:Agent></dc:creator>
+   <dc:rights><cc:Agent><dc:title>Creative Commons BY-SA</dc:title></cc:Agent></dc:rights>
+   <dc:publisher><cc:Agent><dc:title>PICOL - Pictorial Communication Language</dc:title></cc:Agent></dc:publisher>
+   <dc:identifier>http://blog.picol.org</dc:identifier>
+   <dc:source>http://blog.picol.org</dc:source>
+   <dc:language>en</dc:language>
+   <dc:subject>
+     <rdf:Bag>
+       <rdf:li>PICOL</rdf:li>
+       <rdf:li>icon</rdf:li>
+       <rdf:li>icons</rdf:li>
+       <rdf:li>sign</rdf:li>
+       <rdf:li>GUI</rdf:li>
+       <rdf:li>vector</rdf:li>
+       <rdf:li>interface</rdf:li>
+     </rdf:Bag>
+   </dc:subject>
+   <dc:description>This is one icon out of all PICOL icons</dc:description>
+   <dc:contributor>
+       <cc:Agent><dc:title>Melih Bilgil (www.lonja.de), Christopher Adjei (www.boffer.net)</dc:title></cc:Agent></dc:contributor>
+   <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" /></cc:Work>
+   <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+       <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+       <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+       <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+       <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+       <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+       <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License>
+
+   </rdf:RDF>
+</metadata>
+
+<g id="background">
+	<rect y="0" fill="none" width="32" height="32"/>
+</g>
+<g id="light">
+	<path d="M26.644,5.553c-1.33-2.746-4.29-5.587-9.643-5.552c-5.355-0.035-8.315,2.806-9.645,5.552
+		C5.993,8.293,6.005,10.916,5.999,11c0.045,5.542,4.243,9.623,4.292,9.707c0.824,0.817,1.266,1.896,1.488,2.785
+		c0.111,0.443,0.167,0.834,0.194,1.108C12,24.872,11.996,24.999,12,24.999V30h2l2,2h2l2-2h2v-5.039c0-0.04,0.002-0.142,0.025-0.361
+		c0.074-0.83,0.443-2.677,1.681-3.894c0.051-0.084,4.249-4.165,4.292-9.707C27.994,10.916,28.006,8.293,26.644,5.553z
+		 M24.146,16.851c-0.47,0.764-0.941,1.383-1.293,1.808c-0.351,0.424-0.562,0.632-0.562,0.634c-1.558,1.593-2.047,3.548-2.206,4.708
+		h-6.171c-0.16-1.16-0.649-3.115-2.208-4.708c0,0-0.21-0.21-0.562-0.634C10.078,17.388,7.982,14.339,8,11
+		c0-0.002-0.002-0.531,0.142-1.397c0.214-1.303,0.768-3.249,2.067-4.799C11.517,3.26,13.499,2.016,17.001,2
+		c4.644,0.035,6.685,2.195,7.854,4.447c0.566,1.13,0.858,2.29,1,3.156C26.001,10.469,25.993,11,25.999,11
+		C26.003,13.228,25.091,15.321,24.146,16.851z"/>
+</g>
+</svg>
