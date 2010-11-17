@@ -4,6 +4,7 @@
 # contributor: Thibaut Cuvelier - Developpez.com
 
 fr:
+  direction: ltr
   date:
     formats:
       default: "%d/%m/%Y"
@@ -200,7 +201,7 @@ fr:
   mail_body_account_information: Paramètres de connexion de votre compte
   mail_subject_account_activation_request: "Demande d'activation d'un compte {{value}}"
   mail_body_account_activation_request: "Un nouvel utilisateur ({{value}}) s'est inscrit. Son compte nécessite votre approbation :"
-  mail_subject_reminder: "{{count}} demande(s) arrivent à échéance"
+  mail_subject_reminder: "{{count}} demande(s) arrivent à échéance ({{days}})"
   mail_body_reminder: "{{count}} demande(s) qui vous sont assignées arrivent à échéance dans les {{days}} prochains jours :"
   mail_subject_wiki_content_added: "Page wiki '{{page}}' ajoutée"
   mail_body_wiki_content_added: "La page wiki '{{page}}' a été ajoutée par {{author}}."
@@ -270,7 +271,6 @@ fr:
   field_attr_lastname: Attribut Nom
   field_attr_mail: Attribut Email
   field_onthefly: Création des utilisateurs à la volée
-  field_start_date: Début
   field_done_ratio: % réalisé
   field_auth_source: Mode d'authentification
   field_hide_mail: Cacher mon adresse mail
@@ -421,6 +421,8 @@ fr:
   project_module_wiki: Wiki
   project_module_repository: Dépôt de sources
   project_module_boards: Forums de discussion
+  project_module_gantt: Gantt
+  project_module_calendar: Calendar
   
   label_user: Utilisateur
   label_user_plural: Utilisateurs
@@ -772,6 +774,8 @@ fr:
   label_profile: Profil
   label_subtask_plural: Sous-tâches
   label_project_copy_notifications: Envoyer les notifications durant la copie du projet
+  label_principal_search: "Rechercher un utilisateur ou un groupe :"
+  label_user_search: "Rechercher un utilisateur :"
   
   button_login: Connexion
   button_submit: Soumettre
@@ -832,9 +836,9 @@ fr:
   text_subprojects_destroy_warning: "Ses sous-projets : {{value}} seront également supprimés."
   text_workflow_edit: Sélectionner un tracker et un rôle pour éditer le workflow
   text_are_you_sure: Êtes-vous sûr ?
-  text_tip_task_begin_day: tâche commençant ce jour
-  text_tip_task_end_day: tâche finissant ce jour
-  text_tip_task_begin_end_day: tâche commençant et finissant ce jour
+  text_tip_issue_begin_day: tâche commençant ce jour
+  text_tip_issue_end_day: tâche finissant ce jour
+  text_tip_issue_begin_end_day: tâche commençant et finissant ce jour
   text_project_identifier_info: 'Seuls les lettres minuscules (a-z), chiffres et tirets sont autorisés.<br />Un fois sauvegardé, l''identifiant ne pourra plus être modifié.'
   text_caracters_maximum: "{{count}} caractères maximum."
   text_caracters_minimum: "{{count}} caractères minimum."
@@ -922,8 +926,23 @@ fr:
   error_can_not_remove_role: This role is in use and can not be deleted.
   error_can_not_delete_tracker: This tracker contains issues and can't be deleted.
   field_principal: Principal
-  notice_failed_to_save_members: "Failed to save member(s): {{errors}}."
-  text_zoom_out: Zoom out
-  text_zoom_in: Zoom in
-  notice_unable_delete_time_entry: Unable to delete time log entry.
-  label_overall_spent_time: Overall spent time
+  notice_failed_to_save_members: "Erreur lors de la sauvegarde des membres: {{errors}}."
+  text_zoom_out: Zoom arrière
+  text_zoom_in: Zoom avant
+  notice_unable_delete_time_entry: Impossible de supprimer le temps passé.
+  label_overall_spent_time: Temps passé global
+  field_time_entries: Log time
+  project_module_gantt: Gantt
+  project_module_calendar: Calendrier
+  button_edit_associated_wikipage: "Modifier la page wiki associée: {{page_title}}"
+  text_are_you_sure_with_children: Supprimer la demande et toutes ses sous-demandes ?
+  field_text: Champ texte
+  label_user_mail_option_only_owner: Seulement pour ce que j'ai créé
+  setting_default_notification_option: Option de notification par défaut
+  label_user_mail_option_only_my_events: Seulement pour ce que je surveille
+  label_user_mail_option_only_assigned: Seulement pour ce qui m'est assigné
+  label_user_mail_option_none: Aucune notification
+  field_member_of_group: Groupe de l'assigné
+  field_assigned_to_role: Rôle de l'assigné
+
+  field_start_date: Start date

@@ -1,7 +1,10 @@
 class ReGoal < ActiveRecord::Base
   unloadable
 
-  has_one :re_artifact, :as => :artifact, :dependent => :destroy
-  accepts_nested_attributes_for :re_artifact, :allow_destroy => true
-  
+  acts_as_re_artifact
+
+  validates_presence_of :re_artifact_properties
+
+  #acts_as_versioned
+  #accepts_nested_attributes_for :re_artifact_properties, :allow_destroy => true
 end

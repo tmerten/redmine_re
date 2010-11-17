@@ -9,14 +9,25 @@ module RequirementsHelper
     #                 on link_to_remote for html-options.
     # Example: <%= context_menu_link_remote 'Edit',
     #                                           {:controller => @subartifact_controller, :action => 'edit', :id => @artifact.id, :project_id => @artifact.project_id},
-	#                                           'detail_view',
+    #                                           'detail_view',
     #                                           :method => :get,
     #                                           :class => 'icon-edit',
     #                                           :disabled => false %>
     # Generates: <a onclick="new Ajax.Updater('detail_view', '/re_subtask/edit/2?project_id=1', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('LpQJtfbJlKJVxpblgb1KKfqpu5vd59APcZR32Hr9vTk=')}); return false;"
     #               href="#"
     #               class="icon-edit">Edit</a>
-    def context_menu_link_remote (name, url, update, options={})
+  
+  # overrides render_flash_messages in application helper  
+  def render_flash_messages
+    s = ''
+    flash.each do |k,v|
+      s << content_tag('div', v, :class => "flash #{k}", :id => "#{v}#{k}")
+      s << content_tag('script', "setTimeout('new Effect.Fade(\"#{v}#{k}\");', 6000)", :type => "text/javascript")
+    end
+    s
+  end
+    
+  def context_menu_link_remote (name, url, update, options={})
     options[:class] ||= ''
     if options.delete(:selected)
       options[:class] << ' icon-checked disabled'
@@ -29,11 +40,7 @@ module RequirementsHelper
       options[:class] << ' disabled'
       url = '#'
     end
-
     link_to_remote name, :url => url, :update => update, :method => options.delete(:method), :confirm => options.delete(:confirm), :html => options
-
-
   end
-
 
 end

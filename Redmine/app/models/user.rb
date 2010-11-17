@@ -164,6 +164,30 @@ class User < Principal
     self.status == STATUS_LOCKED
   end
 
+  def activate
+    self.status = STATUS_ACTIVE
+  end
+
+  def register
+    self.status = STATUS_REGISTERED
+  end
+
+  def lock
+    self.status = STATUS_LOCKED
+  end
+
+  def activate!
+    update_attribute(:status, STATUS_ACTIVE)
+  end
+
+  def register!
+    update_attribute(:status, STATUS_REGISTERED)
+  end
+
+  def lock!
+    update_attribute(:status, STATUS_LOCKED)
+  end
+
   def check_password?(clear_password)
     if auth_source_id.present?
       auth_source.authenticate(self.login, clear_password)
@@ -327,6 +351,12 @@ class User < Principal
     else
       false
     end
+  end
+
+  # Is the user allowed to do the specified action on any project?
+  # See allowed_to? for the actions and valid options.
+  def allowed_to_globally?(action, options)
+    allowed_to?(action, nil, options.reverse_merge(:global => true))
   end
   
   def self.current=(user)

@@ -412,7 +412,15 @@ class Project < ActiveRecord::Base
   def short_description(length = 255)
     description.gsub(/^(.{#{length}}[^\n\r]*).*$/m, '\1...').strip if description
   end
-  
+
+  def css_classes
+    s = 'project'
+    s << ' root' if root?
+    s << ' child' if child?
+    s << (leaf? ? ' leaf' : ' parent')
+    s
+  end
+
   # Return true if this project is allowed to do the specified action.
   # action can be:
   # * a parameter-like Hash (eg. :controller => 'projects', :action => 'edit')
@@ -440,6 +448,15 @@ class Project < ActiveRecord::Base
     else
       enabled_modules.clear
     end
+  end
+
+  # Returns an array of projects that are in this project's hierarchy
+  #
+  # Example: parents, children, siblings
+  def hierarchy
+    parents = project.self_and_ancestors || []
+    descendants = project.descendants || []
+    project_hierarchy = parents | descendants # Set union
   end
   
   # Returns an auto-generated project identifier based on the last identifier used

@@ -68,8 +68,8 @@ class Issue < ActiveRecord::Base
                                   :conditions => ["#{Project.table_name}.status=#{Project::STATUS_ACTIVE}"]
 
   before_create :default_assign
-  before_save :reschedule_following_issues, :close_duplicates, :update_done_ratio_from_issue_status
-  after_save :update_nested_set_attributes, :update_parent_attributes, :create_journal
+  before_save :close_duplicates, :update_done_ratio_from_issue_status
+  after_save :reschedule_following_issues, :update_nested_set_attributes, :update_parent_attributes, :create_journal
   after_destroy :destroy_children
   after_destroy :update_parent_attributes
   
@@ -245,7 +245,7 @@ class Issue < ActiveRecord::Base
   end
   
   def done_ratio
-    if Issue.use_status_for_done_ratio? && status && status.default_done_ratio?
+    if Issue.use_status_for_done_ratio? && status && status.default_done_ratio
       status.default_done_ratio
     else
       read_attribute(:done_ratio)
@@ -308,7 +308,7 @@ class Issue < ActiveRecord::Base
   # Set the done_ratio using the status if that setting is set.  This will keep the done_ratios
   # even if the user turns off the setting later
   def update_done_ratio_from_issue_status
-    if Issue.use_status_for_done_ratio? && status && status.default_done_ratio?
+    if Issue.use_status_for_done_ratio? && status && status.default_done_ratio
       self.done_ratio = status.default_done_ratio
     end
   end
@@ -357,10 +357,17 @@ class Issue < ActiveRecord::Base
   def overdue?
     !due_date.nil? && (due_date < Date.today) && !status.is_closed?
   end
+
+  # Does this issue have children?
+  def children?
+    !leaf?
+  end
   
   # Users the issue can be assigned to
   def assignable_users
-    project.assignable_users
+    users = project.assignable_users
+    users << author if author
+    users.uniq.sort
   end
   
   # Versions that the issue can be assigned to
@@ -684,7 +691,7 @@ class Issue < ActiveRecord::Base
       end
       
       # done ratio = weighted average ratio of leaves
-      unless Issue.use_status_for_done_ratio? && p.status && p.status.default_done_ratio?
+      unless Issue.use_status_for_done_ratio? && p.status && p.status.default_done_ratio
         leaves_count = p.leaves.count
         if leaves_count > 0
           average = p.leaves.average(:estimated_hours).to_f
@@ -821,7 +828,7 @@ class Issue < ActiveRecord::Base
                                                 j.id as #{select_field},
                                                 count(i.id) as total 
                                               from 
-                                                  #{Issue.table_name} i, #{IssueStatus.table_name} s, #{joins} as j
+                                                  #{Issue.table_name} i, #{IssueStatus.table_name} s, #{joins} j
                                               where 
                                                 i.status_id=s.id 
                                                 and #{where}

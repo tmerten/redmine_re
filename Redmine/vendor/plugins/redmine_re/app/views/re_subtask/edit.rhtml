@@ -10,13 +10,7 @@
     <div class="box">
 
 
-  <% f.fields_for @re_subtask.re_artifact do |re_artifact| %>
-          <%= render "re_artifact/shared_fields", :f => re_artifact %>
-   <% end %>
-
-      <p>
-        <%= f.label :description, l(:re_subtask_description) %> <%= f.text_field :description %>
-      </p>
+    <%= render "re_artifact_properties/shared_fields", :f => f %>
 
       <p>
         <%= submit_tag l(:re_save) %>

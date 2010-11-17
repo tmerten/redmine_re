@@ -8,18 +8,11 @@
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
     <div class="box">
 
+    <%= render "re_artifact_properties/shared_fields", :f => f %>
 
-    <% f.fields_for @re_task.re_artifact do |re_artifact| %>
-        <%= render "re_artifact/shared_fields", :f => re_artifact %>
-      <% end %>
-
-      <p>
-        <%= f.label :description, l(:re_task_description) %> <%= f.text_field :description %>
-      </p>
-
-      <p>
-        <%= submit_tag l(:re_save), :action => :edit %>
-      </p>
+    <p>
+      <%= submit_tag l(:re_save), :action => :edit %>
+    </p>
 
     </div>
 

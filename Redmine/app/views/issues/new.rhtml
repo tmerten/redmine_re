@@ -1,7 +1,7 @@
 <h2><%=l(:label_issue_new)%></h2>
 
 <% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create', :project_id => @project},
-                             :html => {:multipart => true, :id => 'issue-form'} do |f| %>
+                             :html => {:multipart => true, :id => 'issue-form', :class => 'tabular new-issue-form'} do |f| %>
     <%= error_messages_for 'issue' %>
     <div class="box">
     <%= render :partial => 'issues/form', :locals => {:f => f} %>
@@ -9,7 +9,7 @@
     <%= submit_tag l(:button_create) %>
     <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
     <%= link_to_remote l(:label_preview), 
-                       { :url => { :controller => 'issues', :action => 'preview', :project_id => @project },
+                       { :url => preview_issue_path(:project_id => @project),
                          :method => 'post',
                          :update => 'preview',
                          :with => "Form.serialize('issue-form')",

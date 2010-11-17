@@ -1,12 +1,10 @@
 class ReSubtask < ActiveRecord::Base
   unloadable
 
-  acts_as_versioned
-  
-  has_one :re_artifact, :as => :artifact, :dependent => :destroy
-  belongs_to :re_task
+  acts_as_re_artifact
 
-  accepts_nested_attributes_for :re_artifact, :allow_destroy => true
-  
-  validates_presence_of :re_artifact
+  validates_presence_of :re_artifact_properties
+
+  acts_as_versioned
+  #accepts_nested_attributes_for :re_artifact_properties, :allow_destroy => true
 end

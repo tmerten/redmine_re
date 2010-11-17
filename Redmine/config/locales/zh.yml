@@ -2,6 +2,7 @@
 # by tsechingho (http://github.com/tsechingho)
 
 zh:
+  direction: ltr
   date:
     formats:
       default: "%Y-%m-%d"
@@ -136,6 +137,7 @@ zh:
         greater_than_start_date: "必须在起始日期之后"
         not_same_project: "不属于同一个项目"
         circular_dependency: "此关联将导致循环依赖"
+        cant_link_an_issue_with_a_descendant: "An issue can not be linked to one of its subtasks"
 
   actionview_instancetag_blank_option: 请选择
   
@@ -200,7 +202,7 @@ zh:
   mail_body_account_information: 您的帐号信息
   mail_subject_account_activation_request: "{{value}}帐号激活请求"
   mail_body_account_activation_request: "新用户（{{value}}）已完成注册，正在等候您的审核："
-  mail_subject_reminder: "{{count}} 个问题需要尽快解决"
+  mail_subject_reminder: "{{count}} 个问题需要尽快解决 ({{days}})"
   mail_body_reminder: "指派给您的 {{count}} 个问题需要在 {{days}} 天内完成："
   mail_subject_wiki_content_added: "'{{page}}' wiki页面已添加"
   mail_body_wiki_content_added: "'{{page}}' wiki页面已由 {{author}} 添加。"
@@ -270,7 +272,6 @@ zh:
   field_attr_lastname: 姓氏属性
   field_attr_mail: 邮件属性
   field_onthefly: 即时用户生成
-  field_start_date: 开始
   field_done_ratio: 完成度
   field_auth_source: 认证模式
   field_hide_mail: 隐藏我的邮件地址
@@ -833,9 +834,9 @@ zh:
   text_journal_set_to: "{{label}} 被设置为 {{value}}"
   text_journal_deleted: "{{label}} 已删除 ({{old}})"
   text_journal_added: "{{label}} {{value}} 已添加"
-  text_tip_task_begin_day: 今天开始的任务
-  text_tip_task_end_day: 今天结束的任务
-  text_tip_task_begin_end_day: 今天开始并结束的任务
+  text_tip_issue_begin_day: 今天开始的任务
+  text_tip_issue_end_day: 今天结束的任务
+  text_tip_issue_begin_end_day: 今天开始并结束的任务
   text_project_identifier_info: '只允许使用小写字母（a-z），数字和连字符（-）。<br />请注意，标识符保存后将不可修改。'
   text_caracters_maximum: "最多 {{count}} 个字符。"
   text_caracters_minimum: "至少需要 {{count}} 个字符。"
@@ -926,3 +927,14 @@ zh:
   text_zoom_in: 放大
   notice_unable_delete_time_entry: 无法删除工时记录。
   label_overall_spent_time: 所有项目耗用工时
+  field_time_entries: Log time
+  project_module_gantt: Gantt
+  project_module_calendar: Calendar
+  field_member_of_group: Member of Group
+  field_assigned_to_role: Member of Role
+  button_edit_associated_wikipage: "Edit associated Wiki page: {{page_title}}"
+  text_are_you_sure_with_children: Delete issue and all child issues?
+  field_text: Text field
+  field_start_date: Start date
+  label_principal_search: "Search for user or group:"
+  label_user_search: "Search for user:"

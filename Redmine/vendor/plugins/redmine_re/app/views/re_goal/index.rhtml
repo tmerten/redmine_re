@@ -9,7 +9,7 @@
           <% for column in ReGoal.content_columns %>
               <td><b><%= l('re_column_' + column.name) %></b></td>
               <% end %>
-          <% for column in ReArtifact.content_columns %>
+          <% for column in ReArtifactProperties.content_columns %>
               <td><b><%= l('re_column_' + column.name) %></b></td>
         <% end %>
         <td><b><%= l(:re_column_create_child) %></b></td>
@@ -22,8 +22,8 @@
                 <td><%= goal.send(column.name) %></td>
               <% end %>
 
-              <% for column in ReArtifact.content_columns %>
-                <td><%= goal.re_artifact.send(column.name) %></td>
+              <% for column in ReArtifactProperties.content_columns %>
+                <td><%= goal.send(column.name) %></td>
               <% end %>
               <td><%= link_to l(:destroy), :controller => 're_goal', :action => 'delete', :project_id => @project.id, :id => goal.id %></td>              
               <td><%= link_to l(:re_create_child_goal), :controller => 're_goal', :action => 'edit', :project_id => @project.id, :parent_id => goal.id %></td>

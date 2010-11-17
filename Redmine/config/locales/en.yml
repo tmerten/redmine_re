@@ -1,4 +1,6 @@
 en:
+  # Text direction: Left-to-Right (ltr) or Right-to-Left (rtl)
+  direction: ltr
   date:
     formats:
       # Use the strftime parameters for formats.
@@ -64,6 +66,11 @@ en:
         other: "almost {{count}} years"
 
   number:
+    # Default format for numbers
+    format:
+      separator: "." 
+      delimiter: ""
+      precision: 3
     human:
       format:
         delimiter: ""
@@ -74,7 +81,7 @@ en:
           byte:
             one: "Byte"
             other: "Bytes"
-          kb: "KB"
+          kb: "kB"
           mb: "MB"
           gb: "GB"
           tb: "TB"
@@ -183,7 +190,7 @@ en:
   mail_body_account_information: Your account information
   mail_subject_account_activation_request: "{{value}} account activation request"
   mail_body_account_activation_request: "A new user ({{value}}) has registered. The account is pending your approval:"
-  mail_subject_reminder: "{{count}} issue(s) due in the next days"
+  mail_subject_reminder: "{{count}} issue(s) due in the next {{days}} days"
   mail_body_reminder: "{{count}} issue(s) that are assigned to you are due in the next {{days}} days:"
   mail_subject_wiki_content_added: "'{{page}}' wiki page has been added"
   mail_body_wiki_content_added: "The '{{page}}' wiki page has been added by {{author}}."
@@ -254,7 +261,7 @@ en:
   field_attr_lastname: Lastname attribute
   field_attr_mail: Email attribute
   field_onthefly: On-the-fly user creation
-  field_start_date: Start
+  field_start_date: Start Date
   field_done_ratio: % Done
   field_auth_source: Authentication mode
   field_hide_mail: Hide my email address
@@ -273,6 +280,7 @@ en:
   field_redirect_existing_links: Redirect existing links
   field_estimated_hours: Estimated time
   field_column_names: Columns
+  field_time_entries: Log time
   field_time_zone: Time zone
   field_searchable: Searchable
   field_default_value: Default value
@@ -285,6 +293,9 @@ en:
   field_group_by: Group results by
   field_sharing: Sharing
   field_parent_issue: Parent task
+  field_member_of_group: Member of Group
+  field_assigned_to_role: Member of Role
+  field_text: Text field
   
   setting_app_title: Application title
   setting_app_subtitle: Application subtitle
@@ -404,6 +415,8 @@ en:
   project_module_wiki: Wiki
   project_module_repository: Repository
   project_module_boards: Boards
+  project_module_calendar: Calendar
+  project_module_gantt: Gantt
   
   label_user: User
   label_user_plural: Users
@@ -763,6 +776,8 @@ en:
   label_profile: Profile
   label_subtask_plural: Subtasks
   label_project_copy_notifications: Send email notifications during the project copy
+  label_principal_search: "Search for user or group:"
+  label_user_search: "Search for user:"
   
   button_login: Login
   button_submit: Submit
@@ -807,6 +822,7 @@ en:
   button_quote: Quote
   button_duplicate: Duplicate
   button_show: Show
+  button_edit_associated_wikipage: "Edit associated Wiki page: {{page_title}}"
   
   status_active: active
   status_registered: registered
@@ -825,13 +841,14 @@ en:
   text_subprojects_destroy_warning: "Its subproject(s): {{value}} will be also deleted."
   text_workflow_edit: Select a role and a tracker to edit the workflow
   text_are_you_sure: Are you sure ?
+  text_are_you_sure_with_children: "Delete issue and all child issues?"
   text_journal_changed: "{{label}} changed from {{old}} to {{new}}"
   text_journal_set_to: "{{label}} set to {{value}}"
   text_journal_deleted: "{{label}} deleted ({{old}})"
   text_journal_added: "{{label}} {{value}} added"
-  text_tip_task_begin_day: task beginning this day
-  text_tip_task_end_day: task ending this day
-  text_tip_task_begin_end_day: task beginning and ending this day
+  text_tip_issue_begin_day: issue beginning this day
+  text_tip_issue_end_day: issue ending this day
+  text_tip_issue_begin_end_day: issue beginning and ending this day
   text_project_identifier_info: 'Only lower case letters (a-z), numbers and dashes are allowed.<br />Once saved, the identifier can not be changed.'
   text_caracters_maximum: "{{count}} characters maximum."
   text_caracters_minimum: "Must be at least {{count}} characters long."

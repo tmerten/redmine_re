@@ -9,7 +9,7 @@
           <% for column in ReTask.content_columns %>
                 <td><b><%= column.name %></b></td>
               <% end %>
-          <% for column in ReArtifact.content_columns %>
+          <% for column in ReArtifactProperties.content_columns %>
                           <td><b><%= column.name %></b></td>
         <% end %>
         </tr>
@@ -21,12 +21,12 @@
                 <td><%= task.send(column.name) %></td>
               <% end %>
 
-              <% for column in ReArtifact.content_columns %>
-                <td><%= task.re_artifact.send(column.name) %></td>
+              <% for column in ReArtifactProperties.content_columns %>
+                <td><%= task.re_artifact_properties.send(column.name) %></td>
               <% end %>
               <td><%= link_to 'Delete', :action => 'delete', :id =>task.id, :project_id => @project.id %></td>
-              <td><%= link_to 'Add Subtask', :controller => :re_subtask, :action => 'edit', :project_id => @project.id, :parent_id =>task.re_artifact.id %> |</td>  
-              <td><%#= link_to 'Show Versions', :action => 'show_versions', :id =>task.id, :project_id => @project.id %></td>
+              <td><%= link_to 'Add Subtask', :controller => :re_subtask, :action => 'edit', :project_id => @project.id, :parent_id =>task.re_artifact_properties.id %> |</td>  
+              <td><%= link_to 'Show Versions', :action => 'show_versions', :id =>task.id, :project_id => @project.id %></td>
 
             </tr>
         <% end %>

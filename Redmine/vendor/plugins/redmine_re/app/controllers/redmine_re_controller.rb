@@ -25,14 +25,15 @@ class RedmineReController < ApplicationController
   end
 
   ##
-  # this adds user-unmodifiable attributes to the re_artifact
-  # the re_artifact is a superclass of all other artifacts (goals, tasks, etc)
+  # this adds user-unmodifiable attributes to the re_artifact_properties
+  # the re_artifact_properties is a superclass of all other artifacts (goals, tasks, etc)
   # this method should be called after initializing or loading any artifact object
-  def add_hidden_re_artifact_attributes re_artifact
+  def add_hidden_re_artifact_properties_attributes re_artifact
     author = find_current_user
     re_artifact.project_id = @project.id
-    re_artifact.author_id = author.id
     re_artifact.updated_at = Time.now
+    re_artifact.updated_by = author.id
+    re_artifact.created_by = author.id  if re_artifact.new_record?
   end
 
 end

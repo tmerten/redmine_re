@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100805135119) do
+ActiveRecord::Schema.define(:version => 20100819172912) do
 
   create_table "attachments", :force => true do |t|
     t.integer  "container_id",                 :default => 0,  :null => false
@@ -385,19 +385,6 @@ ActiveRecord::Schema.define(:version => 20100805135119) do
 
   add_index "queries", ["project_id"], :name => "index_queries_on_project_id"
   add_index "queries", ["user_id"], :name => "index_queries_on_user_id"
-
-  create_table "re_artifacts", :force => true do |t|
-    t.string  "name"
-    t.date    "created_at"
-    t.date    "updated_at"
-    t.integer "priority"
-    t.integer "artifact_id"
-    t.string  "artifact_type"
-  end
-
-  create_table "re_goals", :force => true do |t|
-    t.string "description"
-  end
 
   create_table "repositories", :force => true do |t|
     t.integer "project_id",               :default => 0,  :null => false

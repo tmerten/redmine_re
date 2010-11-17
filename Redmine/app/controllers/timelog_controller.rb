@@ -55,8 +55,7 @@ class TimelogController < ApplicationController
 
       sql = "SELECT #{sql_select}, tyear, tmonth, tweek, spent_on, SUM(hours) AS hours"
       sql << " FROM #{TimeEntry.table_name}"
-      sql << " LEFT JOIN #{Issue.table_name} ON #{TimeEntry.table_name}.issue_id = #{Issue.table_name}.id"
-      sql << " LEFT JOIN #{Project.table_name} ON #{TimeEntry.table_name}.project_id = #{Project.table_name}.id"
+      sql << time_report_joins
       sql << " WHERE"
       sql << " (%s) AND" % sql_condition
       sql << " (spent_on BETWEEN '%s' AND '%s')" % [ActiveRecord::Base.connection.quoted_date(@from), ActiveRecord::Base.connection.quoted_date(@to)]
@@ -261,8 +260,8 @@ private
     end
     
     @from, @to = @to, @from if @from && @to && @from > @to
-    @from ||= (TimeEntry.minimum(:spent_on, :include => :project, :conditions => Project.allowed_to_condition(User.current, :view_time_entries)) || Date.today) - 1
-    @to   ||= (TimeEntry.maximum(:spent_on, :include => :project, :conditions => Project.allowed_to_condition(User.current, :view_time_entries)) || Date.today)
+    @from ||= (TimeEntry.earilest_date_for_project(@project) || Date.today)
+    @to   ||= (TimeEntry.latest_date_for_project(@project) || Date.today)
   end
 
   def load_available_criterias
@@ -313,5 +312,13 @@ private
 
     call_hook(:controller_timelog_available_criterias, { :available_criterias => @available_criterias, :project => @project })
     @available_criterias
+  end
+
+  def time_report_joins
+    sql = ''
+    sql << " LEFT JOIN #{Issue.table_name} ON #{TimeEntry.table_name}.issue_id = #{Issue.table_name}.id"
+    sql << " LEFT JOIN #{Project.table_name} ON #{TimeEntry.table_name}.project_id = #{Project.table_name}.id"
+    call_hook(:controller_timelog_time_report_joins, {:sql => sql} )
+    sql
   end
 end

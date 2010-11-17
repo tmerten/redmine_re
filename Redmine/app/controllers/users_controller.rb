@@ -53,10 +53,8 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @custom_values = @user.custom_values
     
-    # show only public projects and private projects that the logged in user is also a member of
-    @memberships = @user.memberships.select do |membership|
-      membership.project.is_public? || (User.current.member_of?(membership.project))
-    end
+    # show projects based on current user visibility
+    @memberships = @user.memberships.all(:conditions => Project.visible_by(User.current))
     
     events = Redmine::Activity::Fetcher.new(User.current, :author => @user).events(nil, nil, :limit => 10)
     @events_by_day = events.group_by(&:event_date)
@@ -97,7 +95,9 @@ class UsersController < ApplicationController
     if request.post?
       @user.admin = params[:user][:admin] if params[:user][:admin]
       @user.login = params[:user][:login] if params[:user][:login]
-      @user.password, @user.password_confirmation = params[:password], params[:password_confirmation] unless params[:password].nil? or params[:password].empty? or @user.auth_source_id
+      if params[:password].present? && (@user.auth_source_id.nil? || params[:user][:auth_source_id].blank?)
+        @user.password, @user.password_confirmation = params[:password], params[:password_confirmation]
+      end
       @user.group_ids = params[:user][:group_ids] if params[:user][:group_ids]
       @user.attributes = params[:user]
       # Was the account actived ? (do it before User#save clears the change)
@@ -123,14 +123,22 @@ class UsersController < ApplicationController
     @membership = Member.edit_membership(params[:membership_id], params[:membership], @user)
     @membership.save if request.post?
     respond_to do |format|
-       format.html { redirect_to :controller => 'users', :action => 'edit', :id => @user, :tab => 'memberships' }
-       format.js { 
-         render(:update) {|page| 
-           page.replace_html "tab-content-memberships", :partial => 'users/memberships'
-           page.visual_effect(:highlight, "member-#{@membership.id}")
-         }
-       }
-     end
+      if @membership.valid?
+        format.html { redirect_to :controller => 'users', :action => 'edit', :id => @user, :tab => 'memberships' }
+        format.js {
+          render(:update) {|page|
+            page.replace_html "tab-content-memberships", :partial => 'users/memberships'
+            page.visual_effect(:highlight, "member-#{@membership.id}")
+          }
+        }
+      else
+        format.js {
+          render(:update) {|page|
+            page.alert(l(:notice_failed_to_save_members, :errors => @membership.errors.full_messages.join(', ')))
+          }
+        }
+      end
+    end
   end
   
   def destroy_membership

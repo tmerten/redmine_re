@@ -7,13 +7,8 @@
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
     <div class="box">
-      <% f.fields_for @re_goal.re_artifact do |re_artifact| %>
-        <%= render "re_artifact/shared_fields", :f => re_artifact %>
-      <% end %>
 
-      <p>
-        <%= f.label :description, l(:re_goal_description) %> <%= f.text_field :description %>
-      </p>
+      <%= render "re_artifact_properties/shared_fields", :f => f %>
 
       <p>
         <%= submit_tag l(:re_save), :action => :edit %>
@@ -21,7 +16,7 @@
 
     </div>
 
-    <%= javascript_tag "Form.Element.focus('re_goal_re_artifact_attributes_name');" %>
+    <%= javascript_tag "Form.Element.focus('re_goal_name');" %>
 <% end %>
 
 <%= link_to 'Back', :action => :index, :project_id => @project.id %>

@@ -22,22 +22,22 @@ en:
   re_column_description: 'Description'
   re_column_tree: 'Tree'
 
-  # re_artifact
+  # re_artifact_properties
   re_artifact_name: 'Name'
   re_artifact_priority: 'Priority'
+  re_artifact_description: 'Description'
+  re_artifact_responsibles: 'Responsibles'
 
   # re_goals
   re_create_goal: 'New Goal'
   re_show_goals: 'Show Goals'
   re_goal: 'Goal'
-  re_goal_description: 'Description'
   re_create_child_goal: 'Create Child of Type Goal'
   
   # re_tasks
   re_create_task: 'New Task'
   re_show_tasks: 'Show Tasks'
   re_task: 'Task'
-  re_task_description: 'Description'
   re_create_child_task: 'Create Child of Type Task'
   re_task_overview: 'Overview of Tasks'
 
@@ -45,11 +45,12 @@ en:
   re_create_subtask: 'New Subtask'
   re_show_subtasks: 'Show Subtasks'
   re_subtask: 'Subtask'
-  re_subtask_description: 'Description'
 
   # re_tree
+  re_tree_overview: 'Artifact Overview'
   re_show_tree: 'Show Tree'
   re_show_general_tree_view: 'Show Overall Tree'
+  re_treefilter: 'Filter (Dummy)'
   
   # fields
   field_re_artifact: 'field artifact'

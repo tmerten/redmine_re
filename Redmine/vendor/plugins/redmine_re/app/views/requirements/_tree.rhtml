@@ -3,6 +3,7 @@
     <%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
     <%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
 <% end%>
+<h3><%= l(:re_tree_overview) %></h3>
 
 <div id="tree"></div>
 
@@ -47,7 +48,7 @@
 
     function tree_node_double_click (branch) {
         var id = branch.getId();
-        var url = '/re_artifact/edit/'+ id + '?project_id=<%= @project.id -%>';
+        var url = '/re_artifact_properties/edit/'+ id + '?project_id=<%= @project.id -%>';
 
         //Usage of prototype Ajax request builder
         new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});

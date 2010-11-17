@@ -96,6 +96,16 @@ class UsersControllerTest < ActionController::TestCase
     assert_response 200
     assert_not_nil assigns(:user)
   end
+  
+  def test_show_displays_memberships_based_on_project_visibility
+    @request.session[:user_id] = 1
+    get :show, :id => 2
+    assert_response :success
+    memberships = assigns(:memberships)
+    assert_not_nil memberships
+    project_ids = memberships.map(&:project_id)
+    assert project_ids.include?(2) #private project admin can see
+  end
 
   def test_edit
     ActionMailer::Base.deliveries.clear
@@ -132,6 +142,18 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil mail
     assert_equal [u.mail], mail.bcc
     assert mail.body.include?('newpass')
+  end
+
+  test "POST :edit with a password change to an AuthSource user switching to Internal authentication" do
+    # Configure as auth source
+    u = User.find(2)
+    u.auth_source = AuthSource.find(1)
+    u.save!
+
+    post :edit, :id => u.id, :user => {:auth_source_id => ''}, :password => 'newpass', :password_confirmation => 'newpass'
+
+    assert_equal nil, u.reload.auth_source
+    assert_equal User.hash_password('newpass'), u.reload.hashed_password
   end
   
   def test_edit_membership

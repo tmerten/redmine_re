@@ -6,6 +6,7 @@
 # updated by Gábor Takács (taky77@gmail.com)
 
 "hu":
+  direction: ltr
   date:
     formats:
       default: "%Y.%m.%d."
@@ -142,6 +143,7 @@
         greater_than_start_date: "nagyobbnak kell lennie, mint az indítás dátuma"
         not_same_project: "nem azonos projekthez tartozik"
         circular_dependency: "Ez a kapcsolat egy körkörös függőséget eredményez"
+        cant_link_an_issue_with_a_descendant: "An issue can not be linked to one of its subtasks"
 
   actionview_instancetag_blank_option: Kérem válasszon
   
@@ -258,7 +260,6 @@
   field_attr_lastname: Vezetéknév
   field_attr_mail: E-mail
   field_onthefly: On-the-fly felhasználó létrehozás
-  field_start_date: Kezdés dátuma
   field_done_ratio: Elkészült (%)
   field_auth_source: Azonosítási mód
   field_hide_mail: Rejtse el az e-mail címem
@@ -680,9 +681,9 @@
   text_subprojects_destroy_warning: "Az alprojekt(ek): {{value}} szintén törlésre kerülnek."
   text_workflow_edit: Válasszon egy szerepkört, és egy feladat típust a workflow szerkesztéséhez
   text_are_you_sure: Biztos benne ?
-  text_tip_task_begin_day: a feladat ezen a napon kezdődik
-  text_tip_task_end_day: a feladat ezen a napon ér véget
-  text_tip_task_begin_end_day: a feladat ezen a napon kezdődik és ér véget
+  text_tip_issue_begin_day: a feladat ezen a napon kezdődik
+  text_tip_issue_end_day: a feladat ezen a napon ér véget
+  text_tip_issue_begin_end_day: a feladat ezen a napon kezdődik és ér véget
   text_project_identifier_info: 'Kis betűk (a-z), számok és kötőjel megengedett.<br />Mentés után az azonosítót megváltoztatni nem lehet.'
   text_caracters_maximum: "maximum {{count}} karakter."
   text_caracters_minimum: "Legkevesebb {{count}} karakter hosszúnek kell lennie."
@@ -737,7 +738,7 @@
   enumeration_doc_categories: Dokumentum kategóriák
   enumeration_activities: Tevékenységek (idő rögzítés)
   mail_body_reminder: "{{count}} neked kiosztott feladat határidős az elkövetkező {{days}} napban:"
-  mail_subject_reminder: "{{count}} feladat határidős az elkövetkező napokban"
+  mail_subject_reminder: "{{count}} feladat határidős az elkövetkező {{days}} napokban"
   text_user_wrote: "{{value}} írta:"
   label_duplicated_by: duplikálta
   setting_enabled_scm: Forráskódkezelő (SCM) engedélyezése
@@ -931,3 +932,14 @@
   text_zoom_in: Nagyít
   notice_unable_delete_time_entry: Az időrögzítés nem törölhető
   label_overall_spent_time: Összes rászánt idő
+  field_time_entries: Log time
+  project_module_gantt: Gantt
+  project_module_calendar: Calendar
+  field_member_of_group: Member of Group
+  field_assigned_to_role: Member of Role
+  button_edit_associated_wikipage: "Edit associated Wiki page: {{page_title}}"
+  text_are_you_sure_with_children: Delete issue and all child issues?
+  field_text: Text field
+  field_start_date: Start date
+  label_principal_search: "Search for user or group:"
+  label_user_search: "Search for user:"

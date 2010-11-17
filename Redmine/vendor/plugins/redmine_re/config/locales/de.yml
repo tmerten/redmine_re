@@ -17,15 +17,16 @@ en:
   re_column_create_child: 'Erzeuge Kind'
   re_column_description: 'Beschreibung'
 
-  # re_artifact
+  # re_artifact_properties
   re_artifact_name: 'Name'
   re_artifact_priority: 'Priorit&auml;t'
+  re_artifact_description: 'Beschreibung'
+  re_artifact_responsibles: 'Verantwortliche'
 
   # re_goals
   re_create_goal: 'Neues Ziel'
   re_show_goals: 'Zeige Ziele'
   re_goal: 'Ziel'
-  re_goal_description: 'Beschreibung'
 
 
 

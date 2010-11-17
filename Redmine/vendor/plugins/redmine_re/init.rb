@@ -18,6 +18,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_task => [:index, :edit, :new, :delete, :show_versions, :change_version] ,
         :re_subtask => [:index, :edit, :new, :delete, :show_versions, :change_version, :create, :update]
       },
+
       :public => true
     )
 
@@ -29,9 +30,16 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   menu :project_menu, :re, { :controller => 'requirements', :action => 'index' }, :caption => 'Requirements', :after => :activity, :param => :project_id
   #menu :project_menu, :re, { :controller => 'requirements', :action => 'index' }, :caption => 'Requirements', :after => :activity, :param => :project_id
 
-  # ReArtifact can be added to the activity view
-  #activity_provider :re_artifact
+  # ReArtifactProperties can be added to the activity view
+  #activity_provider :re_artifact_properties
 
   #Observers
-  config.active_record.observers = :re_artifact_observer
+  config.active_record.observers = :re_artifact_properties_observer
+  
+  #Initialisierungen  
+  class ActiveRecord::Base
+    def self.acts_as_re_artifact
+      include Artifact
+    end
+  end
 end
