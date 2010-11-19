@@ -17,12 +17,8 @@ class ReSubtaskController < RedmineReController
   def edit
     @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties) || ReSubtask.new
 
-     if request.get?              #TODO parent_id wieder funktionstüchtig machen
-        if params[:parent_id] == nil
-          params[:parent_id] = @re_subtask.parent_artifact_id
-          Rails.logger.debug("########edit 1###### p id null ne? paren_id param: " + @re_subtask.parent_artifact_id.to_s)
-          render :layout => false if params[:layout] = 'false'
-        end
+     if request.get?
+       render :layout => false if params[:layout] = 'false'
      end
 
     #TODO : parent_id wenn relationship table funktioniert
@@ -30,9 +26,6 @@ class ReSubtaskController < RedmineReController
 
       @re_subtask.attributes = params[:re_subtask]
       add_hidden_re_artifact_properties_attributes @re_subtask
-
-      #paren id setzen
-      @re_subtask.parent_artifact_id = params[:parent_id]
 
       flash[:notice] = 'Task successfully saved' if save_ok = @re_subtask.save
 
@@ -85,7 +78,7 @@ class ReSubtaskController < RedmineReController
     @subtask = ReSubtask.find(params[:id])
     @subtask.re_artifact.send(:notify, :before_revert)
     if(@subtask.revert_to!(targetVersion))
-      @subtask.re_artifact.send(:notify, :after_revert)  # observer after_revert methode ausführen( nötig um werte von re_artifact_properties zu reverten)
+      @subtask.re_artifact.send(:notify, :after_revert)  # observer after_revert methode ausfï¿½hren( nï¿½tig um werte von re_artifact_properties zu reverten)
       flash[:notice] = 'Subtask version changed sucessfully'
     end
     #@subtask.re_artifact_properties.isReverting = false

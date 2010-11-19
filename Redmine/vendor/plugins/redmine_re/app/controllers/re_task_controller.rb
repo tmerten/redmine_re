@@ -17,14 +17,11 @@ class ReTaskController < RedmineReController
   def edit
     @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new
 
-     if request.get?              #TODO parent_id wieder funktionstüchtig machen
-        if params[:parent_id] == nil
-          params[:parent_id] = @re_task.parent_artifact_id
-          render :layout => false if params[:layout] = 'false'
-        end
+     if request.get?
+       render :layout => false if params[:layout] = 'false'
      end
 
-    #TODO : parent_id wenn relationship table funktioniert
+
     if request.post?
 
       @re_task.attributes = params[:re_task]

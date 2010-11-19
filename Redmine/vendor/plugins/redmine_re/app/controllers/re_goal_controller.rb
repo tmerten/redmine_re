@@ -18,14 +18,11 @@ class ReGoalController < RedmineReController
   def edit
     @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact_properties) || ReGoal.new
 
-     if request.get?              #TODO parent_id wieder funktionst�chtig machen
-        if params[:parent_id] == nil
-          params[:parent_id] = @re_goal.parent_artifact_id
-          render :layout => false if params[:layout] = 'false'
-        end
+     if request.get?
+       render :layout => false if params[:layout] = 'false'
      end
 
-    #TODO : parent_id wenn relationship table funktioniert
+
     if request.post?
 
       @re_goal.attributes = params[:re_goal]
