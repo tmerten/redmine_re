@@ -1,5 +1,5 @@
 <fieldset id="treefilter" class="collapsible ">
-  <legend onclick="toggleFieldset(this);"><Tree Filter><%= l(:re_treefilter) %></legend>
+  <legend onclick="toggleFieldset(this);"><%= l(:re_treefilter) %></legend>
   <div>
     <% remote_form_for :filter, :update => :detail_view, :url => {:controller => "requirements", :action => "treefilter"} do |f| %>
      <%= f.text_field :filter, :size => 25 %>
