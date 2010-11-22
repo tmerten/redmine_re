@@ -1,137 +1,124 @@
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'tafelTree.css', :plugin => "redmine_re", :media => 'all' %>
+    <%= stylesheet_link_tag 'sortable_tree.css', :plugin => "redmine_re", :media => 'all' %>
     <%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
-    <%= javascript_include_tag 'tafelTree/Tree.js', :plugin => 'redmine_re' %>
+    <%= javascript_include_tag 'sortable_tree.js', :plugin => 'redmine_re' %>
 <% end%>
 <h3><%= l(:re_tree_overview) %></h3>
 
-<div id="tree"></div>
+<%= @htmltree %>
+
+<div id="log"></div>
 
 <script type="text/javascript">
-    //<![CDATA[
-
-    // We declare the tree outside of the function. This way it's
-    // accessible from any function
-    var tree = null;
-    var treeData = <%= @jsontree.to_s %>;
-
-    // Tree initialisation.
-    var initTree = function TafelTreeInit() {
-        tree = new TafelTree('tree', treeData, {
-            'generate' : true,
-            'imgBase' : '<%= image_path('tafeltree', :plugin => 'redmine_re').split('?')[0] %>/',
-            'width' : '100%', // default value : 100%
-            'height' : 'auto', // default value : auto
-            'openAtLoad' : true,
-            'cookies' : false,
-            'onClick' : tree_node_click,
-            'onDblClick' : tree_node_double_click,
-            'onDrop' : tree_node_drop
-        });
+  //<![CDATA[
+    
+  var tree = new SortableTree('tree', {
+    droppable: {
+      container: ':not(.we_are_all_containers)' /* everything specified here is able to be a container for a drop */
+    },
+    onDrop: function(drag, drop, event){
+      var url = '/requirements/delegate_tree_drop?new_parent_id=' + drag.parent.id() + ';moved_artifact_id=' + drag.id();
+      new Ajax.Request(url, {method: 'get'})      
+      
+      $('log').update($('log').innerHTML + "<p>" + drag.to_params() + "</p>")
     }
+  });
+  tree.setSortable();
 
-    // This function is called automatically
-    // when the page finishes to load
-    // (and can be called manually on success of an ajax call
-    initTree();
-    Event.observe(document.body, 'click', hide_context_menu.bindAsEventListener());
-
-
-    function hide_context_menu (e){
-        var target = Event.element(e);
-        if (!target.hasClassName('tafelTreecontent'))  {
-            // Element is definitively outside of the tree as tree nodes are in td-tags
-            Effect.Fade('context-menu', {duration: 0.10});
-        }
+  function log(line) {
+    $('log').update($('log').innerHTML + "<p>" + line + "</p>");
+  }
+  
+  function toggle_folder(event) {
+    var element = event.element().ancestors().first();
+    if(element.hasClassName('closed')) {
+      element.removeClassName('closed');
+    } else {
+      element.addClassName('closed');
     }
+  }
+  
+  Event.observe(window, "load", function(){
+    $$('.handle').each(function(element){
+      Event.observe(element, 'click', toggle_folder);
+    });
+  });
 
 
-    function tree_node_double_click (branch) {
-        var id = branch.getId();
-        var url = '/re_artifact_properties/edit/'+ id + '?project_id=<%= @project.id -%>';
-
-        //Usage of prototype Ajax request builder
-        new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});
-        return false;
-    };
+  Event.observe(document.body, 'click', hide_context_menu.bindAsEventListener());
 
 
-    function tree_node_drop (branch_move, branch_here, drop_finished, new_branch) {
-        // Beware, the function is called twice. One time before drop
-        // happends, one time after. Here, we check before drop
-        // happends
-        if (!drop_finished) {
-            // Tests
-            if (true) {
-                // OK, the branch will be dropped here
-                return true;
-            } else {
-                // Here, the branch won't be dropped and will return
-                // at her place
-                return false;
-            }
-        } else {
+  function hide_context_menu (e){
+      var target = Event.element(e);
+      if (!target.hasClassName('tafelTreecontent'))  {
+          // Element is definitively outside of the tree as tree nodes are in td-tags
+          Effect.Fade('context-menu', {duration: 0.10});
+      }
+  }
 
-            var url = '/requirements/delegate_tree_drop?new_parent_id=' + branch_here.getId() + ';moved_artifact_id=' + branch_move.getId();
-            // Usage of prototype Ajax request builder
-            new Ajax.Request(url, {method: 'get'})
 
-        }
-        return false; /*to prevent on_click from invoking */
-    }
+  function tree_node_double_click (branch) {
+      var id = branch.getId();
+      var url = '/re_artifact_properties/edit/'+ id + '?project_id=<%= @project.id -%>';
 
-    function tree_node_click(branch, e) {
-        var event = e || window.event; // || window.event to work with IE
-        var id = branch.getId();
-        var url = '/requirements/context_menu/' + id + '?project_id=<%= @project.id -%>';
-        var mouse_x = Event.pointerX(event);
-        var mouse_y = Event.pointerY(event);
-        var render_x = mouse_x;
-        var render_y = mouse_y;
-        var dims;
-        var menu_width;
-        var menu_height;
-        var window_width;
-        var window_height;
-        var max_width;
-        var max_height;
-        new Ajax.Updater('context-menu', url, {asynchronous:true, evalScripts:true, method:'get'});
-        menu = document.getElementById('context-menu');
-        dims = menu.getDimensions();
-        menu_width = dims.width;
-        menu_height = dims.height;
-        max_width = mouse_x + 2 * menu_width;
-        max_height = mouse_y + menu_height;
+      //Usage of prototype Ajax request builder
+      new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});
+      return false;
+  };
 
-        window_width = document.viewport.getWidth();
-        window_height = document.viewport.getHeight();
+  function tree_node_click(branch, e) {
+      var event = e || window.event; // || window.event to work with IE
+      var id = branch.getId();
+      var url = '/requirements/context_menu/' + id + '?project_id=<%= @project.id -%>';
+      var mouse_x = Event.pointerX(event);
+      var mouse_y = Event.pointerY(event);
+      var render_x = mouse_x;
+      var render_y = mouse_y;
+      var dims;
+      var menu_width;
+      var menu_height;
+      var window_width;
+      var window_height;
+      var max_width;
+      var max_height;
+      new Ajax.Updater('context-menu', url, {asynchronous:true, evalScripts:true, method:'get'});
+      menu = document.getElementById('context-menu');
+      dims = menu.getDimensions();
+      menu_width = dims.width;
+      menu_height = dims.height;
+      max_width = mouse_x + 2 * menu_width;
+      max_height = mouse_y + menu_height;
 
-        /* display the menu above and/or to the left of the click if needed */
-        if (max_width > window_width) {
-            render_x -= menu_width;
-            $('context-menu').addClassName('reverse-x');
-        } else {
-            $('context-menu').removeClassName('reverse-x');
-        }
-        if (max_height > window_height) {
-            render_y -= menu_height;
-            $('context-menu').addClassName('reverse-y');
-        } else {
-            $('context-menu').removeClassName('reverse-y');
-        }
-        if (render_x <= 0) render_x = 1;
-        if (render_y <= 0) render_y = 1;
-        $('context-menu').style['left'] = (render_x + 'px');
-        $('context-menu').style['top'] = (render_y + 'px');
-        //$('context-menu').style['left'] = ('400px');
-        //$('context-menu').style['top'] = ('400px');
-        Element.update('context-menu', '');
+      window_width = document.viewport.getWidth();
+      window_height = document.viewport.getHeight();
 
-        Effect.Appear('context-menu', {duration: 0.20});
-        if (window.parseStylesheets) {
-            window.parseStylesheets();
-        } // IE
-    }
+      /* display the menu above and/or to the left of the click if needed */
+      if (max_width > window_width) {
+          render_x -= menu_width;
+          $('context-menu').addClassName('reverse-x');
+      } else {
+          $('context-menu').removeClassName('reverse-x');
+      }
+      if (max_height > window_height) {
+          render_y -= menu_height;
+          $('context-menu').addClassName('reverse-y');
+      } else {
+          $('context-menu').removeClassName('reverse-y');
+      }
+      if (render_x <= 0) render_x = 1;
+      if (render_y <= 0) render_y = 1;
+      $('context-menu').style['left'] = (render_x + 'px');
+      $('context-menu').style['top'] = (render_y + 'px');
+      //$('context-menu').style['left'] = ('400px');
+      //$('context-menu').style['top'] = ('400px');
+      Element.update('context-menu', '');
 
-    //]]>
+      Effect.Appear('context-menu', {duration: 0.20});
+      if (window.parseStylesheets) {
+          window.parseStylesheets();
+      } // IE
+  }
+
+
+  //]]>
 </script>

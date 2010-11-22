@@ -13,6 +13,7 @@ class RequirementsController < RedmineReController
     @jsontree += '"onclick":false, "ondblclick":false,'
     @jsontree += '"items" : ['
 
+    @htmltree = '<ul id="tree">'
     #if params[:id]
       # Create only one branch starting with artifact with given id if id is given
      # artifacts << ReArtifactProperties.find_by_id_and_project_id(params[:id], @project.id)
@@ -23,12 +24,14 @@ class RequirementsController < RedmineReController
       
       if (artifact.parent.nil?)
         render_to_json_tree(artifact)
+        render_to_html_tree(artifact)
         if (artifact != @artifacts.last)
           @jsontree += ","
         end
       end
     end
     @jsontree += "] } ]"
+    @htmltree += '</ul>'
   end
 
   ##
@@ -97,6 +100,23 @@ class RequirementsController < RedmineReController
       @jsontree += ']'
     end
     @jsontree += '}'
+  end
+
+
+  def render_to_html_tree(re_artifact)
+    @htmltree += '<li id="node_' + re_artifact.id.to_s #IDs must begin with a letter(!)
+    @htmltree += '" class="' + re_artifact.artifact_type.to_s.underscore + '">'
+    @htmltree += '<span class="handle"></span>'
+    @htmltree += '<a>' + re_artifact.name.to_s + '</a>'
+
+    if (!re_artifact.children.empty?)
+      @htmltree += '<ul>'
+      for child in re_artifact.children
+        render_to_html_tree(child)
+      end
+      @htmltree += '</ul>'
+    end
+    @htmltree += '</li>'
   end
 
   # first tries to enable a contextmenu in artifact tree
