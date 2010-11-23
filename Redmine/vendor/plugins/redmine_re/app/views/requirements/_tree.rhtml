@@ -17,7 +17,8 @@
       container: ':not(.we_are_all_containers)' /* everything specified here is able to be a container for a drop */
     },
     onDrop: function(drag, drop, event){
-      var url = '/requirements/delegate_tree_drop?new_parent_id=' + drag.parent.id() + ';moved_artifact_id=' + drag.id();
+      var left_node_id = drag.leftNode ? drag.leftNode.id() : ''
+      var url = '/requirements/delegate_tree_drop?new_parent_id=' + drag.parent.id() + ';moved_artifact_id=' + drag.id() + ';left_artifact_id=' + left_node_id;
       new Ajax.Request(url, {method: 'get'})      
       
       $('log').update($('log').innerHTML + "<p>" + drag.to_params() + "</p>")
@@ -25,28 +26,7 @@
   });
   tree.setSortable();
 
-  function log(line) {
-    $('log').update($('log').innerHTML + "<p>" + line + "</p>");
-  }
-  
-  function toggle_folder(event) {
-    var element = event.element().ancestors().first();
-    if(element.hasClassName('closed')) {
-      element.removeClassName('closed');
-    } else {
-      element.addClassName('closed');
-    }
-  }
-  
-  Event.observe(window, "load", function(){
-    $$('.handle').each(function(element){
-      Event.observe(element, 'click', toggle_folder);
-    });
-  });
-
-
   Event.observe(document.body, 'click', hide_context_menu.bindAsEventListener());
-
 
   function hide_context_menu (e){
       var target = Event.element(e);
@@ -54,7 +34,7 @@
           // Element is definitively outside of the tree as tree nodes are in td-tags
           Effect.Fade('context-menu', {duration: 0.10});
       }
-  }
+  };
 
 
   function tree_node_double_click (branch) {
@@ -117,7 +97,7 @@
       if (window.parseStylesheets) {
           window.parseStylesheets();
       } // IE
-  }
+  };
 
 
   //]]>

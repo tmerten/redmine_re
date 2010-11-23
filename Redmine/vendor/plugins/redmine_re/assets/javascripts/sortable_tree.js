@@ -88,6 +88,21 @@ SortableTree.Node = Class.create({
           this.children.push(new SortableTree.Node(this.tree, this, child, this.options));
         }
       }.bind(this));
+      
+      $A(container.childNodes).each(function(child) {
+        var ce = $A(child.childElements());
+        var span = ce.select(function(c) {
+          return (c.hasClassName('handle'));
+          });
+        span.first().observe('click', function(event) {
+          var my_li = this.ancestors().first();
+          if(my_li.hasClassName('closed')) {
+            my_li.removeClassName('closed');
+          } else {
+            my_li.addClassName('closed');
+          }
+        });
+      });
     }
   },
 

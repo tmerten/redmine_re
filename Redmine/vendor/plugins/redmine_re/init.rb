@@ -36,7 +36,10 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   #Observers
   config.active_record.observers = :re_artifact_properties_observer
   
-  #Initialisierungen  
+  #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
+  
+  # add "acts_as_re_artifact" method to any ActiveRecord::Base class
+  # as an alias to "include Artifact"  
   class ActiveRecord::Base
     def self.acts_as_re_artifact
       include Artifact
