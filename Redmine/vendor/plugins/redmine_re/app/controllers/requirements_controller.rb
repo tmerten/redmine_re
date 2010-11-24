@@ -51,7 +51,7 @@ class RequirementsController < RedmineReController
     @htmltree += '<li id="node_' + re_artifact.id.to_s #IDs must begin with a letter(!)
     @htmltree += '" class="' + re_artifact.artifact_type.to_s.underscore + '">'
     @htmltree += '<span class="handle"></span>'
-    @htmltree += '<a>' + re_artifact.name.to_s + '</a>'
+    @htmltree += '<a class="nodelink">' + re_artifact.name.to_s + '</a>'
 
     if (!re_artifact.children.empty?)
       @htmltree += '<ul>'
