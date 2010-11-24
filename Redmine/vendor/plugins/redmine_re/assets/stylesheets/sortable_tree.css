@@ -6,9 +6,9 @@
 #tree {
     font: normal 12px Helvetica,Arial,Verdana,sans-serif;
     padding: 0px;
-    margin: 12px;
+    margin: 8px;
     width: 200px;
-    line-height: 26px
+    line-height: 28px
 }
 #tree ul {
     padding-left: 15px;
@@ -18,20 +18,28 @@
 #tree li {
     margin-top: -6px;
     list-style-type: none;
-}
-#tree li a {
-    background: url(../images/icons/folder_sans_run_16.png) no-repeat left top;
-    padding-left: 18px;
-    padding-top: 6px;
+    width: 170px;
 }
 
-#tree li.re_subtask a {
+#tree li a {
+    padding-top: 6px;  
+}
+
+#tree li a.nodelink {
+    padding-left: 18px;
+}
+
+#tree li.re_task a.nodelink {
+    background: url(../images/icons/folder_sans_run_16.png) no-repeat left top;
+}
+
+#tree li.re_subtask a.nodelink {
     background: url(../images/icons/notes_16.png) no-repeat left top;
 }
-#tree li.re_goal a {
+#tree li.re_goal a.nodelink {
     background: url(../images/icons/globe_16.png) no-repeat left top;
 }
-#tree li.re_subtask a {
+#tree li.re_subtask a.nodelink {
     background: url(../images/icons/book_text_16.png) no-repeat left top;
 }
 
@@ -43,6 +51,7 @@
     margin: 6px 3px 0 0;
     cursor: pointer;
 }
+
 #tree li span {
     background: url(../images/sortable_tree/folder_open.png) no-repeat 3px 3px;
 }

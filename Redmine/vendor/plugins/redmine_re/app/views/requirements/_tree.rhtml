@@ -36,19 +36,20 @@
       }
   };
 
-
-  function tree_node_double_click (branch) {
-      var id = branch.getId();
+  function render_edit_partial (event) {
+      var element = event.element();
+      var id = element.ancestors().first().id;
+      id = id.gsub('node_','');
       var url = '/re_artifact_properties/edit/'+ id + '?project_id=<%= @project.id -%>';
-
-      //Usage of prototype Ajax request builder
       new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});
-      return false;
   };
 
   Event.observe(window, "load", function(){
     $$('.nodelink').each(function(element){
       Event.observe(element, 'click', render_node_context_menu);
+    });
+    $$('.nodeeditlink').each(function(element){
+      Event.observe(element, 'click', render_edit_partial);
     });
   });
 
@@ -58,8 +59,8 @@
       var id = element.ancestors().first().id;
       id = id.gsub('node_','');
       var url = '/requirements/context_menu/' + id + '?project_id=<%= @project.id -%>';
-      var mouse_x = Event.pointerX(event);
-      var mouse_y = Event.pointerY(event);
+      var mouse_x = event.pointerX();
+      var mouse_y = event.pointerY();
       var render_x = mouse_x;
       var render_y = mouse_y;
       var dims;

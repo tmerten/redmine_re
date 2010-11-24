@@ -1,8 +1,8 @@
 class RequirementsController < RedmineReController
   unloadable
 
-  include ActionView::Helpers::PrototypeHelper
-  include ActionView::Helpers::JavaScriptHelper
+  include ActionView::Helpers::AssetTagHelper
+  include ActionView::Helpers::TagHelper
 
 
   def index
@@ -52,6 +52,7 @@ class RequirementsController < RedmineReController
     @htmltree += '" class="' + re_artifact.artifact_type.to_s.underscore + '">'
     @htmltree += '<span class="handle"></span>'
     @htmltree += '<a class="nodelink">' + re_artifact.name.to_s + '</a>'
+    @htmltree += '<a class="nodeeditlink">(edit)</a>'
 
     if (!re_artifact.children.empty?)
       @htmltree += '<ul>'
