@@ -25,7 +25,9 @@ module Artifact
       attributes_to_delegate = all_attributes - ignored_attributes
       
       class_eval <<-RUBY
-        include Artifact::InstanceMethods
+        def parent=(parent)
+          re_artifact_properties.parent = parent;
+        end
 
         def acts_as_artifact_class
           ::#{self.name}
@@ -49,17 +51,6 @@ module Artifact
       end
     end
   end
-  
-  module InstanceMethods
-    def parent=(parent)
-      re_artifact_properties.parent = parent;
-    end
-    
-    def weirdo
-      puts "if feel like a weirdo with all this meta programming"
-    end    
-  end
-  
 
 protected
 
