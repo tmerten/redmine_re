@@ -27,6 +27,7 @@ en:
   re_artifact_priority: 'Priority'
   re_artifact_description: 'Description'
   re_artifact_responsibles: 'Responsibles'
+  re_description_fieldset: 'Artifact Description'
 
   # re_goals
   re_create_goal: 'New Goal'
