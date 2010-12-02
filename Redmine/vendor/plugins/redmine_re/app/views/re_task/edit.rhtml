@@ -4,9 +4,10 @@
 <%= error_messages_for :re_task %>
 
 
-<% remote_form_for :re_task, :update => :detail_view, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
+<% form_for :re_task, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
     <%= hidden_field_tag :project_id, params[:project_id] %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
+    
     <div class="box">
 
     <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>

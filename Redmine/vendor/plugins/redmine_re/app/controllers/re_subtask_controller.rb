@@ -22,7 +22,7 @@ class ReSubtaskController < RedmineReController
       @re_subtask.attributes = params[:re_subtask]
       add_hidden_re_artifact_properties_attributes @re_subtask
 
-      flash[:notice] = 'Task successfully saved' if save_ok = @re_subtask.save
+      flash[:notice] = 'Subtask successfully saved' if save_ok = @re_subtask.save
 
       redirect_to :action => 'edit', :project_id => @project.id and return if save_ok
     end

@@ -1,11 +1,11 @@
 .detail_view {
-    position:absolute; left: 240px;
+    position: absolute;
+    left: 240px;
 }
 
 .treebar {
     float: left;
     width: 200px;
-    position: relative;
 }
 
 .recopyright {

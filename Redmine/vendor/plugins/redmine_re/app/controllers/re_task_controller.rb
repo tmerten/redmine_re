@@ -19,17 +19,12 @@ class ReTaskController < RedmineReController
     @project ||= @re_task.project
 
     if request.post?
-
       @re_task.attributes = params[:re_task]
       add_hidden_re_artifact_properties_attributes @re_task
 
       flash[:notice] = 'Task successfully saved' if save_ok = @re_task.save
 
-      if request.xhr?
-        redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
-      else
-        redirect_to :action => 'index', :project_id => @project.id and return if save_ok
-      end
+      redirect_to :action => 'edit', :project_id => @project.id and return if save_ok
     end
   end
 

@@ -24,11 +24,7 @@ class ReGoalController < RedmineReController
 
       flash[:notice] = 'Goal successfully saved' if save_ok = @re_goal.save
 
-      if request.xhr?
-        redirect_to :action => 'edit', :layout => 'false'
-      else
-        redirect_to :action => 'edit' and return if save_ok
-      end
+      redirect_to :action => 'edit' and return if save_ok
     end
   end
 

@@ -111,6 +111,14 @@ class RedmineReController < ApplicationController
     end
     htmltree += '</li>'
   end
+  
+  def treestate
+    if params[:open] == 'true'
+      re_artifact_properties =  params[:id]    
+    end
+
+    render :nothing => true   
+  end
 
   # first tries to enable a contextmenu in artifact tree
   def context_menu
