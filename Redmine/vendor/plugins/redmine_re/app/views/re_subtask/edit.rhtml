@@ -21,7 +21,7 @@
     <%= javascript_tag "Form.Element.focus('re_subtask_re_artifact_attributes_name');" %>
 <% end %>
 
-<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
+<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
 
-<%= link_to 'Show Subtasks', :action => :index, :project_id => @project.id %>
+<%= link_to 'Show Subtasks', :action => :index, :project_id => params[:project_id] %>
 </div>

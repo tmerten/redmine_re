@@ -24,8 +24,8 @@ class RedmineReController < ApplicationController
     return unless project_id
     begin
       @project = Project.find(project_id)
-    rescue ActiveRecord::RecordNotFound
-      render_404
+    #rescue ActiveRecord::RecordNotFound
+      #render_404
     end
   end
 
