@@ -16,12 +16,8 @@ class ReSubtaskController < RedmineReController
 
   def edit
     @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties) || ReSubtask.new
+    @project = @re_subtask.project
 
-     if request.get?
-       render :layout => false if params[:layout] = 'false'
-     end
-
-    #TODO : parent_id wenn relationship table funktioniert
     if request.post?
 
       @re_subtask.attributes = params[:re_subtask]
