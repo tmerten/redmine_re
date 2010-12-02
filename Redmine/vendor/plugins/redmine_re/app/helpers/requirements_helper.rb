@@ -17,7 +17,7 @@ module RequirementsHelper
     #               href="#"
     #               class="icon-edit">Edit</a>
   
-  # overrides render_flash_messages in application helper  
+  # overrides render_flash_messages in application helper
   def render_flash_messages
     s = ''
     flash.each do |k,v|

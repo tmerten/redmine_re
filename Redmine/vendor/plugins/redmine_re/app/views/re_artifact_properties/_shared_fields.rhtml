@@ -2,7 +2,18 @@
   <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
 </p>
 <p>
-  <%= f.label :description, l(:re_artifact_description) %> <%= f.text_field :description %>
+</p>
+<p>  
+<fieldset><legend><%= l(:re_description_fieldset) %></legend>
+  <%= textilizable(properties, :description, :only_path => false) %>
+  <br/>
+  <%#= f.label :description, l(:re_artifact_description) %><%= f.text_area :description,
+                   :cols => 60,
+                   :rows => (properties.description.blank? ? 10 : [[10, properties.description.length / 50].max, 100].min),
+                   :accesskey => accesskey(:edit),
+                   :class => 'wiki-edit' %>
+  <%= wikitoolbar_for controller.controller_name + '_description' %>
+</fieldset>
 </p>
 <p>
   <%= f.label :priority, l(:re_artifact_priority) %> <%= f.text_field :priority %>

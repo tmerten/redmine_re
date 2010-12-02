@@ -1,0 +1,19 @@
+<% content_for :header_tags do%>
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag 'sortable_tree.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag('jstoolbar/jstoolbar') %>
+  <%= javascript_include_tag('jstoolbar/textile') %>
+  <%= javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}") %>
+  
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
+
+<% content_for :content do%>
+  <%= render :partial => 'requirements/sidebar' %>
+  <%= render :partial => 'requirements/treebar' %>
+  <!--<div id='detail_view' class='detail_view'>
+    <%#= yield %>
+  </div>-->
+<% end %>
+
+<%= render :file => 'layouts/base' %>

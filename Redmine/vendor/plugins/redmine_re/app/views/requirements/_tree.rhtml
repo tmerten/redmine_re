@@ -7,7 +7,7 @@
 
 <%= @htmltree %>
 
-<div id="log"></div>
+<div id="context-menu" style="display:none;"></div>
 
 <script type="text/javascript">
   //<![CDATA[
@@ -20,11 +20,19 @@
       var left_node_id = drag.leftNode ? drag.leftNode.id() : ''
       var url = '/requirements/delegate_tree_drop?new_parent_id=' + drag.parent.id() + ';moved_artifact_id=' + drag.id() + ';left_artifact_id=' + left_node_id;
       new Ajax.Request(url, {method: 'get'})      
-      
-      $('log').update($('log').innerHTML + "<p>" + drag.to_params() + "</p>")
     }
   });
-  tree.setSortable();
+  if (tree !== null) {
+    tree.setSortable();
+    Event.observe(window, "load", function(){
+      $$('.nodelink').each(function(element){
+        Event.observe(element, 'click', render_node_context_menu);
+      });
+      /*$$('.nodeeditlink').each(function(element){
+        Event.observe(element, 'click', render_edit_partial);
+      });*/
+    });  
+  };
 
   Event.observe(document.body, 'click', hide_context_menu.bindAsEventListener());
 
@@ -41,19 +49,14 @@
       var id = element.ancestors().first().id;
       id = id.gsub('node_','');
       var url = '/re_artifact_properties/edit/'+ id + '?project_id=<%= @project.id -%>';
-      new Ajax.Updater('detail_view', url, {asynchronous:true, evalScripts:true, method:'get'});
+      new Ajax.Updater('detail_view', url, {asynchronous:false, evalScripts:true, method:'get'});
   };
 
-  Event.observe(window, "load", function(){
-    $$('.nodelink').each(function(element){
-      Event.observe(element, 'click', render_node_context_menu);
-    });
-    $$('.nodeeditlink').each(function(element){
-      Event.observe(element, 'click', render_edit_partial);
-    });
-  });
-
-
+  /* TODO: Daniela mal refactorn lassen. Ist alles viel zu laaaang
+   * TODO: Hier gibt es ein Scoping Problem. Nach dem Aufgruf 
+   * wird der Binder hinterhergeschoben, setzt den Scope falsch
+   * und rendert das Menü nicht mehr bzw. versteckt es wieder.
+   */
   function render_node_context_menu(event) {
       var element = event.element();
       var id = element.ancestors().first().id;
@@ -70,8 +73,11 @@
       var window_height;
       var max_width;
       var max_height;
+      
+      // race conditions?
+
+      var menu = $('context-menu');
       new Ajax.Updater('context-menu', url, {asynchronous:true, evalScripts:true, method:'get'});
-      menu = document.getElementById('context-menu');
       dims = menu.getDimensions();
       menu_width = dims.width;
       menu_height = dims.height;
@@ -100,12 +106,15 @@
       $('context-menu').style['top'] = (render_y + 'px');
       //$('context-menu').style['left'] = ('400px');
       //$('context-menu').style['top'] = ('400px');
-      Element.update('context-menu', '');
-
-      Effect.Appear('context-menu', {duration: 0.20});
-      if (window.parseStylesheets) {
+      menu.show();
+      //Effect.Appear(menu, {duration: 0.20} );
+      
+      
+      /*if (window.parseStylesheets) {
           window.parseStylesheets();
-      } // IE
+      }*/ // IE
   };
+  
+
   //]]>
 </script>

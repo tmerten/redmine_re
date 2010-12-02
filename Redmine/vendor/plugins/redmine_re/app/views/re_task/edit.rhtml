@@ -1,3 +1,4 @@
+<div id='detail_view' class='detail_view'>
 <h2><%= l(:re_task) %></h2>
 
 <%= error_messages_for :re_task %>
@@ -8,7 +9,7 @@
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
     <div class="box">
 
-    <%= render "re_artifact_properties/shared_fields", :f => f %>
+    <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
 
     <p>
       <%= submit_tag l(:re_save), :action => :edit %>
@@ -21,4 +22,5 @@
 
 <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
 
-<%= link_to 'Back', :action => :index, :project_id => params[:project_id] %>
+<%= link_to 'Show tasks', :action => :index, :project_id => params[:project_id] %>
+</div>

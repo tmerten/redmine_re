@@ -1,19 +1,3 @@
-<% content_for :header_tags do %>
-    <%= javascript_include_tag :defaults %> <%# includes: prototype, effects, dragdrop, controls, application%>
-    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
-<% end %>
-
-<div id='treebar' class='treebar'>
-    <%= render :partial => "filter" %>
-    <%= render :partial => "tree" %>
-</div>
-
 <div id='detail_view' class='detail_view'>
   <%= render :partial => 'requirements/welcome' %>
 </div>
-
-<%= render :partial => 'requirements/sidebar' %>
-
-<div id="context-menu" style="display:none;"></div>
-
-

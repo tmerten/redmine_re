@@ -1,6 +1,8 @@
 var SortableTree = Class.create({
   initialize: function(element, options) {
     this.element = $(element);
+    if (this.element === null) return;
+
     this.root = new SortableTree.Node(this, null, element, options);
 		this.isSortable = false;
   },
@@ -10,22 +12,26 @@ var SortableTree = Class.create({
   },
   
   setSortable: function() {
+    if (this.element === null) return;
     Element.addClassName(this.root.element, 'sortable');
 		this.root.setSortable();
 		this.isSortable = true;
   },
 
 	setUnsortable: function() {
+    if (this.element === null) return;
     Element.removeClassName(this.root.element, 'sortable');
 		this.root.setUnsortable();
 		this.isSortable = false;
 	},
   
   find: function(element) {
+    if (this.element === null) return;
     return this.root.find($(element));
   },
 
 	unmark_all: function() {
+    if (this.element === null) return;
     this.root.unmark();
 	}
 });
@@ -80,30 +86,36 @@ SortableTree.Node = Class.create({
   },
   
   initChildren: function() {
-    this.children = [];  
+    this.children = [];
+    if (this.element === null) return;
+    
     var container = this.findContainer(this.element);
     if(container){
       $A(container.childNodes).each(function(child) {
         if(this.acceptTagName(child)) {
           this.children.push(new SortableTree.Node(this.tree, this, child, this.options));
         }
-      }.bind(this));
-      
-      $A(container.childNodes).each(function(child) {
         var ce = $A(child.childElements());
-        var span = ce.select(function(c) {
-          return (c.hasClassName('handle'));
-          });
+        var span = ce.select(function(c) { return (c.hasClassName('handle')); });
         span.first().observe('click', function(event) {
-          var my_li = this.ancestors().first();
+          var my_li = event.element().ancestors().first();
+          var numeric_id = my_li.identify().gsub('node_','');
           if(my_li.hasClassName('closed')) {
             my_li.removeClassName('closed');
+            this.submitTreeStructure(my_li, true, numeric_id);
           } else {
             my_li.addClassName('closed');
+            this.submitTreeStructure(my_li, false, numeric_id);
           }
-        });
-      });
+        }.bind(this));
+      }.bind(this));
     }
+  },
+  
+  submitTreeStructure: function(element, open, id) {
+    /*
+    new Ajax.Updater(element, '/requirements/treestate/' + id + '?open=' + open, {asynchronous:true, evalScripts:true});
+    */
   },
 
   acceptTagName: function(element) {

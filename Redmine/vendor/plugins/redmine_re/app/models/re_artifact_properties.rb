@@ -42,6 +42,7 @@ class ReArtifactProperties < ActiveRecord::Base
   attr_accessor :state # Als Zustand noetig fuer(observer)
  
 
+  # TODO: Mirsad soll in Englisch schreiben.
   def revert
        #TODO neue version erstellen wenn reverted
        self.state = State::IDLE
@@ -126,8 +127,6 @@ class ReArtifactProperties < ActiveRecord::Base
     relation_type_no = ReArtifactRelationship::RELATION_TYPES[relation_type]
     
     # we can not give more than one parent
-    # Comment from Daniela: Yeah, that's right. But why don't we update the parent-child-relationship?
-    # If we do it this way, we are forced to cancel the existing relationship by hand...
     if (relation_type == :parentchild) && (! to.parent.nil?) && (to.parent.id != self.id)
         raise ArgumentError, "You are trying to add a second parent to the artifact: #{to}. No ReArtifactRelationship has been created or updated."
     end
