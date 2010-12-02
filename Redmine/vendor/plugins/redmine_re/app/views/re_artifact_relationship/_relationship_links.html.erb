@@ -3,18 +3,14 @@
     <%= l(:re_artifact_relationships_outgoing) %><br/>
     <ul>
     <% for relationship in @relationships_outgoing %>
-
         <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
-        <li><%= sink.id %>
-          <%= link_to_remote sink.name,
-                :url => { :action => :edit,
-                          :controller => sink.artifact_type.underscore,
-                          :layout => :false,
-                          :id => ReArtifactProperties.find_by_id(sink.id).artifact_id,
-                          :project_id => params[:project_id]},
-
-                :update => { :success => :detail_view },
-                :method => :get %><br/>
+        <li>
+          <%= link_to sink.name, {
+            :action => :edit,
+            :controller => sink.artifact_type.underscore,
+            :id => ReArtifactProperties.find_by_id(sink.id).artifact_id,
+            :project_id => params[:project_id]} %>
+          <br/>
         </li>
     <% end unless @relationships_outgoing.nil? %>
     </ul>
@@ -25,14 +21,12 @@
     <% for relationship in @relationships_incoming %>
         <% source = ReArtifactProperties.find_by_id(relationship.source_id) %>
         <li>
-          <%= link_to_remote source.name,
-                :url => { :action => :edit,
-                          :controller => source.artifact_type.underscore,
-                          :layout => :false,
-                          :id => ReArtifactProperties.find_by_id(source.id).artifact_id,
-                          :project_id => params[:project_id]},
-                :method => :get,
-                :update => { :success => :detail_view } %><br/>
+          <%= link_to source.name, {
+            :action => :edit,
+            :controller => source.artifact_type.underscore,
+            :id => ReArtifactProperties.find_by_id(source.id).artifact_id,
+            :project_id => params[:project_id]} %>
+          <br/>
         </li>
     <% end unless @relationships_incoming.nil? %>
     </ul>
