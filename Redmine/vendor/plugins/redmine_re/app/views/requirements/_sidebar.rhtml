@@ -1,8 +1,3 @@
-<% content_for :header_tags do %>
-    <%= javascript_include_tag 're_sidebar.js', :plugin => 'redmine_re' %>
-    <%= stylesheet_link_tag 're_sidebar.css', :plugin => 'redmine_re', :media => 'all' %>
-<% end %>
-
 <div id="reSideBar">
 
   <a href="#" id="reSideBarTab" accesskey="n"><img src="<%=image_path('sidebar/slide_button.gif', :plugin => 'redmine_re') %>" alt="<%= t(:re_sidebar_hover) %>" title="<%= t(:re_sidebar_hover) %>"/></a>
@@ -14,36 +9,40 @@
       <h3><%= l(:re_goal) %></h3>
 
       <ul>
-        <li><%= link_to_remote l(:re_create_goal),
-                               :url => {:controller => 're_goal', :action => 'edit', :project_id => @project.id},
-                               :method => :get,
-                               :update => :detail_view %>
+        <li><%= link_to l(:re_create_goal), {
+              :controller => 're_goal',
+              :action => 'edit',
+              :project_id => @project.id } %>
         </li>
-        <li><%= link_to_remote l(:re_show_goals),
-                               :url => {:controller => 're_goal', :action => 'index', :project_id => @project.id},
-                               :update => :detail_view %></li>
+        <li><%= link_to l(:re_show_goals), {
+              :controller => 're_goal',
+              :action => 'index',
+              :project_id => @project.id } %>
+        </li>
       </ul>
 
       <h3><%= l(:re_task) %><br/></h3>
 
       <ul>
-        <li><%= link_to_remote l(:re_create_task),
-                               :url => {:controller => 're_task', :action => 'edit', :project_id => @project.id},
-                               :method => :get,
-                               :update => :detail_view %>
+        <li><%= link_to l(:re_create_task), {
+              :controller => 're_task',
+              :action => 'edit',
+              :project_id => @project.id } %>
         </li>
-        <li><%= link_to_remote l(:re_show_tasks),
-                               :url => {:controller => 're_task', :action => 'index', :project_id => @project.id},
-                               :update => :detail_view %>
+        <li><%= link_to l(:re_show_tasks), {
+              :controller => 're_task',
+              :action => 'index',
+              :project_id => @project.id } %>
         </li>
-        <li><%= link_to_remote l(:re_show_subtasks),
-                               :url => {:controller => 're_subtask', :action => 'index', :project_id => @project.id},
-                               :update => :detail_view %>
+        <li><%= link_to l(:re_create_subtask), {
+              :controller => 're_subtask',
+              :action => 'edit',
+              :project_id => @project.id } %>
         </li>
-        <li><%= link_to_remote l(:re_create_subtask),
-                               :url => {:controller => 're_subtask', :action => 'edit', :project_id => @project.id},
-                               :method => :get,
-                               :update => :detail_view %>
+        <li><%= link_to l(:re_show_subtasks), {
+              :controller => 're_subtask',
+              :action => 'index',
+              :project_id => @project.id } %>
         </li>
       </ul>
 

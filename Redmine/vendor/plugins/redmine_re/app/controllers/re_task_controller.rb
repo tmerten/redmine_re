@@ -16,7 +16,7 @@ class ReTaskController < RedmineReController
 
   def edit
     @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new
-    @project = @re_task.project
+    @project ||= @re_task.project
 
     if request.post?
 

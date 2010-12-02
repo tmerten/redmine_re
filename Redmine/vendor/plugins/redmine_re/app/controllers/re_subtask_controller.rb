@@ -16,20 +16,15 @@ class ReSubtaskController < RedmineReController
 
   def edit
     @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties) || ReSubtask.new
-    @project = @re_subtask.project
+    @project ||= @re_subtask.project
 
     if request.post?
-
       @re_subtask.attributes = params[:re_subtask]
       add_hidden_re_artifact_properties_attributes @re_subtask
 
       flash[:notice] = 'Task successfully saved' if save_ok = @re_subtask.save
 
-      if request.xhr?
-        redirect_to :action => 'index', :project_id => @project.id, :layout => 'false' and return if save_ok
-      else
-        redirect_to :action => 'index', :project_id => @project.id and return if save_ok
-      end
+      redirect_to :action => 'edit', :project_id => @project.id and return if save_ok
     end
   end
 

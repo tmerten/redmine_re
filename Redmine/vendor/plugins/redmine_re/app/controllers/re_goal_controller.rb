@@ -16,7 +16,7 @@ class ReGoalController < RedmineReController
 
   def edit
     @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact_properties) || ReGoal.new
-    @project = @re_goal.project
+    @project ||= @re_goal.project
 
     if request.post?
       @re_goal.attributes = params[:re_goal]
