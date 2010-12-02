@@ -19,4 +19,6 @@
     <%= javascript_tag "Form.Element.focus('re_task_re_artifact_attributes_name');" %>
 <% end %>
 
+<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
+
 <%= link_to 'Back', :action => :index, :project_id => params[:project_id] %>

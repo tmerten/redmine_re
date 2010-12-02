@@ -9,6 +9,7 @@ en:
   re_sidebar: 'Create Artifacts'
   re_create_child: 'Create Child'
   re_delete_confirm: 'Do you really want to delete {{what}}?'
+  re_select_artifact: 'Select Artifact'
 
   # columns
   re_column_name: 'Name'
@@ -28,6 +29,10 @@ en:
   re_artifact_description: 'Description'
   re_artifact_responsibles: 'Responsibles'
   re_description_fieldset: 'Artifact Description'
+
+  re_artifact_relationships: 'Relationships'
+  re_artifact_relationships_outgoing: 'Outgoing Relationships'
+  re_artifact_relationships_incoming: 'Incoming Relationships'
 
   # re_goals
   re_create_goal: 'New Goal'

@@ -17,7 +17,6 @@ class ReGoalController < RedmineReController
 
   def edit
     @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact_properties) || ReGoal.new
-
      if request.get?
        render :layout => false if params[:layout] = 'false'
      end

@@ -1,6 +1,8 @@
 class ReArtifactProperties < ActiveRecord::Base
   unloadable
 
+  ARTIFACT_TYPES = { :ReGoal => 1, :ReTask => 2, :ReSubtask => 3 }
+
   has_many :children,
            :class_name => "ReArtifactProperties",
            :foreign_key => "parent_artifact_id",
@@ -124,6 +126,8 @@ class ReArtifactProperties < ActiveRecord::Base
     relation_type_no = ReArtifactRelationship::RELATION_TYPES[relation_type]
     
     # we can not give more than one parent
+    # Comment from Daniela: Yeah, that's right. But why don't we update the parent-child-relationship?
+    # If we do it this way, we are forced to cancel the existing relationship by hand...
     if (relation_type == :parentchild) && (! to.parent.nil?) && (to.parent.id != self.id)
         raise ArgumentError, "You are trying to add a second parent to the artifact: #{to}. No ReArtifactRelationship has been created or updated."
     end
@@ -169,6 +173,14 @@ class ReArtifactProperties < ActiveRecord::Base
     
     relation
   end
+
+
+  # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
+    def self.get_properties_id(controllername, subartifact_id)
+      @re_artifact_properties = ReArtifactProperties.find_by_artifact_type_and_artifact_id(controllername.camelize, subartifact_id)
+      @re_artifact_properties.id
+    end
+
   
   private
   
