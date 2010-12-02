@@ -11,6 +11,30 @@
     <div class="box">
 
     <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_subtask.re_artifact_properties %>
+      <p>
+         <%= f.label :solution, l(:re_subtask_solution) %> <%= f.text_field :solution %>
+      </p>
+      <p>
+        <%= label_tag 'Subtask' %>  <% if(@re_subtask.sub_type == 0) %>
+                                        <%= radio_button_tag "re_subtask[sub_type]", '0', true %>
+                                    <% else %>
+                                        <%= radio_button_tag "re_subtask[sub_type]", '0', false %>
+                                    <% end %>
+      </p>
+      <p>
+        <%= label_tag 'Variante' %>  <% if(@re_subtask.sub_type == 1) %>
+                                        <%= radio_button_tag "re_subtask[sub_type]", '1', true %>
+                                    <% else %>
+                                        <%= radio_button_tag "re_subtask[sub_type]", '1', false %>
+                                    <% end %>
+      </p>
+      <p>
+        <%= label_tag 'Problem' %>  <% if(@re_subtask.sub_type == 2) %>
+                                        <%= radio_button_tag "re_subtask[sub_type]", '2', true %>
+                                    <% else %>
+                                        <%= radio_button_tag "re_subtask[sub_type]", '2', false %>
+                                    <% end %>
+      </p>
 
     <p>
       <%= submit_tag l(:re_save) %>

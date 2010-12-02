@@ -51,6 +51,7 @@ en:
   re_create_subtask: 'New Subtask'
   re_show_subtasks: 'Show Subtasks'
   re_subtask: 'Subtask'
+  re_subtask_solution: 'Solution'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'

@@ -5,6 +5,6 @@ class ReSubtask < ActiveRecord::Base
 
   validates_presence_of :re_artifact_properties
 
-  acts_as_versioned
+  #acts_as_versioned
   #accepts_nested_attributes_for :re_artifact_properties, :allow_destroy => true
 end

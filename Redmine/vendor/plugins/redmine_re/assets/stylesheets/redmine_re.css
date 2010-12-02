@@ -22,4 +22,17 @@ a:active {
 	outline: none;
 }
 
+div.variant {
+    margin-left:60px;
+    border: dotted;
+    border-spacing: 1px;
+    border-color:#ffff33
+}
+
+div.problem {
+    margin-left:60px;
+    border: dotted;
+    border-spacing: 1px;
+    border-color:red;
+}
 

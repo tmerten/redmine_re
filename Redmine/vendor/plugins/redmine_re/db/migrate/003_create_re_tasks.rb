@@ -1,10 +1,9 @@
 class CreateReTasks < ActiveRecord::Migration
   def self.up
-    create_table :re_tasks do |t|
-    end
+    add_column :re_subtasks, :type, :string
   end
 
   def self.down
-    drop_table :re_tasks
+    remove_column :re_subtasks, :type
   end
 end
