@@ -113,9 +113,12 @@ SortableTree.Node = Class.create({
   },
   
   submitTreeStructure: function(element, open, id) {
-    /*
-    new Ajax.Updater(element, '/requirements/treestate/' + id + '?open=' + open, {asynchronous:true, evalScripts:true});
-    */
+    var ul = element.select('ul').first();
+    new Ajax.Updater(ul, '/requirements/treestate/' + id, {
+      parameters: { 'open': open }
+    });
+    var node = this.find($('node_'+id));
+    node.initChildren();
   },
 
   acceptTagName: function(element) {

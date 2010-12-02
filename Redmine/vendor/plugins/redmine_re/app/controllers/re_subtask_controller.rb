@@ -24,7 +24,7 @@ class ReSubtaskController < RedmineReController
 
       flash[:notice] = 'Subtask successfully saved' if save_ok = @re_subtask.save
 
-      redirect_to :action => 'edit', :project_id => @project.id and return if save_ok
+      redirect_to :action => 'edit' and return if save_ok
     end
   end
 

@@ -19,13 +19,12 @@ class RedmineReController < ApplicationController
   menu_item :re
 
   def find_project
-    # find the current project either by project name (project id entered by the user) or id
-    project_id = params[:project_id]
-    return unless project_id
+    # find the current project either by project name
+    return unless params[:project_id]
     begin
-      @project = Project.find(project_id)
-    #rescue ActiveRecord::RecordNotFound
-      #render_404
+      @project = Project.find(params[:project_id])
+    rescue ActiveRecord::RecordNotFound
+      render_404
     end
   end
 
@@ -51,7 +50,7 @@ class RedmineReController < ApplicationController
     htmltree = '<ul id="tree">'
     for artifact in artifacts
       if (artifact.parent.nil?)
-        htmltree += render_to_html_tree(artifact)
+        htmltree += render_to_html_tree(artifact, 0)
       end
     end
     htmltree += '</ul>'
@@ -89,35 +88,46 @@ class RedmineReController < ApplicationController
   end
 
   #renders a re artifact and its children recursively as html tree
-  def render_to_html_tree(re_artifact)
-    artifact_type = re_artifact.artifact_type.to_s.underscore
+  def render_to_html_tree(re_artifact_properties, depth = 0)
+    artifact_type = re_artifact_properties.artifact_type.to_s.underscore
     htmltree = ''
-    htmltree += '<li id="node_' + re_artifact.id.to_s #IDs must begin with a letter(!)
+    htmltree += '<li id="node_' + re_artifact_properties.id.to_s #IDs must begin with a letter(!)
     htmltree += '" class="' + artifact_type
-    if re_artifact.children.empty?
-      htmltree += ' closed'
+    if re_artifact_properties.children.empty?
+      htmltree += ' empty'
+    else
+      htmltree += ' closed' unless depth > 0
     end
     htmltree += '">'
     htmltree += '<span class="handle"></span>'
-    htmltree += '<a class="nodelink">' + re_artifact.name.to_s + '</a>'
-    htmltree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact.artifact_id) + '" class="nodeeditlink">(' + l(:re_edit) + ')</a>'
+    htmltree += '<a class="nodelink">' + re_artifact_properties.name.to_s + '</a>'
+    htmltree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink">(' + l(:re_edit) + ')</a>'
 
-    if (!re_artifact.children.empty?)
-      htmltree += '<ul>'
-      for child in re_artifact.children
-        htmltree += render_to_html_tree(child)
-      end
-      htmltree += '</ul>'
+    htmltree += '<ul>'
+    if ( (!re_artifact_properties.children.empty?) && depth > 0)
+      htmltree += render_children_to_html_tree(re_artifact_properties, depth-1)
     end
+    htmltree += '</ul>'
+
     htmltree += '</li>'
   end
   
+  def render_children_to_html_tree(re_artifact_properties, depth)
+    htmltree = ''
+    for child in re_artifact_properties.children
+        htmltree += render_to_html_tree(child, depth)
+    end
+    htmltree    
+  end
+  
   def treestate
+    ret = ''
     if params[:open] == 'true'
-      re_artifact_properties =  params[:id]    
+      re_artifact_properties =  ReArtifactProperties.find(params[:id])
+      ret = render_children_to_html_tree(re_artifact_properties, 0)
     end
 
-    render :nothing => true   
+    render :inline => ret
   end
 
   # first tries to enable a contextmenu in artifact tree
