@@ -58,6 +58,9 @@
 #tree li.closed span {
     background: url(../images/sortable_tree/folder_closed.png) no-repeat 3px 3px;
 }
+#tree li.empty span {
+    background: none;
+}
 #tree li.closed li {
     display: none;
 }
