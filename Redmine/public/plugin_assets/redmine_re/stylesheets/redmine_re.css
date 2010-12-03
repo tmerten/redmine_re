@@ -1,11 +1,11 @@
 .detail_view {
-    position:absolute; left: 240px;
+    position: absolute;
+    left: 240px;
 }
 
 .treebar {
     float: left;
     width: 200px;
-    position: relative;
 }
 
 .recopyright {
@@ -22,4 +22,17 @@ a:active {
 	outline: none;
 }
 
+div.variant {
+    margin-left:60px;
+    border: dotted;
+    border-spacing: 1px;
+    border-color:#ffff33
+}
+
+div.problem {
+    margin-left:60px;
+    border: dotted;
+    border-spacing: 1px;
+    border-color:red;
+}
 

@@ -1,6 +1,18 @@
 class ReTaskController < RedmineReController
   unloadable
 
+
+  def add_subtask_before
+     @html_id = "subtask" + params[:id]
+     @re_subtask_with_before_link = ReSubtask.find(params[:id])
+     #Rails.logger.debug("########add subt before 1##########"+ @re_subtask_with_before_link.parent.inspect)
+     #@subtasks = ReSubtask.all
+     @re_subtask =  ReSubtask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
+     respond_to do |format|
+       format.js
+     end
+  end
+
   def index
     @tasks = ReTask.find(:all,
                          :joins => :re_artifact_properties,
@@ -19,8 +31,11 @@ class ReTaskController < RedmineReController
     @subtasks = @re_task.children.collect {|c| c.artifact if c.artifact_type == "ReSubtask"}
 
     @project = @re_task.project
+    Rails.logger.debug("#######edit#####1 subtask:" + params.inspect)
 
     if request.post?
+      Rails.logger.debug("#######edit#####1 subtaskPOST:" + params.inspect)
+
       @re_task.attributes = params[:re_task]
       add_hidden_re_artifact_properties_attributes @re_task
 
