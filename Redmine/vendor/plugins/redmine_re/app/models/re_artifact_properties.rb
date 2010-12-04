@@ -2,6 +2,7 @@ class ReArtifactProperties < ActiveRecord::Base
   unloadable
 
   ARTIFACT_TYPES = { :ReGoal => 1, :ReTask => 2, :ReSubtask => 3 }
+  ARTIFACT_COLOURS = {:ReGoal => '#ea6b55', :ReTask => '#ddaa88', :ReSubtask => '#bb8899'  }
 
   has_many :children,
            :class_name => "ReArtifactProperties",

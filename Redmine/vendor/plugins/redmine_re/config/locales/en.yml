@@ -30,9 +30,12 @@ en:
   re_artifact_responsibles: 'Responsibles'
   re_description_fieldset: 'Artifact Description'
 
+  # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
   re_artifact_relationships_incoming: 'Incoming Relationships'
+  relationship_visualization: 'Relationship Visualization'
+  relationships: 'Relationships'
 
   # re_goals
   re_create_goal: 'New Goal'

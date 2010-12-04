@@ -42,4 +42,5 @@ if options[:sandbox]
 else
   puts "Loading #{ENV['RAILS_ENV']} environment (Rails #{Rails.version})"
 end
-exec "#{options[:irb]} #{libs} --simple-prompt"
+
+exec "\"#{options[:irb]}\" #{libs} –simple-prompt"
