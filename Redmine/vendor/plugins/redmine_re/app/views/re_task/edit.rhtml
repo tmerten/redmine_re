@@ -14,12 +14,6 @@
     
         <div id="subtasks" >
             <%= render :partial => 're_subtask', :collection => @subtasks %>
-            <p>
-                <%= link_to_function "Add Subtask beforeee" do |page|
-                    page.insert_html :bottom, :subtasks, :partial => "re_subtask", :object => ReSubtask.new
-                end %>
-            </p>
-
         </div>
         <p>
           <%= submit_tag l(:re_save), :action => :edit %>

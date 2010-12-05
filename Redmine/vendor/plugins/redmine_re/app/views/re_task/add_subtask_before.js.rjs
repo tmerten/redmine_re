@@ -1,2 +1,0 @@
-page.insert_html :before, @html_id, :partial => "re_subtask", :object => @re_subtask
-

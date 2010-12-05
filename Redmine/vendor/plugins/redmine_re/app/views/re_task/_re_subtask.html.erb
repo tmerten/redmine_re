@@ -5,9 +5,11 @@
               <% if re_subtask.sub_type == 2 %>  <%= "<div id=\"subtask#{re_subtask.id}\" class=\"problem\"> " %><% end %>
         <% @index = "new"+Time.now.to_i.to_s %>
         <% if(re_subtask.id) %>
-        <% @index = re_subtask.id %>
+        <%  @index = re_subtask.id %>
         <% end %>
-      <%= link_to_remote "Add Subtask before", :url => {:action => "add_subtask_before", :id => re_subtask.id} %>
+
+        <%= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => re_subtask.id, :add_position => :before}%>
+        <%= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => re_subtask.id, :add_position => :after}%>
 
                         <p>
                             <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{@index}][name]", re_subtask.name %> <%#= re_subtask_form.text_field :name %>

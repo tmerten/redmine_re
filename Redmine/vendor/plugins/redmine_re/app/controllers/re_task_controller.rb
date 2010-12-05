@@ -2,12 +2,12 @@ class ReTaskController < RedmineReController
   unloadable
 
 
-  def add_subtask_before
+  def add_subtask             #TODO: select tag problem variant subt
+    Rails.logger.debug("###### add subtask #####1 subtype:")
      @html_id = "subtask" + params[:id]
+     @add_position = params[:add_position]
      @re_subtask_with_before_link = ReSubtask.find(params[:id])
-     #Rails.logger.debug("########add subt before 1##########"+ @re_subtask_with_before_link.parent.inspect)
-     #@subtasks = ReSubtask.all
-     @re_subtask =  ReSubtask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
+     @re_subtask =  ReSubtask.new(:sub_type => 0)#,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
      respond_to do |format|
        format.js
      end
