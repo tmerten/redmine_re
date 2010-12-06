@@ -1,6 +1,23 @@
 class ReTaskController < RedmineReController
   unloadable
 
+  def update_subtask_positions
+    Rails.logger.debug("#######up_sub_pos####1   params:" + params.inspect)
+
+    params[:subtasks].each_with_index do |id, index|
+      @subtask = ReSubtask.find(id)
+      Rails.logger.debug("#######up_sub_pos####2  subtask parent:" + @subtask.parent.inspect)
+
+      @relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(@subtask.parent.id,
+                                                                                         @subtask.re_artifact_properties.id,
+                                                                                         ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                          )
+      Rails.logger.debug("#######up_sub_pos####3  relation:" + @relation.inspect)
+
+      Rails.logger.debug("#######up_sub_pos####4 index:  " + index.to_s + " id: "+ id.to_s)
+    end
+    render :nothing => true
+  end
 
   def add_subtask             #TODO: select tag problem variant subt
     Rails.logger.debug("###### add subtask #####1 subtype:")
@@ -31,10 +48,8 @@ class ReTaskController < RedmineReController
     @subtasks = @re_task.children.collect {|c| c.artifact if c.artifact_type == "ReSubtask"}
 
     @project = @re_task.project
-    Rails.logger.debug("#######edit#####1 subtask:" + params.inspect)
 
     if request.post?
-      Rails.logger.debug("#######edit#####1 subtaskPOST:" + params.inspect)
 
       @re_task.attributes = params[:re_task]
       add_hidden_re_artifact_properties_attributes @re_task

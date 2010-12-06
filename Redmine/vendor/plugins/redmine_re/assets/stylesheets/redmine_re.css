@@ -36,3 +36,7 @@ div.problem {
     border-color:red;
 }
 
+div.draggable {
+    cursor: move;
+}
+

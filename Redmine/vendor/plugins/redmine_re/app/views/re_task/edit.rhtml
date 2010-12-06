@@ -15,6 +15,12 @@
         <div id="subtasks" >
             <%= render :partial => 're_subtask', :collection => @subtasks %>
         </div>
+        <%= sortable_element "subtasks",
+                              :tag => 'div',
+                              :complete => visual_effect(:highlight, 'subtasks'),
+                              :url => { :action => "update_subtask_positions" }
+        %>
+
         <p>
           <%= submit_tag l(:re_save), :action => :edit %>
         </p>
