@@ -1,8 +1,7 @@
 <p>
   <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
 </p>
-<p>
-</p>
+<%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
 <p>  
 <fieldset><legend><%= l(:re_description_fieldset) %></legend>
   <%= textilizable(properties, :description, :only_path => false) %>
