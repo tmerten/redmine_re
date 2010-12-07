@@ -19,109 +19,22 @@
       var parent_id = drag.parent.id();
       
       new Ajax.Request('/requirements/delegate_tree_drop', {
-        parameters: { 
+        parameters: {
           new_parent_id:drag.parent.id(),
           moved_artifact_id:drag.id(),
           left_artifact_id:left_node_id
           }
       });
-    }
+    },
+    nodeUrl: '/requirements/treestate/',
+    contextMenuUrl: '/requirements/context_menu/',
+    contextMenuDivId: 'context-menu',
+    projectId: <%= @project.id -%>,
   });
   if (tree !== null) {
     tree.setSortable();
-    Event.observe(window, "load", function(){
-      $$('.nodelink').each(function(element){
-        Event.observe(element, 'click', render_node_context_menu);
-      });
-      /*$$('.nodeeditlink').each(function(element){
-        Event.observe(element, 'click', render_edit_partial);
-      });*/
-    });  
+    Event.observe(document.body, 'click', function() { Effect.Fade('context-menu', {duration: 0.20}) }.bindAsEventListener());
   };
-
-  Event.observe(document.body, 'click', hide_context_menu.bindAsEventListener());
-
-  function hide_context_menu (e){
-      var target = Event.element(e);
-      if (!target.hasClassName('tafelTreecontent'))  {
-          // Element is definitively outside of the tree as tree nodes are in td-tags
-          Effect.Fade('context-menu', {duration: 0.10});
-      }
-  };
-
-  function render_edit_partial (event) {
-      var element = event.element();
-      var id = element.ancestors().first().id;
-      id = id.gsub('node_','');
-      var url = '/re_artifact_properties/edit/'+ id + '?project_id=<%= @project.id -%>';
-      new Ajax.Updater('detail_view', url, {asynchronous:false, evalScripts:true, method:'get'});
-  };
-
-  /* TODO: Daniela mal refactorn lassen. Ist alles viel zu laaaang
-   * TODO: Hier gibt es ein Scoping Problem. Nach dem Aufgruf 
-   * wird der Binder hinterhergeschoben, setzt den Scope falsch
-   * und rendert das Menü nicht mehr bzw. versteckt es wieder.
-   */
-  function render_node_context_menu(event) {
-      var element = event.element();
-      var id = element.ancestors().first().id;
-      id = id.gsub('node_','');
-      var url = '/requirements/context_menu/' + id;
-
-      var menu = $('context-menu');
-      new Ajax.Updater('context-menu', url, { 
-        parameters : { 
-          project_id:<%= @project.id -%>
-        },
-        onComplete: function() {
-		      var render_x = event.pointerX();
-          var render_y = event.pointerY();
-          var menu_width;
-          var menu_height;
-          var window_width;
-          var window_height;
-          var max_width;
-          var max_height;
-
-          menu_width = menu.getDimensions().width;
-          menu_height = menu.getDimensions().height;
-
-          max_width = render_x + 2 * menu_width;
-          max_height = render_y + menu_height;
-    
-          window_width = document.viewport.getWidth();
-          window_height = document.viewport.getHeight();
-    
-          /* display the menu above and/or to the left of the click if needed */
-          if (max_width > window_width) {
-              render_x -= menu_width;
-              $('context-menu').addClassName('reverse-x');
-          } else {
-              $('context-menu').removeClassName('reverse-x');
-          }
-          if (max_height > window_height) {
-              render_y -= menu_height;
-              $('context-menu').addClassName('reverse-y');
-          } else {
-              $('context-menu').removeClassName('reverse-y');
-          }
-          if (render_x <= 0) render_x = 1;
-          if (render_y <= 0) render_y = 1;
-          
-          $('context-menu').style['left'] = (render_x + 'px');
-          $('context-menu').style['top'] = (render_y + 'px');
-          
-          /*$('context-menu').style['left'] = '5px';
-          $('context-menu').style['top'] = '5px';*/
-          
-          Effect.Appear(menu, {duration: 0.20} );
-          if (window.parseStylesheets) {
-              window.parseStylesheets();
-          } // IE
-        }
-      });
-  };
-  
 
   //]]>
 </script>

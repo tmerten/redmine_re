@@ -110,6 +110,8 @@ SortableTree.Node = Class.create({
             this.submitTreeStructure(my_li, false, numeric_id);
           }
         }.bind(this));
+        var nodelink = ce.select(function(c) { return (c.hasClassName('nodelink')); });
+        nodelink.first().observe('click', this.renderNodeContextMenu.bind(this));
       }.bind(this));
     }
   },
@@ -117,13 +119,62 @@ SortableTree.Node = Class.create({
   submitTreeStructure: function(element, open, id) {
     this.tree.theUpdatingNode = this.tree.find(element);
     var ul = element.select('ul').first();
-    new Ajax.Updater(ul, '/requirements/treestate/' + id, {
+    new Ajax.Updater(ul, this.options.nodeUrl + id, {
       parameters: { 'open': open },
       onComplete: function() {
         this.tree.theUpdatingNode.initChildren();
         this.tree.theUpdatingNode.setSortable();
         this.tree.theUpdatingNode = null;
       }.bind(this)
+    });
+  },
+  
+  renderNodeContextMenu: function(event) {
+    var element = event.element();
+    var id = element.ancestors().first().id;
+    id = id.gsub('node_','');
+    var url = this.options.contextMenuUrl + id;
+
+    var menu = $(this.options.contextMenuDivId);
+    new Ajax.Updater('context-menu', url, { 
+      parameters : { 
+        project_id: this.options.projectId
+      },
+      onComplete: function() {
+        var render_x = event.pointerX();
+        var render_y = event.pointerY();
+
+        var menu_width = menu.getDimensions().width;
+        var menu_height = menu.getDimensions().height;
+        var max_width = render_x + 2 * menu_width;
+        var max_height = render_y + menu_height;
+        var window_width = document.viewport.getWidth();
+        var window_height = document.viewport.getHeight();
+  
+        /* display the menu above and/or to the left of the click if needed */
+        if (max_width > window_width) {
+            render_x -= menu_width;
+            $('context-menu').addClassName('reverse-x');
+        } else {
+            $('context-menu').removeClassName('reverse-x');
+        }
+        if (max_height > window_height) {
+            render_y -= menu_height;
+            $('context-menu').addClassName('reverse-y');
+        } else {
+            $('context-menu').removeClassName('reverse-y');
+        }
+        if (render_x <= 0) render_x = 1;
+        if (render_y <= 0) render_y = 1;
+        
+        menu.style['left'] = (render_x + 'px');
+        menu.style['top'] = (render_y + 'px');
+        
+        Effect.Appear(menu, {duration: 0.20} );
+        if (window.parseStylesheets) {
+            window.parseStylesheets();
+        } // IE
+      }
     });
   },
 

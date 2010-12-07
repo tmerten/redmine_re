@@ -40,3 +40,12 @@ div.draggable {
     cursor: move;
 }
 
+#context-menu li.header {
+    border-bottom-width: 1px;
+    border-bottom-color: black;
+    border-bottom-style: dotted;
+    background-color: #507AAA;
+    padding-left: 5px;
+    color: white;
+}
+
