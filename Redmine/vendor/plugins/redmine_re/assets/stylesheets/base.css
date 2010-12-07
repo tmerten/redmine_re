@@ -28,7 +28,7 @@ a {
 }
 
 #container {
-    width: 1000px;
+    width: 1200px;
     height: 600px;
     margin:0 auto;
     position:relative;
@@ -53,7 +53,7 @@ a {
 }
 
 #left-container {
-    left:0;
+    left:80px;
     background-image:url('col2.png');
     background-position:center right;
     border-left:1px solid #ddd;
@@ -61,7 +61,7 @@ a {
 }
 
 #right-container {
-    right:0;
+    left:800px;
     background-image:url('col1.png');
     background-position:center left;
     border-right:1px solid #ddd;
@@ -73,7 +73,7 @@ a {
 
 #center-container {
     width:600px;
-    left:200px;
+    left:300px;
     background-color:#1a1a1a;
     color:#ccc;
 }

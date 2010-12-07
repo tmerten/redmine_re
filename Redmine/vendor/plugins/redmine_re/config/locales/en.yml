@@ -26,6 +26,8 @@ en:
 
   # re_artifact_properties
   re_artifact_name: 'Name'
+  re_artifacts: 'Artifacts'
+  re_artifact: 'Artifact'
   re_artifact_priority: 'Priority'
   re_artifact_description: 'Description'
   re_artifact_responsibles: 'Responsibles'
@@ -35,8 +37,11 @@ en:
   re_artifact_relationships: 'Relationships'
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
   re_artifact_relationships_incoming: 'Incoming Relationships'
-  relationship_visualization: 'Relationship Visualization'
-  relationships: 'Relationships'
+  re_relationship_visualization: 'Relationship Visualization'
+  re_relationships: 'Relationships'
+  re_conflict: 'Conflict'
+  re_dependency: 'Dependency'
+  re_parentchild: 'Parent Child'
 
   # re_goals
   re_create_goal: 'New Goal'

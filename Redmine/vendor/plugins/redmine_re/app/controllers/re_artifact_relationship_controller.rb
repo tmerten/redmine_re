@@ -35,17 +35,23 @@ class ReArtifactRelationshipController < RedmineReController
     @artifacts = ReArtifactProperties.find_all_by_project_id(params[:project_id], :order => "artifact_type, name")
     #@artifacts = ReArtifactProperties.find(:all, :order => "name", :conditions => ["project_id = ? and artifact_type = ?", params[:project_id], "ReGoal"])
     @json_netmap = build_json_for_netmap(@artifacts)
-    # preparing session variable to save for all artifact types if they are chosen or not
-    # starting values are set to true
+    # Preparing session variable to save all artifact types if they are chosen or not.
+    # Starting values are set to true
     session[:artifacts_chosen] = {}
     for key in ReArtifactProperties::ARTIFACT_TYPES.keys do
       session[:artifacts_chosen][key.to_sym] = true
+    end
+    # Preparing session variable to save all relation types if they are chosen or not.
+    # Starting values are set to true
+    session[:relations_chosen] = {}
+    for key in ReArtifactRelationship::RELATION_TYPES.keys do
+      session[:relations_chosen][key.to_sym] = true
     end
   end
 
 
 
-  def build_json_for_netmap(artifacts)
+  def build_json_for_netmap(artifacts, relation_search_string = nil)
     @json_for_netmap = '[
       {
         "id": "node0",
@@ -56,7 +62,11 @@ class ReArtifactRelationshipController < RedmineReController
         "adjacencies": ['
     @json_for_netmap += add_artifacts_as_children_of_root(artifacts)
     for artifact in artifacts do
-      @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.id)
+      if relation_search_string
+        @outgoing_relationships = ReArtifactRelationship.find(:all,  :order => "relation_type", :conditions => [ relation_search_string, artifact.id])
+      else
+        @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.id)
+      end
       @showable_relations = []
       for outgoing_relation in @outgoing_relationships do
         @showable_relations << outgoing_relation if artifacts.include?(ReArtifactProperties.find_by_id(outgoing_relation.sink_id))  
@@ -105,10 +115,13 @@ class ReArtifactRelationshipController < RedmineReController
 
   # This method build a new json string in variable @json_netmap and triggers
   # execution of a javascript to rebuild the netmap
+  # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
   def build_json_according_to_user_choice
     @artifact_choice = params[:artifact_clicked]
+    @relation_choice = params[:relation_clicked]
     # String for condition to find the chosen artifacts
     @chosen_artifacts_or_string = "project_id = ? and (artifact_type = '"
+    @chosen_relations_or_string = "source_id = ? and (relation_type = "
     # Set all values in session concerning chosen artifacts to false
     # in order to set the newly chosen ones to true later on
     @session_artifacts_chosen = {}
@@ -119,11 +132,24 @@ class ReArtifactRelationshipController < RedmineReController
         @chosen_artifacts_or_string += artifact.to_s + "' or artifact_type = '"
       end
     end
+    # Set all values in session concerning chosen relationships to false
+    # in order to set the newly chosen ones to true later on
+    @session_relations_chosen = {}
+    for relation in session[:relations_chosen].keys do
+      @session_relations_chosen[relation.to_sym] = false
+      if @relation_choice.include? relation.to_s
+        @session_relations_chosen[relation.to_sym] = true
+        @chosen_relations_or_string += ReArtifactRelationship::RELATION_TYPES[relation.to_sym].to_s + " or relation_type = "
+      end
+    end
     session[:artifacts_chosen] = @session_artifacts_chosen
+    session[:relations_chosen] = @session_relations_chosen
     # remove the last ' or artifact_type = ' and close brackets
     @chosen_artifacts_or_string = @chosen_artifacts_or_string[0, @chosen_artifacts_or_string.length - 21] + ')'
+    # remove the last ' or relation_type = ' and close brackets
+    @chosen_relations_or_string = @chosen_relations_or_string[0, @chosen_relations_or_string.length - 19] + ')'
     @artifacts = ReArtifactProperties.find(:all, :order => "artifact_type, name", :conditions => [ @chosen_artifacts_or_string , params[:project_id]])
-    @json_netmap = build_json_for_netmap(@artifacts) unless @artifacts.empty?
+    @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string) unless @artifacts.empty?
     render :visualization
   end
 
