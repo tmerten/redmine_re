@@ -6,7 +6,8 @@ class RedmineReController < ApplicationController
   
   #include ActionView::Helpers::UrlHelper
   #include ActionView::Helpers::AssetTagHelper
-  #include ActionView::Helpers::TagHelper  
+  #include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::TextHelper  
 
   before_filter :find_project
   #before_filter :authorize,
@@ -99,10 +100,12 @@ class RedmineReController < ApplicationController
     else
       htmltree += ' closed' unless (depth > 0 || session[:expanded_nodes].include?(re_artifact_properties.id) )
     end
-    htmltree += '">'
+    htmltree += '" style="position: relative;">'
     htmltree += '<span class="handle"></span>'
-    htmltree += '<a class="nodelink">' + re_artifact_properties.name.to_s + '</a>'
-    htmltree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink">(' + l(:re_edit) + ')</a>'
+    htmltree += '<a class="nodelink">' 
+    htmltree += truncate(re_artifact_properties.name.to_s, :length => 20, :omission => "...")
+    htmltree += '</a>'
+    htmltree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink"> (' + l(:re_edit) + ')</a>'
 
     htmltree += '<ul>'
     if ( !re_artifact_properties.children.empty? )

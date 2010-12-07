@@ -18,8 +18,15 @@
     },
     onDrop: function(drag, drop, event){
       var left_node_id = drag.leftNode ? drag.leftNode.id() : ''
-      var url = '/requirements/delegate_tree_drop?new_parent_id=' + drag.parent.id() + ';moved_artifact_id=' + drag.id() + ';left_artifact_id=' + left_node_id;
-      new Ajax.Request(url, {method: 'get'})      
+      var parent_id = drag.parent.id();
+      
+      new Ajax.Request('/requirements/delegate_tree_drop', {
+        parameters: { 
+          new_parent_id:drag.parent.id(),
+          moved_artifact_id:drag.id(),
+          left_artifact_id:left_node_id
+          }
+      });
     }
   });
   if (tree !== null) {

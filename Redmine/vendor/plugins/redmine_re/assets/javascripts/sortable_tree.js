@@ -115,29 +115,14 @@ SortableTree.Node = Class.create({
   },
   
   submitTreeStructure: function(element, open, id) {
-    this.theUpdatingNode = this.tree.find(element);
+    this.tree.theUpdatingNode = this.tree.find(element);
     var ul = element.select('ul').first();
     new Ajax.Updater(ul, '/requirements/treestate/' + id, {
       parameters: { 'open': open },
-      /*onComplete: function(element) {
-        this.theUpdatingNode.initChildren();
-        this.theUpdatingNode = null;
-      }.bind(this)*/
       onComplete: function() {
-        var parent = this.theUpdatingNode.parent;
-        /*
-         * This did not work because the node seems to be "double initialized" afterwards and it does not seem to initialize the nodes children
-         * new SortableTree.Node(this.tree, parent, this.theUpdatingNode, this.options);
-         * 
-         * This did initialize the children correctly but drag and drop works on the branch as a whole but not on the items
-         * this.theUpdatingNode.initChildren();
-         * 
-         * Next try: Delete "theUpdatingNode" from its parents chilren-array and re-initialize it
-         * 
-         * Last try: Delete everything and re-initialize the whole tree.
-         * Thats bad, because in this case we can not call this function from inside the tree  and need an external observer...
-         */
-        this.theUpdatingNode = null;
+        this.tree.theUpdatingNode.initChildren();
+        this.tree.theUpdatingNode.setSortable();
+        this.tree.theUpdatingNode = null;
       }.bind(this)
     });
   },
