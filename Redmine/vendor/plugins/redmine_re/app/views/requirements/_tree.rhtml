@@ -7,8 +7,6 @@
 
 <%= @htmltree %>
 
-<div id="context-menu" style="display:none;"></div>
-
 <script type="text/javascript">
   //<![CDATA[
     
@@ -68,58 +66,60 @@
       var element = event.element();
       var id = element.ancestors().first().id;
       id = id.gsub('node_','');
-      var url = '/requirements/context_menu/' + id + '?project_id=<%= @project.id -%>';
-      var mouse_x = event.pointerX();
-      var mouse_y = event.pointerY();
-      var render_x = mouse_x;
-      var render_y = mouse_y;
-      var dims;
-      var menu_width;
-      var menu_height;
-      var window_width;
-      var window_height;
-      var max_width;
-      var max_height;
-      
-      // race conditions?
+      var url = '/requirements/context_menu/' + id;
 
       var menu = $('context-menu');
-      new Ajax.Updater('context-menu', url, {asynchronous:true, evalScripts:true, method:'get'});
-      dims = menu.getDimensions();
-      menu_width = dims.width;
-      menu_height = dims.height;
-      max_width = mouse_x + 2 * menu_width;
-      max_height = mouse_y + menu_height;
+      new Ajax.Updater('context-menu', url, { 
+        parameters : { 
+          project_id:<%= @project.id -%>
+        },
+        onComplete: function() {
+		      var render_x = event.pointerX();
+          var render_y = event.pointerY();
+          var menu_width;
+          var menu_height;
+          var window_width;
+          var window_height;
+          var max_width;
+          var max_height;
 
-      window_width = document.viewport.getWidth();
-      window_height = document.viewport.getHeight();
+          menu_width = menu.getDimensions().width;
+          menu_height = menu.getDimensions().height;
 
-      /* display the menu above and/or to the left of the click if needed */
-      if (max_width > window_width) {
-          render_x -= menu_width;
-          $('context-menu').addClassName('reverse-x');
-      } else {
-          $('context-menu').removeClassName('reverse-x');
-      }
-      if (max_height > window_height) {
-          render_y -= menu_height;
-          $('context-menu').addClassName('reverse-y');
-      } else {
-          $('context-menu').removeClassName('reverse-y');
-      }
-      if (render_x <= 0) render_x = 1;
-      if (render_y <= 0) render_y = 1;
-      $('context-menu').style['left'] = (render_x + 'px');
-      $('context-menu').style['top'] = (render_y + 'px');
-      //$('context-menu').style['left'] = ('400px');
-      //$('context-menu').style['top'] = ('400px');
-      menu.show();
-      //Effect.Appear(menu, {duration: 0.20} );
-      
-      
-      /*if (window.parseStylesheets) {
-          window.parseStylesheets();
-      }*/ // IE
+          max_width = render_x + 2 * menu_width;
+          max_height = render_y + menu_height;
+    
+          window_width = document.viewport.getWidth();
+          window_height = document.viewport.getHeight();
+    
+          /* display the menu above and/or to the left of the click if needed */
+          if (max_width > window_width) {
+              render_x -= menu_width;
+              $('context-menu').addClassName('reverse-x');
+          } else {
+              $('context-menu').removeClassName('reverse-x');
+          }
+          if (max_height > window_height) {
+              render_y -= menu_height;
+              $('context-menu').addClassName('reverse-y');
+          } else {
+              $('context-menu').removeClassName('reverse-y');
+          }
+          if (render_x <= 0) render_x = 1;
+          if (render_y <= 0) render_y = 1;
+          
+          $('context-menu').style['left'] = (render_x + 'px');
+          $('context-menu').style['top'] = (render_y + 'px');
+          
+          /*$('context-menu').style['left'] = '5px';
+          $('context-menu').style['top'] = '5px';*/
+          
+          Effect.Appear(menu, {duration: 0.20} );
+          if (window.parseStylesheets) {
+              window.parseStylesheets();
+          } // IE
+        }
+      });
   };
   
 

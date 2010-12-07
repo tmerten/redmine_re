@@ -160,6 +160,7 @@ class ReArtifactProperties < ActiveRecord::Base
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
 
     if not relation.nil?
+      # override existing relation
       if parent.nil?
         ReArtifactRelationship.delete(relation.id)
         return
@@ -168,6 +169,7 @@ class ReArtifactProperties < ActiveRecord::Base
       relation.source_id = parent.id
       relation.save
     else
+      #create new relation
       relation = parent.relate_to self, :parentchild
     end
     
