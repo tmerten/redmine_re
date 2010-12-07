@@ -20,10 +20,11 @@
         </h4>
 
           <% for key in ReArtifactProperties::ARTIFACT_TYPES.keys do %>
-             <input type="checkbox" name="artifact[chosen][]" id="artifact_chosen_<%= key %>" value="<%= key %>" checked/>
+             <%= check_box_tag 'artifact_checked[]', key.to_s, session[:artifacts_chosen][key], :id => "artifact_checked_" + key.to_s %>
              <%= label :artifacts_to_choose, l(key.to_s.underscore)%><br/>
-             <%= observe_field ("artifact_chosen_" + key.to_s),   :url => { :action => :build_json_according_to_user_choice, :project_id => params[:project_id], :chosen => key.to_s},
-                                                             :with => "'chosen_artifact='+ escape($('artifact_chosen_" + key.to_s + "').value)" %>
+             <%= observe_field ("artifact_checked_" + key.to_s), :url => { :action => :build_json_according_to_user_choice_2, :project_id => params[:project_id], :chosen => key.to_s},
+                                                      :with => "'chosen_artifact='+ escape($('artifact_checked[]').value)",
+                                                      :complete => "init()" %>
           <% end %>
         <br/><br/><br/><hr>
         <% form_tag :action => :build_json_according_to_user_choice, :project_id => params[:project_id] do %>
@@ -34,7 +35,7 @@
             <% end %>
           <%= submit_tag l(:re_show)%>
         <% end %>
-
+        <%= params[:chosen_artifact] %>
         </div>
 
         <div id="id-list"></div>
