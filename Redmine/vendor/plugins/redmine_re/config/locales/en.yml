@@ -5,6 +5,7 @@ en:
   re_save: 'Save'
   re_edit: 'edit'
   re_delete: 'delete'
+  re_show: 'Show'
   re_requirements_overview: 'Requirements Overview'
   re_sidebar: 'Create Artifacts'
   re_create_child: 'Create Child'

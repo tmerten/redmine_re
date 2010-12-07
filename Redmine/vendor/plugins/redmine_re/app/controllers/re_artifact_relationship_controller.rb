@@ -1,7 +1,6 @@
 class ReArtifactRelationshipController < ApplicationController
   unloadable
 
-  
 
   def prepare_relationships
     @artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
@@ -34,7 +33,20 @@ class ReArtifactRelationshipController < ApplicationController
     # is usually build for trees, we have to add a dummy root element which isn't shown
     # and insert all the artifacts we are interested in as children of this very root node
     @artifacts = ReArtifactProperties.find_all_by_project_id(params[:project_id], :order => "artifact_type, name")
-    @json_netmap = '[
+    #@artifacts = ReArtifactProperties.find(:all, :order => "name", :conditions => ["project_id = ? and artifact_type = ?", params[:project_id], "ReGoal"])
+    @json_netmap = build_json_for_netmap(@artifacts)
+    # preparing session variable to save for all artifact types if they are chosen or not
+    # starting values are set to true
+    session[:artifacts_chosen] = {}
+    for key in ReArtifactProperties::ARTIFACT_TYPES.keys do
+      session[:artifacts_chosen][key.to_sym] = true
+    end
+  end
+
+
+
+  def build_json_for_netmap(artifacts)
+    @json_for_netmap = '[
       {
         "id": "node0",
         "name": "",
@@ -42,14 +54,17 @@ class ReArtifactRelationshipController < ApplicationController
           "$type": "none"
         },
         "adjacencies": ['
-    @json_netmap += add_artifacts_as_children_of_root(@artifacts)
-    @json_netmap += ']},'
-    for artifact in @artifacts do
+    @json_for_netmap += add_artifacts_as_children_of_root(artifacts)
+    for artifact in artifacts do
       @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.id)
-      @json_netmap += add_artifact(artifact, @outgoing_relationships)
+      @showable_relations = []
+      for outgoing_relation in @outgoing_relationships do
+        @showable_relations << outgoing_relation if artifacts.include?(ReArtifactProperties.find_by_id(outgoing_relation.sink_id))  
+      end
+      @json_for_netmap += add_artifact(artifact, @showable_relations)
     end
     # remove last comma
-    @json_netmap = @json_netmap[0, @json_netmap.length - 1] + ']'
+    @json_for_netmap = remove_last_comma_and_close(@json_for_netmap, ']')
   end
 
 
@@ -59,7 +74,7 @@ class ReArtifactRelationshipController < ApplicationController
     for artifact in artifacts do
       @json_artifacts_as_children_of_root += '{ "nodeTo": "' + artifact.artifact_type.to_s + artifact.artifact_id.to_s + '", "data": {' + "'$type': 'none'} },"
     end
-    @json_artifacts_as_children_of_root = @json_artifacts_as_children_of_root[0, @json_artifacts_as_children_of_root.length - 1]
+    @json_artifacts_as_children_of_root = remove_last_comma_and_close(@json_artifacts_as_children_of_root, ']},')
   end
 
 
@@ -78,9 +93,38 @@ class ReArtifactRelationshipController < ApplicationController
                                    }
                          },'
     end
-    # remove last comma
-    @json_artifact = @json_artifact[0, @json_artifact.length - 1]
-    @json_artifact += ']},'
+    @json_artifact = remove_last_comma_and_close(@json_artifact, ']},')
+  end
+
+  # This method removes the last character of a given string and adds another string at the end
+  # Used to remove the last comma and to close the current json-structure
+  def remove_last_comma_and_close(json_string, closing_string)
+    json_string = json_string[0, json_string.length - 1] + closing_string
+  end
+
+
+  # This method build a new json string in variable @json_netmap and triggers
+  # execution of a javascript to rebuild the netmap
+  def build_json_according_to_user_choice
+    @artifact_choice = params[:artifact_clicked]
+    # String for condition to find the chosen artifacts
+    @chosen_artifacts_or_string = "project_id = ? and (artifact_type = '"
+    # Set all values in session concerning chosen artifacts to false
+    # in order to set the newly chosen ones to true later on
+    @session_artifacts_chosen = {}
+    for artifact in session[:artifacts_chosen].keys do
+      @session_artifacts_chosen[artifact.to_sym] = false
+      if @artifact_choice.include? artifact.to_s
+        @session_artifacts_chosen[artifact.to_sym] = true
+        @chosen_artifacts_or_string += artifact.to_s + "' or artifact_type = '"
+      end
+    end
+    session[:artifacts_chosen] = @session_artifacts_chosen
+    # remove the last ' or artifact_type = ' and close brackets
+    @chosen_artifacts_or_string = @chosen_artifacts_or_string[0, @chosen_artifacts_or_string.length - 21] + ')'
+    @artifacts = ReArtifactProperties.find(:all, :order => "artifact_type, name", :conditions => [ @chosen_artifacts_or_string , params[:project_id]])
+    @json_netmap = build_json_for_netmap(@artifacts) unless @artifacts.empty?
+    render :visualization
   end
 
 end
