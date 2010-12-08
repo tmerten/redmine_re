@@ -28,10 +28,11 @@ a {
 }
 
 #container {
-    width: 1200px;
+    width: 990px;
     height: 600px;
     margin:0 auto;
-    position:relative;
+    position:absolute;
+    left: 240px
 }
 
 #left-container, 
@@ -53,7 +54,7 @@ a {
 }
 
 #left-container {
-    left:80px;
+    left:0px;
     background-image:url('col2.png');
     background-position:center right;
     border-left:1px solid #ddd;
@@ -61,7 +62,7 @@ a {
 }
 
 #right-container {
-    left:800px;
+    right:0px;
     background-image:url('col1.png');
     background-position:center left;
     border-right:1px solid #ddd;
