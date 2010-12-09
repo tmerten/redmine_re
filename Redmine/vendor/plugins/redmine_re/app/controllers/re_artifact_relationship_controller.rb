@@ -35,18 +35,6 @@ class ReArtifactRelationshipController < RedmineReController
     @artifacts = ReArtifactProperties.find_all_by_project_id(params[:project_id], :order => "artifact_type, name")
     #@artifacts = ReArtifactProperties.find(:all, :order => "name", :conditions => ["project_id = ? and artifact_type = ?", params[:project_id], "ReGoal"])
     @json_netmap = build_json_for_netmap(@artifacts)
-    # Preparing session variable to save all artifact types if they are chosen or not.
-    # Starting values are set to true
-    session[:artifacts_chosen] = {}
-    for key in ReArtifactProperties::ARTIFACT_TYPES.keys do
-      session[:artifacts_chosen][key.to_sym] = true
-    end
-    # Preparing session variable to save all relation types if they are chosen or not.
-    # Starting values are set to true
-    session[:relations_chosen] = {}
-    for key in ReArtifactRelationship::RELATION_TYPES.keys do
-      session[:relations_chosen][key.to_sym] = true
-    end
   end
 
 
@@ -113,8 +101,8 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
 
-  # This method build a new json string in variable @json_netmap and triggers
-  # execution of a javascript to rebuild the netmap
+  # This method build a new json string in variable @json_netmap which is returned
+  # Meanwhile it computes queries for the search for the chosen artifacts and relations.
   # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
   def build_json_according_to_user_choice
     @artifact_choice = params[:artifact_clicked]
@@ -122,28 +110,13 @@ class ReArtifactRelationshipController < RedmineReController
     # String for condition to find the chosen artifacts
     @chosen_artifacts_or_string = "project_id = ? and (artifact_type = '"
     @chosen_relations_or_string = "source_id = ? and (relation_type = "
-    # Set all values in session concerning chosen artifacts to false
-    # in order to set the newly chosen ones to true later on
     @session_artifacts_chosen = {}
-    for artifact in session[:artifacts_chosen].keys do
-      @session_artifacts_chosen[artifact.to_sym] = false
-      if @artifact_choice.include? artifact.to_s
-        @session_artifacts_chosen[artifact.to_sym] = true
-        @chosen_artifacts_or_string += artifact.to_s + "' or artifact_type = '"
-      end
+    for artifact in @artifact_choice do
+      @chosen_artifacts_or_string += artifact.to_s + "' or artifact_type = '"
     end
-    # Set all values in session concerning chosen relationships to false
-    # in order to set the newly chosen ones to true later on
-    @session_relations_chosen = {}
-    for relation in session[:relations_chosen].keys do
-      @session_relations_chosen[relation.to_sym] = false
-      if @relation_choice.include? relation.to_s
-        @session_relations_chosen[relation.to_sym] = true
-        @chosen_relations_or_string += ReArtifactRelationship::RELATION_TYPES[relation.to_sym].to_s + " or relation_type = "
-      end
+    for relation in @relation_choice do
+      @chosen_relations_or_string += ReArtifactRelationship::RELATION_TYPES[relation.to_sym].to_s + " or relation_type = "
     end
-    session[:artifacts_chosen] = @session_artifacts_chosen
-    session[:relations_chosen] = @session_relations_chosen
     # remove the last ' or artifact_type = ' and close brackets
     @chosen_artifacts_or_string = @chosen_artifacts_or_string[0, @chosen_artifacts_or_string.length - 21] + ')'
     # remove the last ' or relation_type = ' and close brackets

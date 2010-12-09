@@ -29,14 +29,14 @@
           <%= l(:re_artifacts) %> <br/>
           <% for key in ReArtifactProperties::ARTIFACT_TYPES.keys do %>
             <span style="background-color:<%= ReArtifactProperties::ARTIFACT_COLOURS[key.to_sym]%>; color:<%= ReArtifactProperties::ARTIFACT_COLOURS[key.to_sym]%>;">Dummy</span>
-            <%= check_box_tag 'artifact_clicked[]', key.to_s, session[:artifacts_chosen][key.to_sym] %>
+            <%= check_box_tag 'artifact_clicked[]', key.to_s, true %>
             <%= label :artifacts_to_choose, l(key.to_s.underscore)%><br/>
           <% end %>
           <br/>
           <%= l(:re_relationships) %><br/>
           <% for key in ReArtifactRelationship::RELATION_TYPES.keys do %>
             <span style="background-color:<%= ReArtifactRelationship::RELATION_COLOURS[ReArtifactRelationship::RELATION_TYPES[key.to_sym]]%>; color:<%= ReArtifactRelationship::RELATION_COLOURS[ReArtifactRelationship::RELATION_TYPES[key.to_sym]]%>;">Dummy</span>
-            <%= check_box_tag 'relation_clicked[]', key.to_s, session[:relations_chosen][key.to_sym] %>
+            <%= check_box_tag 'relation_clicked[]', key.to_s, true %>
             <%= label :relations_to_choose, l('re_' + key.to_s.underscore)%><br/>
             <% end %>
               <br/>
