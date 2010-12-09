@@ -24,7 +24,6 @@
 
         <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
                                      :project_id => params[:project_id]},
-                            :update => 'id-list',
                             :complete => 'sb.loadJSON(request.responseJSON);
                                           sb.refresh();' do %>
           <%= l(:re_artifacts) %> <br/>
