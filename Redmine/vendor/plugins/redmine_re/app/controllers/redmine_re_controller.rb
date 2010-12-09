@@ -98,7 +98,8 @@ class RedmineReController < ApplicationController
     if re_artifact_properties.children.empty?
       htmltree += ' empty'
     else
-      htmltree += ' closed' unless (depth > 0 || session[:expanded_nodes].include?(re_artifact_properties.id) )
+      htmltree += ' closed' unless (depth > 1 || session[:expanded_nodes].include?(re_artifact_properties.id) )
+      logger.debug('############ depth: ' + depth.to_s + ' is included: ' + session[:expanded_nodes].include?(re_artifact_properties.id).to_s )
     end
     htmltree += '" style="position: relative;">'
     htmltree += '<span class="handle"></span>'
