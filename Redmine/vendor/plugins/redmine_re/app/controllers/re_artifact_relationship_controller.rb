@@ -82,7 +82,7 @@ class ReArtifactRelationshipController < RedmineReController
   def add_artifacts_as_children_of_root(artifacts)
     @json_artifacts_as_children_of_root = ""
     for artifact in artifacts do
-      @json_artifacts_as_children_of_root += '{ "nodeTo": "' + artifact.artifact_type.to_s + artifact.artifact_id.to_s + '", "data": {' + "'$type': 'none'} },"
+      @json_artifacts_as_children_of_root += '{ "nodeTo": "' + artifact.artifact_type.to_s + artifact.artifact_id.to_s + '", "data": {"$type": "none"} },'
     end
     @json_artifacts_as_children_of_root = remove_last_comma_and_close(@json_artifacts_as_children_of_root, ']},')
   end
