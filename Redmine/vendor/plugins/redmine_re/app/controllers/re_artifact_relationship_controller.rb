@@ -150,7 +150,7 @@ class ReArtifactRelationshipController < RedmineReController
     @chosen_relations_or_string = @chosen_relations_or_string[0, @chosen_relations_or_string.length - 19] + ')'
     @artifacts = ReArtifactProperties.find(:all, :order => "artifact_type, name", :conditions => [ @chosen_artifacts_or_string , params[:project_id]])
     @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string) unless @artifacts.empty?
-    render :nothing => true
+    render :text => @json_netmap
   end
 
 end

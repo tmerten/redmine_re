@@ -25,7 +25,8 @@
         <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
                                      :project_id => params[:project_id]},
                             :update => 'id-list',
-                            :complete => 'json = ' + @json_netmap.to_s + '; init();' do %>
+                            :complete => 'alert(response); sb.loadJSON(response);
+                                          sb.refresh();' do %>
           <%= l(:re_artifacts) %> <br/>
           <% for key in ReArtifactProperties::ARTIFACT_TYPES.keys do %>
             <span style="background-color:<%= ReArtifactProperties::ARTIFACT_COLOURS[key.to_sym]%>; color:<%= ReArtifactProperties::ARTIFACT_COLOURS[key.to_sym]%>;">Dummy</span>
@@ -67,7 +68,8 @@
   //<![CDATA[
 
 var labelType, useGradients, nativeTextSupport, animate;
-var sb, json;
+var sb = null;
+var json = null;
 
 <!-- ToDo: Do we need these two functions? Check it! -->  
 (function() {
@@ -98,7 +100,8 @@ var Log = {
 
 function init(){
   //init Sunburst
-  var sb = new $jit.Sunburst({
+  json = <%= @json_netmap %>;
+  sb = new $jit.Sunburst({
     //id container for the visualization
     injectInto: 'infovis',
     //Change node and edge styles such as
@@ -193,7 +196,7 @@ function init(){
 }
 
   <!-- Start of Sunburst -->
-  <!--init(); -->
+  init();
 
   //]]>
 </script>
