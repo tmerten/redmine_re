@@ -150,29 +150,7 @@ class ReArtifactRelationshipController < RedmineReController
     @chosen_relations_or_string = @chosen_relations_or_string[0, @chosen_relations_or_string.length - 19] + ')'
     @artifacts = ReArtifactProperties.find(:all, :order => "artifact_type, name", :conditions => [ @chosen_artifacts_or_string , params[:project_id]])
     @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string) unless @artifacts.empty?
-    render :visualization
-  end
-
-  def build_json_according_to_user_choice_2
-    @artifact_choice = params[:artifact_checked]
-    # String for condition to find the chosen artifacts
-    @chosen_artifacts_or_string = "project_id = ? and (artifact_type = '"
-    # Set all values in session concerning chosen artifacts to false
-    # in order to set the newly chosen ones to true later on
-    @session_artifacts_chosen = {}
-    for artifact in session[:artifacts_chosen].keys do
-      @session_artifacts_chosen[artifact.to_sym] = false
-      if @artifact_choice.include? artifact.to_s
-        @session_artifacts_chosen[artifact.to_sym] = true
-        @chosen_artifacts_or_string += artifact.to_s + "' or artifact_type = '"
-      end
-    end
-    session[:artifacts_chosen] = @session_artifacts_chosen
-    # remove the last ' or artifact_type = ' and close brackets
-    @chosen_artifacts_or_string = @chosen_artifacts_or_string[0, @chosen_artifacts_or_string.length - 21] + ')'
-    @artifacts = ReArtifactProperties.find(:all, :order => "artifact_type, name", :conditions => [ @chosen_artifacts_or_string , params[:project_id]])
-    @json_netmap = build_json_for_netmap(@artifacts) unless @artifacts.empty?
-    render :nothing
+    render :nothing => true
   end
 
 end

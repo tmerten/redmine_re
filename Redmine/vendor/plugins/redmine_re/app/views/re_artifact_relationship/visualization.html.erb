@@ -19,26 +19,24 @@
             <%= l(:re_relationship_visualization)%>
         </h4>
 
-          <% for key in ReArtifactProperties::ARTIFACT_TYPES.keys do %>
-             <%= check_box_tag 'artifact_checked[]', key.to_s, session[:artifacts_chosen][key], :id => "artifact_checked_" + key.to_s %>
-             <%= label :artifacts_to_choose, l(key.to_s.underscore)%><br/>
-             <%= observe_field ("artifact_checked_" + key.to_s), :url => { :action => :build_json_according_to_user_choice_2, :project_id => params[:project_id], :chosen => key.to_s},
-                                                      :with => "'chosen_artifact='+ $('artifact_checked[]').value",
-                                                      :complete => "init()" %>
-          <% end %>
-        <br/><br/><br/><hr>
-        <% form_tag :action => :build_json_according_to_user_choice, :project_id => params[:project_id] do %>
+
+        <br/>
+
+        <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
+                                     :project_id => params[:project_id]},
+                            :update => 'id-list',
+                            :complete => 'json = ' + @json_netmap.to_s + '; init();' do %>
           <%= l(:re_artifacts) %> <br/>
           <% for key in ReArtifactProperties::ARTIFACT_TYPES.keys do %>
             <span style="background-color:<%= ReArtifactProperties::ARTIFACT_COLOURS[key.to_sym]%>; color:<%= ReArtifactProperties::ARTIFACT_COLOURS[key.to_sym]%>;">Dummy</span>
-            <%= check_box_tag 'artifact_clicked[]', key.to_s, session[:artifacts_chosen][key] %>
+            <%= check_box_tag 'artifact_clicked[]', key.to_s, session[:artifacts_chosen][key.to_sym] %>
             <%= label :artifacts_to_choose, l(key.to_s.underscore)%><br/>
           <% end %>
           <br/>
           <%= l(:re_relationships) %><br/>
           <% for key in ReArtifactRelationship::RELATION_TYPES.keys do %>
             <span style="background-color:<%= ReArtifactRelationship::RELATION_COLOURS[ReArtifactRelationship::RELATION_TYPES[key.to_sym]]%>; color:<%= ReArtifactRelationship::RELATION_COLOURS[ReArtifactRelationship::RELATION_TYPES[key.to_sym]]%>;">Dummy</span>
-            <%= check_box_tag 'relation_clicked[]', key.to_s, session[:relations_chosen][key] %>
+            <%= check_box_tag 'relation_clicked[]', key.to_s, session[:relations_chosen][key.to_sym] %>
             <%= label :relations_to_choose, l('re_' + key.to_s.underscore)%><br/>
             <% end %>
               <br/>
@@ -47,7 +45,6 @@
         </div>
 
         <div id="id-list"></div>
-
 
 </div>
 
@@ -70,6 +67,7 @@
   //<![CDATA[
 
 var labelType, useGradients, nativeTextSupport, animate;
+var sb, json;
 
 <!-- ToDo: Do we need these two functions? Check it! -->  
 (function() {
@@ -99,9 +97,6 @@ var Log = {
 
 
 function init(){
-  //init data
-  var json = <%= @json_netmap.to_s %>;
-  //end
   //init Sunburst
   var sb = new $jit.Sunburst({
     //id container for the visualization
@@ -198,7 +193,7 @@ function init(){
 }
 
   <!-- Start of Sunburst -->
-  init();
+  <!--init(); -->
 
   //]]>
 </script>
