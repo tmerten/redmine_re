@@ -2,26 +2,21 @@ class ReTaskController < RedmineReController
   unloadable
 
   def update_subtask_positions
-    Rails.logger.debug("#######up_sub_pos####1   params:" + params.inspect)
-
     params[:subtasks].each_with_index do |id, index|
       @subtask = ReSubtask.find(id)
-      Rails.logger.debug("#######up_sub_pos####2  subtask parent:" + @subtask.parent.inspect)
-
       @relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(@subtask.parent.id,
                                                                                          @subtask.re_artifact_properties.id,
                                                                                          ReArtifactRelationship::RELATION_TYPES[:parentchild]
                                                                                           )
-      Rails.logger.debug("#######up_sub_pos####3  relation:" + @relation.inspect)
-
-      Rails.logger.debug("#######up_sub_pos####4 index:  " + index.to_s + " id: "+ id.to_s)
+      @relation.position = index + 1
+      @relation.save
     end
     render :nothing => true
   end
 
   def add_subtask             #TODO: select tag problem variant subt
     Rails.logger.debug("###### add subtask #####1 subtype:")
-     @html_id = "subtask" + params[:id]
+     @html_id = "subtask_" + params[:id]
      @add_position = params[:add_position]
      @re_subtask_with_before_link = ReSubtask.find(params[:id])
      @re_subtask =  ReSubtask.new(:sub_type => 0)#,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))

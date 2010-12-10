@@ -1,9 +1,9 @@
-                                                                      ,
+                                                                      
 <% fields_for "re_task[subtask_attributes][]", re_subtask do |re_subtask_form| %>
     <%= "<div id=\"subtask_drag_#{re_subtask.id}\" class=\"draggable\" > " %>
-              <% if re_subtask.sub_type == 0 %>  <%= "<div id=\"subtask#{re_subtask.id}\" class=\"subtask\"> " %><% end %>
-              <% if re_subtask.sub_type == 1 %>  <%= "<div id=\"subtask#{re_subtask.id}\" class=\"variant\"> " %><% end %>
-              <% if re_subtask.sub_type == 2 %>  <%= "<div id=\"subtask#{re_subtask.id}\" class=\"problem\"> " %><% end %>
+              <% if re_subtask.sub_type == 0 %>  <%= "<div id=\"subtask_#{re_subtask.id}\" class=\"subtask\"> " %><% end %>
+              <% if re_subtask.sub_type == 1 %>  <%= "<div id=\"subtask_#{re_subtask.id}\" class=\"variant\"> " %><% end %>
+              <% if re_subtask.sub_type == 2 %>  <%= "<div id=\"subtask_#{re_subtask.id}\" class=\"problem\"> " %><% end %>
         <% @index = "new"+Time.now.to_i.to_s %>
         <% if(re_subtask.id) %>
         <%  @index = re_subtask.id %>
