@@ -35,6 +35,8 @@ class ReArtifactRelationshipController < RedmineReController
     @artifacts = ReArtifactProperties.find_all_by_project_id(params[:project_id], :order => "artifact_type, name")
     #@artifacts = ReArtifactProperties.find(:all, :order => "name", :conditions => ["project_id = ? and artifact_type = ?", params[:project_id], "ReGoal"])
     @json_netmap = build_json_for_netmap(@artifacts)
+    # preparing html for tree view
+    @html_tree = create_tree
   end
 
 
@@ -88,9 +90,11 @@ class ReArtifactRelationshipController < RedmineReController
                            "data": {
                                      "$color": "' + ReArtifactRelationship::RELATION_COLOURS[relation.relation_type.to_i].to_s + '",
                                      "$lineWidth": 2
+
                                    }
                          },'
     end
+    # "$type": "arrow"
     @json_artifact = remove_last_comma_and_close(@json_artifact, ']},')
   end
 

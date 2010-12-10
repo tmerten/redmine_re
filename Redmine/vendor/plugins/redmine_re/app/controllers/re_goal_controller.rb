@@ -17,7 +17,8 @@ class ReGoalController < RedmineReController
   def edit
     @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact_properties) || ReGoal.new
     @project ||= @re_goal.project
-
+    # render html for tree
+    @html_tree = create_tree
     if request.post?
       @re_goal.attributes = params[:re_goal]
       add_hidden_re_artifact_properties_attributes @re_goal
