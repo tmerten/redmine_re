@@ -5,7 +5,7 @@ class RequirementsController < RedmineReController
   include ActionView::Helpers::TagHelper
 
   def index
-    @htmltree = create_tree
+    @html_tree = create_tree
   end
 
 end

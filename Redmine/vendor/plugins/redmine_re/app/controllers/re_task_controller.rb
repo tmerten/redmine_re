@@ -43,6 +43,7 @@ class ReTaskController < RedmineReController
     @subtasks = @re_task.children.collect {|c| c.artifact if c.artifact_type == "ReSubtask"}
 
     @project = @re_task.project
+    @html_tree = create_tree
 
     if request.post?
 

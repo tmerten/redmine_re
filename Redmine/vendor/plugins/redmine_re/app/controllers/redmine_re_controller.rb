@@ -4,6 +4,9 @@
 class RedmineReController < ApplicationController
   unloadable
   
+  TRUNCATE_NAME_IN_TREE_AFTER_CHARS = 18
+  TRUNCATE_OMISSION = "..."
+  
   #include ActionView::Helpers::UrlHelper
   #include ActionView::Helpers::AssetTagHelper
   #include ActionView::Helpers::TagHelper
@@ -48,15 +51,15 @@ class RedmineReController < ApplicationController
     artifacts = ReArtifactProperties.find_all_by_project_id(@project.id)
     # artifacts = [] if artifacts.nil?
 
-    htmltree = '<ul id="tree">'
+    html_tree = '<ul id="tree">'
     for artifact in artifacts
       if (artifact.parent.nil?)
-        htmltree += render_to_html_tree(artifact, 0)
+        html_tree += render_to_html_tree(artifact, 0)
       end
     end
-    htmltree += '</ul>'
+    html_tree += '</ul>'
     
-    htmltree
+    html_tree
   end
   
 
@@ -91,51 +94,57 @@ class RedmineReController < ApplicationController
   #renders a re artifact and its children recursively as html tree
   def render_to_html_tree(re_artifact_properties, depth = 0)
     session[:expanded_nodes] ||= Set.new
+    expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
     artifact_type = re_artifact_properties.artifact_type.to_s.underscore
-    htmltree = ''
-    htmltree += '<li id="node_' + re_artifact_properties.id.to_s #IDs must begin with a letter(!)
-    htmltree += '" class="' + artifact_type
+    html_tree = ''
+    
+    html_tree += '<li id="node_' + re_artifact_properties.id.to_s #IDs must begin with a letter(!)
+    html_tree += '" class="' + artifact_type
     if re_artifact_properties.children.empty?
-      htmltree += ' empty'
+      html_tree += ' empty'
     else
-      htmltree += ' closed' unless (depth > 1 || session[:expanded_nodes].include?(re_artifact_properties.id) )
+      html_tree += ' closed' unless (depth > 1 || expanded )
       logger.debug('############ depth: ' + depth.to_s + ' is included: ' + session[:expanded_nodes].include?(re_artifact_properties.id).to_s )
     end
-    htmltree += '" style="position: relative;">'
-    htmltree += '<span class="handle"></span>'
-    htmltree += '<a class="nodelink">' 
-    htmltree += truncate(re_artifact_properties.name.to_s, :length => 20, :omission => "...")
-    htmltree += '</a>'
-    htmltree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink"> (' + l(:re_edit) + ')</a>'
+    html_tree += '" style="position: relative;">'
+    html_tree += '<span class="handle"></span>'
+    html_tree += '<a class="nodelink">' 
+    html_tree += truncate(re_artifact_properties.name.to_s, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+    html_tree += '</a>'
+    html_tree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink"> (' + l(:re_edit) + ')</a>'
 
-    htmltree += '<ul>'
+    html_tree += '<ul>'  if expanded
     if ( !re_artifact_properties.children.empty? )
-      htmltree += render_children_to_html_tree(re_artifact_properties, depth-1)
+      html_tree += render_children_to_html_tree(re_artifact_properties, depth-1)
     end
-    htmltree += '</ul>'
+    html_tree += '</ul>' if expanded
   
-    htmltree += '</li>'
+    html_tree += '</li>'
   end
   
   def render_children_to_html_tree(re_artifact_properties, depth)
-    htmltree = ''
+    expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
+    html_tree = ''
+    
     for child in re_artifact_properties.children
-      if (depth > 0 or session[:expanded_nodes].include?(re_artifact_properties.id) )
-        htmltree += render_to_html_tree(child, depth)
+      if (depth > 0 or expanded )
+        html_tree += render_to_html_tree(child, depth)
       end
     end
-    htmltree    
+    html_tree    
   end
   
   def treestate
     node_id = params[:id].to_i
+    re_artifact_properties =  ReArtifactProperties.find(node_id)
     ret = ''
+
     if params[:open] == 'true'
       session[:expanded_nodes] << node_id
-      re_artifact_properties =  ReArtifactProperties.find(node_id)
-      ret = render_children_to_html_tree(re_artifact_properties, 1)
+      ret = render_to_html_tree(re_artifact_properties, 1)
     else
       session[:expanded_nodes].delete(node_id)
+      ret = render_to_html_tree(re_artifact_properties, 0)
     end
 
     render :inline => ret
