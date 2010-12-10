@@ -5,7 +5,7 @@
 <% end%>
 <h3><%= l(:re_tree_overview) %></h3>
 
-<%= @htmltree %>
+<%= @html_tree %>
 
 <script type="text/javascript">
   //<![CDATA[
@@ -23,8 +23,9 @@
           new_parent_id:drag.parent.id(),
           moved_artifact_id:drag.id(),
           left_artifact_id:left_node_id
-          }
+        }
       });
+
     },
     nodeUrl: '/requirements/treestate/',
     contextMenuUrl: '/requirements/context_menu/',

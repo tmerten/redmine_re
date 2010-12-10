@@ -6,6 +6,7 @@ var SortableTree = Class.create({
     this.root = new SortableTree.Node(this, null, element, options);
 		this.isSortable = false;
     this.theUpdatingNode = null;
+    this.draggablesOldParent = null;
 
   },
   
@@ -68,7 +69,10 @@ SortableTree.Node = Class.create({
 				// style property on the element which overwrites the class' value
 				// (i.e. the drop marker) and apperently can't be removed anymore (?)
 				// new Effect.Highlight(element, { startcolor: '#FFFF99' })
-      }
+      },
+      onStart:  function(drag) {
+        this.tree.draggablesOldParent = drag.element.ancestors()[1];
+      }.bind(this)
     }, options.draggable);
 
     this.initChildren();
@@ -118,7 +122,13 @@ SortableTree.Node = Class.create({
   
   submitTreeStructure: function(element, open, id) {
     this.tree.theUpdatingNode = this.tree.find(element);
-    var ul = element.select('ul').first();
+    var ul = null;
+    ul = element.select('ul').first();
+    if (ul == undefined) {
+      ul = new Element('ul');
+      element.insert(ul);
+    }
+    
     new Ajax.Updater(ul, this.options.nodeUrl + id, {
       parameters: { 'open': open },
       onComplete: function() {
@@ -127,6 +137,8 @@ SortableTree.Node = Class.create({
         this.tree.theUpdatingNode = null;
       }.bind(this)
     });
+    
+    if (!open) { ul.remove(); }
   },
   
   renderNodeContextMenu: function(event) {
@@ -243,16 +255,42 @@ SortableTree.Node = Class.create({
     drag = this.tree.find(drag);
     drop = this.tree.find(drop);
 
+    var oldparent = this.tree.draggablesOldParent;
+    var oldchildren = oldparent.select('li');
+    
+    var newparent = null;
+        
 		// i.e. don't do anything if it's a toplevel node and has been dropped on "itself"
 		// another way around this could be to change scriptaculous to affect() a node
 		// when it has been dropped on itself
 		if(drop.parent || this.dropPosition == 'insert') { 
 	    switch(this.dropPosition) {
-	      case 'top':    drop.parent.insertBefore(drag, drop); break;
-	      case 'bottom': drop.parent.insertBefore(drag, drop.nextSibling()); break;
-	      case 'insert': this.insertBefore(drag, this.firstChild()); break;
+	      case 'top':    drop.parent.insertBefore(drag, drop); newparent = drop.parent.element; break;
+	      case 'bottom': drop.parent.insertBefore(drag, drop.nextSibling()); newparent = drop.parent.element; break;
+	      case 'insert': this.insertBefore(drag, this.firstChild()); newparent = this.element; break;
 	    }
 		}
+		
+    if (! oldparent.hasClassName('empty') && oldchildren.length <= 1) {
+      oldparent.addClassName('empty');
+    }
+    
+    if (newparent.hasClassName('empty')) {
+      newparent.removeClassName('empty');
+    }
+
+    /*
+     * unless we do not reload the subtree of the new parent,
+     * we should keep calm and say that the parent is closed.
+     * 
+     * If the user opens the parent the new child will be re-rendered
+     * together with its siblings.
+     */
+    /*if (newparent.hasClassName('closed')) {
+      newparent.removeClassName('closed');
+    }
+    */
+    this.tree.draggableOldParent = null;    
 
     if(this.options.onDrop) this.options.onDrop(drag, drop, event);
   },

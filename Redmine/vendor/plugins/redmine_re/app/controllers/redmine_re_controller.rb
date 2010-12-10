@@ -113,7 +113,7 @@ class RedmineReController < ApplicationController
     html_tree += '</a>'
     html_tree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink"> (' + l(:re_edit) + ')</a>'
 
-    html_tree += '<ul>'  if expanded
+    html_tree += '<ul>' if expanded
     if ( !re_artifact_properties.children.empty? )
       html_tree += render_children_to_html_tree(re_artifact_properties, depth-1)
     end
@@ -136,15 +136,13 @@ class RedmineReController < ApplicationController
   
   def treestate
     node_id = params[:id].to_i
-    re_artifact_properties =  ReArtifactProperties.find(node_id)
     ret = ''
-
     if params[:open] == 'true'
       session[:expanded_nodes] << node_id
-      ret = render_to_html_tree(re_artifact_properties, 1)
+      re_artifact_properties =  ReArtifactProperties.find(node_id)
+      ret = render_children_to_html_tree(re_artifact_properties, 1)
     else
       session[:expanded_nodes].delete(node_id)
-      ret = render_to_html_tree(re_artifact_properties, 0)
     end
 
     render :inline => ret
