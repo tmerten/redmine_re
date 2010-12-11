@@ -1,6 +1,4 @@
-<hr>
 
-<p>
   <h3><%= l(:re_artifact_relationships) %></h3>
 
     <div id="relationship_link_list">
@@ -9,11 +7,10 @@
         <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id) %>
         <%= render "re_artifact_relationship/relationship_links", :project_id => params[:project_id] %>
     </div>
+<br/>
 
-  <p>
-    <%= select :relationship, :artifact_type, ReArtifactProperties::ARTIFACT_TYPES.to_a %>
-
-    <span :id="preselected_artifacts"><%= select :relationship, :artifact_id, ReArtifactProperties.find(:all).collect { |d| [d.name, d.id]}, {:prompt => l(:re_select_artifact)} %></span>
+    <%= l("re_create_new_relationship") %>
+    <span id="preselected_artifacts"><%= select :relationship, :artifact_id, ReArtifactProperties.find(:all).collect { |d| [d.name, d.id]}, {:prompt => l(:re_select_artifact)} %></span>
     <%= observe_field "relationship_artifact_id",   :url => { :action => :prepare_relationships,
                                                     :controller => :re_artifact_relationship,
                                                     :id => params[:id],
@@ -22,6 +19,4 @@
                                                     :update => "relationship_link_list",
                                                     :with => "'sink_id='+ escape($('relationship_artifact_id').value)" %>
 
-  </p>
 
-</p>

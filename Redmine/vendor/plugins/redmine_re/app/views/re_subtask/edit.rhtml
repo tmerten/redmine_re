@@ -43,7 +43,9 @@
     </div>
 <% end %>
 
-<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
+<div class="manage_relationships">
+    <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
+</div>
 
 <%= link_to 'Show Subtasks', :action => :index, :project_id => params[:project_id] %>
 </div>

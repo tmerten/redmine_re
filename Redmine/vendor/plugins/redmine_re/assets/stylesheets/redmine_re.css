@@ -8,6 +8,13 @@
     width: 200px;
 }
 
+.manage_relationships {
+    left: 680px;
+    position: absolute;
+    top: 3px;
+    width: 180px;
+}
+
 .recopyright {
     font-size: 0.9em;
 }

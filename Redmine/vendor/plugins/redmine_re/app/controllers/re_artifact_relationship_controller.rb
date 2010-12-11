@@ -95,6 +95,7 @@ class ReArtifactRelationshipController < RedmineReController
                          },'
     end
     # "$type": "arrow"
+    # "$type": "line"
     @json_artifact = remove_last_comma_and_close(@json_artifact, ']},')
   end
 
