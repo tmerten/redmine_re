@@ -9,5 +9,5 @@ class ReArtifactRelationship < ActiveRecord::Base
   belongs_to :source, :class_name => "ReArtifactProperties"
   belongs_to :sink,   :class_name => "ReArtifactProperties"
 
-  acts_as_list :scope => :sink
+  acts_as_list :scope => :source #was:sink
 end

@@ -15,11 +15,23 @@ class ReTaskController < RedmineReController
   end
 
   def add_subtask             #TODO: select tag problem variant subt
-    Rails.logger.debug("###### add subtask #####1 subtype:")
+    Rails.logger.debug("###### add subtask #####1 id: params[:id]:" + params[:id].to_s)
      @html_id = "subtask_" + params[:id]
      @add_position = params[:add_position]
-     @re_subtask_with_before_link = ReSubtask.find(params[:id])
-     @re_subtask =  ReSubtask.new(:sub_type => 0)#,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
+
+     # get position of for the new Subtask from the subtask which link was clicked
+     @re_subtask_with_clicked_link = ReSubtask.find(params[:id])
+
+     @relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( @re_subtask_with_clicked_link.parent.id,
+                                                                                         @re_subtask_with_clicked_link.re_artifact_properties.id,
+                                                                                         ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                 )
+     if( @add_position == "after" )
+       @relation.increment(:position)
+     end   # before => same pos like subtask with clicked link
+     @position = @relation.position      #todo:list plugin benutzen
+
+     @re_subtask =  ReSubtask.new(:sub_type => 0) #,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
      respond_to do |format|
        format.js
      end
