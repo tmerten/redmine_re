@@ -1,5 +1,6 @@
 module RequirementsHelper
 
+  def context_menu_link_remote (name, url, update, options={})
     # This helper creates an remote link for a context-menu
     # Params: name    This String is written on the html page as the link
     #         url     A hash with information about action, controller and parameters
@@ -16,18 +17,6 @@ module RequirementsHelper
     # Generates: <a onclick="new Ajax.Updater('detail_view', '/re_subtask/edit/2?project_id=1', {asynchronous:true, evalScripts:true, method:'get', parameters:'authenticity_token=' + encodeURIComponent('LpQJtfbJlKJVxpblgb1KKfqpu5vd59APcZR32Hr9vTk=')}); return false;"
     #               href="#"
     #               class="icon-edit">Edit</a>
-  
-  # overrides render_flash_messages in application helper
-  def render_flash_messages
-    s = ''
-    flash.each do |k,v|
-      s << content_tag('div', v, :class => "flash #{k}", :id => "#{v}#{k}")
-      s << content_tag('script', "setTimeout('new Effect.Fade(\"#{v}#{k}\");', 6000)", :type => "text/javascript")
-    end
-    s
-  end
-    
-  def context_menu_link_remote (name, url, update, options={})
     options[:class] ||= ''
     if options.delete(:selected)
       options[:class] << ' icon-checked disabled'
