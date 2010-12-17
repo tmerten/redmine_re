@@ -103,7 +103,7 @@ class ReTask < ActiveRecord::Base
                                                                                   )
           # insert current new subtask at the current position of the clicked subtask
           @relation_new_subtask.insert_at(@relation_clicked_subtask.position + 1)
-
+             
         end
 
         Rails.logger.debug("##############subb attr #####5555 before sort: " + before_old_to_new.inspect)
