@@ -16,7 +16,7 @@ class ReTaskController < RedmineReController
 
   def add_subtask             #TODO: select tag problem variant subt
     Rails.logger.debug("###### add subtask #####1 id: params[:id]:" + params[:id].to_s)
-     @html_id = "subtask_" + params[:id]
+     @html_id = "subtask_drag_" + params[:id]
      @add_position = params[:add_position]
 
      # get position of for the new Subtask from the subtask which link was clicked
@@ -52,7 +52,8 @@ class ReTaskController < RedmineReController
 
   def edit
     @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new
-    @subtasks = @re_task.children.collect {|c| c.artifact if c.artifact_type == "ReSubtask"}
+    @subtasks = []
+    @re_task.children.each {|c| @subtasks << c.artifact if c.artifact_type == "ReSubtask"}
 
     @project = @re_task.project
     @html_tree = create_tree

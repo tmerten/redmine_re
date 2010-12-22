@@ -5,46 +5,49 @@
     <% else %>
         <% @index = "new_#{@add_position}_#{@re_subtask_with_clicked_link.re_artifact_properties.id}_"+Time.now.to_i.to_s %>
     <% end %>
-    <%= "<div id=\"subtask_drag_#{@index}\" class=\"draggable\" > " %>
-              <% if re_subtask.sub_type == 0 %>  <%= "<div id=\"subtask_#{@index}\" class=\"subtask\"> " %><% end %>
-              <% if re_subtask.sub_type == 1 %>  <%= "<div id=\"subtask_#{@index}\" class=\"variant\"> " %><% end %>
-              <% if re_subtask.sub_type == 2 %>  <%= "<div id=\"subtask_#{@index}\" class=\"problem\"> " %><% end %>
 
+    <% if re_subtask.id %>
+        <%= "<div id=\"subtask_drag_#{@index}\" class=\"draggable\" > " %>
+    <% else %>
+        <%= "<div id=\"subtask_drag_#{@index}\"  > " %>
+    <% end %>
+                  <% if re_subtask.sub_type == 0 %>  <%= "<div id=\"subtask_#{@index}\" class=\"subtask\"> " %><% end %>
+                  <% if re_subtask.sub_type == 1 %>  <%= "<div id=\"subtask_#{@index}\" class=\"variant\"> " %><% end %>
+                  <% if re_subtask.sub_type == 2 %>  <%= "<div id=\"subtask_#{@index}\" class=\"problem\"> " %><% end %>
 
-        <%= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => @index, :add_position => :before}%>
-        <%= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => @index, :add_position => :after}%>
+                    <% if re_subtask.id %>
 
-                        <p>
-                            <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{@index}][name]", re_subtask.name %> <%#= re_subtask_form.text_field :name %>
-                         </p>
-                     <%#= render "re_artifact_properties/shared_fields", :f => re_subtask_form %>
-                           <p>
-                             <%= re_subtask_form.label :solution, l(:re_subtask_solution) %> <%= text_field_tag "re_task[subtask_attributes][#{@index}][solution]", re_subtask.solution %><%#= re_subtask_form.text_field :solution %>
-                          </p>
-    <% if re_subtask.new_record? %>
-         <% end %>
-                          <p>
-                            <%= label_tag 'Subtask' %>  <% if(re_subtask.sub_type == 0) %>
-                                                            <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', true %>
-                                                        <% else %>
-                                                            <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', false %>
-                                                        <% end %>
-                          </p>
-                          <p>
-                            <%= label_tag 'Variante' %>  <% if(re_subtask.sub_type == 1) %>
-                                                            <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', true %>
-                                                        <% else %>
-                                                            <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', false %>
-                                                        <% end %>
-                          </p>
-                          <p>
-                            <%= label_tag 'Problem' %>  <% if(re_subtask.sub_type == 2) %>
-                                                            <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', true %>
-                                                        <% else %>
-                                                            <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', false %>
-                                                        <% end %>
-                          </p>
+                        <%= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => @index, :add_position => :before}%>
+                        <%= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => @index, :add_position => :after}%>
+                    <% end %>
+                    <p>
+                        <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{@index}][name]", re_subtask.name %> <%#= re_subtask_form.text_field :name %>
+                    </p>
+                    <p>
+                         <%= re_subtask_form.label :solution, l(:re_subtask_solution) %> <%= text_field_tag "re_task[subtask_attributes][#{@index}][solution]", re_subtask.solution %><%#= re_subtask_form.text_field :solution %>
+                    </p>
+                    <p>
+                         <%= label_tag 'Subtask' %>  <% if(re_subtask.sub_type == 0) %>
+                                                        <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', true %>
+                                                    <% else %>
+                                                        <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', false %>
+                                                    <% end %>
+                    </p>
+                    <p>
+                        <%= label_tag 'Variante' %>  <% if(re_subtask.sub_type == 1) %>
+                                                        <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', true %>
+                                                    <% else %>
+                                                        <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', false %>
+                                                    <% end %>
+                    </p>
+                    <p>
+                        <%= label_tag 'Problem' %>  <% if(re_subtask.sub_type == 2) %>
+                                                        <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', true %>
+                                                    <% else %>
+                                                        <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', false %>
+                                                    <% end %>
+                    </p>
 
-                  </div>
-     </div>
+              </div>
+        </div>
   <% end %>
