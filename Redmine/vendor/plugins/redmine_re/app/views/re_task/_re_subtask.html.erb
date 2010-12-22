@@ -16,10 +16,11 @@
                   <% if re_subtask.sub_type == 2 %>  <%= "<div id=\"subtask_#{@index}\" class=\"problem\"> " %><% end %>
 
                     <% if re_subtask.id %>
-
-                        <%= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => @index, :add_position => :before}%>
-                        <%= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => @index, :add_position => :after}%>
+                        <%= link_to_remote " ", :url => {:action => "add_subtask", :id => @index, :add_position => :before}, :html=> {:class => "add_before"} %>
+                        <%#= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => @index, :add_position => :before}%>
+                        <%#= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => @index, :add_position => :after}%>
                     <% end %>
+    
                     <p>
                         <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{@index}][name]", re_subtask.name %> <%#= re_subtask_form.text_field :name %>
                     </p>
@@ -47,6 +48,11 @@
                                                         <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', false %>
                                                     <% end %>
                     </p>
+                    <% if re_subtask.id %>
+                        <%= link_to_remote " ", :url => {:action => "add_subtask", :id => @index, :add_position => :after}, :html=> {:class => "add_after"} %>
+                        <%#= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => @index, :add_position => :before}%>
+                        <%#= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => @index, :add_position => :after}%>
+                    <% end %>
 
               </div>
         </div>

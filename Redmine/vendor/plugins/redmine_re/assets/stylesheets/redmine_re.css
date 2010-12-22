@@ -47,6 +47,20 @@ div.draggable {
     cursor: move;
 }
 
+a.add_before {
+    display: block;
+    width: 32px;
+    height: 32px;
+    background: url(../images/icons/add_before.png) no-repeat;
+}
+
+a.add_after {
+    display: block; 
+    width: 32px;
+    height: 32px;
+    background: url(../images/icons/add_after.png) no-repeat;
+}
+
 #context-menu li.header {
     border-bottom-width: 1px;
     border-bottom-color: black;
