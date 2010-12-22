@@ -22,7 +22,7 @@
 }
 
 #tree li a {
-    padding-top: 6px;  
+    padding-top: 4px;  
 }
 
 #tree li a.nodelink {
@@ -30,17 +30,13 @@
 }
 
 #tree li.re_task a.nodelink {
-    background: url(../images/icons/folder_sans_run_16.png) no-repeat left top;
+    background: url(../images/icons/report_user.png) no-repeat left top;
 }
-
 #tree li.re_subtask a.nodelink {
-    background: url(../images/icons/notes_16.png) no-repeat left top;
+    background: url(../images/icons/report.png) no-repeat left top;
 }
 #tree li.re_goal a.nodelink {
-    background: url(../images/icons/globe_16.png) no-repeat left top;
-}
-#tree li.re_subtask a.nodelink {
-    background: url(../images/icons/book_text_16.png) no-repeat left top;
+    background: url(../images/icons/world.png) no-repeat left top;
 }
 
 #tree li span.handle {
