@@ -14,22 +14,16 @@ class ReTaskController < RedmineReController
     render :nothing => true
   end
 
-  def add_subtask             #TODO: select tag problem variant subt
-    Rails.logger.debug("###### add subtask #####1 id: params[:id]:" + params[:id].to_s)
-     @html_id = "subtask_drag_" + params[:id]
+  def add_subtask
+     if params[:id]
+      #the subtask which link was clicked
+      @re_subtask_with_clicked_link = ReSubtask.find(params[:id])
+      @html_id = "subtask_drag_" + params[:id]
+     else
+      @html_id = "subtasks"
+     end
+
      @add_position = params[:add_position]
-
-     # get position of for the new Subtask from the subtask which link was clicked
-     @re_subtask_with_clicked_link = ReSubtask.find(params[:id])
-
-     @relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( @re_subtask_with_clicked_link.parent.id,
-                                                                                         @re_subtask_with_clicked_link.re_artifact_properties.id,
-                                                                                         ReArtifactRelationship::RELATION_TYPES[:parentchild]
-                                                                                 )
-     if( @add_position == "after" )
-       @relation.increment(:position)
-     end   # before => same pos like subtask with clicked link
-     @position = @relation.position      #todo:list plugin benutzen
 
      @re_subtask =  ReSubtask.new(:sub_type => 0) #,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
      respond_to do |format|
@@ -51,15 +45,20 @@ class ReTaskController < RedmineReController
   end
 
   def edit
-    @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new
+    @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => @project.id))
     @subtasks = []
     @re_task.children.each {|c| @subtasks << c.artifact if c.artifact_type == "ReSubtask"}
 
-    @project = @re_task.project
+    @project ||= @re_task.project
     @html_tree = create_tree
 
     if request.post?
 
+      if @re_task.new_record? # perhaps todo: first check if all subtasks are valid
+        add_hidden_re_artifact_properties_attributes @re_task
+        @re_task.name = params[:re_task][:name]
+        @re_task.save         # subtask_attributes=   needs the id of the parent in order to change the positions of the subtasksa
+      end
       @re_task.attributes = params[:re_task]
       add_hidden_re_artifact_properties_attributes @re_task
 

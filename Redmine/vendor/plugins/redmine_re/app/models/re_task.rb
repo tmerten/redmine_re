@@ -25,12 +25,13 @@ class ReTask < ActiveRecord::Base
           if @saved
             # Adding current subtask to his category (before or after)
             ## example id when new subtask: new_before_20_1292590912
+            ## example id when new Task and then new subtask: new_before_newtask_1292590912
             #                                new_AddPosition_ClickedSubtask_TimeClicked
 
             splitted_id = id.to_s.split("_")
 
             add_position = splitted_id[1] # before / after
-            clicked_subtask_artifact_id = splitted_id[2] # Subtask on which the before link was clicked
+            clicked_subtask_artifact_id = splitted_id[2] # Subtask on which the before link was clicked or when new task then "newtask"
             time_clicked = splitted_id[3] # 32432433
 
             # :new_subtasks => { "before" => { "1232432423" => 1 }, "after" => { "3443443" => 2} }
@@ -63,18 +64,29 @@ class ReTask < ActiveRecord::Base
             new_subtask_artifact_id     = array[1]["new_subtask_artifact_id"]
             clicked_subtask_artifact_id = array[1]["clicked_subtask_artifact_id"]
 
-            # get the parent child relation of the clicked subtask in order to get the position of the clicked subtask
-            @relation_clicked_subtask = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.re_artifact_properties.id,#subtask.re_artifact_properties.parent.id,
-                                                                                      clicked_subtask_artifact_id,
-                                                                                      ReArtifactRelationship::RELATION_TYPES[:parentchild]
-                                                                                    )
-                      # get the parent child relation of the clicked subtask in order to get the position of the clicked subtask
-            @relation_new_subtask = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.re_artifact_properties.id,#subtask.re_artifact_properties.parent.id,
-                                                                                       new_subtask_artifact_id,
-                                                                                      ReArtifactRelationship::RELATION_TYPES[:parentchild]
-                                                                                    )
-            # insert current new subtask at the current position of the clicked subtask
-            @relation_new_subtask.insert_at(@relation_clicked_subtask.position + pos_increment)
+            if clicked_subtask_artifact_id == "newtask"
+                 # get the parent child relation of the clicked subtask in order to get the position of the clicked subtask
+                @relation_new_subtask = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.re_artifact_properties.id,#subtask.re_artifact_properties.parent.id,
+                                                                                           new_subtask_artifact_id,
+                                                                                          ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                        )
+                # insert current new subtask at first position
+                @relation_new_subtask.insert_at(1)
+            else
+                # get the parent child relation of the clicked subtask in order to get the position of the clicked subtask
+                @relation_clicked_subtask = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.re_artifact_properties.id,#subtask.re_artifact_properties.parent.id,
+                                                                                          clicked_subtask_artifact_id,
+                                                                                          ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                        )
+                # get the parent child relation of the clicked subtask in order to get the position of the clicked subtask
+                @relation_new_subtask = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.re_artifact_properties.id,#subtask.re_artifact_properties.parent.id,
+                                                                                           new_subtask_artifact_id,
+                                                                                          ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                        )
+                # insert current new subtask at the current position of the clicked subtask
+                @relation_new_subtask.insert_at(@relation_clicked_subtask.position + pos_increment)
+            end
+
          end
 
   end

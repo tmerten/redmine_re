@@ -11,7 +11,13 @@
     <div class="box">
 
         <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
-    
+
+        <p>
+          <% if @subtasks.size == 0 %>
+                <%= link_to_remote "Add Subtask", :url => {:action => "add_subtask", :add_position => :after} %>
+         <% end %>
+        </p>
+
         <div id="subtasks" >
             <%= render :partial => 're_subtask', :collection => @subtasks %>
         </div>
@@ -24,7 +30,6 @@
         <p>
           <%= submit_tag l(:re_save) %>
         </p>
-
     </div>
 <% end %>
 

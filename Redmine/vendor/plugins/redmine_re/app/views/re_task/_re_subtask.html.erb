@@ -3,7 +3,11 @@
     <% if(re_subtask.id) %>
         <%  @index = re_subtask.id %>
     <% else %>
-        <% @index = "new_#{@add_position}_#{@re_subtask_with_clicked_link.re_artifact_properties.id}_"+Time.now.to_i.to_s %>
+        <% if(@re_subtask_with_clicked_link) %>   <%# if ne task is not new and a before or after link was pressed at a subtask%>
+            <% @index = "new_#{@add_position}_#{@re_subtask_with_clicked_link.re_artifact_properties.id}_"+Time.now.to_i.to_s %>
+        <% else %>   <%# if ne task is new or has no subtasks yet%>
+            <% @index = "new_#{@add_position}_newtask_"+Time.now.to_i.to_s %>
+        <% end %>
     <% end %>
 
     <% if re_subtask.id %>
