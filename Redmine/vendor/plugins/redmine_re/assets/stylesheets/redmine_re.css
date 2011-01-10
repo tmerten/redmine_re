@@ -1,6 +1,17 @@
+a {
+/* we need this to make javascript work properly,
+otherwise there is a 1px movement, when clicking on links */
+	outline: none;
+}
+
+a:active {
+  outline: none;
+}
+
 .detail_view {
     position: absolute;
     left: 240px;
+    right: 35px;
 }
 
 .treebar {
@@ -8,57 +19,24 @@
     width: 200px;
 }
 
-.manage_relationships {
-    left: 680px;
-    position: absolute;
-    top: 3px;
-    width: 180px;
-}
-
 .recopyright {
     font-size: 0.9em;
 }
 
-/* we need this to make javascript work properly,
-otherwise there is a 1px movement, when clicking on links */
-a {
-	outline: none;
+fieldset.variant {
+    border-color: #FFDD88;
+    border-style: dotted;
+    margin-left: 10px;
 }
 
-a:active {
-	outline: none;
-}
-
-div.variant {
-    margin-left:60px;
-    border: dotted;
-    border-spacing: 1px;
-    border-color:#ffff33
-}
-
-div.problem {
-    margin-left:60px;
-    border: dotted;
-    border-spacing: 1px;
-    border-color:red;
+fieldset.problem {
+    border-color:#880000;
+    border-style: dashed;
+    margin-left: 10px;
 }
 
 div.draggable {
     cursor: move;
-}
-
-a.add_before {
-    display: block;
-    width: 32px;
-    height: 32px;
-    background: url(../images/icons/add_before.png) no-repeat;
-}
-
-a.add_after {
-    display: block; 
-    width: 32px;
-    height: 32px;
-    background: url(../images/icons/add_after.png) no-repeat;
 }
 
 #context-menu li.header {
@@ -70,3 +48,40 @@ a.add_after {
     color: white;
 }
 
+label {
+    font-weight: bold;
+    width: 100px;
+    clear:left; 
+    display:block;
+    float:left; 
+    text-align:right;
+    padding-right:5px;
+}
+
+.numberfield-slider {
+    float:left;
+}
+
+.numberfield-slider #numberfield-track {
+    float:right;
+    width: 150px;
+    background-color: #507AAA;
+    height: 15px;
+    margin: 3px 0 0 15px;
+}
+
+.numberfield-slider #numberfield-handle {
+    width: 8px;
+    height: 13px;
+    margin: 1px 1px 0 1px;
+    background-color: #FFFFFF;
+    cursor: move;
+}
+
+.icon-subtask-before {
+    background-image: url("../images/icons/subtask_before.png");
+}
+
+.icon-subtask-after {
+    background-image: url("../images/icons/subtask_after.png");
+}

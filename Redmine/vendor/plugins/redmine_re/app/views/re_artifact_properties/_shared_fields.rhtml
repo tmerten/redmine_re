@@ -1,22 +1,58 @@
-<p>
-  <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
-</p>
-<%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
-<p>  
-<fieldset><legend><%= l(:re_description_fieldset) %></legend>
-  <%= textilizable(properties, :description, :only_path => false) %>
-  <br/>
-  <%#= f.label :description, l(:re_artifact_description) %><%= f.text_area :description,
-                   :cols => 60,
-                   :rows => (properties.description.blank? ? 10 : [[10, properties.description.length / 50].max, 100].min),
-                   :accesskey => accesskey(:edit),
-                   :class => 'wiki-edit' %>
-  <%= wikitoolbar_for controller.controller_name + '_description' %>
-</fieldset>
-</p>
-<p>
-  <%= f.label :priority, l(:re_artifact_priority) %> <%= f.text_field :priority %>
-</p>
-<p>
-  <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.text_field :responsibles %>
-</p>
+<div class="box">
+
+  <fieldset><legend><%= l(:re_common_attributes) %></legend>
+    <p>
+      <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
+      <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
+    </p>
+    
+    <div class="splitcontentleft" >
+      <% javascript_tag  do %>
+      Event.observe(window, 'load', function() {
+        var prioSlider = new Control.Slider('numberfield-handle' , 'numberfield-track',
+        {
+             range: $R(1,51),
+             values: $R(1,50),
+             sliderValue: <%= properties.priority.to_s %>,
+             onSlide: function(v) {
+                 $('<%= controller.controller_name -%>_priority').value = v;
+             }
+        } );
+        $('<%= controller.controller_name -%>_priority').observe('change', function() {
+          prioSlider.setValue(this.value);  
+        });
+      });
+      <% end %>
+      <div class="numberfield-slider">
+        <%= f.label :priority, l(:re_artifact_priority) %> <%= f.text_field :priority, :size => 3%>
+        <div id="numberfield-track">
+            <div id="numberfield-handle"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="splitcontentright" >
+    <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.text_field :responsibles%>    
+    </div>
+        
+  </fieldset>
+
+  <br />
+
+  <fieldset><legend><%= l(:re_description_fieldset) %></legend>
+    <div class="contextual">
+      <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', '<%=controller.controller_name -%>_description'); return false;"><%= l(:re_update_description) %></a>
+    </div>
+    <%= textilizable(properties, :description, :only_path => false) %>
+    <br/>
+    <div id='update-description' style="display:none;">
+      <%= f.text_area :description,
+                       :cols => 60,
+                       :rows => (properties.description.blank? ? 10 : [[10, properties.description.length / 50].max, 100].min),
+                       :accesskey => accesskey(:edit),
+                       :class => 'wiki-edit' %>
+      <%= wikitoolbar_for controller.controller_name + '_description' %>
+    </div>
+  </fieldset>
+
+</div>

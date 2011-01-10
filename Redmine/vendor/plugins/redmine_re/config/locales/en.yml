@@ -11,6 +11,9 @@ en:
   re_create_child: 'Create Child'
   re_delete_confirm: 'Do you really want to delete {{what}}?'
   re_select_artifact: 'Select Artifact'
+  re_unsaved: 'unsaved'
+  re_common_attributes: 'Common Attributes'
+  re_type: 'Type'
 
   # columns
   re_column_name: 'Name'
@@ -32,6 +35,8 @@ en:
   re_artifact_description: 'Description'
   re_artifact_responsibles: 'Responsibles'
   re_description_fieldset: 'Artifact Description'
+  re_priority_responsible: 'Priority and Responsibilities'
+  re_update_description: 'Update description'
 
   # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
@@ -62,6 +67,11 @@ en:
   re_show_subtasks: 'Show Subtasks'
   re_subtask: 'Subtask'
   re_subtask_solution: 'Solution'
+  re_subtask_problem: 'Problem'
+  re_subtask_variant: 'Variant'
+  re_insert_st_before: 'insert subtask'
+  re_insert_st_after: 'insert subtask'
+  re_delete_subtask: 'TODO delete subtask'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'

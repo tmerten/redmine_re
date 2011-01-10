@@ -1,14 +1,19 @@
 
-  <h3><%= l(:re_artifact_relationships) %></h3>
+<div class="box">
 
+
+  <fieldset><legend><%= l(:re_artifact_relationships) %></legend>
+  
+  <div class="splitcontentleft">
     <div id="relationship_link_list">
         <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
         <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@artifact_properties_id) %>
         <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id) %>
         <%= render "re_artifact_relationship/relationship_links", :project_id => params[:project_id] %>
     </div>
-<br/>
-
+  </div>
+  
+  <div class="splitcontentright">
     <%= l("re_create_new_relationship") %>
     <span id="preselected_artifacts"><%= select :relationship, :artifact_id, ReArtifactProperties.find(:all).collect { |d| [d.name, d.id]}, {:prompt => l(:re_select_artifact)} %></span>
     <%= observe_field "relationship_artifact_id",   :url => { :action => :prepare_relationships,
@@ -18,5 +23,6 @@
                                                     :original_controller => controller.controller_name},
                                                     :update => "relationship_link_list",
                                                     :with => "'sink_id='+ escape($('relationship_artifact_id').value)" %>
-
-
+ </div>
+ 
+</div>

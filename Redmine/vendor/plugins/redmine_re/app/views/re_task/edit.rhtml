@@ -4,39 +4,35 @@
 <%= error_messages_for :re_task %>
 
 
-<% form_for :re_task, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
+<% form_for :re_task, :url => {:action => "edit"}, :html => { :style => "margin:0;padding:0;display:inline" } do |f| %>
     <%= hidden_field_tag :project_id, @project.id %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
     
-    <div class="box">
+    <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
+    <%= submit_tag l(:re_save) %>
 
-        <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
+    <p>
+      <% if @subtasks.size == 0 %>
+            <%= link_to_remote "Add Subtask", :url => {:action => "add_subtask", :add_position => :after} %>
+     <% end %>
+    </p>
 
-        <p>
-          <% if @subtasks.size == 0 %>
-                <%= link_to_remote "Add Subtask", :url => {:action => "add_subtask", :add_position => :after} %>
-         <% end %>
-        </p>
-
-        <div id="subtasks" >
-            <%= render :partial => 're_subtask', :collection => @subtasks %>
-        </div>
-        <%= sortable_element "subtasks",
-                              :tag => 'div',
-                              :complete => visual_effect(:highlight, 'subtasks'),
-                              :url => { :action => "update_subtask_positions" }
-        %>
-
-        <p>
-          <%= submit_tag l(:re_save) %>
-        </p>
+    <div id="subtasks" >
+        <%= render :partial => 're_subtask', :collection => @subtasks %>
     </div>
+    <%= sortable_element "subtasks",
+                          :tag => 'div',
+                          :complete => visual_effect(:highlight, 'subtasks'),
+                          :url => { :action => "update_subtask_positions" }
+    %>
+
+    <p>
+    <%= submit_tag l(:re_save) %>
+    </p>
 <% end %>
 
 <div class="manage_relationships">
     <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id  %>
 </div>
   
-<%= link_to 'Show tasks', :action => :index, :project_id => params[:project_id] %>
-
 </div>

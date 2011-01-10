@@ -3,24 +3,19 @@
 
 <%= error_messages_for :re_goal %>
 
-<% form_for :re_goal, :update => :detail_view, :url => {:action => "edit"}, :html => { :class => "tabular"} do |f| %>
+<% form_for :re_goal, :update => :detail_view, :url => {:action => "edit"} do |f| %>
     <%= hidden_field_tag :project_id, @project.id %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
-    <div class="box">
+    <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_goal.re_artifact_properties} %>
 
-      <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_goal.re_artifact_properties} %>
+    <p>
+      <%= submit_tag l(:re_save), :action => :edit %>
+    </p>
 
-      <p>
-        <%= submit_tag l(:re_save), :action => :edit %>
-      </p>
-
-    </div>
 <% end %>
 
-<div class="manage_relationships">  
 <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
-</div>
 
 <%= link_to l(:re_show_goals), :action => :index, :project_id => params[:project_id] %>
 </div>

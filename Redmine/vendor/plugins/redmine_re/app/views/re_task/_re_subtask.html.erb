@@ -11,41 +11,42 @@
     <% end %>
 
     <% if re_subtask.id %>
-        <%= "<div id=\"subtask_drag_#{@index}\" class=\"draggable\" > " %>
+        <%= "<div id=\"subtask_drag_#{@index}\" class=\"draggable box\" > " %>
     <% else %>
-        <%= "<div id=\"subtask_drag_#{@index}\"  > " %>
+        <%= "<div id=\"subtask_drag_#{@index}\" class=\"box\" > " %>
     <% end %>
-                  <% if re_subtask.sub_type == 0 %>  <%= "<div id=\"subtask_#{@index}\" class=\"subtask\"> " %><% end %>
-                  <% if re_subtask.sub_type == 1 %>  <%= "<div id=\"subtask_#{@index}\" class=\"variant\"> " %><% end %>
-                  <% if re_subtask.sub_type == 2 %>  <%= "<div id=\"subtask_#{@index}\" class=\"problem\"> " %><% end %>
-
+                  <% if re_subtask.sub_type == 0 %>  <%= "<fieldset id=\"subtask_#{@index}\" class=\"subtask\"> " %><% end %>
+                  <% if re_subtask.sub_type == 1 %>  <%= "<fieldset id=\"subtask_#{@index}\" class=\"variant\"> " %><% end %>
+                  <% if re_subtask.sub_type == 2 %>  <%= "<fieldset id=\"subtask_#{@index}\" class=\"problem\"> " %><% end %>
+                    <legend><%= l(:re_subtask) %> <%= re_subtask.id ? "(" + @add_position.to_s + "TODO?? )" : "(" + l(:re_unsaved) + ")" %></legend>
                     <% if re_subtask.id %>
-                        <%= link_to_remote " ", :url => {:action => "add_subtask", :id => @index, :add_position => :before}, :html=> {:class => "add_before"} %>
-                        <%#= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => @index, :add_position => :before}%>
-                        <%#= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => @index, :add_position => :after}%>
+                        <div class="contextual">
+                        <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => @index}, :html=> {:class => "icon icon-del"} %>
+                        <%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :id => @index, :add_position => :before}, :html=> {:class => "icon icon-subtask-before"} %>
+                       </div>
+                    &nbsp;
                     <% end %>
     
                     <p>
-                        <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{@index}][name]", re_subtask.name %> <%#= re_subtask_form.text_field :name %>
+                    <div class="splitcontentleft">
+                        <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{@index}][name]", re_subtask.name, :size => 40 %> <%#= re_subtask_form.text_field :name %>
+                    </div> 
+                    <div class="splitcontentright">
+                         <%= re_subtask_form.label :solution, l(:re_subtask_solution) %> <%= text_field_tag "re_task[subtask_attributes][#{@index}][solution]", re_subtask.solution, :size => 40 %><%#= re_subtask_form.text_field :solution %>
+                    </div>
                     </p>
-                    <p>
-                         <%= re_subtask_form.label :solution, l(:re_subtask_solution) %> <%= text_field_tag "re_task[subtask_attributes][#{@index}][solution]", re_subtask.solution %><%#= re_subtask_form.text_field :solution %>
-                    </p>
-                    <p>
-                         <%= label_tag 'Subtask' %>  <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', (re_subtask.sub_type == 0) %>
-                    </p>
-                    <p>
-                        <%= label_tag 'Variante' %>  <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', (re_subtask.sub_type == 1) %>
-                    </p>
-                    <p>
-                        <%= label_tag 'Problem' %>  <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', (re_subtask.sub_type == 2) %>
-                    </p>
-                    <% if re_subtask.id %>
-                        <%= link_to_remote " ", :url => {:action => "add_subtask", :id => @index, :add_position => :after}, :html=> {:class => "add_after"} %>
-                        <%#= link_to_remote "Add Subtask before", :url => {:action => "add_subtask", :id => @index, :add_position => :before}%>
-                        <%#= link_to_remote "Add Subtask after", :url => {:action => "add_subtask", :id => @index, :add_position => :after}%>
-                    <% end %>
 
-              </div>
+                    <% if re_subtask.id %>
+                      <div class="contextual">
+                        <%= link_to_remote l(:re_insert_st_after), :url => {:action => "add_subtask", :id => @index, :add_position => :after}, :html=> {:class => "icon icon-subtask-after"} %>
+                      </div>
+                    <% end %>
+                    <p>
+                        <%= label_tag l(:re_type) %>
+                          <%= l(:re_subtask) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', (re_subtask.sub_type == 0) %>
+                          <%= l(:re_subtask_variant) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', (re_subtask.sub_type == 1) %>
+                          <%= l(:re_subtask_problem) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', (re_subtask.sub_type == 2) %>
+                    </p>
+              </fieldset>
         </div>
   <% end %>
