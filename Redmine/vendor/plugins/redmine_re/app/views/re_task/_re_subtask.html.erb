@@ -43,8 +43,8 @@
                     <% end %>
                     <p>
                         <%= label_tag l(:re_type) %>
-                          <%= l(:re_subtask) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', (re_subtask.sub_type == 0) %>
-                          <%= l(:re_subtask_variant) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', (re_subtask.sub_type == 1) %>
+                          <%= l(:re_subtask) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', (re_subtask.sub_type == 0) %> |
+                          <%= l(:re_subtask_variant) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', (re_subtask.sub_type == 1) %>  |
                           <%= l(:re_subtask_problem) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', (re_subtask.sub_type == 2) %>
                     </p>
               </fieldset>
