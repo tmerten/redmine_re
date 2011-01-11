@@ -1,52 +1,51 @@
                                                                       
 <% fields_for "re_task[subtask_attributes][]", re_subtask do |re_subtask_form| %>
     <% if(re_subtask.id) %>
-        <%  @index = re_subtask.id %>
+        <%  index = re_subtask.id %>
     <% else %>
         <% if(@re_subtask_with_clicked_link) %>   <%# if ne task is not new and a before or after link was pressed at a subtask%>
-            <% @index = "new_#{@add_position}_#{@re_subtask_with_clicked_link.re_artifact_properties.id}_"+Time.now.to_i.to_s %>
+            <% index = "new_#{@add_position}_#{@re_subtask_with_clicked_link.re_artifact_properties.id}_"+Time.now.to_i.to_s %>
         <% else %>   <%# if ne task is new or has no subtasks yet%>
-            <% @index = "new_#{@add_position}_newtask_"+Time.now.to_i.to_s %>
+            <% index = "new_#{@add_position}_newtask_"+Time.now.to_i.to_s %>
         <% end %>
     <% end %>
+    
+    <% type = 'box' %>
+    <% type = 'variant' if re_subtask.sub_type == 1 %>
+    <% type = 'problem' if re_subtask.sub_type == 2 %>
 
     <% if re_subtask.id %>
-        <%= "<div id=\"subtask_drag_#{@index}\" class=\"draggable box\" > " %>
+        <%= "<div id=\"subtask_drag_#{index}\" class=\"draggable #{type}\" > " %>
     <% else %>
-        <%= "<div id=\"subtask_drag_#{@index}\" class=\"box\" > " %>
+        <%= "<div id=\"subtask_drag_#{index}\" class=\"#{type}\" > " %>
     <% end %>
-                  <% if re_subtask.sub_type == 0 %>  <%= "<fieldset id=\"subtask_#{@index}\" class=\"subtask\"> " %><% end %>
-                  <% if re_subtask.sub_type == 1 %>  <%= "<fieldset id=\"subtask_#{@index}\" class=\"variant\"> " %><% end %>
-                  <% if re_subtask.sub_type == 2 %>  <%= "<fieldset id=\"subtask_#{@index}\" class=\"problem\"> " %><% end %>
-                    <legend><%= l(:re_subtask) %> <%= re_subtask.id ? "(" + @add_position.to_s + "TODO?? )" : "(" + l(:re_unsaved) + ")" %></legend>
                     <% if re_subtask.id %>
-                        <div class="contextual">
-                        <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => @index}, :html=> {:class => "icon icon-del"} %>
-                        <%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :id => @index, :add_position => :before}, :html=> {:class => "icon icon-subtask-before"} %>
-                       </div>
-                    &nbsp;
+                      <div class="contextual">
+                        <%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :id => index, :add_position => :before}, :html=> {:class => "icon icon-subtask-before"} %>
+                      </div>
+                      &nbsp;
                     <% end %>
     
                     <p>
                     <div class="splitcontentleft">
-                        <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{@index}][name]", re_subtask.name, :size => 40 %> <%#= re_subtask_form.text_field :name %>
+                        <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{index}][name]", re_subtask.name, :size => 40 %> <%#= re_subtask_form.text_field :name %>
                     </div> 
                     <div class="splitcontentright">
-                         <%= re_subtask_form.label :solution, l(:re_subtask_solution) %> <%= text_field_tag "re_task[subtask_attributes][#{@index}][solution]", re_subtask.solution, :size => 40 %><%#= re_subtask_form.text_field :solution %>
+                         <%= re_subtask_form.label :solution, l(:re_subtask_solution) %> <%= text_field_tag "re_task[subtask_attributes][#{index}][solution]", re_subtask.solution, :size => 40 %><%#= re_subtask_form.text_field :solution %>
                     </div>
                     </p>
 
                     <% if re_subtask.id %>
                       <div class="contextual">
-                        <%= link_to_remote l(:re_insert_st_after), :url => {:action => "add_subtask", :id => @index, :add_position => :after}, :html=> {:class => "icon icon-subtask-after"} %>
+                        <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => index}, :html=> {:class => "icon icon-del"} %>
+                        <%= link_to_remote l(:re_insert_st_after), :url => {:action => "add_subtask", :id => index, :add_position => :after}, :html=> {:class => "icon icon-subtask-after"} %>
                       </div>
                     <% end %>
                     <p>
                         <%= label_tag l(:re_type) %>
-                          <%= l(:re_subtask) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '0', (re_subtask.sub_type == 0) %> |
-                          <%= l(:re_subtask_variant) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '1', (re_subtask.sub_type == 1) %>  |
-                          <%= l(:re_subtask_problem) %> <%= radio_button_tag "re_task[subtask_attributes][#{@index}][sub_type]", '2', (re_subtask.sub_type == 2) %>
+                          <%= radio_button_tag "re_task[subtask_attributes][#{index}][sub_type]", '0', (re_subtask.sub_type == 0), { :onclick => "$('subtask_drag_#{index}').removeClassName('variant').removeClassName('problem').addClassName('box')" } %> <%= l(:re_subtask) %>  |
+                          <%= radio_button_tag "re_task[subtask_attributes][#{index}][sub_type]", '1', (re_subtask.sub_type == 1), { :onclick => "$('subtask_drag_#{index}').removeClassName('box').removeClassName('problem').addClassName('variant')" } %> <%= l(:re_subtask_variant) %>  |
+                          <%= radio_button_tag "re_task[subtask_attributes][#{index}][sub_type]", '2', (re_subtask.sub_type == 2), { :onclick => "$('subtask_drag_#{index}').removeClassName('box').removeClassName('variant').addClassName('problem')" } %> <%= l(:re_subtask_problem) %>
                     </p>
-              </fieldset>
         </div>
   <% end %>

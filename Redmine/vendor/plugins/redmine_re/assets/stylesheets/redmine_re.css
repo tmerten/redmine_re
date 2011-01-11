@@ -23,16 +23,24 @@ a:active {
     font-size: 0.9em;
 }
 
-fieldset.variant {
-    border-color: #FFDD88;
-    border-style: dotted;
-    margin-left: 10px;
+div.variant {
+    background-color: #FFE6BF;
+    border: 1px solid #E4E4E4;
+    color: #505050;
+    line-height: 1.5em;
+    margin-bottom: 10px;
+    margin-left: 10px;    
+    padding: 6px;  
 }
 
-fieldset.problem {
-    border-color:#880000;
-    border-style: dashed;
+div.problem {
+    background-color: #F1938C;
+    border: 1px solid #E4E4E4;
+    color: #505050;
+    line-height: 1.5em;
+    margin-bottom: 10px;
     margin-left: 10px;
+    padding: 6px;  
 }
 
 div.draggable {
