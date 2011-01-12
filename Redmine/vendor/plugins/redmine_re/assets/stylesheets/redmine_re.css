@@ -23,28 +23,23 @@ a:active {
     font-size: 0.9em;
 }
 
-div.variant {
+tr.variant {
     background-color: #FFE6BF;
-    border: 1px solid #E4E4E4;
-    color: #505050;
-    line-height: 1.5em;
-    margin-bottom: 10px;
-    margin-left: 10px;    
-    padding: 6px;  
 }
 
-div.problem {
+tr.problem {
     background-color: #F1938C;
-    border: 1px solid #E4E4E4;
-    color: #505050;
-    line-height: 1.5em;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    padding: 6px;  
 }
 
 div.draggable {
     cursor: move;
+}
+
+textarea.subtask {
+    border: 1px solid #CCCCCC;
+    font-family: Verdana,sans-serif;
+    padding: 3px;
+    font-size: 12px;
 }
 
 #context-menu li.header {

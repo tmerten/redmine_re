@@ -1,4 +1,7 @@
-                                                                      
+
+
+     
+
 <% fields_for "re_task[subtask_attributes][]", re_subtask do |re_subtask_form| %>
     <% if(re_subtask.id) %>
         <%  index = re_subtask.id %>
@@ -10,42 +13,30 @@
         <% end %>
     <% end %>
     
-    <% type = 'box' %>
+    <% type = 'odd' %>
     <% type = 'variant' if re_subtask.sub_type == 1 %>
     <% type = 'problem' if re_subtask.sub_type == 2 %>
 
     <% if re_subtask.id %>
-        <%= "<div id=\"subtask_drag_#{index}\" class=\"draggable #{type}\" > " %>
+        <%= "<tr id=\"subtask_drag_#{index}\" class=\"draggable #{type}\" > " %>
     <% else %>
-        <%= "<div id=\"subtask_drag_#{index}\" class=\"#{type}\" > " %>
+        <%= "<tr id=\"subtask_drag_#{index}\" class=\"#{type}\" > " %>
     <% end %>
-                    <% if re_subtask.id %>
-                      <div class="contextual">
-                        <%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :id => index, :add_position => :before}, :html=> {:class => "icon icon-subtask-before"} %>
-                      </div>
-                      &nbsp;
-                    <% end %>
-    
-                    <p>
-                    <div class="splitcontentleft">
-                        <%= re_subtask_form.label :name, l(:re_artifact_name) %><%= text_field_tag "re_task[subtask_attributes][#{index}][name]", re_subtask.name, :size => 40 %> <%#= re_subtask_form.text_field :name %>
-                    </div> 
-                    <div class="splitcontentright">
-                         <%= re_subtask_form.label :solution, l(:re_subtask_solution) %> <%= text_field_tag "re_task[subtask_attributes][#{index}][solution]", re_subtask.solution, :size => 40 %><%#= re_subtask_form.text_field :solution %>
-                    </div>
-                    </p>
-
-                    <% if re_subtask.id %>
-                      <div class="contextual">
-                        <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => index}, :html=> {:class => "icon icon-del"} %>
-                        <%= link_to_remote l(:re_insert_st_after), :url => {:action => "add_subtask", :id => index, :add_position => :after}, :html=> {:class => "icon icon-subtask-after"} %>
-                      </div>
-                    <% end %>
-                    <p>
-                        <%= label_tag l(:re_type) %>
-                          <%= radio_button_tag "re_task[subtask_attributes][#{index}][sub_type]", '0', (re_subtask.sub_type == 0), { :onclick => "$('subtask_drag_#{index}').removeClassName('variant').removeClassName('problem').addClassName('box')" } %> <%= l(:re_subtask) %>  |
-                          <%= radio_button_tag "re_task[subtask_attributes][#{index}][sub_type]", '1', (re_subtask.sub_type == 1), { :onclick => "$('subtask_drag_#{index}').removeClassName('box').removeClassName('problem').addClassName('variant')" } %> <%= l(:re_subtask_variant) %>  |
-                          <%= radio_button_tag "re_task[subtask_attributes][#{index}][sub_type]", '2', (re_subtask.sub_type == 2), { :onclick => "$('subtask_drag_#{index}').removeClassName('box').removeClassName('variant').addClassName('problem')" } %> <%= l(:re_subtask_problem) %>
-                    </p>
-        </div>
+          <td style="cursor: pointer;"></td>
+          <td>
+            <%= select_tag("re_task[subtask_attributes][#{index}][sub_type]", options_for_select([['ST',0],['V', 1],['P',2]], re_subtask.sub_type ), :onchange => "changeSubtaskRowColor($('subtask_drag_#{index}'), this.value)" ) %>
+          </td>
+          <td>
+              <%= text_area_tag "re_task[subtask_attributes][#{index}][name]", re_subtask.name, {:cols => 40, :rows => 1, :class => "subtask"} %> <%#= re_subtask_form.text_field :name %>
+          </td> 
+          <td>
+              <%= text_area_tag "re_task[subtask_attributes][#{index}][solution]", re_subtask.solution, {:cols => 40, :rows => 1, :class => "subtask"} %><%#= re_subtask_form.text_field :solution %>
+          </td>
+          <td>
+              <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => index}, :html=> {:class => "icon icon-del"} %>
+          <% if re_subtask.id %>
+              <%= link_to_remote l(:re_insert_st_after), :url => {:action => "add_subtask", :id => index, :add_position => :after}, :html=> {:class => "icon icon-subtask-after"} %>
+          <% end %>
+          </td>
+        </tr>
   <% end %>

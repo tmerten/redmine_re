@@ -17,19 +17,51 @@
      <% end %>
     </p>
 
-    <div id="subtasks" >
+    <table class="list">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Solution</th>
+          <th><%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :id => 'TODO-FIRST', :add_position => :before}, :html=> {:class => "icon icon-subtask-after"} %></th>
+        </tr>
+      </thead>
+      <tbody id="subtasks">
         <%= render :partial => 're_subtask', :collection => @subtasks %>
-    </div>
+      </tbody>
+    </table>
     <%= sortable_element "subtasks",
-                          :tag => 'div',
+                          :tag => 'tr',
                           :complete => visual_effect(:highlight, 'subtasks'),
                           :url => { :action => "update_subtask_positions" }
     %>
+    <br />
 
 <% end %>
 
 <div class="manage_relationships">
     <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id  %>
 </div>
+
+
+<script type="text/javascript" language="javascript">
+  changeSubtaskRowColor = function(element, value) {
+    element.removeClassName('odd');
+    element.removeClassName('variant');
+    element.removeClassName('problem');
+    
+    switch(value) {
+      case '0': element.addClassName('odd'); break;
+      case '1': element.addClassName('variant'); break;
+      case '2': element.addClassName('problem'); break;
+      default: alert('You cannot switch to that value ' + value);
+    }
+  }
+
+  $$('textarea.subtask').each(function (el) {
+     new ResizingTextArea($(el));
+  });
+</script>
   
 </div>
