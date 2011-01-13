@@ -32,6 +32,12 @@ class ReArtifactProperties < ActiveRecord::Base
     :source => "source"
 
   belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
+  
+  # TODO: Implement author and watchable module into the common fields.
+  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+  acts_as_watchable
+  
+  validates_inclusion_of :priority, :in => 0..50
 
   belongs_to :project
   #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'

@@ -1,7 +1,8 @@
 
 <p>
     <%= l(:re_artifact_relationships_outgoing) %><br/>
-    <ul>
+</p>
+    <%= "<ul>" unless @relationships_outgoing.empty? -%>
     <% for relationship in @relationships_outgoing %>
         <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
         <li>
@@ -13,11 +14,11 @@
           <br/>
         </li>
     <% end unless @relationships_outgoing.nil? %>
-    </ul>
-</p>
+    <%= "</ul>" unless @relationships_outgoing.empty? -%>
 <p>
     <%= l(:re_artifact_relationships_incoming) %>
-    <ul>
+</p>
+    <%= "<ul>" unless @relationships_incoming.empty? -%>
     <% for relationship in @relationships_incoming %>
         <% source = ReArtifactProperties.find_by_id(relationship.source_id) %>
         <li>
@@ -29,5 +30,4 @@
           <br/>
         </li>
     <% end unless @relationships_incoming.nil? %>
-    </ul>
-</p>
+    <%= "</ul>" unless @relationships_incoming.empty? -%>

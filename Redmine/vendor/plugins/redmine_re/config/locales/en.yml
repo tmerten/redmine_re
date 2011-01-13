@@ -50,13 +50,15 @@ en:
   re_create_new_relationship: 'Create new relationship'
 
   # re_goals
-  re_create_goal: 'New Goal'
+  re_new_goal: 'New Goal'
+  re_create_goal: 'Create a Goal'
   re_show_goals: 'Show Goals'
   re_goal: 'Goal'
   re_create_child_goal: 'Create Child of Type Goal'
   
   # re_tasks
-  re_create_task: 'New Task'
+  re_new_task: 'New Task'
+  re_create_task: 'Create a Task'
   re_show_tasks: 'Show Tasks'
   re_task: 'Task'
   re_create_child_task: 'Create Child of Type Task'

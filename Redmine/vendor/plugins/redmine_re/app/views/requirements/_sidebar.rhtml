@@ -7,45 +7,25 @@
       <h2><%= l(:re_sidebar) %></h2>
 
       <h3><%= l(:re_goal) %></h3>
-
+      
       <ul>
-        <li><%= link_to l(:re_create_goal), {
+        <li><%= link_to l(:re_new_goal), {
               :controller => 're_goal',
               :action => 'edit',
               :project_id => @project.id } %>
         </li>
-        <li><%= link_to l(:re_show_goals), {
-              :controller => 're_goal',
-              :action => 'index',
-              :project_id => @project.id } %>
-        </li>
       </ul>
-
+      
       <h3><%= l(:re_task) %><br/></h3>
-
+      
       <ul>
-        <li><%= link_to l(:re_create_task), {
+        <li><%= link_to l(:re_new_task), {
               :controller => 're_task',
               :action => 'edit',
-              :project_id => @project.id } %>
-        </li>
-        <li><%= link_to l(:re_show_tasks), {
-              :controller => 're_task',
-              :action => 'index',
-              :project_id => @project.id } %>
-        </li>
-        <li><%= link_to l(:re_create_subtask), {
-              :controller => 're_subtask',
-              :action => 'edit',
-              :project_id => @project.id } %>
-        </li>
-        <li><%= link_to l(:re_show_subtasks), {
-              :controller => 're_subtask',
-              :action => 'index',
               :project_id => @project.id } %>
         </li>
       </ul>
-
+      
       <h3><%= l(:re_relationships) %><br/></h3>
 
       <ul>
@@ -55,7 +35,6 @@
               :project_id => @project.id } %>
         </li>
       </ul>
-
     </div>
   </div>
 

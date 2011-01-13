@@ -94,7 +94,10 @@ class RedmineReController < ApplicationController
   #renders a re artifact and its children recursively as html tree
   def render_to_html_tree(re_artifact_properties, depth = 0)
     session[:expanded_nodes] ||= Set.new
+    session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
+
     expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
+    
     artifact_type = re_artifact_properties.artifact_type.to_s.underscore
     html_tree = ''
     

@@ -1,3 +1,61 @@
 <div id='detail_view' class='detail_view'>
-  <%= render :partial => 'requirements/welcome' %>
+
+  <h2>Create a new Reqirements Artifact</h2>
+
+  <p>
+  Get started by creating a new requirements artifact. You may select from the artifacts below.<br />
+  You will find the artifacts you created in the tree to your left. You can drag and drop each artifact in the tree to reorder or restructure your RE artifacts.
+  The tree represents the structure of your requirements document. See <a href="#">printing</a>.
+  </p>
+  <p>
+  Once you left this page you can always add a new artifact by clicking on the bar to your right. It will expand and show links to all the stuff you find below.
+  </p>
+
+  <h3><%= l(:re_goal) %></h3>
+  You may want to use goals as high level requirements or to structure your requirements. There are also approaches using goals for the whole RE,
+  especially for understanding the requirements (TODO links, sources, etc.) 
+
+  
+  <ul>
+    <li><%= link_to l(:re_create_goal), {
+          :controller => 're_goal',
+          :action => 'edit',
+          :project_id => @project.id } %>
+    </li>
+  </ul>
+  
+  <h3><%= l(:re_task) %><br/></h3>
+  If you are unfamiliar with using Lauesens Task-Based aproach for RE - it is very similiar to the famouse Use-Cases by Cockburn - 
+  simply <a href="http://www.itu.dk/~slauesen/SorenReqs.html">check his website</a> or have a look
+  at his <a href="http://www.itu.dk/~slauesen/Papers/RequirementsSL-07.doc">Task Template (MS Word Doc)</a>.<br />
+  Most important is that you recognize the demand solution prinziple coming with the two columns of the approach.
+  
+  <ul>
+    <li><%= link_to l(:re_create_task), {
+          :controller => 're_task',
+          :action => 'edit',
+          :project_id => @project.id } %>
+    </li>
+  </ul>
+  
+  <h2>Trace your requirements</h2>
+
+  <p>
+  You also may like to visualize the traces for the requirments artifacts you already created. TODO: Write even more text in here.
+  </p>
+
+  <ul>
+    <li><%= link_to l(:re_relationship_visualization), {
+          :controller => 're_artifact_relationship',
+          :action => 'visualization',
+          :project_id => @project.id } %>
+    </li>
+  </ul>
+
+  <div class='recopyright'>
+    <hr />
+    Copyright <a href="http://www.h-brs.de">Bonn-Rhine-Sieg University of Applied Sciences</a>&nbsp;&nbsp;
+    (<a href="mailto:thorsten.merten@h-brs.de">contact</a>)
+  </div>
+
 </div>

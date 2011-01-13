@@ -29,6 +29,10 @@ table.subtasks {
     border-width: 0;
 }
 
+#subtasks .drop_hover {
+    background: url(../images/sortable_tree/drag.png) no-repeat bottom left;
+}
+
 tr.subtask {
     background-color: #F6F7F8;
     border-width: 1px;
