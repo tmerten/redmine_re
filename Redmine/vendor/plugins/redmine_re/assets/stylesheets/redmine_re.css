@@ -23,6 +23,25 @@ a:active {
     font-size: 0.9em;
 }
 
+table.subtasks {
+    border-spacing: 0;
+    border-style: none;
+    border-width: 0;
+}
+
+tr.subtask {
+    background-color: #F6F7F8;
+    border-width: 1px;
+    padding: 0px;
+    border-style: solid;
+    border-color: gray;
+}
+
+td.subtask {
+    border-top: 2px solid #505050;
+    background-color: #F6F7F8;
+}
+
 tr.variant {
     background-color: #FFE6BF;
 }
@@ -40,6 +59,7 @@ textarea.subtask {
     font-family: Verdana,sans-serif;
     padding: 3px;
     font-size: 12px;
+    width: 95%;
 }
 
 #context-menu li.header {
