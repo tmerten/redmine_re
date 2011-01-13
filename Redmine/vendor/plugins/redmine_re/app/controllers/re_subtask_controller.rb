@@ -18,6 +18,8 @@ class ReSubtaskController < RedmineReController
     @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties) || ReSubtask.new
     @project ||= @re_subtask.project
 
+    @html_tree = create_tree
+
     if request.post?
       @re_subtask.attributes = params[:re_subtask]
       add_hidden_re_artifact_properties_attributes @re_subtask
