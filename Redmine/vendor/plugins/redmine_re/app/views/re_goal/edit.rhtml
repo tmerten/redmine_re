@@ -4,7 +4,6 @@
 <%= error_messages_for :re_goal %>
 
 <% form_for :re_goal, :update => :detail_view, :url => {:action => "edit"} do |f| %>
-    <%= hidden_field_tag :project_id, @project.id %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_goal.re_artifact_properties} %>
