@@ -10,8 +10,8 @@ class ReGoalController < RedmineReController
   end
 
   def new
-  # redirects to edit to be more dry
-    edit
+    # redirects to edit to be more dry
+    redirect_to :action => 'edit', :project_id => params[:project_id]
   end
 
   def edit
@@ -25,7 +25,7 @@ class ReGoalController < RedmineReController
 
       flash[:notice] = 'Goal successfully saved' if save_ok = @re_goal.save
 
-      redirect_to :action => 'edit' and return if save_ok
+      redirect_to :action => 'edit', :id => @re_goal.id and return if save_ok
     end
   end
 
