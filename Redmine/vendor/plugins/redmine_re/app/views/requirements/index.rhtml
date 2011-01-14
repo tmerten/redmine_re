@@ -19,7 +19,7 @@
   <ul>
     <li><%= link_to l(:re_create_goal), {
           :controller => 're_goal',
-          :action => 'edit',
+          :action => 'new',
           :project_id => @project.id } %>
     </li>
   </ul>
@@ -33,7 +33,7 @@
   <ul>
     <li><%= link_to l(:re_create_task), {
           :controller => 're_task',
-          :action => 'edit',
+          :action => 'new',
           :project_id => @project.id } %>
     </li>
   </ul>
