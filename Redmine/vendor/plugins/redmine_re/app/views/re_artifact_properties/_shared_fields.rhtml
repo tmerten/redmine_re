@@ -13,7 +13,7 @@
         {
              range: $R(1,51),
              values: $R(1,50),
-             sliderValue: <%= properties.priority.to_s %>,
+             sliderValue: <%= properties.priority.nil? ? '1' : properties.priority.to_s %>,
              onSlide: function(v) {
                  $('<%= controller.controller_name -%>_priority').value = v;
              }
