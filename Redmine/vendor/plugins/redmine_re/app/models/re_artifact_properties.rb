@@ -37,13 +37,15 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   acts_as_watchable
   
-  validates_inclusion_of :priority, :in => 0..50
 
   belongs_to :project
   #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
 
   validates_presence_of :project, :created_by, :updated_by, :name
   validates_uniqueness_of :name
+
+  # Should be on, but prevents subtasks from saving for now.
+  #validates_numericality_of :priority, :only_integer => true, :greater_than => 0, :less_than_or_equal_to => 50
 
   # Methoden
   attr_accessor :state # Als Zustand noetig fuer(observer)
