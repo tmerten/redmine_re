@@ -1,0 +1,17 @@
+<div id='detail_view' class='detail_view'>
+
+  <% form_tag :url => {:action => "edit"}, :html => { :style => "margin:0;padding:0;display:inline" } do %>
+    <%= hidden_field_tag :project_id, @project.id %>
+
+
+    <%= render "requirements/filter_artifact", :legend => "re_source_artifact" %>
+
+    <%= render "requirements/filter_relationship", :legend => "re_relationship" %>
+
+    <%= render "requirements/filter_artifact", :legend => "re_sink_artifact" %>
+
+    <%= submit_tag l(:re_apply_filter) %>
+
+<% end %>
+  
+</div>

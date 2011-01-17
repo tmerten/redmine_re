@@ -1,0 +1,52 @@
+<div class="box">
+
+  <fieldset><legend><%= l(legend) %></legend>
+    <p>
+      <%= label legend, l(:re_artifact_name) %>
+      <%= select_tag(legend + "[searching][" + l(:re_artifact_name) + "]", options_for_select([l(:re_starts_with), l(:re_ends_with), l(:re_contains)], l(:re_starts_with) )) %>
+      <%= text_field legend + "[data]", l(:re_artifact_name) %>
+    </p>
+
+    <div class="splitcontentleft" >
+      <% javascript_tag  do %>
+      Event.observe(window, 'load', function() {
+        var prioSlider = new Control.Slider('<%= legend -%>_numberfield_handle' , '<%= legend %>_numberfield_track',
+        {
+             range: $R(1,51),
+             values: $R(1,50),
+             sliderValue: 1,
+             onSlide: function(v) {
+                 $('<%= legend + "_data_" + l(:re_artifact_priority) -%>').value = v;
+             }
+        } );
+        $('<%= legend + "_data_" + l(:re_artifact_priority) -%>').observe('change', function() {
+          prioSlider.setValue(this.value);
+        });
+      });
+      <% end %>
+      <div class="numberfield-slider">
+        <%= label legend, l(:re_artifact_priority) %>
+        <%= select_tag(legend + "[searching][" + l(:re_artifact_priority)  + "]", options_for_select([l(:re_equals), l(:re_lesser_than), l(:re_greater_than)], l(:re_equals) )) %>
+        <%= text_field legend + "[data]", l(:re_artifact_priority), :size => 3, :default => "1"%>
+        <div id= "<%= legend %>_numberfield_track" class="numberfield-track">
+            <div id="<%= legend %>_numberfield_handle" class="numberfield-handle"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="splitcontentright" >
+    <%= label legend, l(:re_artifact_responsibles) %>
+    <%= select_tag(legend + "[searching][" + l(:re_artifact_responsibles) + "]", options_for_select([l(:re_starts_with), l(:re_ends_with), l(:re_contains), l(:re_equals)], l(:re_starts_with) )) %>
+    <%= text_field legend + "[data]", l(:re_artifact_responsibles)  %>
+    </div>
+
+    <div class="splitcontentleft" >
+    <%= label legend, l(:re_artifact_description) %>
+    <%= select_tag(legend + "[searching][" + l(:re_artifact_description) + "]", options_for_select([l(:re_starts_with), l(:re_ends_with), l(:re_contains)], l(:re_contains) )) %>
+    <%= text_field legend + "[data]", l(:re_artifact_description) %>
+    </div>
+
+  </fieldset>
+
+
+</div>

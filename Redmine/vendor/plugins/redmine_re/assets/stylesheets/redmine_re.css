@@ -89,7 +89,7 @@ label {
     float:left;
 }
 
-.numberfield-slider #numberfield-track {
+.numberfield-slider .numberfield-track {
     float:right;
     width: 150px;
     background-color: #507AAA;
@@ -97,7 +97,7 @@ label {
     margin: 3px 0 0 15px;
 }
 
-.numberfield-slider #numberfield-handle {
+.numberfield-slider .numberfield-handle {
     width: 8px;
     height: 13px;
     margin: 1px 1px 0 1px;

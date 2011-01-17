@@ -23,10 +23,34 @@ en:
   re_artifact_description: 'Beschreibung'
   re_artifact_responsibles: 'Verantwortliche'
 
+  # re_artifact_relationships
+  re_artifact_relationships: 'Beziehung'
+  re_artifact_relationships_outgoing: 'Ausgehende Beziehung'
+  re_artifact_relationships_incoming: 'Eingehende Beziehung'
+  re_relationship_visualization: 'Beziehungsdarstellung'
+  re_relationships: 'Beziehungen'
+  re_relationship: 'Beziehung'
+  re_conflict: 'Konflikt'
+  re_dependency: 'Abh&auml;ngigkeit'
+  re_parentchild: 'Vater Kind'
+  re_create_new_relationship: 'Neue Beziehung anlegen'
+  re_source_artifact: 'Quellartefakt'
+  re_sink_artifact: 'Zielartifakt'
+
   # re_goals
   re_create_goal: 'Neues Ziel'
   re_show_goals: 'Zeige Ziele'
   re_goal: 'Ziel'
+
+  # filter
+  re_enhanced_filter: 'Erweiterter Filter'
+  re_apply_filter: 'Filter anwenden'
+  re_starts_with: 'beginnt mit'
+  re_ends_with: 'endet mit'
+  re_contains: 'enth&auml;t'
+  re_equals: 'ist gleich'
+  re_greater_than: 'gr&ouml;r&szlig;er als'
+  re_lesser_than: 'kleiner als'
 
 
 

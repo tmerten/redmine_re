@@ -44,10 +44,13 @@ en:
   re_artifact_relationships_incoming: 'Incoming Relationships'
   re_relationship_visualization: 'Relationship Visualization'
   re_relationships: 'Relationships'
+  re_relationship: 'Relationship'
   re_conflict: 'Conflict'
   re_dependency: 'Dependency'
   re_parentchild: 'Parent Child'
   re_create_new_relationship: 'Create new relationship'
+  re_source_artifact: 'Source Artifact'
+  re_sink_artifact: 'Sink Artifact'
 
   # re_goals
   re_new_goal: 'New Goal'
@@ -86,3 +89,13 @@ en:
 
   # sidebar
   re_sidebar_hover: 'Click here to create new elements'
+
+  # filter
+  re_enhanced_filter: 'Enhanced filter'
+  re_apply_filter: 'Apply filter'
+  re_starts_with: 'starts with'
+  re_ends_with: 'ends with'
+  re_contains: 'contains'
+  re_equals: 'equals'
+  re_greater_than: 'greater than'
+  re_lesser_than: 'lesser_than'

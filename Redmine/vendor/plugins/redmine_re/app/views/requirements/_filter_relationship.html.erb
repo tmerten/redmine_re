@@ -1,0 +1,11 @@
+<div class="box">
+
+  <fieldset><legend><%= l(legend) %></legend>
+    <p>
+      <%= label :type, l(:re_type) %>
+      <%= select_tag(legend + "[data][" + l(:re_type) + "]" , options_for_select([l(:re_parentchild), l(:re_conflict), l(:re_dependency)], l(:re_conflict) )) %>
+    </p>
+  </fieldset>
+
+
+</div>

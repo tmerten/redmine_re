@@ -162,4 +162,26 @@ class RedmineReController < ApplicationController
 
     render :layout => false
   end
+
+  # filtering of re_artifacts. If request is post, filter was used already
+  # and result should be displayed
+  def enhanced_filter
+    @project_id = params[:project_id]
+
+    if request.post? # apply filter and show results
+      source = params[:re_source_artifact][:data]
+      source_searching =
+      sink = params[:re_sink_artifact][:data]
+      sink_searching =  params[:re_sink_artifact][:searching]
+      source.delete_if {|key, value| value == ""}
+      sink.delete_if {|key, value| value == ""}
+      # search for artifacts matching the source_artifact_filter_criteria
+      
+      # search was only about artifacts, not about relationships
+      # therefore just display artifacts without taking relationships into account
+      render 'requirements/filter_results_simple'
+    end
+    render 'requirements/enhanced_filter'
+  end
+
 end
