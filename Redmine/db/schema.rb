@@ -386,69 +386,6 @@ ActiveRecord::Schema.define(:version => 20100819172912) do
   add_index "queries", ["project_id"], :name => "index_queries_on_project_id"
   add_index "queries", ["user_id"], :name => "index_queries_on_user_id"
 
-  create_table "re_artifact_properties", :force => true do |t|
-    t.string  "name"
-    t.string  "description"
-    t.integer "priority"
-    t.string  "responsibles"
-    t.date    "created_at"
-    t.date    "updated_at"
-    t.integer "created_by",    :default => 0
-    t.integer "updated_by",    :default => 0
-    t.integer "artifact_id"
-    t.string  "artifact_type"
-    t.integer "project_id",    :default => 0
-  end
-
-  create_table "re_artifact_relationships", :force => true do |t|
-    t.integer "source_id"
-    t.integer "sink_id"
-    t.integer "relation_type"
-    t.integer "position"
-    t.boolean "directed"
-  end
-
-  create_table "re_goals", :force => true do |t|
-  end
-
-  create_table "re_subtask_versions", :force => true do |t|
-    t.integer  "re_subtask_id"
-    t.integer  "version"
-    t.string   "solution"
-    t.datetime "updated_at"
-    t.string   "artifact_name"
-    t.string   "artifact_description"
-    t.integer  "artifact_priority",             :default => 0
-    t.integer  "updated_by"
-    t.integer  "versioned_by_artifact_id"
-    t.integer  "versioned_by_artifact_version"
-    t.integer  "parent_artifact_id"
-    t.string   "action"
-  end
-
-  create_table "re_subtasks", :force => true do |t|
-    t.string  "solution"
-    t.integer "version"
-  end
-
-  create_table "re_task_versions", :force => true do |t|
-    t.integer  "re_task_id"
-    t.integer  "version"
-    t.datetime "updated_at"
-    t.string   "artifact_name"
-    t.string   "artifact_description"
-    t.integer  "artifact_priority",             :default => 0
-    t.integer  "updated_by"
-    t.integer  "versioned_by_artifact_id"
-    t.integer  "versioned_by_artifact_version"
-    t.integer  "parent_artifact_id"
-    t.string   "action"
-  end
-
-  create_table "re_tasks", :force => true do |t|
-    t.integer "version"
-  end
-
   create_table "repositories", :force => true do |t|
     t.integer "project_id",               :default => 0,  :null => false
     t.string  "url",                      :default => "", :null => false
