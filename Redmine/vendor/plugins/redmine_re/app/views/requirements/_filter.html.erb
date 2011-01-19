@@ -2,11 +2,11 @@
   <legend onclick="toggleFieldset(this);"><%= l(:re_treefilter) %></legend>
   <div>
     <% remote_form_for :filter, :update => :detail_view, :url => {:controller => "requirements", :action => "treefilter"} do |f| %>
-     <%= text_field :filter, :size => 25 %>
-   <% end %>
-   <%= link_to l(:re_enhanced_filter), {
-            :action => :enhanced_filter,
-            :controller => :redmine_re,
-            :project_id => params[:project_id]} %>
+      <%= f.text_field :filter, :size => 25 %>
+    <% end %>
+    <%= link_to l(:re_enhanced_filter), {
+      :action => :enhanced_filter,
+      :controller => :redmine_re,
+      :project_id => params[:project_id]} %>
    </div>
 </fieldset>

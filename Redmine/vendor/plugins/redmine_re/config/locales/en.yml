@@ -88,7 +88,7 @@ en:
   field_re_artifact: 'field artifact'
 
   # sidebar
-  re_sidebar_hover: 'Click here to create new elements'
+  re_sidebar_hover: 'Click here to create new RE Artifacts'
 
   # filter
   re_enhanced_filter: 'Enhanced filter'
