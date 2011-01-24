@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class IssueTest < ActiveSupport::TestCase
   fixtures :projects, :users, :members, :member_roles, :roles,
@@ -522,6 +522,28 @@ class IssueTest < ActiveSupport::TestCase
     assert !Issue.new(:due_date => 1.day.ago.to_date, :status => IssueStatus.find(:first, :conditions => {:is_closed => true})).overdue?
   end
 
+  context "#behind_schedule?" do
+    should "be false if the issue has no start_date" do
+      assert !Issue.new(:start_date => nil, :due_date => 1.day.from_now.to_date, :done_ratio => 0).behind_schedule?
+    end
+
+    should "be false if the issue has no end_date" do
+      assert !Issue.new(:start_date => 1.day.from_now.to_date, :due_date => nil, :done_ratio => 0).behind_schedule?
+    end
+
+    should "be false if the issue has more done than it's calendar time" do
+      assert !Issue.new(:start_date => 50.days.ago.to_date, :due_date => 50.days.from_now.to_date, :done_ratio => 90).behind_schedule?
+    end
+
+    should "be true if the issue hasn't been started at all" do
+      assert Issue.new(:start_date => 1.day.ago.to_date, :due_date => 1.day.from_now.to_date, :done_ratio => 0).behind_schedule?
+    end
+
+    should "be true if the issue has used more calendar time than it's done ratio" do
+      assert Issue.new(:start_date => 100.days.ago.to_date, :due_date => Date.today, :done_ratio => 90).behind_schedule?
+    end
+  end
+
   context "#assignable_users" do
     should "be Users" do
       assert_kind_of User, Issue.find(1).assignable_users.first
@@ -540,7 +562,7 @@ class IssueTest < ActiveSupport::TestCase
       assert_equal 2, assignable_user_ids.length
       
       assignable_user_ids.each do |user_id|
-        assert_equal 1, assignable_user_ids.count(user_id), "User #{user_id} appears more or less than once"
+        assert_equal 1, assignable_user_ids.select {|i| i == user_id}.length, "User #{user_id} appears more or less than once"
       end
     end
   end
@@ -552,7 +574,7 @@ class IssueTest < ActiveSupport::TestCase
     assert issue.save
     assert_equal 1, ActionMailer::Base.deliveries.size
   end
-  
+
   def test_stale_issue_should_not_send_email_notification
     ActionMailer::Base.deliveries.clear
     issue = Issue.find(1)
@@ -745,5 +767,50 @@ class IssueTest < ActiveSupport::TestCase
     issue.project = Project.find(2)
     assert issue.save
     assert_equal before, Issue.on_active_project.length
+  end
+
+  context "Issue#recipients" do
+    setup do
+      @project = Project.find(1)
+      @author = User.generate_with_protected!
+      @assignee = User.generate_with_protected!
+      @issue = Issue.generate_for_project!(@project, :assigned_to => @assignee, :author => @author)
+    end
+    
+    should "include project recipients" do
+      assert @project.recipients.present?
+      @project.recipients.each do |project_recipient|
+        assert @issue.recipients.include?(project_recipient)
+      end
+    end
+
+    should "include the author if the author is active" do
+      assert @issue.author, "No author set for Issue"
+      assert @issue.recipients.include?(@issue.author.mail)
+    end
+    
+    should "include the assigned to user if the assigned to user is active" do
+      assert @issue.assigned_to, "No assigned_to set for Issue"
+      assert @issue.recipients.include?(@issue.assigned_to.mail)
+    end
+
+    should "not include users who opt out of all email" do
+      @author.update_attribute(:mail_notification, :none)
+
+      assert !@issue.recipients.include?(@issue.author.mail)
+    end
+
+    should "not include the issue author if they are only notified of assigned issues" do
+      @author.update_attribute(:mail_notification, :only_assigned)
+
+      assert !@issue.recipients.include?(@issue.author.mail)
+    end
+
+    should "not include the assigned user if they are only notified of owned issues" do
+      @assignee.update_attribute(:mail_notification, :only_owner)
+
+      assert !@issue.recipients.include?(@issue.assigned_to.mail)
+    end
+
   end
 end

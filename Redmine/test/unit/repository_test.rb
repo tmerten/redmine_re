@@ -15,18 +15,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class RepositoryTest < ActiveSupport::TestCase
   fixtures :projects,
            :trackers,
            :projects_trackers,
+           :enabled_modules,
            :repositories,
            :issues,
            :issue_statuses,
+           :issue_categories,
            :changesets,
            :changes,
            :users,
+           :members,
+           :member_roles,
+           :roles,
            :enumerations
   
   def setup
@@ -67,6 +72,7 @@ class RepositoryTest < ActiveSupport::TestCase
   
   def test_scan_changesets_for_issue_ids
     Setting.default_language = 'en'
+    Setting.notified_events = ['issue_added','issue_updated']
     
     # choosing a status to apply to fix issues
     Setting.commit_fix_status_id = IssueStatus.find(:first, :conditions => ["is_closed = ?", true]).id

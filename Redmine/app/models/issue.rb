@@ -16,6 +16,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class Issue < ActiveRecord::Base
+  include Redmine::SafeAttributes
+  
   belongs_to :project
   belongs_to :tracker
   belongs_to :status, :class_name => 'IssueStatus', :foreign_key => 'status_id'
@@ -62,10 +64,27 @@ class Issue < ActiveRecord::Base
   
   named_scope :open, :conditions => ["#{IssueStatus.table_name}.is_closed = ?", false], :include => :status
 
-  named_scope :recently_updated, :order => "#{self.table_name}.updated_on DESC"
+  named_scope :recently_updated, :order => "#{Issue.table_name}.updated_on DESC"
   named_scope :with_limit, lambda { |limit| { :limit => limit} }
   named_scope :on_active_project, :include => [:status, :project, :tracker],
                                   :conditions => ["#{Project.table_name}.status=#{Project::STATUS_ACTIVE}"]
+  named_scope :for_gantt, lambda {
+    {
+      :include => [:tracker, :status, :assigned_to, :priority, :project, :fixed_version]
+    }
+  }
+
+  named_scope :without_version, lambda {
+    {
+      :conditions => { :fixed_version_id => nil}
+    }
+  }
+
+  named_scope :with_query, lambda {|query|
+    {
+      :conditions => Query.merge_conditions(query.statement)
+    }
+  }
 
   before_create :default_assign
   before_save :close_duplicates, :update_done_ratio_from_issue_status
@@ -197,32 +216,47 @@ class Issue < ActiveRecord::Base
     write_attribute :estimated_hours, (h.is_a?(String) ? h.to_hours : h)
   end
   
-  SAFE_ATTRIBUTES = %w(
-    tracker_id
-    status_id
-    parent_issue_id
-    category_id
-    assigned_to_id
-    priority_id
-    fixed_version_id
-    subject
-    description
-    start_date
-    due_date
-    done_ratio
-    estimated_hours
-    custom_field_values
-    lock_version
-  ) unless const_defined?(:SAFE_ATTRIBUTES)
+  safe_attributes 'tracker_id',
+    'status_id',
+    'parent_issue_id',
+    'category_id',
+    'assigned_to_id',
+    'priority_id',
+    'fixed_version_id',
+    'subject',
+    'description',
+    'start_date',
+    'due_date',
+    'done_ratio',
+    'estimated_hours',
+    'custom_field_values',
+    'custom_fields',
+    'lock_version',
+    :if => lambda {|issue, user| issue.new_record? || user.allowed_to?(:edit_issues, issue.project) }
   
+  safe_attributes 'status_id',
+    'assigned_to_id',
+    'fixed_version_id',
+    'done_ratio',
+    :if => lambda {|issue, user| issue.new_statuses_allowed_to(user).any? }
+
   # Safely sets attributes
   # Should be called from controllers instead of #attributes=
   # attr_accessible is too rough because we still want things like
   # Issue.new(:project => foo) to work
   # TODO: move workflow/permission checks from controllers to here
   def safe_attributes=(attrs, user=User.current)
-    return if attrs.nil?
-    attrs = attrs.reject {|k,v| !SAFE_ATTRIBUTES.include?(k)}
+    return unless attrs.is_a?(Hash)
+    
+    # User can change issue attributes only if he has :edit permission or if a workflow transition is allowed
+    attrs = delete_unsafe_attributes(attrs, user)
+    return if attrs.empty? 
+    
+    # Tracker must be set before since new_statuses_allowed_to depends on it.
+    if t = attrs.delete('tracker_id')
+      self.tracker_id = t
+    end
+    
     if attrs['status_id']
       unless new_statuses_allowed_to(user).collect(&:id).include?(attrs['status_id'].to_i)
         attrs.delete('status_id')
@@ -237,7 +271,7 @@ class Issue < ActiveRecord::Base
       if !user.allowed_to?(:manage_subtasks, project)
         attrs.delete('parent_issue_id')
       elsif !attrs['parent_issue_id'].blank?
-        attrs.delete('parent_issue_id') unless Issue.visible(user).exists?(attrs['parent_issue_id'])
+        attrs.delete('parent_issue_id') unless Issue.visible(user).exists?(attrs['parent_issue_id'].to_i)
       end
     end
     
@@ -358,6 +392,13 @@ class Issue < ActiveRecord::Base
     !due_date.nil? && (due_date < Date.today) && !status.is_closed?
   end
 
+  # Is the amount of work done less than it should for the due date
+  def behind_schedule?
+    return false if start_date.nil? || due_date.nil?
+    done_date = start_date + ((due_date - start_date+1)* done_ratio/100).floor
+    return done_date <= Date.today
+  end
+
   # Does this issue have children?
   def children?
     !leaf?
@@ -392,9 +433,10 @@ class Issue < ActiveRecord::Base
   # Returns the mail adresses of users that should be notified
   def recipients
     notified = project.notified_users
-    # Author and assignee are always notified unless they have been locked
-    notified << author if author && author.active?
-    notified << assigned_to if assigned_to && assigned_to.active?
+    # Author and assignee are always notified unless they have been
+    # locked or don't want to be notified
+    notified << author if author && author.active? && author.notify_about?(self)
+    notified << assigned_to if assigned_to && assigned_to.active? && assigned_to.notify_about?(self)
     notified.uniq!
     # Remove users that can not view the issue
     notified.reject! {|user| !visible?(user)}

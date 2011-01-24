@@ -139,6 +139,7 @@ class RepositoriesController < ApplicationController
   end
   
   def revision
+    raise ChangesetNotFound if @rev.nil? || @rev.empty?
     @changeset = @repository.find_changeset_by_name(@rev)
     raise ChangesetNotFound unless @changeset
 
@@ -174,6 +175,9 @@ class RepositoriesController < ApplicationController
         @diff = @repository.diff(@path, @rev, @rev_to)
         show_error_not_found unless @diff
       end
+
+      @changeset = @repository.find_changeset_by_name(@rev)
+      @changeset_to = @rev_to ? @repository.find_changeset_by_name(@rev_to) : nil
     end
   end
   
@@ -196,7 +200,10 @@ class RepositoriesController < ApplicationController
     end
   end
   
-private
+  private
+
+  REV_PARAM_RE = %r{\A[a-f0-9]*\Z}i
+
   def find_repository
     @project = Project.find(params[:id])
     @repository = @project.repository
@@ -205,6 +212,12 @@ private
     @path ||= ''
     @rev = params[:rev].blank? ? @repository.default_branch : params[:rev].strip
     @rev_to = params[:rev_to]
+    
+    unless @rev.to_s.match(REV_PARAM_RE) && @rev.to_s.match(REV_PARAM_RE)
+      if @repository.branches.blank?
+        raise InvalidRevisionParam
+      end
+    end
   rescue ActiveRecord::RecordNotFound
     render_404
   rescue InvalidRevisionParam
@@ -212,7 +225,7 @@ private
   end
 
   def show_error_not_found
-    render_error l(:error_scm_not_found)
+    render_error :message => l(:error_scm_not_found), :status => 404
   end
   
   # Handler for Redmine::Scm::Adapters::CommandFailed exception

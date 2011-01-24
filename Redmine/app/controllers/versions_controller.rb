@@ -103,18 +103,22 @@ class VersionsController < ApplicationController
   end
   
   def update
-    if request.post? && params[:version]
+    if request.put? && params[:version]
       attributes = params[:version].dup
       attributes.delete('sharing') unless @version.allowed_sharings.include?(attributes['sharing'])
       if @version.update_attributes(attributes)
         flash[:notice] = l(:notice_successful_update)
         redirect_to :controller => 'projects', :action => 'settings', :tab => 'versions', :id => @project
+      else
+        respond_to do |format|
+          format.html { render :action => 'edit' }
+        end
       end
     end
   end
   
   def close_completed
-    if request.post?
+    if request.put?
       @project.close_completed_versions
     end
     redirect_to :controller => 'projects', :action => 'settings', :tab => 'versions', :id => @project

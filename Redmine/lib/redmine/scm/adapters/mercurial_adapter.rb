@@ -16,6 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'redmine/scm/adapters/abstract_adapter'
+require 'cgi'
 
 module Redmine
   module Scm
@@ -38,13 +39,13 @@ module Redmine
             # release number (eg 0.9.5 or 1.0) or as a revision
             # id composed of 12 hexa characters.
             theversion = hgversion_from_command_line
-            if theversion.match(/^\d+(\.\d+)+/)
-              theversion.split(".").collect(&:to_i)
+            if m = theversion.match(%r{\A(.*?)((\d+\.)+\d+)})
+              m[2].scan(%r{\d+}).collect(&:to_i)
             end
           end
           
           def hgversion_from_command_line
-            %x{#{HG_BIN} --version}.match(/\(version (.*)\)/)[1]
+            shellout("#{HG_BIN} --version") { |io| io.read }.to_s
           end
           
           def template_path
@@ -80,7 +81,7 @@ module Redmine
           path ||= ''
           entries = Entries.new
           cmd = "#{HG_BIN} -R #{target('')} --cwd #{target('')} locate"
-          cmd << " -r " + (identifier ? identifier.to_s : "tip")
+          cmd << " -r " + shell_quote(identifier ? identifier.to_s : "tip")
           cmd << " " + shell_quote("path:#{path}") unless path.empty?
           shellout(cmd) do |io|
             io.each_line do |line|
@@ -112,7 +113,7 @@ module Redmine
             cmd << " -r #{identifier_from.to_i}:"
           end
           cmd << " --limit #{options[:limit].to_i}" if options[:limit]
-          cmd << " #{path}" if path
+          cmd << " #{shell_quote path}" unless path.blank?
           shellout(cmd) do |io|
             begin
               # HG doesn't close the XML Document...
@@ -127,8 +128,8 @@ module Redmine
                     from_rev = logentry.attributes['revision']
                   end
                   paths << {:action => path.attributes['action'],
-                    :path => "/#{path.text}",
-                    :from_path => from_path ? "/#{from_path}" : nil,
+                    :path => "/#{CGI.unescape(path.text)}",
+                    :from_path => from_path ? "/#{CGI.unescape(from_path)}" : nil,
                     :from_revision => from_rev ? from_rev : nil
                   }
                 end
@@ -157,6 +158,9 @@ module Redmine
           else
             identifier_to = identifier_from.to_i - 1
           end
+          if identifier_from
+            identifier_from = identifier_from.to_i
+          end
           cmd = "#{HG_BIN} -R #{target('')} diff -r #{identifier_to} -r #{identifier_from} --nodates"
           cmd << " -I #{target(path)}" unless path.empty?
           diff = []
@@ -171,7 +175,7 @@ module Redmine
         
         def cat(path, identifier=nil)
           cmd = "#{HG_BIN} -R #{target('')} cat"
-          cmd << " -r " + (identifier ? identifier.to_s : "tip")
+          cmd << " -r " + shell_quote(identifier ? identifier.to_s : "tip")
           cmd << " #{target(path)}"
           cat = nil
           shellout(cmd) do |io|
@@ -186,7 +190,7 @@ module Redmine
           path ||= ''
           cmd = "#{HG_BIN} -R #{target('')}"
           cmd << " annotate -n -u"
-          cmd << " -r " + (identifier ? identifier.to_s : "tip")
+          cmd << " -r " + shell_quote(identifier ? identifier.to_s : "tip")
           cmd << " -r #{identifier.to_i}" if identifier
           cmd << " #{target(path)}"
           blame = Annotate.new

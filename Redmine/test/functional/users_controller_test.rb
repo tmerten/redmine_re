@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 require 'users_controller'
 
 # Re-raise errors caught by the controller.
@@ -24,7 +24,7 @@ class UsersController; def rescue_action(e) raise e end; end
 class UsersControllerTest < ActionController::TestCase
   include Redmine::I18n
   
-  fixtures :users, :projects, :members, :member_roles, :roles
+  fixtures :users, :projects, :members, :member_roles, :roles, :auth_sources, :custom_fields, :custom_values
   
   def setup
     @controller = UsersController.new
@@ -65,6 +65,19 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_template 'show'
     assert_not_nil assigns(:user)
+    
+    assert_tag 'li', :content => /Phone number/
+  end
+  
+  def test_show_should_not_display_hidden_custom_fields
+    @request.session[:user_id] = nil
+    UserCustomField.find_by_name('Phone number').update_attribute :visible, false
+    get :show, :id => 2
+    assert_response :success
+    assert_template 'show'
+    assert_not_nil assigns(:user)
+    
+    assert_no_tag 'li', :content => /Phone number/
   end
 
   def test_show_should_not_fail_when_custom_values_are_nil
@@ -106,15 +119,110 @@ class UsersControllerTest < ActionController::TestCase
     project_ids = memberships.map(&:project_id)
     assert project_ids.include?(2) #private project admin can see
   end
-
-  def test_edit
-    ActionMailer::Base.deliveries.clear
-    post :edit, :id => 2, :user => {:firstname => 'Changed'}
-    assert_equal 'Changed', User.find(2).firstname
-    assert ActionMailer::Base.deliveries.empty?
+  
+  def test_show_current_should_require_authentication
+    @request.session[:user_id] = nil
+    get :show, :id => 'current'
+    assert_response 302
   end
   
-  def test_edit_with_activation_should_send_a_notification
+  def test_show_current
+    @request.session[:user_id] = 2
+    get :show, :id => 'current'
+    assert_response :success
+    assert_template 'show'
+    assert_equal User.find(2), assigns(:user)
+  end
+  
+  def test_new
+    get :new
+    
+    assert_response :success
+    assert_template :new
+    assert assigns(:user)
+  end
+  
+  def test_create
+    Setting.bcc_recipients = '1'
+    
+    assert_difference 'User.count' do
+      assert_difference 'ActionMailer::Base.deliveries.size' do
+        post :create,
+          :user => {
+            :firstname => 'John',
+            :lastname => 'Doe',
+            :login => 'jdoe',
+            :password => 'secret',
+            :password_confirmation => 'secret',
+            :mail => 'jdoe@gmail.com',
+            :mail_notification => 'none'
+          },
+          :send_information => '1'
+      end
+    end
+    
+    user = User.first(:order => 'id DESC')
+    assert_redirected_to :controller => 'users', :action => 'edit', :id => user.id
+    
+    assert_equal 'John', user.firstname
+    assert_equal 'Doe', user.lastname
+    assert_equal 'jdoe', user.login
+    assert_equal 'jdoe@gmail.com', user.mail
+    assert_equal 'none', user.mail_notification
+    assert user.check_password?('secret')
+    
+    mail = ActionMailer::Base.deliveries.last
+    assert_not_nil mail
+    assert_equal [user.mail], mail.bcc
+    assert mail.body.include?('secret')
+  end
+  
+  def test_create_with_failure
+    assert_no_difference 'User.count' do
+      post :create, :user => {}
+    end
+    
+    assert_response :success
+    assert_template 'new'
+  end
+
+  def test_edit
+    get :edit, :id => 2
+    
+    assert_response :success
+    assert_template 'edit'
+    assert_equal User.find(2), assigns(:user)
+  end
+
+  def test_update
+    ActionMailer::Base.deliveries.clear
+    put :update, :id => 2, :user => {:firstname => 'Changed', :mail_notification => 'only_assigned'}, :pref => {:hide_mail => '1', :comments_sorting => 'desc'}
+
+    user = User.find(2)
+    assert_equal 'Changed', user.firstname
+    assert_equal 'only_assigned', user.mail_notification
+    assert_equal true, user.pref[:hide_mail]
+    assert_equal 'desc', user.pref[:comments_sorting]
+    assert ActionMailer::Base.deliveries.empty?
+  end
+
+  def test_update_with_failure
+    assert_no_difference 'User.count' do
+      put :update, :id => 2, :user => {:firstname => ''}
+    end
+    
+    assert_response :success
+    assert_template 'edit'
+  end
+  
+  def test_update_with_group_ids_should_assign_groups
+    put :update, :id => 2, :user => {:group_ids => ['10']}
+    
+    user = User.find(2)
+    assert_equal [10], user.group_ids
+  end
+  
+  def test_update_with_activation_should_send_a_notification
     u = User.new(:firstname => 'Foo', :lastname => 'Bar', :mail => 'foo.bar@somenet.foo', :language => 'fr')
     u.login = 'foo'
     u.status = User::STATUS_REGISTERED
@@ -122,7 +230,7 @@ class UsersControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries.clear
     Setting.bcc_recipients = '1'
     
-    post :edit, :id => u.id, :user => {:status => User::STATUS_ACTIVE}
+    put :update, :id => u.id, :user => {:status => User::STATUS_ACTIVE}
     assert u.reload.active?
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
@@ -130,13 +238,13 @@ class UsersControllerTest < ActionController::TestCase
     assert mail.body.include?(ll('fr', :notice_account_activated))
   end
   
-  def test_edit_with_password_change_should_send_a_notification
+  def test_update_with_password_change_should_send_a_notification
     ActionMailer::Base.deliveries.clear
     Setting.bcc_recipients = '1'
     
+    put :update, :id => 2, :user => {:password => 'newpass', :password_confirmation => 'newpass'}, :send_information => '1'
     u = User.find(2)
-    post :edit, :id => u.id, :user => {}, :password => 'newpass', :password_confirmation => 'newpass', :send_information => '1'
-    assert_equal User.hash_password('newpass'), u.reload.hashed_password 
+    assert u.check_password?('newpass')
     
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
@@ -144,16 +252,16 @@ class UsersControllerTest < ActionController::TestCase
     assert mail.body.include?('newpass')
   end
 
-  test "POST :edit with a password change to an AuthSource user switching to Internal authentication" do
+  test "put :update with a password change to an AuthSource user switching to Internal authentication" do
     # Configure as auth source
     u = User.find(2)
     u.auth_source = AuthSource.find(1)
     u.save!
 
-    post :edit, :id => u.id, :user => {:auth_source_id => ''}, :password => 'newpass', :password_confirmation => 'newpass'
+    put :update, :id => u.id, :user => {:auth_source_id => '', :password => 'newpass'}, :password_confirmation => 'newpass'
 
     assert_equal nil, u.reload.auth_source
-    assert_equal User.hash_password('newpass'), u.reload.hashed_password
+    assert u.check_password?('newpass')
   end
   
   def test_edit_membership

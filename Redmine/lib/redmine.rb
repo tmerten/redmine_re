@@ -8,6 +8,7 @@ require 'redmine/core_ext'
 require 'redmine/themes'
 require 'redmine/hook'
 require 'redmine/plugin'
+require 'redmine/notifiable'
 require 'redmine/wiki_formatting'
 require 'redmine/scm/base'
 
@@ -83,17 +84,17 @@ Redmine::AccessControl.map do |map|
   end
   
   map.project_module :time_tracking do |map|
-    map.permission :log_time, {:timelog => :edit}, :require => :loggedin
-    map.permission :view_time_entries, :timelog => [:details, :report]
-    map.permission :edit_time_entries, {:timelog => [:edit, :destroy]}, :require => :member
-    map.permission :edit_own_time_entries, {:timelog => [:edit, :destroy]}, :require => :loggedin
-    map.permission :manage_project_activities, {:project_enumerations => [:save, :destroy]}, :require => :member
+    map.permission :log_time, {:timelog => [:new, :create, :edit, :update]}, :require => :loggedin
+    map.permission :view_time_entries, :timelog => [:index, :show], :time_entry_reports => [:report]
+    map.permission :edit_time_entries, {:timelog => [:new, :create, :edit, :update, :destroy]}, :require => :member
+    map.permission :edit_own_time_entries, {:timelog => [:new, :create, :edit, :update, :destroy]}, :require => :loggedin
+    map.permission :manage_project_activities, {:project_enumerations => [:update, :destroy]}, :require => :member
   end
   
   map.project_module :news do |map|
-    map.permission :manage_news, {:news => [:new, :edit, :destroy, :destroy_comment]}, :require => :member
+    map.permission :manage_news, {:news => [:new, :create, :edit, :update, :destroy], :comments => [:destroy]}, :require => :member
     map.permission :view_news, {:news => [:index, :show]}, :public => true
-    map.permission :comment_news, {:news => :add_comment}
+    map.permission :comment_news, {:comments => :create}
   end
 
   map.project_module :documents do |map|
@@ -102,7 +103,7 @@ Redmine::AccessControl.map do |map|
   end
   
   map.project_module :files do |map|
-    map.permission :manage_files, {:files => :new}, :require => :loggedin
+    map.permission :manage_files, {:files => [:new, :create]}, :require => :loggedin
     map.permission :view_files, :files => :index, :versions => :download
   end
     
@@ -110,10 +111,10 @@ Redmine::AccessControl.map do |map|
     map.permission :manage_wiki, {:wikis => [:edit, :destroy]}, :require => :member
     map.permission :rename_wiki_pages, {:wiki => :rename}, :require => :member
     map.permission :delete_wiki_pages, {:wiki => :destroy}, :require => :member
-    map.permission :view_wiki_pages, :wiki => [:index, :special]
-    map.permission :export_wiki_pages, {}
+    map.permission :view_wiki_pages, :wiki => [:index, :show, :special, :date_index]
+    map.permission :export_wiki_pages, :wiki => [:export]
     map.permission :view_wiki_edits, :wiki => [:history, :diff, :annotate]
-    map.permission :edit_wiki_pages, :wiki => [:edit, :preview, :add_attachment]
+    map.permission :edit_wiki_pages, :wiki => [:edit, :update, :preview, :add_attachment]
     map.permission :delete_wiki_pages_attachments, {}
     map.permission :protect_wiki_pages, {:wiki => :protect}, :require => :member
   end
@@ -136,11 +137,11 @@ Redmine::AccessControl.map do |map|
   end
 
   map.project_module :calendar do |map|
-    map.permission :view_calendar, :calendars => :show
+    map.permission :view_calendar, :calendars => [:show, :update]
   end
 
   map.project_module :gantt do |map|
-    map.permission :view_gantt, :gantts => :show
+    map.permission :view_gantt, :gantts => [:show, :update]
   end
 end
 
@@ -194,11 +195,11 @@ Redmine::MenuManager.map :project_menu do |menu|
   menu.push :calendar, { :controller => 'calendars', :action => 'show' }, :param => :project_id, :caption => :label_calendar
   menu.push :news, { :controller => 'news', :action => 'index' }, :param => :project_id, :caption => :label_news_plural
   menu.push :documents, { :controller => 'documents', :action => 'index' }, :param => :project_id, :caption => :label_document_plural
-  menu.push :wiki, { :controller => 'wiki', :action => 'index', :page => nil }, 
+  menu.push :wiki, { :controller => 'wiki', :action => 'show', :id => nil }, :param => :project_id,
               :if => Proc.new { |p| p.wiki && !p.wiki.new_record? }
   menu.push :boards, { :controller => 'boards', :action => 'index', :id => nil }, :param => :project_id,
               :if => Proc.new { |p| p.boards.any? }, :caption => :label_board_plural
-  menu.push :files, { :controller => 'files', :action => 'index' }, :caption => :label_file_plural
+  menu.push :files, { :controller => 'files', :action => 'index' }, :caption => :label_file_plural, :param => :project_id
   menu.push :repository, { :controller => 'repositories', :action => 'show' },
               :if => Proc.new { |p| p.repository && !p.repository.new_record? }
   menu.push :settings, { :controller => 'projects', :action => 'settings' }, :last => true
@@ -228,3 +229,5 @@ end
 Redmine::WikiFormatting.map do |format|
   format.register :textile, Redmine::WikiFormatting::Textile::Formatter, Redmine::WikiFormatting::Textile::Helper
 end
+
+ActionView::Template.register_template_handler :rsb, Redmine::Views::ApiTemplateHandler

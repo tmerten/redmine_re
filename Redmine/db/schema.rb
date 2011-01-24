@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100819172912) do
+ActiveRecord::Schema.define(:version => 20101114115359) do
 
   create_table "attachments", :force => true do |t|
     t.integer  "container_id",                 :default => 0,  :null => false
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(:version => 20100819172912) do
     t.boolean "searchable",                    :default => false
     t.text    "default_value"
     t.boolean "editable",                      :default => true
+    t.boolean "visible",                       :default => true,  :null => false
   end
 
   add_index "custom_fields", ["id", "type"], :name => "index_custom_fields_on_id_and_type"
@@ -296,6 +297,7 @@ ActiveRecord::Schema.define(:version => 20100819172912) do
   end
 
   add_index "members", ["project_id"], :name => "index_members_on_project_id"
+  add_index "members", ["user_id", "project_id"], :name => "index_members_on_user_id_and_project_id", :unique => true
   add_index "members", ["user_id"], :name => "index_members_on_user_id"
 
   create_table "messages", :force => true do |t|
@@ -348,14 +350,14 @@ ActiveRecord::Schema.define(:version => 20100819172912) do
   end
 
   create_table "projects", :force => true do |t|
-    t.string   "name",        :limit => 30,  :default => "",   :null => false
+    t.string   "name",                       :default => "",   :null => false
     t.text     "description", :limit => 255
     t.string   "homepage",                   :default => ""
     t.boolean  "is_public",                  :default => true, :null => false
     t.integer  "parent_id"
     t.datetime "created_on"
     t.datetime "updated_on"
-    t.string   "identifier",  :limit => 20
+    t.string   "identifier"
     t.integer  "status",                     :default => 1,    :null => false
     t.integer  "lft"
     t.integer  "rgt"
@@ -385,6 +387,70 @@ ActiveRecord::Schema.define(:version => 20100819172912) do
 
   add_index "queries", ["project_id"], :name => "index_queries_on_project_id"
   add_index "queries", ["user_id"], :name => "index_queries_on_user_id"
+
+  create_table "re_artifact_properties", :force => true do |t|
+    t.string  "name"
+    t.string  "description"
+    t.integer "priority"
+    t.string  "responsibles"
+    t.date    "created_at"
+    t.date    "updated_at"
+    t.integer "created_by",    :default => 0
+    t.integer "updated_by",    :default => 0
+    t.integer "artifact_id"
+    t.string  "artifact_type"
+    t.integer "project_id",    :default => 0
+  end
+
+  create_table "re_artifact_relationships", :force => true do |t|
+    t.integer "source_id"
+    t.integer "sink_id"
+    t.integer "relation_type"
+    t.integer "position"
+    t.boolean "directed"
+  end
+
+  create_table "re_goals", :force => true do |t|
+  end
+
+  create_table "re_subtask_versions", :force => true do |t|
+    t.integer  "re_subtask_id"
+    t.integer  "version"
+    t.string   "solution"
+    t.datetime "updated_at"
+    t.string   "artifact_name"
+    t.string   "artifact_description"
+    t.integer  "artifact_priority",             :default => 0
+    t.integer  "updated_by"
+    t.integer  "versioned_by_artifact_id"
+    t.integer  "versioned_by_artifact_version"
+    t.integer  "parent_artifact_id"
+    t.string   "action"
+  end
+
+  create_table "re_subtasks", :force => true do |t|
+    t.string  "solution"
+    t.integer "version"
+    t.integer "sub_type"
+  end
+
+  create_table "re_task_versions", :force => true do |t|
+    t.integer  "re_task_id"
+    t.integer  "version"
+    t.datetime "updated_at"
+    t.string   "artifact_name"
+    t.string   "artifact_description"
+    t.integer  "artifact_priority",             :default => 0
+    t.integer  "updated_by"
+    t.integer  "versioned_by_artifact_id"
+    t.integer  "versioned_by_artifact_version"
+    t.integer  "parent_artifact_id"
+    t.string   "action"
+  end
+
+  create_table "re_tasks", :force => true do |t|
+    t.integer "version"
+  end
 
   create_table "repositories", :force => true do |t|
     t.integer "project_id",               :default => 0,  :null => false
@@ -465,7 +531,6 @@ ActiveRecord::Schema.define(:version => 20100819172912) do
     t.string   "firstname",         :limit => 30, :default => "",    :null => false
     t.string   "lastname",          :limit => 30, :default => "",    :null => false
     t.string   "mail",              :limit => 60, :default => "",    :null => false
-    t.boolean  "mail_notification",               :default => true,  :null => false
     t.boolean  "admin",                           :default => false, :null => false
     t.integer  "status",                          :default => 1,     :null => false
     t.datetime "last_login_on"
@@ -475,6 +540,7 @@ ActiveRecord::Schema.define(:version => 20100819172912) do
     t.datetime "updated_on"
     t.string   "type"
     t.string   "identity_url"
+    t.string   "mail_notification",               :default => "",    :null => false
   end
 
   add_index "users", ["auth_source_id"], :name => "index_users_on_auth_source_id"

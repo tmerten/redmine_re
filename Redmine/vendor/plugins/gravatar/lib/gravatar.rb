@@ -26,6 +26,9 @@ module GravatarHelper
     # decorational picture, the alt text should be empty according to the
     # XHTML specs.
     :alt => '',
+
+    # The title text to use for the img tag for the gravatar.
+    :title => '',
     
     # The class to assign to the img tag for the gravatar.
     :class => 'gravatar',
@@ -48,8 +51,8 @@ module GravatarHelper
     def gravatar(email, options={})
       src = h(gravatar_url(email, options))
       options = DEFAULT_OPTIONS.merge(options)
-      [:class, :alt, :size].each { |opt| options[opt] = h(options[opt]) }
-      "<img class=\"#{options[:class]}\" alt=\"#{options[:alt]}\" width=\"#{options[:size]}\" height=\"#{options[:size]}\" src=\"#{src}\" />"      
+      [:class, :alt, :size, :title].each { |opt| options[opt] = h(options[opt]) }
+      "<img class=\"#{options[:class]}\" alt=\"#{options[:alt]}\" title=\"#{options[:title]}\" width=\"#{options[:size]}\" height=\"#{options[:size]}\" src=\"#{src}\" />"
     end
     
     # Returns the base Gravatar URL for the given email hash. If ssl evaluates to true,
@@ -68,7 +71,7 @@ module GravatarHelper
       email_hash = Digest::MD5.hexdigest(email)
       options = DEFAULT_OPTIONS.merge(options)
       options[:default] = CGI::escape(options[:default]) unless options[:default].nil?
-      returning gravatar_api_url(email_hash, options.delete(:ssl)) do |url|
+      gravatar_api_url(email_hash, options.delete(:ssl)).tap do |url|
         opts = []
         [:rating, :size, :default].each do |opt|
           unless options[opt].nil?

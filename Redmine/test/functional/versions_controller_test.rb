@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 require 'versions_controller'
 
 # Re-raise errors caught by the controller.
@@ -108,14 +108,14 @@ class VersionsControllerTest < ActionController::TestCase
   def test_close_completed
     Version.update_all("status = 'open'")
     @request.session[:user_id] = 2
-    post :close_completed, :project_id => 'ecookbook'
+    put :close_completed, :project_id => 'ecookbook'
     assert_redirected_to :controller => 'projects', :action => 'settings', :tab => 'versions', :id => 'ecookbook'
     assert_not_nil Version.find_by_status('closed')
   end
   
   def test_post_update
     @request.session[:user_id] = 2
-    post :update, :id => 2, 
+    put :update, :id => 2, 
                 :version => { :name => 'New version name', 
                               :effective_date => Date.today.strftime("%Y-%m-%d")}
     assert_redirected_to :controller => 'projects', :action => 'settings', :tab => 'versions', :id => 'ecookbook'
@@ -123,10 +123,19 @@ class VersionsControllerTest < ActionController::TestCase
     assert_equal 'New version name', version.name
     assert_equal Date.today, version.effective_date
   end
+  
+  def test_post_update_with_validation_failure
+    @request.session[:user_id] = 2
+    put :update, :id => 2, 
+                 :version => { :name => '', 
+                               :effective_date => Date.today.strftime("%Y-%m-%d")}
+    assert_response :success
+    assert_template 'edit'
+  end
 
   def test_destroy
     @request.session[:user_id] = 2
-    post :destroy, :id => 3
+    delete :destroy, :id => 3
     assert_redirected_to :controller => 'projects', :action => 'settings', :tab => 'versions', :id => 'ecookbook'
     assert_nil Version.find_by_id(3)
   end

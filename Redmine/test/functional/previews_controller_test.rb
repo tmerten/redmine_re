@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class PreviewsControllerTest < ActionController::TestCase
   fixtures :all
@@ -19,4 +19,14 @@ class PreviewsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:notes)
   end
 
+  def test_news
+    get :news, :project_id => 1,
+                  :news => {:title => '',
+                            :description => 'News description',
+                            :summary => ''}
+    assert_response :success
+    assert_template 'common/_preview'
+    assert_tag :tag => 'fieldset', :attributes => { :class => 'preview' },
+                                   :content => /News description/
+  end
 end

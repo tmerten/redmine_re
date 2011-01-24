@@ -176,9 +176,8 @@ class RedmineReController < ApplicationController
       source.delete_if {|key, value| value == ""}
       sink.delete_if {|key, value| value == ""}
       # search for artifacts matching the source_artifact_filter_criteria
-      if params[:activated_searches].keys.contains?(:re_source_artifact) then
+      if params[:activated_searches].keys.contains?(:re_source_artifact)
         # look for the first given parameter in 
-        source_artifacts = 
       end
       # search was only about artifacts, not about relationships
       # therefore just display artifacts without taking relationships into account
