@@ -4,11 +4,6 @@ class ReArtifactProperties < ActiveRecord::Base
   ARTIFACT_TYPES = { :ReGoal => 1, :ReTask => 2, :ReSubtask => 3 }
   ARTIFACT_COLOURS = {:ReGoal => '#ea6b55', :ReTask => '#ddaa88', :ReSubtask => '#bb8899'  }
 
-  has_many :children,
-           :class_name => "ReArtifactProperties",
-           :foreign_key => "parent_artifact_id",
-           :dependent => :nullify
-
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
