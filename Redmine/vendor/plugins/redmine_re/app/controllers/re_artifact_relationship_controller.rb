@@ -1,5 +1,6 @@
 class ReArtifactRelationshipController < RedmineReController
   unloadable
+  menu_item :re
 
 
   def prepare_relationships

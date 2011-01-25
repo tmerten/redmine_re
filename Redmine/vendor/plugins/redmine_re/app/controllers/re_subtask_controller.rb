@@ -1,5 +1,6 @@
 class ReSubtaskController < RedmineReController
   unloadable
+  menu_item :re
 
   def index
     @subtasks = ReSubtask.find(:all,

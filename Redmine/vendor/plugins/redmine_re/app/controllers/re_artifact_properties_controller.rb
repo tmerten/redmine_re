@@ -1,5 +1,6 @@
 class ReArtifactPropertiesController < RedmineReController
   unloadable
+  menu_item :re
 
 
   def edit

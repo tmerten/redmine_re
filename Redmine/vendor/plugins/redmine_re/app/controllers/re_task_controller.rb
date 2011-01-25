@@ -1,5 +1,6 @@
 class ReTaskController < RedmineReController
   unloadable
+  menu_item :re
 
   def update_subtask_positions
     params[:subtasks].each_with_index do |id, index|

@@ -1,5 +1,6 @@
 class ReGoalController < RedmineReController
   unloadable
+  menu_item :re
 
   def index
     @goals = ReGoal.find(:all,

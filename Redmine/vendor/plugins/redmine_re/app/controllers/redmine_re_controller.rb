@@ -3,6 +3,7 @@
 # common methods used for (almost) all redmine_re controllers go here
 class RedmineReController < ApplicationController
   unloadable
+  menu_item :re
   
   TRUNCATE_NAME_IN_TREE_AFTER_CHARS = 18
   TRUNCATE_OMISSION = "..."
@@ -13,15 +14,13 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TextHelper  
 
   before_filter :find_project
+  
   #before_filter :authorize,
                # :except =>  [:delegate_tree_drop, :delegate_tree_node_click]
 
   # uses redmine_re in combination with redmines base layout for the header unless it is an ajax-request
   layout proc{ |c| c.request.xhr? ? false : "redmine_re" } 
   
-  # marks 'Requirements' (css class=re) as the selected menu item
-  menu_item :re
-
   def find_project
     # find the current project either by project name
     return unless params[:project_id]
