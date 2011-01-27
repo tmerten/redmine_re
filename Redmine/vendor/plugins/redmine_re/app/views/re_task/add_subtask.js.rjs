@@ -1,2 +1,2 @@
 page.insert_html @add_position, @html_id, :partial => "re_subtask", :object => @re_subtask
-
+page.call 'updateAllSubtaskPositions'

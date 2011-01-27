@@ -11,9 +11,10 @@
     <%= submit_tag l(:re_save) %>
 
     <p>
-      <% if @subtasks.size == 0 %>
-            <%= link_to_remote "Add Subtask", :url => {:action => "add_subtask", :add_position => :after} %>
-     <% end %>
+      <%# if @subtasks.size == 0 %>
+            <%#= link_to_remote "Add Subtask", :url => {:action => "add_subtask", :add_position => "after"} %>
+      <%= add_subtask_link "Add Subtask", "subtasks", "bottom" %>
+     <%# end %>
     </p>
 
     <table class="subtasks">
@@ -23,7 +24,7 @@
           <th>Type</th>
           <th>Name</th>
           <th>Solution</th>
-          <th><%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :id => 'TODO-FIRST', :add_position => :before}, :html=> {:class => "icon icon-subtask-after"} %></th>
+          <th><%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :add_position => :bottom}, :html=> {:class => "icon icon-subtask-after"} %></th>
         </tr>
       </thead>
       <tbody id="subtasks">
@@ -33,7 +34,7 @@
     <%= sortable_element "subtasks",
                           :tag => 'tr',
                           :complete => visual_effect(:highlight, 'subtasks'),
-                          :url => { :action => "update_subtask_positions" }
+                          :onUpdate => "function(el) { updateAllSubtaskPositions(); }"
     %>
     <br />
 
@@ -56,6 +57,15 @@
       case '2': element.addClassName('problem'); break;
       default: alert('You cannot switch to that value ' + value);
     }
+  }
+
+  updateAllSubtaskPositions = function() {
+
+      var pos = 1;
+      $$('.position').each( function ( position_hidden_element ) {
+              position_hidden_element.value = pos;
+              pos = pos + 1;
+      });
   }
 
   $$('textarea.subtask').each(function (el) {

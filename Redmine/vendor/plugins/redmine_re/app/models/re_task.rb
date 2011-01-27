@@ -6,8 +6,39 @@ class ReTask < ActiveRecord::Base
   validates_presence_of :re_artifact_properties
 
    #acts_as_versioned
-
   def subtask_attributes=(subtask_attributes)
+    subtask_attributes.each do |id, attributes|
+
+        is_new = id.to_s.start_with?("new") # Every new Subtask has id = new_394834384848
+        if(is_new)
+          subtask =  ReSubtask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => self.project_id,#TODO: getting project_id from task should be changed, otherwise create new task with new subtasks won't work
+                                                                                     :created_by => User.current.id,
+                                                                                     :updated_by => User.current.id))
+        else
+          subtask = ReSubtask.find(id)
+        end
+
+        # Get position and delete it from attributes hash
+        position = attributes.delete("position")
+
+        subtask.attributes = attributes
+        subtask.re_artifact_properties.parent = self
+        saved = subtask.save
+
+        if(saved)
+          parent_relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.re_artifact_properties.id,#subtask.re_artifact_properties.parent.id,
+                                                                                                    subtask.re_artifact_properties.id,
+                                                                                                    ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                                  )
+          # insert current new subtask at first position
+          parent_relation.position = position
+          parent_relation.save
+        end
+
+
+    end
+  end
+  def subtask_attributes_bak=(subtask_attributes)
       subtask = nil
       @new_subtasks = { "before" => {}, "after" => {}} # new subtask will be categorized here
 

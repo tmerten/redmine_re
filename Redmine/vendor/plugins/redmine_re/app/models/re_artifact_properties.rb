@@ -179,6 +179,13 @@ class ReArtifactProperties < ActiveRecord::Base
     relation
   end
 
+  def parent
+    relation_type_no = ReArtifactRelationship::RELATION_TYPES[:parentchild]
+    relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
+
+    return relation.source
+  end
+
 
   # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
     def self.get_properties_id(controllername, subartifact_id)
@@ -200,5 +207,7 @@ class ReArtifactProperties < ActiveRecord::Base
     end
     o    
   end
+
+
   
 end

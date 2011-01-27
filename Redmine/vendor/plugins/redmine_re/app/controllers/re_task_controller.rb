@@ -15,10 +15,19 @@ class ReTaskController < RedmineReController
     render :nothing => true
   end
 
+  def add_subtask_bak
+     @html_id = "subtasks"
+
+     @add_position = params[:add_position]
+
+     @re_subtask =  ReSubtask.new#(:sub_type => 0) #,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
+     respond_to do |format|
+       format.js
+     end
+  end
   def add_subtask
      if params[:id]
       #the subtask which link was clicked
-      @re_subtask_with_clicked_link = ReSubtask.find(params[:id])
       @html_id = "subtask_drag_" + params[:id]
      else
       @html_id = "subtasks"
@@ -55,13 +64,27 @@ class ReTaskController < RedmineReController
 
     if request.post?
 
-      if @re_task.new_record? # perhaps todo: first check if all subtasks are valid
+      # When new Task in order to save the subtasks and their positions you need the id of the task
+
+      if @re_task.new_record?
+        # Attributes oof Subtasks delete from re_task hash in order that task can be saved(need id for parent relation to subtasks)
+        subtask_attributes = params[:re_task].delete("subtask_attributes")
+
+        @re_task.attributes = params[:re_task]
         add_hidden_re_artifact_properties_attributes @re_task
-        @re_task.name = params[:re_task][:name]
-        @re_task.save         # subtask_attributes=   needs the id of the parent in order to change the positions of the subtasksa
+
+        # Task will be saved with valid attributes
+        @re_task.save
+
+        # saves subtasks and sets position
+        @re_task.subtask_attributes = subtask_attributes
+
+      else
+        # implicite executeion of subtask_attributes
+        @re_task.attributes = params[:re_task]
+        add_hidden_re_artifact_properties_attributes @re_task
       end
-      @re_task.attributes = params[:re_task]
-      add_hidden_re_artifact_properties_attributes @re_task
+
 
       flash[:notice] = 'Task successfully saved' if save_ok = @re_task.save
 
