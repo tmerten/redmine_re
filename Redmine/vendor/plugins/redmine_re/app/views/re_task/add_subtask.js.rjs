@@ -1,2 +1,5 @@
 page.insert_html @add_position, @html_id, :partial => "re_subtask", :object => @re_subtask
-page.call 'updateAllSubtaskPositions'
+page.call "unregisterTextAreaEvents"
+page.call "setResizeableTextAreas"
+page.call "updateAllSubtaskPositions"
+page.call "Sortable.create('subtasks', {onUpdate:function(el) { updateAllSubtaskPositions(); }, tag:'tr'})"

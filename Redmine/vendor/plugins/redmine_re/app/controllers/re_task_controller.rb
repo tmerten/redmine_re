@@ -2,29 +2,6 @@ class ReTaskController < RedmineReController
   unloadable
   menu_item :re
 
-  def update_subtask_positions
-    params[:subtasks].each_with_index do |id, index|
-      @subtask = ReSubtask.find(id)
-      @relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(@subtask.parent.id,
-                                                                                         @subtask.re_artifact_properties.id,
-                                                                                         ReArtifactRelationship::RELATION_TYPES[:parentchild]
-                                                                                          )
-      @relation.position = index + 1
-      @relation.save
-    end
-    render :nothing => true
-  end
-
-  def add_subtask_bak
-     @html_id = "subtasks"
-
-     @add_position = params[:add_position]
-
-     @re_subtask =  ReSubtask.new#(:sub_type => 0) #,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
-     respond_to do |format|
-       format.js
-     end
-  end
   def add_subtask
      if params[:id]
       #the subtask which link was clicked
@@ -58,7 +35,6 @@ class ReTaskController < RedmineReController
     @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => @project.id))
     @subtasks = []
     @re_task.children.each {|c| @subtasks << c.artifact if c.artifact_type == "ReSubtask"}
-
     @project ||= @re_task.project
     @html_tree = create_tree
 
@@ -67,7 +43,7 @@ class ReTaskController < RedmineReController
       # When new Task in order to save the subtasks and their positions you need the id of the task
 
       if @re_task.new_record?
-        # Attributes oof Subtasks delete from re_task hash in order that task can be saved(need id for parent relation to subtasks)
+        # Attributes of Subtasks delete from re_task hash in order that task can be saved(need id for parent relation to subtasks)
         subtask_attributes = params[:re_task].delete("subtask_attributes")
 
         @re_task.attributes = params[:re_task]

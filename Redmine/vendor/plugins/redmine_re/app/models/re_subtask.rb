@@ -10,23 +10,21 @@ class ReSubtask < ActiveRecord::Base
   #accepts_nested_attributes_for :re_artifact_properties, :allow_destroy => true
 
   #position in scope of parent (source)
-  def position #todo: exceptionsource or sink not in db if
-    raise ArgumentError, "relation_type not valid (see ReArtifactRelationship::TYPES.keys for valid relation_types)" if not ReArtifactRelationship::RELATION_TYPES.has_key?(relation_type)
-
-    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent.id,
+  def position() #todo: exceptionsource or sink not in db if
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent,
                                                                                        self.re_artifact_properties.id,
                                                                                        ReArtifactRelationship::RELATION_TYPES[:parentchild]
                                                                                      )
     return relation.position
   end
 
-    def position=(source, sink, relation_type)#todo: exceptionsource or sink not in db if
-    raise ArgumentError, "relation_type not valid (see ReArtifactRelationship::TYPES.keys for valid relation_types)" if not ReArtifactRelationship::RELATION_TYPES.has_key?(relation_type)
-
-    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( source.id,
-                                                                                       sink.id,
-                                                                                       relation_type
+  # set position in scope of parent (source)
+  def position=(position)#todo: exceptionsource or sink not in db if
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent,
+                                                                                       self.re_artifact_properties.id,
+                                                                                       ReArtifactRelationship::RELATION_TYPES[:parentchild]
                                                                                      )
-    return relation.position
+     relation.position = position
+     relation.save
   end
 end

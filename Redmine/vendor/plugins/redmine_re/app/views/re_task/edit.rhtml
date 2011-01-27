@@ -67,7 +67,19 @@
               pos = pos + 1;
       });
   }
+  setResizeableTextAreas = function() {
+      $$('textarea.subtask').each(function (el) {
+         new ResizingTextArea($(el));
+      });
+  }
 
+  unregisterTextAreaEvents = function() {
+    $$('textarea.subtask').each(function (el) {
+     (el).stopObserving('click');
+     (el).stopObserving('keyup');
+    });
+  }
+  
   $$('textarea.subtask').each(function (el) {
      new ResizingTextArea($(el));
   });

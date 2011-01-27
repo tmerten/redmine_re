@@ -179,11 +179,11 @@ class ReArtifactProperties < ActiveRecord::Base
     relation
   end
 
-  def parent
+  def parent_id
     relation_type_no = ReArtifactRelationship::RELATION_TYPES[:parentchild]
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
 
-    return relation.source
+    return relation.source_id
   end
 
 

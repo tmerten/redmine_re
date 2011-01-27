@@ -21,8 +21,12 @@
 
 
       <%= "<tr id=\"subtask_drag_#{index}\" class=\"draggable #{type}\" > " %>
-
-          <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", "no_pos", :class => "position" %>
+          <% if re_subtask.id %>
+            <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", re_subtask.position, :class => "position" %>
+          <% else %>
+            <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", "no_pos", :class => "position" %>
+          <% end %>
+    
           <td style="cursor: pointer;" class="<%=type-%>" ></td>
           <td class="<%=type-%>">
             <%= select_tag("re_task[subtask_attributes][#{index}][sub_type]", options_for_select([['ST',0],['V', 1],['P',2]], re_subtask.sub_type ), :onchange => "changeSubtaskRowColor($('subtask_drag_#{index}'), this.value)" ) %>
