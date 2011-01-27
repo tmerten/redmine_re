@@ -1,0 +1,14 @@
+Description:
+    Generates a controller for a model ReArtifact model in the redmine_re plugin.
+    Please not that the controller always generates the methods new, edit and delete for you.
+    If you specify new, edit or delete as action it will be generated twice (which is not so bad).
+    
+    Additionally it creates a edit view (yes, we know its a controller generator),
+    which incorporates the re_artifact_attributes fields.
+    This way you have to write your artifact specific stuff, only.
+    Since we redirect new to edit you do not need additional views for new.  
+
+    ./script/generate redmine_re_artifact_controller <model_name> actions
+
+Example:
+    ./script/generate redmine_re_artifact_controller use_cases index show
