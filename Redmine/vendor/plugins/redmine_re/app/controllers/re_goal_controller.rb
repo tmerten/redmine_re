@@ -50,9 +50,4 @@ class ReGoalController < RedmineReController
     end
   end
 
-  def show
-  # unused right now
-    @re_goal= ReGoal.find_by_id(params[:id])
-  end
-
 end

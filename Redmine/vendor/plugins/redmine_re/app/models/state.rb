@@ -1,5 +1,6 @@
 class State
-  #Konstanten die den Zustand f�r das ReArtifactProperties beschreiben
+  #Constants describin the ReArtifactProperties
+  
   IDLE = 0
   REVERTING = 1
   DROPPING = 2

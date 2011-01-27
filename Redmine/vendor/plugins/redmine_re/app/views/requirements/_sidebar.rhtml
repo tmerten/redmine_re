@@ -6,7 +6,32 @@
     <div id="reSideBarContentsInner">
       <h2><%= l(:re_sidebar) %></h2>
 
-      <h3><%= l(:re_goal) %></h3>
+      <h3><%= l(:re_structuring_elements) %><br/></h3>
+      
+      <ul>
+        <li><%= link_to l(:re_new_section), {
+              :controller => 're_section',
+              :action => 'new',
+              :project_id => @project.id } %>
+        </li>
+        <li><%= link_to l(:re_new_workarea), {
+              :controller => 're_workarea',
+              :action => 'new',
+              :project_id => @project.id } %>
+        </li>
+      </ul>
+      
+      <h3><%= l(:re_stakeholders) %><br/></h3>
+      
+      <ul>
+        <li><%= link_to l(:re_new_user_profile), {
+              :controller => 're_user_profile',
+              :action => 'new',
+              :project_id => @project.id } %>
+        </li>
+      </ul>      
+
+      <h3><%= l(:re_goals) %></h3>
       
       <ul>
         <li><%= link_to l(:re_new_goal), {
@@ -16,7 +41,7 @@
         </li>
       </ul>
       
-      <h3><%= l(:re_task) %><br/></h3>
+      <h3><%= l(:re_tasks) %><br/></h3>
       
       <ul>
         <li><%= link_to l(:re_new_task), {
@@ -25,7 +50,7 @@
               :project_id => @project.id } %>
         </li>
       </ul>
-      
+
       <h3><%= l(:re_relationships) %><br/></h3>
 
       <ul>

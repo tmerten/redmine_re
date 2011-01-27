@@ -29,14 +29,23 @@
     padding-left: 18px;
 }
 
-#tree li.re_task a.nodelink {
+#tree a.re_workarea {
+    background: url(../images/icons/bricks.png) no-repeat left top;
+}
+#tree a.re_task {
     background: url(../images/icons/report_user.png) no-repeat left top;
 }
-#tree li.re_subtask a.nodelink {
+#tree a.re_subtask {
     background: url(../images/icons/report.png) no-repeat left top;
 }
-#tree li.re_goal a.nodelink {
+#tree a.re_goal {
     background: url(../images/icons/world.png) no-repeat left top;
+}
+#tree a.re_user_profile {
+    background: url(../images/icons/user.png) no-repeat left top;
+}
+#tree a.re_section {
+    background: url(../images/icons/text_padding_top.png) no-repeat left top;
 }
 
 #tree li span.handle {

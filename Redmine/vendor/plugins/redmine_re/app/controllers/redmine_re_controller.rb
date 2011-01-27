@@ -110,7 +110,7 @@ class RedmineReController < ApplicationController
     end
     html_tree += '" style="position: relative;">'
     html_tree += '<span class="handle"></span>'
-    html_tree += '<a class="nodelink">' 
+    html_tree += '<a class="nodelink ' + artifact_type + '">' 
     html_tree += truncate(re_artifact_properties.name.to_s, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
     html_tree += '</a>'
     html_tree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink"> (' + l(:re_edit) + ')</a>'

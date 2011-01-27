@@ -19,8 +19,6 @@ class ReArtifactProperties < ActiveRecord::Base
     :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:parentchild] ],
     :source => "sink"
   
-  #acts_as_list :scope => :sinks # unsure if we need this or if it is better to use the relationship object itself
-  
   has_many :sources, :through => :relationships_as_sink,   :order => "re_artifact_relationships.position"
   has_one :parent, :through => :relationships_as_sink,
     :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:parentchild] ],
@@ -182,10 +180,8 @@ class ReArtifactProperties < ActiveRecord::Base
   def parent_id
     relation_type_no = ReArtifactRelationship::RELATION_TYPES[:parentchild]
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
-
     return relation.source_id
   end
-
 
   # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
     def self.get_properties_id(controllername, subartifact_id)
@@ -207,7 +203,4 @@ class ReArtifactProperties < ActiveRecord::Base
     end
     o    
   end
-
-
-  
 end
