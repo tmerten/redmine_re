@@ -9,7 +9,7 @@ class ReSubtask < ActiveRecord::Base
 
   #position in scope of parent (source)
   def position() #todo: exceptionsource or sink not in db if
-    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent,
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent.id,
                                                                                        self.re_artifact_properties.id,
                                                                                        ReArtifactRelationship::RELATION_TYPES[:parentchild]
                                                                                      )
@@ -18,7 +18,7 @@ class ReSubtask < ActiveRecord::Base
 
   # set position in scope of parent (source)
   def position=(position)#todo: exceptionsource or sink not in db if
-    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent,
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id, #needs true because: google  => rails-association-proxies-and-caching => first link: "By default, active record only load associations the first time you use them. After that, you can reload them by passing true to the association; for example: patron.books(true)""
                                                                                        self.re_artifact_properties.id,
                                                                                        ReArtifactRelationship::RELATION_TYPES[:parentchild]
                                                                                      )

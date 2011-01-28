@@ -24,7 +24,7 @@ class ReTask < ActiveRecord::Base
         position = attributes.delete("position")
 
         subtask.attributes = attributes
-        subtask.re_artifact_properties.parent = self
+        subtask.parent = self
         saved = subtask.save
 
         if(saved)
