@@ -9,9 +9,15 @@ class ReTask < ActiveRecord::Base
 
   #virtual attribuite
   def subtask_attributes=(subtask_attributes)
+    if subtask_attributes.blank?
+      return
+    end
+
     subtask_attributes.each do |id, attributes|
 
         is_new = id.to_s.start_with?("new") # Every new Subtask has id = new_394834384848
+        saved = false
+
         if(is_new)
           subtask =  ReSubtask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => self.project_id,#TODO: getting project_id from task should be changed, otherwise create new task with new subtasks won't work
                                                                                        :created_by => User.current.id,
@@ -24,8 +30,11 @@ class ReTask < ActiveRecord::Base
         position = attributes.delete("position")
 
         subtask.attributes = attributes
-        subtask.parent = self
-        saved = subtask.save
+        if subtask.valid? # empty subtask won't be saved'
+          subtask.parent = self
+          saved = subtask.save
+        end
+
 
         if(saved)
            subtask.position = position
