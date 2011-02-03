@@ -44,13 +44,16 @@ en:
   # re_section
   re_new_section: 'New Section'
   re_section: 'Section'
+  ReSection: 'Section'
   
   # re_workarea
   re_workarea: 'Workarea'
+  ReWorkarea: 'Workarea'
   re_new_workarea: 'New Workarea'
   
   # re_user_profile
   re_user_profile: 'User Profile'
+  ReUserProfile: 'User Profile'
   re_new_user_profile: 'New User Profile'
 
   # re_artifact_relationships
@@ -73,6 +76,7 @@ en:
   re_create_goal: 'Create a Goal'
   re_show_goals: 'Show Goals'
   re_goal: 'Goal'
+  re_goals: 'Goals'
   ReGoal: 'Goal'
   re_create_child_goal: 'Create Child of Type Goal'
   
@@ -81,6 +85,7 @@ en:
   re_create_task: 'Create a Task'
   re_show_tasks: 'Show Tasks'
   re_task: 'Task'
+  re_tasks: 'Tasks'
   ReTask: 'Task'
   re_create_child_task: 'Create Child of Type Task'
   re_task_overview: 'Overview of Tasks'
