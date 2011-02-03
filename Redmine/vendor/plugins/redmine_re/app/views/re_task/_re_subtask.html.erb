@@ -10,7 +10,7 @@
     <% type = 'problem' if re_subtask.sub_type == 2 %>
 
 
-      <%= "<tr id=\"subtask_drag_#{index}\" class=\"draggable #{type}\" > " %>
+      <%= "<tr id=\"subtask_drag_#{index}\" class=\"draggable  #{type}\" > " %>
           <% if re_subtask.id %>
             <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", re_subtask.re_artifact_properties.position, :class => "position" %>
           <% else %>

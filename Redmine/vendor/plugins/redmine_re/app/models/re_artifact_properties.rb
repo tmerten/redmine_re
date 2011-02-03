@@ -7,12 +7,14 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
-    :class_name => "ReArtifactRelationship"
+    :class_name => "ReArtifactRelationship",
+    :dependent => :destroy
 
   has_many :relationships_as_sink,
     :order => "re_artifact_relationships.position",
     :foreign_key => "sink_id",
-    :class_name => "ReArtifactRelationship"
+    :class_name => "ReArtifactRelationship",
+    :dependent => :destroy
     
   has_many :sinks,    :through => :relationships_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :relationships_as_source, :order => "re_artifact_relationships.position",

@@ -10,13 +10,6 @@
     <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
     <%= submit_tag l(:re_save) %>
 
-    <p>
-      <%# if @subtasks.size == 0 %>
-            <%#= link_to_remote "Add Subtask", :url => {:action => "add_subtask", :add_position => "after"} %>
-      <%= add_subtask_link "Add Subtask", "subtasks", "bottom" %>
-     <%# end %>
-    </p>
-
     <table class="subtasks">
       <thead>
         <tr>
@@ -47,16 +40,20 @@
 
 <script type="text/javascript" language="javascript">
   changeSubtaskRowColor = function(element, value) {
-    element.removeClassName('odd');
+    element.removeClassName('subtask');
     element.removeClassName('variant');
     element.removeClassName('problem');
     
     switch(value) {
-      case '0': element.addClassName('odd'); break;
+      case '0': element.addClassName('subtask'); break;
       case '1': element.addClassName('variant'); break;
       case '2': element.addClassName('problem'); break;
       default: alert('You cannot switch to that value ' + value);
     }
+
+    element.childElements().each( function ( td ) {
+       changeSubtaskRowColor(td, value)
+    });
   }
 
   updateAllSubtaskPositions = function() {

@@ -18,6 +18,27 @@ class ReTaskController < RedmineReController
      end
   end
 
+  def delete_subtask
+    @index = params[:id]
+    is_saved_subtask = !@index.to_s.starts_with?("new")
+
+    # delete existent subtask
+    if is_saved_subtask
+      @subtask = ReSubtask.find(@index)
+
+      @subtask.re_artifact_properties.destroy
+      @subtask.destroy
+    end
+
+    # remove tr of the subtask
+
+     respond_to do |format|
+       format.js
+     end
+
+
+  end
+
   def index
     @tasks = ReTask.find(:all,
                          :joins => :re_artifact_properties,

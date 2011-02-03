@@ -43,7 +43,6 @@ tr.subtask {
 
 td.subtask {
     border-top: 2px solid #505050;
-    background-color: #F6F7F8;
 }
 
 tr.variant {
@@ -54,11 +53,11 @@ tr.problem {
     background-color: #F1938C;
 }
 
-div.draggable {
+tr.draggable {
     cursor: move;
 }
 
-textarea.subtask {
+textarea {
     border: 1px solid #CCCCCC;
     font-family: Verdana,sans-serif;
     padding: 3px;
