@@ -169,20 +169,67 @@ class RedmineReController < ApplicationController
 
     if request.post? # apply filter and show results
       source = params[:re_source_artifact][:data]
-      source_searching =
+      source_searching = params[:re_source_artifact][:searching]
       sink = params[:re_sink_artifact][:data]
       sink_searching =  params[:re_sink_artifact][:searching]
       source.delete_if {|key, value| value == ""}
       sink.delete_if {|key, value| value == ""}
       # search for artifacts matching the source_artifact_filter_criteria
-      if params[:activated_searches].keys.contains?(:re_source_artifact)
-        # look for the first given parameter in 
+      if params[:activated_searches].key?(:re_source_artifact)
+        first_param = source.each.first
+        condition_hash = build_conditions_hash(filter_param, searching_forms, artifact_type)
+        @source_artifacts = find_first_artifacts_with_first_parameter(first_param, condition_hash, params[:re_source_artifact][:type])
+        source.delete(first_param[0])
+        # run through all given parameters and reduce the set of artifacts matching with each step
+        for key in source.keys do
+         @source_artifacts = reduce_search_result_with_parameter(@source_artifacts, key, source[key], source_searching[key])
+        end
+
       end
       # search was only about artifacts, not about relationships
       # therefore just display artifacts without taking relationships into account
       render 'requirements/filter_results_simple'
+      return
     end
     render 'requirements/enhanced_filter'
+  end
+
+  # This method evaluates the parameters from the filter and builds up the parts to form a 
+  def build_conditions_hash(filter_param, searching_forms, artifact_type) # Todo: Muss erledigt werden!
+    
+  end
+
+
+  # This method takes a 2 value array with the name of the attribute to search for and its value;
+  # it takes the hash with the searching forms like start with, greater_than and so on;
+  # finally it takes the chosen artifact type to reduce the search.
+  # The method evaluates the given parameter to find artifacts matching these first two
+  # criteria (type and the first_param).
+  def find_first_artifacts_with_first_parameter(filter_param, condition_hash, artifact_type)
+    artifacts = []
+    artifact_properties_attribute = false
+    for column in ReArtifactProperties.content_columns do
+     artifact_properties_attribute = true if column.name == filter_param[0] 
+    end
+     
+     # if attribute searched for belongs to RePropertiesAttributes, one can search for the artifact in ReArtifactProperties
+     if artifact_properties_attribute # ReArtifactProperties.has_attribute?(filter_param[0])
+            artifacts += ReArtifactProperties.find(:all, :conditions => [filter_param[0] + " LIKE ? AND artifact_type = ?", filter_param[1] + '%', artifact_type])
+     # attribute is a special one used by one of the subclasses of ReArtifactProperties
+     else
+      case artifact_type
+        when "ReSubtask", ""
+            artifacts += ReSubtask.find(:all, :conditions => [filter_param[0] + " = ?", filter_param[1]])
+        when "ReTask", ""
+            artifacts += ReTask.find(:all, :conditions => [filter_param[0] + " = ?", filter_param[1]])
+        when "ReGoal", ""
+            artifacts += ReSubtask.find(:all, :conditions => [filter_param[0] + " = ?", filter_param[1]])
+      end
+     end
+  end
+
+  def reduce_search_result_with_parameter(source_artifacts, key, source_key, source_searching_key)
+
   end
 
 end

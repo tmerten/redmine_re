@@ -23,6 +23,7 @@ en:
   re_column_updated_at: 'Last Updated'
   re_column_priority: 'Priority'
   re_column_artifact_type: 'Artifact Type'
+  re_column_responsibles: 'Responsibles'
   re_column_edit: 'Edit'
   re_column_delete: 'Delete'
   re_column_create_child: 'Create Child'
@@ -65,13 +66,14 @@ en:
   re_create_new_relationship: 'Create new relationship'
   re_source_artifact: 'Source Artifact'
   re_sink_artifact: 'Sink Artifact'
+  re_artifact_type: 'Type'
 
   # re_goals
   re_new_goal: 'New Goal'
   re_create_goal: 'Create a Goal'
   re_show_goals: 'Show Goals'
   re_goal: 'Goal'
-  re_goals: 'Goals'
+  ReGoal: 'Goal'
   re_create_child_goal: 'Create Child of Type Goal'
   
   # re_tasks
@@ -79,7 +81,7 @@ en:
   re_create_task: 'Create a Task'
   re_show_tasks: 'Show Tasks'
   re_task: 'Task'
-  re_tasks: 'Tasks'
+  ReTask: 'Task'
   re_create_child_task: 'Create Child of Type Task'
   re_task_overview: 'Overview of Tasks'
 
@@ -87,6 +89,7 @@ en:
   re_create_subtask: 'New Subtask'
   re_show_subtasks: 'Show Subtasks'
   re_subtask: 'Subtask'
+  ReSubtask: 'Subtask'
   re_subtask_solution: 'Solution'
   re_subtask_problem: 'Problem'
   re_subtask_variant: 'Variant'
@@ -115,3 +118,5 @@ en:
   re_equals: 'equals'
   re_greater_than: 'greater than'
   re_lesser_than: 'lesser_than'
+  re_none_specific: 'None specific'
+  re_filter_results: 'Filter results'

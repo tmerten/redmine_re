@@ -1,0 +1,12 @@
+<div id="detail_view" class="detail_view">
+	<h3><%= l(:re_filter_results) %></h3>
+	<% @goals = @source_artifacts %>
+	<% for artifact in @source_artifacts do %>
+		<%= render artifact.artifact_type.underscore + "/one_line_view", :artifact => artifact%>
+	<% end %>
+	
+	
+	
+	<%= link_to l(:re_enhanced_filter), :action => 'enhanced_filter', :project_id => @project.id %>  |
+
+</div>

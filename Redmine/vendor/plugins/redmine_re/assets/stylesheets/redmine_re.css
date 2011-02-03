@@ -84,6 +84,17 @@ label {
     padding-right:5px;
 }
 
+label.filter {
+    font-weight: bold;
+    width: 100px;
+    clear:left; 
+    display:block;
+    float:left; 
+    text-align:left;
+    padding-right:5px;
+}
+
+
 .numberfield-slider {
     float:left;
 }
@@ -110,4 +121,8 @@ label {
 
 .icon-subtask-after {
     background-image: url("../images/icons/subtask_after.png");
+}
+
+.select_field_filter {
+    width: 110px;
 }

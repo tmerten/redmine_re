@@ -1,7 +1,7 @@
 <div class="box">
 
   <fieldset <%= if activated then 'class="collapsible "' else 'class="collapsible collapsed "' end %> >
-    <legend onclick="toggleFieldset(this); toggleCheckbox(document.getElementById(<%='\'activated_searches_' + legend + 'fdgdfg\'' %>));">
+    <legend onclick="toggleFieldset(this); toggleCheckbox(document.getElementById(<%='\'activated_searches_' + legend + '\'' %>));">
       <%= l(legend) %>
       <%= check_box_tag "activated_searches[" + legend + "]", legend, activated, :style => 'display:none' %>
     </legend>
