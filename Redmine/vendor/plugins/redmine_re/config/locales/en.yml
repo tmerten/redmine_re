@@ -42,8 +42,10 @@ en:
 
   # re_section
   re_new_section: 'New Section'
+  re_section: 'Section'
   
   # re_workarea
+  re_workarea: 'Workarea'
   re_new_workarea: 'New Workarea'
   
   # re_user_profile
