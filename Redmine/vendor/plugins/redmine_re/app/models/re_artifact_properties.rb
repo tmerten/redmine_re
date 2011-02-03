@@ -183,6 +183,31 @@ class ReArtifactProperties < ActiveRecord::Base
       @re_artifact_properties.id
     end
 
+    # set position in scope of parent (source)
+  def position=(position)
+    raise ArgumentError, "For the current re_artifact_properties object #{self} exist no parent-relation in the database" if not self.parent(true)
+    raise ArgumentError, "The current re_artifact_properties object #{self} is not in the database" if not self.id
+
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id, #needs true because: http://www.elevatedcode.com/articles/2007/03/16/rails-association-proxies-and-caching/ => "By default, active record only load associations the first time you use them. After that, you can reload them by passing true to the association"
+                                                                                       self.id,
+                                                                                       ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                     )
+    relation.position = position
+    relation.save
+  end
+
+  #position in scope of parent (source)
+  def position()
+    raise ArgumentError, "For the current re_artifact_properties object #{self} exist no parent-relation in the database" if not self.parent(true)
+    raise ArgumentError, "The current re_artifact_properties object #{self} is not in the database" if not self.id
+
+
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id,
+                                                                                       self.id,
+                                                                                       ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                     )
+    return relation.position
+  end
   
   private
   
