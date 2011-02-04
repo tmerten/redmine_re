@@ -5,7 +5,10 @@ module ReTaskHelper
 
     link_to_function( name, nil, :class => "icon icon-subtask-#{choosed_icon}") do |page|
       page.insert_html add_pos, container, :partial => 're_subtask', :object => ReSubtask.new
-      page.call 'updateAllSubtaskPositions'
+      page.call "unregisterTextAreaEvents"
+      page.call "setResizeableTextAreas"
+      page.call "updateAllSubtaskPositions"
+      page.call "Sortable.create('subtasks', {onUpdate:function(el) { updateAllSubtaskPositions(); }, tag:'tr'})"
     end
   end
 end

@@ -1,8 +1,8 @@
 <% fields_for "re_task[subtask_attributes][]", re_subtask do |re_subtask_form| %>
     <% if(re_subtask.id) %>
-        <%  index = re_subtask.id %>
+        <%  index = re_subtask.re_artifact_properties.position %>
     <% else %>
-        <%  index = "new_" + Time.now.to_i.to_s %>
+        <%  index = "new" %>
     <% end %>
     
     <% type = 'subtask' %>
@@ -28,7 +28,7 @@
               <%= text_area_tag "re_task[subtask_attributes][#{index}][solution]", re_subtask.solution, {:cols => 40, :rows => 1, :class => "subtask"} %><%#= re_subtask_form.text_field :solution %>
           </td>
           <td class="<%=type-%>">
-              <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => index}, :html=> {:class => "icon icon-del"} %>
+              <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => re_subtask.id || index, :pos => index}, :html=> {:class => "icon icon-del"} %>
               <%= link_to_remote l(:re_insert_st_after), :url => {:action => "add_subtask", :id => index, :add_position => :after}, :html=> {:class => "icon icon-subtask-after"} %>
           </td>
       </tr>

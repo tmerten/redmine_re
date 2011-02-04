@@ -75,7 +75,7 @@ class ReTaskController < RedmineReController
 
         # saves subtasks and sets position
         @re_task.subtask_attributes = subtask_attributes
-
+        #todo: flash notification if a subtask fails validation
       else
         # implicite executeion of subtask_attributes
         @re_task.attributes = params[:re_task]

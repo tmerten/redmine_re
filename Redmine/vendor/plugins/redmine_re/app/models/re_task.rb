@@ -35,7 +35,7 @@ class ReTask < ActiveRecord::Base
           saved = subtask.save
         end
 
-
+      
         if(saved)
            subtask.position = position
         end
