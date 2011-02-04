@@ -1,9 +1,10 @@
 class ReArtifactProperties < ActiveRecord::Base
   unloadable
 
-  ARTIFACT_TYPES = { :ReGoal => 1, :ReTask => 2, :ReSubtask => 3 }
-  ARTIFACT_COLOURS = {:ReGoal => '#ea6b55', :ReTask => '#ddaa88', :ReSubtask => '#bb8899'  }
-
+  # Class attribute to host a hash with all different types of artifacts
+  # will be set at Plugin-Start-up. See init.rb of this plugin and module Preparations
+  cattr_accessor :artifact_types
+  
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
@@ -18,12 +19,12 @@ class ReArtifactProperties < ActiveRecord::Base
     
   has_many :sinks,    :through => :relationships_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :relationships_as_source, :order => "re_artifact_relationships.position",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:parentchild] ],
+    :conditions => [ "re_artifact_relationships.relation_type = ?", Preparation::RELATION_TYPES[:parentchild] ],
     :source => "sink"
   
   has_many :sources, :through => :relationships_as_sink,   :order => "re_artifact_relationships.position"
   has_one :parent, :through => :relationships_as_sink,
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:parentchild] ],
+    :conditions => [ "re_artifact_relationships.relation_type = ?", Preparation::RELATION_TYPES[:parentchild] ],
     :source => "source"
 
   belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
@@ -42,10 +43,9 @@ class ReArtifactProperties < ActiveRecord::Base
   # Should be on, but prevents subtasks from saving for now.
   #validates_numericality_of :priority, :only_integer => true, :greater_than => 0, :less_than_or_equal_to => 50
 
-  # Methoden
-  attr_accessor :state # Als Zustand noetig fuer(observer)
- 
-
+  # Methods
+  attr_accessor :state # Needed to simulate the state for observer
+  
   # TODO: Mirsad soll in Englisch schreiben.
   def revert
        #TODO neue version erstellen wenn reverted

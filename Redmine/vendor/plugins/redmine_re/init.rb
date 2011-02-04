@@ -1,4 +1,6 @@
 require 'redmine'
+require_dependency 'modules/calculate_artifact_type_hash'
+
 
 Redmine::Plugin.register :redmine_re do
   name 'Redmine Requirements Engineering Plugin'
@@ -46,3 +48,6 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
     end
   end
 end
+
+# include of a constant to class re_artifact_properties as a test
+ActiveRecord::Base::ReArtifactProperties.send :include, Preparation
