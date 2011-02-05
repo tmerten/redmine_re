@@ -82,11 +82,10 @@
     }
 
     // # Execute functions after adding subtask
-   unregisterTextAreaEvents();
-   setResizeableTextAreas();
-   updateAllSubtaskPositions();
+    unregisterTextAreaEvents();
+    setResizeableTextAreas();
+    updateAllSubtaskPositions();
     Sortable.create('subtasks', {onUpdate:function(el) { updateAllSubtaskPositions(); }, tag:'tr'});
-
   }
 
   updateAllSubtaskPositions = function() {
