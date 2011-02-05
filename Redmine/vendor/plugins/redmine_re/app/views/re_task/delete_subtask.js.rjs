@@ -1,2 +1,2 @@
-page.remove "subtask_drag_#{@index}"
+page.remove "subtask_drag_#{@position}"
 

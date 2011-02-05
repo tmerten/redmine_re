@@ -1,14 +1,9 @@
 module ReTaskHelper
-  def add_subtask_link(name, container, add_pos)
+  def add_subtask_link(name, element_id , add_pos)
+    choosed_icon = add_pos;
     choosed_icon = "after"  if add_pos == "bottom"
     choosed_icon = "before" if add_pos == "top"
 
-    link_to_function( name, nil, :class => "icon icon-subtask-#{choosed_icon}") do |page|
-      page.insert_html add_pos, container, :partial => 're_subtask', :object => ReSubtask.new
-      page.call "unregisterTextAreaEvents"
-      page.call "setResizeableTextAreas"
-      page.call "updateAllSubtaskPositions"
-      page.call "Sortable.create('subtasks', {onUpdate:function(el) { updateAllSubtaskPositions(); }, tag:'tr'})"
-    end
+    link_to name, "#", :class => "icon icon-subtask-#{choosed_icon}", :onclick => "addSubtask('#{element_id}', '#{add_pos}');return false;"
   end
 end

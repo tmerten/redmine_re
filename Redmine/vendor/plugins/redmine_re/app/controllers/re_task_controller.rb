@@ -2,29 +2,14 @@ class ReTaskController < RedmineReController
   unloadable
   menu_item :re
 
-  def add_subtask
-     if params[:id]
-      #the subtask which link was clicked
-      @html_id = "subtask_drag_" + params[:id]
-     else
-      @html_id = "subtasks"
-     end
-
-     @add_position = params[:add_position]
-
-     @re_subtask =  ReSubtask.new(:sub_type => 0) #,:re_artifact_properties => ReArtifactProperties.new(:project_id => @re_subtask_with_before_link.project_id, :created_by => find_current_user.id))
-     respond_to do |format|
-       format.js
-     end
-  end
-
   def delete_subtask
-    @index = params[:id]
-    is_saved_subtask = !@index.to_s.starts_with?("new")
+    id = params[:id] #id of the subtask if new subtask then it's: new_pos => new_2
+    @position = params[:pos] # new_pos if new subtask otherwise pos
+    is_saved_subtask = !@position.to_s.starts_with?("new")
 
     # delete existent subtask
     if is_saved_subtask
-      @subtask = ReSubtask.find(@index)
+      @subtask = ReSubtask.find(id)
 
       @subtask.re_artifact_properties.destroy
       @subtask.destroy

@@ -1,35 +1,36 @@
 <% fields_for "re_task[subtask_attributes][]", re_subtask do |re_subtask_form| %>
-    <% if(re_subtask.id) %>
-        <%  index = re_subtask.re_artifact_properties.position %>
-    <% else %>
-        <%  index = "new" %>
-    <% end %>
-    
-    <% type = 'subtask' %>
-    <% type = 'variant' if re_subtask.sub_type == 1 %>
-    <% type = 'problem' if re_subtask.sub_type == 2 %>
-
-
-      <%= "<tr id=\"subtask_drag_#{index}\" class=\"draggable  #{type}\" > " %>
-          <% if re_subtask.id %>
-            <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", re_subtask.re_artifact_properties.position, :class => "position" %>
-          <% else %>
-            <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", "no_pos", :class => "position" %>
-          <% end %>
-    
-          <td style="cursor: pointer;" class="<%=type-%>" ></td>
-          <td class="<%=type-%>">
-            <%= select_tag("re_task[subtask_attributes][#{index}][sub_type]", options_for_select([['ST',0],['V', 1],['P',2]], re_subtask.sub_type ), :onchange => "changeSubtaskRowColor($('subtask_drag_#{index}'), this.value)" ) %>
-          </td>
-          <td class="<%=type-%>">
-              <%= text_area_tag "re_task[subtask_attributes][#{index}][name]", re_subtask.name, {:cols => 40, :rows => 1, :class => "subtask"} %> <%#= re_subtask_form.text_field :name %>
-          </td> 
-          <td class="<%=type-%>">
-              <%= text_area_tag "re_task[subtask_attributes][#{index}][solution]", re_subtask.solution, {:cols => 40, :rows => 1, :class => "subtask"} %><%#= re_subtask_form.text_field :solution %>
-          </td>
-          <td class="<%=type-%>">
-              <%= link_to_remote l(:re_delete_subtask), :url => {:action => "delete_subtask", :id => re_subtask.id || index, :pos => index}, :html=> {:class => "icon icon-del"} %>
-              <%= link_to_remote l(:re_insert_st_after), :url => {:action => "add_subtask", :id => index, :add_position => :after}, :html=> {:class => "icon icon-subtask-after"} %>
-          </td>
-      </tr>
+  <% if(re_subtask.id) %>
+      <%  index = re_subtask.id %>
+  <% else %>
+      <%  index = "new" %>
   <% end %>
+
+  <% type = 'subtask' %>
+  <% type = 'variant' if re_subtask.sub_type == 1 %>
+  <% type = 'problem' if re_subtask.sub_type == 2 %>
+
+
+  <% if re_subtask.id %>
+    <%= "<tr id=\"subtask_drag_#{re_subtask.re_artifact_properties.position}\" class=\"draggable  #{type}\" > " %>
+        <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", re_subtask.re_artifact_properties.position, :class => "position" %>
+  <% else %>
+    <%= "<tr id=\"subtask_drag_#{index}\" class=\"draggable  #{type}\" > " %>
+        <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", "no_pos", :class => "position" %>
+  <% end %>
+
+      <td style="cursor: pointer;" class="<%=type-%>" ></td>
+      <td class="<%=type-%>">
+        <%= select_tag("re_task[subtask_attributes][#{index}][sub_type]", options_for_select([['ST',0],['V', 1],['P',2]], re_subtask.sub_type ), :onchange => "changeSubtaskRowColor($('subtask_drag_#{index}'), this.value)" ) %>
+      </td>
+      <td class="<%=type-%>">
+          <%= text_area_tag "re_task[subtask_attributes][#{index}][name]", re_subtask.name, {:cols => 40, :rows => 1, :class => "subtask"} %> <%#= re_subtask_form.text_field :name %>
+      </td>
+      <td class="<%=type-%>">
+          <%= text_area_tag "re_task[subtask_attributes][#{index}][solution]", re_subtask.solution, {:cols => 40, :rows => 1, :class => "subtask"} %><%#= re_subtask_form.text_field :solution %>
+      </td>
+      <td class="<%=type-%>">
+          <%= link_to_remote l(:re_delete_subtask),  :url => {:action => "delete_subtask", :id => re_subtask.id || index, :pos => index}, :html=> {:class => "icon icon-del"} %>
+          <%= add_subtask_link l(:re_insert_st_after), "subtask_drag_#{index}", "after" %>
+      </td>
+  </tr>
+<% end %>

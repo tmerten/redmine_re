@@ -124,11 +124,11 @@ class ReArtifactProperties < ActiveRecord::Base
   #
   # returns the created relation
   def relate_to(to, relation_type, directed=true)
-    raise ArgumentError, "relation_type not valid (see ReArtifactRelationship::TYPES.keys for valid relation_types)" if not ReArtifactRelationship::RELATION_TYPES.has_key?(relation_type)
+    raise ArgumentError, "relation_type not valid (see ReArtifactRelationship::TYPES.keys for valid relation_types)" if not Preparation::RELATION_TYPES.has_key?(relation_type)
     
     to = instance_checker to
     
-    relation_type_no = ReArtifactRelationship::RELATION_TYPES[relation_type]
+    relation_type_no = Preparation::RELATION_TYPES[relation_type]
     
     # we can not give more than one parent
     if (relation_type == :parentchild) && (! to.parent.nil?) && (to.parent.id != self.id)
@@ -159,7 +159,7 @@ class ReArtifactProperties < ActiveRecord::Base
   # with the exception that we will return the relation not the parent!
   # (create a new parent or replace the current parent)  
   def parent=(parent)
-    relation_type_no = ReArtifactRelationship::RELATION_TYPES[:parentchild]
+    relation_type_no = Preparation::RELATION_TYPES[:parentchild]
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
 
     if not relation.nil?
@@ -192,7 +192,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
     relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id, #needs true because: http://www.elevatedcode.com/articles/2007/03/16/rails-association-proxies-and-caching/ => "By default, active record only load associations the first time you use them. After that, you can reload them by passing true to the association"
                                                                                        self.id,
-                                                                                       ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                       Preparation::RELATION_TYPES[:parentchild]
                                                                                      )
     relation.position = position
     relation.save
@@ -206,7 +206,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
     relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id,
                                                                                        self.id,
-                                                                                       ReArtifactRelationship::RELATION_TYPES[:parentchild]
+                                                                                       Preparation::RELATION_TYPES[:parentchild]
                                                                                      )
     return relation.position
   end

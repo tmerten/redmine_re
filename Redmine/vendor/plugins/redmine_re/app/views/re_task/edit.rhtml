@@ -10,9 +10,6 @@
     <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
     <%= submit_tag l(:re_save) %>
 
-      <%= add_subtask_link "Add Subtask", "subtasks", "top" %>
-
-
     <table class="subtasks">
       <thead>
         <tr>
@@ -20,7 +17,7 @@
           <th>Type</th>
           <th>Name</th>
           <th>Solution</th>
-          <th><%= link_to_remote l(:re_insert_st_before), :url => {:action => "add_subtask", :add_position => :bottom}, :html=> {:class => "icon icon-subtask-after"} %></th>
+          <th> <%= add_subtask_link l(:re_insert_st_before), "subtasks", "top" %> </th>
         </tr>
       </thead>
       <tbody id="subtasks">
@@ -59,6 +56,39 @@
     });
   }
 
+  addSubtask = function(element_id, add_pos) {
+    var tr_subtask_drag;
+    var rendered_subtask;
+
+    tr_subtask_drag = $(element_id) ; // the subtask drag tr from the clicked insert link
+    rendered_subtask = "<%= escape_javascript(render(:partial => "re_subtask", :object => ReSubtask.new)) %>";
+
+    // # Add Subtask
+    if(add_pos == 'after')
+    {
+        tr_subtask_drag.insert( { after: rendered_subtask} );
+    }
+    else if (add_pos == 'before')
+    {
+        tr_subtask_drag.insert( { before: rendered_subtask} );
+    }
+    else if (add_pos == 'bottom')
+    {
+        tr_subtask_drag.insert( { bottom: rendered_subtask} );
+    }
+    else if (add_pos == 'top')
+    {
+        tr_subtask_drag.insert( { top: rendered_subtask} );
+    }
+
+    // # Execute functions after adding subtask
+   unregisterTextAreaEvents();
+   setResizeableTextAreas();
+   updateAllSubtaskPositions();
+    Sortable.create('subtasks', {onUpdate:function(el) { updateAllSubtaskPositions(); }, tag:'tr'});
+
+  }
+
   updateAllSubtaskPositions = function() {
       var pos = 1;
       var id;
@@ -81,28 +111,30 @@
           // # Replace the id of the tr
           tr_subtask_drag.id = "subtask_drag_" + id;
 
-          // # Refresh the position and id of the the attributes (id,name)
+          // # Refresh the position value of the hidden  field
           position_hidden_element.value = pos;
-          position_hidden_element.id    = "re_task_subtask_attributes_" + id + "_position";
-          position_hidden_element.name  = "re_task[subtask_attributes]["+ id + "][position]";
-
-          // # Refresh the positions values from the subtask attributes fields
 
           sub_type      = tr_subtask_drag.down('select');
-          sub_type.id   = "re_task_subtask_attributes_" + id + "_sub_type";
-          sub_type.name = "re_task[subtask_attributes]["+ id + "][sub_type]";
-          var sub_type_value = sub_type.value;
-          alert(sub_type_value);
+          // ## Refresh the parameter of the changesubtaskcolor function
           sub_type.ancestors()[0].innerHTML = sub_type.ancestors()[0].innerHTML.replace(/(subtask_drag_\d+|subtask_drag_new_\d+|subtask_drag_new)/i, tr_subtask_drag.id );
-          sub_type.value = sub_type_value;
 
-          name          = tr_subtask_drag.down('textarea');
-          name.id       = "re_task_subtask_attributes_" + id + "_name";
-          name.name     = "re_task[subtask_attributes]["+ id + "][name]";
+          // # Refresh the id values for the new subtask attributes fields
 
-          solution      = tr_subtask_drag.down('textarea', 1);
-          solution.id   = "re_task_subtask_attributes_" + id + "_solution";
-          solution.name = "re_task[subtask_attributes]["+ id + "][solution]";
+          if(is_new_subtask) {
+              position_hidden_element.id    = "re_task_subtask_attributes_" + id + "_position";
+              position_hidden_element.name  = "re_task[subtask_attributes]["+ id + "][position]";
+
+              sub_type.id   = "re_task_subtask_attributes_" + id + "_sub_type";
+              sub_type.name = "re_task[subtask_attributes]["+ id + "][sub_type]";
+
+              name          = tr_subtask_drag.down('textarea');
+              name.id       = "re_task_subtask_attributes_" + id + "_name";
+              name.name     = "re_task[subtask_attributes]["+ id + "][name]";
+
+              solution      = tr_subtask_drag.down('textarea', 1);
+              solution.id   = "re_task_subtask_attributes_" + id + "_solution";
+              solution.name = "re_task[subtask_attributes]["+ id + "][solution]";
+          }
 
           // # Replace the positions values from the delete and insert links
 
@@ -111,16 +143,16 @@
 
           // ## Replace the innerhtml of the links
           if(is_new_subtask) {
-              // <a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/noindex?pos=noindex',
-              // <a class="icon icon-subtask-after" href="#" onclick="new Ajax.Request('/re_task/add_subtask/noindex?add_position=after',
+              // <a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/new?pos=new',
+              //<a onclick="addSubtask('subtask_drag_new', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/\?pos=(new_\d+|new)/i, "?pos=" + id);
-              td_of_links.innerHTML = td_of_links.innerHTML.replace(/\/(new_\d+|new)\?/gi, "/" + id + "?");
+              td_of_links.innerHTML = td_of_links.innerHTML.replace(/subtask_drag_(new_\d+|new)/i, "subtask_drag_" + id);
 
           } else {
               //<a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/1?pos=1',
-              //<a class="icon icon-subtask-after" href="#" onclick="new Ajax.Request('/re_task/add_subtask/1?add_position=after',
+              //<a onclick="addSubtask('subtask_drag_2', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/\?pos=\d+/i, "?pos=" + id);
-              td_of_links.innerHTML = td_of_links.innerHTML.replace(/(\/\d+\?add_position)/i, "/" + id + "?add_position");
+              td_of_links.innerHTML = td_of_links.innerHTML.replace(/subtask_drag_\d+/i, "subtask_drag_" + id );
           }
 
           // # increment position
