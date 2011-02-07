@@ -82,14 +82,14 @@ class ReArtifactRelationshipController < RedmineReController
   def add_artifact(artifact, outgoing_relationships)
     @json_artifact = '{ "id": "' + artifact.artifact_type.to_s + artifact.artifact_id.to_s + '",
                         "name": "' + artifact.name + '",
-                        "data": { "$color": "' + Preparation::COLOURS_TO_HEX[Preparation::ARTIFACT_COLOURS[ReArtifactProperties.artifact_types[artifact.artifact_type.to_sym]]].to_s + '",
+                        "data": { "$color": "' + ReArtifactProperties::COLOURS_TO_HEX[ReArtifactProperties::ARTIFACT_COLOURS[ReArtifactProperties.artifact_types[artifact.artifact_type.to_sym]]].to_s + '",
                                   "$height": 70},
                         "adjacencies": [ '
     for relation in outgoing_relationships do
       @sink = ReArtifactProperties.find_by_id(relation.sink_id)
       @json_artifact += '{ "nodeTo": "' + @sink.artifact_type.to_s + @sink.artifact_id.to_s + '",
                            "data": {
-                                     "$color": "' + Preparation::COLOURS_TO_HEX[Preparation::RELATION_COLOURS[relation.relation_type.to_i]] + '",
+                                     "$color": "' + ReArtifactProperties::COLOURS_TO_HEX[ReArtifactProperties::RELATION_COLOURS[relation.relation_type.to_i]] + '",
                                      "$lineWidth": 2
 
                                    }
@@ -121,7 +121,7 @@ class ReArtifactRelationshipController < RedmineReController
       @chosen_artifacts_or_string += artifact.to_s + "' or artifact_type = '"
     end
     for relation in @relation_choice do
-      @chosen_relations_or_string += Preparation::RELATION_TYPES[relation.to_sym].to_s + " or relation_type = "
+      @chosen_relations_or_string += ReArtifactProperties::RELATION_TYPES[relation.to_sym].to_s + " or relation_type = "
     end
     # remove the last ' or artifact_type = ' and close brackets
     @chosen_artifacts_or_string = @chosen_artifacts_or_string[0, @chosen_artifacts_or_string.length - 21] + ')'

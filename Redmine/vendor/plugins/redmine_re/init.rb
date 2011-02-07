@@ -50,4 +50,4 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 end
 
 # include of a constant to class re_artifact_properties as a test
-ActiveRecord::Base::ReArtifactProperties.send :include, Preparation
+# ActiveRecord::Base::ReArtifactProperties.send :include, Preparation
