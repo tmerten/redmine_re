@@ -1,5 +1,5 @@
 require 'redmine'
-require_dependency 'modules/calculate_artifact_type_hash'
+require_dependency 'modules/preparation'
 
 
 Redmine::Plugin.register :redmine_re do
