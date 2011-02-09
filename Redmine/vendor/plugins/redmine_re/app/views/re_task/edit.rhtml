@@ -24,14 +24,10 @@
         <%= render :partial => 're_subtask', :collection => @subtasks %>
       </tbody>
     </table>
-    <%#= sortable_element "subtasks",
+    <%= sortable_element "subtasks",
                           :tag => 'tr',
                           :complete => visual_effect(:highlight, 'subtasks'),
                           :onUpdate => "function(el) { updateAllSubtaskPositions(); }"
-    %>
-    <%= sortable_element "subtasks",
-                          :tag => 'tr',
-                          :complete => "function(el) { updateAllSubtaskPositions(); }"
     %>
     <br />
 
@@ -116,10 +112,6 @@
 
           // # Refresh the position value of the hidden  field
           position_hidden_element.value = pos;
-
-          sub_type      = tr_subtask_drag.down('select');
-          // ## Refresh the parameter of the changesubtaskcolor function
-          sub_type.ancestors()[0].innerHTML = sub_type.ancestors()[0].innerHTML.replace(/(subtask_drag_\d+|subtask_drag_new_\d+|subtask_drag_new)/i, tr_subtask_drag.id );
 
           // # Refresh the id values for the new subtask attributes fields
 
