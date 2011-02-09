@@ -24,10 +24,14 @@
         <%= render :partial => 're_subtask', :collection => @subtasks %>
       </tbody>
     </table>
-    <%= sortable_element "subtasks",
+    <%#= sortable_element "subtasks",
                           :tag => 'tr',
                           :complete => visual_effect(:highlight, 'subtasks'),
                           :onUpdate => "function(el) { updateAllSubtaskPositions(); }"
+    %>
+    <%= sortable_element "subtasks",
+                          :tag => 'tr',
+                          :complete => "function(el) { updateAllSubtaskPositions(); }"
     %>
     <br />
 
@@ -84,8 +88,8 @@
     // # Execute functions after adding subtask
     unregisterTextAreaEvents();
     setResizeableTextAreas();
-    updateAllSubtaskPositions();
     Sortable.create('subtasks', {onUpdate:function(el) { updateAllSubtaskPositions(); }, tag:'tr'});
+    updateAllSubtaskPositions();
   }
 
   updateAllSubtaskPositions = function() {
@@ -123,6 +127,7 @@
               position_hidden_element.id    = "re_task_subtask_attributes_" + id + "_position";
               position_hidden_element.name  = "re_task[subtask_attributes]["+ id + "][position]";
 
+              sub_type      = tr_subtask_drag.down('select');// new init because above innerHTML was changend (sub_type.ancestors()[0].innerHTML...)
               sub_type.id   = "re_task_subtask_attributes_" + id + "_sub_type";
               sub_type.name = "re_task[subtask_attributes]["+ id + "][sub_type]";
 
@@ -146,7 +151,6 @@
               //<a onclick="addSubtask('subtask_drag_new', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/\?pos=(new_\d+|new)/i, "?pos=" + id);
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/subtask_drag_(new_\d+|new)/i, "subtask_drag_" + id);
-
           } else {
               //<a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/1?pos=1',
               //<a onclick="addSubtask('subtask_drag_2', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
