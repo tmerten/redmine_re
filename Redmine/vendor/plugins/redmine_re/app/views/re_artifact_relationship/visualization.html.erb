@@ -29,15 +29,15 @@
           
 		  <h4><%= l(:re_artifacts) %> <br/></h4>
           <% for key, value in ReArtifactProperties.artifact_types do %>
-          <% colors = Preparation::ARTIFACT_COLOURS[value] %>
+          <% colors = ReArtifactColors::ARTIFACT_COLOURS[value] %>
             <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
             <%= check_box_tag 'artifact_clicked[]', key.to_s, true %>
             <%= label :artifacts_to_choose, l(key.to_s.underscore)%><br/>
           <% end %>
           <br/>
           <h4><%= l(:re_relationships) %><br/></h4>
-          <% for key, value in Preparation::RELATION_TYPES do %>
-            <% colors = Preparation::RELATION_COLOURS[Preparation::RELATION_TYPES[key.to_sym]] %>
+          <% for key, value in ReArtifactProperties::RELATION_TYPES do %>
+            <% colors = ReArtifactColors::RELATION_COLOURS[ReArtifactProperties::RELATION_TYPES[key.to_sym]] %>
             <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
             <%= check_box_tag 'relation_clicked[]', key.to_s, true %>
             <%= label :relations_to_choose, l('re_' + key.to_s.underscore)%><br/>

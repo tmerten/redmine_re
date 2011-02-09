@@ -1,6 +1,4 @@
 require 'redmine'
-require_dependency 'modules/preparation'
-
 
 Redmine::Plugin.register :redmine_re do
   name 'Redmine Requirements Engineering Plugin'
@@ -24,8 +22,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
       :public => true
     )
 
-    # more restrictive setup manage_requirements becomes "Manage Requirements" by convention
-    # permission :manage_requirements, :requirements => :index
+  # more restrictive setup manage_requirements becomes "Manage Requirements" by convention
+  # permission :manage_requirements, :requirements => :index
   end
 
   # The Requirements item is added to the project menu after the Activity item
@@ -37,11 +35,11 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 
   #Observers
   config.active_record.observers = :re_artifact_properties_observer
-  
+
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
-  
+
   # add "acts_as_re_artifact" method to any ActiveRecord::Base class
-  # as an alias to "include Artifact"  
+  # as an alias to "include Artifact"
   class ActiveRecord::Base
     def self.acts_as_re_artifact
       include Artifact
@@ -49,5 +47,15 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   end
 end
 
-# include of a constant to class re_artifact_properties as a test
-# ActiveRecord::Base::ReArtifactProperties.send :include, Preparation
+ 
+config.after_initialize do
+	# register symbols of all ReArtifact models to the ReArtifactProperties class  
+	i = 0
+	files = Dir["#{RAILS_ROOT}/vendor/plugins/redmine_re/app/models/re_*.rb"].map do |f|
+		fd = File.open(f, 'r')
+		File.basename(f, '.rb').camelize.to_sym if fd.read.include? "acts_as_re_artifact"
+	end
+
+	files.delete_if { |x| x.nil? }
+	ReArtifactProperties.artifact_types = Hash[*files.collect { |v| [v, files.index(v)] }.flatten]	
+end

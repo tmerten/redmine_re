@@ -6,9 +6,6 @@ module Artifact
     base.alias_method_chain :re_artifact_properties, :autobuild
     base.extend ClassMethods
     base.define_re_artifact_properties_accessors
-    # Logger does not work here...  logger.debug 'Module load'  
-    ActiveRecord::Base::ReArtifactProperties.artifact_types = {0 => 'Test'}
-    #ReArtifactProperties.artifact_types[ReArtifactProperties.nil? ? 0 : ReArtifactProperties.artifact_types.length] = base.class
   end
 
   def re_artifact_properties_with_autobuild

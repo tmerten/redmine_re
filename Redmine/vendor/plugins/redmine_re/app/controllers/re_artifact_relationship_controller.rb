@@ -80,18 +80,19 @@ class ReArtifactRelationshipController < RedmineReController
 
 
   def add_artifact(artifact, outgoing_relationships)
+  	type = artifact.artifact_type.to_sym
+  	arti = ReArtifactProperties.artifact_types[type]
     @json_artifact = '{ "id": "' + artifact.artifact_type.to_s + artifact.artifact_id.to_s + '",
                         "name": "' + artifact.name + '",
-                        "data": { "$color": "' + ReArtifactProperties::COLOURS_TO_HEX[ReArtifactProperties::ARTIFACT_COLOURS[ReArtifactProperties.artifact_types[artifact.artifact_type.to_sym]]].to_s + '",
+                        "data": { "$color": "' + ReArtifactColors.get_html_artifact_color_code(arti) + '",
                                   "$height": 70},
                         "adjacencies": [ '
     for relation in outgoing_relationships do
       @sink = ReArtifactProperties.find_by_id(relation.sink_id)
       @json_artifact += '{ "nodeTo": "' + @sink.artifact_type.to_s + @sink.artifact_id.to_s + '",
                            "data": {
-                                     "$color": "' + ReArtifactProperties::COLOURS_TO_HEX[ReArtifactProperties::RELATION_COLOURS[relation.relation_type.to_i]] + '",
+                                     "$color": "' + ReArtifactColors.get_html_relation_color_code(relation.relation_type.to_i) + '",
                                      "$lineWidth": 2
-
                                    }
                          },'
     end
