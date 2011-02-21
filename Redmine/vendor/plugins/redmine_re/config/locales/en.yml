@@ -16,6 +16,7 @@ en:
   re_type: 'Type'
   re_structuring_elements: 'Structuring Elements'
   re_stakeholders: 'Stakeholders'
+  re_more: 'more'
 
   # columns
   re_column_name: 'Name'
@@ -45,6 +46,10 @@ en:
   re_new_section: 'New Section'
   re_section: 'Section'
   ReSection: 'Section'
+  re_section_not_found: 'Could not find section with id {{id}}.'
+  re_section_deleted: 'The Section {{name}} has been sucessfully deleted.'
+  re_section_not_deleted: 'The Section {{name}} could not be deleted.'
+  re_section_saved: 'Section successfully saved'
   
   # re_workarea
   re_workarea: 'Workarea'
