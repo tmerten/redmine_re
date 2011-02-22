@@ -1,6 +1,6 @@
 module Artifact
   def self.included(base)
-    base.has_one :re_artifact_properties, :as => :artifact, :autosave => true
+    base.has_one :re_artifact_properties, :as => :artifact, :autosave => true, :dependent => :destroy
     base.validates_presence_of :re_artifact_properties
     base.validate :re_artifact_properties_must_be_valid
     base.alias_method_chain :re_artifact_properties, :autobuild
@@ -11,7 +11,7 @@ module Artifact
   def re_artifact_properties_with_autobuild
     re_artifact_properties_without_autobuild || build_re_artifact_properties
   end
-
+  
   def method_missing(meth, *args, &blk)
     re_artifact_properties.send(meth, *args, &blk)
   rescue NoMethodError
@@ -51,8 +51,6 @@ module Artifact
         RUBY
       end
     end
-    
-    
   end
 
 protected
