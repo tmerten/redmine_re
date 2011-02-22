@@ -26,7 +26,7 @@ class ReSectionController < RedmineReController
       @re_section.attributes = params[:re_section]
       add_hidden_re_artifact_properties_attributes @re_section
 
-      flash[:notice] = 'ReSection successfully saved' if save_ok = @re_section.save
+      flash[:notice] = l(:re_section_saved) if save_ok = @re_section.save
 
       redirect_to :action => 'edit', :id => @re_section.id and return if save_ok
     end
@@ -35,21 +35,19 @@ class ReSectionController < RedmineReController
   def delete
   # deletes and updates the flash with either success, id not found error or deletion error
     @re_section = ReSection.find_by_id(params[:id], :include => :re_artifact_properties)
+    @project ||= @re_section.project
+
     if !@re_section
-      flash[:error] = 'Could not find a ReSection with this ' + params[:id] + ' to delete'
+      flash[:error] = t(:re_section_not_found, {:id => @params[:id] })
     else
       name = @re_section.name
       if ReSection.destroy(@re_section.id)
-        flash[:notice] = 'The ReSection "' + name + '" has been deleted'
+        flash[:notice] = t(:re_section_deleted, {:name => name})
       else
-        flash[:error] = 'The ReSection "' + name + '" could not be deleted'
+        flash[:error] = t(:re_section_not_deleted, {:name => name})
       end
     end
-    if request.xhr?
-      redirect_to :action => 'index', :project_id => @project.id, :layout => 'false'
-    else
-      redirect_to :action => 'index', :project_id => @project.id
-    end
+    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
 
 end

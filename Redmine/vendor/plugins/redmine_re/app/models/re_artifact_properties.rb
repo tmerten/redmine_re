@@ -37,7 +37,6 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   acts_as_watchable
   
-
   belongs_to :project
   #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
 

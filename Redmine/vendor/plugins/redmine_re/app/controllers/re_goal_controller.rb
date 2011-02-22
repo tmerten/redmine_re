@@ -43,11 +43,7 @@ class ReGoalController < RedmineReController
         flash[:error] = 'The Goal "' + name + '" could not be deleted'
       end
     end
-    if request.xhr?
-      redirect_to :action => 'index', :project_id => @project.id, :layout => 'false'
-    else
-      redirect_to :action => 'index', :project_id => @project.id
-    end
+    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
 
 end

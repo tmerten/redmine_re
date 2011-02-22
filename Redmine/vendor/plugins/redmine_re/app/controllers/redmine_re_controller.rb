@@ -13,10 +13,16 @@ class RedmineReController < ApplicationController
   #include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper  
 
-  before_filter :find_project
+  before_filter :find_project, :load_settings
   
   #before_filter :authorize,
                # :except =>  [:delegate_tree_drop, :delegate_tree_node_click]
+
+	def load_settings
+		@settings = Setting.plugin_redmine_re
+		@re_artifact_order = ActiveSupport::JSON.decode(@settings['re_artifact_types'])
+	end
+
 
   # uses redmine_re in combination with redmines base layout for the header unless it is an ajax-request
   layout proc{ |c| c.request.xhr? ? false : "redmine_re" } 

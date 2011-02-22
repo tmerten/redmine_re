@@ -10,19 +10,15 @@
             :class => "icon-edit" %>
           </li>
 	        
-	        <li><%= link_to 'Delete', {
+					<li><%= link_to 'Delete', {
   	          :controller => 're_artifact_properties',
-  	          :action => 'delete', :id => @artifact.artifact_id,
+  	          :action => 'delete', :id => @artifact.id,
   	        },
             :confirm => t(:re_delete_confirm, {:what => @artifact.name}),
             :class => 'icon-del' %>
           </li>
 	        <li class="folder icon icon-folder">
-	                <a href="#" class="submenu" onclick="return false;">Submenu</a>
-	                <ul>
-	                    <li>Dummy Info</li>
-	                    <li><a href="#">Dummy Link</a></li>
-	                </ul>
+	                <a href="#" class="submenu" onclick="return false;"><%= l(:re_more) %>...</a>
 	        </li>
 	  <% end %>
 	  <%= call_hook(:view_artifacts_context_menu_end, {:artifacts => @artifacts, :back => @back }) %>

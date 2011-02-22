@@ -17,19 +17,8 @@ en:
   re_structuring_elements: 'Structuring Elements'
   re_stakeholders: 'Stakeholders'
   re_more: 'more'
-
-  # columns
-  re_column_name: 'Name'
-  re_column_created_at: 'Created At'
-  re_column_updated_at: 'Last Updated'
-  re_column_priority: 'Priority'
-  re_column_artifact_type: 'Artifact Type'
-  re_column_responsibles: 'Responsibles'
-  re_column_edit: 'Edit'
-  re_column_delete: 'Delete'
-  re_column_create_child: 'Create Child'
-  re_column_description: 'Description'
-  re_column_tree: 'Tree'
+  re_drag_list_items_to_reorder_artifacts: 'Drag the list items to reorder the RE Artefacts. The configured order will be used everywhere in the RE Plugin'
+  re_artifact_order: 'Artifact Display Order'
 
   # re_artifact_properties
   re_artifact_name: 'Name'
@@ -43,7 +32,8 @@ en:
   re_update_description: 'Update description'
 
   # re_section
-  re_new_section: 'New Section'
+  re_new_re_section: 'New Section'
+  re_create_re_section: 'Create a new Section'
   re_section: 'Section'
   ReSection: 'Section'
   re_section_not_found: 'Could not find section with id {{id}}.'
@@ -53,13 +43,15 @@ en:
   
   # re_workarea
   re_workarea: 'Workarea'
+  re_create_re_workarea: 'Create a new Workarea'
   ReWorkarea: 'Workarea'
-  re_new_workarea: 'New Workarea'
+  re_new_re_workarea: 'New Workarea'
   
   # re_user_profile
   re_user_profile: 'User Profile'
+  re_create_re_user_profile: 'Create a new User Profile'
   ReUserProfile: 'User Profile'
-  re_new_user_profile: 'New User Profile'
+  re_new_re_user_profile: 'New User Profile'
 
   # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
@@ -77,8 +69,8 @@ en:
   re_artifact_type: 'Type'
 
   # re_goals
-  re_new_goal: 'New Goal'
-  re_create_goal: 'Create a Goal'
+  re_new_re_goal: 'New Goal'
+  re_create_re_goal: 'Create a Goal'
   re_show_goals: 'Show Goals'
   re_goal: 'Goal'
   re_goals: 'Goals'
@@ -86,18 +78,17 @@ en:
   re_create_child_goal: 'Create Child of Type Goal'
   
   # re_tasks
-  re_new_task: 'New Task'
-  re_create_task: 'Create a Task'
+  re_new_re_task: 'New Task'
+  re_create_re_task: 'Create a new Task'
   re_show_tasks: 'Show Tasks'
   re_task: 'Task'
   re_tasks: 'Tasks'
   ReTask: 'Task'
-  re_create_child_task: 'Create Child of Type Task'
-  re_task_overview: 'Overview of Tasks'
 
   # re_subtasks
-  re_create_subtask: 'New Subtask'
+  re_new_re_subtask: 'New Subtask'
   re_show_subtasks: 'Show Subtasks'
+  re_create_re_subtask: 'Create a new Subtask'
   re_subtask: 'Subtask'
   ReSubtask: 'Subtask'
   re_subtask_solution: 'Solution'
