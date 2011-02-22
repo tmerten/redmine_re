@@ -77,13 +77,16 @@
 <%### REDMINE RE STUFF START 2 ###%>
         <%= render_flash_messages_with_timeout %>
 <%### REDMINE RE STUFF END 2 ###%>
+
+<%### REDMINE RE STUFF START 3 ###%>
+        <%= render :partial => 'requirements/treebar' %>
+<%### REDMINE RE STUFF END 3 ###%>
         
         <%= yield %>
 
-<%### REDMINE RE STUFF START 3 ###%>
+<%### REDMINE RE STUFF START 4 ###%>
         <%= render :partial => 'requirements/sidebar' %>
-        <%= render :partial => 'requirements/treebar' %>
-<%### REDMINE RE STUFF END 3 ###%>
+<%### REDMINE RE STUFF END 4 ###%>
 
         <%= call_hook :view_layouts_base_content %>
         <div style="clear:both;"></div>

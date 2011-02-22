@@ -9,13 +9,13 @@ a:active {
 }
 
 .detail_view {
-    position: absolute;
-    left: 240px;
-    right: 35px;
+    float: left;
+    margin-left: 220px;
+    margin-right: 35px;
 }
 
 .treebar {
-    float: left;
+    position: absolute;
     width: 200px;
 }
 
