@@ -204,7 +204,7 @@ class ReArtifactColors
 	end
 
 	def self.get_html_relation_color_code(i)
-		color=ReArtifactColors::RELATION_COLOURS[ReArtifactColors::ARTIFACT_COLOURS[i]]	
+		color=ReArtifactColors::COLOURS_TO_HEX[ReArtifactColors::RELATION_COLOURS[i]]	
 		color.to_s
 	end
 end
