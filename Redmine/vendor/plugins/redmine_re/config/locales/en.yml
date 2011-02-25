@@ -19,6 +19,7 @@ en:
   re_more: 'more'
   re_drag_list_items_to_reorder_artifacts: 'Drag the list items to reorder the RE Artefacts. The configured order will be used everywhere in the RE Plugin'
   re_artifact_order: 'Artifact Display Order'
+  re_create: 'Create'
 
   # re_artifact_properties
   re_artifact_name: 'Name'
@@ -70,6 +71,10 @@ en:
   re_source_artifact: 'Source Artifact'
   re_sink_artifact: 'Sink Artifact'
   re_artifact_type: 'Type'
+  re_create_new_relation: 'Create a new relation'
+  re_dependency_relation_type: 'Dependency'
+  re_conflict_relation_type: 'Conflict'
+  re_relation_type: 'Relation Type'
 
   # re_goals
   re_new_re_goal: 'New Goal'

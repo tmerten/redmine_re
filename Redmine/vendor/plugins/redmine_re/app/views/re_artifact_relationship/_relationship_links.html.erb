@@ -1,33 +1,38 @@
-
+<b><%= t(:re_artifact_relationships_outgoing) %></b>
 <p>
-    <%= l(:re_artifact_relationships_outgoing) %><br/>
+	<%= "
+	<ul>
+		" unless @relationships_outgoing.empty? -%>
+		<% for relationship in @relationships_outgoing %>
+		<% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
+		<li>
+			<%= link_to sink.name, {
+			:action => :edit,
+			:controller => sink.artifact_type.underscore,
+			:id => ReArtifactProperties.find_by_id(sink.id).artifact_id,
+			:project_id => params[:project_id]} %>
+			(<%= ReArtifactProperties::RELATION_TYPES.invert[relationship.relation_type].to_s.humanize %>)
+		</li>
+		<% end unless @relationships_outgoing.nil? %>
+		<%= "
+	</ul>" unless @relationships_outgoing.empty? -%>
 </p>
-    <%= "<ul>" unless @relationships_outgoing.empty? -%>
-    <% for relationship in @relationships_outgoing %>
-        <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
-        <li>
-          <%= link_to sink.name, {
-            :action => :edit,
-            :controller => sink.artifact_type.underscore,
-            :id => ReArtifactProperties.find_by_id(sink.id).artifact_id,
-            :project_id => params[:project_id]} %>
-          <br/>
-        </li>
-    <% end unless @relationships_outgoing.nil? %>
-    <%= "</ul>" unless @relationships_outgoing.empty? -%>
+<b><%= t(:re_artifact_relationships_incoming) %></b>
 <p>
-    <%= l(:re_artifact_relationships_incoming) %>
+	<%= "
+	<ul>
+		" unless @relationships_incoming.empty? -%>
+		<% for relationship in @relationships_incoming %>
+		<% source = ReArtifactProperties.find_by_id(relationship.source_id) %>
+		<li>
+			<%= link_to source.name, {
+			:action => :edit,
+			:controller => source.artifact_type.underscore,
+			:id => ReArtifactProperties.find_by_id(source.id).artifact_id,
+			:project_id => params[:project_id]} %>
+			(<%= ReArtifactProperties::RELATION_TYPES.invert[relationship.relation_type].to_s.humanize %>)
+		</li>
+		<% end unless @relationships_incoming.nil? %>
+		<%= "
+	</ul>" unless @relationships_incoming.empty? -%>
 </p>
-    <%= "<ul>" unless @relationships_incoming.empty? -%>
-    <% for relationship in @relationships_incoming %>
-        <% source = ReArtifactProperties.find_by_id(relationship.source_id) %>
-        <li>
-          <%= link_to source.name, {
-            :action => :edit,
-            :controller => source.artifact_type.underscore,
-            :id => ReArtifactProperties.find_by_id(source.id).artifact_id,
-            :project_id => params[:project_id]} %>
-          <br/>
-        </li>
-    <% end unless @relationships_incoming.nil? %>
-    <%= "</ul>" unless @relationships_incoming.empty? -%>

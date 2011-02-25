@@ -1,9 +1,4 @@
-
-<div class="box">
-
-
-  <fieldset><legend><%= l(:re_artifact_relationships) %></legend>
-  
+<fieldset id="relation-manager" class="collapsible "><legend>Manage Relations</legend>
   <div class="splitcontentleft">
     <div id="relationship_link_list">
         <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
@@ -11,19 +6,26 @@
         <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id) %>
         <%= render "re_artifact_relationship/relationship_links", :project_id => params[:project_id] %>
     </div>
+  <br />
   </div>
   
   <div class="splitcontentright">
-    <%= l("re_create_new_relationship") %>
-    <span id="preselected_artifacts"><%= select :relationship, :artifact_id, ReArtifactProperties.find(:all).collect { |d| [d.name, d.id]}, {:prompt => l(:re_select_artifact)} %></span>
-    <%= observe_field "relationship_artifact_id",   :url => { :action => :prepare_relationships,
-                                                    :controller => :re_artifact_relationship,
-                                                    :id => params[:id],
-                                                    :project_id => params[:project_id],
-                                                    :original_controller => controller.controller_name},
-                                                    :update => "relationship_link_list",
-                                                    :with => "'sink_id='+ escape($('relationship_artifact_id').value)" %>
- </div>
- 
- </fieldset>
-</div>
+    <b><%= t(:re_create_new_relation) %></b>
+		<p>
+    <% form_remote_tag :url =>
+    	{ :action => :prepare_relationships,
+      	:controller => :re_artifact_relationship,
+        :id => params[:id],
+        :project_id => params[:project_id],
+        :original_controller => controller.controller_name},
+        :update => "relationship_link_list" do %>
+        <p>
+				<p><%= label :re_artifact_relationship, :relation_type, l(:re_relation_type) %><%= l(:re_dependency_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :dependency %> <%= l(:re_conflict_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :conflict %></p>
+				<p><%= label :relationship, :artifact_id, t(:re_sink_artifact) %> <%= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find(:all).collect { |d| [d.name, d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
+	    	<p><%= submit_tag t(:re_create) %></p>
+	    	</p>
+  	<% end -%>
+    </p>
+    <br />
+	</div>
+</fieldset>

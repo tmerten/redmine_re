@@ -4,14 +4,19 @@ class ReArtifactRelationshipController < RedmineReController
 
 
   def prepare_relationships
-    @artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
-    if params[:sink_id] != ""
-      @source = ReArtifactProperties.find_by_id(@artifact_properties_id)
-      @sink = ReArtifactProperties.find_by_id(params[:sink_id])
-      @source.relate_to(@sink, :conflict, false)
+    artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
+    relation = params[:re_artifact_relationship]
+    
+    if relation[:relation_type] && relation[:artifact_id]
+      source = ReArtifactProperties.find_by_id(artifact_properties_id)
+      sink = ReArtifactProperties.find_by_id(relation[:artifact_id])
+      source.relate_to(sink, relation[:relation_type].to_sym, false)
+    else
+    	@error = "Relation could not be created"
     end
-    @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@artifact_properties_id)
-    @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id)
+    
+    @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(artifact_properties_id)
+    @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(artifact_properties_id)
     render :partial => "relationship_links", :layout => false, :project_id => params[:project_id]
   end
 
