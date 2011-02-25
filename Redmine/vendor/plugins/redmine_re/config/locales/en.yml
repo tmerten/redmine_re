@@ -40,18 +40,21 @@ en:
   re_section_deleted: 'The Section {{name}} has been sucessfully deleted.'
   re_section_not_deleted: 'The Section {{name}} could not be deleted.'
   re_section_saved: 'Section successfully saved'
+  re_section_priority: 'Priority'
   
   # re_workarea
   re_workarea: 'Workarea'
   re_create_re_workarea: 'Create a new Workarea'
   ReWorkarea: 'Workarea'
   re_new_re_workarea: 'New Workarea'
+  re_workarea_priority: 'Priority'
   
   # re_user_profile
   re_user_profile: 'User Profile'
   re_create_re_user_profile: 'Create a new User Profile'
   ReUserProfile: 'User Profile'
   re_new_re_user_profile: 'New User Profile'
+  re_user_profile_priority: 'Priority'
 
   # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
@@ -75,7 +78,7 @@ en:
   re_goal: 'Goal'
   re_goals: 'Goals'
   ReGoal: 'Goal'
-  re_create_child_goal: 'Create Child of Type Goal'
+  re_goal_priority: 'Priority'
   
   # re_tasks
   re_new_re_task: 'New Task'
@@ -84,6 +87,7 @@ en:
   re_task: 'Task'
   re_tasks: 'Tasks'
   ReTask: 'Task'
+  re_task_priority: 'Priority'
 
   # re_subtasks
   re_new_re_subtask: 'New Subtask'
@@ -97,6 +101,7 @@ en:
   re_insert_st_before: 'insert'
   re_insert_st_after: 'insert'
   re_delete_subtask: 'delete'
+  re_subtask_priority: 'Priority'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'

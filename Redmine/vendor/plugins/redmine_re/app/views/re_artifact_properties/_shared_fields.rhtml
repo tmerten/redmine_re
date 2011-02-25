@@ -8,29 +8,8 @@
     </p>
     
     <div class="splitcontentleft" >
-      <% javascript_tag  do %>
-      Event.observe(window, 'load', function() {
-        var prioSlider = new Control.Slider('numberfield-handle' , 'numberfield-track',
-        {
-             range: $R(1,51),
-             values: $R(1,50),
-             sliderValue: <%= properties.priority.nil? ? '1' : properties.priority.to_s %>,
-             onSlide: function(v) {
-                 $('<%= controller.controller_name -%>_priority').value = v;
-             }
-        } );
-        $('<%= controller.controller_name -%>_priority').observe('change', function() {
-          prioSlider.setValue(this.value);  
-        });
-      });
-      <% end %>
-      <div class="numberfield-slider">
-        <%= f.label :priority, l(:re_artifact_priority) %> <%= f.text_field :priority, :size => 3%>
-        <div id="numberfield-track" class="numberfield-track">
-            <div id="numberfield-handle" class="numberfield-handle"></div>
-        </div>
-      </div>
-    </div>
+      <%= number_field_with_slider(controller.controller_name, :priority, 0, 50) %>
+     </div>
     
     <div class="splitcontentright" >
     <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.text_field :responsibles%>    
