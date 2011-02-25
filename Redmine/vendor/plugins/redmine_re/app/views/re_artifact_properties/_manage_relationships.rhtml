@@ -1,4 +1,5 @@
-<fieldset id="relation-manager" class="collapsible "><legend>Manage Relations</legend>
+<fieldset id="relation-manager" class="collapsible collapsed"><legend onclick="toggleFieldset(this);">Manage Relations</legend>
+<div style="overflow: visible; display: none;">
   <div class="splitcontentleft">
     <div id="relationship_link_list">
         <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
@@ -28,4 +29,5 @@
     </p>
     <br />
 	</div>
+</div>
 </fieldset>
