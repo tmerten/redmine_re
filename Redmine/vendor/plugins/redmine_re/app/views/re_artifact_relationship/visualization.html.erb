@@ -4,37 +4,28 @@
     <%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
 <% end%>
 
-
 <!-- KoREM: We have to check if this is needed and to add the js-File.-->
 <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
 
+<div id='detail_view' class='detail_view'>
 
-<div id="container">
-
-<div id="left-container">
-
-
+<div id="filters">
         <div class="text">
         <h3>
             <%= l(:re_relationship_visualization)%>
         </h3>
-
-
-        <br/>
-
         <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
                                      :project_id => params[:project_id]},
                             :complete => 'sb.loadJSON(request.responseJSON);
                                           sb.refresh();' do %>
           
-		  <h4><%= l(:re_artifacts) %> <br/></h4>
+				  <h4><%= l(:re_artifacts) %> <br/></h4>
           <% @re_artifact_order.each_with_index do |artifact_type, i| %>
           <% colors = ReArtifactColors::get_html_artifact_color_code(i) %>
             <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
             <%= check_box_tag 'artifact_clicked[]', artifact_type.to_s, true %>
             <%= label :artifacts_to_choose, t(artifact_type.to_s.underscore)%><br/>
           <% end %>
-          <br/>
           <h4><%= l(:re_relationships) %><br/></h4>
           <% for key, value in ReArtifactProperties::RELATION_TYPES do %>
             <% colors = ReArtifactColors::RELATION_COLOURS[ReArtifactProperties::RELATION_TYPES[key.to_sym]] %>
@@ -45,25 +36,14 @@
               <br/>
           <%= submit_tag l(:re_show)%>
         <% end %>
+         <div id="node-details"></div>
         </div>
-        <div id="id-list"></div>
 
 </div>
 
-<div id="center-container">
-    <div id="infovis"></div>
+<div id="wrapper">
+<div id="infovis"></div>
 </div>
-
-<div id="right-container">
-
-<div id="inner-details"></div>
-
-</div>
-
-<div id="log"></div>
-</div>
-
-
 
 <script type="text/javascript">
   //<![CDATA[
@@ -87,17 +67,6 @@ var json = null;
   useGradients = nativeCanvasSupport;
   animate = !(iStuff || !nativeCanvasSupport);
 })();
-
-var Log = {
-  elem: false,
-  write: function(text){
-    if (!this.elem)
-      this.elem = document.getElementById('log');
-    this.elem.innerHTML = text;
-    this.elem.style.left = (500 - this.elem.offsetWidth / 2) + 'px';
-  }
-};
-
 
 function init(){
   //init Sunburst
@@ -140,14 +109,14 @@ function init(){
       //List node connections onClick
       onClick: function(node, eventInfo, e){
         if (!node) return;
-        var html = "<h4>" + node.name + " connections</h4><ul><li>", ans = [];
+        var html = "<h4>" + node.name.truncate(30, '...') + "</h4><ul><li>", ans = [];
         node.eachAdjacency(function(adj){
           // if on the same level i.e siblings
             if (adj.nodeTo._depth == node._depth) {
-              ans.push(adj.nodeTo.name);
+              ans.push(adj.nodeTo.name.truncate(50, '...'));
             }
           });
-        $jit.id('inner-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
+        $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
       }
     },
     levelDistance: 190,

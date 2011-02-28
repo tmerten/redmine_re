@@ -96,8 +96,9 @@ class ReArtifactRelationshipController < RedmineReController
       @json_artifact += '{ "nodeTo": "' + @sink.artifact_type.to_s + @sink.artifact_id.to_s + '",
                            "data": {
                                      "$color": "' + ReArtifactColors.get_html_relation_color_code(relation.relation_type) + '",
-                                     "$lineWidth": 2
-                                   }
+                                     "$lineWidth": 2'
+			@json_artifact += ', "$type": "arrow",' if relation.directed?                                     
+			@json_artifact += '		}
                          },'
     end
     # "$type": "arrow"
