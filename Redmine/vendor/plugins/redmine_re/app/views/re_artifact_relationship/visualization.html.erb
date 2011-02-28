@@ -8,12 +8,10 @@
 <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
 
 <div id='detail_view' class='detail_view'>
+<h2><%= l(:re_relationship_visualization)%></h2>
 
 <div id="filters">
         <div class="text">
-        <h3>
-            <%= l(:re_relationship_visualization)%>
-        </h3>
         <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
                                      :project_id => params[:project_id]},
                             :complete => 'sb.loadJSON(request.responseJSON);

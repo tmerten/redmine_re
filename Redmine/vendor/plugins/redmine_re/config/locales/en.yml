@@ -61,7 +61,7 @@ en:
   re_artifact_relationships: 'Relationships'
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
   re_artifact_relationships_incoming: 'Incoming Relationships'
-  re_relationship_visualization: 'Visualize'
+  re_relationship_visualization: 'Artifact Traceability Visualization'
   re_relationships: 'Relationships'
   re_relationship: 'Relationship'
   re_conflict: 'Conflict'
