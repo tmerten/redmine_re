@@ -39,6 +39,11 @@
 
 
 <script type="text/javascript" language="javascript">
+  Event.observe(window, 'load', function() {
+    updateAllSubtaskPositions();
+  });
+
+
   changeSubtaskRowColor = function(element, value) {
     element.removeClassName('subtask');
     element.removeClassName('variant');

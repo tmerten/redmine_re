@@ -45,34 +45,38 @@ class ReTaskController < RedmineReController
     @html_tree = create_tree
 
     if request.post?
+      # check validation of task and subtask attributes
 
-      # When new Task in order to save the subtasks and their positions you need the id of the task
+      valid_task = true
+      valid_subtask_attributes = true
+      subtask_attributes = params[:re_task].delete(:subtask_attributes)
 
-      if @re_task.new_record?
-        # Attributes of Subtasks delete from re_task hash in order that task can be saved(need id for parent relation to subtasks)
-        subtask_attributes = params[:re_task].delete("subtask_attributes")
+      ## Task validation
+      @re_task.attributes = params[:re_task]
+      valid_task = @re_task.valid?
 
-        @re_task.attributes = params[:re_task]
-        add_hidden_re_artifact_properties_attributes @re_task
+      ## subtask_attributes validation
+      valid_subtask_attributes = @re_task.subtasks_valid?(subtask_attributes)
 
-        # Task will be saved with valid attributes
-        @re_task.save
+      # Saving everything
+      if valid_task && valid_subtask_attributes
+        if @re_task.save
+          # Save all subtasks
+          @re_task.subtask_attributes = subtask_attributes
 
-        # saves subtasks and sets position
-        @re_task.subtask_attributes = subtask_attributes
-        #todo: flash notification if a subtask fails validation
+          flash[:notice] = 'Task and Subtasks successfully saved'
+          redirect_to :action => 'edit', :id => @re_task.id and return
+        end
       else
-        # implicite executeion of subtask_attributes
-        @re_task.attributes = params[:re_task]
-        add_hidden_re_artifact_properties_attributes @re_task
+        # Get all Subtasks sorted by their position
+        @subtasks = @re_task.get_subtasks_sorted_by_position(subtask_attributes)
+        # Add error to task
+        @re_task.errors.add("subtasks", "Subtasks are not valid!")
+        #todo: css formerror red
       end
-
-
-      flash[:notice] = 'Task successfully saved' if save_ok = @re_task.save
-
-      redirect_to :action => 'edit', :id => @re_task.id and return if save_ok
     end
   end
+
 
   ##
   # deletes and updates the flash with either success, id not found error or deletion error
