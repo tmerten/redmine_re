@@ -114,8 +114,13 @@ SortableTree.Node = Class.create({
             this.submitTreeStructure(my_li, false, numeric_id);
           }
         }.bind(this));
+        
         var nodelink = ce.select(function(c) { return (c.hasClassName('nodelink')); });
+        nodelink.first().observe('dblclick', this.redirectToEdit.bind(this));
+
+        nodelink = ce.select(function(c) { return (c.hasClassName('nodecontextmenulink')); });
         nodelink.first().observe('click', this.renderNodeContextMenu.bind(this));
+
       }.bind(this));
     }
   },
@@ -140,10 +145,20 @@ SortableTree.Node = Class.create({
     
     if (!open) { ul.remove(); }
   },
+
+  redirectToEdit: function(event) {
+    var element = event.element();
+    var listelement = element.ancestors().detect(function(e) { return e.match('li') });
+    var id = listelement.id;
+    id = id.gsub('node_','');
+    var url = this.options.editUrl + id;
+    document.location = url;
+  },
   
   renderNodeContextMenu: function(event) {
     var element = event.element();
-    var id = element.ancestors().first().id;
+    var listelement = element.ancestors().detect(function(e) { return e.match('li') });
+    var id = listelement.id;
     id = id.gsub('node_','');
     var url = this.options.contextMenuUrl + id;
 

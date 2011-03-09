@@ -30,7 +30,8 @@
     nodeUrl: '/requirements/treestate/',
     contextMenuUrl: '/requirements/context_menu/',
     contextMenuDivId: 'context-menu',
-    projectId: <%= @project.id -%>,
+    editUrl: '/re_artifact_properties/edit/',
+    projectId: <%= @project.id -%>
   });
   if (tree !== null) {
     tree.setSortable();

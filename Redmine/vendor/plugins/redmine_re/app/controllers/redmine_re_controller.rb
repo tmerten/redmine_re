@@ -8,9 +8,8 @@ class RedmineReController < ApplicationController
   TRUNCATE_NAME_IN_TREE_AFTER_CHARS = 18
   TRUNCATE_OMISSION = "..."
   
-  #include ActionView::Helpers::UrlHelper
-  #include ActionView::Helpers::AssetTagHelper
-  #include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::AssetTagHelper
+  include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper  
 
   before_filter :find_project, :load_settings
@@ -74,17 +73,37 @@ class RedmineReController < ApplicationController
   # longer than the next refresh of the browser.
   def delegate_tree_drop
     new_parent_id = params[:new_parent_id]
+    left_artifact_id = params[:left_artifact_id]
     moved_artifact_id = params[:moved_artifact_id]
-    child = ReArtifactProperties.find_by_id(moved_artifact_id)
-    if new_parent_id == 'null'
+
+    moved_artifact = ReArtifactProperties.find(moved_artifact_id)
+    old_parent = moved_artifact.parent
+
+		new_parent = nil
+    new_parent = ReArtifactProperties.find(new_parent_id) if not new_parent_id.empty?
+
+		left_artifact = nil
+    left_artifact = ReArtifactProperties.find(left_artifact_id) if not left_artifact_id.empty?
+ 
+    if new_parent.nil?
       # Element is dropped under root node which is the project new parent-id has to become nil.
-      child.parent = nil
+      moved_artifact.parent = nil
+			#children = ReArtifactProperties.find_all_by_parend_id = nil
+			#children << moved_artifact
     else
+			relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(
+				new_parent_id,
+				RELATION_TYPES[:parentchild]
+			)
+			
+			    	
+   		children = new_parent.children
       # Element is dropped under other artifact
-      child.parent = ReArtifactProperties.find(new_parent_id)
+      moved_artifact.parent = new_parent
     end
-    child.state = State::DROPPING    #setting state for observer
-    child.save!
+    
+    moved_artifact.state = State::DROPPING    #setting state for observer
+    moved_artifact.save!
     render :nothing => true
   end
 
@@ -119,7 +138,9 @@ class RedmineReController < ApplicationController
     html_tree += '<a class="nodelink ' + artifact_type + '">' 
     html_tree += truncate(re_artifact_properties.name.to_s, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
     html_tree += '</a>'
-    html_tree += '<a href="' + url_for( :controller => artifact_type, :action => 'edit', :id => re_artifact_properties.artifact_id) + '" class="nodeeditlink"> (' + l(:re_edit) + ')</a>'
+    html_tree += '<a class="nodecontextmenulink">'
+    html_tree += image_tag('icons/bullet_toggle_plus.png', :alt => l(:re_treenode_context_menu), :plugin => "redmine_re")
+    html_tree += '</a>'
 
     html_tree += '<ul>' if expanded
     if ( !re_artifact_properties.children.empty? )
