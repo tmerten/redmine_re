@@ -34,6 +34,7 @@
               <br/>
           <%= submit_tag l(:re_show)%>
         <% end %>
+         <h4><%= t(:re_artifact_details) %></h4>
          <div id="node-details"></div>
         </div>
 
@@ -41,6 +42,8 @@
 
 <div id="wrapper">
 <div id="infovis"></div>
+</div>
+
 </div>
 
 <script type="text/javascript">
@@ -107,11 +110,11 @@ function init(){
       //List node connections onClick
       onClick: function(node, eventInfo, e){
         if (!node) return;
-        var html = "<h4>" + node.name.truncate(30, '...') + "</h4><ul><li>", ans = [];
+        var html = "<b>" + node.name.truncate(30, '...') + "</b><ul class=\"filterdetails\"><li>", ans = [];
         node.eachAdjacency(function(adj){
           // if on the same level i.e siblings
             if (adj.nodeTo._depth == node._depth) {
-              ans.push(adj.nodeTo.name.truncate(50, '...'));
+              ans.push(adj.nodeTo.name.truncate(22, '...'));
             }
           });
         $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
