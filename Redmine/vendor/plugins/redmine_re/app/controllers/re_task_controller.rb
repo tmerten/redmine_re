@@ -71,8 +71,7 @@ class ReTaskController < RedmineReController
         # Get all Subtasks sorted by their position
         @subtasks = @re_task.get_subtasks_sorted_by_position(subtask_attributes)
         # Add error to task
-        @re_task.errors.add("subtasks", "Subtasks are not valid!")
-        #todo: css formerror red
+        @re_task.errors.add("subtasks","are not valid!")
       end
     end
   end

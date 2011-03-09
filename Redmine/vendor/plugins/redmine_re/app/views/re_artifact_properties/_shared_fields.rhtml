@@ -12,7 +12,7 @@
      </div>
     
     <div class="splitcontentright" >
-    <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.text_field :responsibles%>    
+    <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.select :responsibles, User.all.collect {|u| [ u.firstname+" "+ u.lastname ] }%>
     </div>
         
   </fieldset>

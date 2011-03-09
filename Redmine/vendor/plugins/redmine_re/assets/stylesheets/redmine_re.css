@@ -32,6 +32,10 @@ table.subtasks {
     background: url(../images/sortable_tree/drag.png) no-repeat bottom left;
 }
 
+.formError {
+    color:red;
+    font-weight:bold;
+}
 tr.subtask {
     background-color: #F6F7F8;
     border-width: 1px;

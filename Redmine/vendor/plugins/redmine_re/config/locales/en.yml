@@ -107,6 +107,7 @@ en:
   re_insert_st_after: 'insert'
   re_delete_subtask: 'delete'
   re_subtask_priority: 'Priority'
+  field_subtasks: 'Subtasks'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'
