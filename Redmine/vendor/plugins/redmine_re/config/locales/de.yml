@@ -1,5 +1,5 @@
 # German strings go here for Rails i18n
-en:
+de:
   # general stuff
   re_requirements: 'Anforderungen'
   re_save: 'Speichern'
@@ -22,6 +22,12 @@ en:
   re_artifact_priority: 'Priorit&auml;t'
   re_artifact_description: 'Beschreibung'
   re_artifact_responsibles: 'Verantwortliche'
+  re_artifact_properties_validates_presence_of_name: 'Name muss angegeben werden!'
+  re_artifact_properties_validates_uniqueness_of_name: 'Name wird bereits verwendet!'
+  re_artifact_properties_validates_presence_of_updated_by: 'Updadet by muss angegeben werden!'
+  re_artifact_properties_validates_presence_of_created_by: 'Created by muss angegeben werden!'
+  re_artifact_properties_validates_presence_of_project: 'Project muss angegeben werden!'
+
 
   # re_artifact_relationships
   re_artifact_relationships: 'Beziehung'

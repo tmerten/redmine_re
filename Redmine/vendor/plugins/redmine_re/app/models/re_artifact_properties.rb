@@ -43,8 +43,12 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :project
   #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
 
-  validates_presence_of :project, :created_by, :updated_by, :name
-  validates_uniqueness_of :name
+  validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
+  validates_presence_of :created_by, :message => l(:re_artifact_properties_validates_presence_of_created_by)
+  validates_presence_of :updated_by, :message => l(:re_artifact_properties_validates_presence_of_updated_by)
+  validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
+
+  validates_uniqueness_of :name, :message => l(:re_artifact_properties_validates_uniqueness_of_name)
 
   # Should be on, but prevents subtasks from saving for now.
   #validates_numericality_of :priority, :only_integer => true, :greater_than => 0, :less_than_or_equal_to => 50

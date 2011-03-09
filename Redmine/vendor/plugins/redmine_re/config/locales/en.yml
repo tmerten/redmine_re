@@ -31,6 +31,11 @@ en:
   re_description_fieldset: 'Artifact Description'
   re_priority_responsible: 'Priority and Responsibilities'
   re_update_description: 'Update description'
+  re_artifact_properties_validates_presence_of_name: 'Name cant be blank!'
+  re_artifact_properties_validates_uniqueness_of_name: 'Name has been already taken!'
+  re_artifact_properties_validates_presence_of_updated_by: 'Updadet by cant be blank!'
+  re_artifact_properties_validates_presence_of_created_by: 'Created by cant be blank!'
+  re_artifact_properties_validates_presence_of_project: 'Project cant be blank!'
 
   # re_section
   re_new_re_section: 'New Section'
