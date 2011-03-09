@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ReArtifactTest < ActiveSupport::TestCase
-  fixtures :re_artifacts
+class ReArtifactPropertiesTest < ActiveSupport::TestCase
+  fixtures :re_artifact_properties
 
   # Replace this with your real tests.
   def test_truth
