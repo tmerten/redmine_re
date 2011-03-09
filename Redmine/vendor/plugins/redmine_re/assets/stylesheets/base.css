@@ -8,6 +8,10 @@
 	float: left;
 }
 
+#node-details {
+		font-size: 10px;
+}
+
 /*TOOLTIPS*/
 .tip {
     color: #111;
