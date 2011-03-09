@@ -8,7 +8,7 @@
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
     
     <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
-    <%= submit_tag l(:re_save) %>
+    <%= submit_tag l(:re_save), :accesskey => "s" %>
 
     <table class="subtasks">
       <thead>
@@ -16,7 +16,9 @@
           <th>&nbsp;</th>
           <th>Type</th>
           <th>Name</th>
+          <th>&nbsp;</th>
           <th>Solution</th>
+          <th>&nbsp;</th>
           <th> <%= add_subtask_link l(:re_insert_st_before), "subtasks", "top" %> </th>
         </tr>
       </thead>

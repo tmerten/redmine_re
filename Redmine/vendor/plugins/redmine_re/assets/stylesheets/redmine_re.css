@@ -129,3 +129,20 @@ label.filter {
 .select_field_filter {
     width: 110px;
 }
+
+/***** Tooltips overridden from application.css (redmine)******/
+.tooltip{position:relative;z-index:24;}
+.tooltip:hover{z-index:25;color:#000;}
+.tooltip span.tip{display: none; text-align:center;}
+
+div.tooltip:hover span.tip{
+display:block;
+position:absolute;
+top:12px; left:24px; width:270px;
+border:1px solid #EC705B;
+background-color:#ffffff;
+padding: 4px;
+font-size: 0.8em;
+font-weight:bold;
+color:#EC705B
+}
