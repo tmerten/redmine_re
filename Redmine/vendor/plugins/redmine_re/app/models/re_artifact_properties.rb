@@ -174,7 +174,7 @@ class ReArtifactProperties < ActiveRecord::Base
         ReArtifactRelationship.delete(relation.id)
         return
       end
-      parent = instance_checker parent
+      parent = instance_checker(parent)
       relation.source_id = parent.id
       relation.save
     else
@@ -224,7 +224,7 @@ class ReArtifactProperties < ActiveRecord::Base
   def instance_checker(o)
     if not o.instance_of? ReArtifactProperties
       if not o.respond_to? :re_artifact_properties
-        raise ArgumentError, "you can relate ReArtifactProperties to other ReArtifactProperties or a class that acts_as_artifact, only."
+        raise ArgumentError, "You can relate ReArtifactProperties to other ReArtifactProperties or a class that acts_as_artifact, only."
       end
       o = o.re_artifact_properties
     end
