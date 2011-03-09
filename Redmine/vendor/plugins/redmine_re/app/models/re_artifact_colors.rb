@@ -2,7 +2,7 @@ class ReArtifactColors
 	
   ARTIFACT_COLOURS = {
   	0 => :DarkViolet,
-  	1 => :FireBrick,
+  	1 => :DarkGreen,
   	2 => :BurlyWood,
   	3 => :Crimson,
   	4 => :DarkCyan,
@@ -12,9 +12,9 @@ class ReArtifactColors
   	8 => :Coral,
   	9 => :GreenYellow,
   	10 => :HotPink,
-  	11 => :ForrestGreen,
+  	11 => :DarkSalmon,
   	12 => :DeepSkyBlue,
-  	13 => :DarkSalmon,
+  	13 => :FireBrick,
   	14 => :GoldenRod,
   	15 => :Kahki,
   	16 => :LightSeaBlue,
@@ -27,11 +27,11 @@ class ReArtifactColors
   RELATION_COLOURS = {
   	1 => :Navy,
   	2 => :Darkorange,
-  	4 => :Red,
-  	8 => :Purple,
-  	16 => :Magenta,
-  	32 => :Yellow,
-  	64 => :Green
+  	3 => :Red,
+  	4 => :Purple,
+  	5 => :Magenta,
+  	6 => :Yellow,
+  	7 => :Green
 	}  
 
   COLOURS_TO_HEX = {

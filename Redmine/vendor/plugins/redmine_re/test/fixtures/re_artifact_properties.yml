@@ -1,17 +1,224 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 # TODO renamed from "old" artifacts
-art_benutzerfreundlichkeit:
-  name: benutzerfreundlichkeit
-  priority: 1
-  author: users_001
-  project: projects_002
-  artifact: goa_benutzerfreundlichkeit (ReGoal)
 
-art_geringe_latenz:
-  name: geringe_latenz
+
+
+# Artifact Properties for Goals
+
+art_goal_usability:
+  id: <%= Fixtures.identify(:art_goal_usability) %>
+  name: Usability
+  description: The system shall be operated easily.
+  priority: 1
+  created_by: 1
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:goal_usability) %>
+  artifact_type: ReGoal
+
+art_goal_small_latency:
+  id: <%= Fixtures.identify(:art_goal_small_latency) %>
+  name: Small latency
+  description: The system's latency should be small in order to not annoy the user. This goal has to be specified in more detail by corresponding requirements. 
   priority: 5
-  author: users_002
-  project: projects_004
-  parent: art_benutzerfreundlichkeit
-  artifact: goa_geringe_latenz (ReGoal)
+  responsibles: Mister X
+  created_by: 2
+  created_at: 2011-03-02 19:55
+  project_id: 2
+  artifact_id: <%= Fixtures.identify(:goal_small_latency) %>
+  artifact_type: ReGoal
+  
+art_goal_keyboard_control:
+  id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
+  name: Control of system via keyboard
+  description: The system shall offer the possibility to be controlled via keyboard only.
+  priority: 4
+  responsibles: Mr. Simpson, frequent user.
+  created_by: 1
+  created_at: 2011-03-09 08:22
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:goal_keyboard_control) %>
+  artifact_type: ReGoal
+
+
+
+  
+# Artifact Properties for Tasks 
+ 
+art_task_login:
+  id: <%= Fixtures.identify(:art_task_login) %>
+  name: Login
+  description: This task sums up all steps needed to perform a system login.
+  priority: 2
+  created_by: 1
+  project_id: 2
+  artifact_id: <%= Fixtures.identify(:task_login) %>
+  artifact_type: ReTask
+
+art_task_test_vocabulary:
+  id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
+  name: Test of vocabulary
+  description: This task describes how the user and the system perform a test of the user's knowledge about one lecture's vocabulary. 
+  priority: 4
+  responsibles: Miss Mayhem, Speach Department
+  created_by: 2
+  created_at: 2011-03-07 10:31
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:task_test_vocabulary) %>
+  artifact_type: ReTask
+  
+  
+  
+
+# Artifact Properties for Subtasks  
+
+art_subtask_login_get_user_data_from_user:
+  id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_user) %>
+  name: User data from user
+  description: Gain user data (user name and password) from user.
+  priority: 1
+  responsibles: Senior Seguridad, Security Department
+  created_by: 2
+  created_at: 2011-03-07 10:31
+  project_id: 2
+  artifact_id: <%= Fixtures.identify(:subtask_login_get_user_data_from_user) %>
+  artifact_type: ReSubtask
+
+art_subtask_login_get_user_data_from_cookie:
+  id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_cookie) %>
+  name: User data from other sources
+  description: Gain user data - - user name and password - from other sources like a cookie.
+  priority: 4
+  responsibles: Senior Seguridad, Security Department
+  created_by: 2
+  created_at: 2011-03-07 10:32
+  project_id: 2
+  artifact_id: <%= Fixtures.identify(:subtask_login_get_user_data_from_cookie) %>
+  artifact_type: ReSubtask
+
+art_subtask_login_problem_with_forgotten_user_data:
+  id: <%= Fixtures.identify(:art_subtask_login_problem_with_forgotten_user_data) %>
+  name: Forgotten password
+  description: Provide a possibility to recover from password and/or username loss.
+  priority: 2
+  responsibles: Senior Seguridad, Security Department
+  created_by: 2
+  created_at: 2011-03-07 10:36
+  project_id: 2
+  artifact_id: <%= Fixtures.identify(:subtask_login_problem_with_forgotten_user_data) %>
+  artifact_type: ReSubtask
+
+art_subtask_login_hash_password:
+  id: <%= Fixtures.identify(:art_subtask_login_hash_password) %>
+  name: Hashing
+  description: Hash password before sending to avoid exposure of password in plain text.
+  priority: 1
+  responsibles: Senior Seguridad, Security Department
+  created_by: 2
+  created_at: 2011-03-07 10:38
+  project_id: 2
+  artifact_id: <%= Fixtures.identify(:subtask_login_hash_password) %>
+  artifact_type: ReSubtask
+  
+art_subtask_login_data_check:
+  id: <%= Fixtures.identify(:art_subtask_login_data_check) %>
+  name: Check data
+  description: Verify provided data against stored username and password hash. 
+  priority: 1
+  responsibles: Senior Seguridad, Security Department
+  created_by: 2
+  created_at: 2011-03-07 10:33
+  project_id: 2
+  artifact_id: <%= Fixtures.identify(:subtask_login_data_check) %>
+  artifact_type: ReSubtask
+
+art_subtask_test_vocabulary_choose_lecture:
+  id: <%= Fixtures.identify(:art_subtask_test_vocabulary_choose_lecture) %>
+  name: Choose lecture to test
+  description: Choose one or more of the given lectures to create a test of the user's knowledge on this vocabulary.
+  priority: 2
+  responsibles: Miss Mayhem, Speach Department
+  created_by: 1
+  created_at: 2011-03-08 14:08
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:subtask_test_vocabulary_choose_lecture) %>
+  artifact_type: ReSubtask
+
+art_subtask_test_vocabulary_control_knowledge:
+  id: <%= Fixtures.identify(:art_subtask_test_vocabulary_control_knowledge) %>
+  name: Performing a part of a a vocabulary test
+  description: Test if user knows translations to words from choosen lecture.
+  priority: 1
+  responsibles: Miss Contrella, Department of Knowledge Testing
+  created_by: 1
+  created_at: 2011-03-07 14:36
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:subtask_test_vocabulary_control_knowledge) %>
+  artifact_type: ReSubtask
+
+art_subtask_test_vocabulary_show_results:
+  id: <%= Fixtures.identify(:art_subtask_test_vocabulary_show_results) %>
+  name: Result presentation
+  description: Show results from the test made before. Use a system to represent the users knowledge progress.
+  priority: 3
+  responsibles: Miss Contrella, Department of Knowledge Testing
+  created_by: 1
+  created_at: 2011-03-07 14:45
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:subtask_test_vocabulary_show_results) %>
+  artifact_type: ReSubtask
+  
+  
+  
+  
+# Artifact Properties for Sections
+
+art_section_goals:
+  id: <%= Fixtures.identify(:art_section_goals) %>
+  name: Dokumentation of Goals
+  description: This section of the documentation contains all goals relevant for the project.
+  responsibles: Mrs. Xander, Project Manager
+  created_by: 9
+  created_at: 2011-03-09 14:11
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:section_goals) %>
+  artifact_type: ReSection
+  
+art_section_szenarios:
+  id: <%= Fixtures.identify(:art_section_szenarios) %>
+  name: Dokumentation of Szenarios
+  description: This section of the documentation contains all szenarios relevant for the project.
+  responsibles: Mrs. Xander, Project Manager
+  created_by: 9
+  created_at: 2011-03-07 17:51
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:section_szenarios) %>
+  artifact_type: ReSection
+  
+  
+  
+  
+# Artifact Properties for Workareas
+
+art_workarea_learning_at_home:
+  id: <%= Fixtures.identify(:art_workarea_learning_at_home) %>
+  name: Learning at home
+  description: This workarea describes the atmosphere of a place of work at home. The user is placed in a familiar surrounding and feels relaxed.
+  responsibles: Mr. Appelgarden, Teacher of Foreign Languages
+  created_by: 4
+  created_at: 2011-03-09 15:22
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:workarea_learning_at_home) %>
+  artifact_type: ReWorkarea
+  
+art_workarea_public_test_for_toefel:
+  id: <%= Fixtures.identify(:art_workarea_public_test_for_toefel) %>
+  name: Public vocabulary test for toefel tests
+  description: This workarea describes the atmosphere at an official electronical vocabulary test for e.g. toeffel tests. The user is placed in an unfamiliar surrounding and feels excited, stressed and maybe even afraid.
+  responsibles: Mrs. Xander, Project Manager
+  created_by: 4
+  created_at: 2011-03-07 11:13
+  project_id: 4
+  artifact_id: <%= Fixtures.identify(:workarea_public_test_for_toefel) %>
+  artifact_type: ReWorkarea
+ 

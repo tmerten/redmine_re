@@ -1,5 +1,5 @@
 class State
-  #Constants describin the ReArtifactProperties
+  #Constants describing the ReArtifactProperties
   
   IDLE = 0
   REVERTING = 1

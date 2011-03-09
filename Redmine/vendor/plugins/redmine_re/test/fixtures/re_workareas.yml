@@ -1,13 +1,15 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
-  id: 1
-  start: MyString
-  end: MyString
-  frequency: MyString
-  difficult: MyString
-two:
-  id: 2
-  start: MyString
-  end: MyString
-  frequency: MyString
-  difficult: MyString
+
+workarea_learning_at_home:
+  id: <%= Fixtures.identify(:workarea_learning_at_home) %>
+  start: 
+  end: 
+  frequency: Every second day for 30 minutes.
+  difficult: Easy
+  
+workarea_public_test_for_toefel:
+  id: <%= Fixtures.identify(:workarea_public_test_for_toefel) %>
+  start: Fifteen minutes before official vocabulary test starts at the day of the public toeffel test.
+  end: Official endtime of the test at the day of the public toeffel test.
+  frequency: Once every half year.
+  difficult: High because of official situation. 

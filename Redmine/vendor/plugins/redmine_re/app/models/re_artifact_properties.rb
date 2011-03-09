@@ -6,7 +6,10 @@ class ReArtifactProperties < ActiveRecord::Base
   RELATION_TYPES = {
   	:parentchild => 1,
   	:dependency => 2,
-  	:conflict => 4
+    :rationale => 3,
+  	:conflict => 4,
+    :refinement => 5,
+    :part_of => 6
 	}
 	
   has_many :relationships_as_source,
