@@ -9,6 +9,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 	url 'http://korem.de/redmineplugin'
 	author_url 'http://korem.de'
 
+	# Patches to the Redmine Core
+	#require_dependency 'projects_patch'
+
 	# this plugin creates a project module. navigate to 'settings->modules' in the app to activate the plugin per project
 	project_module :requirements do
 		permission( :re,
