@@ -9,140 +9,152 @@ a:active {
 }
 
 .detail_view {
-    margin-left: 220px;
-    margin-right: 35px;
+  margin-left: 220px;
+  margin-right: 35px;
 }
 
 .treebar {
-    position: absolute;
-    width: 200px;
+  position: absolute;
+  width: 200px;
 }
 
 .recopyright {
-    font-size: 0.9em;
+  font-size: 0.9em;
 }
 
 table.subtasks {
-    border-spacing: 0;
-    border-style: none;
-    border-width: 0;
+  border-spacing: 0;
+  border-style: none;
+  border-width: 0;
 }
 
 #subtasks .drop_hover {
-    background: url(../images/sortable_tree/drag.png) no-repeat bottom left;
+  background: url(../images/sortable_tree/drag.png) no-repeat bottom left;
 }
 
 .formError {
-    color:red;
-    font-weight:bold;
+  color:red;
+  font-weight:bold;
 }
+
 tr.subtask {
-    background-color: #F6F7F8;
-    border-width: 1px;
-    padding: 0px;
-    border-style: solid;
-    border-color: gray;
+  background-color: #F6F7F8;
+  border-width: 1px;
+  padding: 0px;
+  border-style: solid;
+  border-color: gray;
 }
 
 td.subtask {
-    border-top: 2px solid #505050;
+  border-top: 2px solid #505050;
 }
 
 tr.variant {
-    background-color: #FFE6BF;
+  background-color: #FFE6BF;
 }
 
 tr.problem {
-    background-color: #F1938C;
+  background-color: #F1938C;
 }
 
 tr.draggable {
-    cursor: move;
+  cursor: move;
 }
 
 textarea {
-    border: 1px solid #CCCCCC;
-    font-family: Verdana,sans-serif;
-    padding: 3px;
-    font-size: 12px;
-    width: 95%;
+  border: 1px solid #CCCCCC;
+  font-family: Verdana,sans-serif;
+  padding: 3px;
+  font-size: 12px;
+  width: 95%;
 }
 
 #context-menu li.header {
-    border-bottom-width: 1px;
-    border-bottom-color: black;
-    border-bottom-style: dotted;
-    background-color: #507AAA;
-    padding-left: 5px;
-    color: white;
+  border-bottom-width: 1px;
+  border-bottom-color: black;
+  border-bottom-style: dotted;
+  background-color: #507AAA;
+  padding-left: 5px;
+  color: white;
 }
 
 label {
-    font-weight: bold;
-    width: 100px;
-    clear:left; 
-    display:block;
-    float:left; 
-    text-align:right;
-    padding-right:5px;
+  font-weight: bold;
+  width: 100px;
+  clear:left; 
+  display:block;
+  float:left; 
+  text-align:right;
+  padding-right:5px;
 }
 
 label.filter {
-    font-weight: bold;
-    width: 100px;
-    clear:left; 
-    display:block;
-    float:left; 
-    text-align:left;
-    padding-right:5px;
+  font-weight: bold;
+  width: 100px;
+  clear:left; 
+  display:block;
+  float:left; 
+  text-align:left;
+  padding-right:5px;
 }
 
 
 .numberfield-slider {
-    float:left;
+  float:left;
 }
 
 .numberfield-slider .numberfield-track {
-    float:right;
-    width: 150px;
-    background-color: #507AAA;
-    height: 15px;
-    margin: 3px 0 0 15px;
+  float:right;
+  width: 150px;
+  background-color: #507AAA;
+  height: 15px;
+  margin: 3px 0 0 15px;
 }
 
 .numberfield-slider .numberfield-handle {
-    width: 8px;
-    height: 13px;
-    margin: 1px 1px 0 1px;
-    background-color: #FFFFFF;
-    cursor: move;
+  width: 8px;
+  height: 13px;
+  margin: 1px 1px 0 1px;
+  background-color: #FFFFFF;
+  cursor: move;
 }
 
 .icon-subtask-before {
-    background-image: url("../images/icons/subtask_before.png");
+  background-image: url("../images/icons/subtask_before.png");
 }
 
 .icon-subtask-after {
-    background-image: url("../images/icons/subtask_after.png");
+  background-image: url("../images/icons/subtask_after.png");
 }
 
 .select_field_filter {
-    width: 110px;
+  width: 110px;
 }
 
 /***** Tooltips overridden from application.css (redmine)******/
-.tooltip{position:relative;z-index:24;}
-.tooltip:hover{z-index:25;color:#000;}
-.tooltip span.tip{display: none; text-align:center;}
+.tooltip {
+  position:relative;
+  z-index:24;
+}
 
-div.tooltip:hover span.tip{
-display:block;
-position:absolute;
-top:12px; left:24px; width:270px;
-border:1px solid #EC705B;
-background-color:#ffffff;
-padding: 4px;
-font-size: 0.8em;
-font-weight:bold;
-color:#EC705B
+.tooltip:hover {
+  z-index:25;
+  color:#000;
+}
+
+.tooltip span.tip {
+  display: none;
+  text-align:center;
+}
+
+div.tooltip:hover span.tip {
+  display:block;
+  position:absolute;
+  top:12px; left:24px; width:270px;
+  border:1px solid #EC705B;
+  background-color:#ffffff;
+  padding: 4px;
+  font-size: 0.8em;
+  font-weight:bold;
+  color:#EC705B
 }

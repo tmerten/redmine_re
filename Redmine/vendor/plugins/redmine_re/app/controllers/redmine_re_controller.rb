@@ -10,8 +10,8 @@ class RedmineReController < ApplicationController
   
   include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::TagHelper
-  include ActionView::Helpers::TextHelper  
-
+  include ActionView::Helpers::TextHelper
+  
   before_filter :find_project, :load_settings
   
   #before_filter :authorize,
@@ -21,7 +21,6 @@ class RedmineReController < ApplicationController
 		@settings = Setting.plugin_redmine_re
 		@re_artifact_order = ActiveSupport::JSON.decode(@settings['re_artifact_types'])
 	end
-
 
   # uses redmine_re in combination with redmines base layout for the header unless it is an ajax-request
   layout proc{ |c| c.request.xhr? ? false : "redmine_re" } 
@@ -125,7 +124,7 @@ class RedmineReController < ApplicationController
     artifact_type = re_artifact_properties.artifact_type.to_s.underscore
     html_tree = ''
     
-    html_tree += '<li id="node_' + re_artifact_properties.id.to_s #IDs must begin with a letter(!)
+    html_tree += '<li id="node_' + re_artifact_properties.id.to_s #HTML-IDs must begin with a letter(!)
     html_tree += '" class="' + artifact_type
     if re_artifact_properties.children.empty?
       html_tree += ' empty'
