@@ -34,6 +34,9 @@
   cursor: pointer;
 }
 
+#tree a.project {
+  background: url(../images/icons/group_gear.png) no-repeat left top;
+}
 #tree a.re_workarea {
   background: url(../images/icons/bricks.png) no-repeat left top;
 }

@@ -24,6 +24,5 @@ ReSideBar = Class.create({
         }
 
         new Effect.toggle('reSideBarContents', 'blind', {duration: 0.25, scaleX: 'true', scaleY: 'true;', scaleContent: false});
-
     }
 });

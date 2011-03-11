@@ -7,6 +7,8 @@ class RedmineReController < ApplicationController
   
   TRUNCATE_NAME_IN_TREE_AFTER_CHARS = 18
   TRUNCATE_OMISSION = "..."
+  NODE_CONTEXT_MENU_ICON = "bullet_toggle_plus.png"
+
   
   include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::TagHelper
@@ -52,7 +54,6 @@ class RedmineReController < ApplicationController
   
   def create_tree
     artifacts = ReArtifactProperties.find_all_by_project_id(@project.id)
-    # artifacts = [] if artifacts.nil?
 
     html_tree = '<ul id="tree">'
     for artifact in artifacts
@@ -84,44 +85,39 @@ class RedmineReController < ApplicationController
 		left_artifact = nil
     left_artifact = ReArtifactProperties.find(left_artifact_id) if not left_artifact_id.empty?
  
-    if new_parent.nil?
-      # Element is dropped under root node which is the project new parent-id has to become nil.
-      moved_artifact.parent = nil
-			#children = ReArtifactProperties.find_all_by_parend_id = nil
-			#children << moved_artifact
-    else
-			relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(
-				new_parent_id,
-				RELATION_TYPES[:parentchild]
-			)
-			
-			    	
-   		children = new_parent.children
-      # Element is dropped under other artifact
-      moved_artifact.parent = new_parent
-    end
+    moved_artifact.parent = new_parent
+    #moved_artifact.state = State::DROPPING    #setting state for observer
+
+    # update relations according to the drop order    
+    #relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(
+    #  new_parent_id,
+    #  ReArtifactProperties::RELATION_TYPES[:parentchild]
+    #  )
     
-    moved_artifact.state = State::DROPPING    #setting state for observer
-    moved_artifact.save!
-    render :nothing => true
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(
+      new_parent_id,
+      moved_artifact_id,
+      ReArtifactProperties::RELATION_TYPES[:parentchild]
+      )
+    
+    position = 1
+    position = left_artifact.position + 1 unless left_artifact.nil? || left_artifact.position.nil?
+    relation.insert_at position
+    
+    #moved_artifact.save!
+    #render :nothing => true
+    render :text => position
   end
 
-  ##
-  # The following method is called via JavaScript Tree by an ajax update request.
-  # It transmits the call to the according controller which should render the detail view
-  def delegate_tree_node_click
-    artifact = ReArtifactProperties.find_by_id(params[:id])
-    redirect_to url_for :controller => params[:artifact_controller], :action => 'edit', :id => params[:id], :parent_id => artifact.parent_artifact_id, :project_id => artifact.project_id
-  end
-
-  #renders a re artifact and its children recursively as html tree
   def render_to_html_tree(re_artifact_properties, depth = 0)
+    #renders a re artifact and its children recursively as html tree
     session[:expanded_nodes] ||= Set.new
     session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
 
     expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
     
     artifact_type = re_artifact_properties.artifact_type.to_s.underscore
+    artifact_name = re_artifact_properties.name.to_s
     html_tree = ''
     
     html_tree += '<li id="node_' + re_artifact_properties.id.to_s #HTML-IDs must begin with a letter(!)
@@ -134,11 +130,17 @@ class RedmineReController < ApplicationController
     end
     html_tree += '" style="position: relative;">'
     html_tree += '<span class="handle"></span>'
-    html_tree += '<a class="nodelink ' + artifact_type + '">' 
-    html_tree += truncate(re_artifact_properties.name.to_s, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+    html_tree += '<a class="nodelink ' + artifact_type + '"'
+    html_tree += ' title="' + artifact_name + '"' unless artifact_name.length < TRUNCATE_NAME_IN_TREE_AFTER_CHARS
+    html_tree += '">'
+
+    # TODO: Debug line
+    html_tree += ' ' + re_artifact_properties.position.to_s + ' ' unless re_artifact_properties.artifact_type == 'Project'
+    
+    html_tree += truncate(artifact_name, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
     html_tree += '</a>'
     html_tree += '<a class="nodecontextmenulink">'
-    html_tree += image_tag('icons/bullet_toggle_plus.png', :alt => l(:re_treenode_context_menu), :plugin => "redmine_re")
+    html_tree += image_tag('icons/' + NODE_CONTEXT_MENU_ICON, :alt => l(:re_treenode_context_menu), :plugin => "redmine_re")
     html_tree += '</a>'
 
     html_tree += '<ul>' if expanded
