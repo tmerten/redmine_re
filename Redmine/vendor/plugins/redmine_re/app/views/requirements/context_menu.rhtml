@@ -17,9 +17,6 @@
             :confirm => t(:re_delete_confirm, {:what => @artifact.name}),
             :class => 'icon-del' %>
           </li>
-	        <li class="folder icon icon-folder">
-	                <a href="#" class="submenu" onclick="return false;"><%= l(:re_more) %>...</a>
-	        </li>
 	  <% end %>
 	  <%= call_hook(:view_artifacts_context_menu_end, {:artifacts => @artifacts, :back => @back }) %>
 </ul>

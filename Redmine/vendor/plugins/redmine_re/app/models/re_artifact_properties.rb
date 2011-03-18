@@ -165,25 +165,31 @@ class ReArtifactProperties < ActiveRecord::Base
     relation
   end
 
-  # make parent= work as expected
-  # with the exception that we will return the relation not the parent!
-  # (create a new parent or replace the current parent)  
-  def parent=(parent)
+  def set_parent(parent, position = -1)
+    # sets the parent using either the spcified or the last position
+    # will return the relation not the parent!
+    # creates a new parent or replaces the current parent
     relation_type_no = RELATION_TYPES[:parentchild]
+    
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
 
-    if not relation.nil?
+    unless relation.nil?
       # override existing relation
       if parent.nil?
+        relation.remove_from_list
         ReArtifactRelationship.delete(relation.id)
         return
       end
       parent = instance_checker(parent)
+      relation.remove_from_list
+
       relation.source_id = parent.id
-      relation.save
+      relation.save(true)
+      relation.insert_at position
     else
       #create new relation
       relation = parent.relate_to self, :parentchild
+      relation.insert_at position
     end
     
     relation

@@ -17,7 +17,6 @@ module Artifact
   rescue NoMethodError
     super
   end
-  
 
   module ClassMethods
     def define_re_artifact_properties_accessors

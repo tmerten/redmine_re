@@ -1,5 +1,6 @@
 <div id='detail_view' class='detail_view'>
-<h2><%= l(:re_section) %></h2>
+
+  <h2><%= t(:re_artifact) + ' #' + @re_section.artifact_id.to_s + ' - ' + t(:re_section) %></h2>
 
 <%= error_messages_for :re_section %>
 

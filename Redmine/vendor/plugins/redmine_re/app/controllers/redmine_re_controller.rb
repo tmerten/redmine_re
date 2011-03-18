@@ -77,36 +77,23 @@ class RedmineReController < ApplicationController
     moved_artifact_id = params[:moved_artifact_id]
 
     moved_artifact = ReArtifactProperties.find(moved_artifact_id)
-    old_parent = moved_artifact.parent
-
+    
 		new_parent = nil
     new_parent = ReArtifactProperties.find(new_parent_id) if not new_parent_id.empty?
 
 		left_artifact = nil
     left_artifact = ReArtifactProperties.find(left_artifact_id) if not left_artifact_id.empty?
- 
-    moved_artifact.parent = new_parent
-    #moved_artifact.state = State::DROPPING    #setting state for observer
 
-    # update relations according to the drop order    
-    #relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(
-    #  new_parent_id,
-    #  ReArtifactProperties::RELATION_TYPES[:parentchild]
-    #  )
-    
-    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(
-      new_parent_id,
-      moved_artifact_id,
-      ReArtifactProperties::RELATION_TYPES[:parentchild]
-      )
-    
     position = 1
-    position = left_artifact.position + 1 unless left_artifact.nil? || left_artifact.position.nil?
-    relation.insert_at position
+    position = (left_artifact.position + 1) unless left_artifact.nil? || left_artifact.position.nil?
     
-    #moved_artifact.save!
+    moved_artifact.set_parent(new_parent, position)
+   
     #render :nothing => true
-    render :text => position
+    debugtext = 'insert position: ' + position.to_s + ' - left '
+    debugtext += left_artifact.position.to_s + ' ' + left_artifact.name.to_s unless left_artifact.nil? || left_artifact.position.nil?
+    
+    render :text => debugtext
   end
 
   def render_to_html_tree(re_artifact_properties, depth = 0)
@@ -134,8 +121,7 @@ class RedmineReController < ApplicationController
     html_tree += ' title="' + artifact_name + '"' unless artifact_name.length < TRUNCATE_NAME_IN_TREE_AFTER_CHARS
     html_tree += '">'
 
-    # TODO: Debug line
-    html_tree += ' ' + re_artifact_properties.position.to_s + ' ' unless re_artifact_properties.artifact_type == 'Project'
+    #html_tree += ' ' + re_artifact_properties.position.to_s + ' ' unless re_artifact_properties.artifact_type == 'Project'
     
     html_tree += truncate(artifact_name, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
     html_tree += '</a>'
