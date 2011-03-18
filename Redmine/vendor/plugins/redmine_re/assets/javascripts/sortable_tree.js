@@ -136,7 +136,14 @@ SortableTree.Node = Class.create({
     
     new Ajax.Updater(ul, this.options.nodeUrl + id, {
       parameters: { 'open': open },
+      onLoading: function() {
+        tree.setUnsortable();
+        new Effect.Opacity('tree', { from: 1.0, to: 0.4, duration: 0.2 });
+      },
       onComplete: function() {
+        new Effect.Opacity('tree', { from: 0.4, to: 1.0, duration: 0.2 });
+        tree.setSortable();
+        
         this.tree.theUpdatingNode.initChildren();
         this.tree.theUpdatingNode.setSortable();
         this.tree.theUpdatingNode = null;
