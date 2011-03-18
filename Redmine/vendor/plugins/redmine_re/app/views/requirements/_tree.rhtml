@@ -2,14 +2,16 @@
     <%= stylesheet_link_tag 'sortable_tree.css', :plugin => "redmine_re", :media => 'all' %>
     <%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
     <%= javascript_include_tag 'sortable_tree.js', :plugin => 'redmine_re' %>
-<% end%>
+    <%= javascript_include_tag 'overlay.js', :plugin => 'redmine_re' %>
+    <% end%>
 <h3><%= l(:re_tree_overview) %></h3>
 
 <%= @html_tree %>
 
 <script type="text/javascript">
   //<![CDATA[
-    
+  var overlay;
+  
   var tree = new SortableTree('tree', {
     droppable: {
       container: ':not(.we_are_all_containers)' /* everything specified here is able to be a container for a drop */
@@ -24,6 +26,14 @@
           new_parent_id:drag.parent.id(),
           moved_artifact_id:drag.id(),
           left_artifact_id:left_node_id
+        },
+        onLoading: function() {
+          tree.setUnsortable();
+          new Effect.Opacity('tree', { from: 1.0, to: 0.4, duration: 0.2 });
+        },
+        onComplete: function() {
+          new Effect.Opacity('tree', { from: 0.4, to: 1.0, duration: 0.2 });
+          tree.setSortable();
         }
       });
 
@@ -36,7 +46,9 @@
   });
   if (tree !== null) {
     tree.setSortable();
-    Event.observe(document.body, 'click', function() { Effect.Fade('context-menu', {duration: 0.20}) }.bindAsEventListener());
+    Event.observe(document.body, 'click', function() {
+        new Effect.Fade('context-menu', {duration: 0.20});
+    }.bindAsEventListener());
   };
 
   //]]>
