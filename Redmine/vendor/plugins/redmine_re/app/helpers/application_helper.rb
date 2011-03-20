@@ -51,7 +51,7 @@ JAVASCRIPT
 
     # check if a wiki page already exist for this artifact
     html_code = ""
-    wiki_page_name = "#{re_artifact.id}_#{re_artifact.artifact_type}_#{re_artifact.name}"
+    wiki_page_name = "#{re_artifact.id}_#{re_artifact.artifact_type}"
     wiki_page = WikiPage.find_by_title(wiki_page_name)
     has_no_wiki_page_yet = (wiki_page.nil?)? true : false
 
