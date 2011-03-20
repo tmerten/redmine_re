@@ -127,6 +127,14 @@ label.filter {
   background-image: url("../images/icons/subtask_after.png");
 }
 
+.icon-subtask-wiki-new {
+  background-image: url("../images/icons/book_add.png");
+}
+
+.icon-subtask-wiki-edit {
+  background-image: url("../images/icons/book_edit.png");
+}
+
 .select_field_filter {
   width: 110px;
 }

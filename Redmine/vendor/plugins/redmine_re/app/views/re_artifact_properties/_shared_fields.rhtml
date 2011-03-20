@@ -5,7 +5,7 @@
     <p>
       <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
       <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
-    </p>
+    </p>s
     
     <div class="splitcontentleft" >
       <%= number_field_with_slider(controller.controller_name, :priority, 0, 50) %>
@@ -34,5 +34,7 @@
       <%= wikitoolbar_for controller.controller_name + '_description' %>
     </div>
   </fieldset>
-
+    <p>
+       <%= wiki_page_of_re_artifact( @project, properties ) %>
+    </p>
 </div>

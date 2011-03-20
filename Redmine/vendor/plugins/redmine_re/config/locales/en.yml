@@ -118,6 +118,11 @@ en:
   re_subtask_priority: 'Priority'
   field_subtasks: 'Subtasks'
 
+  # re_attachment
+  re_attachment: 'Attachment'
+  re_new_re_attachment: 'New Attachment'
+
+
   # re_tree
   re_tree_overview: 'Artifact Overview'
   re_show_tree: 'Show Tree'

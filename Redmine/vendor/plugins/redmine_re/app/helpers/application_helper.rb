@@ -39,5 +39,36 @@ JAVASCRIPT
 		field << text_field(objectname, method, :size => 3)
     sliderdivs = content_tag(:div, field+sliderdivs, :class => "numberfield-slider")
     js + sliderdivs
-	end
+  end
+
+  # creates a link to the wikipage of an artifact => wiki/#id_#artifact_type_#name/
+  # if there is already a wikipage the content will be placed as a tooltip to the link
+  def wiki_page_of_re_artifact( project, re_artifact ) #todo subtasks wiki link..
+    return if re_artifact.id.blank? # only when already saved artifact
+
+    # check instance
+    re_artifact = (re_artifact.instance_of?(ReArtifactProperties))? re_artifact : re_artifact.re_artifact_properties
+
+    # check if a wiki page already exist for this artifact
+    html_code = ""
+    wiki_page_name = "#{re_artifact.id}_#{re_artifact.artifact_type}_#{re_artifact.name}"
+    wiki_page = WikiPage.find_by_title(wiki_page_name)
+    has_no_wiki_page_yet = (wiki_page.nil?)? true : false
+
+    # variable icon
+    css_class = (has_no_wiki_page_yet)? "new": "edit"
+    
+    html_code += link_to  "wiki",
+                          "/projects/#{project.identifier}/wiki/#{wiki_page_name}/",
+                          :class => "icon icon-subtask-wiki-#{css_class}"
+
+    # tooltip preview of wikipage if one exists already
+    unless has_no_wiki_page_yet
+        html_code =  '<div class="tooltip">' + html_code + '
+                        <span class="tip"><br> wiki preview:<br>'+ textilizable(wiki_page.content.text) +'</span>
+                      </div>'
+    end
+
+    return html_code
+  end
 end
