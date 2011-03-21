@@ -28,7 +28,7 @@ class RedmineReArtifactControllerGenerator < ControllerGenerator
       m.directory File.join('app/views', class_path, file_name)
       m.directory File.join('test/functional', class_path)
 
-      # Controller class, functional test, and helper class.
+      # Controller class, functional test, helper class and generic edit view.
       m.template 'controller.rb.erb',
                   File.join('app/controllers',
                             class_path,
@@ -49,13 +49,6 @@ class RedmineReArtifactControllerGenerator < ControllerGenerator
                             class_path,
                             file_name,
                             "edit.rhtml")                      
-
-      # View template for each action.
-      actions.each do |action|
-        path = File.join('app/views', class_path, file_name, "#{action}.rhtml")
-        m.template 'view.html.erb', path,
-          :assigns => { :action => action, :path => path }
-      end
     end
   end
 end
