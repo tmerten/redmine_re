@@ -156,13 +156,13 @@ label.filter {
 }
 
 div.tooltip:hover span.tip {
-  display:block;
-  position:absolute;
-  top:12px; left:24px; width:270px;
-  border:1px solid #EC705B;
-  background-color:#ffffff;
-  padding: 4px;
-  font-size: 0.8em;
-  font-weight:bold;
-  color:#EC705B
+  display: block;
+  position: absolute;
+  border: 1px solid #507AAA;
+  background-color: #FFFFFF;
+  font-size: x-small;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 20px;
 }

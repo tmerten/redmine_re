@@ -9,7 +9,6 @@ class RedmineReController < ApplicationController
   TRUNCATE_OMISSION = "..."
   NODE_CONTEXT_MENU_ICON = "bullet_toggle_plus.png"
 
-  
   include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper

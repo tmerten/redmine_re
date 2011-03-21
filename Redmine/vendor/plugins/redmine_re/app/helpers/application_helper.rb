@@ -44,7 +44,7 @@ JAVASCRIPT
   # creates a link to the wikipage of an artifact => wiki/#id_#artifact_type_#name/
   # if there is already a wikipage the content will be placed as a tooltip to the link
   def wiki_page_of_re_artifact( project, re_artifact ) #todo subtasks wiki link..
-    return if re_artifact.id.blank? # only when already saved artifact
+    return t(:re_wiki_page_available_after_save) if re_artifact.id.blank? # only when already saved artifact
 
     # check instance
     re_artifact = (re_artifact.instance_of?(ReArtifactProperties))? re_artifact : re_artifact.re_artifact_properties
@@ -57,16 +57,18 @@ JAVASCRIPT
 
     # variable icon
     css_class = (has_no_wiki_page_yet)? "new": "edit"
+    linkname = (has_no_wiki_page_yet)? t(:re_create_wiki_page_for_re_artifact): t(:re_edit_wiki_page_for_re_artifact)    
     
-    html_code += link_to  "wiki",
-                          "/projects/#{project.identifier}/wiki/#{wiki_page_name}/",
-                          :class => "icon icon-subtask-wiki-#{css_class}"
+    html_code += link_to linkname,
+    "/projects/#{project.identifier}/wiki/#{wiki_page_name}/",
+    :class => "icon icon-subtask-wiki-#{css_class}"
 
-    # tooltip preview of wikipage if one exists already
     unless has_no_wiki_page_yet
-        html_code =  '<div class="tooltip">' + html_code + '
-                        <span class="tip"><br> wiki preview:<br>'+ textilizable(wiki_page.content.text) +'</span>
-                      </div>'
+      # tooltip preview of wikipage if one exists already
+      #tip = content_tag("h1", t(:re_preview_wiki_page_for_re_artifact))
+      tip = content_tag("span", textilizable(wiki_page.content.text), :class => "tip")
+      tip = content_tag("div", html_code + tip, :class => "tooltip")
+      html_code = tip
     end
 
     return html_code

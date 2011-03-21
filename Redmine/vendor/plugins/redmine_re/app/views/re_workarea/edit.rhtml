@@ -1,5 +1,7 @@
 <div id='detail_view' class='detail_view'>
-  <h2><%= t(:re_artifact) + ' #' + @re_workarea.artifact_id.to_s + ' - ' + t(:re_workarea) %></h2>
+  <%= render 're_artifact_properties/action_menu', {:artifact => @re_workarea} %>
+
+<h2><%= t(:re_artifact) + ' #' + @re_workarea.artifact_id.to_s + ' - ' + t(:re_workarea) %></h2>
 
 <%= error_messages_for :re_workarea %>
 

@@ -1,20 +1,23 @@
 <div id='detail_view' class='detail_view'>
+  <%= render 're_artifact_properties/action_menu', {:artifact => @re_goal} %>
+  
   <h2><%= t(:re_artifact) + ' #' + @re_goal.artifact_id.to_s + ' - ' + t(:re_goal) %></h2>
 
-<%= error_messages_for :re_goal %>
+  <%= error_messages_for :re_goal %>
+  
+  <% form_for :re_goal, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+      <%= hidden_field_tag :parent_id, params[:parent_id] %>
+  
+      <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_goal.re_artifact_properties} %>
+  
+      <p>
+        <%= submit_tag l(:re_save), :action => :edit %>
+      </p>
+  
+  <% end %>
+  
+  <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
+  
+  <%= link_to l(:re_show_goals), :action => :index, :project_id => params[:project_id] %>
 
-<% form_for :re_goal, :update => :detail_view, :url => {:action => "edit"} do |f| %>
-    <%= hidden_field_tag :parent_id, params[:parent_id] %>
-
-    <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_goal.re_artifact_properties} %>
-
-    <p>
-      <%= submit_tag l(:re_save), :action => :edit %>
-    </p>
-
-<% end %>
-
-<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
-
-<%= link_to l(:re_show_goals), :action => :index, :project_id => params[:project_id] %>
 </div>

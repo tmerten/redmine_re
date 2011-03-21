@@ -2,17 +2,17 @@
   <%= hidden_field_tag :project_id, @project.id %>
 
   <fieldset><legend><%= l(:re_common_attributes) %></legend>
-    <p>
-      <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
-      <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
-    </p>s
     
     <div class="splitcontentleft" >
+      <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
+      <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %><br/>
+
       <%= number_field_with_slider(controller.controller_name, :priority, 0, 50) %>
      </div>
     
     <div class="splitcontentright" >
-    <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.select :responsibles, User.all.collect {|u| [ u.firstname+" "+ u.lastname ] }%>
+      <label for="wiki_link"><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact( @project, properties ) %><br/>
+      <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.select :responsibles, User.all.collect {|u| [ u.firstname+" "+ u.lastname ] }%>
     </div>
         
   </fieldset>
@@ -34,7 +34,4 @@
       <%= wikitoolbar_for controller.controller_name + '_description' %>
     </div>
   </fieldset>
-    <p>
-       <%= wiki_page_of_re_artifact( @project, properties ) %>
-    </p>
 </div>
