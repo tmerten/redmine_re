@@ -26,7 +26,7 @@ class <%= class_name %>Controller < RedmineReController
       @<%= class_name.underscore %>.attributes = params[:<%= class_name.underscore %>]
       add_hidden_re_artifact_properties_attributes @<%= class_name.underscore %>
 
-			flash[:notice] = t(:<%= class_name.underscore %>_saved, {:name => name}) if save_ok = @<%= class_name.underscore %>.save
+			flash[:notice] = t(:<%= class_name.underscore %>_saved, {:name => @<%= class_name.underscore %>.name}) if save_ok = @<%= class_name.underscore %>.save
 
       redirect_to :action => 'edit', :id => @<%= class_name.underscore %>.id and return if save_ok
     end
