@@ -12,7 +12,7 @@
 	font-size:110%;
 	margin:10px 10px 10px 20px;
 	font-weight:bold !important;
-    border-bottom-style: none;
+  border-bottom-style: none;
 }
 
 #reSideBar h2 span{
@@ -24,7 +24,7 @@
 	color:#FFFFFF;
 	font-size:100%;
 	margin:5px 20px 5px 20px;
-    font-weight:bold !important;
+  font-weight:bold !important;
 }
 
 #reSideBar h3 span{
@@ -38,9 +38,10 @@
 }
 
 #reSideBar li{
-	padding:3px;
-	list-style-type:none;
-	color:#FFFFFF;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	list-style-type: none;
+	color: #FFFFFF;
 }
 
 #reSideBar li a{
@@ -50,18 +51,11 @@
 #reSideBar li a:link,
 #reSideBar li a:visited{
 	color:#FFFFFF;
-	font-family:verdana;
-	font-size:100%;
-	text-decoration:none;
-	display:block;
-	margin:0px 0px 0px 0px;
-	padding:0px;
-	width:100%;
 }
 
 #reSideBar li a:hover{
 	color:#FFFFFF;
-    background-color: #759fcf;
+  /*background-color: #759fcf;*/
 	text-decoration:underline;
 }
 
@@ -69,7 +63,11 @@
 	float:left;
 	height:137px;
 	width:28px;
-    background-color: #759fcf;
+  background-color: #759fcf;
+  -moz-border-radius-bottomleft: 10px;
+  border-bottom-left-radius: 10px;	
+  -moz-border-radius-topleft: 10px;
+  border-top-left-radius: 10px;
 }
 
 #reSideBarTab img{
@@ -77,13 +75,14 @@
 }
 
 #reSideBarContents{
-    background-color:#507aaa;
+  background-color:#507aaa;
 	float:left;
 	overflow:hidden !important;
 	width:200px;
-    /*border-bottom-left-radius: 7px;
-    -moz-border-radius-bottomleft: 7px;*/
+  -moz-border-radius-bottomleft: 10px;
+  border-bottom-left-radius: 10px;	
 }
+
 
 #reSideBarContentsInner{
 	width:200px;

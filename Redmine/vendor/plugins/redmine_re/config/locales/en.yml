@@ -27,7 +27,7 @@ en:
   re_artifact: 'Artifact'
   re_artifact_priority: 'Priority'
   re_artifact_description: 'Description'
-  re_artifact_responsibles: 'Responsibles'
+  re_artifact_responsible: 'Responsible'
   re_description_fieldset: 'Artifact Description'
   re_priority_responsible: 'Priority and Responsibilities'
   re_update_description: 'Update description'
@@ -55,7 +55,8 @@ en:
   
   # re_vision
   re_vision_priority: 'Priority'
-  re_new_re_vision: 'New Vision'
+  re_new_re_vision: 'New Vision Statement'
+  re_vision: 'Vision Statement'
   
   # re_workarea
   re_workarea: 'Workarea'

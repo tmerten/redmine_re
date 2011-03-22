@@ -38,28 +38,30 @@
 #tree a.project {
   background: url(../images/icons/group_gear.png) no-repeat left top;
 }
-#tree a.re_workarea {
+a.re_workarea {
   background: url(../images/icons/bricks.png) no-repeat left top;
 }
-#tree a.re_task {
+a.re_task {
   background: url(../images/icons/report_user.png) no-repeat left top;
 }
-#tree a.re_subtask {
+a.re_subtask {
   background: url(../images/icons/report.png) no-repeat left top;
 }
-#tree a.re_goal {
+a.re_goal {
   background: url(../images/icons/world.png) no-repeat left top;
 }
-#tree a.re_user_profile {
+a.re_user_profile {
   background: url(../images/icons/user.png) no-repeat left top;
 }
-#tree a.re_section {
+a.re_section {
   background: url(../images/icons/text_padding_top.png) no-repeat left top;
 }
-#tree a.re_attachment {
+a.re_attachment {
     background: url(../images/icons/attach.png) no-repeat left top;
 }
-
+a.re_vision {
+    background: url(../images/icons/lightbulb.png) no-repeat left top;
+}
 
 #tree li span.handle {
   display: block;

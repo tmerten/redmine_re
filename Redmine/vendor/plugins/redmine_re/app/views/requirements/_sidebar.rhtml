@@ -10,16 +10,17 @@
 			<% for artifact_type in @re_artifact_order	%>
 					<li><%= link_to t("re_new_#{artifact_type.underscore}"), {
 			          :controller => artifact_type.underscore,
-			          :action => 'new',
-			          :project_id => @project.id } %></li>
+			          :action => "new",
+		      	    :project_id => @project.id } ,
+			          :class => "icon #{artifact_type.underscore}" %></li>
 			<% end %>
 			</ul>
 
       <h2><%= l(:re_relationships) %><br/></h3>
       <ul>
         <li><%= link_to l(:re_relationship_visualization), {
-              :controller => 're_artifact_relationship',
-              :action => 'visualization',
+              :controller => "re_artifact_relationship",
+              :action => "visualization",
               :project_id => @project.id } %>
         </li>
       </ul>

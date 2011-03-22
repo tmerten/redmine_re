@@ -56,6 +56,12 @@ class ReArtifactProperties < ActiveRecord::Base
   # Methods
   attr_accessor :state # Needed to simulate the state for observer
   
+  after_save :check_for_and_set_parent
+  
+  def check_for_and_set_parent
+    set_parent(ReArtifactProperties.find_by_project_id_and_artifact_type(self.project_id, "Project"), 1) if self.parent.nil?
+  end
+  
   def revert
     #TODO create new version if reverted
      self.state = State::IDLE

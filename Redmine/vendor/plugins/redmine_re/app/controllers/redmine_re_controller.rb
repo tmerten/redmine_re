@@ -52,25 +52,29 @@ class RedmineReController < ApplicationController
   end
   
   def create_tree
-    artifacts = ReArtifactProperties.find_all_by_project_id(@project.id)
-
+    show_projects = params[:show_projects]
+    artifacts = nil
+    
+    if show_projects
+      artifacts = ReArtifactProperties.find_all_by_artifact_type("Project")
+    else
+      project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+      artifacts = project_artifact.children
+    end
+    
     html_tree = '<ul id="tree">'
     for artifact in artifacts
-      if (artifact.parent.nil?)
-        html_tree += render_to_html_tree(artifact, 0)
-      end
+      html_tree += render_to_html_tree(artifact, 0)
     end
     html_tree += '</ul>'
     
     html_tree
   end
   
-
-  ##
-  # The following method is called via JavaScript Tree by an ajax request.
-  # It transmits the drops done in the tree to the database in order to last
-  # longer than the next refresh of the browser.
   def delegate_tree_drop
+    # The following method is called via if somebody drops an artifact on the tree.
+    # It transmits the drops done in the tree to the database in order to last
+    # longer than the next refresh of the browser.
     new_parent_id = params[:new_parent_id]
     left_artifact_id = params[:left_artifact_id]
     moved_artifact_id = params[:moved_artifact_id]
@@ -78,7 +82,11 @@ class RedmineReController < ApplicationController
     moved_artifact = ReArtifactProperties.find(moved_artifact_id)
     
 		new_parent = nil
-    new_parent = ReArtifactProperties.find(new_parent_id) if not new_parent_id.empty?
+		begin
+	 	  new_parent = ReArtifactProperties.find(new_parent_id) if not new_parent_id.empty?
+		rescue ActiveRecord::RecordNotFound
+      new_parent = ReArtifactProperties.find_by_project_id_and_artifact_type(moved_artifact.project_id, "Project")
+		end
 
 		left_artifact = nil
     left_artifact = ReArtifactProperties.find(left_artifact_id) if not left_artifact_id.empty?
