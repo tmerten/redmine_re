@@ -53,6 +53,10 @@ en:
   re_section_saved: 'Section successfully saved'
   re_section_priority: 'Priority'
   
+  # re_vision
+  re_vision_priority: 'Priority'
+  re_new_re_vision: 'New Vision'
+  
   # re_workarea
   re_workarea: 'Workarea'
   re_create_re_workarea: 'Create a new Workarea'

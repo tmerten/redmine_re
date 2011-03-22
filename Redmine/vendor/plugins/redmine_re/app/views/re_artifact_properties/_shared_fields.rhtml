@@ -14,7 +14,7 @@
       <label for="wiki_link"><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact( @project, properties ) %><br/>
       <%= f.label :responsibles, l(:re_artifact_responsibles) %> <%= f.select :responsibles, User.all.collect {|u| [ u.firstname+" "+ u.lastname ] }%>
     </div>
-        
+
   </fieldset>
 
   <br />

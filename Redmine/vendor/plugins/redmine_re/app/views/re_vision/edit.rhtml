@@ -1,0 +1,16 @@
+<div id='detail_view' class='detail_view'>
+<h2><%= l(:re_vision) %></h2>
+  <%= render 're_artifact_properties/action_menu', {:artifact => @re_vision} %>
+  <%= error_messages_for :re_vision %>
+  <% form_for :re_vision, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+    
+    <%= hidden_field_tag :parent_id, params[:parent_id] %>
+    <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_vision.re_artifact_properties} %>
+    <p>
+      <%= submit_tag l(:re_save), :action => :edit %>
+    </p>
+
+<% end %>
+<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
+
+</div>

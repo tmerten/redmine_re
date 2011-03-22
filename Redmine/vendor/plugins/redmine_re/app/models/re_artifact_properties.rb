@@ -56,32 +56,31 @@ class ReArtifactProperties < ActiveRecord::Base
   # Methods
   attr_accessor :state # Needed to simulate the state for observer
   
-  # TODO: Mirsad soll in Englisch schreiben.
   def revert
-       #TODO neue version erstellen wenn reverted
-       self.state = State::IDLE
+    #TODO create new version if reverted
+     self.state = State::IDLE
 
-       versionNr = self.artifact.version
-       version   = self.artifact.versions.find_by_version(versionNr)
-
-       # ReArtifactProperties attribute wiederherstellen
-       self.name = version.artifact_name
-       self.priority = version.artifact_priority
-
-       self.save
-    end
-
-  # Setzt die eigenen zu Versiontabelle hinzugef�gten Spalten
-  def update_extra_version_columns
      versionNr = self.artifact.version
      version   = self.artifact.versions.find_by_version(versionNr)
 
-     version.updated_by         = User.current.id
-     version.artifact_name      = self.name
-     version.artifact_priority  = self.priority
-     version.parent_artifact_id = self.parent_artifact_id
+     # re-create ReArtifactProperties attribute
+     self.name = version.artifact_name
+     self.priority = version.artifact_priority
 
-     version.save
+     self.save
+  end
+
+  def update_extra_version_columns
+    # puts own columns
+    versionNr = self.artifact.version
+    version   = self.artifact.versions.find_by_version(versionNr)
+    
+    version.updated_by         = User.current.id
+    version.artifact_name      = self.name
+    version.artifact_priority  = self.priority
+    version.parent_artifact_id = self.parent_artifact_id
+    
+    version.save
   end
 
 #  def create_new_version
@@ -105,35 +104,34 @@ class ReArtifactProperties < ActiveRecord::Base
 #     new_version.save
 #  end
 
-  # Versioniert das Elternartifact
   def versioning_parent
-     return if self.parent.nil? #Nur wenn ein parent existiert
+    # versions the parent artifact
+    return if self.parent.nil?
 
-     parent = self.parent.artifact
-     parent.save  # Neue version vom parent(ohne ver�nderung von attributen)
-
-     # gespeicherte Version zwischenspeichern
-     savedParentVersion = parent.versions.last
-
-     #--- Version mit zusatzinformation updaten ---
-     # Den verursacher(child) zwischenspeichern
-     savedParentVersion.versioned_by_artifact_id      = self.id
-     savedParentVersion.versioned_by_artifact_version = self.artifact.version
-
-     parent.re_artifact.update_extra_version_columns
-     
-     savedParentVersion.save
+    parent = self.parent.artifact
+    parent.save
+    
+    # temporary save parent
+    savedParentVersion = parent.versions.last
+    
+    # save the updating child
+    savedParentVersion.versioned_by_artifact_id      = self.id
+    savedParentVersion.versioned_by_artifact_version = self.artifact.version
+    
+    parent.re_artifact.update_extra_version_columns
+    
+    savedParentVersion.save
   end
   
-  # creates a new relation of type "relation_type" or updates an existing relation
-  # from "self" to the re_artifact_properties in "to".
-  # (any class that acting as ReArtifact should also work for "to".)
-  #
-  # see ReArtifactRelationship::TYPES.keys for valid types
-  # the relation will be directed, unless you pass "false" as third argument
-  #
-  # returns the created relation
   def relate_to(to, relation_type, directed=true)
+    # creates a new relation of type "relation_type" or updates an existing relation
+    # from "self" to the re_artifact_properties in "to".
+    # (any class that acting as ReArtifact should also work for "to".)
+    #
+    # see ReArtifactRelationship::TYPES.keys for valid types
+    # the relation will be directed, unless you pass "false" as third argument
+    #
+    # returns the created relation
     raise ArgumentError, "relation_type not valid (see ReArtifactRelationship::TYPES.keys for valid relation_types)" if not RELATION_TYPES.has_key?(relation_type)
     
     to = instance_checker to
@@ -195,35 +193,38 @@ class ReArtifactProperties < ActiveRecord::Base
     relation
   end
 
-  # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
-    def self.get_properties_id(controllername, subartifact_id)
-      @re_artifact_properties = ReArtifactProperties.find_by_artifact_type_and_artifact_id(controllername.camelize, subartifact_id)
-      @re_artifact_properties.id
-    end
+  def self.get_properties_id(controllername, subartifact_id)
+    # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
+    @re_artifact_properties = ReArtifactProperties.find_by_artifact_type_and_artifact_id(controllername.camelize, subartifact_id)
+    @re_artifact_properties.id
+  end
 
     # set position in scope of parent (source)
   def position=(position)
     raise ArgumentError, "For the current re_artifact_properties object #{self} exist no parent-relation in the database" if not self.parent(true)
     raise ArgumentError, "The current re_artifact_properties object #{self} is not in the database" if not self.id
 
-    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id, #needs true because: http://www.elevatedcode.com/articles/2007/03/16/rails-association-proxies-and-caching/ => "By default, active record only load associations the first time you use them. After that, you can reload them by passing true to the association"
-                                                                                       self.id,
-                                                                                       RELATION_TYPES[:parentchild]
-                                                                                     )
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(
+      self.parent(true).id,
+      #needs true because: http://www.elevatedcode.com/articles/2007/03/16/rails-association-proxies-and-caching/
+      # "By default, active record only load associations the first time you use them.
+      # After that, you can reload them by passing true to the association"
+      self.id,
+      RELATION_TYPES[:parentchild]
+    )
     relation.position = position
     relation.save
   end
 
-  #position in scope of parent (source)
   def position()
+    #position in scope of parent (source)
     raise ArgumentError, "For the current re_artifact_properties object #{self} exist no parent-relation in the database" if not self.parent(true)
     raise ArgumentError, "The current re_artifact_properties object #{self} is not in the database" if not self.id
 
-
     relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id,
-                                                                                       self.id,
-                                                                                       RELATION_TYPES[:parentchild]
-                                                                                     )
+      self.id,
+      RELATION_TYPES[:parentchild]
+    )
     return relation.position
   end
   

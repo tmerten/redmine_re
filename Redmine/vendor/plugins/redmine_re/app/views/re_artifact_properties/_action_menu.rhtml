@@ -1,0 +1,3 @@
+<div class="contextual">
+  <%= link_to l(:button_delete), {:controller => artifact.class.to_s.underscore, :action => 'delete', :id => artifact}, :confirm => t(:text_are_you_sure), :method => :post, :class => 'icon icon-del' %>
+</div>
