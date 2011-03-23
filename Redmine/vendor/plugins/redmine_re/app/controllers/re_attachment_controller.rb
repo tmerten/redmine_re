@@ -15,16 +15,29 @@ class ReAttachmentController < RedmineReController
     redirect_to :action => 'edit', :project_id => params[:project_id]
   end
 
-  def edit
+  def edit #todo: errorhandling of attachment and refactor
     @re_attachment = ReAttachment.find_by_id(params[:id], :include => :re_artifact_properties) || ReAttachment.new
     @project ||= @re_attachment.project
-    
+    #attachment_uploaded = false
     # render html for tree
-    @html_tree = create_tree
+    #@html_tree = create_tree #todo: temporary switched of because exception atm
     
     if request.post?
       @re_attachment.attributes = params[:re_attachment]
       add_hidden_re_artifact_properties_attributes @re_attachment
+
+      if(@re_attachment.valid?)
+        params["attachment"]["1"]["description"] = @re_attachment.name
+
+        result = Attachment.attach_files(@re_attachment, params["attachment"])
+
+       #attachment_uploaded = @re_attachment.unsaved_attachments.blank? && !result[:files].blank?
+        #if !attachment_uploaded
+        #  @re_attachment.errors.add("attachment", "no file choosed or filesize is 0 Byte")
+        #end
+        @re_attachment.attachment = result[:files][0]
+        #Rails.logger.debug("###### edit ####1 " + result.inspect  + "\n" + @re_attachment.unsaved_attachments.inspect)
+      end
 
 			flash[:notice] = t(:re_attachment_saved, {:name => @re_attachment.name}) if save_ok = @re_attachment.save
 
