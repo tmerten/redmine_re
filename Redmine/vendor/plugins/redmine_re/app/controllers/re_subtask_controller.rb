@@ -35,6 +35,8 @@ class ReSubtaskController < RedmineReController
   # deletes and updates the flash with either success, id not found error or deletion error
   def delete
     @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties)
+    @project ||= @re_goal.project
+    
     if !@re_subtask
       flash[:error] = 'Could not find a subtask with this ' + params[:id] + ' to delete'
     else

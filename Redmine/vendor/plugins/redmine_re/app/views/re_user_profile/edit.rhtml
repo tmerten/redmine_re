@@ -3,7 +3,7 @@
 
 <h2><%= t(:re_artifact) + ' #' + @re_user_profile.artifact_id.to_s + ' - ' + t(:re_user_profile) %></h2>
 
-<%= error_messages_for :re_user_profile %>
+<%= errors_and_flash :re_user_profile %>
 
 <% form_for :re_user_profile, :update => :detail_view, :url => {:action => "edit"} do |f| %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>

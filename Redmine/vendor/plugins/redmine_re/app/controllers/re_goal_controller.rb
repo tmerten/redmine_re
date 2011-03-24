@@ -24,7 +24,7 @@ class ReGoalController < RedmineReController
       @re_goal.attributes = params[:re_goal]
       add_hidden_re_artifact_properties_attributes @re_goal
 
-      flash[:notice] = t(:re_goal_successfully_saved) if save_ok = @re_goal.save
+      flash[:notice] = t(:re_goal_saved) if save_ok = @re_goal.save
 
       redirect_to :action => 'edit', :id => @re_goal.id and return if save_ok
     end
@@ -33,6 +33,8 @@ class ReGoalController < RedmineReController
   def delete
   # deletes and updates the flash with either success, id not found error or deletion error
     @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact_properties)
+    @project ||= @re_goal.project
+    
     if !@re_goal
       flash[:error] = 'Could not find a goal with this ' + params[:id] + ' to delete'
     else

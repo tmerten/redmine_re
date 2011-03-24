@@ -63,6 +63,8 @@ en:
   re_vision_priority: 'Priority'
   re_new_re_vision: 'New Vision Statement'
   re_vision: 'Vision Statement'
+  re_create_re_vision: 'Create a new Vision Statement'
+  re_vision_saved: 'Vision successfully saved'
   
   # re_workarea
   re_workarea: 'Workarea'
@@ -70,6 +72,7 @@ en:
   ReWorkarea: 'Workarea'
   re_new_re_workarea: 'New Workarea'
   re_workarea_priority: 'Priority'
+  re_workarea_saved: 'Workare successfully saved'
   
   # re_user_profile
   re_user_profile: 'User Profile'
@@ -77,6 +80,7 @@ en:
   ReUserProfile: 'User Profile'
   re_new_re_user_profile: 'New User Profile'
   re_user_profile_priority: 'Priority'
+  re_user_profile_saved: 'User Profile Sucessfully Saved'
 
   # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
@@ -109,7 +113,7 @@ en:
   re_goals: 'Goals'
   ReGoal: 'Goal'
   re_goal_priority: 'Priority'
-  re_goal_successfully_saved: 'Goal successfully saved'
+  re_goal_saved: 'Goal successfully saved'
   
   # re_tasks
   re_new_re_task: 'New Task'
@@ -119,6 +123,7 @@ en:
   re_tasks: 'Tasks'
   ReTask: 'Task'
   re_task_priority: 'Priority'
+  re_task_saved: 'Task successfully saved'
 
   # re_subtasks
   re_new_re_subtask: 'New Subtask'
@@ -134,11 +139,14 @@ en:
   re_delete_subtask: 'delete'
   re_subtask_priority: 'Priority'
   field_subtasks: 'Subtasks'
+  re_subtasks_saved: 'Subtasks successfully saved'
 
   # re_attachment
   re_attachment: 'File Attachment'
   re_new_re_attachment: 'New File Attachment'
   re_attachment_priority: 'Priority'
+  re_create_re_attachment: 'Create a new File Attachment'
+  re_attachment_saved: 'Attachment successfully saved'
 
 
   # re_tree

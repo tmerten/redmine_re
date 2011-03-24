@@ -81,6 +81,8 @@ class ReTaskController < RedmineReController
   # deletes and updates the flash with either success, id not found error or deletion error
   def delete
     @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact)
+    @project ||= @re_goal.project
+    
     if !@re_task
       flash[:error] = 'Could not find a task with id ' + params[:id] + ' to delete'
     else

@@ -1,4 +1,12 @@
 module ApplicationHelper
+  
+  def errors_and_flash(artifact)
+    s = error_messages_for artifact
+    s += render_flash_messages_with_timeout
+  end
+  
+  
+  
   def render_flash_messages_with_timeout
   # overrides render_flash_messages in application helper
     s = ''

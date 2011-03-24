@@ -3,8 +3,7 @@
 
   <h2><%= t(:re_artifact) + ' #' + @re_task.artifact_id.to_s + ' - ' + t(:re_task) %></h2>
 
-<%= error_messages_for :re_task %>
-
+<%= errors_and_flash :re_task %>
 
 <% form_for :re_task, :url => {:action => "edit"}, :html => { :style => "margin:0;padding:0;display:inline" } do |f| %>
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
