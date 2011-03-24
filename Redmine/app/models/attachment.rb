@@ -106,7 +106,9 @@ class Attachment < ActiveRecord::Base
   end
 
   def project
+    Rails.logger.debug("######project###### container.inspect  " + container.inspect)
     container.project
+
   end
   
   def visible?(user=User.current)
