@@ -55,10 +55,7 @@ module Artifact
 protected
 
   def re_artifact_properties_must_be_valid
-    unless re_artifact_properties.valid?
-      re_artifact_properties.errors.each do |attr, message|
-        errors.add(attr, message)
-      end
-    end
+    re_artifact_properties.valid?
   end
+  
 end

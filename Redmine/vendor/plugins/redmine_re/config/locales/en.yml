@@ -35,12 +35,18 @@ en:
   re_create_wiki_page_for_re_artifact: 'Create new Wiki Page'
   re_edit_wiki_page_for_re_artifact: 'Edit Wiki Page'
   re_preview_wiki_page_for_re_artifact: 'Wiki Page Preview:'
-  re_wiki_page_available_after_save: 'The Wiki Page will be available after saving'
-  re_artifact_properties_validates_presence_of_name: 'Name cant be blank!'
-  re_artifact_properties_validates_uniqueness_of_name: 'Name has been already taken!'
-  re_artifact_properties_validates_presence_of_updated_by: 'Updadet by cant be blank!'
-  re_artifact_properties_validates_presence_of_created_by: 'Created by cant be blank!'
-  re_artifact_properties_validates_presence_of_project: 'Project cant be blank!'
+  re_wiki_page_available_after_save: 'A Wiki Page will be available after saving'
+
+  re_artifact_properties_validates_presence_of_name: 'needs to be entered.'
+  re_artifact_properties_validates_uniqueness_of_name: 'is used in another artifact, already.'
+  re_artifact_properties_validates_presence_of_updated_by: 'cannot be blank'
+  re_artifact_properties_validates_presence_of_created_by: 'cannot be blank!'
+  re_artifact_properties_validates_presence_of_project: 'cannot be blank!'
+  field_re_artifact_properties:
+    name: 'Name'
+    updated_by: 'Updating User'
+    created_by: 'Creating User'
+    project: 'Project'
 
   # re_section
   re_new_re_section: 'New Section'
@@ -103,6 +109,7 @@ en:
   re_goals: 'Goals'
   ReGoal: 'Goal'
   re_goal_priority: 'Priority'
+  re_goal_successfully_saved: 'Goal successfully saved'
   
   # re_tasks
   re_new_re_task: 'New Task'
@@ -129,8 +136,9 @@ en:
   field_subtasks: 'Subtasks'
 
   # re_attachment
-  re_attachment: 'Attachment'
-  re_new_re_attachment: 'New Attachment'
+  re_attachment: 'File Attachment'
+  re_new_re_attachment: 'New File Attachment'
+  re_attachment_priority: 'Priority'
 
 
   # re_tree

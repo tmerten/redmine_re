@@ -11,25 +11,21 @@
 	color:#FFFFFF;
 	font-size:110%;
 	margin:10px 10px 10px 20px;
-	font-weight:bold !important;
   border-bottom-style: none;
 }
 
 #reSideBar h2 span{
 	font-size:125%;
-	font-weight:normal !important;
 }
 
 #reSideBar h3{
 	color:#FFFFFF;
 	font-size:100%;
 	margin:5px 20px 5px 20px;
-  font-weight:bold !important;
 }
 
 #reSideBar h3 span{
 	font-size:115%;
-	font-weight:normal !important;
 }
 
 #reSideBar ul{
@@ -82,7 +78,6 @@
   -moz-border-radius-bottomleft: 10px;
   border-bottom-left-radius: 10px;	
 }
-
 
 #reSideBarContentsInner{
 	width:200px;

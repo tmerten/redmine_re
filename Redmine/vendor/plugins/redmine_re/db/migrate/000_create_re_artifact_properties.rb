@@ -1,3 +1,5 @@
+require_dependency 'projects_patch'
+
 class CreateReArtifactProperties < ActiveRecord::Migration
   def self.up
     create_table :re_artifact_properties do |t|
@@ -16,6 +18,10 @@ class CreateReArtifactProperties < ActiveRecord::Migration
       t.column :project_id, :integer, :default => 0      
 
       t.timestamps
+    end
+    ocal
+    for project in Projects.find(:all)
+      project.create_or_update_re_artifact
     end
   end
 

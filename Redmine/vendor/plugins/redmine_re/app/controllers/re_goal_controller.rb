@@ -24,7 +24,7 @@ class ReGoalController < RedmineReController
       @re_goal.attributes = params[:re_goal]
       add_hidden_re_artifact_properties_attributes @re_goal
 
-      flash[:notice] = 'Goal successfully saved' if save_ok = @re_goal.save
+      flash[:notice] = t(:re_goal_successfully_saved) if save_ok = @re_goal.save
 
       redirect_to :action => 'edit', :id => @re_goal.id and return if save_ok
     end
