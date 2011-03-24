@@ -59,21 +59,23 @@ class ReArtifactProperties < ActiveRecord::Base
   after_save :check_for_and_set_parent
   
   def check_for_and_set_parent
-    set_parent(ReArtifactProperties.find_by_project_id_and_artifact_type(self.project_id, "Project"), 1) if self.parent.nil?
+    if self.parent.nil? and self.artifact_type != 'Project'
+      set_parent(ReArtifactProperties.find_by_project_id_and_artifact_type(self.project_id, "Project"), 1)
+    end
   end
   
   def revert
     #TODO create new version if reverted
-     self.state = State::IDLE
+    self.state = State::IDLE
 
-     versionNr = self.artifact.version
-     version   = self.artifact.versions.find_by_version(versionNr)
+    versionNr = self.artifact.version
+    version   = self.artifact.versions.find_by_version(versionNr)
 
-     # re-create ReArtifactProperties attribute
-     self.name = version.artifact_name
-     self.priority = version.artifact_priority
+    # re-create ReArtifactProperties attribute
+    self.name = version.artifact_name
+    self.priority = version.artifact_priority
 
-     self.save
+    self.save
   end
 
   def update_extra_version_columns
