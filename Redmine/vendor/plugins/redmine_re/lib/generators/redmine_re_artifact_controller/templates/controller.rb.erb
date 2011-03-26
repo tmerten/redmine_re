@@ -35,6 +35,8 @@ class <%= class_name %>Controller < RedmineReController
   def delete
   # deletes and updates the flash with either success, id not found error or deletion error
     @<%= class_name.underscore %> = <%= class_name %>.find_by_id(params[:id], :include => :re_artifact_properties)
+    @project ||= @<%= class_name.underscore %>.project
+
     if !@<%= class_name.underscore %>
       flash[:error] = t(:<%= class_name.underscore %>_not_found, {:id => @params[:id] })
     else
