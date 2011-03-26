@@ -25,10 +25,6 @@ module Artifact
       attributes_to_delegate = all_attributes - ignored_attributes
       
       class_eval <<-RUBY
-        def parent=(parent)
-          re_artifact_properties.parent = parent;
-        end
-
         def acts_as_artifact_class
           ::#{self.name}
         end

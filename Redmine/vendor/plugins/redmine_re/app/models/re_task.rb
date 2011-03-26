@@ -31,13 +31,12 @@ class ReTask < ActiveRecord::Base
 
         subtask.attributes = attributes
         if subtask.valid? # empty subtask won't be saved'
-          subtask.parent = self
           saved = subtask.save
         end
 
       
         if(saved)
-           subtask.position = position
+          subtask.set_parent(self, position)
         end
     end
   end
