@@ -30,6 +30,9 @@ class ReAttachmentController < RedmineReController
       attachment_uploaded = @re_attachment.attach_file(attachment_hash)
 
       return if !attachment_uploaded
+      @re_attachment.attachment.description = @re_attachment.name
+      @re_attachment.attachment.save
+      
 			flash[:notice] = t(:re_attachment_saved, {:name => @re_attachment.name}) if save_ok = @re_attachment.save
 
       redirect_to :action => 'edit', :id => @re_attachment.id and return if save_ok
@@ -59,11 +62,14 @@ class ReAttachmentController < RedmineReController
   def delete
   # deletes and updates the flash with either success, id not found error or deletion error
     @re_attachment = ReAttachment.find_by_id(params[:id], :include => :re_artifact_properties)
+    @project ||= @re_attachment.project
+
     if !@re_attachment
       flash[:error] = t(:re_attachment_not_found, {:id => @params[:id] })
     else
       name = @re_attachment.name
       if ReAttachment.destroy(@re_attachment.id)
+        
         flash[:notice] = t(:re_attachment_deleted, {:name => name})
       else
 				flash[:error] = t(:re_attachment_not_deleted, {:name => name})

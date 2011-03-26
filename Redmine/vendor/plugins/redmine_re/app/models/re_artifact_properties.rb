@@ -57,6 +57,7 @@ class ReArtifactProperties < ActiveRecord::Base
   attr_accessor :state # Needed to simulate the state for observer
   
   after_save :check_for_and_set_parent
+  after_destroy :delete_wiki_page
   
   def check_for_and_set_parent
     if self.parent.nil? and self.artifact_type != 'Project'
@@ -234,6 +235,12 @@ class ReArtifactProperties < ActiveRecord::Base
       RELATION_TYPES[:parentchild]
     )
     return relation.position
+  end
+
+  def delete_wiki_page
+    wiki_page_name = "#{self.id}_#{self.artifact_type}"
+    wiki_page = WikiPage.find_by_title(wiki_page_name)
+    wiki_page.destroy if wiki_page
   end
   
   private

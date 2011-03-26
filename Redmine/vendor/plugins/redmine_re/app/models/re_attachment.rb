@@ -6,8 +6,11 @@ class ReAttachment < ActiveRecord::Base
 
   belongs_to :attachment
 
+
   def attach_file(attachment_hash)
     return false unless self.valid?
+    return true  if self.attachment
+    
     if attachment_hash.blank?
       self.errors.add("attachment", "no file choosed!")
       return false
@@ -15,7 +18,7 @@ class ReAttachment < ActiveRecord::Base
     success = false
 
     # set the name of the current ReAttachment as description of the redmine attachment
-    attachment_hash["1"]["description"] = self.name
+    #attachment_hash["1"]["description"] = self.name
 
     # try to attach the file gets a hash with attached and unsaved attached files
     result  = Attachment.attach_files(self, attachment_hash)
