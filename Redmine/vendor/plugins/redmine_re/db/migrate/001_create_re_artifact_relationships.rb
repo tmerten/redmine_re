@@ -7,6 +7,10 @@ class CreateReArtifactRelationships < ActiveRecord::Migration
       t.column :position, :integer
       t.column :directed, :boolean
     end
+
+    for project in Project.find(:all)
+      project.create_or_update_re_artifact
+    end
   end
 
   def self.down

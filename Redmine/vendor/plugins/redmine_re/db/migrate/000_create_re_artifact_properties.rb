@@ -19,10 +19,6 @@ class CreateReArtifactProperties < ActiveRecord::Migration
 
       t.timestamps
     end
-    ocal
-    for project in Projects.find(:all)
-      project.create_or_update_re_artifact
-    end
   end
 
   def self.down
