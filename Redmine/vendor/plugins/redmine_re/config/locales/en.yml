@@ -9,7 +9,7 @@ en:
   re_requirements_overview: 'Requirements Overview'
   re_sidebar: 'Create Artifacts'
   re_create_child: 'Create Child'
-  re_delete_confirm: 'Do you really want to delete {{what}}?'
+  re_delete_confirm: 'Do you really want to delete %{what}?'
   re_select_artifact: 'Select Artifact'
   re_unsaved: 'unsaved'
   re_common_attributes: 'Common Attributes'
@@ -53,9 +53,9 @@ en:
   re_create_re_section: 'Create a new Section'
   re_section: 'Section'
   ReSection: 'Section'
-  re_section_not_found: 'Could not find section with id {{id}}.'
-  re_section_deleted: 'The Section {{name}} has been sucessfully deleted.'
-  re_section_not_deleted: 'The Section {{name}} could not be deleted.'
+  re_section_not_found: 'Could not find section with id %{id}.'
+  re_section_deleted: 'The Section %{name} has been sucessfully deleted.'
+  re_section_not_deleted: 'The Section %{name} could not be deleted.'
   re_section_saved: 'Section successfully saved'
   re_section_priority: 'Priority'
   
@@ -125,9 +125,9 @@ en:
   re_task_priority: 'Priority'
   re_task_saved: 'Task successfully saved'
   re_task_and_subtasks_saved: 'Task and Subtasks successfully saved'
-  re_task_deleted: 'The Task {{name}} has been deleted'
-  re_task_not_deleted: 'The Task {{name}} could not be deleted'
-  re_task_not_found: 'Could not find a task with id {{id}} to delete'
+  re_task_deleted: 'The Task %{name}} has been deleted'
+  re_task_not_deleted: 'The Task %{name} could not be deleted'
+  re_task_not_found: 'Could not find a task with id %{id} to delete'
 
   # re_subtasks
   re_new_re_subtask: 'New Subtask'
@@ -153,12 +153,12 @@ en:
   re_attachment_priority: 'Priority'
   re_create_re_attachment: 'Create a new File Attachment'
   re_attachment_saved: 'ReAttachment successfully saved'
-  re_attachment_deleted: 'The ReAttachment {{name}} has been deleted'
-  re_attachment_not_deleted: 'The ReAttachment {{name}} could not be deleted'
-  re_attachment_not_found: 'Could not find a ReAttachment with id {{id}} to delete'
+  re_attachment_deleted: 'The ReAttachment %{name} has been deleted'
+  re_attachment_not_deleted: 'The ReAttachment %{name} could not be deleted'
+  re_attachment_not_found: 'Could not find a ReAttachment with id %{id} to delete'
   re_attachment_no_file_error: 'No file choosed!'
   re_attachment_size_greater_zero: 'Filesize have to be >0 byte !'
-  re_attachment_validation_error: 'Attachment error: {{msg}}'
+  re_attachment_validation_error: 'Attachment error: %{msg}'
 
 
   # re_tree

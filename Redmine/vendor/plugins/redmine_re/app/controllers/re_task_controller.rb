@@ -87,10 +87,15 @@ class ReTaskController < RedmineReController
       flash[:error] = t(:re_task_not_found, :id => params[:id])
     else
       name = @re_task.re_artifact_properties.name
+      subtasks = []
+      @re_task.children.each {|c| subtasks << c.artifact if c.artifact_type == "ReSubtask"}
+
       if ReTask.destroy(@re_task.id)
-        flash[:notice] = t(:re_task_deleted, :name => @re_task.name)
+        # destroy subtasks
+        subtasks.each { |subtask| subtask.destroy } #todo: clean up relations ?for example par/child relations between orher artifact types?
+        flash[:notice] = t(:re_task_deleted, :name => name)
       else
-        flash[:error] = t(:re_task_not_deleted, :name => @re_task.name)
+        flash[:error] = t(:re_task_not_deleted, :name => name)
       end
     end
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
