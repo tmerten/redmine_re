@@ -64,14 +64,14 @@ class ReTaskController < RedmineReController
           # Save all subtasks
           @re_task.subtask_attributes = subtask_attributes
 
-          flash[:notice] = 'Task and Subtasks successfully saved'
+          flash[:notice] = t(:re_task_and_subtasks_saved)
           redirect_to :action => 'edit', :id => @re_task.id and return
         end
       else
         # Get all Subtasks sorted by their position
         @subtasks = @re_task.get_subtasks_sorted_by_position(subtask_attributes)
         # Add error to task
-        @re_task.errors.add("subtasks","are not valid!")
+        @re_task.errors.add_to_base(t(:re_subtasks_not_valid)) unless valid_subtask_attributes
       end
     end
   end
@@ -84,13 +84,13 @@ class ReTaskController < RedmineReController
     @project ||= @re_task.project
     
     if !@re_task
-      flash[:error] = 'Could not find a task with id ' + params[:id] + ' to delete'
+      flash[:error] = t(:re_task_not_found, :id => params[:id])
     else
       name = @re_task.re_artifact_properties.name
       if ReTask.destroy(@re_task.id)
-        flash[:notice] = 'The Task "' + name + '" has been deleted'
+        flash[:notice] = t(:re_task_deleted, :name => @re_task.name)
       else
-        flash[:error] = 'The Task "' + name + '" could not be deleted'
+        flash[:error] = t(:re_task_not_deleted, :name => @re_task.name)
       end
     end
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id

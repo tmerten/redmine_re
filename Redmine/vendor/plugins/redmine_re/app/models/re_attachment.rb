@@ -12,7 +12,7 @@ class ReAttachment < ActiveRecord::Base
     return true  if self.attachment
     
     if attachment_hash.blank?
-      self.errors.add("attachment", "no file choosed!")
+      self.errors.add_to_base(I18n.t(:re_attachment_no_file_error))
       return false
     end
     success = false
@@ -42,13 +42,13 @@ class ReAttachment < ActiveRecord::Base
     # if both hashes empty than the filesize equals 0 (See attachment.tb line 147)
     elsif result[:unsaved].blank? && result[:files].blank?
       if attachment_file.size == 0
-        self.errors.add("attachment", "filesize have to be >0 byte !")
+        self.errors.add_to_base(I18n.t(:re_attachment_size_greater_zero))
         return false
       end
     # if the attachment is found in the unsaved hash there should be a validation error
     elsif !result[:unsaved].blank? && result[:files].blank?
       if self.unsaved_attachments[0].errors.size > 0
-        self.unsaved_attachments[0].errors.each_full{|msg| self.errors.add("attachment", msg) }
+        self.unsaved_attachments[0].errors.each_full{|msg| self.errors.add_to_base(I18n.t(:re_attachment_validation_error, :msg => msg)) }
       end
     end
     return false

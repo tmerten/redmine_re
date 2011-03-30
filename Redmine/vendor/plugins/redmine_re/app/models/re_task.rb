@@ -58,6 +58,7 @@ class ReTask < ActiveRecord::Base
   end
 
   def subtasks_valid?(subtask_attributes)
+    return true if subtask_attributes.blank?
     valid_subtask_attributes = true
 
     subtask_attributes.each do |id, attributes|

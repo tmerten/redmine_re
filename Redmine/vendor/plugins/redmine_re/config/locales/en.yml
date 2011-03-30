@@ -124,6 +124,10 @@ en:
   ReTask: 'Task'
   re_task_priority: 'Priority'
   re_task_saved: 'Task successfully saved'
+  re_task_and_subtasks_saved: 'Task and Subtasks successfully saved'
+  re_task_deleted: 'The Task {{name}} has been deleted'
+  re_task_not_deleted: 'The Task {{name}} could not be deleted'
+  re_task_not_found: 'Could not find a task with id {{id}} to delete'
 
   # re_subtasks
   re_new_re_subtask: 'New Subtask'
@@ -140,13 +144,21 @@ en:
   re_subtask_priority: 'Priority'
   field_subtasks: 'Subtasks'
   re_subtasks_saved: 'Subtasks successfully saved'
+  re_subtasks_not_valid: 'Subtasks are not valid!'
+  
 
   # re_attachment
   re_attachment: 'File Attachment'
   re_new_re_attachment: 'New File Attachment'
   re_attachment_priority: 'Priority'
   re_create_re_attachment: 'Create a new File Attachment'
-  re_attachment_saved: 'Attachment successfully saved'
+  re_attachment_saved: 'ReAttachment successfully saved'
+  re_attachment_deleted: 'The ReAttachment {{name}} has been deleted'
+  re_attachment_not_deleted: 'The ReAttachment {{name}} could not be deleted'
+  re_attachment_not_found: 'Could not find a ReAttachment with id {{id}} to delete'
+  re_attachment_no_file_error: 'No file choosed!'
+  re_attachment_size_greater_zero: 'Filesize have to be >0 byte !'
+  re_attachment_validation_error: 'Attachment error: {{msg}}'
 
 
   # re_tree
