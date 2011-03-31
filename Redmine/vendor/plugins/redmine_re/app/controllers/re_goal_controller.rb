@@ -36,13 +36,13 @@ class ReGoalController < RedmineReController
     @project ||= @re_goal.project
     
     if !@re_goal
-      flash[:error] = 'Could not find a goal with this ' + params[:id] + ' to delete'
+      flash[:error] = t(:re_goal_not_found, :id => params[:id])
     else
       name = @re_goal.name
       if ReGoal.destroy(@re_goal.id)
-        flash[:notice] = 'The Goal "' + name + '" has been deleted'
+        flash[:notice] = t(:re_goal_deleted, :name => name)
       else
-        flash[:error] = 'The Goal "' + name + '" could not be deleted'
+        flash[:error] = t(:re_goal_not_deleted, :name => name)
       end
     end
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id

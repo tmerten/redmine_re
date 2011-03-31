@@ -65,7 +65,7 @@ class ReAttachmentController < RedmineReController
     @project ||= @re_attachment.project
 
     if !@re_attachment
-      flash[:error] = t(:re_attachment_not_found, {:id => @params[:id] })
+      flash[:error] = t(:re_attachment_not_found, {:id => params[:id] })
     else
       name = @re_attachment.name
       if ReAttachment.destroy(@re_attachment.id)

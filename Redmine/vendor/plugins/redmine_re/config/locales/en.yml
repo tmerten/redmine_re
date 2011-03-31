@@ -65,6 +65,9 @@ en:
   re_vision: 'Vision Statement'
   re_create_re_vision: 'Create a new Vision Statement'
   re_vision_saved: 'Vision successfully saved'
+  re_vision_not_found: 'Could not find ReVision with id %{id}.'
+  re_vision_deleted: 'The ReVision %{name} has been sucessfully deleted.'
+  re_vision_not_deleted: 'The ReVision %{name} could not be deleted.'
   
   # re_workarea
   re_workarea: 'Workarea'
@@ -73,6 +76,9 @@ en:
   re_new_re_workarea: 'New Workarea'
   re_workarea_priority: 'Priority'
   re_workarea_saved: 'Workare successfully saved'
+  re_workarea_not_found: 'Could not find ReWorkarea with id %{id}.'
+  re_workarea_deleted: 'The ReWorkarea %{name} has been sucessfully deleted.'
+  re_workarea_not_deleted: 'The ReWorkarea %{name} could not be deleted.'
   
   # re_user_profile
   re_user_profile: 'User Profile'
@@ -81,6 +87,9 @@ en:
   re_new_re_user_profile: 'New User Profile'
   re_user_profile_priority: 'Priority'
   re_user_profile_saved: 'User Profile Sucessfully Saved'
+  re_user_profile_deleted: 'The ReUserProfile %{name} has been deleted'
+  re_user_profile_not_deleted: 'The ReUserProfile %{name} could not be deleted'
+  re_user_profile_not_found: 'Could not find a ReUserProfile with id %{id} to delete'
 
   # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
@@ -104,6 +113,7 @@ en:
   re_dependency_relation_type: 'Dependency'
   re_conflict_relation_type: 'Conflict'
   re_relation_type: 'Relation Type'
+  re_relationship_create_error: 'Relation could not be created'
 
   # re_goals
   re_new_re_goal: 'New Goal'
@@ -114,6 +124,9 @@ en:
   ReGoal: 'Goal'
   re_goal_priority: 'Priority'
   re_goal_saved: 'Goal successfully saved'
+  re_goal_deleted: 'The Goal %{name} has been deleted'
+  re_goal_not_deleted: 'The Goal %{name} could not be deleted'
+  re_goal_not_found: 'Could not find a Goal with id %{id} to delete'
   
   # re_tasks
   re_new_re_task: 'New Task'
@@ -145,6 +158,11 @@ en:
   field_subtasks: 'Subtasks'
   re_subtasks_saved: 'Subtasks successfully saved'
   re_subtasks_not_valid: 'Subtasks are not valid!'
+  re_subtask_saved: 'Subtask %{name} successfully saved'
+  re_subtask_deleted: 'The subtask %{name} has been deleted'
+  re_subtask_not_deleted: 'The subtask %{name} could not be deleted'
+  re_subtask_not_found: 'Could not find a subtask with id %{id} to delete'
+
   
 
   # re_attachment

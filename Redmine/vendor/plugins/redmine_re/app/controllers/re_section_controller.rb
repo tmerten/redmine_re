@@ -38,7 +38,7 @@ class ReSectionController < RedmineReController
     @project ||= @re_section.project
 
     if !@re_section
-      flash[:error] = t(:re_section_not_found, {:id => @params[:id] })
+      flash[:error] = t(:re_section_not_found, {:id => params[:id] })
     else
       name = @re_section.name
       if ReSection.destroy(@re_section.id)

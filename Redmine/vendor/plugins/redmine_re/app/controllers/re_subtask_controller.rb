@@ -25,7 +25,7 @@ class ReSubtaskController < RedmineReController
       @re_subtask.attributes = params[:re_subtask]
       add_hidden_re_artifact_properties_attributes @re_subtask
 
-      flash[:notice] = 'Subtask successfully saved' if save_ok = @re_subtask.save
+      flash[:notice] = t(:re_subtask_saved, :name => @re_subtask.name) if save_ok = @re_subtask.save
 
       redirect_to :action => 'edit' and return if save_ok
     end
@@ -38,13 +38,13 @@ class ReSubtaskController < RedmineReController
     @project ||= @re_goal.project
     
     if !@re_subtask
-      flash[:error] = 'Could not find a subtask with this ' + params[:id] + ' to delete'
+      flash[:error] = t(:re_subtask_not_found, :id => params[:id])
     else
       name = @re_subtask.name
       if ReSubtask.destroy(@re_subtask.id)
-        flash[:notice] = 'The Subtask "' + name + '" has been deleted'
+        flash[:notice] = t(:re_subtask_deleted, :name => name)
       else
-        flash[:error] = 'The Subtask "' + name + '" could not be deleted'
+        flash[:error] = t(:re_subtask_not_deleted, :name => name)
       end
     end
     if request.xhr?

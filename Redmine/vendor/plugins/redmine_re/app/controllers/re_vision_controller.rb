@@ -36,7 +36,7 @@ class ReVisionController < RedmineReController
   # deletes and updates the flash with either success, id not found error or deletion error
     @re_vision = ReVision.find_by_id(params[:id], :include => :re_artifact_properties)
     if !@re_vision
-      flash[:error] = t(:re_vision_not_found, {:id => @params[:id] })
+      flash[:error] = t(:re_vision_not_found, {:id => params[:id] })
     else
       name = @re_vision.name
       if ReVision.destroy(@re_vision.id)

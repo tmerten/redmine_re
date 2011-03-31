@@ -12,7 +12,7 @@ class ReArtifactRelationshipController < RedmineReController
       sink = ReArtifactProperties.find_by_id(relation[:artifact_id])
       source.relate_to(sink, relation[:relation_type].to_sym, false)
     else
-    	@error = "Relation could not be created"
+    	@error = t(:re_relationship_create_error)
     end
     
     @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(artifact_properties_id)

@@ -26,7 +26,7 @@ class ReWorkareaController < RedmineReController
       @re_workarea.attributes = params[:re_workarea]
       add_hidden_re_artifact_properties_attributes @re_workarea
 
-      flash[:notice] = 'ReWorkarea successfully saved' if save_ok = @re_workarea.save
+      flash[:notice] = t(:re_workarea_saved) if save_ok = @re_workarea.save
 
       redirect_to :action => 'edit', :id => @re_workarea.id and return if save_ok
     end
@@ -36,13 +36,13 @@ class ReWorkareaController < RedmineReController
   # deletes and updates the flash with either success, id not found error or deletion error
     @re_workarea = ReWorkarea.find_by_id(params[:id], :include => :re_artifact_properties)
     if !@re_workarea
-      flash[:error] = 'Could not find a ReWorkarea with this ' + params[:id] + ' to delete'
+      flash[:error] = t(:re_workarea_not_found, :id => params[:id])
     else
       name = @re_workarea.name
       if ReWorkarea.destroy(@re_workarea.id)
-        flash[:notice] = 'The ReWorkarea "' + name + '" has been deleted'
+        flash[:notice] = t(:re_workarea_deleted, :name => name)
       else
-        flash[:error] = 'The ReWorkarea "' + name + '" could not be deleted'
+        flash[:error] = t(:re_workarea_not_deleted, :name => name)
       end
     end
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
