@@ -74,7 +74,7 @@ JAVASCRIPT
     unless has_no_wiki_page_yet
       # tooltip preview of wikipage if one exists already
       #tip = content_tag("h1", t(:re_preview_wiki_page_for_re_artifact))
-      tip = content_tag("span", textilizable(wiki_page.content.text), :class => "tip")
+      tip = content_tag("span", textilizable(wiki_page.content.text), :class => "tip wiki_page_preview_tip")
       tip = content_tag("div", html_code + tip, :class => "tooltip")
       html_code = tip
     end

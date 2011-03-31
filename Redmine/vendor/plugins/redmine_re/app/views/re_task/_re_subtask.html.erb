@@ -28,7 +28,7 @@
       <td class="<%=type-%>">
        <% if re_subtask.errors.on("re_artifact_properties.name")%>
        <div class="tooltip"><%= image_tag("exclamation.png") %>
-        <span class="tip"><%= re_subtask.errors.on("re_artifact_properties.name")%></span>
+        <span class="tip subtask_error_tip"><%= re_subtask.errors.on("re_artifact_properties.name")%></span>
        </div>
        <% end %>
       </td>
@@ -39,7 +39,7 @@
       <td class="<%=type-%>">
        <% if re_subtask.errors.on(:solution) %>
        <div class="tooltip"><%= image_tag("exclamation.png") %>
-        <span class="tip"><%= re_subtask.errors.on(:solution)%></span>
+        <span class="tip subtask_error_tip"><%= re_subtask.errors.on(:solution)%></span>
        </div>
        <% end %>
       </td>

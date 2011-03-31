@@ -139,30 +139,27 @@ label.filter {
   width: 110px;
 }
 
-/***** Tooltips overridden from application.css (redmine)******/
-.tooltip {
-  position:relative;
-  z-index:24;
-}
+/***** custom tooltips visualization*****/
 
-.tooltip:hover {
-  z-index:25;
-  color:#000;
-}
+/* if you define a tooltip use for the tip 2 css class: class="tip customtipname"
+   for example: class="tip subtask_error_tip"
 
-.tooltip span.tip {
-  display: none;
+   look in apllication.css of redmine which styles are already set and overwrite or add
+   the stylez for your custom tooltip
+*/
+div.tooltip:hover span.subtask_error_tip {
+  border: 1px solid #EC705B;
   text-align:center;
+  font-weight:bold;
+  color:#EC705B;
 }
 
-div.tooltip:hover span.tip {
-  display: block;
-  position: absolute;
-  border: 1px solid #507AAA;
-  background-color: #FFFFFF;
-  font-size: x-small;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 20px;
+div.tooltip:hover span.wiki_page_preview_tip {
+    border: 1px solid #507AAA;
+    font-size: x-small;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 20px;
 }
+
