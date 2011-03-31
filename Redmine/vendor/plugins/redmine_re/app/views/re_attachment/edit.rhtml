@@ -11,7 +11,7 @@
     <% if @re_attachment.id %>
       <%=  link_to(h(@re_attachment.attachment.filename), {:controller => 're_attachment', :action => "download_or_show", :id => @re_attachment}, {:target => "blank", :class => 'icon icon-attachment'}) %>
     <% else %>
-        <%= file_field_tag 'attachment[1][file]', :size => 30 %>
+      <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
     <% end %>
     <p>
       <%= submit_tag l(:re_save), :action => :edit %>
