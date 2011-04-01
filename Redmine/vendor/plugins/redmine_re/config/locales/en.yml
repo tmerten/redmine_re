@@ -140,7 +140,7 @@ en:
   re_task_and_subtasks_saved: 'Task and Subtasks successfully saved'
   re_task_deleted: 'The Task %{name}} has been deleted'
   re_task_not_deleted: 'The Task %{name} could not be deleted'
-  re_task_not_found: 'Could not find a task with id %{id} to delete'
+  re_task_not_found: 'Could not find a Task with id %{id} to delete'
 
   # re_subtasks
   re_new_re_subtask: 'New Subtask'
@@ -159,9 +159,9 @@ en:
   re_subtasks_saved: 'Subtasks successfully saved'
   re_subtasks_not_valid: 'Subtasks are not valid!'
   re_subtask_saved: 'Subtask %{name} successfully saved'
-  re_subtask_deleted: 'The subtask %{name} has been deleted'
-  re_subtask_not_deleted: 'The subtask %{name} could not be deleted'
-  re_subtask_not_found: 'Could not find a subtask with id %{id} to delete'
+  re_subtask_deleted: 'The Subtask %{name} has been deleted'
+  re_subtask_not_deleted: 'The Subtask %{name} could not be deleted'
+  re_subtask_not_found: 'Could not find a Subtask with id %{id} to delete'
 
   
 
@@ -170,15 +170,14 @@ en:
   re_new_re_attachment: 'New File Attachment'
   re_attachment_priority: 'Priority'
   re_create_re_attachment: 'Create a new File Attachment'
-  re_attachment_saved: 'ReAttachment successfully saved'
-  re_attachment_deleted: 'The ReAttachment %{name} has been deleted'
-  re_attachment_not_deleted: 'The ReAttachment %{name} could not be deleted'
-  re_attachment_not_found: 'Could not find a ReAttachment with id %{id} to delete'
-  re_attachment_no_file_error: 'No file choosed!'
-  re_attachment_size_greater_zero: 'Filesize have to be >0 byte !'
-  re_attachment_validation_error: 'Attachment error: %{msg}'
+  re_attachment_saved: 'File Attachment successfully saved'
+  re_attachment_deleted: 'The File Attachment %{name} has been deleted'
+  re_attachment_not_deleted: 'The File Attachment %{name} could not be deleted'
+  re_attachment_not_found: 'Could not find a File Attachment with id %{id} to delete'
+  re_attachment_no_file_error: 'Please select a file!'
+  re_attachment_size_greater_zero: 'The Filesize has to be >0 byte !'
+  re_attachment_validation_error: 'File Attachment error: %{msg}'
   re_attachment_file: 'File'
-
 
   # re_tree
   re_tree_overview: 'Artifact Overview'
