@@ -52,6 +52,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 			include Artifact
 		end
 	end
+
 end
 
 config.after_initialize do

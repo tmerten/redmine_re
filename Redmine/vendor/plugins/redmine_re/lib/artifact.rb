@@ -25,6 +25,10 @@ module Artifact
       attributes_to_delegate = all_attributes - ignored_attributes
       
       class_eval <<-RUBY
+        def artifact_id
+          re_artifact_properties.id
+        end
+
         def acts_as_artifact_class
           ::#{self.name}
         end

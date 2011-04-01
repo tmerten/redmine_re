@@ -1,7 +1,7 @@
 <div id='detail_view' class='detail_view'>
 
 <%= render 're_artifact_properties/action_menu', {:artifact => @re_vision} %>
-<h2><%= l(:re_vision) %></h2>
+<h2><%= t(:re_artifact) + ' #' + @re_vision.artifact_id.to_s + ' - ' + l(:re_vision) %></h2>
   <%= errors_and_flash  :re_vision %>
   <% form_for :re_vision, :update => :detail_view, :url => {:action => "edit"} do |f| %>
     

@@ -70,7 +70,9 @@ class ReTaskController < RedmineReController
       else
         # Get all Subtasks sorted by their position
         @subtasks = @re_task.get_subtasks_sorted_by_position(subtask_attributes)
+
         # Add error to task
+        # TODO: Distinguish type of error and translate
         @re_task.errors.add_to_base(t(:re_subtasks_not_valid)) unless valid_subtask_attributes
       end
     end

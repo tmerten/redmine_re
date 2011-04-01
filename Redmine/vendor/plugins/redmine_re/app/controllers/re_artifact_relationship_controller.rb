@@ -20,20 +20,6 @@ class ReArtifactRelationshipController < RedmineReController
     render :partial => "relationship_links", :layout => false, :project_id => params[:project_id]
   end
 
-  def index
-  end
-
-  def show
-  end
-
-  def new
-  end
-
-  def edit
-  end
-
-
-
   def visualization
     # Building JSON-Tree for Netmap-Visualization. As the JIT-Sunburst-Visualization
     # is usually build for trees, we have to add a dummy root element which isn't shown

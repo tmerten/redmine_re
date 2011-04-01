@@ -31,4 +31,19 @@ class ReArtifactPropertiesController < RedmineReController
       redirect_to redirector
     end
   end
+  
+  def prepare_delete
+    @artifact = ReArtifactProperties.find(params[:id])
+    @project ||= @artifact.project
+    
+    @html_tree = create_tree
+    
+    @sinks = @artifact.relationships_as_sink
+    @sources = @artifact.relationships_as_source
+    @parent = @artifact.parent
+    @children = @artifact.children
+
+    @parent_relation = @sources.delete_if {|x| x.relation_type = ReArtifactProperties::RELATION_TYPES[:parentchild] }
+    @child_relations = @sinks.delete_if {|x| x.relation_type = ReArtifactProperties::RELATION_TYPES[:parentchild] }
+  end
 end

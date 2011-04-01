@@ -1,6 +1,6 @@
 <div class="contextual">
   <% if artifact.id %>
-    <%= link_to l(:button_delete), {:controller => artifact.class.to_s.underscore, :action => 'delete', :id => artifact},
+  <%= link_to l(:button_delete), {:controller => 're_artifact_properties', :action => 'prepare_delete', :id => artifact.re_artifact_properties.id},
       :confirm => t(:text_are_you_sure), :method => :post, :class => 'icon icon-del' %>
   <% end %>
 </div>

@@ -91,7 +91,7 @@ class ReArtifactProperties < ActiveRecord::Base
     
     version.save
   end
-
+  
 #  def create_new_version
 #     versionNr = self.artifact.version
 #     version   = self.artifact.versions.find_by_version(versionNr)
