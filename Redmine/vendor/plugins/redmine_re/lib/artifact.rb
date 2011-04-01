@@ -26,7 +26,7 @@ module Artifact
       
       class_eval <<-RUBY
         def artifact_id
-          re_artifact_properties.id
+          re_artifact_properties.id unless re_artifact_properties.nil?
         end
 
         def acts_as_artifact_class

@@ -11,9 +11,8 @@ class ReSubtaskController < RedmineReController
   end
 
   def new
-    edit
+    redirect_to :action => 'edit', :project_id => params[:project_id]
   end
-
 
   def edit
     @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties) || ReSubtask.new

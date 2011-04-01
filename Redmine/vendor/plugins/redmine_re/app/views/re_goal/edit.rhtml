@@ -1,7 +1,7 @@
 <div id='detail_view' class='detail_view'>
   <%= render 're_artifact_properties/action_menu', {:artifact => @re_goal} %>
   
-  <h2><%= t(:re_artifact) + ' #' + @re_goal.artifact_id.to_s + ' - ' + t(:re_goal) %></h2>
+  <h2><%= t(:re_artifact) + ' #' + @re_goal.artifact_id.to_s + ' - ' + t(:re_goal) unless @re_goal.nil? %></h2>
 
   <%= errors_and_flash :re_goal %>
   
