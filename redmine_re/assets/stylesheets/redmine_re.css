@@ -1,0 +1,165 @@
+a {
+/* we need this to make javascript work properly,
+otherwise there is a 1px movement, when clicking on links */
+	outline: none;
+}
+
+a:active {
+  outline: none;
+}
+
+.detail_view {
+  margin-left: 220px;
+  margin-right: 35px;
+}
+
+.treebar {
+  position: absolute;
+  width: 200px;
+}
+
+.recopyright {
+  font-size: 0.9em;
+}
+
+table.subtasks {
+  border-spacing: 0;
+  border-style: none;
+  border-width: 0;
+}
+
+#subtasks .drop_hover {
+  background: url(../images/sortable_tree/drag.png) no-repeat bottom left;
+}
+
+.formError {
+  color:red;
+  font-weight:bold;
+}
+
+tr.subtask {
+  background-color: #F6F7F8;
+  border-width: 1px;
+  padding: 0px;
+  border-style: solid;
+  border-color: gray;
+}
+
+td.subtask {
+  border-top: 2px solid #505050;
+}
+
+tr.variant {
+  background-color: #FFE6BF;
+}
+
+tr.problem {
+  background-color: #F1938C;
+}
+
+tr.draggable {
+  cursor: move;
+}
+
+textarea {
+  border: 1px solid #CCCCCC;
+  font-family: Verdana,sans-serif;
+  padding: 3px;
+  font-size: 12px;
+  width: 95%;
+}
+
+#context-menu li.header {
+  border-bottom-width: 1px;
+  border-bottom-color: black;
+  border-bottom-style: dotted;
+  background-color: #507AAA;
+  padding-left: 5px;
+  color: white;
+}
+
+label {
+  font-weight: bold;
+  width: 100px;
+  clear:left; 
+  display:block;
+  float:left; 
+  text-align:right;
+  padding-right:5px;
+}
+
+label.filter {
+  font-weight: bold;
+  width: 100px;
+  clear:left; 
+  display:block;
+  float:left; 
+  text-align:left;
+  padding-right:5px;
+}
+
+
+.numberfield-slider {
+  float:left;
+}
+
+.numberfield-slider .numberfield-track {
+  float:right;
+  width: 150px;
+  background-color: #507AAA;
+  height: 15px;
+  margin: 3px 0 0 15px;
+}
+
+.numberfield-slider .numberfield-handle {
+  width: 8px;
+  height: 13px;
+  margin: 1px 1px 0 1px;
+  background-color: #FFFFFF;
+  cursor: move;
+}
+
+.icon-subtask-before {
+  background-image: url("../images/icons/subtask_before.png");
+}
+
+.icon-subtask-after {
+  background-image: url("../images/icons/subtask_after.png");
+}
+
+.icon-subtask-wiki-new {
+  background-image: url("../images/icons/book_add.png");
+}
+
+.icon-subtask-wiki-edit {
+  background-image: url("../images/icons/book_edit.png");
+}
+
+.select_field_filter {
+  width: 110px;
+}
+
+/***** custom tooltips visualization*****/
+
+/* if you define a tooltip use for the tip 2 css class: class="tip customtipname"
+   for example: class="tip subtask_error_tip"
+
+   look in apllication.css of redmine which styles are already set and overwrite or add
+   the stylez for your custom tooltip
+*/
+div.tooltip:hover span.subtask_error_tip {
+  border: 1px solid #EC705B;
+  text-align:center;
+  font-weight:bold;
+  color:#EC705B;
+}
+
+div.tooltip:hover span.wiki_page_preview_tip {
+    border: 1px solid #507AAA;
+    font-size: x-small;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 20px;
+}
+

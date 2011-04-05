@@ -1,0 +1,66 @@
+<div class="box">
+
+  <fieldset <%= if activated then 'class="collapsible "' else 'class="collapsible collapsed "' end %> >
+    <legend onclick="toggleFieldset(this); toggleCheckbox(document.getElementById(<%='\'activated_searches_' + legend + '\'' %>));">
+      <%= l(legend) %>
+      <%= check_box_tag "activated_searches[" + legend + "]", legend, activated, :style => 'display: none' %> 
+    </legend>
+
+    <div <%= 'style="overflow: visible; display: none; "' unless activated %> >
+
+        <div class="splitcontentleft ">
+          <%= label legend, l(:re_artifact_type) %>
+          <%= select (legend, :type, ReArtifactProperties.find(:all, :select => 'distinct artifact_type').collect { |item| [l(item.artifact_type), item.artifact_type]}, { :include_blank => l(:re_none_specific), :class => :select_field_filter }) %>
+        </div>
+
+        <div class="splitcontentright " >
+          <% javascript_tag  do %>
+          Event.observe(window, 'load', function() {
+            var <%=legend -%>prioSlider = new Control.Slider('<%= legend -%>_numberfield_handle' , '<%= legend -%>_numberfield_track',
+            {
+                 range: $R(1,51),
+                 values: $R(1,50),
+                 sliderValue: 1,
+                 onSlide: function(v) {
+                     $('<%= legend + "_data_priority" -%>').value = v;
+                 }
+            } );
+            $('<%= legend + "_data_priority" -%>').observe('change', function() {
+              <%=legend + 'prioSlider'%>.setValue(this.value);
+            });
+          });
+          <% end %>
+          <div class="numberfield-slider ">
+            <%= label legend, l(:re_artifact_priority) %>
+            <%= select_tag(legend + "[searching][priority]", options_for_select([l(:re_equals), l(:re_lesser_than), l(:re_greater_than)], l(:re_equals) ), {:class => :select_field_filter}) %>
+            <%= text_field legend + "[data]", :priority, :size => 3, :default => "1"%>
+            <div id= "<%= legend %>_numberfield_track" class="numberfield-track ">
+                <div id="<%= legend %>_numberfield_handle" class="numberfield-handle "></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="splitcontentleft ">
+          <%= label legend, l(:re_artifact_name) %>
+          <%= select_tag(legend + "[searching][name]", options_for_select([l(:re_starts_with), l(:re_ends_with), l(:re_contains)], l(:re_starts_with) ), {:class => :select_field_filter}) %>
+          <%= text_field legend + "[data]", :name %>
+        </div>
+
+        <div class="splitcontentright " >
+        <%= label legend, l(:re_artifact_responsibles) %>
+        <%= select_tag(legend + "[searching][responsibles]", options_for_select([l(:re_starts_with), l(:re_ends_with), l(:re_contains), l(:re_equals)], l(:re_starts_with) ), {:class => :select_field_filter}) %>
+        <%= text_field legend + "[data]", :responsibles  %>
+        </div>
+
+        <div class="splitcontentleft " >
+        <%= label legend, l(:re_artifact_description) %>
+        <%= select_tag(legend + "[searching][description]", options_for_select([l(:re_starts_with), l(:re_ends_with), l(:re_contains)], l(:re_contains) ), {:class => :select_field_filter}) %>
+        <%= text_field legend + "[data]", :description %>
+        </div>
+
+    </div>
+
+  </fieldset>
+
+
+</div>

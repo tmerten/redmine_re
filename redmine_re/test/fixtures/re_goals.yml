@@ -1,0 +1,10 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+goal_small_latency:
+  id: <%= Fixtures.identify(:goal_small_latency) %>
+  
+goal_usability:
+  id: <%= Fixtures.identify(:goal_usability) %>
+  
+goal_keyboard_control:
+  id: <%= Fixtures.identify(:goal_keyboard_control) %>
+

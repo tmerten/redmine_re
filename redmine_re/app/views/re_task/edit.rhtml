@@ -1,0 +1,184 @@
+<div id='detail_view' class='detail_view'>
+  <%= render 're_artifact_properties/action_menu', {:artifact => @re_task} %>
+
+  <h2><%= t(:re_artifact) + ' #' + @re_task.artifact_id.to_s + ' - ' + t(:re_task) unless @re_task.nil? %></h2>
+
+<%= errors_and_flash :re_task %>
+
+<% form_for :re_task, :url => {:action => "edit"}, :html => { :style => "margin:0;padding:0;display:inline" } do |f| %>
+    <%= hidden_field_tag :parent_id, params[:parent_id] %>
+    
+    <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
+    <%= submit_tag l(:re_save), :accesskey => "s" %>
+
+    <table class="subtasks">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>&nbsp;</th>
+          <th>Solution</th>
+          <th>&nbsp;</th>
+          <th> <%= add_subtask_link l(:re_insert_st_before), "subtasks", "top" %> </th>
+        </tr>
+      </thead>
+      <tbody id="subtasks">
+        <%= render :partial => 're_subtask', :collection => @subtasks %>
+      </tbody>
+    </table>
+    <%= sortable_element "subtasks",
+                          :tag => 'tr',
+                          :complete => visual_effect(:highlight, 'subtasks'),
+                          :onUpdate => "function(el) { updateAllSubtaskPositions(); }"
+    %>
+    <br />
+
+<% end %>
+
+<div class="manage_relationships">
+    <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id  %>
+</div>
+
+
+<script type="text/javascript" language="javascript">
+  Event.observe(window, 'load', function() {
+    updateAllSubtaskPositions();
+  });
+
+
+  changeSubtaskRowColor = function(element, value) {
+    element.removeClassName('subtask');
+    element.removeClassName('variant');
+    element.removeClassName('problem');
+    
+    switch(value) {
+      case '0': element.addClassName('subtask'); break;
+      case '1': element.addClassName('variant'); break;
+      case '2': element.addClassName('problem'); break;
+      default: alert('You cannot switch to that value ' + value);
+    }
+
+    element.childElements().each( function ( td ) {
+       changeSubtaskRowColor(td, value)
+    });
+  }
+
+  addSubtask = function(element_id, add_pos) {
+    var tr_subtask_drag;
+    var rendered_subtask;
+
+    tr_subtask_drag = $(element_id) ; // the subtask drag tr from the clicked insert link
+    rendered_subtask = "<%= escape_javascript(render(:partial => "re_subtask", :object => ReSubtask.new)) %>";
+
+    // # Add Subtask
+    if(add_pos == 'after')
+    {
+        tr_subtask_drag.insert( { after: rendered_subtask} );
+    }
+    else if (add_pos == 'before')
+    {
+        tr_subtask_drag.insert( { before: rendered_subtask} );
+    }
+    else if (add_pos == 'bottom')
+    {
+        tr_subtask_drag.insert( { bottom: rendered_subtask} );
+    }
+    else if (add_pos == 'top')
+    {
+        tr_subtask_drag.insert( { top: rendered_subtask} );
+    }
+
+    // # Execute functions after adding subtask
+    unregisterTextAreaEvents();
+    setResizeableTextAreas();
+    Sortable.create('subtasks', {onUpdate:function(el) { updateAllSubtaskPositions(); }, tag:'tr'});
+    updateAllSubtaskPositions();
+  }
+
+  updateAllSubtaskPositions = function() {
+      var pos = 1;
+      var id;
+      var is_new_subtask = false;
+      var tr_subtask_drag, sub_type, name, solution, td_of_links; // Elements
+
+      // # loop through all hidden fields ( class = "position" )
+      $$('.position').each( function ( position_hidden_element ) {
+          id = pos;
+
+          // # Get the tr dom object (parent of hidden field position )
+          tr_subtask_drag =  position_hidden_element.ancestors()[0];
+
+          // # Confirm if current tr is from a new added subtask
+          is_new_subtask = tr_subtask_drag.id.indexOf("new") > 0;
+          if(is_new_subtask){
+            id = "new_" + pos;
+          }
+
+          // # Replace the id of the tr
+          tr_subtask_drag.id = "subtask_drag_" + id;
+
+          // # Refresh the position value of the hidden  field
+          position_hidden_element.value = pos;
+
+          // # Refresh the id values for the new subtask attributes fields
+
+          if(is_new_subtask) {
+              position_hidden_element.id    = "re_task_subtask_attributes_" + id + "_position";
+              position_hidden_element.name  = "re_task[subtask_attributes]["+ id + "][position]";
+
+              sub_type      = tr_subtask_drag.down('select');// new init because above innerHTML was changend (sub_type.ancestors()[0].innerHTML...)
+              sub_type.id   = "re_task_subtask_attributes_" + id + "_sub_type";
+              sub_type.name = "re_task[subtask_attributes]["+ id + "][sub_type]";
+
+              name          = tr_subtask_drag.down('textarea');
+              name.id       = "re_task_subtask_attributes_" + id + "_name";
+              name.name     = "re_task[subtask_attributes]["+ id + "][name]";
+
+              solution      = tr_subtask_drag.down('textarea', 1);
+              solution.id   = "re_task_subtask_attributes_" + id + "_solution";
+              solution.name = "re_task[subtask_attributes]["+ id + "][solution]";
+          }
+
+          // # Replace the positions values from the delete and insert links
+
+          // ## Get the parent dom object of the link ( td )
+          td_of_links = tr_subtask_drag.down('a').ancestors()[0];
+
+          // ## Replace the innerhtml of the links
+          if(is_new_subtask) {
+              // <a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/new?pos=new',
+              //<a onclick="addSubtask('subtask_drag_new', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
+              td_of_links.innerHTML = td_of_links.innerHTML.replace(/\?pos=(new_\d+|new)/i, "?pos=" + id);
+              td_of_links.innerHTML = td_of_links.innerHTML.replace(/subtask_drag_(new_\d+|new)/i, "subtask_drag_" + id);
+          } else {
+              //<a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/1?pos=1',
+              //<a onclick="addSubtask('subtask_drag_2', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
+              td_of_links.innerHTML = td_of_links.innerHTML.replace(/\?pos=\d+/i, "?pos=" + id);
+              td_of_links.innerHTML = td_of_links.innerHTML.replace(/subtask_drag_\d+/i, "subtask_drag_" + id );
+          }
+
+          // # increment position
+          pos = pos + 1;
+      });
+  }
+
+  setResizeableTextAreas = function() {
+      $$('textarea.subtask').each(function (el) {
+         new ResizingTextArea($(el));
+      });
+  }
+
+  unregisterTextAreaEvents = function() {
+    $$('textarea.subtask').each(function (el) {
+     (el).stopObserving('click');
+     (el).stopObserving('keyup');
+    });
+  }
+  
+  $$('textarea.subtask').each(function (el) {
+     new ResizingTextArea($(el));
+  });
+</script>
+  
+</div>

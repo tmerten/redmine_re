@@ -1,0 +1,24 @@
+<div id='detail_view' class='detail_view'>
+<h2><%= t(:re_artifact) + ' #' + @re_attachment.artifact_id.to_s + ' - ' + l(:re_attachment) unless @re_attachment.nil? %></h2>
+
+<%= errors_and_flash :re_attachment %>
+
+<% form_for :re_attachment, :update => :detail_view, :url => {:action => "edit"}, :html => {:multipart => true } do |f| %>
+    <%= hidden_field_tag :parent_id, params[:parent_id] %>
+
+    <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_attachment.re_artifact_properties} %>
+
+    <% if @re_attachment.id %>
+      <%=  link_to(h(@re_attachment.attachment.filename), {:controller => 're_attachment', :action => "download_or_show", :id => @re_attachment}, {:target => "blank", :class => 'icon icon-attachment'}) %>
+    <% else %>
+      <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
+    <% end %>
+    <p>
+      <%= submit_tag l(:re_save), :action => :edit %>
+    </p>
+
+<% end %>
+
+<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
+
+</div>

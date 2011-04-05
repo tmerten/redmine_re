@@ -1,0 +1,17 @@
+<div class="box">
+
+  <fieldset <%= if activated then 'class="collapsible "' else 'class="collapsible collapsed "' end %> >
+    <legend onclick="toggleFieldset(this); toggleCheckbox(document.getElementById(<%='\'activated_searches_' + legend + '\'' %>));">
+      <%= l(legend) %>
+      <%= check_box_tag "activated_searches[" + legend + "]", legend, activated, :style => 'display:none' %>
+    </legend>
+    <div <%= 'style="overflow: visible; display: none; "' unless activated %>>
+        <p>
+          <%= label :type, l(:re_type) %>
+          <%= select_tag(legend + "[data][" + l(:re_type) + "]" , options_for_select([l(:re_parentchild), l(:re_conflict), l(:re_dependency)], l(:re_conflict) )) %>
+        </p>
+    </div>
+  </fieldset>
+
+
+</div>

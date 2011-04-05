@@ -1,0 +1,23 @@
+<div class="one_line_view">
+	<p><table>
+		<tbody>
+			<tr>
+			<% for column in ReArtifactProperties.content_columns %>
+				<% unless column.name == "created_by" || column.name == "updated_by" %>
+	              <td>
+	              	<label class='filter'><%= l('re_column_' + column.name) + ": " %></label>
+					<%= artifact.send(column.name) %>
+	            </td>
+				<% end %>
+	        <% end %>
+			<% for column in ReSubtask.content_columns %>
+	        	<td>
+	              	<label class='filter'><%= l('re_column_' + column.name) + ": " %></label>
+					<%= artifact.send(column.name) %>
+	            </td>  
+	        <% end %>
+	          	
+			</tr>
+		</tbody>
+	</table></p>
+</div>

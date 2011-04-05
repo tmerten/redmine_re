@@ -1,0 +1,6 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+task_test_vocabulary:
+  id: <%= Fixtures.identify(:task_test_vocabulary) %>
+  
+task_login:
+  id: <%= Fixtures.identify(:task_login) %>
