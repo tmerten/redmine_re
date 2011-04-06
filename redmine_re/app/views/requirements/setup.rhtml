@@ -1,0 +1,17 @@
+<div id='detail_view' class='detail_view'>
+
+<h1><%= t(:re_first_use) %></h1>
+
+<p>
+<%= t(:re_project_was_setup) %>
+</p>
+
+<p>
+<%= t(:re_continue_to) %> <%= link_to t(:re_index), :action => "index", :project_id => @project.id %> <%= t(:re_page) %>
+</p>
+
+<p>
+<%= link_to t(:re_configure), :controller => "settings", :action => "plugin", :id => "redmine_re" %>
+</p>
+
+</div>

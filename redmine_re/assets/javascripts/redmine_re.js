@@ -1,3 +1,5 @@
+var $j = jQuery.noConflict();
+
 var ResizingTextArea = Class.create();
 ResizingTextArea.prototype = {
     defaultRows: 1,

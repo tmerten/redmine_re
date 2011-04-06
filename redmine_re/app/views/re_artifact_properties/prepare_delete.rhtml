@@ -1,12 +1,12 @@
 <div id='detail_view' class='detail_view'>
 <h2> t(:prepare_for_artifact_deletion) </h2>
-
+<p>
 You asked for deleting the following artifact: <b><%= @artifact.name %></b> (#<%= @artifact.id %>)
+</p>
 
 <h3><%= t(:re_relations_and_artifacts_found) %></h3>
 
 <p>
-
 <div class="splitcontentleft">
 
 <h4>Relations to other artifacts</h4>
@@ -44,9 +44,9 @@ You asked for deleting the following artifact: <b><%= @artifact.name %></b> (#<%
 (TODO -> design machen)<br/>
 <h3><%= t(:re_choose_option_for_deletion) %></h3>
 <ul>
-  <li>Delete everything (deletes this artifact<%=', all relations' unless @sources.empty? && @sinks.empty? %><%=' and all children' unless @children.empty? %>)</li>
+  <li><%= link_to t(:re_delete_everything), :action => "delete", :recursive => true %> (<%= t(:re_deletes_this_artifact) %><%= t(:and_all_relations) unless @sources.empty? && @sinks.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
   <% unless @children.empty? %>
-    <li>Delete this artifact and move its children to the parent (<%= @parent.name %></li>
+  <li><%= link_to t(:re_delete_this_artifact_and_move_its_children_to_the_parent), :action => "delete" %> (<%= @parent.name %>)</li>
   <% end %>
 </ul>
 </p>

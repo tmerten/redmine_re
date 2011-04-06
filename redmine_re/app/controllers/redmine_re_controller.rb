@@ -53,13 +53,13 @@ class RedmineReController < ApplicationController
   
   def create_tree
     show_projects = params[:show_projects]
-    artifacts = nil
+    artifacts = []
     
     if show_projects
       artifacts = ReArtifactProperties.find_all_by_artifact_type("Project")
     else
-      project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
-      artifacts = project_artifact.children
+      @project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+      artifacts = @project_artifact.children unless @project_artifact.nil?
     end
     
     html_tree = '<ul id="tree">'

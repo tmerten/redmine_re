@@ -12,9 +12,8 @@
 	        
 					<li><%= link_to 'Delete', {
   	          :controller => 're_artifact_properties',
-  	          :action => 'delete', :id => @artifact.id,
+  	          :action => 'prepare_delete', :id => @artifact.id,
   	        },
-            :confirm => t(:re_delete_confirm, {:what => @artifact.name}),
             :class => 'icon-del' %>
           </li>
 	  <% end %>
