@@ -1,5 +1,5 @@
 <div id='detail_view' class='detail_view'>
-<h2> t(:prepare_for_artifact_deletion) </h2>
+<h2> <%= t(:re_prepare_deletion) %></h2>
 <p>
 
 <%= t(:re_you_asked_for_deleting_the_following_artifact) %>: <b><%= @artifact.name %></b> (#<%= @artifact.id %>)
@@ -8,9 +8,9 @@
 <p>
 <h3><%= t(:re_choose_option_for_deletion) %></h3>
 <ul>
-  <li><%= link_to t(:re_delete_everything), :action => "delete", :id => @artifact.id, :recursive => true %> (<%= t(:re_deletes_this_artifact) %><%= t(:and_all_relations) unless @relationships_outgoing.empty? && @relationships_incoming.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
+  <li><%= link_to t(:re_delete_everything), :action => "delete", :id => @artifact.id, :method => 'recursive' %> (<%= t(:re_deletes_this_artifact) %><%= t(:re_and_all_relations) unless @relationships_outgoing.empty? && @relationships_incoming.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
   <% unless @children.empty? %>
-  <li><%= link_to t(:re_move_children_to_the_parent), :id => @artifact.id, :action => "delete" %> "<%= @parent.name %>" <%= t(:re_and_delete_afterwards, :artifact_name => @artifact.name) %></li>
+  <li><%= link_to t(:re_move_children_to_the_parent), :id => @artifact.id, :action => "delete", :method => 'move' %> "<%= @parent.name %>" <%= t(:re_and_delete_afterwards, :artifact_name => @artifact.name) %></li>
   <% end %>
 </ul>
 </p>

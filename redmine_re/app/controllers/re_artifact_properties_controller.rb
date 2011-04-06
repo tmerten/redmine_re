@@ -28,23 +28,58 @@ class ReArtifactPropertiesController < RedmineReController
   end
   
   def delete
-    method = params[:method]  
-    if method
-      redirect_to index
-    else
-      @artifact = ReArtifactProperties.find(params[:id])
-      @project ||= @artifact.project
-      
-      @html_tree = create_tree
-      
-      @relationships_incoming = @artifact.relationships_as_sink
-      @relationships_outgoing = @artifact.relationships_as_source
-      @parent = @artifact.parent
-      @children = @artifact.children
-      
-      @parent_relation = @relationships_incoming.delete_if {|x| x.relation_type = ReArtifactProperties::RELATION_TYPES[:parentchild] }
-      @child_relations = @relationships_outgoing.delete_if {|x| x.relation_type = ReArtifactProperties::RELATION_TYPES[:parentchild] }
+    method = params[:method]
+    @artifact = ReArtifactProperties.find(params[:id])
+    @project ||= @artifact.project
+    @html_tree = create_tree
+
+    @relationships_incoming = @artifact.relationships_as_sink
+    @relationships_outgoing = @artifact.relationships_as_source
+    @parent = @artifact.parent
+
+    @children = gather_children(@artifact)
+    
+    @relationships_incoming.delete_if {|x| x.relation_type == 1 }
+    @relationships_outgoing.delete_if {|x| x.relation_type == 1 }
+    
+    case method
+      when 'move'
+        @children = @artifact.children
+        for child in @children
+          child.set_parent(@parent)
+        end
+        @artifact.destroy
+
+        flash[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact.name, :parent => @parent.name)
+        redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
+        
+      when 'recursive'
+        for child in @children
+          child.destroy
+        end
+        @artifact.destroy
+
+        flash[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact.name)
+        redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
+      else
+        @children = gather_children(@artifact)
     end
+
+  end  
+
+  private
+  
+  def gather_children(artifact)
+    # recursively gathers all children for the given artifact
+    #
+    children = Array.new
+    children.concat artifact.children
+    return children if artifact.changed? || artifact.children.empty?
+    for child in children
+      children.concat gather_children(child)
+    end
+    children
   end
+    
 
 end
