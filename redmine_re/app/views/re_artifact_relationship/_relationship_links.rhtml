@@ -1,8 +1,6 @@
-<b><%= t(:re_artifact_relationships_outgoing) %></b>
 <p>
-	<%= "
-	<ul>
-		" unless @relationships_outgoing.empty? -%>
+  <b><%= t(:re_artifact_relationships_outgoing) %></b>
+	<%= "<ul>" unless @relationships_outgoing.empty? -%>
 		<% for relationship in @relationships_outgoing %>
 		<% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
 		<li>
@@ -17,11 +15,9 @@
 		<%= "
 	</ul>" unless @relationships_outgoing.empty? -%>
 </p>
-<b><%= t(:re_artifact_relationships_incoming) %></b>
 <p>
-	<%= "
-	<ul>
-		" unless @relationships_incoming.empty? -%>
+  <b><%= t(:re_artifact_relationships_incoming) %></b>
+	<%= "<ul>" unless @relationships_incoming.empty? -%>
 		<% for relationship in @relationships_incoming %>
 		<% source = ReArtifactProperties.find_by_id(relationship.source_id) %>
 		<li>
