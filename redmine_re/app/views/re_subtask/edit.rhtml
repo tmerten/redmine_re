@@ -20,14 +20,14 @@
                                     <% end %>
       </p>
       <p>
-        <%= label_tag t(:re_variant) %>  <% if(@re_subtask.sub_type == 1) %>
+        <%= label_tag t(:re_subtask_variant) %>  <% if(@re_subtask.sub_type == 1) %>
                                         <%= radio_button_tag "re_subtask[sub_type]", '1', true %>
                                     <% else %>
                                         <%= radio_button_tag "re_subtask[sub_type]", '1', false %>
                                     <% end %>
       </p>
       <p>
-        <%= label_tag t(:re_problem) %>  <% if(@re_subtask.sub_type == 2) %>
+        <%= label_tag t(:re_subtask_problem) %>  <% if(@re_subtask.sub_type == 2) %>
                                         <%= radio_button_tag "re_subtask[sub_type]", '2', true %>
                                     <% else %>
                                         <%= radio_button_tag "re_subtask[sub_type]", '2', false %>
