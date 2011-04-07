@@ -13,11 +13,8 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
   
-  before_filter :find_project, :load_settings
+  before_filter :find_project, :authorize, :load_settings
   
-  #before_filter :authorize,
-               # :except =>  [:delegate_tree_drop, :delegate_tree_node_click]
-
 	def load_settings
 		@settings = Setting.plugin_redmine_re
 		@re_artifact_order = ActiveSupport::JSON.decode(@settings['re_artifact_types'])
@@ -27,12 +24,33 @@ class RedmineReController < ApplicationController
   layout proc{ |c| c.request.xhr? ? false : "redmine_re" } 
   
   def find_project
-    # find the current project either by project name
-    return unless params[:project_id]
-    begin
-      @project = Project.find(params[:project_id])
-    rescue ActiveRecord::RecordNotFound
-      render_404
+    # find the current project either by project name ( new action,..)
+    if( params[:project_id] )
+      return unless params[:project_id]
+      begin
+        @project = Project.find(params[:project_id])
+      rescue ActiveRecord::RecordNotFound
+        render_404
+      end
+    # or by artifact id ( edit action)
+    else
+      if (params[:id])
+        begin
+          controller_name = params[:controller]
+          artifact = nil
+          unless controller_name.eql? "re_artifact_properties"
+            #  "re_task" => "ReTask" => ReTask.find
+            artifact = controller_name.classify.constantize.find(params[:id])
+          else # needed because classify converts "re_artifact_properties" to "ReArtifactProperty""
+            artifact = ReArtifactProperties.find(params[:id])
+          end
+          @project = artifact.project
+        rescue ActiveRecord::RecordNotFound
+          render_404
+        end
+      else# no project_id and no artifact id found
+        render_404
+      end
     end
   end
 

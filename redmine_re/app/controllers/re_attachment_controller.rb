@@ -30,15 +30,6 @@ class ReAttachmentController < RedmineReController
     end
   end
 
-  def show
-    if @attachment.image? && @attachment.filesize <= Setting.file_max_size_displayed.to_i.kilobyte
-      @content = File.new(@attachment.diskfile, "rb").read
-      render :action => 'file'
-    else
-      download
-    end
-  end
-
   def download_or_show
     @re_attachment = ReAttachment.find(params[:id])
     @re_attachment.attachment.increment_download

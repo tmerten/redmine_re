@@ -11,15 +11,24 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 
 	# this plugin creates a project module. navigate to 'settings->modules' in the app to activate the plugin per project
 	project_module :requirements do
-		permission( :re,
-      {
-        :requirements => [:index, :treeview],
-        :re_goal => [:index, :edit, :new, :delete] ,
-        :re_task => [:index, :edit, :new, :delete, :show_versions, :change_version] ,
-        :re_subtask => [:index, :edit, :new, :delete, :show_versions, :change_version, :create, :update]
-      },
 
-      :public => true
+    #   before_filter :authorize is set in the redmine_re_controller
+		permission( :edit_requirements,
+      {
+        # actions of redmine_re_controller are here too because the get executed by inheritance of requirements controller
+        # for example here:_tree partial: <%= url_for :controller => 'requirements', :action => 'context_menu' %>
+        :requirements => [:index, :treeview, :context_menu, :treestate, :load_settings, :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree, :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree, :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter, :reduce_search_result_with_parameter],#todo:
+        :re_artifact_properties => [:edit, :redirect, :delete],
+        :re_goal => [:edit, :new] ,
+        :re_task => [:edit, :new, :delete_subtask],
+        :re_subtask => [:edit, :new],
+        :re_section => [:edit, :new],
+        :re_workarea => [:edit, :new],
+        :re_vision => [:edit, :new],
+        :re_user_profile => [:edit, :new],
+        :re_attachment => [:edit, :new, :download_or_show],
+        :re_atifact_relationship => [:prepare_relationships, :visualization, :build_json_for_netmap, :add_artifacts_as_children_of_root, :add_artifact, :remove_last_comma_and_close, :build_json_according_to_user_choice]
+      }
     )
 
 	# more restrictive setup manage_requirements becomes "Manage Requirements" by convention
