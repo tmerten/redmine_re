@@ -1,10 +1,9 @@
-require_dependency 'projects_patch'
-
 class CreateReArtifactProperties < ActiveRecord::Migration
+
   def self.up
     create_table :re_artifact_properties do |t|
       t.column :name, :string
-      t.column :description, :string
+      t.column :description, :text
       t.column :priority, :integer
       t.column :responsibles, :string
 

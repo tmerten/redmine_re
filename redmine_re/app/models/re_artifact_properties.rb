@@ -36,6 +36,12 @@ class ReArtifactProperties < ActiveRecord::Base
 
   belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
   
+  after_destroy :destroy_artifact
+  
+  def destroy_artifact
+    artifact.destroy unless artifact.nil?
+  end
+  
   # TODO: Implement author and watchable module into the common fields.
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   acts_as_watchable
@@ -48,7 +54,7 @@ class ReArtifactProperties < ActiveRecord::Base
   validates_presence_of :updated_by, :message => l(:re_artifact_properties_validates_presence_of_updated_by)
   validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
 
-  validates_uniqueness_of :name, :message => l(:re_artifact_properties_validates_uniqueness_of_name)
+  #validates_uniqueness_of :name, :message => l(:re_artifact_properties_validates_uniqueness_of_name)
 
   # Should be on, but prevents subtasks from saving for now.
   #validates_numericality_of :priority, :only_integer => true, :greater_than => 0, :less_than_or_equal_to => 50

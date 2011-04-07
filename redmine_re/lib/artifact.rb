@@ -1,6 +1,6 @@
 module Artifact
   def self.included(base)
-    base.has_one :re_artifact_properties, :as => :artifact, :autosave => true, :dependent => :destroy
+    base.has_one :re_artifact_properties, :as => :artifact, :autosave => true
     base.validates_presence_of :re_artifact_properties
     base.validate :re_artifact_properties_must_be_valid
     base.alias_method_chain :re_artifact_properties, :autobuild

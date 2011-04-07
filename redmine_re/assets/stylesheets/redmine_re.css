@@ -26,6 +26,7 @@ table.subtasks {
   border-spacing: 0;
   border-style: none;
   border-width: 0;
+  min-width: 800px;
 }
 
 #subtasks .drop_hover {

@@ -9,8 +9,40 @@
     <%= hidden_field_tag :parent_id, params[:parent_id] %>
     
     <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
-    <%= submit_tag l(:re_save), :accesskey => "s" %>
+ 
 
+    <div class="box">
+      <fieldset><legend><%= l(:re_task_specific_attributes) %></legend>    
+        <div>
+        <div class="splitcontentleft" >
+          <%= f.label :start, l(:re_task_start) %> <%= f.text_field :start %>
+          <%= f.label :end, l(:re_task_end) %> <%= f.text_field :end %>
+         </div>
+        
+        <div class="splitcontentright" >
+          <%= f.label :frequency, l(:re_task_frequency) %> <%= f.text_field :frequency %>
+        </div>
+      </fieldset>
+      <fieldset><legend><%= l(:re_task_difficulties) %></legend>
+
+      <% unless @re_task.id.nil? %>
+        <div class="contextual">
+          <a href="#" class="icon icon-edit" onclick="showAndScrollTo('update-difficult', '<%=controller.controller_name -%>_difficult'); return false;"><%= l(:re_update_difficult) %></a>
+          </div>
+      <%= textilizable(@re_task, :difficult, :only_path => false) %>
+      <br/>
+      <% end %>
+      <div id='update-description' <%= 'style="display:none;"' unless @re_task.id.nil? %>>
+        <%= f.text_area :difficult,
+                         :cols => 60,
+                         :rows => (@re_task.difficult.blank? ? 10 : [[10, @re_task.difficult.length / 50].max, 100].min),
+                         :class => 'wiki-edit' %>
+        <%= wikitoolbar_for controller.controller_name + '_difficult' %>
+      </div>      
+      </fieldset>    
+    </div>
+
+    <fieldset><legend><%= l(:re_subtasks) %></legend>    
     <table class="subtasks">
       <thead>
         <tr>
@@ -27,6 +59,7 @@
         <%= render :partial => 're_subtask', :collection => @subtasks %>
       </tbody>
     </table>
+    </fieldset>
     <%= sortable_element "subtasks",
                           :tag => 'tr',
                           :complete => visual_effect(:highlight, 'subtasks'),
@@ -34,6 +67,9 @@
     %>
     <br />
 
+    <p>
+      <%= submit_tag l(:re_save), :accesskey => "s" %>
+    </p>
 <% end %>
 
 <div class="manage_relationships">

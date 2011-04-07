@@ -25,6 +25,7 @@ en:
   re_continue_here: 'For more information continue to here'
   re_configure: 'Or (optionally) configure the plugin'
   re_index: 'Redmine RE Plugin'
+  re_are_you_sure: 'Are you sure?'
 
   # re_artifact_properties
   re_artifact_name: 'Name'
@@ -42,11 +43,11 @@ en:
   re_preview_wiki_page_for_re_artifact: 'Wiki Page Preview:'
   re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
 
-  re_artifact_properties_validates_presence_of_name: 'needs to be entered.'
-  re_artifact_properties_validates_uniqueness_of_name: 'is used in another artifact, already.'
-  re_artifact_properties_validates_presence_of_updated_by: 'cannot be blank'
-  re_artifact_properties_validates_presence_of_created_by: 'cannot be blank!'
-  re_artifact_properties_validates_presence_of_project: 'cannot be blank!'
+  re_artifact_properties_validates_presence_of_name: 'Enter the name of the subtask.'
+  re_artifact_properties_validates_uniqueness_of_name: 'The name is used in another artifact, already.'
+  re_artifact_properties_validates_presence_of_updated_by: 'Updated by cannot be blank.'
+  re_artifact_properties_validates_presence_of_created_by: 'Created by cannot be blank.'
+  re_artifact_properties_validates_presence_of_project: 'There is no project associated to this artifact.'
   field_re_artifact_properties:
     name: 'Name'
     updated_by: 'Updating User'
@@ -161,6 +162,14 @@ en:
   re_task_deleted: 'The Task %{name}} has been deleted'
   re_task_not_deleted: 'The Task %{name} could not be deleted'
   re_task_not_found: 'Could not find a Task with id %{id} to delete'
+  re_task_specific_attributes: 'Task specific attributes'
+  re_task_start: 'Start'
+  re_task_end: 'End'
+  re_task_frequency: 'Frequency'
+  re_task_difficult: 'Difficult'
+  re_subtasks: 'Subtasks'
+  re_task_difficulties: 'Difficulties'
+  re_update_difficult: 'Update Difficulties'
 
   # re_subtasks
   re_new_re_subtask: 'New Subtask'
