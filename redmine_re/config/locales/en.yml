@@ -40,7 +40,7 @@ en:
   re_create_wiki_page_for_re_artifact: 'Create new Wiki Page'
   re_edit_wiki_page_for_re_artifact: 'Edit Wiki Page'
   re_preview_wiki_page_for_re_artifact: 'Wiki Page Preview:'
-  re_wiki_page_available_after_save: 'You connect a Wiki Page after saving'
+  re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
 
   re_artifact_properties_validates_presence_of_name: 'needs to be entered.'
   re_artifact_properties_validates_uniqueness_of_name: 'is used in another artifact, already.'
