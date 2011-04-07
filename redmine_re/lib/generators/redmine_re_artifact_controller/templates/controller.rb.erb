@@ -1,13 +1,5 @@
 class <%= class_name %>Controller < RedmineReController
   unloadable
-  def index
-  
-    @<%= plural_name %> = <%= class_name %>.find(:all,
-                         :joins => :re_artifact_properties,
-                         :conditions => {:re_artifact_properties => {:project_id => @project.id}}
-    )
-    render :layout => false if params[:layout] == 'false'
-  end
 
   def new
     # redirects to edit to be more dry
@@ -30,24 +22,6 @@ class <%= class_name %>Controller < RedmineReController
 
       redirect_to :action => 'edit', :id => @<%= class_name.underscore %>.id and return if save_ok
     end
-  end
-
-  def delete
-  # deletes and updates the flash with either success, id not found error or deletion error
-    @<%= class_name.underscore %> = <%= class_name %>.find_by_id(params[:id], :include => :re_artifact_properties)
-    @project ||= @<%= class_name.underscore %>.project
-
-    if !@<%= class_name.underscore %>
-      flash[:error] = t(:<%= class_name.underscore %>_not_found, {:id => @params[:id] })
-    else
-      name = @<%= class_name.underscore %>.name
-      if <%= class_name %>.destroy(@<%= class_name.underscore %>.id)
-        flash[:notice] = t(:<%= class_name.underscore %>_deleted, {:name => name})
-      else
-				flash[:error] = t(:<%= class_name.underscore %>_not_deleted, {:name => name})
-      end
-    end
-    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
 
 <% actions.each do |action| -%>
