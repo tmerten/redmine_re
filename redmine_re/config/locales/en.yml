@@ -20,6 +20,11 @@ en:
   re_drag_list_items_to_reorder_artifacts: 'Drag the list items to reorder the RE Artefacts. The configured order will be used everywhere in the RE Plugin'
   re_artifact_order: 'Artifact Display Order'
   re_create: 'Create'
+  re_first_use: 'This is the first time you are using the RE Plugin'
+  re_project_was_setup: 'I just set up your database'
+  re_continue_here: 'For more information continue to here'
+  re_configure: 'Or (optionally) configure the plugin'
+  re_index: 'Redmine RE Plugin'
 
   # re_artifact_properties
   re_artifact_name: 'Name'

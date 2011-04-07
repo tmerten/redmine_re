@@ -135,7 +135,7 @@ SortableTree.Node = Class.create({
     }
     
     if ( ! element.hasClassName('empty')) {
-      new Ajax.Updater(ul, this.options.nodeUrl + '/' + id, {
+      new Ajax.Updater(ul, this.options.nodeUrl + '/'  + id, {
         parameters: { 'open': open },
         onLoading: function() {
           tree.setUnsortable();
