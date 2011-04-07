@@ -135,7 +135,7 @@ SortableTree.Node = Class.create({
     }
     
     if ( ! element.hasClassName('empty')) {
-      new Ajax.Updater(ul, this.options.nodeUrl + id, {
+      new Ajax.Updater(ul, this.options.nodeUrl + '/' + id, {
         parameters: { 'open': open },
         onLoading: function() {
           tree.setUnsortable();
@@ -160,7 +160,7 @@ SortableTree.Node = Class.create({
     var listelement = element.ancestors().detect(function(e) { return e.match('li') });
     var id = listelement.id;
     id = id.gsub('node_','');
-    var url = this.options.editUrl + id;
+    var url = this.options.editUrl + '/' + id;
     document.location = url;
   },
   
@@ -169,7 +169,7 @@ SortableTree.Node = Class.create({
     var listelement = element.ancestors().detect(function(e) { return e.match('li') });
     var id = listelement.id;
     id = id.gsub('node_','');
-    var url = this.options.contextMenuUrl + id;
+    var url = this.options.contextMenuUrl + '/' + id;
 
     var menu = $(this.options.contextMenuDivId);
     new Ajax.Updater('context-menu', url, { 

@@ -26,7 +26,16 @@
     <p>
       <b><%= t(:re_parent) %></b>
       <ul>
-        <li><%= @parent.name %>
+        <li>
+          <% if @parent.artifact_type == "Project" %>
+            <%= @parent.name %>
+          <% else %>
+            <%= link_to @parent.name, {
+              :action => :edit,
+              :controller => @parent.artifact_type.underscore,
+              :id => @parent.artifact_id } %>
+          <% end %>  
+        </li>
       </ul>
     </p>
     
@@ -34,7 +43,12 @@
       <b><%= t(:re_children) %></b>
       <ul>
         <% for child in @children %>
-          <li><%= child.name %></li>
+          <li>
+            <%= link_to child.name, {
+              :action => :edit,
+              :controller => child.artifact_type.underscore,
+              :id => child.artifact_id } %>          
+          </li>
         <% end %>
       </ul>
     </p>

@@ -60,6 +60,8 @@ en:
   re_and_all_relations: ' and all relations'
   re_and_all_children: ' and all children'
   re_and_delete_afterwards: 'and delete "%{artifact_name}" afterwards.'
+  re_deleted_artifact_and_children: 'Successfully deleted the artifact and all its children'
+  re_deleted_artifact_and_moved_children: 'Succesfully moved all child artifacts to the parent and deleted the artifact'
   
   # re_section
   re_new_re_section: 'New Section'
