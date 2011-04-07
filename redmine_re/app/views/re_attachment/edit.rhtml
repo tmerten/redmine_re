@@ -1,4 +1,6 @@
 <div id='detail_view' class='detail_view'>
+  <%= render 're_artifact_properties/action_menu', {:artifact => @re_attachment} %>
+
 <h2><%= t(:re_artifact) + ' #' + @re_attachment.artifact_id.to_s + ' - ' + l(:re_attachment) unless @re_attachment.nil? %></h2>
 
 <%= errors_and_flash :re_attachment %>
