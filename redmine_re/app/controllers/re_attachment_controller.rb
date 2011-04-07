@@ -1,17 +1,8 @@
 class ReAttachmentController < RedmineReController
   unloadable
-  def index
-  
-    @re_attachments = ReAttachment.find(:all,
-                         :joins => :re_artifact_properties,
-                         :conditions => {:re_artifact_properties => {:project_id => @project.id}}
-    )
-    render :layout => false if params[:layout] == 'false'
-  end
 
   def new
     # redirects to edit to be more dry
-
     redirect_to :action => 'edit', :project_id => params[:project_id]
   end
 
@@ -57,25 +48,6 @@ class ReAttachmentController < RedmineReController
                                     :type => Redmine::MimeType.of(@re_attachment.attachment.filename),
                                     :disposition => (@re_attachment.attachment.image? ? 'inline' : 'attachment')
 
-  end
-
-  def delete
-  # deletes and updates the flash with either success, id not found error or deletion error
-    @re_attachment = ReAttachment.find_by_id(params[:id], :include => :re_artifact_properties)
-    @project ||= @re_attachment.project
-
-    if !@re_attachment
-      flash[:error] = t(:re_attachment_not_found, {:id => params[:id] })
-    else
-      name = @re_attachment.name
-      if ReAttachment.destroy(@re_attachment.id)
-        
-        flash[:notice] = t(:re_attachment_deleted, {:name => name})
-      else
-				flash[:error] = t(:re_attachment_not_deleted, {:name => name})
-      end
-    end
-    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
 
 end

@@ -20,18 +20,7 @@ class ReTaskController < RedmineReController
      respond_to do |format|
        format.js
      end
-
-
   end
-
-  def index
-    @tasks = ReTask.find(:all,
-                         :joins => :re_artifact_properties,
-                         :conditions => { :re_artifact_properties => { :project_id => params[:project_id]} }
-    )
-    render :layout => false if params[:layout] == 'false'
-  end
-
 
   def new
     redirect_to :action => 'edit', :project_id => params[:project_id]
@@ -78,46 +67,13 @@ class ReTaskController < RedmineReController
     end
   end
 
-
-  ##
-  # deletes and updates the flash with either success, id not found error or deletion error
-  def delete
-    @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties)
-    @project ||= @re_task.project
-    
-    if !@re_task
-      flash[:error] = t(:re_task_not_found, :id => params[:id])
-    else
-      name = @re_task.re_artifact_properties.name
-      subtasks = []
-      @re_task.children.each {|c| subtasks << c.artifact if c.artifact_type == "ReSubtask"}
-
-      if ReTask.destroy(@re_task.id)
-        # destroy subtasks
-        subtasks.each { |subtask| subtask.destroy } #todo: clean up relations ?for example par/child relations between orher artifact types?
-        flash[:notice] = t(:re_task_deleted, :name => name)
-      else
-        flash[:error] = t(:re_task_not_deleted, :name => name)
-      end
-    end
-    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
-  end
-
-  ##
-  # unused right now
-  def show
-    @re_task = ReTask.find_by_id(params[:id])
-  end
-
-  ##
-  # shows all versions
   def show_versions #todo das view funktioniert
+    # shows all versions
     @task = ReTask.find(params[:id] ) # :include => :re_artifact_properties)
   end
 
-  ##
-  # reverts to an older version
   def change_version
+    # reverts to an older version
     targetVersion = params[:version]
     @task = ReTask.find(params[:id])
 

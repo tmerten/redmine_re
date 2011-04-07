@@ -1,13 +1,5 @@
 class ReSectionController < RedmineReController
   unloadable
-  def index
-  
-    @re_sections = ReSection.find(:all,
-                         :joins => :re_artifact_properties,
-                         :conditions => {:re_artifact_properties => {:project_id => @project.id}}
-    )
-    render :layout => false if params[:layout] == 'false'
-  end
 
   def new
     # redirects to edit to be more dry
@@ -30,24 +22,6 @@ class ReSectionController < RedmineReController
 
       redirect_to :action => 'edit', :id => @re_section.id and return if save_ok
     end
-  end
-
-  def delete
-  # deletes and updates the flash with either success, id not found error or deletion error
-    @re_section = ReSection.find_by_id(params[:id], :include => :re_artifact_properties)
-    @project ||= @re_section.project
-
-    if !@re_section
-      flash[:error] = t(:re_section_not_found, {:id => params[:id] })
-    else
-      name = @re_section.name
-      if ReSection.destroy(@re_section.id)
-        flash[:notice] = t(:re_section_deleted, {:name => name})
-      else
-        flash[:error] = t(:re_section_not_deleted, {:name => name})
-      end
-    end
-    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
 
 end

@@ -2,7 +2,6 @@ class ReArtifactRelationshipController < RedmineReController
   unloadable
   menu_item :re
 
-
   def prepare_relationships
     artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
     relation = params[:re_artifact_relationship]
@@ -31,8 +30,6 @@ class ReArtifactRelationshipController < RedmineReController
     @html_tree = create_tree
   end
 
-
-
   def build_json_for_netmap(artifacts, relation_search_string = nil)
     @json_for_netmap = '[
       {
@@ -59,8 +56,6 @@ class ReArtifactRelationshipController < RedmineReController
     @json_for_netmap = remove_last_comma_and_close(@json_for_netmap, ']')
   end
 
-
-
   def add_artifacts_as_children_of_root(artifacts)
     @json_artifacts_as_children_of_root = ""
     for artifact in artifacts do
@@ -68,7 +63,6 @@ class ReArtifactRelationshipController < RedmineReController
     end
     @json_artifacts_as_children_of_root = remove_last_comma_and_close(@json_artifacts_as_children_of_root, ']},')
   end
-
 
   def add_artifact(artifact, outgoing_relationships)
   	type = artifact.artifact_type
@@ -92,17 +86,16 @@ class ReArtifactRelationshipController < RedmineReController
     @json_artifact = remove_last_comma_and_close(@json_artifact, ']},')
   end
 
-  # This method removes the last character of a given string and adds another string at the end
-  # Used to remove the last comma and to close the current json-structure
   def remove_last_comma_and_close(json_string, closing_string)
+    # This method removes the last character of a given string and adds another string at the end
+    # Used to remove the last comma and to close the current json-structure
     json_string = json_string[0, json_string.length - 1] + closing_string
   end
 
-
-  # This method build a new json string in variable @json_netmap which is returned
-  # Meanwhile it computes queries for the search for the chosen artifacts and relations.
-  # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
   def build_json_according_to_user_choice
+    # This method build a new json string in variable @json_netmap which is returned
+    # Meanwhile it computes queries for the search for the chosen artifacts and relations.
+    # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
     @artifact_choice = params[:artifact_clicked]
     @relation_choice = params[:relation_clicked]
     # String for condition to find the chosen artifacts
@@ -123,5 +116,4 @@ class ReArtifactRelationshipController < RedmineReController
     @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string) unless @artifacts.empty?
     render :json => @json_netmap
   end
-
 end

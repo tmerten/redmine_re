@@ -2,14 +2,6 @@ class ReSubtaskController < RedmineReController
   unloadable
   menu_item :re
 
-  def index
-    @subtasks = ReSubtask.find(:all,
-                         :joins => :re_artifact_properties,
-                         :conditions => { :re_artifact_properties => { :project_id => @project.id} }
-    )
-    render :layout => false if params[:layout] == 'false'
-  end
-
   def new
     redirect_to :action => 'edit', :project_id => params[:project_id]
   end
@@ -28,35 +20,6 @@ class ReSubtaskController < RedmineReController
 
       redirect_to :action => 'edit' and return if save_ok
     end
-  end
-
-    ##
-  # deletes and updates the flash with either success, id not found error or deletion error
-  def delete
-    @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties)
-    @project ||= @re_goal.project
-    
-    if !@re_subtask
-      flash[:error] = t(:re_subtask_not_found, :id => params[:id])
-    else
-      name = @re_subtask.name
-      if ReSubtask.destroy(@re_subtask.id)
-        flash[:notice] = t(:re_subtask_deleted, :name => name)
-      else
-        flash[:error] = t(:re_subtask_not_deleted, :name => name)
-      end
-    end
-    if request.xhr?
-      redirect_to :action => 'index', :project_id => @project.id, :layout => 'false'
-    else
-      redirect_to :action => 'index', :project_id => @project.id
-    end
-  end
-
-  ##
-  # unused right now
-  def show
-    @re_subtask = ReSubtask.find_by_id(params[:id])
   end
 
   ##
