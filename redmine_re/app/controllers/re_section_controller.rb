@@ -21,7 +21,7 @@ class ReSectionController < RedmineReController
 
       if save_ok && ! params[:parent_artifact_id].empty?
         @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-        @re_section.set_parent(@parent, -1)
+        @re_section.set_parent(@parent, 1)
       end
       
       redirect_to :action => 'edit', :id => @re_section.id and return if save_ok

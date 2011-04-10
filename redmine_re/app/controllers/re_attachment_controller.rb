@@ -25,7 +25,7 @@ class ReAttachmentController < RedmineReController
 
       if save_ok && ! params[:parent_artifact_id].empty?
         @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-        @re_attachment.set_parent(@parent, -1)
+        @re_attachment.set_parent(@parent, 1)
       end			
 			
       redirect_to :action => 'edit', :id => @re_attachment.id and return if save_ok

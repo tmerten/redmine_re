@@ -19,7 +19,7 @@ class ReSubtaskController < RedmineReController
 
       if save_ok && ! params[:parent_artifact_id].empty?
         @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-        @re_subtask.set_parent(@parent, -1)
+        @re_subtask.set_parent(@parent, 1)
       end      
       
       redirect_to :action => 'edit' , :id => @re_subtask.id and return if save_ok

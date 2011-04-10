@@ -190,7 +190,7 @@ class ReArtifactProperties < ActiveRecord::Base
     relation
   end
 
-  def set_parent(parent, position = -1)
+  def set_parent(parent, position = 1)
     # sets the parent using either the spcified or the last position
     # will return the relation not the parent!
     # creates a new parent or replaces the current parent
