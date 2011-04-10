@@ -48,7 +48,7 @@ class ReTaskController < RedmineReController
 
       # Saving everything
       if valid_task && valid_subtask_attributes
-        if @re_task.save
+        if save_ok = @re_task.save
           # Save all subtasks
           @re_task.subtask_attributes = subtask_attributes
 
