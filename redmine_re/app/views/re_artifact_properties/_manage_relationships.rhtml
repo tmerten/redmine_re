@@ -22,7 +22,7 @@
         :update => "relationship_link_list" do %>
         <p>
 				<p><%= label :re_artifact_relationship, :relation_type, l(:re_relation_type) %><%= l(:re_dependency_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :dependency %> <%= l(:re_conflict_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :conflict %></p>
-				<p><%= label :relationship, :artifact_id, t(:re_sink_artifact) %> <%= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(1).collect { |d| [d.name, d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
+				<p><%= label :relationship, :artifact_id, t(:re_sink_artifact) %> <%= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [d.name, d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
 	    	<p><%= submit_tag t(:re_create) %></p>
 	    	</p>
   	<% end -%>
