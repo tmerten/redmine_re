@@ -17,7 +17,7 @@
     	{ :action => :prepare_relationships,
       	:controller => :re_artifact_relationship,
         :id => params[:id],
-        :project_id => params[:project_id],
+        :project_id => @project.id,
         :original_controller => controller.controller_name},
         :update => "relationship_link_list" do %>
         <p>
