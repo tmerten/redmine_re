@@ -5,7 +5,6 @@
   <%= errors_and_flash  :re_vision %>
   <% form_for :re_vision, :update => :detail_view, :url => {:action => "edit"} do |f| %>
     
-    <%= hidden_field_tag :parent_id, params[:parent_id] %>
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_vision.re_artifact_properties} %>
     <p>
       <%= submit_tag l(:re_save), :action => :edit %>

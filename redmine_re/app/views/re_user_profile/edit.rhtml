@@ -6,7 +6,6 @@
 <%= errors_and_flash :re_user_profile %>
 
 <% form_for :re_user_profile, :update => :detail_view, :url => {:action => "edit"} do |f| %>
-    <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_user_profile.re_artifact_properties} %>
 

@@ -38,18 +38,21 @@ class RedmineReController < ApplicationController
         begin
           controller_name = params[:controller]
           artifact = nil
-          unless controller_name.eql? "re_artifact_properties"
-            #  "re_task" => "ReTask" => ReTask.find
-            artifact = controller_name.classify.constantize.find(params[:id])
-          else # needed because classify converts "re_artifact_properties" to "ReArtifactProperty""
+
+          class_name = controller_name.classify
+          begin
+            artifact = class_name.constantize
+            artifact = artifact.find(params[:id])
+          rescue NameError
             artifact = ReArtifactProperties.find(params[:id])
           end
           @project = artifact.project
         rescue ActiveRecord::RecordNotFound
           render_404
         end
-      else# no project_id and no artifact id found
-        render_404
+      #else# no project_id and no artifact id found
+      # well, we tried everything, but we might still be able to display the page correctly
+      #  render_404
       end
     end
   end
@@ -87,38 +90,6 @@ class RedmineReController < ApplicationController
     html_tree += '</ul>'
     
     html_tree
-  end
-  
-  def delegate_tree_drop
-    # The following method is called via if somebody drops an artifact on the tree.
-    # It transmits the drops done in the tree to the database in order to last
-    # longer than the next refresh of the browser.
-    new_parent_id = params[:new_parent_id]
-    left_artifact_id = params[:left_artifact_id]
-    moved_artifact_id = params[:moved_artifact_id]
-
-    moved_artifact = ReArtifactProperties.find(moved_artifact_id)
-    
-		new_parent = nil
-		begin
-	 	  new_parent = ReArtifactProperties.find(new_parent_id) if not new_parent_id.empty?
-		rescue ActiveRecord::RecordNotFound
-      new_parent = ReArtifactProperties.find_by_project_id_and_artifact_type(moved_artifact.project_id, "Project")
-		end
-
-		left_artifact = nil
-    left_artifact = ReArtifactProperties.find(left_artifact_id) if not left_artifact_id.empty?
-
-    position = 1
-    position = (left_artifact.position + 1) unless left_artifact.nil? || left_artifact.position.nil?
-    
-    moved_artifact.set_parent(new_parent, position)
-   
-    #render :nothing => true
-    debugtext = 'insert position: ' + position.to_s + ' - left '
-    debugtext += left_artifact.position.to_s + ' ' + left_artifact.name.to_s unless left_artifact.nil? || left_artifact.position.nil?
-    
-    render :text => debugtext
   end
 
   def render_to_html_tree(re_artifact_properties, depth = 0)
@@ -175,32 +146,6 @@ class RedmineReController < ApplicationController
     html_tree    
   end
   
-  def treestate
-    node_id = params[:id].to_i
-    ret = ''
-    if params[:open] == 'true'
-      session[:expanded_nodes] << node_id
-      re_artifact_properties =  ReArtifactProperties.find(node_id)
-      ret = render_children_to_html_tree(re_artifact_properties, 1)
-    else
-      session[:expanded_nodes].delete(node_id)
-    end
-
-    render :inline => ret
-  end
-
-  # first tries to enable a contextmenu in artifact tree
-  def context_menu
-    @artifact =  ReArtifactProperties.find_by_id(params[:id])
-
-    render :text => "Could not find artifact.", :status => 500 unless @artifact
-
-    @subartifact_controller = @artifact.artifact_type.to_s.underscore
-    @back = params[:back_url] || request.env['HTTP_REFERER']
-
-    render :layout => false
-  end
-
   # filtering of re_artifacts. If request is post, filter was used already
   # and result should be displayed
   def enhanced_filter

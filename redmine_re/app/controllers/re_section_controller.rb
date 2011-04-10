@@ -9,7 +9,6 @@ class ReSectionController < RedmineReController
 
   def edit
     @re_section = ReSection.find_by_id(params[:id], :include => :re_artifact_properties) || ReSection.new
-    @project ||= @re_section.project
     
     # render html for tree
     @html_tree = create_tree
@@ -20,6 +19,11 @@ class ReSectionController < RedmineReController
 
       flash[:notice] = l(:re_section_saved) if save_ok = @re_section.save
 
+      if save_ok && ! params[:parent_artifact_id].empty?
+        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+        @re_section.set_parent(@parent, -1)
+      end
+      
       redirect_to :action => 'edit', :id => @re_section.id and return if save_ok
     end
   end

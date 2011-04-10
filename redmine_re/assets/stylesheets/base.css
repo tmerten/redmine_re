@@ -1,11 +1,15 @@
 #infovis {
-	width: 600px;
-	height: 600px;
 	overflow: hidden;
+	width: 700px;
+	height: 700px;
 }
 
-#filters {
+#infovis_filters {
 	float: left;
+}
+
+div#infovis_filters div.text form label {
+  	width: 150px;
 }
 
 #node-details {

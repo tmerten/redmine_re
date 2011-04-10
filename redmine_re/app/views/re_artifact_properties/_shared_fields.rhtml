@@ -4,6 +4,20 @@
   <fieldset><legend><%= l(:re_common_attributes) %></legend>
     
     <div class="splitcontentleft" >
+      <%= hidden_field_tag :parent_artifact_id, '', { :id => 'parent_artifact_id' } %>
+      <%= label_tag l(:re_set_parent) %><%= text_field_tag 'parent_artifact', '', {:size => 30, :class => 'autocomplete', :id => 'parent_autocomplete'} %>
+      <div id="parent_artifact_candidates" class="autocomplete"></div>
+      <% javascript_tag do %>
+        new Ajax.Autocompleter('parent_autocomplete',
+           'parent_artifact_candidates',
+           '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
+           { minChars: 3,
+             paramName: 'parent_name',
+             parameters: 'project_id=<%= @project.id %><%= '&id=' + properties.id.to_s unless properties.id.blank? %>',
+             frequency: 0.5,
+             afterUpdateElement : function(text, li) { $('parent_artifact_id').setValue(li.id) }
+             });      
+      <% end %>
       <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
       <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %><br/>
 

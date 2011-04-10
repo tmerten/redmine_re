@@ -9,7 +9,6 @@ class <%= class_name %>Controller < RedmineReController
 
   def edit
     @<%= class_name.underscore %> = <%= class_name %>.find_by_id(params[:id], :include => :re_artifact_properties) || <%= class_name %>.new
-    @project ||= @<%= class_name.underscore %>.project
     
     # render html for tree
     @html_tree = create_tree

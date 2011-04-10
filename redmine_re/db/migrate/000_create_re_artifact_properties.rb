@@ -6,9 +6,8 @@ class CreateReArtifactProperties < ActiveRecord::Migration
       t.column :description, :text
       t.column :priority, :integer
       t.column :responsibles, :string
-
-      t.column :created_at, :date
-      t.column :updated_at, :date
+      t.column :created_at, :datetime, :null => false
+      t.column :updated_at, :datetime, :null => false
       t.column :created_by, :integer, :default => 0
       t.column :updated_by, :integer, :default => 0
 

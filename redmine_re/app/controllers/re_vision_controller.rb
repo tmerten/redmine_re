@@ -9,7 +9,6 @@ class ReVisionController < RedmineReController
 
   def edit
     @re_vision = ReVision.find_by_id(params[:id], :include => :re_artifact_properties) || ReVision.new
-    @project ||= @re_vision.project
     
     # render html for tree
     @html_tree = create_tree
@@ -20,6 +19,11 @@ class ReVisionController < RedmineReController
 
 			flash[:notice] = t(:re_vision_saved, {:name => @re_vision.name}) if save_ok = @re_vision.save
 
+      if save_ok && ! params[:parent_artifact_id].empty?
+        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+        @re_vision.set_parent(@parent, -1)
+      end
+			
       redirect_to :action => 'edit', :id => @re_vision.id and return if save_ok
     end
   end

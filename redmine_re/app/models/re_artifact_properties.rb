@@ -6,10 +6,10 @@ class ReArtifactProperties < ActiveRecord::Base
   RELATION_TYPES = {
   	:parentchild => 1,
   	:dependency => 2,
-    :rationale => 3,
-  	:conflict => 4,
-    :refinement => 5,
-    :part_of => 6
+  	:conflict => 3
+    #:rationale => 4,
+    #:refinement => 5,
+    #:part_of => 6
 	}
 	
   has_many :relationships_as_source,
@@ -41,14 +41,26 @@ class ReArtifactProperties < ActiveRecord::Base
   def destroy_artifact
     artifact.destroy unless artifact.nil?
   end
+    
+  acts_as_event :title => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
+  :description => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
+    :datetime => :updated_at,
+    :url => Proc.new {|o| {:controller => 're_artifact_properties', :action => 'edit', :id => o.id}}
   
-  # TODO: Implement author and watchable module into the common fields.
-  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
-  acts_as_watchable
-  
+  acts_as_activity_provider :type => 're_artifact_properties',
+    :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
+    :author_key => "#{ReArtifactProperties.table_name}.updated_by",
+    :find_options => {:include => [:project, :user] },
+    :permission => :edit_requirements
+    
   belongs_to :project
-  #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+  belongs_to :author, :class_name => 'User', :foreign_key => 'created_by'
+  belongs_to :user, :foreign_key => 'updated_by'
 
+  # TODO: Implement author and watchable module into the common fields.
+  #acts_as_watchable
+  
+  
   validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
   validates_presence_of :created_by, :message => l(:re_artifact_properties_validates_presence_of_created_by)
   validates_presence_of :updated_by, :message => l(:re_artifact_properties_validates_presence_of_updated_by)
@@ -184,18 +196,25 @@ class ReArtifactProperties < ActiveRecord::Base
     # creates a new parent or replaces the current parent
     relation_type_no = RELATION_TYPES[:parentchild]
     
+    children = gather_children
+    parent = instance_checker(parent)
+
+    raise ArgumentError, "The parent may not be self" if self == parent
+    raise ArgumentError, "The parent may not be within the chilren" if children.include? parent
+    
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
 
     unless relation.nil?
-      # override existing relation
+      # delete existing relation
       if parent.nil?
+        raise ArgumentError "At the moment we always need to set a parent"
         relation.remove_from_list
         ReArtifactRelationship.delete(relation.id)
         return
       end
-      parent = instance_checker(parent)
+      
+      # relocate parent
       relation.remove_from_list
-
       relation.source_id = parent.id
       relation.save(true)
       relation.insert_at position
@@ -204,7 +223,6 @@ class ReArtifactProperties < ActiveRecord::Base
       relation = parent.relate_to self, :parentchild
       relation.insert_at position
     end
-    
     relation
   end
 
@@ -247,6 +265,18 @@ class ReArtifactProperties < ActiveRecord::Base
     wiki_page_name = "#{self.id}_#{self.artifact_type}"
     wiki_page = WikiPage.find_by_title(wiki_page_name)
     wiki_page.destroy if wiki_page
+  end
+  
+  def gather_children
+    # recursively gathers all children for the given artifact
+    #
+    children = Array.new
+    children.concat self.children
+    return children if self.children.empty?
+    for child in children
+      children.concat child.gather_children
+    end
+    children
   end
   
   private

@@ -17,8 +17,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
       {
         # actions of redmine_re_controller are here too because the get executed by inheritance of requirements controller
         # for example here:_tree partial: <%= url_for :controller => 'requirements', :action => 'context_menu' %>
-        :requirements => [:index, :treeview, :context_menu, :treestate, :load_settings, :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree, :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree, :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter, :reduce_search_result_with_parameter],#todo:
-        :re_artifact_properties => [:edit, :redirect, :delete],
+        :requirements => [:index, :treeview, :context_menu, :treestate, :load_settings, :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree, :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree, :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter, :reduce_search_result_with_parameter, :setup],
+        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent],
         :re_goal => [:edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
         :re_subtask => [:edit, :new],
@@ -37,8 +37,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 
 	# The Requirements item is added to the project menu after the Activity item
 	menu :project_menu, :re, { :controller => 'requirements', :action => 'index' }, :caption => 'Requirements', :after => :activity, :param => :project_id
-	#menu :project_menu, :re, { :controller => 'requirements', :action => 'index' }, :caption => 'Requirements', :after => :activity, :param => :project_id
 
+	activity_provider :re_artifact_properties, :class_name => 'ReArtifactProperties', :default => true
+	
 	# ReArtifactProperties can be added to the activity view
 	#activity_provider :re_artifact_properties
 

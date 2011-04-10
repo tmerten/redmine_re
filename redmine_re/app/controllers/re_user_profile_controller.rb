@@ -9,7 +9,6 @@ class ReUserProfileController < RedmineReController
 
   def edit
     @re_user_profile = ReUserProfile.find_by_id(params[:id], :include => :re_artifact_properties) || ReUserProfile.new
-    @project ||= @re_user_profile.project
     
     # render html for tree
     @html_tree = create_tree
@@ -20,6 +19,11 @@ class ReUserProfileController < RedmineReController
 
       flash[:notice] = t(:re_user_profile_saved) if save_ok = @re_user_profile.save
 
+      if save_ok && ! params[:parent_artifact_id].empty?
+        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+        @re_user_profile.set_parent(@parent, -1)
+      end
+      
       redirect_to :action => 'edit', :id => @re_user_profile.id and return if save_ok
     end
   end

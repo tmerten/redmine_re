@@ -4,7 +4,6 @@
   <<%= '%' %>= errors_and_flash :<%= class_name.underscore %> <%= '%' %>>
   <<%= '%' %> form_for :<%= class_name.underscore %>, :update => :detail_view, :url => {:action => "edit"} do |f| <%= '%' %>>
     
-    <<%= '%' %>= hidden_field_tag :parent_id, params[:parent_id] <%= '%' %>>
     <<%= '%' %>= render "re_artifact_properties/shared_fields", {:f => f, :properties => @<%= class_name.underscore %>.re_artifact_properties} <%= '%' %>>
     <p>
       <<%= '%' %>= submit_tag l(:re_save), :action => :edit <%= '%' %>>

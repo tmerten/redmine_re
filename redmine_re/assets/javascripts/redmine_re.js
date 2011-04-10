@@ -31,3 +31,16 @@ ResizingTextArea.prototype = {
         if (newRows < element.rows) element.rows = Math.max(this.defaultRows, newRows);        
     }
 }
+
+function observeParentArtifactField(url) {
+  new Ajax.Autocompleter('issue_parent_issue_id',
+                         'parent_artifact_candidates',
+                         url,
+                         { minChars: 3,
+                           frequency: 0.5,
+                           paramName: 'q',
+                           updateElement: function(value) {
+                             document.getElementById('issue_parent_issue_id').value = value.id;
+                           }});
+}
+

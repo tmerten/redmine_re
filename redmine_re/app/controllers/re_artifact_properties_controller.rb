@@ -9,6 +9,7 @@ class ReArtifactPropertiesController < RedmineReController
   def redirect action
     @re_artifact_properties = ReArtifactProperties.find_by_id(params[:id])
 
+      
     if @re_artifact_properties.nil?
       render :template => 'error', :status => 500, :id => params[:id]
     else
@@ -20,7 +21,12 @@ class ReArtifactPropertiesController < RedmineReController
               ") to instance (id=" + @redirect_id.to_s + " ,controller=" + @redirect_controller.to_s)
 
 
-      redirector = { :controller => @redirect_controller, :action => action, :id => @redirect_id, :project_id => @project_id }
+      if @redirect_controller.eql? 'Project'
+        redirector  = { :controller => 'requirements', :action => 'index', :project_id => @project.id }
+      else
+        redirector = { :controller => @redirect_controller, :action => action, :id => @redirect_id, :project_id => @project_id }
+      end
+      
       redirector[:layout] = 'false' if request.xhr?
 
       redirect_to redirector
@@ -28,7 +34,7 @@ class ReArtifactPropertiesController < RedmineReController
   end
   
   def delete
-    method = params[:method]
+    method = params[:mode]
     @artifact = ReArtifactProperties.find(params[:id])
     @project ||= @artifact.project
     @html_tree = create_tree
@@ -64,9 +70,32 @@ class ReArtifactPropertiesController < RedmineReController
       else
         @children = gather_children(@artifact)
     end
-
   end  
 
+  def autocomplete_parent
+    @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?    
+
+    query = '%' + params[:parent_name].gsub ('%', '\%').gsub ('_', '\_').downcase + '%'
+    @parents = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
+
+    if @artifact
+      children = @artifact.gather_children
+      @parents.delete_if{ |p| children.include? p }
+      @parents.delete_if{ |p| p == @artifact } 
+    end
+    
+    list = '<ul>'
+    for parent in @parents
+      list << '<li id="'
+      list << parent.id.to_s
+      list << '">'
+      list << parent.name
+      list << '</li>'
+    end
+    list << '</ul>'
+    render :text => list   
+  end
+  
   private
   
   def gather_children(artifact)

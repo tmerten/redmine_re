@@ -6,7 +6,6 @@
 <%= errors_and_flash :re_attachment %>
 
 <% form_for :re_attachment, :update => :detail_view, :url => {:action => "edit"}, :html => {:multipart => true } do |f| %>
-    <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_attachment.re_artifact_properties} %>
 

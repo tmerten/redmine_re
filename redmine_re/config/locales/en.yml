@@ -26,6 +26,8 @@ en:
   re_configure: 'Or (optionally) configure the plugin'
   re_index: 'Redmine RE Plugin'
   re_are_you_sure: 'Are you sure?'
+  re_was_updated: 'was updated'
+  re_was_created: 'was created'
 
   # re_artifact_properties
   re_artifact_name: 'Name'
@@ -54,7 +56,8 @@ en:
     created_by: 'Creating User'
     project: 'Project'
   re_parent: 'Parent'
-  re_children: 'Children'  
+  re_children: 'Children'
+  re_set_parent: 'Set Parent'
     
   # re_artifact_properties_deletion
   re_prepare_deletion: 'Prepare deletion'
@@ -68,6 +71,7 @@ en:
   re_and_delete_afterwards: 'and delete "%{artifact_name}" afterwards.'
   re_deleted_artifact_and_children: 'Successfully deleted the artifact and all its children'
   re_deleted_artifact_and_moved_children: 'Succesfully moved all child artifacts to the parent and deleted the artifact'
+  re_relations_and_artifacts_found: 'The following relations and artifacts are connected'
   
   # re_section
   re_new_re_section: 'New Section'

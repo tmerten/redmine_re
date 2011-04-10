@@ -6,7 +6,6 @@
 <%= errors_and_flash :re_workarea %>
 
 <% form_for :re_workarea, :update => :detail_view, :url => {:action => "edit"} do |f| %>
-    <%= hidden_field_tag :parent_id, params[:parent_id] %>
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_workarea.re_artifact_properties} %>
 

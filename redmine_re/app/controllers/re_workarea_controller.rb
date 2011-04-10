@@ -9,7 +9,6 @@ class ReWorkareaController < RedmineReController
 
   def edit
     @re_workarea = ReWorkarea.find_by_id(params[:id], :include => :re_artifact_properties) || ReWorkarea.new
-    @project ||= @re_workarea.project
     
     # render html for tree
     @html_tree = create_tree
@@ -20,6 +19,11 @@ class ReWorkareaController < RedmineReController
 
       flash[:notice] = t(:re_workarea_saved) if save_ok = @re_workarea.save
 
+      if save_ok && ! params[:parent_artifact_id].empty?
+        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+        @re_workarea.set_parent(@parent, -1)
+      end
+      
       redirect_to :action => 'edit', :id => @re_workarea.id and return if save_ok
     end
   end

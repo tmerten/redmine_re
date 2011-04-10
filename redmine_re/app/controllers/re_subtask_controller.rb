@@ -8,7 +8,6 @@ class ReSubtaskController < RedmineReController
 
   def edit
     @re_subtask = ReSubtask.find_by_id(params[:id], :include => :re_artifact_properties) || ReSubtask.new
-    @project ||= @re_subtask.project
 
     @html_tree = create_tree
 
@@ -18,6 +17,11 @@ class ReSubtaskController < RedmineReController
 
       flash[:notice] = t(:re_subtask_saved, :name => @re_subtask.name) if save_ok = @re_subtask.save
 
+      if save_ok && ! params[:parent_artifact_id].empty?
+        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+        @re_subtask.set_parent(@parent, -1)
+      end      
+      
       redirect_to :action => 'edit' , :id => @re_subtask.id and return if save_ok
     end
   end

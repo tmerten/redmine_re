@@ -23,7 +23,9 @@ class ReArtifactRelationshipController < RedmineReController
     # Building JSON-Tree for Netmap-Visualization. As the JIT-Sunburst-Visualization
     # is usually build for trees, we have to add a dummy root element which isn't shown
     # and insert all the artifacts we are interested in as children of this very root node
-    @artifacts = ReArtifactProperties.find_all_by_project_id(params[:project_id], :order => "artifact_type, name")
+    @artifacts = ReArtifactProperties.find_all_by_project_id(@project.id, :order => "artifact_type, name")
+    @artifacts.delete_if { |a| a.artifact_type.eql? 'Project' }
+    
     #@artifacts = ReArtifactProperties.find(:all, :order => "name", :conditions => ["project_id = ? and artifact_type = ?", params[:project_id], "ReGoal"])
     @json_netmap = build_json_for_netmap(@artifacts)
     # preparing html for tree view
@@ -69,7 +71,7 @@ class ReArtifactRelationshipController < RedmineReController
     @json_artifact = '{ "id": "' + type.to_s + artifact.artifact_id.to_s + '",
                         "name": "' + artifact.name + '",
                         "data": { "$color": "' + ReArtifactColors.get_html_artifact_color_code(@re_artifact_order.index(type)) + '",
-                                  "$height": 70},
+                                  "$height": 90},
                         "adjacencies": [ '
     for relation in outgoing_relationships do
       @sink = ReArtifactProperties.find_by_id(relation.sink_id)
@@ -93,6 +95,9 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
   def build_json_according_to_user_choice
+    @size = '600px' || params[:visualization_size]
+    
+    
     # This method build a new json string in variable @json_netmap which is returned
     # Meanwhile it computes queries for the search for the chosen artifacts and relations.
     # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
