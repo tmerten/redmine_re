@@ -10,16 +10,16 @@
     <%= render "re_artifact_properties/shared_fields", :f => f, :properties => @re_task.re_artifact_properties %>
 
     <div class="box">
-      <fieldset><legend><%= l(:re_task_specific_attributes) %></legend>    
-        <div>
-        <div class="splitcontentleft" >
-          <%= f.label :start, l(:re_task_start) %> <%= f.text_field :start %>
-          <%= f.label :end, l(:re_task_end) %> <%= f.text_field :end %>
-         </div>
-        
-        <div class="splitcontentright" >
-          <%= f.label :frequency, l(:re_task_frequency) %> <%= f.text_field :frequency %>
-        </div>
+      <fieldset><legend><%= l(:re_task_specific_attributes) %></legend>
+      <p>
+        <%= f.label :start, l(:re_task_start) %> <%= f.text_field :start, :size => 100 %>
+      </p>
+      <p>
+        <%= f.label :end, l(:re_task_end) %> <%= f.text_field :end, :size => 100 %>
+      </p>
+      <p>
+        <%= f.label :frequency, l(:re_task_frequency) %> <%= f.text_field :frequency, :size => 100 %>
+      </p>
       </fieldset>
       <fieldset><legend><%= l(:re_task_difficulties) %></legend>
 
@@ -30,7 +30,7 @@
       <%= textilizable(@re_task, :difficult, :only_path => false) %>
       <br/>
       <% end %>
-      <div id='update-description' <%= 'style="display:none;"' unless @re_task.id.nil? %>>
+      <div id='update-difficult' <%= 'style="display:none;"' unless @re_task.id.nil? %>>
         <%= f.text_area :difficult,
                          :cols => 60,
                          :rows => (@re_task.difficult.blank? ? 10 : [[10, @re_task.difficult.length / 50].max, 100].min),
@@ -75,7 +75,7 @@
 </div>
 
 
-<script type="text/javascript" language="javascript">
+<% javascript_tag do %>
   Event.observe(window, 'load', function() {
     updateAllSubtaskPositions();
   });
@@ -181,13 +181,13 @@
 
           // ## Replace the innerhtml of the links
           if(is_new_subtask) {
-              // <a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/new?pos=new',
-              //<a onclick="addSubtask('subtask_drag_new', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
+              /* <a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/new?pos=new',
+              <a onclick="addSubtask('subtask_drag_new', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a> */
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/\?pos=(new_\d+|new)/i, "?pos=" + id);
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/subtask_drag_(new_\d+|new)/i, "subtask_drag_" + id);
           } else {
-              //<a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/1?pos=1',
-              //<a onclick="addSubtask('subtask_drag_2', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a>
+              /* <a class="icon icon-del" href="#" onclick="new Ajax.Request('/re_task/delete_subtask/1?pos=1',
+              <a onclick="addSubtask('subtask_drag_2', 'after');return false;" class="icon icon-subtask-after" href="#">insert</a> */
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/\?pos=\d+/i, "?pos=" + id);
               td_of_links.innerHTML = td_of_links.innerHTML.replace(/subtask_drag_\d+/i, "subtask_drag_" + id );
           }
@@ -213,6 +213,7 @@
   $$('textarea.subtask').each(function (el) {
      new ResizingTextArea($(el));
   });
-</script>
-  
+
+<% end %>
+
 </div>

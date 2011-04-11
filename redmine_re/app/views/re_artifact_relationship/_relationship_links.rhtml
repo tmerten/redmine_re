@@ -1,4 +1,4 @@
-<p>
+<div>
   <b><%= t(:re_artifact_relationships_outgoing) %></b>
 	<%= "<ul>" unless @relationships_outgoing.empty? -%>
 		<% for relationship in @relationships_outgoing %>
@@ -14,8 +14,9 @@
 		<% end unless @relationships_outgoing.nil? %>
 		<%= "
 	</ul>" unless @relationships_outgoing.empty? -%>
-</p>
-<p>
+</div>
+<br />
+<div>
   <b><%= t(:re_artifact_relationships_incoming) %></b>
 	<%= "<ul>" unless @relationships_incoming.empty? -%>
 		<% for relationship in @relationships_incoming %>
@@ -31,4 +32,4 @@
 		<% end unless @relationships_incoming.nil? %>
 		<%= "
 	</ul>" unless @relationships_incoming.empty? -%>
-</p>
+</div>

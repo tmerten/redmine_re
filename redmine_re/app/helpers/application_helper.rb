@@ -74,13 +74,16 @@ JAVASCRIPT
       :project_id => project.identifier} ,
       { :class => "icon icon-subtask-wiki-#{action}" }
 
-    unless has_no_wiki_page_yet
+      # this is buggy since if creates a lot of invalid html. We might render this somethere else but we should not
+      # keep it like this!
+      
+    #unless has_no_wiki_page_yet
       # tooltip preview of wikipage if one exists already
       #tip = content_tag("h1", t(:re_preview_wiki_page_for_re_artifact))
-      tip = content_tag("span", textilizable(wiki_page.content.text), :class => "tip wiki_page_preview_tip")
-      tip = content_tag("div", html_code + tip, :class => "tooltip")
-      html_code = tip
-    end
+      #tip = content_tag("span", textilizable(wiki_page.content.text), :class => "tip wiki_page_preview_tip")
+      #tip = content_tag("div", html_code + tip, :class => "tooltip")
+      #html_code = tip
+    #end
 
     return html_code
   end

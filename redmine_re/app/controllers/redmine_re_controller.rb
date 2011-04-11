@@ -115,7 +115,7 @@ class RedmineReController < ApplicationController
     html_tree += '<span class="handle"></span>'
     html_tree += '<a class="nodelink ' + artifact_type + '"'
     html_tree += ' title="' + artifact_name + '"' unless artifact_name.length < TRUNCATE_NAME_IN_TREE_AFTER_CHARS
-    html_tree += '">'
+    html_tree += '>'
 
     #html_tree += ' ' + re_artifact_properties.position.to_s + ' ' unless re_artifact_properties.artifact_type == 'Project'
     

@@ -12,7 +12,7 @@
   
   <div class="splitcontentright">
     <b><%= t(:re_create_new_relation) %></b>
-		<p>
+		<div>
     <% form_remote_tag :url =>
     	{ :action => :prepare_relationships,
       	:controller => :re_artifact_relationship,
@@ -20,13 +20,11 @@
         :project_id => @project.id,
         :original_controller => controller.controller_name},
         :update => "relationship_link_list" do %>
-        <p>
-				<p><%= label :re_artifact_relationship, :relation_type, l(:re_relation_type) %><%= l(:re_dependency_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :dependency %> <%= l(:re_conflict_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :conflict %></p>
-				<p><%= label :relationship, :artifact_id, t(:re_sink_artifact) %> <%= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
+				<p><%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %><%= l(:re_dependency_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :dependency %> <%= l(:re_conflict_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :conflict %></p>
+				<p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact) %> <%= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
 	    	<p><%= submit_tag t(:re_create) %></p>
-	    	</p>
   	<% end -%>
-    </p>
+    </div>
     <br />
 	</div>
 </div>
