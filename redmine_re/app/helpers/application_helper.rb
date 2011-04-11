@@ -64,12 +64,15 @@ JAVASCRIPT
     has_no_wiki_page_yet = (wiki_page.nil?)? true : false
 
     # variable icon
-    css_class = (has_no_wiki_page_yet)? "new": "edit"
+    action = (has_no_wiki_page_yet)? "new": "edit"
     linkname = (has_no_wiki_page_yet)? t(:re_create_wiki_page_for_re_artifact): t(:re_edit_wiki_page_for_re_artifact)    
     
-    html_code += link_to linkname,
-    "/projects/#{project.identifier}/wiki/#{wiki_page_name}/",
-    :class => "icon icon-subtask-wiki-#{css_class}"
+    html_code += link_to linkname, {
+      :controller => 'wiki',
+      :action => 'edit',
+      :id => wiki_page_name,
+      :project_id => project.identifier} ,
+      { :class => "icon icon-subtask-wiki-#{action}" }
 
     unless has_no_wiki_page_yet
       # tooltip preview of wikipage if one exists already
