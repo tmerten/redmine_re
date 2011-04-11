@@ -8,9 +8,9 @@
 <p>
 <h3><%= t(:re_choose_option_for_deletion) %></h3>
 <ul>
-  <li><%= link_to t(:re_delete_everything), { :action => "delete", :id => @artifact.id }, :confirm => t(:re_are_you_sure), :mode => 'recursive' %> (<%= t(:re_deletes_this_artifact) %><%= t(:re_and_all_relations) unless @relationships_outgoing.empty? && @relationships_incoming.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
+  <li><%= link_to t(:re_delete_everything), { :action => "delete", :id => @artifact.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %> (<%= t(:re_deletes_this_artifact) %><%= t(:re_and_all_relations) unless @relationships_outgoing.empty? && @relationships_incoming.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
   <% unless @children.empty? %>
-  <li><%= link_to t(:re_move_children_to_the_parent), { :id => @artifact.id, :action => "delete" }, :confirm => t(:re_are_you_sure), :mode => 'move' %> "<%= @parent.name %>" <%= t(:re_and_delete_afterwards, :artifact_name => @artifact.name) %></li>
+  <li><%= link_to t(:re_move_children_to_the_parent), { :action => "delete", :id => @artifact.id, :mode => 'move' }, :confirm => t(:re_are_you_sure) %> "<%= @parent.name %>" <%= t(:re_and_delete_afterwards, :artifact_name => @artifact.name) %></li>
   <% end %>
 </ul>
 </p>

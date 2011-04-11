@@ -199,7 +199,7 @@ class ReArtifactProperties < ActiveRecord::Base
     children = gather_children
     parent = instance_checker(parent)
 
-    raise ArgumentError, "The parent may not be self" if self == parent
+    raise ArgumentError, "The parent may not be self" if self.eql? parent
     raise ArgumentError, "The parent may not be within the chilren" if children.include? parent
     
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
@@ -208,8 +208,6 @@ class ReArtifactProperties < ActiveRecord::Base
       # delete existing relation
       if parent.nil?
         raise ArgumentError "At the moment we always need to set a parent"
-        relation.remove_from_list
-        ReArtifactRelationship.delete(relation.id)
         return
       end
       
