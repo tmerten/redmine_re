@@ -11,10 +11,10 @@
 
   <% if re_subtask.id %>
     <%= '<tr id="subtask_drag_' + re_subtask.re_artifact_properties.position.to_s + '" class="draggable ' + type + '" >' %>
-        <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", re_subtask.re_artifact_properties.position, :class => "position" %>
+        <td><%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", re_subtask.re_artifact_properties.position, :class => "position" %></td>
   <% else %>
     <%= '<tr id="subtask_drag_' + index + '" class="draggable ' + type + '" >' %>
-        <%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", "no_pos", :class => "position" %>
+        <td><%= hidden_field_tag "re_task[subtask_attributes][#{index}][position]", "no_pos", :class => "position" %></td>
   <% end %>
 
       <td style="cursor: pointer;" class="<%=type-%>" ></td>
