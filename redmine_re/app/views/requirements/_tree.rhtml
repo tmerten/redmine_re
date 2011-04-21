@@ -132,7 +132,7 @@
           var drag_id = drag.attr("id");
           
           var invalid_ids = [];
-          var artifact_in_editor = "node_<%= @artifact.id.to_s %>";
+          var artifact_in_editor = "node_<%= @artifact.id.to_s unless @artifact.nil? || @artifact.id.nil? %>";
           invalid_ids.push(artifact_in_editor);
           
           jQuery("#" + artifact_in_editor).find("li").each(function () {

@@ -1,6 +1,8 @@
 class ReArtifactRelationshipController < RedmineReController
   unloadable
   menu_item :re
+  
+  include ActionView::Helpers::JavaScriptHelper
 
   def prepare_relationships
     artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
