@@ -9,16 +9,21 @@
 			:controller => sink.artifact_type.underscore,
 			:id => ReArtifactProperties.find_by_id(sink.id).artifact_id} %>
 			(<%= ReArtifactProperties::RELATION_TYPES.invert[relationship.relation_type].to_s.humanize %>)
-			<%= link_to_remote "del",:update => "relationship_link_list",
-                                    :url => {
-                                :action => :delete,
-                                :controller => :re_artifact_relationship,
-                                :id => relationship.id,
-                                :re_artifact_properties_id => @re_artifact_properties.id,
-			                    :project_id => @re_artifact_properties.project.id#params[:project_id]
-                                }
-
-            %>
+      &nbsp;&nbsp;&nbsp;<%= link_to_remote (
+        t(:re_delete),
+        {
+          :update => "relationship_link_list",
+          :url => {
+            :action => :delete,
+            :controller => :re_artifact_relationship,
+            :id => relationship.id,
+            :re_artifact_properties_id => @re_artifact_properties.id,
+            :project_id => @re_artifact_properties.project.id#params[:project_id]
+          }
+        },
+        {
+          :class => 'icon icon-del'
+        } ) %>
 		</li>
 		<% end unless @relationships_outgoing.nil? %>
 		<%= "
