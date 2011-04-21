@@ -3,9 +3,15 @@
   <div class="splitcontentleft">
     <div id="relationship_link_list">
         <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
+        <% @re_artifact_properties = ReArtifactProperties.find(@artifact_properties_id) %>
+
         <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@artifact_properties_id) %>
+        <% @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}  %>
+
         <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id) %>
-        <%= render "re_artifact_relationship/relationship_links", :project_id => params[:project_id] %>
+        <% @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}  %>
+
+        <%= render "re_artifact_relationship/relationship_links" %>
     </div>
   <br />
   </div>
@@ -21,8 +27,26 @@
         :original_controller => controller.controller_name},
         :update => "relationship_link_list" do %>
 				<p><%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %><%= l(:re_dependency_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :dependency %> <%= l(:re_conflict_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :conflict %></p>
-				<p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact) %> <%= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
-	    	<p><%= submit_tag t(:re_create) %></p>
+				<p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact) %>
+                    <%#= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
+	    	  <%= hidden_field_tag "re_artifact_relationship[artifact_id]", "no_value_yet", { :id => 'sink_artifact_id' } %>
+      <p>
+        <%= text_field_tag :sink_artifact, '', {:size => 30, :class => 'autocomplete', :id => 'sink_autocomplete'} %>
+      </p>
+      <div id="sink_artifact_candidates" class="autocomplete"></div>
+      <% javascript_tag do %>
+        new Ajax.Autocompleter('sink_autocomplete',
+           'sink_artifact_candidates',
+           '<%= url_for :controller => 're_artifact_relationship', :action => 'autocomplete_sink' %>',
+           { minChars: 3,
+             paramName: 'sink_name',
+             parameters: 'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
+             frequency: 0.5,
+             afterUpdateElement : function(text, li) { $('sink_artifact_id').setValue(li.id) }
+             });
+      <% end %>
+
+              <p><%= submit_tag t(:re_create) %></p>
   	<% end -%>
     </div>
     <br />

@@ -11,8 +11,9 @@ module ApplicationHelper
   # overrides render_flash_messages in application helper
     s = ''
     flash.each do |k,v|
-      s << content_tag('div', v, :class => "flash #{k}", :id => "#{v}#{k}")
-      s << content_tag('script', "setTimeout('new Effect.Fade(\"#{v}#{k}\");', 6000)", :type => "text/javascript")
+      id = "#{v} #{k}".gsub(" ", "_") # id should be a token (one word) WC3 valid..
+      s << content_tag('div', v, :class => "flash #{k}", :id => id)
+      s << content_tag('script', "setTimeout('new Effect.Fade(\"#{id}\");', 6000)", :type => "text/javascript")
     end
     s
   end

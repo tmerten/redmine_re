@@ -4,20 +4,62 @@ class ReArtifactRelationshipController < RedmineReController
   
   include ActionView::Helpers::JavaScriptHelper
 
+  def delete
+    @relation = ReArtifactRelationship.find(params[:id])
+
+    unless( @relation.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild]) )
+      @relation.destroy
+    end
+
+    @re_artifact_properties = ReArtifactProperties.find(params[:re_artifact_properties_id])
+    @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(params[:re_artifact_properties_id])
+    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
+    @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(params[:re_artifact_properties_id])
+    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
+
+    render :partial => "relationship_links", :project_id => params[:project_id]
+  end
+
+  def autocomplete_sink
+    @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?
+
+    query = '%' + params[:sink_name].gsub ('%', '\%').gsub ('_', '\_').downcase + '%'
+    @sinks = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
+
+    if @artifact
+      @sinks.delete_if{ |p| p == @artifact }
+    end
+
+    list = '<ul>'
+    for sink in @sinks
+      list << '<li id="'
+      list << sink.id.to_s
+      list << '">'
+      list << sink.name
+      list << '</li>'
+    end
+    list << '</ul>'
+    render :text => list
+  end
+  
   def prepare_relationships
     artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
     relation = params[:re_artifact_relationship]
     
     if relation[:relation_type] && relation[:artifact_id]
       source = ReArtifactProperties.find_by_id(artifact_properties_id)
-      sink = ReArtifactProperties.find_by_id(relation[:artifact_id])
+      sink = ReArtifactProperties.find_by_id(relation[:artifact_id]) 
       source.relate_to(sink, relation[:relation_type].to_sym, false)
     else
     	@error = t(:re_relationship_create_error)
     end
-    
+
+    @re_artifact_properties = ReArtifactProperties.find(artifact_properties_id)
     @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(artifact_properties_id)
+    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(artifact_properties_id)
+    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
+
     render :partial => "relationship_links", :layout => false, :project_id => params[:project_id]
   end
 
