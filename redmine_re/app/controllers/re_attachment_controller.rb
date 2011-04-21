@@ -8,9 +8,7 @@ class ReAttachmentController < RedmineReController
 
   def edit
     @re_attachment = ReAttachment.find_by_id(params[:id], :include => :re_artifact_properties) || ReAttachment.new
-    
-    # render html for tree
-    @html_tree = create_tree
+    @artifact = @re_attachment.re_artifact_properties
     
     if request.post?
       @re_attachment.attributes = params[:re_attachment]
@@ -26,7 +24,7 @@ class ReAttachmentController < RedmineReController
       if save_ok && ! params[:parent_artifact_id].empty?
         @parent = ReArtifactProperties.find(params[:parent_artifact_id])
         @re_attachment.set_parent(@parent, 1)
-      end			
+      end
 			
       redirect_to :action => 'edit', :id => @re_attachment.id and return if save_ok
     end
@@ -40,7 +38,6 @@ class ReAttachmentController < RedmineReController
     send_file @re_attachment.attachment.diskfile, :filename => filename_for_content_disposition(@re_attachment.attachment.filename),
                                     :type => Redmine::MimeType.of(@re_attachment.attachment.filename),
                                     :disposition => (@re_attachment.attachment.image? ? 'inline' : 'attachment')
-
   end
 
 end

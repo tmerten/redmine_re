@@ -28,9 +28,10 @@ class ReTaskController < RedmineReController
 
   def edit
     @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => @project.id))
+    @artifact = @re_task.re_artifact_properties
+    
     @subtasks = []
     @re_task.children.each {|c| @subtasks << c.artifact if c.artifact_type == "ReSubtask"}
-    @html_tree = create_tree
 
     if request.post?
       # check validation of task and subtask attributes

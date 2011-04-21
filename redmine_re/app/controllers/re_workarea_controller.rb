@@ -9,9 +9,8 @@ class ReWorkareaController < RedmineReController
 
   def edit
     @re_workarea = ReWorkarea.find_by_id(params[:id], :include => :re_artifact_properties) || ReWorkarea.new
-    
-    # render html for tree
-    @html_tree = create_tree
+    @artifact = @re_workarea.re_artifact_properties
+
     
     if request.post?
       @re_workarea.attributes = params[:re_workarea]

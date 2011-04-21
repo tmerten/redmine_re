@@ -22,16 +22,16 @@
 <%### REDMINE RE STUFF START 1 ### %>
 <%= javascript_include_tag 'jquery-1.5.2.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
-<%= javascript_include_tag 'sortable_tree.js', :plugin => 'redmine_re' %>
-<%= javascript_include_tag('jstoolbar/jstoolbar') %>
-<%= javascript_include_tag('jstoolbar/textile') %>
-<%= javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}") %>
+<%= javascript_include_tag 'jquery.jstree/jquery.jstree.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'jquery.blockUI-2.38.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'jstoolbar/jstoolbar'  %>
+<%= javascript_include_tag 'jstoolbar/textile'  %>
+<%= javascript_include_tag "jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}" %>
 <%= javascript_include_tag 're_sidebar.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'slider.js', :plugin => 'redmine_re' %>
-<%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
 <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 <%= stylesheet_link_tag 're_sidebar.css', :plugin => 'redmine_re', :media => 'all' %>
-<%= stylesheet_link_tag 'sortable_tree.css', :plugin => 'redmine_re', :media => 'all' %>
+
 <%### REDMINE RE STUFF STOP 1 ###%>
 
 <%= call_hook :view_layouts_base_html_head %>

@@ -37,7 +37,6 @@ class ReArtifactPropertiesController < RedmineReController
     method = params[:mode]
     @artifact = ReArtifactProperties.find(params[:id])
     @project ||= @artifact.project
-    @html_tree = create_tree
 
     @relationships_incoming = @artifact.relationships_as_sink
     @relationships_outgoing = @artifact.relationships_as_source

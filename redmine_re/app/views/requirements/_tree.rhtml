@@ -1,52 +1,172 @@
-<% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'sortable_tree.css', :plugin => "redmine_re", :media => 'all' %>
-    <%= stylesheet_link_tag 'context_menu.css', :media => 'all' %>
-    <%= javascript_include_tag 'sortable_tree.js', :plugin => 'redmine_re' %>
-    <%= javascript_include_tag 'overlay.js', :plugin => 'redmine_re' %>
-    <% end%>
 <h3><%= l(:re_tree_overview) %></h3>
 
-<%= @html_tree %>
+<div id="tree"></div>
 
 <script type="text/javascript">
   //<![CDATA[
-  var tree = new SortableTree('tree', {
-    droppable: {
-      container: ':not(.we_are_all_containers)' /* everything specified here is able to be a container for a drop */
-    },
-    onDrop: function(drag, drop, event){
-      var left_node = drag.previousSibling();
-      var left_node_id = left_node ? left_node.id() : ''
-      var parent_id = drag.parent.id();
-      
-      new Ajax.Request('<%= url_for :controller => "requirements", :action => "delegate_tree_drop" %>/' + drag.id(), {
-        parameters: {
-          new_parent_id:drag.parent.id(),
-          left_artifact_id:left_node_id
-        },
-        onLoading: function() {
-          tree.setUnsortable();
-          new Effect.Opacity('tree', { from: 1.0, to: 0.4, duration: 0.2 });
-        },
-        onComplete: function() {
-          new Effect.Opacity('tree', { from: 0.4, to: 1.0, duration: 0.2 });
-          tree.setSortable();
+
+  jQuery("#tree")
+    .bind("close_node.jstree", function (event, data) {
+      jQuery.ajax({
+        "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') ,
+      });        
+    })
+    .bind("open_node.jstree", function (event, data) {
+      jQuery.ajax({
+        "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') + "?open=true" ,
+      });        
+    })
+		.bind("move_node.jstree", function (e, data) {
+			data.rslt.o.each(function (i) {
+				jQuery.ajax({
+					async : false,
+					type: 'POST',
+					url: "<%= url_for :controller => 'requirements', :action => 'delegate_tree_drop' %>/",
+					data : { 
+						"id" : jQuery(this).attr("id").replace("node_",""), 
+						"new_parent_id" : data.rslt.np.attr("id").replace("node_",""),
+						"ancestor_id" : data.rslt.r.attr("id").replace("node_",""),
+						"position" : data.rslt.p
+					},
+					success : function (r) {
+						if(!r.status) {
+							jQuery.jstree.rollback(data.rlbk);
+						}
+						else {
+							jQuery(data.rslt.oc).attr("id", "node_" + r.id);
+							if(data.rslt.cy && jQuery(data.rslt.oc).children("UL").length) {
+								data.inst.refresh(data.inst._get_parent(data.rslt.oc));
+							}
+						}
+					}
+				});
+			});
+		})    
+    .jstree({
+      "core": {
+        "animation" : 100,
+        "strings" : {
+          "loading" : "<%= t(:re_tree_loading) %>"
         }
-      });
-
-    },
-    nodeUrl: '<%= url_for :controller => 'requirements', :action => 'treestate' %>',
-    contextMenuUrl: '<%= url_for :controller => 'requirements', :action => 'context_menu' %>',
-    editUrl: '<%= url_for :controller => 're_artifact_properties', :action => 'edit' %>',
-    contextMenuDivId: 'context-menu',
-    projectId: <%= @project.id -%>
-  });
-  if (tree !== null) {
-    tree.setSortable();
-    Event.observe(document.body, 'click', function() {
-        new Effect.Fade('context-menu', {duration: 0.20});
-    }.bindAsEventListener());
-  };
-
+      },
+      "themes" : {
+        "url": "<%= stylesheet_path "/plugin_assets/redmine_re/stylesheets/jquery.jstree/classic/style.css"  %>",
+        "theme" : "classic",
+        "dots" : true,
+        "icons" : true
+      },
+      "json_data" : {
+        "ajax" : {
+          "url" : function (n) {
+            var url = "<%= url_for :controller => 'requirements', :action => 'treestate' %>";
+            var id = n.attr ? n.attr("id").gsub('node_','') : -1;
+            var params = "?project_id=<%= @project.id %>&open=data";
+            return url + "/" + id + params;
+          }
+        }		    
+      },
+      "types" : {
+        "types" : {
+          "default" : {
+            /*"valid_children" : [ "default" ]*/
+          },
+          "re_goal" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/world.png', :plugin => 'redmine_re' %>"
+            }
+          },
+          "re_task" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/report_user.png', :plugin => 'redmine_re' %>"
+            }
+          },
+          "re_subtask" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/report.png', :plugin => 'redmine_re' %>"
+            }
+          },
+          "re_vision" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/lightbulb.png', :plugin => 'redmine_re' %>"
+            }
+          },
+          "re_attachment" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/attach.png', :plugin => 'redmine_re' %>"
+            }
+          },          
+          "re_workarea" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/bricks.png', :plugin => 'redmine_re' %>"
+            }
+          },
+          "re_user_profile" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/user.png', :plugin => 'redmine_re' %>"
+            }
+          },
+          "re_section" : {
+            "icon" : { 
+              "image" :"<%= image_path 'icons/text_padding_top.png', :plugin => 'redmine_re' %>"
+            }
+          }
+          
+        }
+      },
+      "dnd" : {
+        "drop_finish" : function (data) {
+          var drag = data.o;
+          var drop = data.r;
+          var id = drag.attr("id").replace('node_','');
+          var name = jQuery("a:first", drag.first()).text();
+          var name = jQuery.trim(name);
+          
+          var parent_id_field = jQuery('#parent_artifact_id');
+          var parent_text_field = jQuery('#parent_autocomplete');
+          
+          parent_id_field.val(id);
+          parent_text_field.val(name);
+        },
+        "drop_check" : function (data) {
+          var drag = data.o;
+          var drag_id = drag.attr("id");
+          
+          var invalid_ids = [];
+          var artifact_in_editor = "node_<%= @artifact.id.to_s %>";
+          invalid_ids.push(artifact_in_editor);
+          
+          jQuery("#" + artifact_in_editor).find("li").each(function () {
+            invalid_ids.push(this.id);
+          });
+          
+          if (jQuery.inArray(drag_id, invalid_ids) > -1)
+            return false;
+          
+          /*TODO: We need to make sure that this is also checked in the controller
+          since we are still throwing exceptions if not*/
+          
+          return true;
+        }
+      }, 
+      "ui" : {
+        <%= '"initially_select" : [ "node_' + @artifact.id.to_s + '" ],' unless @artifact.nil? || @artifact.id.nil? %>
+        "select_limit" : 1,
+        "selected_parent_close" : "select_parent"
+      },      
+      plugins : [ "themes", "json_data", "dnd", "types" , "ui" ]
+    });
+    
+    jQuery("#tree a").live("dblclick", function(e) {
+        var link = jQuery(this);
+        jQuery.blockUI({
+            "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + link[0].text + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
+        }); 
+        var parent = jQuery(this).parent();
+        var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/"
+        var type = parent.attr("rel");
+        var id = parent.attr ? parent.attr("id").gsub('node_','') : -1;
+        window.location.href = link + id
+    }) 
+  
   //]]>
 </script>

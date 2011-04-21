@@ -57,93 +57,14 @@ class RedmineReController < ApplicationController
     end
   end
 
-  def save_re_tree_structure
-    @treestructure = params[:treestructure]
-  end
-
-  def add_hidden_re_artifact_properties_attributes re_artifact
-    # this adds user-unmodifiable attributes to the re_artifact_properties
-    # the re_artifact_properties is a superclass of all other artifacts (goals, tasks, etc)
-    # this method should be called after initializing or loading any artifact object
-    author = find_current_user
-    re_artifact.project_id = @project.id
-    re_artifact.updated_at = Time.now
-    re_artifact.updated_by = author.id
-    re_artifact.created_by = author.id  if re_artifact.new_record?
-  end
-  
-  def create_tree
-    show_projects = params[:show_projects]
-    artifacts = []
-    
-    if show_projects
-      artifacts = ReArtifactProperties.find_all_by_artifact_type("Project")
-    else
-      @project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
-      artifacts = @project_artifact.children unless @project_artifact.nil?
-    end
-    
-    html_tree = '<ul id="tree">'
-    for artifact in artifacts
-      html_tree += render_to_html_tree(artifact, 0)
-    end
-    html_tree += '</ul>'
-    
-    html_tree
-  end
-
-  def render_to_html_tree(re_artifact_properties, depth = 0)
-    #renders a re artifact and its children recursively as html tree
-    session[:expanded_nodes] ||= Set.new
-    session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
-
-    expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
-    
-    artifact_type = re_artifact_properties.artifact_type.to_s.underscore
-    artifact_name = re_artifact_properties.name.to_s
-    html_tree = ''
-    
-    html_tree += '<li id="node_' + re_artifact_properties.id.to_s #HTML-IDs must begin with a letter(!)
-    html_tree += '" class="' + artifact_type
-    if re_artifact_properties.children.empty?
-      html_tree += ' empty'
-    else
-      html_tree += ' closed' unless (depth > 1 || expanded )
-      logger.debug('############ depth: ' + depth.to_s + ' is included: ' + session[:expanded_nodes].include?(re_artifact_properties.id).to_s )
-    end
-    html_tree += '" style="position: relative;">'
-    html_tree += '<span class="handle"></span>'
-    html_tree += '<a class="nodelink ' + artifact_type + '"'
-    html_tree += ' title="' + artifact_name + '"' unless artifact_name.length < TRUNCATE_NAME_IN_TREE_AFTER_CHARS
-    html_tree += '>'
-
-    #html_tree += ' ' + re_artifact_properties.position.to_s + ' ' unless re_artifact_properties.artifact_type == 'Project'
-    
-    html_tree += truncate(artifact_name, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-    html_tree += '</a>'
-    html_tree += '<a class="nodecontextmenulink">'
-    html_tree += image_tag('icons/' + NODE_CONTEXT_MENU_ICON, :alt => l(:re_treenode_context_menu), :plugin => "redmine_re")
-    html_tree += '</a>'
-
-    html_tree += '<ul>' if expanded
-    if ( !re_artifact_properties.children.empty? )
-      html_tree += render_children_to_html_tree(re_artifact_properties, depth-1)
-    end
-    html_tree += '</ul>' if expanded
-  
-    html_tree += '</li>'
-  end
-  
-  def render_children_to_html_tree(re_artifact_properties, depth)
-    expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
-    html_tree = ''
-    
+  def render_json_tree(re_artifact_properties, depth)
+    # creates a tree of all children of re_artifact_properties
+    # as json data
+    tree = []
     for child in re_artifact_properties.children
-      if (depth > 0 or expanded )
-        html_tree += render_to_html_tree(child, depth)
-      end
+      tree << create_tree(child, depth)
     end
-    html_tree    
+    tree.to_json
   end
   
   # filtering of re_artifacts. If request is post, filter was used already
@@ -180,9 +101,7 @@ class RedmineReController < ApplicationController
 
   # This method evaluates the parameters from the filter and builds up the parts to form a 
   def build_conditions_hash(filter_param, searching_forms, artifact_type) # Todo: Muss erledigt werden!
-    
   end
-
 
   # This method takes a 2 value array with the name of the attribute to search for and its value;
   # it takes the hash with the searching forms like start with, greater_than and so on;
@@ -213,7 +132,65 @@ class RedmineReController < ApplicationController
   end
 
   def reduce_search_result_with_parameter(source_artifacts, key, source_key, source_searching_key)
-
   end
+  
+  private
+
+    def add_hidden_re_artifact_properties_attributes re_artifact
+      # this adds user-unmodifiable attributes to the re_artifact_properties
+      # the re_artifact_properties is a superclass of all other artifacts (goals, tasks, etc)
+      # this method should be called after initializing or loading any artifact object
+      author = find_current_user
+      re_artifact.project_id = @project.id
+      re_artifact.updated_at = Time.now
+      re_artifact.updated_by = author.id
+      re_artifact.created_by = author.id  if re_artifact.new_record?
+    end
+  
+    def create_tree(re_artifact_properties, depth = 0)
+      #renders a re artifact and its children recursively as html tree
+      session[:expanded_nodes] ||= Set.new
+      session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
+      expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
+      
+      artifact_type = re_artifact_properties.artifact_type.to_s.underscore
+      artifact_name = re_artifact_properties.name.to_s
+      artifact_shortened_name = truncate(artifact_name, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+      artifact_id = re_artifact_properties.id.to_s
+      has_children = ! re_artifact_properties.children.empty?
+      
+      tree = {}
+      tree['data'] = artifact_shortened_name
+      tree['url'] = url_for :controller => artifact_type, :action => 'edit'
+      if has_children
+        tree ['state'] = 'open' if expanded
+        tree ['state'] = 'closed' unless expanded
+      end
+      
+      attr = {}
+      attr['id'] = "node_" + artifact_id.to_s
+      attr['rel'] = artifact_type
+      
+      tree['attr'] = attr
+      
+      if has_children
+        tree['children'] = get_children(re_artifact_properties, depth-1)
+      end
+      
+      tree
+    end  
+
+    def get_children(re_artifact_properties, depth)
+      children = []
+      expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
+      comma = false
+      
+      for child in re_artifact_properties.children
+        if (depth > 0 or expanded )
+          children << create_tree(child, depth)
+        end
+      end
+      children
+    end
 
 end

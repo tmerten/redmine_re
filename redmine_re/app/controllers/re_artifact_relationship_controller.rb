@@ -29,7 +29,6 @@ class ReArtifactRelationshipController < RedmineReController
     #@artifacts = ReArtifactProperties.find(:all, :order => "name", :conditions => ["project_id = ? and artifact_type = ?", params[:project_id], "ReGoal"])
     @json_netmap = build_json_for_netmap(@artifacts)
     # preparing html for tree view
-    @html_tree = create_tree
   end
 
   def build_json_for_netmap(artifacts, relation_search_string = nil)
@@ -68,14 +67,14 @@ class ReArtifactRelationshipController < RedmineReController
 
   def add_artifact(artifact, outgoing_relationships)
   	type = artifact.artifact_type
-    @json_artifact = '{ "id": "' + type.to_s + artifact.artifact_id.to_s + '",
-                        "name": "' + artifact.name + '",
+    @json_artifact = '{ "id": "' + escape_javascript(type.to_s) + escape_javascript(artifact.artifact_id.to_s) + '",
+                        "name": "' + escape_javascript(artifact.name) + '",
                         "data": { "$color": "' + ReArtifactColors.get_html_artifact_color_code(@re_artifact_order.index(type)) + '",
                                   "$height": 90},
                         "adjacencies": [ '
     for relation in outgoing_relationships do
       @sink = ReArtifactProperties.find_by_id(relation.sink_id)
-      @json_artifact += '{ "nodeTo": "' + @sink.artifact_type.to_s + @sink.artifact_id.to_s + '",
+      @json_artifact += '{ "nodeTo": "' + escape_javascript(@sink.artifact_type.to_s) + escape_javascript(@sink.artifact_id.to_s) + '",
                            "data": {
                                      "$color": "' + ReArtifactColors.get_html_relation_color_code(relation.relation_type) + '",
                                      "$lineWidth": 2'

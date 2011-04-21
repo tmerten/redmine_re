@@ -9,10 +9,8 @@ class ReSectionController < RedmineReController
 
   def edit
     @re_section = ReSection.find_by_id(params[:id], :include => :re_artifact_properties) || ReSection.new
-    
-    # render html for tree
-    @html_tree = create_tree
-    
+    @artifact = @re_section.re_artifact_properties
+
     if request.post?
       @re_section.attributes = params[:re_section]
       add_hidden_re_artifact_properties_attributes @re_section

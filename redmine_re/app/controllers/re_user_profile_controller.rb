@@ -8,10 +8,8 @@ class ReUserProfileController < RedmineReController
   end
 
   def edit
-    @re_user_profile = ReUserProfile.find_by_id(params[:id], :include => :re_artifact_properties) || ReUserProfile.new
-    
-    # render html for tree
-    @html_tree = create_tree
+    @re_user_profile = ReUserProfile.find(params[:id], :include => :re_artifact_properties) || ReUserProfile.new
+    @artifact = @re_user_profile.re_artifact_properties
     
     if request.post?
       @re_user_profile.attributes = params[:re_user_profile]

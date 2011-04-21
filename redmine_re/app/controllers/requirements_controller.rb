@@ -3,7 +3,6 @@ class RequirementsController < RedmineReController
   menu_item :re
 
   def index
-    @html_tree = create_tree
     @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
     
     if @project_artifact.nil?
@@ -35,8 +34,9 @@ class RequirementsController < RedmineReController
     # It transmits the drops done in the tree to the database in order to last
     # longer than the next refresh of the browser.
     new_parent_id = params[:new_parent_id]
-    left_artifact_id = params[:left_artifact_id]
+    ancestor_id = params[:ancestor_id]
     moved_artifact_id = params[:id]
+    insert_postition = params[:position]
 
     moved_artifact = ReArtifactProperties.find(moved_artifact_id)
     
@@ -48,19 +48,29 @@ class RequirementsController < RedmineReController
 		end
     session[:expanded_nodes] << new_parent.id
 		
-		left_artifact = nil
-    left_artifact = ReArtifactProperties.find(left_artifact_id) if not left_artifact_id.empty?
+		ancestor = nil
+    ancestor = ReArtifactProperties.find(ancestor_id) if not ancestor_id.empty?
 
     position = 1
-    position = (left_artifact.position + 1) unless left_artifact.nil? || left_artifact.position.nil?
+    
+    case insert_postition
+    when 'before'
+      position = (ancestor.position - 1) unless ancestor.nil? || ancestor.position.nil?
+    when 'after'
+      position = (ancestor.position + 1) unless ancestor.nil? || ancestor.position.nil?
+    else
+      position = 1
+    end
+      
     
     moved_artifact.set_parent(new_parent, position)
    
-    #render :nothing => true
-    debugtext = 'insert position: ' + position.to_s + ' - left '
-    debugtext += left_artifact.position.to_s + ' ' + left_artifact.name.to_s unless left_artifact.nil? || left_artifact.position.nil?
+    result = {}
+    result['status'] = 1
+    result['insert_pos'] = position.to_s
+    result['ancestor'] = ancestor.position.to_s + ' ' + ancestor.name.to_s unless ancestor.nil? || ancestor.position.nil?
     
-    render :text => debugtext
+    render :json => result
   end
 
   # first tries to enable a contextmenu in artifact tree
@@ -83,14 +93,22 @@ class RequirementsController < RedmineReController
     # session for the nodes that are "opened" to render the children
     node_id = params[:id].to_i
     ret = ''
-    if params[:open] == 'true'
+    case params[:open]
+    when 'data'
+      if node_id.eql? -1
+        re_artifact_properties = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+      else
+        session[:expanded_nodes] << node_id
+        re_artifact_properties =  ReArtifactProperties.find(node_id)
+      end
+      ret = render_json_tree(re_artifact_properties, 1)
+      render :json => ret
+    when 'true'
       session[:expanded_nodes] << node_id
-      re_artifact_properties =  ReArtifactProperties.find(node_id)
-      ret = render_children_to_html_tree(re_artifact_properties, 1)
+      render :text => "node #{node_id} opened"
     else
       session[:expanded_nodes].delete(node_id)
+      render :text => "node #{node_id} closed"
     end
-    render :inline => ret
   end  
-  
 end

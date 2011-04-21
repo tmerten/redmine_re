@@ -9,9 +9,7 @@ class ReVisionController < RedmineReController
 
   def edit
     @re_vision = ReVision.find_by_id(params[:id], :include => :re_artifact_properties) || ReVision.new
-    
-    # render html for tree
-    @html_tree = create_tree
+    @artifact = @re_vision.re_artifact_properties
     
     if request.post?
       @re_vision.attributes = params[:re_vision]
