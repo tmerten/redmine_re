@@ -164,17 +164,16 @@ class ReArtifactProperties < ActiveRecord::Base
     to = instance_checker to
     
     relation_type_no = RELATION_TYPES[relation_type]
-    
     # we can not give more than one parent
     if (relation_type == :parentchild) && (! to.parent.nil?) && (to.parent.id != self.id)
         raise ArgumentError, "You are trying to add a second parent to the artifact: #{to}. No ReArtifactRelationship has been created or updated."
     end
     
     relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(self.id, to.id, relation_type_no)
+
     # new relation    
     if relation.nil?
-      self.sinks << to
-      relation = self.relationships_as_source.find_by_source_id_and_sink_id self.id, to.id
+      relation = ReArtifactRelationship.new(:source_id => self.id, :sink_id => to.id)
     else
       if parent.nil?
         ReArtifactRelationships.delete(relation.id)
@@ -186,7 +185,7 @@ class ReArtifactProperties < ActiveRecord::Base
     relation.relation_type = relation_type_no
     relation.directed = directed
     relation.save
-    
+
     relation
   end
 
@@ -200,7 +199,7 @@ class ReArtifactProperties < ActiveRecord::Base
     parent = instance_checker(parent)
 
     raise ArgumentError, "The parent may not be self" if self.eql? parent
-    raise ArgumentError, "The parent may not be within the chilren" if children.include? parent
+    raise ArgumentError, "The parent may not be within the children" if children.include? parent
     
     relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
 

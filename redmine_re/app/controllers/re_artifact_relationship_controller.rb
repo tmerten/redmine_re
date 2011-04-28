@@ -23,7 +23,7 @@ class ReArtifactRelationshipController < RedmineReController
   def autocomplete_sink
     @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?
 
-    query = '%' + params[:sink_name].gsub ('%', '\%').gsub ('_', '\_').downcase + '%'
+    query = '%' + params[:sink_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
     @sinks = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
 
     if @artifact
@@ -45,7 +45,11 @@ class ReArtifactRelationshipController < RedmineReController
   def prepare_relationships
     artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
     relation = params[:re_artifact_relationship]
-    
+
+    if relation[:relation_type].eql?("parentchild")
+      raise ArgumentError, "You are not allowed to create a parentchild relationship!"
+    end
+
     if relation[:relation_type] && relation[:artifact_id]
       source = ReArtifactProperties.find_by_id(artifact_properties_id)
       sink = ReArtifactProperties.find_by_id(relation[:artifact_id]) 
