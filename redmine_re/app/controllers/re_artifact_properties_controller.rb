@@ -85,40 +85,12 @@ class ReArtifactPropertiesController < RedmineReController
     
     list = '<ul>'
     for parent in @parents
-      list << '<li id="'
-      list << parent.id.to_s
-      list << '">'
-      list << parent.name
-      list << '</li>'
+      list << render_autocomplete_artifact_list_entry(parent)
     end
     list << '</ul>'
     render :text => list   
   end
 
-  def autocomplete_sink
-    @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?
-
-    query = '%' + params[:sink_name].gsub ('%', '\%').gsub ('_', '\_').downcase + '%'
-    @sinks = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
-
-    if @artifact
-    #  children = @artifact.gather_children
-    #  @sinks.delete_if{ |p| children.include? p }
-      @sinks.delete_if{ |p| p == @artifact }
-    end
-
-    list = '<ul>'
-    for sink in @sinks
-      list << '<li id="'
-      list << sink.id.to_s
-      list << '">'
-      list << sink.name
-      list << '</li>'
-    end
-    list << '</ul>'
-    render :text => list
-  end
-  
   private
   
   def gather_children(artifact)

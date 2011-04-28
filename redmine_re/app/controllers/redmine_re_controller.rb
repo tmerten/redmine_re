@@ -135,62 +135,87 @@ class RedmineReController < ApplicationController
   end
   
   private
-
-    def add_hidden_re_artifact_properties_attributes re_artifact
-      # this adds user-unmodifiable attributes to the re_artifact_properties
-      # the re_artifact_properties is a superclass of all other artifacts (goals, tasks, etc)
-      # this method should be called after initializing or loading any artifact object
-      author = find_current_user
-      re_artifact.project_id = @project.id
-      re_artifact.updated_at = Time.now
-      re_artifact.updated_by = author.id
-      re_artifact.created_by = author.id  if re_artifact.new_record?
-    end
   
-    def create_tree(re_artifact_properties, depth = 0)
-      #renders a re artifact and its children recursively as html tree
-      session[:expanded_nodes] ||= Set.new
-      session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
-      expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
-      
-      artifact_type = re_artifact_properties.artifact_type.to_s.underscore
-      artifact_name = re_artifact_properties.name.to_s
-      artifact_shortened_name = truncate(artifact_name, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-      artifact_id = re_artifact_properties.id.to_s
-      has_children = ! re_artifact_properties.children.empty?
-      
-      tree = {}
-      tree['data'] = artifact_shortened_name
-      tree['url'] = url_for :controller => artifact_type, :action => 'edit'
-      if has_children
-        tree ['state'] = 'open' if expanded
-        tree ['state'] = 'closed' unless expanded
+  def render_autocomplete_artifact_list_entry(artifact)
+    # renders a list entry (<li> ... </li>) containing the artifacts name
+    # and all its parent parents up to the project
+    grandparents = []
+    grandparent = artifact.parent
+    unless grandparent.nil?
+      while not grandparent.artifact_type.eql? "Project"
+        grandparents << grandparent.parent
+        grandparent = grandparent.parent
       end
-      
-      attr = {}
-      attr['id'] = "node_" + artifact_id.to_s
-      attr['rel'] = artifact_type
-      
-      tree['attr'] = attr
-      
-      if has_children
-        tree['children'] = get_children(re_artifact_properties, depth-1)
-      end
-      
-      tree
-    end  
-
-    def get_children(re_artifact_properties, depth)
-      children = []
-      expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
-      comma = false
-      
-      for child in re_artifact_properties.children
-        if (depth > 0 or expanded )
-          children << create_tree(child, depth)
-        end
-      end
-      children
     end
+
+    li = '<li id="'
+    li << artifact.id.to_s
+    li << '">'
+    
+    for gp in grandparents.reverse
+      li << gp.name + " &rarr; "
+    end
+    
+    li << artifact.name
+    li << '</li>'
+    li    
+  end
+
+  def add_hidden_re_artifact_properties_attributes re_artifact
+    # this adds user-unmodifiable attributes to the re_artifact_properties
+    # the re_artifact_properties is a superclass of all other artifacts (goals, tasks, etc)
+    # this method should be called after initializing or loading any artifact object
+    author = find_current_user
+    re_artifact.project_id = @project.id
+    re_artifact.updated_at = Time.now
+    re_artifact.updated_by = author.id
+    re_artifact.created_by = author.id  if re_artifact.new_record?
+  end
+
+  def create_tree(re_artifact_properties, depth = 0)
+    #renders a re artifact and its children recursively as html tree
+    session[:expanded_nodes] ||= Set.new
+    session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
+    expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
+    
+    artifact_type = re_artifact_properties.artifact_type.to_s.underscore
+    artifact_name = re_artifact_properties.name.to_s
+    artifact_shortened_name = truncate(artifact_name, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+    artifact_id = re_artifact_properties.id.to_s
+    has_children = ! re_artifact_properties.children.empty?
+    
+    tree = {}
+    tree['data'] = artifact_shortened_name
+    tree['url'] = url_for :controller => artifact_type, :action => 'edit'
+    if has_children
+      tree ['state'] = 'open' if expanded
+      tree ['state'] = 'closed' unless expanded
+    end
+    
+    attr = {}
+    attr['id'] = "node_" + artifact_id.to_s
+    attr['rel'] = artifact_type
+    
+    tree['attr'] = attr
+    
+    if has_children
+      tree['children'] = get_children(re_artifact_properties, depth-1)
+    end
+    
+    tree
+  end  
+
+  def get_children(re_artifact_properties, depth)
+    children = []
+    expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
+    comma = false
+    
+    for child in re_artifact_properties.children
+      if (depth > 0 or expanded )
+        children << create_tree(child, depth)
+      end
+    end
+    children
+  end
 
 end

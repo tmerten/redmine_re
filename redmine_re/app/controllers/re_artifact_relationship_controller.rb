@@ -32,11 +32,7 @@ class ReArtifactRelationshipController < RedmineReController
 
     list = '<ul>'
     for sink in @sinks
-      list << '<li id="'
-      list << sink.id.to_s
-      list << '">'
-      list << sink.name
-      list << '</li>'
+      list << render_autocomplete_artifact_list_entry(sink)
     end
     list << '</ul>'
     render :text => list
