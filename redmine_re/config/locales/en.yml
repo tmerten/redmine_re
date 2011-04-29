@@ -48,7 +48,7 @@ en:
   re_update_description: 'Update description'
   re_wiki_page_for_artifact: 'Wiki Page'
   re_create_wiki_page_for_re_artifact: 'Create new Wiki Page'
-  re_edit_wiki_page_for_re_artifact: 'Edit Wiki Page'
+  re_show_wiki_page_for_re_artifact: 'Wiki Page'
   re_preview_wiki_page_for_re_artifact: 'Wiki Page Preview:'
   re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
 
