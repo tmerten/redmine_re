@@ -156,7 +156,7 @@ class RedmineReController < ApplicationController
       li << gp.name + " &rarr; "
     end
     
-    li << artifact.name
+    li << "<b>" + artifact.name + "</b>"
     li << '</li>'
     li    
   end

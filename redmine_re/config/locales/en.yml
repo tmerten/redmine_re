@@ -31,6 +31,9 @@ en:
   re_tree_loading: 'Tree is loading...'
   re_editor_for: 'Please wait, the editor for'
   re_is_being_loaded: 'is loading...'
+  re_remove: 'remove'
+  re_to: 'to'
+  re_from: 'from'
 
   # re_artifact_properties
   re_artifact_name: 'Name'

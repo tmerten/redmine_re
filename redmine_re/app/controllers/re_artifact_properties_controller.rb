@@ -74,7 +74,7 @@ class ReArtifactPropertiesController < RedmineReController
   def autocomplete_parent
     @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?    
 
-    query = '%' + params[:parent_name].gsub ('%', '\%').gsub ('_', '\_').downcase + '%'
+    query = '%' + params[:parent_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
     @parents = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
 
     if @artifact
