@@ -65,27 +65,32 @@ JAVASCRIPT
     has_no_wiki_page_yet = (wiki_page.nil?)? true : false
 
     # variable icon
-    action = (has_no_wiki_page_yet)? "new": "edit"
-    linkname = (has_no_wiki_page_yet)? t(:re_create_wiki_page_for_re_artifact): t(:re_edit_wiki_page_for_re_artifact)    
     
-    html_code += link_to linkname, {
+    if has_no_wiki_page_yet
+    html_code += link_to t(:re_create_wiki_page_for_re_artifact), {
       :controller => 'wiki',
       :action => 'edit',
       :id => wiki_page_name,
       :project_id => project.identifier} ,
-      { :class => "icon icon-subtask-wiki-#{action}" }
+      { :class => "icon icon-subtask-wiki-new" }
+    else
+      html_code += link_to t(:re_show_wiki_page_for_re_artifact), {
+      :controller => 'wiki',
+      :action => 'show',
+      :id => wiki_page_name,
+      :project_id => project.identifier}
 
-      # this is buggy since if creates a lot of invalid html. We might render this somethere else but we should not
-      # keep it like this!
+      html_code += " ("
       
-    #unless has_no_wiki_page_yet
-      # tooltip preview of wikipage if one exists already
-      #tip = content_tag("h1", t(:re_preview_wiki_page_for_re_artifact))
-      #tip = content_tag("span", textilizable(wiki_page.content.text), :class => "tip wiki_page_preview_tip")
-      #tip = content_tag("div", html_code + tip, :class => "tooltip")
-      #html_code = tip
-    #end
-
+      html_code += link_to t(:re_edit), {
+      :controller => 'wiki',
+      :action => 'edit',
+      :id => wiki_page_name,
+      :project_id => project.identifier} ,
+      { :class => "icon icon-subtask-wiki-edit" }     
+      
+      html_code += ")"
+    end
     return html_code
   end
 end
