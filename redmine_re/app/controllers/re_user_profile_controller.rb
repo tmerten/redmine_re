@@ -8,7 +8,12 @@ class ReUserProfileController < RedmineReController
   end
 
   def edit
-    @re_user_profile = ReUserProfile.find(params[:id], :include => :re_artifact_properties) || ReUserProfile.new
+    @re_user_profile = nil
+    if params[:id].nil?
+      @re_user_profile = ReUserProfile.new
+    else
+      @re_user_profile = ReUserProfile.find(params[:id], :include => :re_artifact_properties)
+    end
     @artifact = @re_user_profile.re_artifact_properties
     
     if request.post?
