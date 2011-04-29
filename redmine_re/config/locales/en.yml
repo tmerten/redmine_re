@@ -3,6 +3,7 @@ en:
   # general stuff
   re_requirements: 'Requirements'
   re_save: 'Save'
+  re_cancel: 'Cancel'
   re_edit: 'edit'
   re_delete: 'delete'
   re_show: 'Show'

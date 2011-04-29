@@ -143,7 +143,7 @@ class RedmineReController < ApplicationController
     grandparent = artifact.parent
     unless grandparent.nil?
       while not grandparent.artifact_type.eql? "Project"
-        grandparents << grandparent.parent
+        grandparents << grandparent
         grandparent = grandparent.parent
       end
     end
