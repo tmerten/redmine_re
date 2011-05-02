@@ -32,13 +32,14 @@
         <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact( @project, properties ) %>
       </p>
         <%
-        users = []
-        users.concat User.all
-        users.delete_if { |u| ! u.member_of? @project }
-        #users.delete_if { |u| ! u.allowed_to? :re, @project }
+        re_users = []
+        re_users << User.current
+        re_users.concat User.all
+        re_users.delete_if { |u| ! u.allowed_to? :edit_requirements, @project }
+        re_users.uniq!
         %>
       <p>
-        <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, users.collect {|u| [ u.firstname+" "+ u.lastname ] }%>
+        <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect {|u| [ u.firstname+" "+ u.lastname ] }%>
       </p>
     </div>
 
