@@ -1,2 +1,0 @@
-page.remove "subtask_drag_#{@position}"
-page.call "updateAllSubtaskPositions"

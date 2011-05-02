@@ -1,7 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-section_goals:
-  id: <%= Fixtures.identify(:section_goals) %>
-  
-section_szenarios:
-  id: <%= Fixtures.identify(:section_szenarios) %>
