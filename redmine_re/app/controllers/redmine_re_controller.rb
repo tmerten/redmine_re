@@ -195,6 +195,7 @@ class RedmineReController < ApplicationController
     attr = {}
     attr['id'] = "node_" + artifact_id.to_s
     attr['rel'] = artifact_type
+    attr['title'] = artifact_name
     
     tree['attr'] = attr
     

@@ -147,21 +147,21 @@
           
           return true;
         }
-      }, 
+      },
       "ui" : {
         <%= '"initially_select" : [ "node_' + @artifact.id.to_s + '" ],' unless @artifact.nil? || @artifact.id.nil? %>
         "select_limit" : 1,
         "selected_parent_close" : "select_parent"
-      },      
+      },
       plugins : [ "themes", "json_data", "dnd", "types" , "ui" ]
     });
     
     jQuery("#tree a").live("dblclick", function(e) {
         var link = jQuery(this);
-        jQuery.blockUI({
-            "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + link[0].text + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-        }); 
         var parent = jQuery(this).parent();
+        jQuery.blockUI({
+            "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + parent.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
+        }); 
         var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/"
         var type = parent.attr("rel");
         var id = parent.attr ? parent.attr("id").gsub('node_','') : -1;
