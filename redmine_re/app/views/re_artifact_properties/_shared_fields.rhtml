@@ -34,7 +34,7 @@
         <%
         re_users = []
         re_users << User.current
-        re_users.concat User.all
+        re_users.concat User.all.sort_by { |u| u.lastname}
         re_users.delete_if { |u| ! u.allowed_to? :edit_requirements, @project }
         re_users.uniq!
         %>
