@@ -17,7 +17,11 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
       {
         # actions of redmine_re_controller are here too because the get executed by inheritance of requirements controller
         # for example here:_tree partial: <%= url_for :controller => 'requirements', :action => 'context_menu' %>
-        :requirements => [:index, :treeview, :context_menu, :treestate, :load_settings, :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree, :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree, :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter, :reduce_search_result_with_parameter, :setup],
+        :requirements => [:index, :treeview, :context_menu, :treestate, :load_settings,
+          :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree,
+          :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree,
+          :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
+          :reduce_search_result_with_parameter],
         :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent],
         :re_goal => [:edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
@@ -27,13 +31,16 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_vision => [:edit, :new],
         :re_user_profile => [:edit, :new],
         :re_attachment => [:edit, :new, :download_or_show],
-        :re_artifact_relationship => [:delete, :autocomplete_sink, :visualization, :build_json_according_to_user_choice],
+        :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
+          :visualization, :build_json_according_to_user_choice]
+      }
+    )
+    permission( :administrate_requirements,
+      {
+        :requirements => [:setup, :configure]
         :re_building_block => [:edit, :new]
       }
     )
-        
-	# more restrictive setup manage_requirements becomes "Manage Requirements" by convention
-	# permission :manage_requirements, :requirements => :index
 	end
 
 	# The Requirements item is added to the project menu after the Activity item
@@ -76,6 +83,7 @@ config.after_initialize do
 
 	all_artifact_types.delete_if { |x| x.nil? }
 	all_artifact_types.delete(:ReArtifactProperties)
+	all_artifact_types.delete(:ReArtifactsConfig)
 	all_artifact_types.delete_if{ |v| configured_artifact_types.include? v }
 	configured_artifact_types.concat(all_artifact_types)
 	Setting["plugin_redmine_re"] = {'re_artifact_types' => ActiveSupport::JSON.encode(configured_artifact_types) }

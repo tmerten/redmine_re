@@ -23,8 +23,21 @@
               :project_id => @project.id } %>
         </li>
       </ul>
+      
+      <% if User.current.allowed_to?(:administrate_requirements, @project) %>
+      <h2><%= l(:re_administrate) %></h2>
+      <ul>
+        <li><%= link_to l(:re_configure_plugin), {
+          :controller => "requirements",
+          :action => "configure", 
+          :project_id => @project.identifier } %>
+        </li>
+      </ul>
+      <% end %>
+
     </div>
   </div>
+  
 
 </div>
 
