@@ -1,0 +1,35 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+bb_text_note:
+  id: <%= Fixtures.identify(:bb_text_note) %>
+  artifact_type: ReGoal
+  name: Note
+  help: Please enter any further information relevant for the artifact here.
+  mandatory: false
+  for_every_project: true
+  multiple_values: false
+  grouped: false
+  for_condensed_view: false
+  for_search: false
+  arrangable_by_users: true
+  position: 2
+  default_value: Take a note here.
+  min_length: 5
+  max_length: 2000
+
+bb_text_ideas:
+  id: <%= Fixtures.identify(:bb_text_ideas) %>
+  artifact_type: ReGoal
+  name: Solution Ideas
+  help: Please enter your ideas about how to achieve this goal
+  mandatory: false
+  for_every_project: false
+  multiple_values: true
+  grouped: false
+  for_condensed_view: false
+  for_search: true
+  arrangable_by_users: true
+  position: 1
+  default_value: Your ideas.
+  min_length: 
+  max_length: 2000
+

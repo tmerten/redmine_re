@@ -1,0 +1,19 @@
+<div id='detail_view' class='detail_view'>
+	<h2><%= t(:re_bb_choose_builing_block_to_expand_artifact)%></h2>
+	<p>
+	<% options = '<option value="re_bb_text">' + t(:re_bb_text) + '</option>
+				  <option value="re_bb_link">' + t(:re_bb_link) + '</option>
+						<option value="re_bb_number">' + t(:re_bb_number) + '</option>
+						<option value="re_bb_value_selection">' + t(:re_bb_value_selection) + '</option>
+						<option value="re_bb_data_upload">' + t(:re_bb_data_upload) + '</option>
+						<option value="re_bb_multiple_user_entries">' + t(:re_bb_multiple_user_entries) + '</option>
+						<option value="re_bb_artifact_selection">' + t(:re_bb_artifact_selection) + '</option>
+						<option value="re_bb_subartifact_table">' + t(:re_bb_subartifact_table) + '</option>
+						<option value="re_bb_specified_selection">' + t(:re_bb_specified_selection) + '</option>
+						<option value="re_bb_grouping">' + t(:re_bb_grouping) + '</option>' %>
+	<%= select_tag :building_block, options %>
+	</p>
+	<p>
+	<%= render "re_building_block/re_bb_text/config", :artifact_type => params[:artifact_type], :project_id => params[:project_id]  %>
+	</p>
+</div>

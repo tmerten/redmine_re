@@ -1,0 +1,6 @@
+class ReBbText < ReBuildingBlock
+  
+  
+  
+  
+end

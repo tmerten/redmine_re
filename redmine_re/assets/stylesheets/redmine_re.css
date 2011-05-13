@@ -70,6 +70,12 @@ textarea {
   width: 95%;
 }
 
+textarea.bb_config {
+	width: 50%;
+	height: 70px;
+	rows: 5;
+}
+
 #context-menu li.header {
   border-bottom-width: 1px;
   border-bottom-color: black;
@@ -97,6 +103,21 @@ label.filter {
   float:left; 
   text-align:left;
   padding-right:5px;
+}
+
+label.behind_checkbox {
+  display:inline;
+  float:none; 
+  clear:none;
+  margin-left: 5px;
+}
+
+label.bb_config {
+	width: 130px;
+}
+
+input.bb_checkbox {
+	margin-left: 105px;
 }
 
 

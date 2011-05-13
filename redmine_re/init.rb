@@ -27,10 +27,11 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_vision => [:edit, :new],
         :re_user_profile => [:edit, :new],
         :re_attachment => [:edit, :new, :download_or_show],
-        :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships, :visualization, :build_json_for_netmap, :add_artifacts_as_children_of_root, :add_artifact, :remove_last_comma_and_close, :build_json_according_to_user_choice]
+        :re_artifact_relationship => [:delete, :autocomplete_sink, :visualization, :build_json_according_to_user_choice],
+        :re_building_block => [:edit, :new]
       }
     )
-
+        
 	# more restrictive setup manage_requirements becomes "Manage Requirements" by convention
 	# permission :manage_requirements, :requirements => :index
 	end

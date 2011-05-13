@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require File.dirname(__FILE__) + '/../../lib/projects_patch'
 
 class ReArtifactPropertiesTest < ActiveSupport::TestCase
   fixtures :projects, :re_artifact_properties

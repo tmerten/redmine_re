@@ -13,7 +13,7 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
   
-  before_filter :find_project, :authorize, :load_settings
+  before_filter :find_project, :load_settings #, :authorize
   
 	def load_settings
 		@settings = Setting.plugin_redmine_re
