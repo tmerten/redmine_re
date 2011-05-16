@@ -19,5 +19,13 @@
   <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
   
   <br>
-  <%= link_to(	t(:re_bb_add), :controller => :re_building_block, :action => :edit, :id => "", :project_id => @project.id, :artifact_type => :ReGoal) %>
+  <% if User.current.allowed_to?(:administrate_requirements, @project) %>
+      <%= link_to(	t(:re_bb_add), 
+					:controller => :re_building_block, 
+					:action => :edit, 
+					:id => "", 
+					:project_id => @project.id, 
+					:artifact_type => :ReGoal) %>
+  <% end %>
+  
 </div>
