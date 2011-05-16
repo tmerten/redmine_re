@@ -1,7 +1,8 @@
 class CreateReBuildingBlocks < ActiveRecord::Migration
   def self.up
     create_table :re_building_blocks do |t|
-      t.column :artifact_type, :string
+      t.column :type, :string
+      t.column :artifact_type, :string      
       t.column :name, :string
       t.column :help, :string
       t.column :mandatory, :boolean
