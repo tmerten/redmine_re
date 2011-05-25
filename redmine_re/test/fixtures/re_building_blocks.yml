@@ -1,6 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-bb_text_note:
-  id: <%= Fixtures.identify(:bb_text_note) %>
+bb_text_for_goal_note:
+  id: <%= Fixtures.identify(:bb_text_for_goal_note) %>
   type: ReBbText
   artifact_type: ReGoal
   name: Note
@@ -17,8 +17,8 @@ bb_text_note:
   min_length: 5
   max_length: 2000
 
-bb_text_ideas:
-  id: <%= Fixtures.identify(:bb_text_ideas) %>
+bb_text_for_goal_ideas:
+  id: <%= Fixtures.identify(:bb_text_for_goal_ideas) %>
   type: ReBbText
   artifact_type: ReGoal
   name: Solution Ideas
@@ -35,8 +35,8 @@ bb_text_ideas:
   min_length: 
   max_length: 2000
   
-bb_text_note_task:
-  id: <%= Fixtures.identify(:bb_text_note_task) %>
+bb_text_for_task_note:
+  id: <%= Fixtures.identify(:bb_text_for_task_note) %>
   type: ReBbText
   artifact_type: ReTask
   name: Note

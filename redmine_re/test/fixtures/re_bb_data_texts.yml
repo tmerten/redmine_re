@@ -1,11 +1,19 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
-  id: 1
 
-  value: MyString
+re_bb_data_text_for_goal_usability_and_bb_text_for_goal_note:
+  id: <%= Fixtures.identify(:re_bb_data_text_for_goal_usability_and_bb_text_for_goal_note) %>
+  value: This is my personal note for the goal.
+  re_artifact_properties_id: <%= Fixtures.identify(:art_goal_usability) %>
+  re_bb_text_id: <%= Fixtures.identify(:bb_text_for_goal_note) %>
 
-two:
-  id: 2
-
-  value: MyString
-
+re_bb_data_text_for_goal_latency_and_bb_text_for_goal_note:
+  id: <%= Fixtures.identify(:re_bb_data_text_for_goal_latency_and_bb_text_for_goal_note) %>
+  value: This is my personal note for the another goal.
+  re_artifact_properties_id: <%= Fixtures.identify(:art_goal_latency) %>
+  re_bb_text_id: <%= Fixtures.identify(:bb_text_for_goal_note) %>
+  
+re_bb_data_text_for_task_login_and_bb_text_for_task_note:
+  id: <%= Fixtures.identify(:re_bb_data_text_for_task_login_and_bb_text_for_task_note) %>
+  value: This is my personal note for the task.
+  re_artifact_properties_id: <%= Fixtures.identify(:art_task_login) %>
+  re_bb_text_id: <%= Fixtures.identify(:bb_text_for_task_note) %>

@@ -45,4 +45,7 @@
     <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
 </div>
 
+<br>
+  <%= add_bb_configuration_link(:ReSubtasks)%>
+
 </div>

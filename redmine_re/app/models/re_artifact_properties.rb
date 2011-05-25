@@ -34,7 +34,10 @@ class ReArtifactProperties < ActiveRecord::Base
     :conditions => [ "re_artifact_relationships.relation_type = ?", RELATION_TYPES[:parentchild] ],
     :source => "source"
 
+  has_many :re_bb_data_texts
+
   belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
+  
   
   after_destroy :destroy_artifact
   

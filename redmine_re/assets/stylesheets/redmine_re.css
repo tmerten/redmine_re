@@ -116,6 +116,11 @@ label.bb_config {
 	width: 130px;
 }
 
+label.user_defined {
+	width: 150px;
+}
+
+
 input.bb_checkbox {
 	margin-left: 105px;
 }

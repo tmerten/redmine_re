@@ -8,24 +8,18 @@
   <% form_for :re_goal, :update => :detail_view, :url => {:action => "edit"} do |f| %>
   
       <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_goal.re_artifact_properties} %>
-  
+  	  <%= add_bb_section(@re_goal)%>
       <p>
         <%= submit_tag l(:re_save) %>
         <%= link_to(t(:re_cancel), :project_id => @project.id) %>
       </p>
+	  
+	  
   
   <% end %>
   
   <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
   
   <br>
-  <% if User.current.allowed_to?(:administrate_requirements, @project) %>
-      <%= link_to(	t(:re_bb_add), 
-					:controller => :re_building_block, 
-					:action => :edit, 
-					:id => "", 
-					:project_id => @project.id, 
-					:artifact_type => :ReGoal) %>
-  <% end %>
-  
+  <%= add_bb_configuration_link(:ReGoal)%>
 </div>

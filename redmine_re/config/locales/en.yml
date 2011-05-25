@@ -52,7 +52,7 @@ en:
   re_preview_wiki_page_for_re_artifact: 'Wiki Page Preview:'
   re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
 
-  re_artifact_properties_validates_presence_of_name: 'Enter the name of the subtask.'
+  re_artifact_properties_validates_presence_of_name: 'Enter the name of the artifact.'
   re_artifact_properties_validates_uniqueness_of_name: 'The name is used in another artifact, already.'
   re_artifact_properties_validates_presence_of_updated_by: 'Updated by cannot be blank.'
   re_artifact_properties_validates_presence_of_created_by: 'Created by cannot be blank.'
@@ -248,6 +248,10 @@ en:
   re_bb_min_value: 'Minimal value'
   re_bb_max_value: 'Maximal value'
   re_bb_saved: 'Building Block was saved successfully.'
+  re_bb_userdefined_fields: 'Userdefined Fields'
+  re_bb_too_short: '%{bb_name} is too short. Should have at least %{min_length} characters.'
+  re_bb_too_long: "%{bb_name} is too long. Shouldn't have more than %{max_length} characters."
+  re_bb_data_required: 'Data is required here.'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'

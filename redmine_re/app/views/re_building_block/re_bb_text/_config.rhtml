@@ -6,6 +6,7 @@
   <% form_for :re_building_block, :update => :detail_view, :url => {:action => "edit"} do |f| %>
       <%= hidden_field_tag :project_id, @project.id %>
   	  <%= hidden_field_tag :artifact_type, @artifact_type %>
+	  <%= hidden_field_tag :type, 'ReBbText' %>
 	  <div class="box">
 	  	
 	    <fieldset>

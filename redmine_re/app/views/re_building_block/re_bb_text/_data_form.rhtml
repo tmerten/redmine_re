@@ -1,0 +1,18 @@
+	<p>
+		<% if !data.empty? %>
+			<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data[0].id.to_s + '][value]'  %>
+		<% else %>
+			<% param_path = 're_bb[' + re_bb.id.to_s + '][no_id][value]'  %>
+		<% end %>
+      	<%= label_tag param_path, re_bb.name, :class => "user_defined" %>
+		<% if data.empty? %>
+			<%= text_field_tag param_path, re_bb.default_value, {:size => 30, :id => param_path} %>
+		<% else %>
+			<%= text_field_tag param_path, data[0].value, {:size => 30, :id => param_path} %>
+			<% if data[0].errors.on(:value) %>
+		       <div class="tooltip"><%= image_tag("exclamation.png") %>
+		        	<span class="tip subtask_error_tip"><%= data[0].errors.on(:value)%></span>
+		       </div>
+       <% end %>
+		<% end %>
+    </p>

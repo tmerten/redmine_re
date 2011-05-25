@@ -93,4 +93,30 @@ JAVASCRIPT
     end
     return html_code
   end
+  
+  def add_bb_configuration_link(artifact_type)
+    if User.current.allowed_to?(:administrate_requirements, @project)
+      link_to(  t(:re_bb_add), 
+                :controller => :re_building_block, 
+                :action => :edit, 
+                :id => "", 
+                :project_id => @project.id, 
+                :artifact_type => artifact_type)
+    else
+      ""
+    end
+  end
+  
+  def add_bb_section(artifact)
+    if User.current.allowed_to?(:administrate_requirements, @project)
+      bb_hash = ReBuildingBlock.find_all_bbs_and_data(artifact.re_artifact_properties)
+      render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash}
+    else
+      ""
+    end
+  end
+  
+  
+  
+  
 end
