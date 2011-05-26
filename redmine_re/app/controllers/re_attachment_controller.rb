@@ -20,6 +20,11 @@ class ReAttachmentController < RedmineReController
         @parent = ReArtifactProperties.find(params[:parent_artifact_id])
         @re_attachment.set_parent(@parent, 1)
       end
+      
+      if save_ok
+        # Saving of user defined Fields (Building Blocks)
+        ReBuildingBlock.save_data(@re_attachment.re_artifact_properties.id, params[:re_bb])
+      end
 			
       redirect_to :action => 'edit', :id => @re_attachment.id and return if save_ok
     end
