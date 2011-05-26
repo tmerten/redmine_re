@@ -1,3 +1,5 @@
+<% @re_task = @artifact %>
+
 <div id='detail_view' class='detail_view'>
   <%= render 're_artifact_properties/action_menu', {:artifact => @re_task} %>
 
@@ -54,7 +56,9 @@
         </tr>
       </thead>
       <tbody id="subtasks">
-        <%= render :partial => 're_subtask', :collection => @subtasks %>
+      <% for subtask in @subtasks %>
+        <%= render( :partial => 're_subtask', :locals => { :re_subtask => subtask }) %>
+      <% end %>
       </tbody>
     </table>
     </fieldset>
@@ -67,7 +71,7 @@
 
     <p>
       <%= submit_tag l(:re_save), :accesskey => "s" %>
-      <%= link_to(t(:re_cancel), :project_id => @project.id) %>
+      &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
     </p>
 <% end %>
 
@@ -161,20 +165,20 @@
           // # Refresh the id values for the new subtask attributes fields
 
           if(is_new_subtask) {
-              position_hidden_element.id    = "re_task_subtask_attributes_" + id + "_position";
-              position_hidden_element.name  = "re_task[subtask_attributes]["+ id + "][position]";
+              position_hidden_element.id    = "subtask_attributes_" + id + "_position";
+              position_hidden_element.name  = "subtask_attributes["+ id + "][position]";
 
               sub_type      = tr_subtask_drag.down('select');// new init because above innerHTML was changend (sub_type.ancestors()[0].innerHTML...)
-              sub_type.id   = "re_task_subtask_attributes_" + id + "_sub_type";
-              sub_type.name = "re_task[subtask_attributes]["+ id + "][sub_type]";
+              sub_type.id   = "subtask_attributes_" + id + "_sub_type";
+              sub_type.name = "subtask_attributes["+ id + "][sub_type]";
 
               name          = tr_subtask_drag.down('textarea');
-              name.id       = "re_task_subtask_attributes_" + id + "_name";
-              name.name     = "re_task[subtask_attributes]["+ id + "][name]";
+              name.id       = "subtask_attributes_" + id + "_name";
+              name.name     = "subtask_attributes["+ id + "][name]";
 
               solution      = tr_subtask_drag.down('textarea', 1);
-              solution.id   = "re_task_subtask_attributes_" + id + "_solution";
-              solution.name = "re_task[subtask_attributes]["+ id + "][solution]";
+              solution.id   = "subtask_attributes_" + id + "_solution";
+              solution.name = "subtask_attributes["+ id + "][solution]";
           }
 
           // # Replace the positions values from the delete and insert links

@@ -1,5 +1,11 @@
 <div id='treebar' class='treebar'>
+<a href="#" id="hide_treebar" class="contextual" title="<%= t(:re_shows_after_reload) %>"><%= t(:re_hide) %></a>
     <%= render :partial => 'requirements/filter' %>
     <%= render :partial => 'requirements/tree' %>
 </div>
-<div id="context-menu" style="display:none;"></div>
+<% javascript_tag do -%>
+jQuery("#hide_treebar").click(function () {
+  jQuery("#treebar").hide();
+  jQuery(".detail_view").css('margin-left', '10px');
+});
+<% end -%>

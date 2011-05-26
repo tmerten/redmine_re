@@ -2,6 +2,10 @@ class ReArtifactRelationshipController < RedmineReController
   unloadable
   menu_item :re
   
+  TRUNCATE_NAME_IN_VISUALIZATION_AFTER_CHARS = 18
+  TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS = 150
+  TRUNCATE_OMISSION = "..."
+  
   include ActionView::Helpers::JavaScriptHelper
 
   def delete
@@ -76,76 +80,123 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
   def build_json_for_netmap(artifacts, relation_search_string = nil)
-    @json_for_netmap = '[
-      {
-        "id": "node0",
-        "name": "",
-        "data": {
-          "$type": "none"
-        },
-        "adjacencies": ['
-    @json_for_netmap += add_artifacts_as_children_of_root(artifacts)
-    for artifact in artifacts do
-      if relation_search_string
-        @outgoing_relationships = ReArtifactRelationship.find(:all,  :order => "relation_type", :conditions => [ relation_search_string, artifact.id])
-      else
-        @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.id)
-      end
-      @showable_relations = []
-      for outgoing_relation in @outgoing_relationships do
-        @showable_relations << outgoing_relation if artifacts.include?(ReArtifactProperties.find_by_id(outgoing_relation.sink_id))  
-      end
-      @json_for_netmap += add_artifact(artifact, @showable_relations)
-    end
-    # remove last comma
-    @json_for_netmap = remove_last_comma_and_close(@json_for_netmap, ']')
-  end
+    json = []
 
-  def add_artifacts_as_children_of_root(artifacts)
-    @json_artifacts_as_children_of_root = ""
-    for artifact in artifacts do
-      @json_artifacts_as_children_of_root += '{ "nodeTo": "' + artifact.artifact_type.to_s + artifact.artifact_id.to_s + '", "data": {"$type": "none"} },'
+    rootnode = {}
+    rootnode['id'] = "node0"
+    rootnode['name'] = "Project"
+    
+    root_node_data = {}
+    root_node_data['$type'] = "none"
+    rootnode['data'] = root_node_data
+
+    if @show_tree
+      re_artifact_properties = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+      
+      children= gather_children(re_artifact_properties)
+      rootnode['children'] = children
+      
+      json = rootnode
+    else
+    
+      adjacencies = []
+      for artifact in artifacts do
+        adjacent_node = {}
+        adjacent_node['nodeTo'] = "node_" + artifact.id.to_s
+        edge_data = {}
+        edge_data['$type'] = "none"
+        adjacent_node['data'] = edge_data
+        adjacencies << adjacent_node      
+      end
+      
+      rootnode['adjacencies'] = adjacencies
+      json << rootnode
+  
+      for artifact in artifacts do
+        if relation_search_string
+          @outgoing_relationships = ReArtifactRelationship.find(:all,  :order => "relation_type", :conditions => [ relation_search_string, artifact.id])
+        else
+          @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.id)
+        end
+        @showable_relations = []
+        for outgoing_relation in @outgoing_relationships do
+          @showable_relations << outgoing_relation if artifacts.include?(ReArtifactProperties.find_by_id(outgoing_relation.sink_id))  
+        end
+        json << add_artifact(artifact, @showable_relations)
+      end
+      
+    end #if show_tree
+   
+    json.to_json
+  end
+  
+  def gather_children(artifact)
+    children = []
+    for child in artifact.children
+      next unless (@artifact_choice.include? child.artifact_type.to_s)
+
+      if @chosen_relations_or_string
+        @outgoing_relationships = ReArtifactRelationship.find(:all,  :order => "relation_type", :conditions => [  @chosen_relations_or_string, child.id])
+      else
+        @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(child.id)
+      end
+      json_artifact = add_artifact(child, @outgoing_relationships)
+      json_artifact['children'] = gather_children(child)
+      children << json_artifact
     end
-    @json_artifacts_as_children_of_root = remove_last_comma_and_close(@json_artifacts_as_children_of_root, ']},')
+    children
   end
 
   def add_artifact(artifact, outgoing_relationships)
-  	type = artifact.artifact_type
-    @json_artifact = '{ "id": "' + escape_javascript(type.to_s) + escape_javascript(artifact.artifact_id.to_s) + '",
-                        "name": "' + escape_javascript(artifact.name) + '",
-                        "data": { "$color": "' + ReArtifactColors.get_html_artifact_color_code(@re_artifact_order.index(type)) + '",
-                                  "$height": 90},
-                        "adjacencies": [ '
-    for relation in outgoing_relationships do
-      @sink = ReArtifactProperties.find_by_id(relation.sink_id)
-      @json_artifact += '{ "nodeTo": "' + escape_javascript(@sink.artifact_type.to_s) + escape_javascript(@sink.artifact_id.to_s) + '",
-                           "data": {
-                                     "$color": "' + ReArtifactColors.get_html_relation_color_code(relation.relation_type) + '",
-                                     "$lineWidth": 2'
-			@json_artifact += ', "$type": "arrow",' if relation.directed?                                     
-			@json_artifact += '		}
-                         },'
-    end
-    # "$type": "arrow"
-    # "$type": "line"
-    @json_artifact = remove_last_comma_and_close(@json_artifact, ']},')
-  end
+    type = artifact.artifact_type
 
-  def remove_last_comma_and_close(json_string, closing_string)
-    # This method removes the last character of a given string and adds another string at the end
-    # Used to remove the last comma and to close the current json-structure
-    json_string = json_string[0, json_string.length - 1] + closing_string
+    node = {}
+    node['id'] = "node_" + artifact.id.to_s
+    node['name'] = truncate(artifact.name, :length => TRUNCATE_NAME_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+    
+    node_data = {}
+    node_data['full_name'] = artifact.name
+    node_data['description'] = truncate(artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+    node_data['priority'] = artifact.priority.to_s
+    node_data['created_at'] = artifact.created_at.to_s(:short)
+    node_data['author'] = artifact.author.to_s
+    node_data['updated_at'] = artifact.updated_at.to_s(:short)
+    node_data['user'] = artifact.user.to_s
+    node_data['responsibles'] = artifact.responsibles
+    node_data['$color'] = ReArtifactColors.get_html_artifact_color_code(@re_artifact_order.index(type))
+    node_data['$height'] = 90
+    node_data['$angularWidth'] = 13.00
+    
+    node['data'] = node_data
+    
+    adjacencies= []
+    for relation in outgoing_relationships do
+      sink = ReArtifactProperties.find_by_id(relation.sink_id)
+      adjacent_node = {}
+      adjacent_node['nodeTo'] = "node_" + sink.id.to_s
+      #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
+      edge_data = {}
+      edge_data['$color'] = ReArtifactColors.get_html_relation_color_code(relation.relation_type)
+      edge_data['$lineWidth'] = 2
+      edge_data['$type'] = "arrow" if relation.directed?
+      edge_data['$direction'] = [ "node_" + sink.id.to_s, "node_" + artifact.id.to_s ] if relation.directed?
+      edge_data['$type'] = "hyperline" unless relation.directed?
+      adjacent_node['data'] = edge_data
+      adjacencies << adjacent_node
+    end
+    node['adjacencies'] = adjacencies
+
+    node
   end
 
   def build_json_according_to_user_choice
-    @size = '600px' || params[:visualization_size]
-    
-    
     # This method build a new json string in variable @json_netmap which is returned
     # Meanwhile it computes queries for the search for the chosen artifacts and relations.
     # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
     @artifact_choice = params[:artifact_clicked]
     @relation_choice = params[:relation_clicked]
+    @show_tree = params[:show_tree] == "yes"
+    
     # String for condition to find the chosen artifacts
     @chosen_artifacts_or_string = "project_id = ? and (artifact_type = '"
     @chosen_relations_or_string = "source_id = ? and (relation_type = "
@@ -161,7 +212,51 @@ class ReArtifactRelationshipController < RedmineReController
     # remove the last ' or relation_type = ' and close brackets
     @chosen_relations_or_string = @chosen_relations_or_string[0, @chosen_relations_or_string.length - 19] + ')'
     @artifacts = ReArtifactProperties.find(:all, :order => "artifact_type, name", :conditions => [ @chosen_artifacts_or_string , params[:project_id]])
-    @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string) unless @artifacts.empty?
+    #@json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string) unless @artifacts.empty?
+    @json_netmap = <<JSON
+    {
+    "name": "ROOT",
+    "id": "root",
+    "data": {  
+      "$alpha": "0.3"  
+    },
+    "adjacencies": [
+      "node6"          
+    ],    
+    "children": [
+        {
+            "name": "NODE1",
+            "id": "node_1" 
+        },
+        {
+            "name": "NODE2",
+            "id": "node_2",
+            "children": [
+                {
+                    "name": "NODE3",
+                    "id": "node_3" 
+                } 
+            ] 
+        },
+        {
+            "name": "NODE4",
+            "id": "node_4",
+            "children": [
+                {
+                    "name": "NODE5",
+                    "id": "node_5" 
+                },
+                {
+                    "name": "NODE6",
+                    "id": "node_6" 
+                }                 
+            ] 
+        }         
+      ]
+    }
+JSON
+    @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string)
+    
     render :json => @json_netmap
   end
 end

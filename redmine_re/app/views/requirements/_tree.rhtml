@@ -6,14 +6,28 @@
   //<![CDATA[
 
   jQuery("#tree")
+    /*.resizable({ handles: 'e' })*/
     .bind("close_node.jstree", function (event, data) {
       jQuery.ajax({
         "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') ,
       });        
     })
     .bind("open_node.jstree", function (event, data) {
+      var node = data.args[0];
+      var node_postition = node.position();
+      var node_width = node.outerWidth();
+      /* TODO: Resize Trees div, there is also a post open/close hook!! */
+           
+      var width = this.getWidth();
+      
+      if (node_position + node_width > width) {
+        alert('its bigger: ' + node_position + node_width);
+      }
+      
+      var treebar = jQuery(".treebar");
+      
       jQuery.ajax({
-        "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') + "?open=true" ,
+        "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
       });        
     })
 		.bind("move_node.jstree", function (e, data) {
@@ -153,11 +167,49 @@
         "select_limit" : 1,
         "selected_parent_close" : "select_parent"
       },
-      plugins : [ "themes", "json_data", "dnd", "types" , "ui" ]
+      "contextmenu" : {
+        "select_node" : true,
+        
+        "items" : {
+          "create" : false,
+          "rename" : false,
+          "remove" : false,
+          "ccp" : false,
+          "edit" : {
+            "label" : "Edit",
+             "icon" : "<%= image_path("edit.png") %>"
+          },
+          "new" : {
+            // The item label
+            "label" : "Create New",
+            "separator_before" : false,
+            "separator_after"	: true,
+            "icon" : "<%= image_path("add.png") %>",
+            "submenu" : {
+              "re_goal" : {
+                "label" : "Goal",
+                "action" : function (node) {
+                  var id = node[0].id.gsub('node_','');
+                  var link = "<%= url_for(:controller => 're_goal', :action => 'new', :project_id => @project.id) %>"
+                  window.location.href = link + '?parent_artifact_id=' + id
+                },
+                "icon" : "<%= image_path("icons/world.png", :plugin => "redmine_re") %>"
+              },
+              "re_task" : {
+                "label" : "Task",
+                "action" : function (obj) {  },
+                "_disabled" : true,		// clicking the item won't do a thing
+                "_class" : "class",	// class is applied to the item LI node
+                "icon" : false
+              }
+            }
+          }
+        }
+      },
+      plugins : [ "themes", "json_data", "dnd", "types" , "ui", "contextmenu" ]
     });
     
     jQuery("#tree a").live("dblclick", function(e) {
-        var link = jQuery(this);
         var parent = jQuery(this).parent();
         jQuery.blockUI({
             "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + parent.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"

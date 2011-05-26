@@ -2,33 +2,31 @@ class ReGoalController < RedmineReController
   unloadable
   menu_item :re
 
-  def new
-    # redirects to edit to be more dry
-    redirect_to :action => 'edit', :project_id => params[:project_id]
-  end
-
-  def edit
-    @re_goal = ReGoal.find_by_id(params[:id], :include => :re_artifact_properties) || ReGoal.new
-    @artifact = @re_goal.re_artifact_properties
+  # The new and edit functions will be called via the RedmineReController.
+  # Both methods are pretty much equal for every artifact type (goal, scenario
+  # etc. ).
+  #
+  # If your artifact type needs special treatment uncommenct the following
+  # hook method(s).
+  # You find an example of how to use these hooks in the ReTaskController
   
-    if request.post?
-      @re_goal.attributes = params[:re_goal]
-      add_hidden_re_artifact_properties_attributes @re_goal
+  #def new_hook(params)
+  #end
 
-      flash[:notice] = t(:re_goal_saved) if save_ok = @re_goal.save
-      
-      if save_ok && ! params[:parent_artifact_id].empty?
-        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-        @re_goal.set_parent(@parent, 1)
-      end
-      
-      if save_ok
-        # Saving of user defined Fields (Building Blocks)
-        ReBuildingBlock.save_data(@re_goal.re_artifact_properties.id, params[:re_bb])
-      end
+  #def edit_hook_after_artifact_initialized(params)
+  #end
+  
+  #def edit_hook_validate_before_save(params, artifact_valid)
+    # must return true, if the validation passed or false if invalid 
+    # you should also attach your errors to the @artifact variable
 
-      redirect_to :action => 'edit', :id => @re_goal.id and return if save_ok
-    end
-  end
+  #  return true
+  #end
+  
+  #def edit_hook_valid_artifact_after_save(params)
+  #end
+  
+  #def edit_hook_invalid_artifact_cleanup(params)
+  #end
 
 end

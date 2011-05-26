@@ -1,11 +1,6 @@
 class ReAttachmentController < RedmineReController
   unloadable
 
-  def new
-    # redirects to edit to be more dry
-    redirect_to :action => 'edit', :project_id => params[:project_id]
-  end
-
   def edit
     @re_attachment = ReAttachment.find_by_id(params[:id], :include => :re_artifact_properties) || ReAttachment.new
     @artifact = @re_attachment.re_artifact_properties

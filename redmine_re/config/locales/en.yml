@@ -24,7 +24,8 @@ en:
   re_first_use: 'This is the first time you are using the RE Plugin'
   re_project_was_setup: 'I just set up your database'
   re_continue_here: 'For more information continue to here'
-  re_configure: 'Or (optionally) configure the plugin'
+  re_link_to_configure: 'Or configure the Plugin'
+  re_configure: 'Redmine RE Plugin Configuration'
   re_index: 'Redmine RE Plugin'
   re_are_you_sure: 'Are you sure?'
   re_was_updated: 'was updated'
@@ -35,6 +36,12 @@ en:
   re_remove: 'remove'
   re_to: 'to'
   re_from: 'from'
+  re_hide: 'hide'
+  re_shows_after_reload: 'will be shown after a page reload'
+  
+  # Configuration
+  re_administrate: 'Administration'
+  re_configure_plugin: 'Configure Plugin'
 
   # re_artifact_properties
   re_artifact_name: 'Name'

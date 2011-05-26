@@ -11,8 +11,6 @@ class RequirementsController < RedmineReController
   end
 
   def setup
-    @project = Project.find(params[:project_id])
-    
     @project_artifact = nil
     @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
     if @project_artifact.nil?
@@ -27,6 +25,22 @@ class RequirementsController < RedmineReController
       @project_artifact.name = @project.name
       @project_artifact.save
     end
+  end
+  
+  def configure
+    @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
+    @re_artifacts_configs = ReArtifactsConfig.find(:all)
+    @config = {}
+    settings = {}
+    settings['relation_management_pane'] = 'true'
+    @config['settings'] = settings
+    
+    for artifact_config in @re_artifacts_configs
+      artifact_type = artifact_config.artifact_type
+      config[artifact_type] = artifact_config
+    end
+    
+    
   end
 
   def delegate_tree_drop

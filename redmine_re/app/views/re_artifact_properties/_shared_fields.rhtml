@@ -4,9 +4,9 @@
   <fieldset><legend><%= l(:re_common_attributes) %></legend>
 
     <div class="splitcontentleft" >
-      <%= hidden_field_tag :parent_artifact_id, '', { :id => 'parent_artifact_id' } %>
+      <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, { :id => 'parent_artifact_id' } %>
       <p>
-        <%= label_tag :parent_autocomplete, l(:re_set_parent), { :class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', '', {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
+        <%= label_tag :parent_autocomplete, l(:re_set_parent), { :class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @parent.nil? ? '' : @parent.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
       </p>
       <div id="parent_artifact_candidates" class="autocomplete"></div>
       <% javascript_tag do %>

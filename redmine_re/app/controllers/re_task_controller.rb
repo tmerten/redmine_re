@@ -21,56 +21,42 @@ class ReTaskController < RedmineReController
        format.js
      end
   end
-
-  def new
-    redirect_to :action => 'edit', :project_id => params[:project_id]
-  end
-
-  def edit
-    @re_task = ReTask.find_by_id(params[:id], :include => :re_artifact_properties) || ReTask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => @project.id))
-    @artifact = @re_task.re_artifact_properties
-    
+  
+  def new_hook params
     @subtasks = []
-    @re_task.children.each {|c| @subtasks << c.artifact if c.artifact_type == "ReSubtask"}
+  end
+  
+  def edit_hook_after_artifact_initialized params
+    # inifializes subtasks from database or creates an empty subtask array for
+    # new task instances
 
-    if request.post?
-      # check validation of task and subtask attributes
-
-      valid_task = true
-      valid_subtask_attributes = true
-      subtask_attributes = params[:re_task].delete(:subtask_attributes)
-
-      ## Task validation
-      @re_task.attributes = params[:re_task]
-      valid_task = @re_task.valid?
-
-      ## subtask_attributes validation
-      valid_subtask_attributes = @re_task.subtasks_valid?(subtask_attributes)
-
-      # Saving everything
-      if valid_task && valid_subtask_attributes
-        if save_ok = @re_task.save
-          # Save all subtasks
-          @re_task.subtask_attributes = subtask_attributes
-
-          flash[:notice] = t(:re_task_and_subtasks_saved)
-
-          if save_ok && ! params[:parent_artifact_id].empty?
-            @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-            @re_task.set_parent(@parent, 1)
-          end          
-          
-          redirect_to :action => 'edit', :id => @re_task.id and return
-        end
-      else
-        # Get all Subtasks sorted by their position
-        @subtasks = @re_task.get_subtasks_sorted_by_position(subtask_attributes)
-
-        # Add error to task
-        # TODO: Distinguish type of error and translate
-        @re_task.errors.add_to_base(t(:re_subtasks_not_valid)) unless valid_subtask_attributes
-      end
+    @subtasks = []
+    @artifact.children.each {|c| @subtasks << c.artifact if c.artifact_type == "ReSubtask"}
+  end
+  
+  def edit_hook_validate_before_save(params, artifact_valid)
+    # validates subtasks and recreates a subtask array from what has
+    # been submitted in the last post
+    
+    subtask_attributes = params[:subtask_attributes]
+    #valid_subtask_attributes = @artifact.subtasks_valid?(subtask_attributes)
+    
+    @subtasks = ReTask.sort_subtasks_attributes_by_position(subtask_attributes, @project.id)
+    valid_subtasks = true
+    for st in @subtasks
+      valid_subtasks = false unless st.valid?   
     end
+    @artifact.errors.add_to_base(t(:re_subtasks_not_valid)) unless valid_subtasks
+    
+    return valid_subtasks
+  end
+  
+  def edit_hook_valid_artifact_after_save params
+    # saves the subtasks and rewrites flash message to include the subtasks
+    
+    subtask_attributes = params[:subtask_attributes]
+    @artifact.subtask_attributes = subtask_attributes
+    flash[:notice] = t(:re_task_and_subtasks_saved)
   end
 
   def show_versions #todo das view funktioniert

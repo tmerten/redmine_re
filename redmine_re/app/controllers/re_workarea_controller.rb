@@ -1,29 +1,31 @@
 class ReWorkareaController < RedmineReController
   unloadable
+  
+  # The new and edit functions will be called via the RedmineReController.
+  # Both methods are pretty much equal for every artifact type (goal, scenario
+  # etc. ).
+  #
+  # If your artifact type needs special treatment uncommenct the following
+  # hook method(s).
+  # You find an example of how to use these hooks in the ReTaskController
+  
+  #def new_hook(params)
+  #end
 
-  def new
-    # redirects to edit to be more dry
+  #def edit_hook_after_artifact_initialized(params)
+  #end
+  
+  #def edit_hook_validate_before_save(params, artifact_valid)
+    # must return true, if the validation passed or false if invalid 
+    # you should also attach your errors to the @artifact variable
 
-    redirect_to :action => 'edit', :project_id => params[:project_id]
-  end
+  #  return true
+  #end
+  
+  #def edit_hook_valid_artifact_after_save(params)
+  #end
+  
+  #def edit_hook_invalid_artifact_cleanup(params)
+  #end
 
-  def edit
-    @re_workarea = ReWorkarea.find_by_id(params[:id], :include => :re_artifact_properties) || ReWorkarea.new
-    @artifact = @re_workarea.re_artifact_properties
-
-    
-    if request.post?
-      @re_workarea.attributes = params[:re_workarea]
-      add_hidden_re_artifact_properties_attributes @re_workarea
-
-      flash[:notice] = t(:re_workarea_saved) if save_ok = @re_workarea.save
-
-      if save_ok && ! params[:parent_artifact_id].empty?
-        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-        @re_workarea.set_parent(@parent, 1)
-      end
-      
-      redirect_to :action => 'edit', :id => @re_workarea.id and return if save_ok
-    end
-  end
 end

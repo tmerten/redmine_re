@@ -1,4 +1,7 @@
+<% @re_goal = @artifact %>
+
 <div id='detail_view' class='detail_view'>
+
   <%= render 're_artifact_properties/action_menu', {:artifact => @re_goal} %>
   
   <h2><%= t(:re_artifact) + ' #' + @re_goal.artifact_id.to_s + ' - ' + t(:re_goal) unless @re_goal.nil? %></h2>
@@ -7,11 +10,11 @@
   
   <% form_for :re_goal, :update => :detail_view, :url => {:action => "edit"} do |f| %>
   
-      <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_goal.re_artifact_properties} %>
+      <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @artifact_properties} %>
   	  <%= add_bb_section(@re_goal)%>
       <p>
         <%= submit_tag l(:re_save) %>
-        <%= link_to(t(:re_cancel), :project_id => @project.id) %>
+        &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
       </p>
 	  
 	  

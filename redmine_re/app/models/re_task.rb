@@ -41,45 +41,30 @@ class ReTask < ActiveRecord::Base
     end
   end
 
-  #  returns an array of subtasks sorted by their positions
-  def get_subtasks_sorted_by_position( subtask_attributes )
-      subtasks = Array.new(subtask_attributes.size - 1)
+  def self.sort_subtasks_attributes_by_position(subtask_attributes, project_id)
+    #  returns an array of subtasks sorted by their positions
+    
+    subtasks = Array.new(subtask_attributes.size - 1)
       subtask_attributes.each do |id, attributes|
-        subtask = get_subtask_instance_from_attributes(id, attributes)
+        subtask = self.get_subtask_instance_from_attributes(id, attributes, project_id)
         subtask.valid?
         subtasks[attributes[:position].to_i - 1] =  subtask
       end
       return subtasks
   end
 
-  def subtask_valid?(id, attributes)
-    subtask = get_subtask_instance_from_attributes(id, attributes)
-    is_valid = subtask.valid?
-  end
-
-  def subtasks_valid?(subtask_attributes)
-    return true if subtask_attributes.blank?
-    valid_subtask_attributes = true
-
-    subtask_attributes.each do |id, attributes|
-      valid = subtask_valid?(id, attributes)
-
-      if(valid == false)
-        valid_subtask_attributes = false
-      end
-    end
-
-    return valid_subtask_attributes
-  end
-
-  def get_subtask_instance_from_attributes(id, attributes)
+  def self.get_subtask_instance_from_attributes(id, attributes, project_id)
     is_new = id.to_s.start_with?("new") # Every new Subtask has id = new_394834384848
-
     # create a subtask object with current attributes
     if is_new
-      subtask =  ReSubtask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => self.project_id || params[:project_id],
-                                                                                   :created_by => User.current.id,
-                                                                                   :updated_by => User.current.id))
+      subtask =  ReSubtask.new(
+        :re_artifact_properties => 
+         ReArtifactProperties.new(
+           :project_id => project_id,
+           :created_by => User.current.id,
+           :updated_by => User.current.id
+         )
+    )
 
     else
       subtask = ReSubtask.find(id)

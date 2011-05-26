@@ -1,3 +1,5 @@
+<% @re_attachment = @artifact %>
+
 <div id='detail_view' class='detail_view'>
   <%= render 're_artifact_properties/action_menu', {:artifact => @re_attachment} %>
 
@@ -16,7 +18,7 @@
     <% end %>
     <p>
       <%= submit_tag l(:re_save) %>
-      <%= link_to(t(:re_cancel), :project_id => @project.id) %>
+      &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
     </p>
 
 <% end %>

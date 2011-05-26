@@ -1,28 +1,31 @@
 class ReVisionController < RedmineReController
   unloadable
 
-  def new
-    # redirects to edit to be more dry
+  # The new and edit functions will be called via the RedmineReController.
+  # Both methods are pretty much equal for every artifact type (goal, scenario
+  # etc. ).
+  #
+  # If your artifact type needs special treatment uncommenct the following
+  # hook method(s).
+  # You find an example of how to use these hooks in the ReTaskController
+  
+  #def new_hook(params)
+  #end
 
-    redirect_to :action => 'edit', :project_id => params[:project_id]
-  end
+  #def edit_hook_after_artifact_initialized(params)
+  #end
+  
+  #def edit_hook_validate_before_save(params, artifact_valid)
+    # must return true, if the validation passed or false if invalid 
+    # you should also attach your errors to the @artifact variable
 
-  def edit
-    @re_vision = ReVision.find_by_id(params[:id], :include => :re_artifact_properties) || ReVision.new
-    @artifact = @re_vision.re_artifact_properties
-    
-    if request.post?
-      @re_vision.attributes = params[:re_vision]
-      add_hidden_re_artifact_properties_attributes @re_vision
-
-			flash[:notice] = t(:re_vision_saved, {:name => @re_vision.name}) if save_ok = @re_vision.save
-
-      if save_ok && ! params[:parent_artifact_id].empty?
-        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-        @re_vision.set_parent(@parent, 1)
-      end
-			
-      redirect_to :action => 'edit', :id => @re_vision.id and return if save_ok
-    end
-  end
+  #  return true
+  #end
+  
+  #def edit_hook_valid_artifact_after_save(params)
+  #end
+  
+  #def edit_hook_invalid_artifact_cleanup(params)
+  #end 
+  
 end

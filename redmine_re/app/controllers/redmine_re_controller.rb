@@ -22,7 +22,7 @@ class RedmineReController < ApplicationController
 
   # uses redmine_re in combination with redmines base layout for the header unless it is an ajax-request
   layout proc{ |c| c.request.xhr? ? false : "redmine_re" } 
-  
+
   def find_project
     # find the current project either by project name ( new action,..)
     if( params[:project_id] )
@@ -56,7 +56,84 @@ class RedmineReController < ApplicationController
       end
     end
   end
+  
+  def new
+    artifact_type = self.controller_name
+    logger.debug "############ CALLED NEW FOR ARTIFACT OF TYPE: " + artifact_type
+    
+    @artifact = artifact_type.camelcase.constantize.new
+    @artifact_properties = @artifact.re_artifact_properties
+    if params[:parent_artifact_id]
+      @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+    end
+    
+    new_hook params
+    
+    render :edit
+  end
+  
+  def edit
+    artifact_type = self.controller_name
+    logger.debug "############ CALLED EDIT FOR ARTIFACT OF TYPE: " + artifact_type
 
+    @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
+    @artifact_properties = @artifact.re_artifact_properties
+    @parent = nil
+    
+    unless params[:parent_artifact_id].blank?
+      @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+    end
+    
+    edit_hook_after_artifact_initialized params
+    
+    if request.post?
+      @artifact.attributes = params[artifact_type]
+      # attributes that cannot be set by the user
+      author = find_current_user
+      @artifact.project_id = @project.id
+      @artifact.updated_at = Time.now
+      @artifact.updated_by = author.id
+      @artifact.created_by = author.id  if @artifact.new_record?
+  
+      valid = @artifact.valid?
+      logger.debug("#############: task valid?" + valid.to_s)
+
+      valid = edit_hook_validate_before_save(params, valid) 
+
+      logger.debug("#############: subtasks valid?" + valid.to_s)
+
+      if valid
+        @artifact.save
+        flash[:notice] = t(artifact_type + '_saved') if flash[:notice].blank?
+        edit_hook_valid_artifact_after_save params
+        @artifact.set_parent(@parent, 1) unless @parent.nil?
+      else
+        edit_hook_invalid_artifact_cleanup params
+      end
+    end # request.post? end
+  end
+  
+  def new_hook(params)
+    logger.debug("#############: new_hook not called")
+  end
+
+  def edit_hook_after_artifact_initialized(params)
+    logger.debug("#############: edit_validate_before_save_hook not called")
+  end
+  
+  def edit_hook_validate_before_save(params, artifact_valid)
+    logger.debug("#############: edit_validate_before_save_hook not called")
+    return true
+  end
+  
+  def edit_hook_valid_artifact_after_save(params)
+    logger.debug("#############: edit_valid_artifact_after_save_hook not called")
+  end
+  
+  def edit_hook_invalid_artifact_cleanup(params)
+    logger.debug("#############: edit_invalid_artifact_cleanup_hook not called")
+  end
+  
   def render_json_tree(re_artifact_properties, depth)
     # creates a tree of all children of re_artifact_properties
     # as json data
@@ -159,17 +236,6 @@ class RedmineReController < ApplicationController
     li << "<b>" + artifact.name + "</b>"
     li << '</li>'
     li    
-  end
-
-  def add_hidden_re_artifact_properties_attributes re_artifact
-    # this adds user-unmodifiable attributes to the re_artifact_properties
-    # the re_artifact_properties is a superclass of all other artifacts (goals, tasks, etc)
-    # this method should be called after initializing or loading any artifact object
-    author = find_current_user
-    re_artifact.project_id = @project.id
-    re_artifact.updated_at = Time.now
-    re_artifact.updated_by = author.id
-    re_artifact.created_by = author.id  if re_artifact.new_record?
   end
 
   def create_tree(re_artifact_properties, depth = 0)
