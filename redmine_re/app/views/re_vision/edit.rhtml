@@ -8,7 +8,8 @@
   <% form_for :re_vision, :update => :detail_view, :url => {:action => "edit"} do |f| %>
     
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_vision.re_artifact_properties} %>
-    <p>
+    <%= add_bb_section(@re_vision)%>
+	<p>
       <%= submit_tag l(:re_save) %>
       &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
     </p>

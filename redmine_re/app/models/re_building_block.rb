@@ -22,8 +22,14 @@ class ReBuildingBlock < ActiveRecord::Base
   def self.find_all_bbs_and_data(artifact_properties)
     building_blocks = ReBuildingBlock.find_all_by_artifact_type(artifact_properties.artifact_type)
     bb_hash = {}
-    for bb in building_blocks do  
-      data_for_bb = ReBbDataText.find(:all, :conditions => {:re_bb_text_id => bb.id, :re_artifact_properties_id => artifact_properties.id})
+    for bb in building_blocks do 
+      # TODO: Insert all bb_data classes here when they come into existance.
+      data_for_bb = []
+      ['ReBbDataText'].each do |bb_class|
+        data_for_bb += bb_class.constantize.find(:all, :conditions => {:re_bb_text_id => bb.id, :re_artifact_properties_id => artifact_properties.id})
+      end
+      # Zu Demonstrationszwecken, um den Test fehlschlagen zu lassen:
+      # data_for_bb = bb.re_bb_data_texts
       bb_hash[bb] = data_for_bb      
     end
     bb_hash

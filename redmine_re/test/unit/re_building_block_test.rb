@@ -1,4 +1,5 @@
 require File.expand_path('../../test_helper', __FILE__)
+#require "#{RAILS_ROOT}/vendor/plugins/redmine_re/app/models/re_bb_data_text.rb" 
 
 class ReBuildingBlockTest < ActiveSupport::TestCase
 #  fixtures :re_building_blocks
@@ -6,16 +7,16 @@ class ReBuildingBlockTest < ActiveSupport::TestCase
  # fixtures :re_goals
 
   def setup
-    @simpel_bb = ReBuildingBlock.new(:name => 'Note', :artifact_type => 'ReGoal', :type => 'ReBbText')
-    @simpel_bb.save
+    @simple_bb = ReBuildingBlock.new(:name => 'Note', :artifact_type => 'ReGoal', :type => 'ReBbText')
+    @simple_bb.save
     @complex_bb_text = ReBuildingBlock.find_by_name('Solution Ideas')
   end
   
   def test_if_artifact_type_is_not_overrideable
-    type = @simpel_bb.artifact_type
-    @simpel_bb.artifact_type = 'ReTask'
-    @simpel_bb.save
-    assert_equal @simpel_bb.artifact_type, type
+    type = @simple_bb.artifact_type
+    @simple_bb.artifact_type = 'ReTask'
+    @simple_bb.save
+    assert_equal @simple_bb.artifact_type, type
   end  
 
   def test_if_right_bbs_are_delivered_for_artifact
@@ -26,6 +27,7 @@ class ReBuildingBlockTest < ActiveSupport::TestCase
     new_bb.save
     new_data = ReBbDataText.new(:value => 'New data value', :re_artifact_properties_id => prop.id, :re_bb_text_id => new_bb.id)
     new_data.save
+    assert new_bb.re_bb_data_texts.include? new_data
     params_new = ReBuildingBlock.find_all_bbs_and_data(prop)
     assert_equal params.keys.count + 1, params_new.keys.count
     assert !params.has_key?(new_bb)

@@ -259,6 +259,10 @@ en:
   re_bb_too_short: '%{bb_name} is too short. Should have at least %{min_length} characters.'
   re_bb_too_long: "%{bb_name} is too long. Shouldn't have more than %{max_length} characters."
   re_bb_data_required: 'Data is required here.'
+  re_bb_max_length_smaller_min_length: 'Value for minimal length is bigger than value for maximal length.'
+  re_bb_min_length_under_zero: "Value for minimal length mustn't be negativ."
+  re_bb_max_length_under_zero: "Value for maximal length mustn't be negativ."
+  re_bb_default_value_outside_min_max: 'Length of default value must fit minimal and maximal length.'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'

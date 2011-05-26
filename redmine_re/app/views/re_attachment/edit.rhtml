@@ -16,6 +16,8 @@
     <% else %>
       <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
     <% end %>
+	
+	<%= add_bb_section(@re_attachment)%>
     <p>
       <%= submit_tag l(:re_save) %>
       &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
