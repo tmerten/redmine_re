@@ -5,13 +5,13 @@ class CreateReArtifactsConfigs < ActiveRecord::Migration
       t.column :alias_name, :string
       t.column :color, :string
       t.column :icon, :string
-      t.column :show_children_in_tree, :bool
+      t.column :show_children_in_tree, :boolean
       t.column :allowed_children, :text
       t.column :hide_fields, :text
-      t.column :in_use, :bool
-      t.column :printable, :bool
+      t.column :in_use, :boolean
+      t.column :printable, :boolean
       t.column :position, :integer
-      t.column :overwriteable, :bool
+      t.column :overwriteable, :boolean
       t.column :user_id, :integer
     end
   end

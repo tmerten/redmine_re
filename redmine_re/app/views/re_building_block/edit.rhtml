@@ -4,7 +4,7 @@
 	<% options = '<option value="re_bb_text">' + t(:re_bb_text) + '</option>
 				  <option value="re_bb_link">' + t(:re_bb_link) + '</option>
 						<option value="re_bb_number">' + t(:re_bb_number) + '</option>
-						<option value="re_bb_value_selection">' + t(:re_bb_value_selection) + '</option>
+						<option value="re_bb_selection">' + t(:re_bb_selection) + '</option>
 						<option value="re_bb_data_upload">' + t(:re_bb_data_upload) + '</option>
 						<option value="re_bb_multiple_user_entries">' + t(:re_bb_multiple_user_entries) + '</option>
 						<option value="re_bb_artifact_selection">' + t(:re_bb_artifact_selection) + '</option>
@@ -15,5 +15,9 @@
 	</p>
 	<p>
 	<%= render "re_building_block/re_bb_text/config", :artifact_type => params[:artifact_type], :project_id => params[:project_id]  %>
+	</p>
+	<p>
+	<%= #render "re_building_block/re_bb_selection/config", :artifact_type => params[:artifact_type], :project_id => params[:project_id] 
+ %>
 	</p>
 </div>

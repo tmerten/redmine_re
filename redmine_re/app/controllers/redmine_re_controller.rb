@@ -107,6 +107,8 @@ class RedmineReController < ApplicationController
         flash[:notice] = t(artifact_type + '_saved') if flash[:notice].blank?
         edit_hook_valid_artifact_after_save params
         @artifact.set_parent(@parent, 1) unless @parent.nil?
+        # Saving of user defined Fields (Building Blocks)
+        ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
       else
         edit_hook_invalid_artifact_cleanup params
       end

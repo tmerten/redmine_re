@@ -232,7 +232,7 @@ en:
   re_bb_text: 'Text Building Block'
   re_bb_link: 'Link Building Block'
   re_bb_number: 'Number Building Block'
-  re_bb_value_selection: 'Value Selection Building Block'
+  re_bb_selection: 'Value Selection Building Block'
   re_bb_data_upload: 'Data Attachment Building Block'
   re_bb_multiple_user_entries: 'Poll Building Block'
   re_bb_artifact_selection: 'Artifact Selection Building Block'
@@ -263,6 +263,7 @@ en:
   re_bb_min_length_under_zero: "Value for minimal length mustn't be negativ."
   re_bb_max_length_under_zero: "Value for maximal length mustn't be negativ."
   re_bb_default_value_outside_min_max: 'Length of default value must fit minimal and maximal length.'
+  re_bb_options: 'Options for select (comma seperated)'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'
