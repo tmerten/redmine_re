@@ -1,0 +1,46 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+re_bb_option_selection_several_each_day_for_task_frequency:
+  id: <%= Fixtures.identify(:re_bb_option_selection_several_each_day_for_task_frequency) %>
+  value: Serveral times each day
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
+
+re_bb_option_selection_daily_for_task_frequency:
+  id: <%= Fixtures.identify(:re_bb_option_selection_daily_for_task_frequency) %>
+  value: Once a day
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
+  
+re_bb_option_selection_weekly_for_task_frequency:
+  id: <%= Fixtures.identify(:re_bb_option_selection_weekly_for_task_frequency) %>
+  value: Once a week
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
+  
+re_bb_option_selection_several_each_week_for_task_frequency:
+  id: <%= Fixtures.identify(:re_bb_option_selection_several_each_week_for_task_frequency) %>
+  value: Serveral times each week
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
+  
+re_bb_option_selection_monthly_for_task_frequency:
+  id: <%= Fixtures.identify(:re_bb_option_selection_monthly_for_task_frequency) %>
+  value: Once a month
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
+  
+re_bb_option_selection_unaudited_for_goal_usability:
+  id: <%= Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability) %>
+  value: Unaudited
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_goal_usability) %>
+
+re_bb_option_selection_in_audit_for_goal_usability:
+  id: <%= Fixtures.identify(:re_bb_option_selection_in_audit_for_goal_usability) %>
+  value: In audit
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_goal_usability) %>
+  
+re_bb_option_selection_corrections_needed_for_goal_usability:
+  id: <%= Fixtures.identify(:re_bb_option_selection_corrections_needed_for_goal_usability) %>
+  value: Corrections needed
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_goal_usability) %>
+  
+re_bb_option_selection_approved_for_goal_usability:
+  id: <%= Fixtures.identify(:re_bb_option_selection_approved_for_goal_usability) %>
+  value: Approved
+  re_bb_selection_id: <%= Fixtures.identify(:bb_selection_for_goal_usability) %>

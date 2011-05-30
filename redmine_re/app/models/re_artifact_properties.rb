@@ -35,6 +35,7 @@ class ReArtifactProperties < ActiveRecord::Base
     :source => "source"
 
   has_many :re_bb_data_texts
+  has_many :re_bb_data_selections
 
   belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
   

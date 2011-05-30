@@ -25,8 +25,9 @@ class ReBuildingBlock < ActiveRecord::Base
     for bb in building_blocks do 
       # TODO: Insert all bb_data classes here when they come into existance.
       data_for_bb = []
-      ['ReBbDataText'].each do |bb_class|
-        data_for_bb += bb_class.constantize.find(:all, :conditions => {:re_bb_text_id => bb.id, :re_artifact_properties_id => artifact_properties.id})
+      ['ReBbDataText', 'ReBbDataSelection'].each do |bb_class|
+        building_block_reference_column_name = (bb_class.sub('Data','').underscore + '_id').to_sym
+        data_for_bb += bb_class.constantize.find(:all, :conditions => {building_block_reference_column_name => bb.id, :re_artifact_properties_id => artifact_properties.id})
       end
       # Zu Demonstrationszwecken, um den Test fehlschlagen zu lassen:
       # data_for_bb = bb.re_bb_data_texts
@@ -37,7 +38,7 @@ class ReBuildingBlock < ActiveRecord::Base
   
   def self.save_data(artifact_properties_id, data_hash)
     data_hash.keys.each do |bb_id|
-      bb = ReBbText.find_by_id(bb_id)
+      bb = ReBuildingBlock.find_by_id(bb_id)
       bb.save_datum(data_hash[bb_id], artifact_properties_id) 
     end
   end

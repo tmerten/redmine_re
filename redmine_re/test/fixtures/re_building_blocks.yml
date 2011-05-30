@@ -52,4 +52,35 @@ bb_text_for_task_note:
   default_value: Take a note here.
   min_length: 5
   max_length: 2000
+  
+bb_selection_for_task_frequency:
+  id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
+  type: ReBbSelection
+  artifact_type: ReTask
+  name: Frequency
+  help: Please select how often the task will be performed.
+  mandatory: false
+  for_every_project: true
+  multiple_values: false
+  grouped: false
+  for_condensed_view: true
+  for_search: true
+  arrangable_by_users: true
+  position: 1
+  default_value: <%= Fixtures.identify(:re_bb_option_selection_daily_for_task_frequency) %>
 
+bb_selection_for_goal_usability_status:
+  id: <%= Fixtures.identify(:bb_selection_for_goal_usability_status) %>
+  type: ReBbSelection
+  artifact_type: ReGoal
+  name: Status
+  help: Please select one of the given status.
+  mandatory: true
+  for_every_project: false
+  multiple_values: false
+  grouped: false
+  for_condensed_view: false
+  for_search: false
+  arrangable_by_users: false
+  position: 1
+  default_value: <%= Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability) %>

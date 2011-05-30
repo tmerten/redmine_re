@@ -14,10 +14,10 @@
 	<%= select_tag :building_block, options %>
 	</p>
 	<p>
-	<%= render "re_building_block/re_bb_text/config", :artifact_type => params[:artifact_type], :project_id => params[:project_id]  %>
+	<%= #render "re_building_block/re_bb_text/config", :artifact_type => params[:artifact_type], :project_id => params[:project_id]  
+%>
 	</p>
 	<p>
-	<%= #render "re_building_block/re_bb_selection/config", :artifact_type => params[:artifact_type], :project_id => params[:project_id] 
- %>
+	<%= render "re_building_block/re_bb_selection/config", :artifact_type => params[:artifact_type], :project_id => params[:project_id] %>
 	</p>
 </div>
