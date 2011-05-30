@@ -42,6 +42,8 @@ en:
   # Configuration
   re_administrate: 'Administration'
   re_configure_plugin: 'Configure Plugin'
+  re_relation_management_pane: 'Show relation management pane'
+  re_visualization_size: 'Visualization size in Pixel'
 
   # re_artifact_properties
   re_artifact_name: 'Name'

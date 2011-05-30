@@ -1,0 +1,71 @@
+<div id='detail_view' class='detail_view'>
+
+<h1><%= t(:re_configure) %></h1>
+<br/>
+<% configured_artifact_types = ActiveSupport::JSON.decode(@settings['re_artifact_types']) unless @settings['re_artifact_types'].nil? %>
+
+<% form_for :config, :url => {:action => "configure", :project_id => @project.id}, :html => { :style => "margin:0;padding:0;display:inline" } do |f| %>
+<p>
+<h2>General Settings</h2>
+  <%= label_tag :relation_management_pane, l(:re_relation_management_pane), :class => 'large' %> <%= check_box_tag "settings[relation_management_pane]", @settings['relation_management_pane'] %><br/>
+  <%= label_tag :re_visualization_size, l(:re_visualization_size), :class => 'large' %> <%= text_field_tag 'settings[visualization_size]', @settings['visualization_size'] %>
+</p>
+
+<p>
+<h2>Artifact Configuration</h2>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th title="Use Drag and Drop to change the display order (e.g. in the side menu or the index page)">Display Order</th>
+      <th>Alias Name</th>
+      <th>Color</th>
+      <th>Icon</th>
+      <th>Show in tree</th>
+      <th>Use in project</th>
+    </tr>
+  </thead>
+  <tbody id="artifact_types_list">
+  <% configured_artifact_types.each_with_index do |artifact_type, i| %>
+    <tr id="<%=artifact_type + '_' + i.to_s %>">
+      <td class="dnd"><%= artifact_type.gsub(/^Re/, '').underscore.humanize %></td>
+      <td><%= text_field_tag artifact_type + '[alias_name]', '', :size => 20 %></td>
+      <td><%= text_field_tag artifact_type + '[color]', :size => 10 %></td>
+      <td><%= text_field_tag artifact_type + '[icon]', :size => 10 %></td>
+      <td><%= check_box_tag artifact_type + '[show_in_tree]' %></td>
+      <td><%= check_box_tag artifact_type + '[in_use]' %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</p>
+
+<p>
+<h2>Relationship Configuration</h2>
+
+TODO
+
+</p>
+
+  <%= hidden_field_tag 'settings[re_artifact_types]', @settings['re_artifact_types'], :size => 15 %><br/>
+  <%= submit_tag l(:re_save), :accesskey => "s" %>
+<% end %>
+
+<%= sortable_element "artifact_types_list",
+	:tag => 'tr',
+	:complete => visual_effect(:highlight, 'artifact_types_list'),
+	:onUpdate => "function(el) { elements_to_json(el); }" %>
+
+<% javascript_tag do %>
+  function elements_to_json(el) {
+  	var json = '[';
+		$$('#artifact_types_list tr').each(function(el){
+			var artifact_type = el.id.gsub(/_[0-9]*$/,'');
+			json += '"' + artifact_type + '",';
+		});
+		json = json.gsub(/.$/,'') + ']';
+  	$('settings_re_artifact_types').value = json;
+  }
+<% end %>
+
+</div>

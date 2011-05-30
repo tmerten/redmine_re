@@ -74,7 +74,7 @@ class RedmineReController < ApplicationController
   
   def edit
     artifact_type = self.controller_name
-    logger.debug "############ CALLED EDIT FOR ARTIFACT OF TYPE: " + artifact_type
+    logger.debug "############ Called edit for artifact of type: " + artifact_type
 
     @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
@@ -96,11 +96,7 @@ class RedmineReController < ApplicationController
       @artifact.created_by = author.id  if @artifact.new_record?
   
       valid = @artifact.valid?
-      logger.debug("#############: task valid?" + valid.to_s)
-
       valid = edit_hook_validate_before_save(params, valid) 
-
-      logger.debug("#############: subtasks valid?" + valid.to_s)
 
       if valid
         @artifact.save
