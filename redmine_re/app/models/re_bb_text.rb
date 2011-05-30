@@ -29,10 +29,8 @@ class ReBbText < ReBuildingBlock
   end 
   
   def min_max_values_must_be_possible
-    if min_length > max_length 
-      errors.add_to_base(l(:re_bb_max_length_smaller_min_length))
-      return false
-    end 
+    min_length = 0 if min_length.nil? 
+    max_length = 99999 if max_length.nil? 
     if min_length < 0
       errors.add(:value, l(:re_bb_min_length_under_zero))
       return false
@@ -40,11 +38,17 @@ class ReBbText < ReBuildingBlock
     if max_length < 0
       errors.add(:value, l(:re_bb_max_length_under_zero))
       return false
+    end
+    if min_length > max_length 
+      errors.add_to_base(l(:re_bb_max_length_smaller_min_length))
+      return false
     end   
     true      
   end
   
   def default_value_is_not_allowed_outside_min_max
+    min_length = 0 if min_length.nil? 
+    max_length = 99999 if max_length.nil?
     if default_value.length > max_length || default_value.length < min_length
       errors.add(:default_value, l(:re_bb_default_value_outside_min_max))
     end

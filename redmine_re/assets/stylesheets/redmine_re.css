@@ -130,6 +130,14 @@ label.bb_config {
 	width: 130px;
 }
 
+label.bb_options {
+  display:inline;
+  float:none; 
+  clear:none;
+  margin-left: 5px;
+  width:60px;	
+}
+
 label.user_defined {
 	width: 150px;
 }

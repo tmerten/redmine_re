@@ -265,7 +265,9 @@ en:
   re_bb_min_length_under_zero: "Value for minimal length mustn't be negativ."
   re_bb_max_length_under_zero: "Value for maximal length mustn't be negativ."
   re_bb_default_value_outside_min_max: 'Length of default value must fit minimal and maximal length.'
-  re_bb_options: 'Options for select (comma seperated)'
+  re_bb_options_field: 'Options for select (comma seperated)'
+  re_bb_options: 'Options for select'
+  re_bb_no_options_defined: 'No options defined so far.'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'
