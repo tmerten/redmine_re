@@ -22,14 +22,16 @@ class ReBuildingBlock < ActiveRecord::Base
   def self.find_all_bbs_and_data(artifact_properties)
     building_blocks = ReBuildingBlock.find_all_by_artifact_type(artifact_properties.artifact_type)
     bb_hash = {}
+    bb_types = []
+    bb_types = ReBuildingBlock.find(:all).map{|x| x.type.to_s}.uniq
     for bb in building_blocks do 
-      # TODO: Insert all bb_data classes here when they come into existance.
       data_for_bb = []
-      ['ReBbDataText', 'ReBbDataSelection'].each do |bb_class|
-        building_block_reference_column_name = (bb_class.sub('Data','').underscore + '_id').to_sym
-        data_for_bb += bb_class.constantize.find(:all, :conditions => {building_block_reference_column_name => bb.id, :re_artifact_properties_id => artifact_properties.id})
+      bb_types.each do |bb_class|
+        building_block_reference_column_name = (bb_class.underscore + '_id').to_sym
+        bb_data_class = bb_class.gsub('ReBb', 'ReBbData')
+        data_for_bb += bb_data_class.constantize.find(:all, :conditions => {building_block_reference_column_name => bb.id, :re_artifact_properties_id => artifact_properties.id})
       end
-      # Zu Demonstrationszwecken, um den Test fehlschlagen zu lassen:
+      # Zu Demonstrationszwecken, um den Test fehlschlagen zu lassen (Tests sollten im Moment nur mit TextBBs arbeiten):
       # data_for_bb = bb.re_bb_data_texts
       bb_hash[bb] = data_for_bb      
     end
