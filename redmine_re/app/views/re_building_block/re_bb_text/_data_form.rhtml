@@ -1,24 +1,18 @@
 	<p>
 		<% if !data.empty? %>
 			<% data_id = data[0].id.to_s %>
-			<% selected = data[0].re_bb_option_selection_id.to_i %>
+			<% shown_value = data[0].value.to_s %>
 		<% else %>
 			<% data_id = 'no_id' %>
-			<% default_option = ReBbOptionSelection.find(:first, :conditions => {:re_bb_selection_id => re_bb.id, :value => re_bb.default_value}) %>
-			<% selected = default_option.id.to_i unless default_option.nil?%>
+			<% shown_value = re_bb.default_value %>
 		<% end %>
-		<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][re_bb_option_selection_id]'  %>
-      	<% options = ReBbOptionSelection.find_all_by_re_bb_selection_id(re_bb.id) %>
+		<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
 		<% unless re_bb.help.nil? || re_bb.help == "" %>
 			<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
 	      		<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
 	     	</div>
 		<% end %>
       	<%= label_tag param_path, re_bb.name, :class => "user_defined" %>
-		<% if data.empty? %>
-			<%= text_field_tag param_path, re_bb.default_value, {:size => 30, :id => param_path} %>
-		<% else %>
-			<%= text_field_tag param_path, data[0].value, {:size => 30, :id => param_path} %>
-		<% end %>
+		<%= text_field_tag param_path, shown_value, {:size => 30, :id => param_path} %>
 		
     </p>
