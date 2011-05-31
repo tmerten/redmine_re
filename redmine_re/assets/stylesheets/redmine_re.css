@@ -238,3 +238,17 @@ div.tooltip:hover span.wiki_page_preview_tip {
     padding-top: 20px;
 }
 
+div.tooltip:hover span.userdefined_fields_tip {
+    border: 1px solid #507AAA;
+	position: absolute;
+    text-align:center;
+  	font-weight:bold;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+div.tooltip.userdefined_fields {
+	position: absolute;
+}
+
