@@ -1,0 +1,12 @@
+<br>
+<fieldset><legend><%= l(:re_bb_options) %> </legend>
+	<% if params[:id].nil? %>
+		<%= l(:re_bb_no_options_defined) %>
+	<% else %>
+		<% options = ReBbOptionSelection.find_all_by_re_bb_selection_id(params[:id]) %>
+		<% options.each do |opt| %>		
+			<%= label_tag :option, opt.value, :class => "behind_checkbox" %>
+			<br>
+		<% end %>
+	<% end %>
+</fieldset>
