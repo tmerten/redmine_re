@@ -1,4 +1,7 @@
 class ReBbSelection < ReBuildingBlock
+  unloadable
+  
+  include StrategyProcs
 
   #has_many :re_bb_data, :class_name => 'ReBbDataText'
   has_many :re_bb_data_selections   # This does not work properly in test environment.TODO: Ask why
@@ -6,9 +9,15 @@ class ReBbSelection < ReBuildingBlock
   
   
   @@data_form_partial_strategy = 're_building_block/re_bb_selection/data_form'
+  @@additional_work_after_save_strategy = SAVE_OPTIONS_STRATEGY
   
+  #ToDo: Vielleicht später auslagern in eigenes Modul
   def data_form_partial_strategy
     @@data_form_partial_strategy
+  end
+  
+  def additional_work_after_save_strategy
+    @@additional_work_after_save_strategy
   end
   
 

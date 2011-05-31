@@ -1,14 +1,22 @@
 class ReBbText < ReBuildingBlock
+  unloadable
+  
+  include StrategyProcs  
 
-  #has_many :re_bb_data, :class_name => 'ReBbDataText'
   has_many :re_bb_data_texts   # This does not work properly in test environment.TODO: Ask why
   
   validate :min_max_values_must_be_possible, :default_value_is_not_allowed_outside_min_max 
   
   @@data_form_partial_strategy = 're_building_block/re_bb_text/data_form'
+  @@additional_work_after_save_strategy = DO_NOTHING_STRATEGY
   
+  #ToDo: Vielleicht später auslagern in eigenes Modul
   def data_form_partial_strategy
     @@data_form_partial_strategy
+  end
+  
+  def additional_work_after_save_strategy
+    @@additional_work_after_save_strategy
   end
   
 

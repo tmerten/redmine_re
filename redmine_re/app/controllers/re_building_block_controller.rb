@@ -24,18 +24,8 @@ class ReBuildingBlockController < RedmineReController
       @re_building_block = params[:type].constantize.new if @re_building_block.artifact_type.nil?
       @re_building_block.attributes = params[:re_building_block]
       flash[:notice] = t(:re_bb_saved) if save_ok = @re_building_block.save
-      # the following if statement is only needed in a rough way of building
-      # a selection bb. It will be replaced with a better way of handling things during refactory.
-      if params[:type] == 'ReBbSelection'
-        options = params[:options].split(%r{,\s*})
-        options = options.insert(0, @re_building_block.default_value) unless options.include? @re_building_block.default_value
-        options = options.delete_if {|x| x == "" }
-        existing_options = ReBbOptionSelection.find_all_by_re_bb_selection_id(@re_building_block.id).map {|x| x.value.to_s}
-        options -= existing_options
-        options.each do |option|
-          ReBbOptionSelection.new(:value => option, :re_bb_selection_id => @re_building_block.id).save
-        end
-      end      
+      # Calling the strategies for handling additional work after normal saving
+      @re_building_block.additional_work_after_save_strategy.call(params[:options], @re_building_block)
       redirect_to :action => 'edit', :id => @re_building_block.id, :building_block => @re_building_block, :building_block_type => params[:type].underscore, :artifact_type => params[:artifact_type], :project_id => @project.id and return if save_ok
    end
   end
