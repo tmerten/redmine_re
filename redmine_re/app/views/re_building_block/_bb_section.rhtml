@@ -1,14 +1,14 @@
-<%= error_messages_for :re_bb_data_text %>
-
-<div class="box">
-
-  <fieldset><legend><%= l(:re_bb_userdefined_fields) %></legend>
-	<% bb_hash.keys.each do |bb| %>
-		<%= render :partial => bb.data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb_hash[bb]} %>
-	<% end %>
-      
-    
-  </fieldset>
-
-  <br />
-</div>
+<% if bb_hash.keys.length != 0 %>
+	<div class="box">
+	
+	  <fieldset><legend><%= l(:re_bb_userdefined_fields) %></legend>
+		<% bb_hash.keys.each do |bb| %>
+			<%= render :partial => bb.data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb_hash[bb]} %>
+		<% end %>
+	      
+	    
+	  </fieldset>
+	
+	  <br />
+	</div>
+<% end %>
