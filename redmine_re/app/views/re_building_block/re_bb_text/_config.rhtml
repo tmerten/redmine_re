@@ -1,32 +1,29 @@
   
-  <h2><%= t(:re_bb_configuration_header, :builing_block => t(:re_bb_text), :artifact_type => t(params[:artifact_type])) %></h2>
+  <h2><%= t(:re_bb_configuration_header, :builing_block => t(:re_bb_selection), :artifact_type => t(params[:artifact_type])) %></h2>
 
   <%= errors_and_flash :re_building_block %>
   
   <% form_for :re_building_block, :update => :detail_view, :url => {:action => "edit"} do |f| %>
       <%= hidden_field_tag :project_id, @project.id %>
   	  <%= hidden_field_tag :artifact_type, @artifact_type %>
-	  <%= hidden_field_tag :type, 'ReBbText' %>
+	  <%= hidden_field_tag :type, 'ReBbSelection' %>
 	  <div class="box">
 	  	
 	    <fieldset>
 	  	  <%= render "re_building_block/common_config", :f => f %>
 	      <div class="splitcontentright" >
-	        <fieldset><legend><%= l(:re_bb_special_configuration, :building_block => t(:re_bb_text)) %> </legend>
+	        <fieldset><legend><%= l(:re_bb_special_configuration, :building_block => t(:re_bb_selection)) %> </legend>
 		
 		      <p>
 		      	<%= f.label :default_value, l(:re_bb_default_value), :class => "bb_config" %> <%= f.text_field :default_value %>
 		      </p>
 		      <p>
-		      	<%= f.label :min_length, l(:re_bb_min_length), :class => "bb_config" %> <%= f.text_field :min_length %>
+		      	<%= label_tag :options, l(:re_bb_options_field), :class => "bb_config" %> <%= text_field_tag :options %>
 		      </p>
-		      <p>
-		      	<%= f.label :max_length, l(:re_bb_max_length), :class => "bb_config" %> <%= f.text_field :max_length %>
-		      </p> 
-		  
-	  	    </fieldset>
-	      </div> 
-	  
+		  	</fieldset>
+	      	<%= render "re_building_block/re_bb_selection/options", :id => params[:id] %>
+		  </div> 
+	  	  	
 	    </fieldset>
 	  
 	  </div>
