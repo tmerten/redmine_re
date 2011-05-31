@@ -10,7 +10,7 @@
 <% form_for :re_workarea, :update => :detail_view, :url => {:action => "edit"} do |f| %>
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_workarea.re_artifact_properties} %>
-	<%= add_bb_section(@re_workarea)%>
+	<%= add_bb_section(@re_workarea, @bb_hash)%>
     <p>
       <%= submit_tag l(:re_save) %>
       &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>

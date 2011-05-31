@@ -79,6 +79,7 @@ class RedmineReController < ApplicationController
     @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
     @parent = nil
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
     
     unless params[:parent_artifact_id].blank?
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
@@ -105,6 +106,7 @@ class RedmineReController < ApplicationController
         @artifact.set_parent(@parent, 1) unless @parent.nil?
         # Saving of user defined Fields (Building Blocks)
         ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
+        @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
       else
         edit_hook_invalid_artifact_cleanup params
       end

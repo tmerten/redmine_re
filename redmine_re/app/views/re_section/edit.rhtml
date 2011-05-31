@@ -11,7 +11,7 @@
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_section.re_artifact_properties} %>
 
-	<%= add_bb_section(@re_section)%>
+	<%= add_bb_section(@re_section, @bb_hash)%>
     <p>
       <%= submit_tag l(:re_save) %>
       <%= link_to(t(:re_cancel), :project_id => @project.id) %>

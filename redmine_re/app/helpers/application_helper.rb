@@ -107,9 +107,8 @@ JAVASCRIPT
     end
   end
   
-  def add_bb_section(artifact)
+  def add_bb_section(artifact, bb_hash)
     if User.current.allowed_to?(:administrate_requirements, @project)
-      bb_hash = ReBuildingBlock.find_all_bbs_and_data(artifact.re_artifact_properties)
       render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash}
     else
       ""

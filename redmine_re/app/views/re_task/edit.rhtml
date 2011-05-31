@@ -68,7 +68,7 @@
                           :onUpdate => "function(el) { updateAllSubtaskPositions(); }"
     %>
     <br />
-    <%= add_bb_section(@re_task)%>
+    <%= add_bb_section(@re_task, @bb_hash)%>
     <p>
       <%= submit_tag l(:re_save), :accesskey => "s" %>
       &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
