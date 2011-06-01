@@ -18,6 +18,7 @@ class RedmineReController < ApplicationController
 	def load_settings
 		@settings = Setting.plugin_redmine_re
 		@re_artifact_order = ActiveSupport::JSON.decode(@settings['re_artifact_types'])
+		@re_relation_order = ReArtifactProperties::RELATION_TYPES.keys
 	end
 
   # uses redmine_re in combination with redmines base layout for the header unless it is an ajax-request
@@ -105,7 +106,7 @@ class RedmineReController < ApplicationController
         edit_hook_valid_artifact_after_save params
         @artifact.set_parent(@parent, 1) unless @parent.nil?
         # Saving of user defined Fields (Building Blocks)
-        ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
+        #ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
         @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
       else
         edit_hook_invalid_artifact_cleanup params

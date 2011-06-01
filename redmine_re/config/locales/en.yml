@@ -8,7 +8,7 @@ en:
   re_delete: 'delete'
   re_show: 'Show'
   re_requirements_overview: 'Requirements Overview'
-  re_sidebar: 'Create Artifacts'
+  re_create_new_artifacts: 'Create New Artifacts'
   re_create_child: 'Create Child'
   re_delete_confirm: 'Do you really want to delete %{what}?'
   re_select_artifact: 'Select Artifact'
@@ -25,7 +25,8 @@ en:
   re_project_was_setup: 'I just set up your database'
   re_continue_here: 'For more information continue to here'
   re_link_to_configure: 'Or configure the Plugin'
-  re_configure: 'Redmine RE Plugin Configuration'
+  re_configure: 'Configure'
+  re_plugin_configuration: 'Redmine RE Plugin Configuration'
   re_index: 'Redmine RE Plugin'
   re_are_you_sure: 'Are you sure?'
   re_was_updated: 'was updated'
@@ -134,10 +135,10 @@ en:
 
   # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
+  re_show_relationships: 'Show Relationships'
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
   re_artifact_relationships_incoming: 'Incoming Relationships'
   re_relationship_visualization: 'Artifact Traceability Visualization'
-  re_relationships: 'Relationships'
   re_artifact_details: 'Artifact Details'
   re_relationship: 'Relationship'
   re_conflict: 'Conflict'
@@ -274,12 +275,11 @@ en:
   re_show_tree: 'Show Tree'
   re_show_general_tree_view: 'Show Overall Tree'
   re_treefilter: 'Filter'
+  re_create_below: 'create artifact below...'
+  re_create_relation: 'create relation to...'
   
   # fields
   field_re_artifact: 'field artifact'
-
-  # sidebar
-  re_sidebar_hover: 'Click here to create new RE Artifacts'
 
   # filter
   re_enhanced_filter: 'Enhanced filter'

@@ -86,5 +86,17 @@ config.after_initialize do
 	all_artifact_types.delete(:ReArtifactsConfig)
 	all_artifact_types.delete_if{ |v| configured_artifact_types.include? v }
 	configured_artifact_types.concat(all_artifact_types)
+	
+	for artifact_type in all_artifact_types
+	  configured_artifact = ReArtifactConfig.find_by_artifact_type(artifact_type)
+	  if configured_artifact.nil?
+      configured_artifacts = ReArtifactConfig.all.sort_by {|x| x.position }
+      position = configured_artifacts.last.position
+      configuration = ReArtifactConfig.new( :artifact_type => artifact_type, :position => position )
+      configuration.save
+    end
+	end
+	
 	Setting["plugin_redmine_re"] = {'re_artifact_types' => ActiveSupport::JSON.encode(configured_artifact_types) }
+	
 end

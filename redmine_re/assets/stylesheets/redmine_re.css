@@ -17,6 +17,54 @@ a:active {
   position: absolute;
   float: left;
   width: 200px;
+  height: 100%;
+}
+
+/* accordion header */
+#treebar h2 {
+	background:#dddddd;
+	margin:0;
+	padding:5px 15px;
+  font-size: 14px;
+	font-weight:normal;
+	border:1px solid #fff;
+	border-bottom:1px solid #ddd;
+	cursor:pointer;		
+}
+
+/* currently active header */
+#treebar h2.current {
+	cursor:default;
+	background-color:#fff;
+}
+
+/* accordion pane */
+#treebar .pane {
+	border:1px solid #fff;
+	border-width:0 2px;
+	display:none;
+	padding:15px;
+	color:#fff;
+	font-size:12px;
+	min-height:200px;
+}
+
+/* a title inside pane */
+#treebar .pane h2 {
+	font-weight:bold;
+	margin:0 0 -5px 0;
+	font-size:16px;
+	color:#999;
+}
+
+#treebar ul.navigation {
+  list-style-type:none;
+  padding: 0;
+  margin: 0;
+}
+
+#treebar ul.navigation li {
+  padding-bottom:2px;
 }
 
 .recopyright {
@@ -93,7 +141,6 @@ label.medium {
 label.large {
   width: 300px;
 }
-
 
 label {
   font-weight: bold;
@@ -186,29 +233,66 @@ input.bb_checkbox {
   width: 110px;
 }
 
+ins.new {
+    background: url(../../../images/add.png) no-repeat left top;
+}
+ins.edit {
+    background: url(../../../images/edit.png) no-repeat left top;
+}
+ins.delete {
+    background: url(../../../images/delete.png) no-repeat left top;
+}
+
+ins.project {
+  background: url(../images/icons/group_gear.png) no-repeat left top;
+}
 a.project {
   background: url(../images/icons/group_gear.png) no-repeat left top;
+}
+ins.re_workarea {
+  background: url(../images/icons/bricks.png) no-repeat left top;
 }
 a.re_workarea {
   background: url(../images/icons/bricks.png) no-repeat left top;
 }
+ins.re_task {
+  background: url(../images/icons/report_user.png) no-repeat left top;
+}
 a.re_task {
   background: url(../images/icons/report_user.png) no-repeat left top;
+}
+ins.re_subtask {
+  background: url(../images/icons/report.png) no-repeat left top;
 }
 a.re_subtask {
   background: url(../images/icons/report.png) no-repeat left top;
 }
+ins.re_goal {
+  background: url(../images/icons/world.png) no-repeat left top;
+}
 a.re_goal {
   background: url(../images/icons/world.png) no-repeat left top;
+}
+ins.re_user_profile {
+  background: url(../images/icons/user.png) no-repeat left top;
 }
 a.re_user_profile {
   background: url(../images/icons/user.png) no-repeat left top;
 }
+ins.re_section {
+  background: url(../images/icons/text_padding_top.png) no-repeat left top;
+}
 a.re_section {
   background: url(../images/icons/text_padding_top.png) no-repeat left top;
 }
+ins.re_attachment {
+    background: url(../images/icons/attach.png) no-repeat left top;
+}
 a.re_attachment {
     background: url(../images/icons/attach.png) no-repeat left top;
+}
+ins.re_vision {
+    background: url(../images/icons/lightbulb.png) no-repeat left top;
 }
 a.re_vision {
     background: url(../images/icons/lightbulb.png) no-repeat left top;
@@ -222,6 +306,7 @@ a.re_vision {
    look in apllication.css of redmine which styles are already set and overwrite or add
    the stylez for your custom tooltip
 */
+
 div.tooltip:hover span.subtask_error_tip {
   border: 1px solid #EC705B;
   text-align:center;

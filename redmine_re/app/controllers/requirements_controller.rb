@@ -29,7 +29,7 @@ class RequirementsController < RedmineReController
   
   def configure
     @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
-    @re_artifacts_configs = ReArtifactsConfig.find(:all)
+    @re_artifacts_configs = ReArtifactsConfig.all
     @config = {}
     settings = {}
     settings['relation_management_pane'] = 'true'

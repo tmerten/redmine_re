@@ -27,7 +27,7 @@
     </p>
       <br/>                                                                                                                    
     <p>                                           
-        <h4><%= l(:re_relationships) %><br/></h4>
+        <h4><%= l(:re_artifact_relationships) %><br/></h4>
         <% for key, value in ReArtifactProperties::RELATION_TYPES do %>
           <% colors = ReArtifactColors::RELATION_COLOURS[ReArtifactProperties::RELATION_TYPES[key.to_sym]] %>
           <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>

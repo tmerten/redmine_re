@@ -2,15 +2,15 @@
 <h2> <%= t(:re_prepare_deletion) %></h2>
 <p>
 
-<%= t(:re_you_asked_for_deleting_the_following_artifact) %>: <b><%= @artifact.name %></b> (#<%= @artifact.id %>)
+<%= t(:re_you_asked_for_deleting_the_following_artifact) %>: <b><%= @artifact_properties.name %></b> (#<%= @artifact_properties.id %>)
 </p>
 
 <p>
 <h3><%= t(:re_choose_option_for_deletion) %></h3>
 <ul>
-  <li><%= link_to t(:re_delete_everything), { :action => "delete", :id => @artifact.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %> (<%= t(:re_deletes_this_artifact) %><%= t(:re_and_all_relations) unless @relationships_outgoing.empty? && @relationships_incoming.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
+  <li><%= link_to t(:re_delete_everything), { :action => "delete", :id => @artifact_properties.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %> (<%= t(:re_deletes_this_artifact) %><%= t(:re_and_all_relations) unless @relationships_outgoing.empty? && @relationships_incoming.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
   <% unless @children.empty? %>
-  <li><%= link_to t(:re_move_children_to_the_parent), { :action => "delete", :id => @artifact.id, :mode => 'move' }, :confirm => t(:re_are_you_sure) %> "<%= @parent.name %>" <%= t(:re_and_delete_afterwards, :artifact_name => @artifact.name) %></li>
+  <li><%= link_to t(:re_move_children_to_the_parent), { :action => "delete", :id => @artifact_properties.id, :mode => 'move' }, :confirm => t(:re_are_you_sure) %> "<%= @parent.name %>" <%= t(:re_and_delete_afterwards, :artifact_name => @artifact_properties.name) %></li>
   <% end %>
 </ul>
 </p>
@@ -18,7 +18,7 @@
 <h3><%= t(:re_relations_and_artifacts_found) %></h3>
 
 <p>
-  <div class="splitcontentleft">
+  <div id="relationship_link_list" class="splitcontentleft">
     <%= render 're_artifact_relationship/relationship_links' %>
   </div>
   
@@ -30,10 +30,11 @@
           <% if @parent.artifact_type == "Project" %>
             <%= @parent.name %>
           <% else %>
-            <%= link_to @parent.name, {
-              :action => :edit,
-              :controller => @parent.artifact_type.underscore,
-              :id => @parent.artifact_id } %>
+            <%= link_to ( @parent.name, {
+                :action => :edit,
+                :controller => @parent.artifact_type.underscore,
+                :id => @parent.artifact_id
+              }, :class => "icon #{@parent.artifact_type.underscore}" ) %>
           <% end %>  
         </li>
       </ul>
@@ -44,10 +45,11 @@
       <ul>
         <% for child in @children %>
           <li>
-            <%= link_to child.name, {
-              :action => :edit,
-              :controller => child.artifact_type.underscore,
-              :id => child.artifact_id } %>          
+          <%= link_to ( child.name, {
+                :action => :edit,
+                :controller => child.artifact_type.underscore,
+                :id => child.artifact_id
+              }, :class => "icon #{child.artifact_type.underscore}" ) %>          
           </li>
         <% end %>
       </ul>

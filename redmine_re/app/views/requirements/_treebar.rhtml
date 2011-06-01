@@ -1,11 +1,318 @@
 <div id='treebar' class='treebar'>
-<a href="#" id="hide_treebar" class="contextual" title="<%= t(:re_shows_after_reload) %>"><%= t(:re_hide) %></a>
+  <!--<a href="#" id="hide_treebar" class="contextual" title="<%= t(:re_shows_after_reload) %>"><%= t(:re_hide) %></a>-->
+  
+  <h2 class="current"><%= l(:re_tree_overview) %></h3>
+  <div class="pane">
     <%= render :partial => 'requirements/filter' %>
-    <%= render :partial => 'requirements/tree' %>
+    <div id="tree"></div>
+  </div>
+  
+  <h2><%= l(:re_create_new_artifacts) %></h3>
+  <div class="pane">
+    <ul class="navigation">
+    <% for artifact_type in @re_artifact_order	%>
+        <li><%= link_to t("re_new_#{artifact_type.underscore}"), {
+              :controller => artifact_type.underscore,
+              :action => "new",
+              :project_id => @project.id } ,
+              :class => "icon #{artifact_type.underscore}" %></li>
+    <% end %>
+    </ul>
+  </div>
+    
+  <h2><%= l(:re_show_relationships) %></h2>
+  <div class="pane">
+    <ul class="navigation">
+      <li><%= link_to l(:re_relationship_visualization), {
+            :controller => "re_artifact_relationship",
+            :action => "visualization",
+            :project_id => @project.id } %>
+      </li>
+    </ul>
+  </div>
+
+  <% if User.current.allowed_to?(:administrate_requirements, @project) %>
+  <h2><%= l(:re_configure) %></h2>
+  <div class="pane">
+    <ul class="navigation">
+      <li><%= link_to l(:re_configure_plugin), {
+        :controller => "requirements",
+        :action => "configure", 
+        :project_id => @project.identifier } %>
+      </li>
+    </ul>
+  </div>
+  <% end %>
+  
 </div>
-<% javascript_tag do -%>
+
+<script type="text/javascript">
+  //<![CDATA[
+  
 jQuery("#hide_treebar").click(function () {
   jQuery("#treebar").hide();
   jQuery(".detail_view").css('margin-left', '10px');
 });
-<% end -%>
+
+var accordion = jQuery("#treebar").tabs("#treebar div.pane", {
+  tabs: 'h2',
+  effect: 'slide',
+  initialIndex: null,history:true
+});
+
+var tree = jQuery("#tree")
+  .bind("loaded.jstree", function (event, data) {
+    var api = jQuery("#treebar").data("tabs");
+    api.click(0);
+  })
+  .bind("close_node.jstree", function (event, data) {
+    jQuery.ajax({
+      "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') ,
+    });        
+  })
+  .bind("open_node.jstree", function (event, data) {
+    var node = data.args[0];
+    var node_postition = node.position();
+    var node_width = node.outerWidth();
+    /* TODO: Resize Trees div, there is also a post open/close hook!! */
+         
+    var width = this.getWidth();
+    
+    if (node_position + node_width > width) {
+      alert('its bigger: ' + node_position + node_width);
+    }
+    
+    var treebar = jQuery(".treebar");
+    
+    jQuery.ajax({
+      "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
+    });        
+  })
+  .bind("move_node.jstree", function (e, data) {
+    data.rslt.o.each(function (i) {
+      jQuery.ajax({
+        async : false,
+        type: 'POST',
+        url: "<%= url_for :controller => 'requirements', :action => 'delegate_tree_drop' %>/",
+        data : { 
+          "id" : jQuery(this).attr("id").replace("node_",""), 
+          "new_parent_id" : data.rslt.np.attr("id").replace("node_",""),
+          "ancestor_id" : data.rslt.r.attr("id").replace("node_",""),
+          "position" : data.rslt.p
+        },
+        success : function (r) {
+          if(!r.status) {
+            jQuery.jstree.rollback(data.rlbk);
+          }
+          else {
+            jQuery(data.rslt.oc).attr("id", "node_" + r.id);
+            if(data.rslt.cy && jQuery(data.rslt.oc).children("UL").length) {
+              data.inst.refresh(data.inst._get_parent(data.rslt.oc));
+            }
+          }
+        }
+      });
+    });
+  })    
+  .jstree({
+    "core": {
+      "animation" : 100,
+      "strings" : {
+        "loading" : "<%= t(:re_tree_loading) %>"
+      }
+    },
+    "themes" : {
+      "url": "<%= stylesheet_path "/plugin_assets/redmine_re/stylesheets/jquery.jstree/classic/style.css"  %>",
+      "theme" : "classic",
+      "dots" : true,
+      "icons" : true
+    },
+    "json_data" : {
+      "ajax" : {
+        "url" : function (n) {
+          var url = "<%= url_for :controller => 'requirements', :action => 'treestate' %>";
+          var id = n.attr ? n.attr("id").gsub('node_','') : -1;
+          var params = "?project_id=<%= @project.id %>&open=data";
+          return url + "/" + id + params;
+        }
+      }		    
+    },
+    "types" : {
+      "types" : {
+        "default" : {
+          /*"valid_children" : [ "default" ]*/
+        },
+        "re_goal" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/world.png', :plugin => 'redmine_re' %>"
+          }
+        },
+        "re_task" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/report_user.png', :plugin => 'redmine_re' %>"
+          }
+        },
+        "re_subtask" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/report.png', :plugin => 'redmine_re' %>"
+          }
+        },
+        "re_vision" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/lightbulb.png', :plugin => 'redmine_re' %>"
+          }
+        },
+        "re_attachment" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/attach.png', :plugin => 'redmine_re' %>"
+          }
+        },          
+        "re_workarea" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/bricks.png', :plugin => 'redmine_re' %>"
+          }
+        },
+        "re_user_profile" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/user.png', :plugin => 'redmine_re' %>"
+          }
+        },
+        "re_section" : {
+          "icon" : { 
+            "image" :"<%= image_path 'icons/text_padding_top.png', :plugin => 'redmine_re' %>"
+          }
+        }
+        
+      }
+    },
+    "dnd" : {
+      "drop_finish" : function (data) {
+        var drag = data.o;
+        var drop = data.r;
+        var id = drag.attr("id").replace('node_','');
+        var name = jQuery("a:first", drag.first()).text();
+        var name = jQuery.trim(name);
+        
+        var parent_id_field = jQuery('#parent_artifact_id');
+        var parent_text_field = jQuery('#parent_autocomplete');
+        
+        parent_id_field.val(id);
+        parent_text_field.val(name);
+      },
+      "drop_check" : function (data) {
+        var drag = data.o;
+        var drag_id = drag.attr("id");
+        
+        var invalid_ids = [];
+        var artifact_in_editor = "node_<%= @artifact.id.to_s unless @artifact.nil? || @artifact.id.nil? %>";
+        invalid_ids.push(artifact_in_editor);
+        
+        jQuery("#" + artifact_in_editor).find("li").each(function () {
+          invalid_ids.push(this.id);
+        });
+        
+        if (jQuery.inArray(drag_id, invalid_ids) > -1)
+          return false;
+        
+        /*TODO: We need to make sure that this is also checked in the controller
+        since we are still throwing exceptions if not*/
+        
+        return true;
+      }
+    },
+    "ui" : {
+      <%= '"initially_select" : [ "node_' + @artifact.id.to_s + '" ],' unless @artifact.nil? || @artifact.id.nil? %>
+      "select_limit" : 1,
+      "selected_parent_close" : "select_parent"
+    },
+    "contextmenu" : {
+      "select_node" : true,
+      "show_at_node" : false,
+      "items" : {
+        "create" : false,
+        "rename" : false,
+        "remove" : false,
+        "ccp" : false,
+        "new" : {
+          "label" : "<%= t('re_create_below') %>",
+          "separator_before" : false,
+          "separator_after"	: false,
+          "icon" : "new",
+          "submenu" : {
+          <% for artifact_type in @re_artifact_order	%>
+            "<%= artifact_type.underscore %>" : {
+              "label" : "<%= t(artifact_type.underscore) %>",
+              "action" : function (node) {
+                jQuery.blockUI({
+                    "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= t('re_new_' + artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
+                });                  
+                var id = node[0].id.gsub('node_','');
+                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
+                window.location.href = link + '?parent_artifact_id=' + id;
+              },
+              "icon" : "<%= artifact_type.underscore %>"
+            }<%= "," unless artifact_type == @re_artifact_order.last %>
+          <% end %>
+          }
+        },
+        "relation" : {
+          "label" : "<%= t('re_create_relation') %>",
+          "separator_before" : false,
+          "separator_after"	: true,
+          "icon" : "relation",
+          "submenu" : {
+          <% for relation_type in @re_relation_order %>
+            "<%= relation_type %>" : {
+              "label" : "<%= relation_type %>",
+              "action" : function (node) {
+                var id = node[0].id.gsub('node_','');
+                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
+                alert('RELATION CREATOR COMING SOON');
+              },
+              "icon" : "<%= artifact_type.underscore %>"
+            }<%= "," unless relation_type == @re_relation_order.last %>
+          <% end %>
+          }
+        },
+        "edit" : {
+          "label" : "<%= t(:re_edit) %>",
+          "icon" : "edit",
+          "action" : function (node) {
+            jQuery.blockUI({
+                "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + node.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
+            });
+            var id = node[0].id.gsub('node_','');
+            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/";
+            window.location.href = link + id;
+          }             
+        },
+        "delete" : {
+          "label" : "<%= t(:re_delete) %>",
+          "icon" : "delete",
+          "action" : function (node) {
+            /*jQuery.blockUI({
+                "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + node.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
+            });*/
+            var id = node[0].id.gsub('node_','');
+            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'delete') %>/";
+            window.location.href = link + id;
+          }
+        }          
+      }
+    },
+    plugins : [ "themes", "json_data", "dnd", "types" , "ui", "contextmenu" ]
+  });
+  
+  jQuery("#tree a").live("dblclick", function(e) {
+      var parent = jQuery(this).parent();
+      jQuery.blockUI({
+          "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + parent.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
+      }); 
+      var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/"
+      var type = parent.attr("rel");
+      var id = parent.attr ? parent.attr("id").gsub('node_','') : -1;
+      window.location.href = link + id
+  })
+  
+  //]]>
+</script>

@@ -34,39 +34,39 @@ class ReArtifactPropertiesController < RedmineReController
   
   def delete
     method = params[:mode]
-    @artifact = ReArtifactProperties.find(params[:id])
-    @project ||= @artifact.project
+    @artifact_properties = ReArtifactProperties.find(params[:id])
+    @project ||= @artifact_properties.project
 
-    @relationships_incoming = @artifact.relationships_as_sink
-    @relationships_outgoing = @artifact.relationships_as_source
-    @parent = @artifact.parent
+    @relationships_incoming = @artifact_properties.relationships_as_sink
+    @relationships_outgoing = @artifact_properties.relationships_as_source
+    @parent = @artifact_properties.parent
 
-    @children = gather_children(@artifact)
+    @children = gather_children(@artifact_properties)
     
     @relationships_incoming.delete_if {|x| x.relation_type == 1 }
     @relationships_outgoing.delete_if {|x| x.relation_type == 1 }
     
     case method
       when 'move'
-        @children = @artifact.children
+        @children = @artifact_properties.children
         for child in @children
           child.set_parent(@parent)
         end
-        @artifact.destroy
+        @artifact_properties.destroy
 
-        flash[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact.name, :parent => @parent.name)
+        flash[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
         redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
         
       when 'recursive'
         for child in @children
           child.destroy
         end
-        @artifact.destroy
+        @artifact_properties.destroy
 
-        flash[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact.name)
+        flash[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
         redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
       else
-        @children = gather_children(@artifact)
+        @children = gather_children(@artifact_properties)
     end
   end  
 

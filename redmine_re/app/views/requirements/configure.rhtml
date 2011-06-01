@@ -1,6 +1,6 @@
 <div id='detail_view' class='detail_view'>
 
-<h1><%= t(:re_configure) %></h1>
+<h1><%= t(:re_plugin_configuration) %></h1>
 <br/>
 <% configured_artifact_types = ActiveSupport::JSON.decode(@settings['re_artifact_types']) unless @settings['re_artifact_types'].nil? %>
 
@@ -26,14 +26,27 @@
     </tr>
   </thead>
   <tbody id="artifact_types_list">
-  <% configured_artifact_types.each_with_index do |artifact_type, i| %>
+  
+  
+      t.column :alias_name, :string
+      t.column :color, :string
+      t.column :icon, :string
+      t.column :show_children_in_tree, :boolean
+      t.column :allowed_children, :text
+      t.column :hide_fields, :text
+      t.column :in_use, :boolean
+      t.column :printable, :boolean
+      t.column :position, :integer
+      t.column :overwriteable, :boolean
+      t.column :user_id, :integer
+  
+  <% @re_artifacts_configs.each_with_index do |artifact_config, i| %>
     <tr id="<%=artifact_type + '_' + i.to_s %>">
-      <td class="dnd"><%= artifact_type.gsub(/^Re/, '').underscore.humanize %></td>
-      <td><%= text_field_tag artifact_type + '[alias_name]', '', :size => 20 %></td>
-      <td><%= text_field_tag artifact_type + '[color]', :size => 10 %></td>
-      <td><%= text_field_tag artifact_type + '[icon]', :size => 10 %></td>
-      <td><%= check_box_tag artifact_type + '[show_in_tree]' %></td>
-      <td><%= check_box_tag artifact_type + '[in_use]' %></td>
+      <td class="dnd"><%= artifact_config.artifact_type.gsub(/^Re/, '').underscore.humanize %></td>
+      <td><%= text_field_tag artifact_type.alias_name, '', :size => 20 %></td>
+      <td><%= text_field_tag artifact_type.color, :size => 10 %></td>
+      <td><%= check_box_tag artifact_type.show_children_in_tree %></td>
+      <td><%= check_box_tag artifact_type.in_use %></td>
     </tr>
   <% end %>
   </tbody>

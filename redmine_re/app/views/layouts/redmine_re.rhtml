@@ -27,10 +27,9 @@
 <%= javascript_include_tag 'jstoolbar/jstoolbar'  %>
 <%= javascript_include_tag 'jstoolbar/textile'  %>
 <%= javascript_include_tag "jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}" %>
-<%= javascript_include_tag 're_sidebar.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'jquery.tools.min.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'slider.js', :plugin => 'redmine_re' %>
 <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
-<%= stylesheet_link_tag 're_sidebar.css', :plugin => 'redmine_re', :media => 'all' %>
 
 <%### REDMINE RE STUFF STOP 1 ###%>
 
@@ -80,10 +79,6 @@
 <%### REDMINE RE STUFF END 2 ###%>
         
         <%= yield %>
-
-<%### REDMINE RE STUFF START 3 ###%>
-        <%= render :partial => 'requirements/sidebar' %>
-<%### REDMINE RE STUFF END 3 ###%>
 
         <%= call_hook :view_layouts_base_content %>
         <div style="clear:both;"></div>
