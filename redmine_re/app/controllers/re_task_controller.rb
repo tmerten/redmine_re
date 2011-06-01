@@ -15,15 +15,18 @@ class ReTaskController < RedmineReController
       @subtask.destroy
     end
 
-    # remove tr of the subtask
-
      respond_to do |format|
        format.js
      end
   end
   
   def new_hook params
-    @subtasks = []
+    subtask_attributes = params[:subtask_attributes]
+    if subtask_attributes.blank?
+      @subtasks = []
+    else
+      @subtasks = ReTask.sort_subtasks_attributes_by_position(subtask_attributes, @project.id)
+    end
   end
   
   def edit_hook_after_artifact_initialized params
@@ -41,12 +44,14 @@ class ReTaskController < RedmineReController
     subtask_attributes = params[:subtask_attributes]
     #valid_subtask_attributes = @artifact.subtasks_valid?(subtask_attributes)
     
-    @subtasks = ReTask.sort_subtasks_attributes_by_position(subtask_attributes, @project.id)
     valid_subtasks = true
-    for st in @subtasks
-      valid_subtasks = false unless st.valid?   
+    unless subtask_attributes.blank?
+      @subtasks = ReTask.sort_subtasks_attributes_by_position(subtask_attributes, @project.id)
+      for st in @subtasks
+        valid_subtasks = false unless st.valid?   
+      end
+      @artifact.errors.add_to_base(t(:re_subtasks_not_valid)) unless valid_subtasks
     end
-    @artifact.errors.add_to_base(t(:re_subtasks_not_valid)) unless valid_subtasks
     
     return valid_subtasks
   end
