@@ -39,9 +39,11 @@ class ReBuildingBlock < ActiveRecord::Base
   end
   
   def self.save_data(artifact_properties_id, data_hash)
-    data_hash.keys.each do |bb_id|
-      bb = ReBuildingBlock.find_by_id(bb_id)
-      bb.save_datum(data_hash[bb_id], artifact_properties_id) 
+    unless data_hash.nil?
+      data_hash.keys.each do |bb_id|
+        bb = ReBuildingBlock.find_by_id(bb_id)
+        bb.save_datum(data_hash[bb_id], artifact_properties_id) 
+      end
     end
   end
   
