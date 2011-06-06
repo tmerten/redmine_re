@@ -1,0 +1,48 @@
+	<p>
+
+		<% data_id = 'no_id' %>
+		<% shown_value = re_bb.default_value %>
+		
+		<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
+		
+		<table>
+			<tr>
+				<th>
+					<%= label_tag param_path, re_bb.name, :class => "user_defined" %>
+					<% unless re_bb.help.nil? || re_bb.help == "" %>
+						<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
+				      		<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
+				     	</div>
+					<% end %>
+				</th>
+				<th>
+					<%= l(:re_bb_value)%>
+				</th>
+				<th>
+					<%= l(:re_bb_control)%>
+				</th>
+			</tr>
+		  <% data.each do |datum| %>
+			<tr>
+				<td></td>
+				<td>
+					<%= datum.value %>
+				</td>
+				<td>
+					<% div_id = 'bb_form_' + re_bb.id.to_s  %>
+					<%= link_to_remote 	(image_tag("delete.png"), 
+										:url => {:controller => 're_building_block', :action => 'delete_data', :re_bb_data_id => datum.id, :re_bb_id => re_bb.id },
+										:update => div_id	)
+					%>
+				</td>	
+			</tr>
+		  <% end %>
+			<tr>
+				<td></td>	
+				<td colspan=2>
+					<%= text_field_tag param_path, shown_value, {:size => 30, :id => param_path} %>	
+			    </td>
+			</tr>
+		</table>
+		
+    </p>

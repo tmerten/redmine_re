@@ -8,11 +8,16 @@ class ReBbText < ReBuildingBlock
   validate :min_max_values_must_be_possible, :default_value_is_not_allowed_outside_min_max 
   
   @@data_form_partial_strategy = 're_building_block/re_bb_text/data_form'
+  @@multiple_data_form_partial_strategy = 're_building_block/re_bb_text/multiple_data_form'
   @@additional_work_after_save_strategy = DO_NOTHING_STRATEGY
   
   #ToDo: Vielleicht später auslagern in eigenes Modul
   def data_form_partial_strategy
     @@data_form_partial_strategy
+  end
+  
+  def multiple_data_form_partial_strategy
+    @@multiple_data_form_partial_strategy
   end
   
   def additional_work_after_save_strategy

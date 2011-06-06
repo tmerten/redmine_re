@@ -9,11 +9,16 @@ class ReBbSelection < ReBuildingBlock
   
   
   @@data_form_partial_strategy = 're_building_block/re_bb_selection/data_form'
+  @@multiple_data_form_partial_strategy = 're_building_block/re_bb_selection/multiple_data_form'
   @@additional_work_after_save_strategy = SAVE_OPTIONS_STRATEGY
   
   #ToDo: Vielleicht später auslagern in eigenes Modul
   def data_form_partial_strategy
     @@data_form_partial_strategy
+  end
+  
+  def multiple_data_form_partial_strategy
+    @@multiple_data_form_partial_strategy
   end
   
   def additional_work_after_save_strategy

@@ -28,6 +28,14 @@ class ReBuildingBlockController < RedmineReController
       @re_building_block.additional_work_after_save_strategy.call(params[:options], @re_building_block)
       redirect_to :action => 'edit', :id => @re_building_block.id, :building_block => @re_building_block, :building_block_type => params[:type].underscore, :artifact_type => params[:artifact_type], :project_id => @project.id and return if save_ok
    end
-  end
+ end
+ 
+ def delete_data
+   bb = ReBuildingBlock.find(params[:re_bb_id])
+   datum = bb.get_data_class_name.constantize.find(params[:re_bb_data_id])
+   re_artifact_properties = ReArtifactProperties.find(datum.re_artifact_properties_id)
+   datum.delete unless datum.nil?
+   render :partial => bb.multiple_data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb.find_my_data(re_artifact_properties)}
+ end
 
 end

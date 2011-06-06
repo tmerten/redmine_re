@@ -281,6 +281,8 @@ en:
   re_bb_options_field: 'Options for select (comma seperated)'
   re_bb_options: 'Options for select'
   re_bb_no_options_defined: 'No options defined so far.'
+  re_bb_value: 'Value'
+  re_bb_control: 'Control'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'

@@ -22,22 +22,25 @@ class ReBuildingBlock < ActiveRecord::Base
   def self.find_all_bbs_and_data(artifact_properties)
     building_blocks = ReBuildingBlock.find_all_by_artifact_type(artifact_properties.artifact_type)
     bb_hash = {}
-    bb_types = []
-    bb_types = ReBuildingBlock.find(:all).map{|x| x.type.to_s}.uniq
     for bb in building_blocks do 
-      data_for_bb = []
-      bb_types.each do |bb_class|
-        building_block_reference_column_name = (bb_class.underscore + '_id').to_sym
-        bb_data_class = bb_class.gsub('ReBb', 'ReBbData')
-        data_for_bb += bb_data_class.constantize.find(:all, :conditions => {building_block_reference_column_name => bb.id, :re_artifact_properties_id => artifact_properties.id})
-      end
-      # Zu Demonstrationszwecken, um den Test fehlschlagen zu lassen (Tests sollten im Moment nur mit TextBBs arbeiten):
-      # data_for_bb = bb.re_bb_data_texts
-      bb_hash[bb] = data_for_bb      
+      bb_hash[bb] = bb.find_my_data(artifact_properties)
     end
     bb_hash
   end
   
+  # This method delivers an array with all data objects for 
+  # the building block from which it is called, reducing the 
+  # result to data for on special artifact
+  def find_my_data(artifact_properties)
+    building_block_reference_column_name = (self.type.to_s.underscore + '_id').to_sym
+    bb_data_class = self.get_data_class_name
+    data_for_bb = bb_data_class.constantize.find(:all, :conditions => {building_block_reference_column_name => self.id, :re_artifact_properties_id => artifact_properties.id}) 
+    return data_for_bb
+  end
+  
+  # This method delegates the saving of the builing block data
+  # sent by an artifact form to every building block used by that
+  # artifact.
   def self.save_data(artifact_properties_id, data_hash)
     unless data_hash.nil?
       data_hash.keys.each do |bb_id|
@@ -45,6 +48,12 @@ class ReBuildingBlock < ActiveRecord::Base
         bb.save_datum(data_hash[bb_id], artifact_properties_id) 
       end
     end
+  end
+  
+  # This method performs an easy string operation to
+  # build the data class name from the type of the building block 
+  def get_data_class_name
+    self.type.to_s.gsub('ReBb', 'ReBbData')
   end
   
 end

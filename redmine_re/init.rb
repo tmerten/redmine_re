@@ -38,7 +38,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
     permission( :administrate_requirements,
       {
         :requirements => [:setup, :configure],
-        :re_building_block => [:edit, :new, :update_config_form]
+        :re_building_block => [:edit, :new, :update_config_form, :delete_data]
       }
     )
 	end

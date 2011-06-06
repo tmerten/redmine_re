@@ -3,7 +3,13 @@
 	
 	  <fieldset><legend><%= l(:re_bb_userdefined_fields) %></legend>
 		<% bb_hash.keys.each do |bb| %>
-			<%= render :partial => bb.data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb_hash[bb]} %>
+			<div <%= 'id="bb_form_' + bb.id.to_s + '"'  %>>
+				<% if bb.multiple_values %>
+					<%= render :partial => bb.multiple_data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb_hash[bb]} %>
+				<% else %>
+					<%= render :partial => bb.data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb_hash[bb]} %>
+				<% end %>
+			</div>
 		<% end %>
 	      
 	    
