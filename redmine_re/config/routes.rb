@@ -9,4 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :re_vision, :path_prefix => '/projects/:project_id'
   map.resources :re_workarea, :path_prefix => '/projects/:project_id'
   map.resources :re_artifact_relationship, :path_prefix => '/projects/:project_id'
+  map.resources :re_scenario, :path_prefix => '/projects/:project_id'
+  map.resources :re_requirement, :path_prefix => '/projects/:project_id'
+
 end

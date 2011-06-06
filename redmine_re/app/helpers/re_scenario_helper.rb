@@ -1,0 +1,2 @@
+module ReScenarioHelper
+end

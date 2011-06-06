@@ -90,6 +90,18 @@ en:
   re_deleted_artifact_and_moved_children: 'Succesfully moved all child artifacts to the parent and deleted the artifact'
   re_relations_and_artifacts_found: 'The following relations and artifacts are connected'
   
+  #re_requirement
+  re_requirement: 'Requirement'
+  re_new_re_requirement: 'New Requirement'
+  re_requirement_priority: 'Priority'
+  re_requirement_saved: 'Requirement saved successfully'
+  
+  #re_scenario
+  re_scenario: 'Scenario'
+  re_new_re_scenario: 'New Scenario'
+  re_scenario_priority: 'Priority'
+  re_scenario_saved: 'Scenario saved successfully'
+  
   # re_section
   re_new_re_section: 'New Section'
   re_create_re_section: 'Create a new Section'

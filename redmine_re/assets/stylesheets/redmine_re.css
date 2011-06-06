@@ -297,6 +297,19 @@ ins.re_vision {
 a.re_vision {
     background: url(../images/icons/lightbulb.png) no-repeat left top;
 }
+ins.re_requirement {
+    background: url(../images/icons/pencil.png) no-repeat left top;
+}
+a.re_requirement {
+    background: url(../images/icons/pencil.png) no-repeat left top;
+}
+ins.re_scenario {
+    background: url(../images/icons/newspaper.png) no-repeat left top;
+}
+a.re_scenario {
+    background: url(../images/icons/newspaper.png) no-repeat left top;
+}
+
 
 /***** custom tooltips visualization*****/
 

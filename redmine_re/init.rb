@@ -88,11 +88,11 @@ config.after_initialize do
 	configured_artifact_types.concat(all_artifact_types)
 	
 	for artifact_type in all_artifact_types
-	  configured_artifact = ReArtifactConfig.find_by_artifact_type(artifact_type)
+	  configured_artifact = ReArtifactsConfig.find_by_artifact_type(artifact_type) || []
 	  if configured_artifact.nil?
-      configured_artifacts = ReArtifactConfig.all.sort_by {|x| x.position }
+      configured_artifacts = ReArtifactsConfig.all.sort_by {|x| x.position }
       position = configured_artifacts.last.position
-      configuration = ReArtifactConfig.new( :artifact_type => artifact_type, :position => position )
+      configuration = ReArtifactsConfig.new( :artifact_type => artifact_type, :position => position )
       configuration.save
     end
 	end
