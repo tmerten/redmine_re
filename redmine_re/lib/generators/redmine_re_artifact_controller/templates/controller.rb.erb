@@ -1,28 +1,32 @@
 class <%= class_name %>Controller < RedmineReController
   unloadable
+  menu_item :re
 
-  def new
-    # redirects to edit to be more dry
+  # The new and edit functions will be called via the RedmineReController.
+  # Both methods are pretty much equal for every artifact type (goal, scenario
+  # etc. ).
+  #
+  # If your artifact type needs special treatment uncommenct the following
+  # hook method(s).
+  # You find an example of how to use these hooks in the ReTaskController
+  
+  #def new_hook(params)
+  #end
 
-    redirect_to :action => 'edit', :project_id => params[:project_id]
-  end
+  #def edit_hook_after_artifact_initialized(params)
+  #end
+  
+  #def edit_hook_validate_before_save(params, artifact_valid)
+    # must return true, if the validation passed or false if invalid 
+    # you should also attach your errors to the @artifact variable
 
-  def edit
-    @<%= class_name.underscore %> = <%= class_name %>.find_by_id(params[:id], :include => :re_artifact_properties) || <%= class_name %>.new
-    
-    if request.post?
-      @<%= class_name.underscore %>.attributes = params[:<%= class_name.underscore %>]
-      add_hidden_re_artifact_properties_attributes @<%= class_name.underscore %>
+  #  return true
+  #end
+  
+  #def edit_hook_valid_artifact_after_save(params)
+  #end
+  
+  #def edit_hook_invalid_artifact_cleanup(params)
+  #end
 
-			flash[:notice] = t(:<%= class_name.underscore %>_saved, {:name => @<%= class_name.underscore %>.name}) if save_ok = @<%= class_name.underscore %>.save
-
-      redirect_to :action => 'edit', :id => @<%= class_name.underscore %>.id and return if save_ok
-    end
-  end
-
-<% actions.each do |action| -%>
-
-  def <%= action %>
-  end
-<% end -%>
 end
