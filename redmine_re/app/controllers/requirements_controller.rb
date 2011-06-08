@@ -28,6 +28,17 @@ class RequirementsController < RedmineReController
   end
   
   def configure
+  for artifact_type in @re_artifact_order
+	  configured_artifact = ReArtifactsConfig.find_by_artifact_type(artifact_type)
+	  if configured_artifact.nil?
+      configured_artifacts = ReArtifactsConfig.all
+      configured_artifacts.sort_by {|x| x.position }
+      position = configured_artifacts.last.position
+      configuration = ReArtifactsConfig.new( :artifact_type => artifact_type, :position => position )
+      configuration.save
+    end
+	end
+    
     @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
     @re_artifacts_configs = ReArtifactsConfig.all
     @config = {}
