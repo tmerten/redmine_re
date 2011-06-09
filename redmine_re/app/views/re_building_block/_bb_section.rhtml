@@ -1,7 +1,10 @@
 <% if bb_hash.keys.length != 0 %>
 	<div class="box">
 	
-	  <fieldset><legend><%= l(:re_bb_userdefined_fields) %></legend>
+	  <fieldset>
+	  	<legend>
+	  		<%= l(:re_bb_userdefined_fields) %>
+	  	</legend>
 		<% bb_hash.keys.each do |bb| %>
 			<div <%= 'id="bb_form_' + bb.id.to_s + '"'  %>>
 				<% if bb.multiple_values %>

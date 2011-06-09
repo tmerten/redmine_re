@@ -7,7 +7,12 @@
   <% form_for :re_scenario, :update => :detail_view, :url => {:action => "edit"} do |f| %>
     
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_scenario.re_artifact_properties} %>
-    <p>
+    
+	<div id='re_bb_section'>
+	  	<%= add_bb_section(@re_scenario, @bb_hash)%>
+	</div>
+	
+	<p>
       <%= submit_tag l(:re_save) %>
       &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
 

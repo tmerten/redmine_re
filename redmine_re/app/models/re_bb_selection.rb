@@ -26,16 +26,18 @@ class ReBbSelection < ReBuildingBlock
   end
   
 
-  def save_datum(datum_hash, artifact_properties_id)
+  def save_datum(datum_hash, artifact_properties_id, error_hash)
     id = datum_hash.keys.first
-    #Try to find a bb_data_object with the given id . 
-    #If no matching object is found, create a new one
-    bb_data = ReBbDataSelection.find_by_id(id) || ReBbDataSelection.new
-    bb_data.attributes = datum_hash[id]
-    bb_data.re_artifact_properties_id = artifact_properties_id
-    bb_data.re_bb_selection_id = self.id
-    bb_data.save  
-    
+    if ReBbDataSelection.find(:first, :conditions => {:re_bb_option_selection_id => datum_hash[id][:re_bb_option_selection_id], :re_artifact_properties_id => artifact_properties_id, :re_bb_selection_id => self.id}).nil?
+      #Try to find a bb_data_object with the given id . 
+      #If no matching object is found, create a new one
+      bb_data = ReBbDataSelection.find_by_id(id) || ReBbDataSelection.new
+      bb_data.attributes = datum_hash[id]
+      bb_data.re_artifact_properties_id = artifact_properties_id
+      bb_data.re_bb_selection_id = self.id
+      bb_data.save 
+      error_hash
+    end
   end 
   
    

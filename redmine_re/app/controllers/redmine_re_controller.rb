@@ -107,7 +107,8 @@ class RedmineReController < ApplicationController
         edit_hook_valid_artifact_after_save params
         @artifact.set_parent(@parent, 1) unless @parent.nil?
         # Saving of user defined Fields (Building Blocks)
-        ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
+        @bb_error_hash = {}
+        @bb_error_hash = ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb], @bb_error_hash)
         @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
       else
         edit_hook_invalid_artifact_cleanup params

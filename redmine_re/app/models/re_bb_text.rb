@@ -5,7 +5,7 @@ class ReBbText < ReBuildingBlock
 
   has_many :re_bb_data_texts   # This does not work properly in test environment.TODO: Ask why
   
-  validate :min_max_values_must_be_possible, :default_value_is_not_allowed_outside_min_max 
+  validate :min_max_values_must_be_possible
   
   @@data_form_partial_strategy = 're_building_block/re_bb_text/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_text/multiple_data_form'
@@ -25,12 +25,12 @@ class ReBbText < ReBuildingBlock
   end
   
 
-  def save_datum(datum_hash, artifact_properties_id)
+  def save_datum(datum_hash, artifact_properties_id, error_hash)
     id = datum_hash.keys.first
-    # Only if other data than default value is delivered,
-    # a save operation is needed
+    # Data should only be saved if no other data object with
+    # the same content is existent.
     attributes = datum_hash[id]
-    if attributes[:value] != self.default_value
+    if ReBbDataText.find(:first, :conditions => {:value => attributes[:value], :re_artifact_properties_id => artifact_properties_id, :re_bb_text_id => self.id}).nil?
       #Try to find a bb_data_object with the given id . 
       #If no matching object is found, create a new one
       bb_data = ReBbDataText.find_by_id(id) || ReBbDataText.new
@@ -38,34 +38,33 @@ class ReBbText < ReBuildingBlock
       bb_data.re_artifact_properties_id = artifact_properties_id
       bb_data.re_bb_text_id = self.id
       bb_data.save 
-    end    
+      error_hash = bb_data.validate_for_specification(error_hash)
+    end
+    error_hash
   end 
   
   def min_max_values_must_be_possible
-    min_length = 0 if min_length.nil? 
-    max_length = 99999 if max_length.nil? 
-    if min_length < 0
-      errors.add(:value, l(:re_bb_min_length_under_zero))
-      return false
+    unless min_length.nil?
+      if min_length < 0
+        errors.add(:value, l(:re_bb_min_length_under_zero))
+        return false
+      end
     end
-    if max_length < 0
-      errors.add(:value, l(:re_bb_max_length_under_zero))
-      return false
+    unless max_length.nil?
+      if max_length < 0
+        errors.add(:value, l(:re_bb_max_length_under_zero))
+        return false
+      end  
     end
-    if min_length > max_length 
-      errors.add_to_base(l(:re_bb_max_length_smaller_min_length))
-      return false
-    end   
+    unless min_length.nil? or max_length.nil?
+      if min_length > max_length 
+        errors.add_to_base(l(:re_bb_max_length_smaller_min_length))
+        return false
+      end   
+    end
+      
     true      
   end
   
-  def default_value_is_not_allowed_outside_min_max
-    min_length = 0 if min_length.nil? 
-    max_length = 99999 if max_length.nil?
-    if default_value.length > max_length || default_value.length < min_length
-      errors.add(:default_value, l(:re_bb_default_value_outside_min_max))
-    end
-  end
-    
-  
+ 
 end

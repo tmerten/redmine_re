@@ -41,19 +41,37 @@ class ReBuildingBlock < ActiveRecord::Base
   # This method delegates the saving of the builing block data
   # sent by an artifact form to every building block used by that
   # artifact.
-  def self.save_data(artifact_properties_id, data_hash)
+  def self.save_data(artifact_properties_id, data_hash, error_hash)
     unless data_hash.nil?
       data_hash.keys.each do |bb_id|
         bb = ReBuildingBlock.find_by_id(bb_id)
-        bb.save_datum(data_hash[bb_id], artifact_properties_id) 
+        error_hash = bb.save_datum(data_hash[bb_id], artifact_properties_id, error_hash) 
       end
     end
+    error_hash
   end
   
   # This method performs an easy string operation to
   # build the data class name from the type of the building block 
   def get_data_class_name
     self.type.to_s.gsub('ReBb', 'ReBbData')
+  end
+  
+  # This method can be called to validate the custom fields of an artifact.
+  # Therefore the artifact properties of the artifact have to be transmitted.
+  def self.validate_building_blocks(re_artifact_properties)
+    valid = true
+    bb_hash = self.find_all_bbs_and_data(artifact_properties)
+    unless bb_hash.nil?
+      bb_error_hash = {}
+      bb_hash.each do |bb|
+        bb_hash[bb].each do |datum|
+          bb_error_hash = datum.validate_for_specification(bb_error_hash)    
+        end
+      end
+      valid = false unless bb_error_hash.empty? 
+    end
+    valid
   end
   
 end

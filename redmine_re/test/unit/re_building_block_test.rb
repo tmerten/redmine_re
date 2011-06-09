@@ -1,13 +1,13 @@
-require File.expand_path('../../test_helper', __FILE__)
+#require File.expand_path('../../test_helper', __FILE__)
 #require "#{RAILS_ROOT}/vendor/plugins/redmine_re/app/models/re_bb_data_text.rb" 
+require File.dirname(__FILE__) + '/../test_helper'
+require 're_building_block'
 
 class ReBuildingBlockTest < ActiveSupport::TestCase
-#  fixtures :re_building_blocks
-#  fixtures :re_bb_data_texts
- # fixtures :re_goals
+  fixtures :re_building_blocks, :re_bb_data_texts, :re_goals
 
   def setup
-    @simple_bb = ReBuildingBlock.new(:name => 'Note', :artifact_type => 'ReGoal', :type => 'ReBbText')
+    @simple_bb = ReBbText.new(:name => 'Note_', :artifact_type => 'ReGoal')
     @simple_bb.save
     @complex_bb_text = ReBuildingBlock.find_by_name('Solution Ideas')
   end
@@ -21,6 +21,7 @@ class ReBuildingBlockTest < ActiveSupport::TestCase
 
   def test_if_right_bbs_are_delivered_for_artifact
     goal = ReGoal.find_by_id(Fixtures.identify(:goal_small_latency))
+    #logger.info("Example how to call the logger: ")
     prop = ReArtifactProperties.find_by_id(goal.re_artifact_properties.id)
     params = ReBuildingBlock.find_all_bbs_and_data(prop)
     new_bb = ReBbText.new(:name => 'New', :artifact_type => 'ReGoal')

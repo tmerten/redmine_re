@@ -68,7 +68,11 @@
                           :onUpdate => "function(el) { updateAllSubtaskPositions(); }"
     %>
     <br />
-    <%= add_bb_section(@re_task, @bb_hash)%>
+	
+    <div id='re_bb_section'>
+    	<%= add_bb_section(@re_task, @bb_hash)%>
+	</div>
+	
     <p>
       <%= submit_tag l(:re_save), :accesskey => "s" %>
       &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
@@ -79,6 +83,7 @@
     <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id  %>
 </div>
 <br>
+  	
   <%= add_bb_configuration_link(:ReTask)%>
 
 

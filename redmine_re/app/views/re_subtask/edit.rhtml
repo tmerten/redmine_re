@@ -36,7 +36,9 @@
                                     <% end %>
       </p>
 
-    <%= add_bb_section(@re_subtask, @bb_hash)%>
+	<div id='re_bb_section'>
+        <%= add_bb_section(@re_subtask, @bb_hash)%>
+	</div>
     <p>
       <%= submit_tag l(:re_save) %>
       &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
