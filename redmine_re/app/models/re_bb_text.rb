@@ -3,7 +3,7 @@ class ReBbText < ReBuildingBlock
   
   include StrategyProcs  
 
-  has_many :re_bb_data_texts   # This does not work properly in test environment.TODO: Ask why
+  has_many :re_bb_data_texts 
   
   validate :min_max_values_must_be_possible
   
@@ -24,6 +24,10 @@ class ReBbText < ReBuildingBlock
   def additional_work_after_save_strategy
     @@additional_work_after_save_strategy
   end
+  
+  def validation_strategies
+    @@validation_strategies
+  end
     
 
   def save_datum(datum_hash, artifact_properties_id)
@@ -41,14 +45,7 @@ class ReBbText < ReBuildingBlock
       bb_data.save 
     end
   end 
-  
-  def validate_for_spezification(datum, bb_error_hash)
-    @@validation_strategies.each do |validation_strategy|
-      bb_error_hash = validation_strategy.call(self, datum, bb_error_hash)    
-    end
-    bb_error_hash
-  end
-  
+    
   def min_max_values_must_be_possible
     unless min_length.nil?
       if min_length < 0

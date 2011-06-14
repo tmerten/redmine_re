@@ -3,14 +3,14 @@ class ReBbSelection < ReBuildingBlock
   
   include StrategyProcs
 
-  #has_many :re_bb_data, :class_name => 'ReBbDataText'
-  has_many :re_bb_data_selections   # This does not work properly in test environment.TODO: Ask why
+  has_many :re_bb_data_selections 
   has_many :re_bb_option_selections
   
   
   @@data_form_partial_strategy = 're_building_block/re_bb_selection/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_selection/multiple_data_form'
   @@additional_work_after_save_strategy = SAVE_OPTIONS_STRATEGY
+  @@validation_strategies = []
   
   #ToDo: Vielleicht später auslagern in eigenes Modul
   def data_form_partial_strategy
@@ -23,6 +23,10 @@ class ReBbSelection < ReBuildingBlock
   
   def additional_work_after_save_strategy
     @@additional_work_after_save_strategy
+  end
+  
+  def validation_strategies
+    @@validation_strategies
   end
   
 
@@ -38,6 +42,13 @@ class ReBbSelection < ReBuildingBlock
       bb_data.save 
     end
   end 
+  
+  def validate_for_specification(datum, bb_error_hash)
+    @@validation_strategies.each do |validation_strategy|
+      bb_error_hash = validation_strategy.call(self, datum, bb_error_hash)    
+    end
+    bb_error_hash
+  end
   
    
   

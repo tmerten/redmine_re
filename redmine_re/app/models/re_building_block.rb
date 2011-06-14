@@ -62,9 +62,15 @@ class ReBuildingBlock < ActiveRecord::Base
     bb_hash = self.find_all_bbs_and_data(re_artifact_properties)
     unless bb_hash.nil?
       bb_hash.keys.each do |bb|
+        logger.debug "################## BuildingBlock: #{bb.type}"
+        validation_strategies = bb.validation_strategies
         unless bb_hash[bb].nil?
-          bb_hash[bb].each do |datum|
-            bb_error_hash = bb.validate_for_specification(datum, bb_error_hash)    
+          unless validation_strategies.empty?
+            validation_strategies.each do |validation_strategy|
+              bb_hash[bb].each do |datum|
+                bb_error_hash = validation_strategy.call(bb, datum, bb_error_hash)    
+              end
+            end
           end  
         end
       end
