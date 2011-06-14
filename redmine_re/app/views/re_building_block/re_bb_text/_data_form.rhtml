@@ -1,18 +1,35 @@
-	<p>
-		<% if !data.empty? %>
-			<% data_id = data[0].id.to_s %>
-			<% shown_value = data[0].value.to_s %>
-		<% else %>
-			<% data_id = 'no_id' %>
-			<% shown_value = re_bb.default_value %>
-		<% end %>
-		<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
-		<% unless re_bb.help.nil? || re_bb.help == "" %>
-			<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
-	      		<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
-	     	</div>
-		<% end %>
-      	<%= label_tag param_path, re_bb.name, :class => "user_defined" %>
-		<%= text_field_tag param_path, shown_value, {:size => 30, :id => param_path} %>
-		
-    </p>
+<% if !data.empty? %>
+	<% data_id = data[0].id.to_s %>
+	<% shown_value = data[0].value.to_s %>
+<% else %>
+	<% data_id = 'no_id' %>
+	<% shown_value = re_bb.default_value %>
+<% end %>
+<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
+<table>
+	<tr>
+		<td>
+			<%= label_tag param_path, re_bb.name, :class => "user_defined" %>
+		</td>
+		<td>
+			<% unless re_bb.help.nil? || re_bb.help == "" %>
+				<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
+			  		<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
+			 	</div>
+			<% else %>
+				<div class="tooltip placeholder">&nbsp;
+ 				</div>
+			<% end %>
+		</td>
+		<td>
+			<%= text_field_tag param_path, shown_value, {:size => 30, :id => param_path} %>
+		</td>
+		<td>
+			<% unless bb_error_hash.nil? or bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][data[0].id].nil? %>
+				<div class="tooltip userdefined_fields"><%= image_tag("icons/invalid.png", :plugin => 'redmine_re') %>
+			  		<span class="tip userdefined_fields_tip"><%= bb_error_hash[re_bb.id][data[0].id].to_s %></span>
+			 	</div>
+			<% end %>
+		</td>
+	</tr>
+</table>

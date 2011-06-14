@@ -12,7 +12,7 @@
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_user_profile.re_artifact_properties} %>
 	
 	<div id='re_bb_section'>
-		<%= add_bb_section(@re_user_profile, @bb_hash)%>
+		<%= add_bb_section(@re_user_profile, @bb_hash, @bb_error_hash)%>
 	</div>
     <p>
       <%= submit_tag l(:re_save) %>

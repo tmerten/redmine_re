@@ -13,6 +13,10 @@ a:active {
   margin-right: 35px;
 }
 
+.re_bb_form {
+	width: 500px;
+}
+
 .treebar {
   position: absolute;
   float: left;
@@ -340,6 +344,7 @@ div.tooltip:hover span.userdefined_fields_tip {
     border: 1px solid #507AAA;
 	position: absolute;
     text-align:center;
+	float: right;
   	font-weight:bold;
     padding-bottom: 5px;
     padding-left: 5px;
@@ -347,6 +352,13 @@ div.tooltip:hover span.userdefined_fields_tip {
 }
 
 div.tooltip.userdefined_fields {
-	position: absolute;
+	position: relative;
+	float: right;
+}
+
+div.tooltip.placeholder {
+	position: relative;
+	width: 16px;
+	float: right;
 }
 

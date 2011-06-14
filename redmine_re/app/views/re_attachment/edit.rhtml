@@ -17,7 +17,7 @@
       <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
     <% end %>
 	<div id='re_bb_section'>
-		<%= add_bb_section(@re_attachment, @bb_hash)%>
+		<%= add_bb_section(@re_attachment, @bb_hash, @bb_error_hash)%>
 	</div>
     <p>
       <%= submit_tag l(:re_save) %>

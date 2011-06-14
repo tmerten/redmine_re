@@ -12,7 +12,7 @@
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_workarea.re_artifact_properties} %>
 	
 	<div id='re_bb_section'>
-		<%= add_bb_section(@re_workarea, @bb_hash)%>
+		<%= add_bb_section(@re_workarea, @bb_hash, @bb_error_hash)%>
     </div>
 	
 	<p>

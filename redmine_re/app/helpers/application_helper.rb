@@ -107,9 +107,9 @@ JAVASCRIPT
     end
   end
   
-  def add_bb_section(artifact, bb_hash)
+  def add_bb_section(artifact, bb_hash, bb_error_hash)
     if User.current.allowed_to?(:administrate_requirements, @project)
-      render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash}
+      render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash, :bb_error_hash => bb_error_hash}
     else
       ""
     end

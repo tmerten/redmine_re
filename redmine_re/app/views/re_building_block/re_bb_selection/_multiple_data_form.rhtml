@@ -9,23 +9,24 @@
       	
 		<table>
 			<tr>
-				<th>
+				<td>
 					<%= label_tag param_path, re_bb.name, :class => "user_defined" %>
+				</td>
+				<td>
 					<% unless re_bb.help.nil? || re_bb.help == "" %>
 						<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
 	      					<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
 	     				</div>
+					<% else %>
+						<div class="tooltip placeholder">&nbsp;
+	     				</div>
 					<% end %>
-				</th>
-				<th>
-					<%= l(:re_bb_value)%>
-				</th>
-				<th>
-					<%= l(:re_bb_control)%>
-				</th>
+				</td>
 			</tr>
 		  <% data.each do |datum| %>
 			<tr>
+				<td>
+				</td>
 				<td>
 				</td>
 				<td>
@@ -43,6 +44,7 @@
 			<br/>
 			<% options = ReBbOptionSelection.find_all_by_re_bb_selection_id(re_bb.id) %>			
 			<tr>
+				<td></td>
 				<td></td>
 				<td colspan=2>
 					<%= select_tag param_path, options_for_select(options.map {|opt| [opt.value, opt.id]}, selected.to_i) %>
