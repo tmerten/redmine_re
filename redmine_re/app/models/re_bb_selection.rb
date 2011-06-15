@@ -10,9 +10,10 @@ class ReBbSelection < ReBuildingBlock
   @@data_form_partial_strategy = 're_building_block/re_bb_selection/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_selection/multiple_data_form'
   @@additional_work_after_save_strategy = SAVE_OPTIONS_STRATEGY
-  @@validation_strategies = []
+  @@validation_strategies = {}
+  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_bb_option_selection_id'}}
   
-  #ToDo: Vielleicht später auslagern in eigenes Modul
+  #ToDo: später auslagern in eigenes Modul
   def data_form_partial_strategy
     @@data_form_partial_strategy
   end
@@ -27,6 +28,10 @@ class ReBbSelection < ReBuildingBlock
   
   def validation_strategies
     @@validation_strategies
+  end
+  
+  def validation_whole_data_strategies
+    @@validation_whole_data_strategies
   end
   
 

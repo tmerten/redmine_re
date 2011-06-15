@@ -115,6 +115,16 @@ JAVASCRIPT
     end
   end
   
+  def validation_warning(bb_error_hash, re_bb, key_for_error_hash)
+    unless bb_error_hash.nil? or bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][key_for_error_hash].nil?
+      %Q{
+        <div class="tooltip userdefined_fields"> #{image_tag("icons/invalid.png", :plugin => 'redmine_re')}
+          <span class="tip userdefined_fields_tip"> #{bb_error_hash[re_bb.id][key_for_error_hash].to_s}</span>
+        </div>
+      }
+    end
+  end
+  
   
   
   

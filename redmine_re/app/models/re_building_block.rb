@@ -20,7 +20,7 @@ class ReBuildingBlock < ActiveRecord::Base
   # an array with all bb_data_objects belonging to the artifact properties and the
   # building block being the key. 
   def self.find_all_bbs_and_data(artifact_properties)
-    building_blocks = ReBuildingBlock.find_all_by_artifact_type(artifact_properties.artifact_type)
+    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_properties.artifact_type})
     bb_hash = {}
     for bb in building_blocks do 
       bb_hash[bb] = bb.find_my_data(artifact_properties)
@@ -62,16 +62,21 @@ class ReBuildingBlock < ActiveRecord::Base
     bb_hash = self.find_all_bbs_and_data(re_artifact_properties)
     unless bb_hash.nil?
       bb_hash.keys.each do |bb|
-        logger.debug "################## BuildingBlock: #{bb.type}"
-        validation_strategies = bb.validation_strategies
+        validation_strategy_hash = bb.validation_strategies
         unless bb_hash[bb].nil?
-          unless validation_strategies.empty?
-            validation_strategies.each do |validation_strategy|
+          unless validation_strategy_hash.empty?
+            validation_strategy_hash.keys.each do |validation_strategy|
               bb_hash[bb].each do |datum|
-                bb_error_hash = validation_strategy.call(bb, datum, bb_error_hash)    
+                bb_error_hash = validation_strategy.call(bb, datum, bb_error_hash, validation_strategy_hash[validation_strategy])    
               end
             end
           end  
+        end
+        # Validation concerning the whole Building Block and all its data 
+        # (Only if multiple data is allowed)
+        validation_whole_data_strategy_hash = bb.validation_whole_data_strategies
+        validation_whole_data_strategy_hash.keys.each do |validation_strategy|
+          bb_error_hash = validation_strategy.call(bb, bb_hash[bb], bb_error_hash, validation_whole_data_strategy_hash[validation_strategy]) 
         end
       end
     end

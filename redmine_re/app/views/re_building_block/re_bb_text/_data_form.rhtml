@@ -25,10 +25,9 @@
 			<%= text_field_tag param_path, shown_value, {:size => 30, :id => param_path} %>
 		</td>
 		<td>
-			<% unless bb_error_hash.nil? or bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][data[0].id].nil? %>
-				<div class="tooltip userdefined_fields"><%= image_tag("icons/invalid.png", :plugin => 'redmine_re') %>
-			  		<span class="tip userdefined_fields_tip"><%= bb_error_hash[re_bb.id][data[0].id].to_s %></span>
-			 	</div>
+			<%= validation_warning(bb_error_hash, re_bb, :general)%>
+			<% if !data.empty? %>
+				<%= validation_warning(bb_error_hash, re_bb, data_id) %>
 			<% end %>
 		</td>
 	</tr>

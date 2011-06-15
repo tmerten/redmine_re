@@ -283,6 +283,7 @@ en:
   re_bb_no_options_defined: 'No options defined so far.'
   re_bb_value: 'Value'
   re_bb_control: 'Control'
+  re_bb_mandatory: '%{bb_name} is mandatory. Please enter data!'
 
   # re_tree
   re_tree_overview: 'Artifact Overview'

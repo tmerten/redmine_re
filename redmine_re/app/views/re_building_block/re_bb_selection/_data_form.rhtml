@@ -1,3 +1,5 @@
+<!-- This view is not prepared to show error-warnings concerning a single datum. So if you add errors for ReBbSelection, add suitable code here -->
+
 <% if !data.empty? %>
 	<% data_id = data[0].id.to_s %>
 	<% selected = data[0].re_bb_option_selection_id.to_i %>
@@ -27,5 +29,9 @@
 		<td>
 			<%= select_tag param_path, options_for_select(options.map {|opt| [opt.value, opt.id]}, selected.to_i) %>
 		</td>
+		<td>
+		   <%= validation_warning(bb_error_hash, re_bb, :general) %>
+		</td>
+		
 	</tr>
 </table>

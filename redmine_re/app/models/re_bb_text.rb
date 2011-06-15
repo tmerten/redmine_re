@@ -1,7 +1,7 @@
 class ReBbText < ReBuildingBlock
   unloadable
   
-  include StrategyProcs  
+   include StrategyProcs  
 
   has_many :re_bb_data_texts 
   
@@ -10,9 +10,10 @@ class ReBbText < ReBuildingBlock
   @@data_form_partial_strategy = 're_building_block/re_bb_text/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_text/multiple_data_form'
   @@additional_work_after_save_strategy = DO_NOTHING_STRATEGY
-  @@validation_strategies = [VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY]
+  @@validation_strategies = {VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY => nil}
+  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => nil}
   
-  #ToDo: Vielleicht später auslagern in eigenes Modul
+  #ToDo: später auslagern in eigenes Modul
   def data_form_partial_strategy
     @@data_form_partial_strategy
   end
@@ -28,6 +29,10 @@ class ReBbText < ReBuildingBlock
   def validation_strategies
     @@validation_strategies
   end
+  
+  def validation_whole_data_strategies
+    @@validation_whole_data_strategies
+  end
     
 
   def save_datum(datum_hash, artifact_properties_id)
@@ -36,13 +41,16 @@ class ReBbText < ReBuildingBlock
     # the same content is existent.
     attributes = datum_hash[id]
     if ReBbDataText.find(:first, :conditions => {:value => attributes[:value], :re_artifact_properties_id => artifact_properties_id, :re_bb_text_id => self.id}).nil?
-      #Try to find a bb_data_object with the given id . 
-      #If no matching object is found, create a new one
-      bb_data = ReBbDataText.find_by_id(id) || ReBbDataText.new
-      bb_data.attributes = attributes
-      bb_data.re_artifact_properties_id = artifact_properties_id
-      bb_data.re_bb_text_id = self.id
-      bb_data.save 
+      # With multiple values possible, the saving of empty data should be forbidden
+      unless (attributes[:value].nil? or attributes[:value] == "") and self.multiple_values == true
+        #Try to find a bb_data_object with the given id . 
+        #If no matching object is found, create a new one
+        bb_data = ReBbDataText.find_by_id(id) || ReBbDataText.new
+        bb_data.attributes = attributes
+        bb_data.re_artifact_properties_id = artifact_properties_id
+        bb_data.re_bb_text_id = self.id
+        bb_data.save
+      end      
     end
   end 
     
