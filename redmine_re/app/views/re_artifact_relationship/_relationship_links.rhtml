@@ -4,7 +4,7 @@
 		<% for relationship in @relationships_outgoing %>
 		<% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
 		<li>
-              [<%= link_to_remote (
+              [<%= link_to_remote(
                 t(:re_remove),
                     {
                       :update => "relationship_link_list",
@@ -40,7 +40,7 @@
 		<% for relationship in @relationships_incoming %>
 		<% source = ReArtifactProperties.find_by_id(relationship.source_id) %>
 		<li>
-      [<%= link_to_remote (
+      [<%= link_to_remote(
         t(:re_remove),
             {
               :update => "relationship_link_list",

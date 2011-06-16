@@ -19,7 +19,6 @@ class ReBuildingBlockController < RedmineReController
    
    if request.post?
       params[:re_building_block][:artifact_type] = params[:artifact_type]
-      params[:re_building_block][:type] = params[:type]
       # Test if @re_builing_block is a new object
       @re_building_block = params[:type].constantize.new if @re_building_block.artifact_type.nil?
       @re_building_block.attributes = params[:re_building_block]

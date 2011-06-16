@@ -14,7 +14,6 @@ module StrategyProcs
   end
       
   DO_NOTHING_STRATEGY = lambda do
-    #RAILS_DEFAULT_LOGGER.debug('#################  Called DO_NOTHING_STRATEGY')
     true
   end
   
@@ -33,18 +32,17 @@ module StrategyProcs
   # This proc needs the Building Block (bb) which user-defined fields shall be checked. The bb 
   # deliverd is supposed to allow multiple data. The data is transmitted all together in one 
   # array. As usual, the error_hash as built up since now has to be given to the proc as well.
+  #
+  # The hash attribute_names is not used here yet.
   VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY = lambda do |bb, datum, bb_error_hash, attribute_names|
-    #RAILS_DEFAULT_LOGGER.debug('#################  Called VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY')
     unless bb.min_length.nil?
       if datum.value.length < bb.min_length 
          bb_error_hash = StrategyProcs.add_error(bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_short, :bb_name => bb.name, :min_length => bb.min_length))       
-         RAILS_DEFAULT_LOGGER.debug("#################  Added error #{I18n.t(:re_bb_too_short, :bb_name => bb.name, :min_length => bb.min_length)}")
       end
     end
     unless bb.max_length.nil?
       if datum.value.length > bb.max_length 
         bb_error_hash = StrategyProcs.add_error(bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_long, :bb_name => bb.name, :max_length => bb.max_length))       
-        RAILS_DEFAULT_LOGGER.debug("#################  Added error #{I18n.t(:re_bb_too_long, :bb_name => bb.name, :max_length => bb.max_length)}")
       end
     end
     bb_error_hash
@@ -54,6 +52,8 @@ module StrategyProcs
   # This proc needs the Building Block (bb) which user-defined fields shall be checked. The bb 
   # deliverd is supposed to allow multiple data. The data is transmitted all together in one 
   # array. As usual, the error_hash as built up since now has to be given to the proc as well.
+  # The hash attribute_names is needed if the data to check stores its information in another
+  # attribute than "value".
   VALIDATE_MANDATORY_VALUES = lambda do |bb, data_array, bb_error_hash, attribute_names |
     if attribute_names.nil?
       attribute_names = {:value => :value}
@@ -66,7 +66,6 @@ module StrategyProcs
         # So check if there is any data and if not, add the message.
         if data_array.empty? or eval "data_array[0].#{attribute_names[:value]} == ''"
           bb_error_hash = StrategyProcs.add_error(bb.id, :general, bb_error_hash, I18n.t(:re_bb_mandatory, :bb_name => bb.name))         
-          RAILS_DEFAULT_LOGGER.debug("#################  Added error in general #{I18n.t(:re_bb_mandatory, :bb_name => bb.name)}")
         end
       end
     end
