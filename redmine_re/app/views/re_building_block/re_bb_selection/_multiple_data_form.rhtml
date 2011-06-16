@@ -33,9 +33,9 @@
 		</td>
 		<td>
 			<% div_id = 'bb_form_' + re_bb.id.to_s  %>
-			<%= link_to_remote 	(image_tag("delete.png"), 
-								:url => {:controller => 're_building_block', :action => 'delete_data', :re_bb_data_id => datum.id, :re_bb_id => re_bb.id },
-								:update => div_id)
+			<%= link_to_remote(image_tag("delete.png"), 
+							  :url => {:controller => 're_building_block', :action => 'delete_data', :re_bb_data_id => datum.id, :re_bb_id => re_bb.id },
+							  :update => div_id)
 			%>
 		</td>	
 	</tr>

@@ -7,3 +7,15 @@ Engines::Testing.set_fixture_path
 def logger
   RAILS_DEFAULT_LOGGER
 end
+
+def extract_error_messages(hash)
+  messages = []
+  hash.keys.each do |bb|
+    hash[bb].keys.each do |datum|
+      hash[bb][datum].each do |message|
+        messages << message
+      end
+    end
+  end
+  messages
+end
