@@ -1,5 +1,5 @@
 <% data_id = 'no_id' %>
-<% shown_value = re_bb.default_value %>
+<% re_bb.mandatory? and !data.empty? ? shown_value = "" : shown_value = re_bb.default_value %>
 
 <% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
 
@@ -27,7 +27,7 @@
 			<%= datum.value %>
 		</td>
 		<td>
-			<%= validation_warning(bb_error_hash, re_bb, datum.id) %>
+			<%= validation_warning(bb_error_hash, re_bb, datum.id.to_i) %>
 		</td>
 		<td>
 			<% div_id = 'bb_form_' + re_bb.id.to_s  %>
@@ -42,7 +42,7 @@
 		<td></td>
 		<td></td>	
 		<td colspan=3>
-			<%= text_field_tag param_path, shown_value, {:size => 30, :id => param_path} %>	
+			<%= text_area_tag param_path, shown_value, {:size => '25*3', :id => param_path} %>	
 	    </td>
 		<td>
 			<%= validation_warning(bb_error_hash, re_bb, :general) %>	
