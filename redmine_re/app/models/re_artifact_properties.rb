@@ -2,7 +2,10 @@ class ReArtifactProperties < ActiveRecord::Base
   unloadable
 
   cattr_accessor :artifact_types
-  
+
+  has_many :realizations  
+  has_many :issues, :through => :realizations
+
   RELATION_TYPES = {
   	:parentchild => 1,
   	:dependency => 2,

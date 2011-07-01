@@ -14,7 +14,7 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TextHelper
   
   before_filter :find_project, :load_settings# , :authorize
-  
+
 	def load_settings
 		@settings = Setting.plugin_redmine_re
 		@re_artifact_order = ActiveSupport::JSON.decode(@settings['re_artifact_types'])
@@ -84,7 +84,8 @@ class RedmineReController < ApplicationController
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
     @bb_error_hash = {}
     @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash)
-        
+
+    @issues = @artifact_properties.issues
     
     unless params[:parent_artifact_id].blank?
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
