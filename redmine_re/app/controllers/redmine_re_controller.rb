@@ -13,7 +13,7 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
   
-  before_filter :find_project, :load_settings# , :authorize
+  before_filter :find_project, :load_settings, :authorize
 
 	def load_settings
 		@settings = Setting.plugin_redmine_re
@@ -151,6 +151,7 @@ class RedmineReController < ApplicationController
     end
     tree.to_json
   end
+
   
   # filtering of re_artifacts. If request is post, filter was used already
   # and result should be displayed
