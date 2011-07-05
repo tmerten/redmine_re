@@ -1,3 +1,5 @@
+# http://guides.rubyonrails.org/v2.3.8/routing.html#route-options to simplify routes
+
 ActionController::Routing::Routes.draw do |map|
   map.resources :requirements, :path_prefix => '/projects/:project_id', :except => :edit
   map.resources :re_goal  , :path_prefix => '/projects/:project_id', :except => :edit
