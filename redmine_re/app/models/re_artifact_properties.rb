@@ -3,7 +3,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
   cattr_accessor :artifact_types
 
-  has_many :realizations  
+  has_many :realizations
   has_many :issues, :through => :realizations
 
   RELATION_TYPES = {

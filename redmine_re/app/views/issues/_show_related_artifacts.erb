@@ -1,0 +1,10 @@
+<fieldset>
+  <legend><%= t(:re_asscociated_requirements) %></legend>
+
+  <% unless @issue.nil? %>
+  <%= @issue.re_artifact_properties.collect {
+          |properties| link_to properties.name, send("edit_#{properties.artifact_type.underscore}_path", :id=>properties.artifact_id)
+  }.to_sentence %>
+  <% end %>
+    
+</fieldset>

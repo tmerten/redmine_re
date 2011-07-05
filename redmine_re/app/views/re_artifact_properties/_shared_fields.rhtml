@@ -1,68 +1,78 @@
 <div class="box">
-  
   <%= hidden_field_tag :project_id, @project.id %>
+  <fieldset>
+    <legend><%= t(:re_common_attributes) %></legend>
 
-  <fieldset><legend><%= l(:re_common_attributes) %></legend>
-
-    <div class="splitcontentleft" >
-      <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, { :id => 'parent_artifact_id' } %>
+    <div class="splitcontentleft">
+      <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, {:id => 'parent_artifact_id'} %>
       <p>
-        <%= label_tag :parent_autocomplete, l(:re_set_parent), { :class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @parent.nil? ? '' : @parent.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
+        <%= label_tag :parent_autocomplete, l(:re_set_parent), {:class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @parent.nil? ? '' : @parent.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
       </p>
+
       <div id="parent_artifact_candidates" class="autocomplete"></div>
       <% javascript_tag do %>
-        new Ajax.Autocompleter('parent_autocomplete',
-           'parent_artifact_candidates',
-           '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
-           { minChars: 3,
-             paramName: 'parent_name',
-             parameters: 'project_id=<%= @project.id %><%= '&id=' + properties.id.to_s unless properties.id.blank? %>',
-             frequency: 0.5,
-             afterUpdateElement : function(text, li) { $('parent_artifact_id').setValue(li.id) }
-             });      
+          new Ajax.Autocompleter('parent_autocomplete',
+          'parent_artifact_candidates',
+          '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
+          { minChars: 3,
+          paramName: 'parent_name',
+          parameters: 'project_id=<%= @project.id %><%= '&id=' + properties.id.to_s unless properties.id.blank? %>',
+          frequency: 0.5,
+          afterUpdateElement : function(text, li) { $('parent_artifact_id').setValue(li.id) }
+          });
       <% end %>
       <p>
         <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
       </p>
-      <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %><br/>
+      <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
+      <br/>
       <%= number_field_with_slider(controller.controller_name, :priority, 0, 50) %>
-     </div>
-    
-    <div class="splitcontentright" >
+    </div>
+
+    <div class="splitcontentright">
       <p>
-        <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact( @project, properties ) %>
+        <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact(@project, properties) %>
       </p>
-        <%
-        re_users = []
-        re_users << User.current
-        re_users.concat User.all.sort_by { |u| u.lastname}
-        re_users.delete_if { |u| ! u.allowed_to? :edit_requirements, @project }
-        re_users.uniq!
-        %>
+      <%
+         re_users = []
+         re_users << User.current
+         re_users.concat User.all.sort_by { |u| u.lastname }
+         re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
+         re_users.uniq!
+      %>
       <p>
-        <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect {|u| [ u.firstname+" "+ u.lastname ] }%>
+        <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
       </p>
     </div>
 
   </fieldset>
 
-  <br />
+  <br/>
 
-  <fieldset><legend><%= t(:re_description_fieldset) %></legend>
+  <fieldset>
+    <legend><%= t(:re_description_fieldset) %></legend>
     <% unless properties.id.nil? %>
-      <div class="contextual">
-        <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', '<%=controller.controller_name -%>_description'); return false;"><%= l(:re_update_description) %></a>
+        <div class="contextual">
+          <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', '<%=controller.controller_name -%>_description'); return false;"><%= l(:re_update_description) %></a>
         </div>
-    <%= textilizable(properties, :description, :only_path => false) %>
-    <br/>
+        <%= textilizable(properties, :description, :only_path => false) %>
+        <br/>
     <% end %>
     <div id='update-description' <%= 'style="display:none;"' unless properties.id.nil? %>>
       <%= f.text_area :description,
-                       :cols => 60,
-                       :rows => (properties.description.blank? ? 10 : [[10, properties.description.length / 50].max, 100].min),
-                       :accesskey => accesskey(:edit),
-                       :class => 'wiki-edit' %>
+                      :cols => 60,
+                      :rows => (properties.description.blank? ? 10 : [[10, properties.description.length / 50].max, 100].min),
+                      :accesskey => accesskey(:edit),
+                      :class => 'wiki-edit' %>
       <%= wikitoolbar_for controller.controller_name + '_description' %>
     </div>
   </fieldset>
+
+  <fieldset>
+    <legend><%= t(:re_associated_issues) %></legend>
+    <% unless @issues.nil? %>
+        <%= @issues.collect { |issue| link_to issue.subject, issues_path+"/"+issue.id.to_s }.to_sentence %>
+    <% end %>
+  </fieldset>
+
 </div>

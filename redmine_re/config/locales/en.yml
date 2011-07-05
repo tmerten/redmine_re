@@ -39,7 +39,10 @@ en:
   re_from: 'from'
   re_hide: 'hide'
   re_shows_after_reload: 'will be shown after a page reload'
-  
+  re_associated_issues: 'Related Issues'
+  re_asscociated_requirements: 'Related Requirements'
+
+
   # Configuration
   re_administrate: 'Administration'
   re_configure_plugin: 'Configure Plugin'

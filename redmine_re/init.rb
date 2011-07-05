@@ -1,4 +1,10 @@
 require 'redmine'
+require 'redmine_re/hooks'
+require 'dispatcher'
+
+Dispatcher.to_prepare do
+  require_dependency 'issue_patch'
+end
 
 Redmine::Plugin.register :redmine_re do
 	name 'Redmine Requirements Engineering Plugin'

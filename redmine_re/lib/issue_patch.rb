@@ -1,4 +1,4 @@
-require "issue"
+require_dependency 'issue'
 
 
 #Mixin for Issue Model
@@ -7,24 +7,32 @@ require "issue"
 
 module IssuePatch
 
-  def self.include(base)
+  def self.included(base)
     base.extend(ClassMethods)
     base.send(:include, InstanceMethods)
-#    base.instance_eval("has_many :realizations")
-#    base.instance_eval("has_many: artifacts, :through => :realizations")
+
+    #typing in class
     base.class_eval do
-      base.has_many :realizations
-      base.has_many :re_artifact_properties, :through => :realizations
+      unloadable
+
+      #puts base.methods
+      has_many :realizations
+      has_many :re_artifact_properties, :as => :artifact, :class_name => "ReArtifactProperties", :through => :realizations
+
+      puts "\n ISSUE PATCH LOADED \n"
+
+      
     end
 
   end
 
 
-  module ClassMethods
-
-  end
-
-  module InstanceMethods
-
-  end
+module ClassMethods
 end
+
+module InstanceMethods
+end
+
+end
+
+Issue.send(:include, IssuePatch)
