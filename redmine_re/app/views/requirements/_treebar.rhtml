@@ -1,22 +1,26 @@
 <div id='treebar' class='treebar'>
   <!--<a href="#" id="hide_treebar" class="contextual" title="<%= t(:re_shows_after_reload) %>"><%= t(:re_hide) %></a>-->
   
-  <h2 class="current"><%= l(:re_tree_overview) %></h3>
+  <h2 class="current"><%= l(:re_tree_overview) %></h2>
   <div class="pane">
     <%= render :partial => 'requirements/filter' %>
     <div id="tree"></div>
   </div>
   
-  <h2><%= l(:re_create_new_artifacts) %></h3>
+  <h2><%= l(:re_create_new_artifacts) %></h2>
   <div class="pane">
     <ul class="navigation">
     <% for artifact_type in @re_artifact_order	%>
-        <li><%= link_to t("re_new_#{artifact_type.underscore}"), {
+      <% artifact_settings = ReSetting.get_serialized(artifact_type, @project.id) %>
+      <% if artifact_settings['in_use'] %>
+      <li><%= link_to artifact_settings['alias'] ? t(:re_new) + " " + artifact_settings['alias'] : t("re_new_#{artifact_type.underscore}"), {
               :controller => artifact_type.underscore,
               :action => "new",
               :project_id => @project.id } ,
               :class => "icon #{artifact_type.underscore}" %></li>
+      <% end %>
     <% end %>
+      <% %>
     </ul>
   </div>
     
@@ -44,6 +48,7 @@
   </div>
   <% end %>
   
+  <span id="back-top"><a href="#top"><%= l(:re_scroll_to_top) %></a></span>
 </div>
 
 <script type="text/javascript">
@@ -54,16 +59,30 @@ jQuery("#hide_treebar").click(function () {
   jQuery(".detail_view").css('margin-left', '10px');
 });
 
+/* if a user clicks a tab, this variable becomes true.
+   If it is true, the tab containing the tree does not
+   get opened after the tree is loaded (since the
+   user has already chosen another tab)
+   (may be refactored as non-global variable) */
+var cancel_showtree = false;
+
 var accordion = jQuery("#treebar").tabs("#treebar div.pane", {
   tabs: 'h2',
   effect: 'slide',
-  initialIndex: null,history:true
+  initialIndex: null,
+  history:true,
+	onClick: function(event, tabIndex) {
+    cancel_showtree = true;
+	}
 });
 
 var tree = jQuery("#tree")
   .bind("loaded.jstree", function (event, data) {
-    var api = jQuery("#treebar").data("tabs");
-    api.click(0);
+    if (! cancel_showtree) {
+      var api = jQuery("#treebar").data("tabs");
+      api.click(0);
+      cancel_showtree = false;
+    }
   })
   .bind("close_node.jstree", function (event, data) {
     jQuery.ajax({
@@ -74,7 +93,8 @@ var tree = jQuery("#tree")
     var node = data.args[0];
     var node_postition = node.position();
     var node_width = node.outerWidth();
-    /* TODO: Resize Trees div, there is also a post open/close hook!! */
+    /* TODO: Resize the trees div (actually resize the contents left margin);
+    there is a post open/close hook, where this can be implemented */
          
     var width = this.getWidth();
     
@@ -324,5 +344,27 @@ var tree = jQuery("#tree")
       window.location.href = link + id
   })
   
+  jQuery(document).ready(function(){
+
+    jQuery("#back-top").hide();
+    jQuery(function () {
+      jQuery(window).scroll(function () {
+        if (jQuery(this).scrollTop() > 100) {
+          jQuery('#back-top').fadeIn();
+        } else {
+          jQuery('#back-top').fadeOut();
+        }
+      });
+      // scroll body to 0px on click
+      jQuery('#back-top a').click(function () {
+        jQuery('body,html').animate({
+          scrollTop: 0
+        }, 800);
+        return false;
+      });
+    });
+  
+
+});
   //]]>
 </script>

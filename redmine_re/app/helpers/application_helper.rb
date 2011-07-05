@@ -5,10 +5,7 @@ module ApplicationHelper
     s += render_flash_messages_with_timeout
   end
   
-  
-  
   def render_flash_messages_with_timeout
-  # overrides render_flash_messages in application helper
     s = ''
     flash.each do |k,v|
       id = "#{v} #{k}".gsub(" ", "_") # id should be a token (one word) WC3 valid..

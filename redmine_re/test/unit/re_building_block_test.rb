@@ -17,7 +17,7 @@ class ReBuildingBlockTest < ActiveSupport::TestCase
     @simple_bb.artifact_type = 'ReTask'
     @simple_bb.save
     assert_equal @simple_bb.artifact_type, type
-  end  
+  end
 
   def test_if_right_bbs_are_delivered_for_artifact
     goal = ReGoal.find_by_id(Fixtures.identify(:goal_small_latency))

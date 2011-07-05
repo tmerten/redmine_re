@@ -1,6 +1,7 @@
 # English strings go here for Rails i18n
 en:
   # general stuff
+  re_new: 'New'
   re_requirements: 'Requirements'
   re_save: 'Save'
   re_cancel: 'Cancel'
@@ -39,15 +40,32 @@ en:
   re_from: 'from'
   re_hide: 'hide'
   re_shows_after_reload: 'will be shown after a page reload'
+  re_scroll_to_top: 'Scroll to top'
   re_associated_issues: 'Related Issues'
   re_asscociated_requirements: 'Related Requirements'
-
-
+  
+  re_404_invalid_project_id: 'The project (or project ID) could not be found or is invalid'
+  re_404_artifact_not_found: 'The artifact (or artifact ID) could not be found'
+  re_404_artifact_not_found_or_project_missing: 'No artifact could not be found and no project ID was supplied'
+  
+  
   # Configuration
   re_administrate: 'Administration'
   re_configure_plugin: 'Configure Plugin'
-  re_relation_management_pane: 'Show relation management pane'
-  re_visualization_size: 'Visualization size in Pixel'
+  re_relation_management_pane: 'Always show relation management pane'
+  re_visualization_size: 'Visualization size (in pixels)'
+  re_child_artifacts: 'Child artifacts'
+  re_fields: 'Fields'
+  re_configs_saved: 'Configurations saved sucessfully'
+  re_conf_artifact_display_order: 'Use Drag and Drop to change the display order (e.g. in the side menu or the index page)'
+  re_conf_artifact_in_use: 'Do you want do use (show) this artifact type in this project (existing artifacts will not be deletet)?'
+  re_conf_alias_name: 'You can give another name to this artifact type to match your RE process'
+  re_conf_printable: 'Whether this artifact will be shown when a specification is created'
+  re_conf_color: 'The color code of this artifact throughout the application. This is especially useful in the visualization'
+  re_conf_show_in_tree: 'Should this artifact type be shown in the tree? Tick this off for artifacts that are handled implizitly, e.g. subtasks'
+  re_conf_child_artifacts: 'You may want to forbid some artifact types to be direct children of this artifact. E.g. you may not want goals below workareas.'
+  re_conf_fields: 'Configure fields that get displayed along with this artifact type'
+  re_conf_overwritable: 'What was the intention of this field, again?'
 
   # re_artifact_properties
   re_artifact_name: 'Name'
@@ -96,12 +114,14 @@ en:
   #re_requirement
   re_requirement: 'Requirement'
   re_new_re_requirement: 'New Requirement'
+  re_create_re_requirement: 'Create Requirement'
   re_requirement_priority: 'Priority'
   re_requirement_saved: 'Requirement saved successfully'
   
   #re_scenario
   re_scenario: 'Scenario'
   re_new_re_scenario: 'New Scenario'
+  re_create_re_scenario: 'Create Scenario'
   re_scenario_priority: 'Priority'
   re_scenario_saved: 'Scenario saved successfully'
   
@@ -289,7 +309,7 @@ en:
   re_bb_mandatory: '%{bb_name} is mandatory. Please enter data!'
 
   # re_tree
-  re_tree_overview: 'Artifact Overview'
+  re_tree_overview: 'Artifact Summary'
   re_show_tree: 'Show Tree'
   re_show_general_tree_view: 'Show Overall Tree'
   re_treefilter: 'Filter'

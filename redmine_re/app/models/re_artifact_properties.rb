@@ -5,16 +5,6 @@ class ReArtifactProperties < ActiveRecord::Base
 
   has_many :realizations
   has_many :issues, :through => :realizations
-
-  RELATION_TYPES = {
-  	:parentchild => 1,
-  	:dependency => 2,
-  	:conflict => 3
-    #:rationale => 4,
-    #:refinement => 5,
-    #:part_of => 6
-	}
-	
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
@@ -29,44 +19,41 @@ class ReArtifactProperties < ActiveRecord::Base
     
   has_many :sinks,    :through => :relationships_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :relationships_as_source, :order => "re_artifact_relationships.position",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", RELATION_TYPES[:parentchild] ],
+  :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
     :source => "sink"
   
   has_many :sources, :through => :relationships_as_sink,   :order => "re_artifact_relationships.position"
   has_one :parent, :through => :relationships_as_sink,
-    :conditions => [ "re_artifact_relationships.relation_type = ?", RELATION_TYPES[:parentchild] ],
+    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
     :source => "source"
 
   has_many :re_bb_data_texts
   has_many :re_bb_data_selections
 
-  belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
-  
-  
   after_destroy :destroy_artifact
   
   def destroy_artifact
     artifact.destroy unless artifact.nil?
   end
-    
+  
   acts_as_event :title => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
   :description => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
-    :datetime => :updated_at,
-    :url => Proc.new {|o| {:controller => 're_artifact_properties', :action => 'edit', :id => o.id}}
+  :datetime => :updated_at,
+  :url => Proc.new {|o| {:controller => 're_artifact_properties', :action => 'edit', :id => o.id}}
   
   acts_as_activity_provider :type => 're_artifact_properties',
-    :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
-    :author_key => "#{ReArtifactProperties.table_name}.updated_by",
-    :find_options => {:include => [:project, :user] },
-    :permission => :edit_requirements
-    
+  :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
+  :author_key => "#{ReArtifactProperties.table_name}.updated_by",
+  :find_options => {:include => [:project, :user] },
+  :permission => :edit_requirements
+  
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'created_by'
   belongs_to :user, :foreign_key => 'updated_by'
-
+  belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
+  
   # TODO: Implement author and watchable module into the common fields.
   #acts_as_watchable
-  
   
   validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
   validates_presence_of :created_by, :message => l(:re_artifact_properties_validates_presence_of_created_by)
@@ -157,26 +144,27 @@ class ReArtifactProperties < ActiveRecord::Base
     savedParentVersion.save
   end
   
-  def relate_to(to, relation_type, directed=true)
+  def relate_to(to, relation_type)
     # creates a new relation of type "relation_type" or updates an existing relation
     # from "self" to the re_artifact_properties in "to".
     # (any class that acting as ReArtifact should also work for "to".)
     #
-    # see ReArtifactRelationship::TYPES.keys for valid types
-    # the relation will be directed, unless you pass "false" as third argument
+    # see ReArtifactRelationship::TYPES (.values) for valid relation_types
     #
     # returns the created relation
-    raise ArgumentError, "relation_type not valid (see ReArtifactRelationship::TYPES.keys for valid relation_types)" if not RELATION_TYPES.has_key?(relation_type)
+    relation_type = relation_type.to_s
+    unless ReArtifactRelationship::RELATION_TYPES.has_value?(relation_type)
+      raise ArgumentError, "relation_type (#{relation_type}) not valid (see ReArtifactRelationship::TYPES.value for valid relation_types)"
+    end
     
     to = instance_checker to
     
-    relation_type_no = RELATION_TYPES[relation_type]
-    # we can not give more than one parent
-    if (relation_type == :parentchild) && (! to.parent.nil?) && (to.parent.id != self.id)
+    # we can not relate to more than one parent
+    if (relation_type == ReArtifactRelationship::RELATION_TYPES[:pch]) && (! to.parent.nil?) && (to.parent.id != self.id)
         raise ArgumentError, "You are trying to add a second parent to the artifact: #{to}. No ReArtifactRelationship has been created or updated."
     end
     
-    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(self.id, to.id, relation_type_no)
+    relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type(self.id, to.id, relation_type)
 
     # new relation    
     if relation.nil?
@@ -189,8 +177,7 @@ class ReArtifactProperties < ActiveRecord::Base
     end
  
     # update properties of new or exising relation
-    relation.relation_type = relation_type_no
-    relation.directed = directed
+    relation.relation_type = relation_type
     relation.save
 
     relation
@@ -200,7 +187,7 @@ class ReArtifactProperties < ActiveRecord::Base
     # sets the parent using either the spcified or the last position
     # will return the relation not the parent!
     # creates a new parent or replaces the current parent
-    relation_type_no = RELATION_TYPES[:parentchild]
+    relation_type = ReArtifactRelationship::RELATION_TYPES[:pch]
     
     children = gather_children
     parent = instance_checker(parent)
@@ -208,12 +195,12 @@ class ReArtifactProperties < ActiveRecord::Base
     raise ArgumentError, "The parent may not be self" if self.eql? parent
     raise ArgumentError, "The parent may not be within the children" if children.include? parent
     
-    relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type_no)
+    relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(self.id, relation_type)
 
     unless relation.nil?
       # delete existing relation
       if parent.nil?
-        raise ArgumentError "At the moment we always need to set a parent"
+        raise ArgumentError "We always need to set a parent"
         return
       end
       
@@ -224,7 +211,7 @@ class ReArtifactProperties < ActiveRecord::Base
       relation.insert_at position
     else
       #create new relation
-      relation = parent.relate_to self, :parentchild
+      relation = parent.relate_to self, relation_type
       relation.insert_at position
     end
     relation
@@ -260,7 +247,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
     relation = ReArtifactRelationship.find_by_source_id_and_sink_id_and_relation_type( self.parent(true).id,
       self.id,
-      RELATION_TYPES[:parentchild]
+      ReArtifactRelationship::RELATION_TYPES[:pch]
     )
     return relation.position
   end

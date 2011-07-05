@@ -16,9 +16,11 @@ class RedmineReController < ApplicationController
   before_filter :find_project, :load_settings, :authorize
 
 	def load_settings
-		@settings = Setting.plugin_redmine_re
-		@re_artifact_order = ActiveSupport::JSON.decode(@settings['re_artifact_types'])
-		@re_relation_order = ReArtifactProperties::RELATION_TYPES.keys
+    # Check the settings cache for each request
+    ReSetting.check_cache
+    @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
+    @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
+    session[:expanded_nodes] = Array.new unless session[:expanded_nodes]
 	end
 
   # uses redmine_re in combination with redmines base layout for the header unless it is an ajax-request
@@ -27,13 +29,12 @@ class RedmineReController < ApplicationController
   def find_project
     # find the current project either by project name ( new action,..)
     if( params[:project_id] )
-      return unless params[:project_id]
       begin
         @project = Project.find(params[:project_id])
       rescue ActiveRecord::RecordNotFound
-        render_404
+        render_404 :message => t(:re_404_invalid_project_id)
       end
-    # or by artifact id ( edit action)
+      # or by artifact id (e.g. in edit actions or when called though ajax)
     else
       if (params[:id])
         begin
@@ -49,18 +50,18 @@ class RedmineReController < ApplicationController
           end
           @project = artifact.project
         rescue ActiveRecord::RecordNotFound
-          render_404
+          render_404 :message => t(:re_404_artifact_not_found)
+
         end
-      #else# no project_id and no artifact id found
-      # well, we tried everything, but we might still be able to display the page correctly
-      #  render_404
+      else
+      render_404 :message => t(:re_404_artifact_not_found_or_project_missing)
       end
     end
   end
   
   def new
     artifact_type = self.controller_name
-    logger.debug "############ CALLED NEW FOR ARTIFACT OF TYPE: " + artifact_type
+    logger.debug("############ CALLED NEW FOR ARTIFACT OF TYPE: " + artifact_type) if logger
     
     @artifact = artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
@@ -76,7 +77,7 @@ class RedmineReController < ApplicationController
   
   def edit
     artifact_type = self.controller_name
-    logger.debug "############ Called edit for artifact of type: " + artifact_type
+    logger.debug("############ Called edit for artifact of type: " + artifact_type) if logger
 
     @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
@@ -122,24 +123,24 @@ class RedmineReController < ApplicationController
   end
   
   def new_hook(params)
-    logger.debug("#############: new_hook not called")
+    logger.debug("#############: new_hook not called") if logger
   end
 
   def edit_hook_after_artifact_initialized(params)
-    logger.debug("#############: edit_validate_before_save_hook not called")
+    logger.debug("#############: edit_validate_before_save_hook not called") if logger
   end
   
   def edit_hook_validate_before_save(params, artifact_valid)
-    logger.debug("#############: edit_validate_before_save_hook not called")
+    logger.debug("#############: edit_validate_before_save_hook not called") if logger
     return true
   end
   
   def edit_hook_valid_artifact_after_save(params)
-    logger.debug("#############: edit_valid_artifact_after_save_hook not called")
+    logger.debug("#############: edit_valid_artifact_after_save_hook not called") if logger
   end
   
   def edit_hook_invalid_artifact_cleanup(params)
-    logger.debug("#############: edit_invalid_artifact_cleanup_hook not called")
+    logger.debug("#############: edit_invalid_artifact_cleanup_hook not called") if logger
   end
   
   def render_json_tree(re_artifact_properties, depth)
@@ -248,7 +249,20 @@ class RedmineReController < ApplicationController
   end
 
   def create_tree(re_artifact_properties, depth = 0)
-    #renders a re artifact and its children recursively as html tree
+    # creates a hash containing re_artifact_properties and all its children
+    # until a certain tree depth (BFS)
+    # the result is a hash in the form
+    #
+    # tree['data'] = ARTIFACT_NAME (max TRUNCATE_NAME_IN_TREE_AFTER_CHARS chars long)...
+    # tree['url']  = ARTIFACT_EDIT_URL ...
+    # tree['state'] = ARTIFACT_OPEN/CLOSED ...
+    # tree['rel'] = ARTIFACT_TYPE ...
+    # tree['attr]['id'] = ARTIFACT_ID...
+    # tree['attr]['rel'] = ARTIFACT_TYPE ...
+    # tree['attr]['title'] = ARTIFACT_FULL_NAME ...
+    # tree['children] = ARRAY OF MORE ARTIFACTS IN THE SAME STRUCTURE
+    #
+    # to be rendered as json or xml. Used together with JStree right now 
     session[:expanded_nodes] ||= Set.new
     session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
     expanded = session[:expanded_nodes].include?(re_artifact_properties.id)

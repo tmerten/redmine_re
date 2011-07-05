@@ -4,7 +4,7 @@ class ReArtifactPropertiesTest < ActiveSupport::TestCase
   fixtures :projects, :re_artifact_properties
 
   def setup
-    @ecookbook = Project.find(1)
+    @ecookbook = projects(:projects_001)
     @changed_name = "Name Property Changed"
     @changed_name2 = "Name Property Changed Again"
     
@@ -12,12 +12,14 @@ class ReArtifactPropertiesTest < ActiveSupport::TestCase
   end
   
   def test_pseudo_project_artifact
+
+    project_properties = ReArtifactProperties.find_by_artifact_type "Project"
     
-    @ecobook.save
+    @ecookbook.save
     assert_nil project_properties, "Project artifact should not be created if the project did not change"
     
-    @ecobook.name = @changed_name
-    @ecobook.save
+    @ecookbook.name = @changed_name
+    @ecookbook.save
     project_properties = ReArtifactProperties.find_by_artifact_type "Project"
     
     # changed project name and saved (new project properties)
@@ -25,8 +27,8 @@ class ReArtifactPropertiesTest < ActiveSupport::TestCase
     assert_equal @changed_name, project_properties.name, "Project artifact should have the same name as the project"
     
     project_properties_id = project_properties.id
-    @ecobook.name = @changed_name2
-    @ecobook.save
+    @ecookbook.name = @changed_name2
+    @ecookbook.save
     project_properties = ReArtifactProperties.find_by_artifact_type "Project"
 
     assert_not_nil project_properties, "Project artifact should be created if the project has changed"

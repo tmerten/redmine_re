@@ -11,15 +11,15 @@ class ReArtifactRelationshipController < RedmineReController
   def delete
     @relation = ReArtifactRelationship.find(params[:id])
 
-    unless( @relation.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild]) )
+    unless( @relation.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) )
       @relation.destroy
     end
 
-    @re_artifact_properties = ReArtifactProperties.find(params[:re_artifact_properties_id])
+    @artifact_properties = ReArtifactProperties.find(params[:re_artifact_properties_id])
     @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(params[:re_artifact_properties_id])
-    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
+    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(params[:re_artifact_properties_id])
-    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
+    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
 
     render :partial => "relationship_links", :project_id => params[:project_id]
   end
@@ -28,7 +28,7 @@ class ReArtifactRelationshipController < RedmineReController
     @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?
 
     query = '%' + params[:sink_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
-    @sinks = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
+    @sinks = ReArtifactProperties.find_all_by_project_id(@project.id, :conditions => ['name like ?', query ])
 
     if @artifact
       @sinks.delete_if{ |p| p == @artifact }
@@ -46,23 +46,23 @@ class ReArtifactRelationshipController < RedmineReController
     artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
     relation = params[:re_artifact_relationship]
 
-    if relation[:relation_type].eql?("parentchild")
+    if relation[:relation_type].eql?(ReArtifactRelationship::RELATION_TYPES[:pch])
       raise ArgumentError, "You are not allowed to create a parentchild relationship!"
     end
 
     if relation[:relation_type] && relation[:artifact_id]
       source = ReArtifactProperties.find_by_id(artifact_properties_id)
       sink = ReArtifactProperties.find_by_id(relation[:artifact_id]) 
-      source.relate_to(sink, relation[:relation_type].to_sym, false)
+      source.relate_to(sink, relation[:relation_type])
     else
     	@error = t(:re_relationship_create_error)
     end
 
-    @re_artifact_properties = ReArtifactProperties.find(artifact_properties_id)
+    @artifact_properties = ReArtifactProperties.find(artifact_properties_id)
     @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(artifact_properties_id)
-    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
+    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(artifact_properties_id)
-    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}
+    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
 
     render :partial => "relationship_links", :layout => false, :project_id => params[:project_id]
   end
@@ -149,7 +149,8 @@ class ReArtifactRelationshipController < RedmineReController
 
   def add_artifact(artifact, outgoing_relationships)
     type = artifact.artifact_type
-
+    node_settings = ReSetting.get_serialized(type.underscore, @project.id)
+    
     node = {}
     node['id'] = "node_" + artifact.id.to_s
     node['name'] = truncate(artifact.name, :length => TRUNCATE_NAME_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
@@ -163,99 +164,56 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['updated_at'] = artifact.updated_at.to_s(:short)
     node_data['user'] = artifact.user.to_s
     node_data['responsibles'] = artifact.responsibles
-    node_data['$color'] = ReArtifactColors.get_html_artifact_color_code(@re_artifact_order.index(type))
-    node_data['$height'] = 90
+    node_data['$color'] = "#" + node_settings['color']
+    node_data['$height'] = 90                                                    
     node_data['$angularWidth'] = 13.00
     
     node['data'] = node_data
     
-    adjacencies= []
+    adjacencies= []                                     
     for relation in outgoing_relationships do
-      sink = ReArtifactProperties.find_by_id(relation.sink_id)
+      sink = ReArtifactProperties.find_by_id(relation.sink_id)                                                       
+      relation_settings = ReSetting.get_serialized(relation.relation_type, @project.id)
+                
       adjacent_node = {}
+
+      logger.debug("Relation Settings: " + relation_settings.to_yaml )
+      
       adjacent_node['nodeTo'] = "node_" + sink.id.to_s
-      #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
-      edge_data = {}
-      edge_data['$color'] = ReArtifactColors.get_html_relation_color_code(relation.relation_type)
+      #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s     
+      edge_data = {}                                            
+      edge_data['$color'] = "#" + relation_settings['color']
       edge_data['$lineWidth'] = 2
-      edge_data['$type'] = "arrow" if relation.directed?
-      edge_data['$direction'] = [ "node_" + sink.id.to_s, "node_" + artifact.id.to_s ] if relation.directed?
-      edge_data['$type'] = "hyperline" unless relation.directed?
+      edge_data['$type'] = "arrow" if relation_settings['directed']
+      edge_data['$direction'] = [ "node_" + sink.id.to_s, "node_" + artifact.id.to_s ] if relation_settings['directed']
+      edge_data['$type'] = "hyperline" unless relation_settings['directed']                
       adjacent_node['data'] = edge_data
       adjacencies << adjacent_node
     end
     node['adjacencies'] = adjacencies
 
     node
-  end
+  end                                                             
 
   def build_json_according_to_user_choice
     # This method build a new json string in variable @json_netmap which is returned
     # Meanwhile it computes queries for the search for the chosen artifacts and relations.
     # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
-    @artifact_choice = params[:artifact_clicked]
-    @relation_choice = params[:relation_clicked]
     @show_tree = params[:show_tree] == "yes"
     
     # String for condition to find the chosen artifacts
-    @chosen_artifacts_or_string = "project_id = ? and (artifact_type = '"
-    @chosen_relations_or_string = "source_id = ? and (relation_type = "
+    @chosen_artifacts = []
+    @chosen_relations = []
+    
     @session_artifacts_chosen = {}
-    for artifact in @artifact_choice do
-      @chosen_artifacts_or_string += artifact.to_s + "' or artifact_type = '"
+    for artifact in params[:artifact_clicked] do
+      @chosen_artifacts << artifact.to_s
     end
-    for relation in @relation_choice do
-      @chosen_relations_or_string += ReArtifactProperties::RELATION_TYPES[relation.to_sym].to_s + " or relation_type = "
+    for relation in params[:relation_clicked] do
+      @chosen_relations << ReArtifactRelationship::RELATION_TYPES[relation.to_sym]
     end
-    # remove the last ' or artifact_type = ' and close brackets
-    @chosen_artifacts_or_string = @chosen_artifacts_or_string[0, @chosen_artifacts_or_string.length - 21] + ')'
-    # remove the last ' or relation_type = ' and close brackets
-    @chosen_relations_or_string = @chosen_relations_or_string[0, @chosen_relations_or_string.length - 19] + ')'
-    @artifacts = ReArtifactProperties.find(:all, :order => "artifact_type, name", :conditions => [ @chosen_artifacts_or_string , params[:project_id]])
-    #@json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string) unless @artifacts.empty?
-    @json_netmap = <<JSON
-    {
-    "name": "ROOT",
-    "id": "root",
-    "data": {  
-      "$alpha": "0.3"  
-    },
-    "adjacencies": [
-      "node6"          
-    ],    
-    "children": [
-        {
-            "name": "NODE1",
-            "id": "node_1" 
-        },
-        {
-            "name": "NODE2",
-            "id": "node_2",
-            "children": [
-                {
-                    "name": "NODE3",
-                    "id": "node_3" 
-                } 
-            ] 
-        },
-        {
-            "name": "NODE4",
-            "id": "node_4",
-            "children": [
-                {
-                    "name": "NODE5",
-                    "id": "node_5" 
-                },
-                {
-                    "name": "NODE6",
-                    "id": "node_6" 
-                }                 
-            ] 
-        }         
-      ]
-    }
-JSON
-    @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations_or_string)
+    @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, type, :order => "artifact_type, name")
+    @json_netmap = build_json_for_netmap(@artifacts, nil)
     
     render :json => @json_netmap
   end

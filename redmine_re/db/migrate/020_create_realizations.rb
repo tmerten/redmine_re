@@ -4,9 +4,6 @@ class CreateRealizations < ActiveRecord::Migration
       t.column :issue_id, :integer
       t.column :re_artifact_properties_id, :integer
     end
-
-
-
   end
 
   def self.down

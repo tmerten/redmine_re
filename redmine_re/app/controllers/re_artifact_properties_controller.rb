@@ -43,8 +43,8 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
     
-    @relationships_incoming.delete_if {|x| x.relation_type == 1 }
-    @relationships_outgoing.delete_if {|x| x.relation_type == 1 }
+    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
     
     case method
       when 'move'

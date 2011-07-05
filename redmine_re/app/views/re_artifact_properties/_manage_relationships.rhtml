@@ -1,15 +1,16 @@
-<fieldset id="relation-manager" class="collapsible collapsed"><legend onclick="toggleFieldset(this);">Manage Relations</legend>
-<div style="overflow: visible; display: none;">
+<% open = ReSetting.get_plain("relation_management_pane", @project.id).eql?("true") %>
+<fieldset id="relation-manager" class="collapsible <%= 'collapsed' unless open %>"><legend onclick="toggleFieldset(this);">Manage Relations</legend>
+<div style="overflow: visible; <%= "display: none;" unless open %>">
   <div class="splitcontentleft">
     <div id="relationship_link_list">
         <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
         <% @re_artifact_properties = ReArtifactProperties.find(@artifact_properties_id) %>
 
         <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@artifact_properties_id) %>
-        <% @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}  %>
+        <% @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}  %>
 
         <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id) %>
-        <% @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactProperties::RELATION_TYPES[:parentchild])}  %>
+        <% @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}  %>
 
         <%= render "re_artifact_relationship/relationship_links" %>
     </div>
@@ -26,7 +27,16 @@
         :project_id => @project.id,
         :original_controller => controller.controller_name},
         :update => "relationship_link_list" do %>
-				<p><%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %><%= l(:re_dependency_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :dependency %> <%= l(:re_conflict_relation_type)%> <%= radio_button :re_artifact_relationship, :relation_type, :conflict %></p>
+        <p>
+        <%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %>
+        <div style="padding-left:110px">
+				<% for relation_type in @re_relation_order %>
+				  <% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && relation_type != 'parentchild' %>
+				    <%= radio_button :re_artifact_relationship, :relation_type, relation_type %><%= l("re_" + relation_type)%><br/>
+          <% end %>				
+				<% end %>
+				</div>
+				</p>
 				<p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact) %>
                     <%#= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
 	    	  <%= hidden_field_tag "re_artifact_relationship[artifact_id]", "no_value_yet", { :id => 'sink_artifact_id' } %>

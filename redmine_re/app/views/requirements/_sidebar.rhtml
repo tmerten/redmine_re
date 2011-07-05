@@ -7,7 +7,9 @@
       <h2><%= l(:re_sidebar) %></h2>
 			<ul>
 			<% for artifact_type in @re_artifact_order	%>
-					<li><%= link_to t("re_new_#{artifact_type.underscore}"), {
+					<li>
+					Some string before
+					<%= link_to t("re_new_#{artifact_type.underscore}"), {
 			          :controller => artifact_type.underscore,
 			          :action => "new",
 		      	    :project_id => @project.id } ,

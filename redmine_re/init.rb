@@ -77,22 +77,5 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 end
 
 config.after_initialize do
-	settings = Setting["plugin_redmine_re"]
-
-	configured_artifact_types = Array.new
-	configured_artifact_types.concat(ActiveSupport::JSON.decode(settings['re_artifact_types'])) unless settings['re_artifact_types'].empty?
-
-	all_artifact_types = Dir["#{RAILS_ROOT}/vendor/plugins/redmine_re/app/models/re_*.rb"].map do |f|
-		fd = File.open(f, 'r')
-		File.basename(f, '.rb').camelize if fd.read.include? "acts_as_re_artifact"
-	end
-
-	all_artifact_types.delete_if { |x| x.nil? }
-	all_artifact_types.delete(:ReArtifactProperties)
-	all_artifact_types.delete(:ReArtifactsConfig)
-	all_artifact_types.delete_if{ |v| configured_artifact_types.include? v }
-	configured_artifact_types.concat(all_artifact_types)
-	
-	Setting["plugin_redmine_re"] = {'re_artifact_types' => ActiveSupport::JSON.encode(configured_artifact_types) }
-	
+  #initialize_re_artifact_order
 end

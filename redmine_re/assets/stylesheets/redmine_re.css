@@ -9,8 +9,7 @@ a:active {
 }
 
 .detail_view {
-  margin-left: 220px;
-  margin-right: 35px;
+  margin-left: 240px;
 }
 
 .re_bb_form {
@@ -20,7 +19,7 @@ a:active {
 .treebar {
   position: absolute;
   float: left;
-  width: 200px;
+  min-width: 220px;
   height: 100%;
 }
 
@@ -28,32 +27,36 @@ a:active {
 #treebar h2 {
 	background:#dddddd;
 	margin:0;
-	padding:5px 15px;
-  font-size: 14px;
-	font-weight:normal;
-	border:1px solid #fff;
-	border-bottom:1px solid #ddd;
+	padding:4px 10px;
+  font-size: 12px;
+	font-weight:bold;
 	cursor:pointer;		
+}
+
+/* accordion header */
+#treebar h2:hover {
+  text-decoration:underline;
+	background:#dddddd;
 }
 
 /* currently active header */
 #treebar h2.current {
 	cursor:default;
-	background-color:#fff;
+  text-decoration:none;
 }
 
 /* accordion pane */
 #treebar .pane {
-	border:1px solid #fff;
-	border-width:0 2px;
+  padding-top: 4px;
+  padding-left: 7px;
+	border-left: 10px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
 	display:none;
-	padding:15px;
+	padding:5px;
 	color:#fff;
-	font-size:12px;
-	min-height:200px;
 }
 
-/* a title inside pane */
 #treebar .pane h2 {
 	font-weight:bold;
 	margin:0 0 -5px 0;
@@ -362,3 +365,38 @@ div.tooltip.placeholder {
 	float: right;
 }
 
+/*Back to top button */
+#back-top {
+	position: fixed;
+	bottom: 20px;
+	margin-left: 10px;
+	width: 100px;
+	display: block;
+	margin-bottom: 7px;
+  background-color: #dddddd;
+  /* rounded corners */
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	/* background color transition */
+	-webkit-transition: 1s;
+	-moz-transition: 1s;
+	transition: 1s;
+}
+
+#back-top a {
+	display: block;
+	text-align: center;
+	font: 11px/100%;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #999999;
+  /* background color transition */
+	-webkit-transition: 1s;
+	-moz-transition: 1s;
+	transition: 1s;
+}
+
+#back-top a:hover {
+  text-decoration:underline;
+}
