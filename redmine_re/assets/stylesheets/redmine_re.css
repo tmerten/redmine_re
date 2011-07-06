@@ -261,60 +261,70 @@ ins.re_workarea {
 }
 a.re_workarea {
   background: url(../images/icons/bricks.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_task {
   background: url(../images/icons/report_user.png) no-repeat left top;
 }
 a.re_task {
   background: url(../images/icons/report_user.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_subtask {
   background: url(../images/icons/report.png) no-repeat left top;
 }
 a.re_subtask {
   background: url(../images/icons/report.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_goal {
   background: url(../images/icons/world.png) no-repeat left top;
 }
 a.re_goal {
   background: url(../images/icons/world.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_user_profile {
   background: url(../images/icons/user.png) no-repeat left top;
 }
 a.re_user_profile {
   background: url(../images/icons/user.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_section {
   background: url(../images/icons/text_padding_top.png) no-repeat left top;
 }
 a.re_section {
   background: url(../images/icons/text_padding_top.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_attachment {
     background: url(../images/icons/attach.png) no-repeat left top;
 }
 a.re_attachment {
     background: url(../images/icons/attach.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_vision {
     background: url(../images/icons/lightbulb.png) no-repeat left top;
 }
 a.re_vision {
     background: url(../images/icons/lightbulb.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_requirement {
     background: url(../images/icons/pencil.png) no-repeat left top;
 }
 a.re_requirement {
     background: url(../images/icons/pencil.png) no-repeat left top;
+    margin-left: -16px;
 }
 ins.re_scenario {
     background: url(../images/icons/newspaper.png) no-repeat left top;
 }
 a.re_scenario {
     background: url(../images/icons/newspaper.png) no-repeat left top;
+    margin-left: -16px;
 }
 
 ins.re_knowledge_artifact {
@@ -322,6 +332,7 @@ ins.re_knowledge_artifact {
 }
 a.re_knowledge_artifact {
     background: url(../images/icons/note.png) no-repeat left top;
+    margin-left: -16px;
 }
 
 /***** custom tooltips visualization*****/
@@ -373,9 +384,10 @@ div.tooltip.placeholder {
 
 
 div.bullet_add {
-    background: url("../images/icons/bullet_add.png") no-repeat scroll left top transparent;
+    background: url("../images/icons/bullet_add.png") no-repeat scroll 5px 2px transparent;
+    float: left;
     height: 16px;
-    position: absolute;
+    position: relative;
     width: 16px;
 }
 /*Back to top button */
