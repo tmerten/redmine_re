@@ -317,6 +317,12 @@ a.re_scenario {
     background: url(../images/icons/newspaper.png) no-repeat left top;
 }
 
+ins.re_knowledge_artifact {
+    background: url(../images/icons/note.png) no-repeat left top;
+}
+a.re_knowledge_artifact {
+    background: url(../images/icons/note.png) no-repeat left top;
+}
 
 /***** custom tooltips visualization*****/
 
@@ -365,38 +371,28 @@ div.tooltip.placeholder {
 	float: right;
 }
 
+
+div.bullet_add {
+    background: url("../images/icons/bullet_add.png") no-repeat scroll left top transparent;
+    height: 16px;
+    position: absolute;
+    width: 16px;
+}
 /*Back to top button */
 #back-top {
-	position: fixed;
-	bottom: 20px;
-	margin-left: 10px;
-	width: 100px;
-	display: block;
-	margin-bottom: 7px;
-  background-color: #dddddd;
-  /* rounded corners */
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	/* background color transition */
-	-webkit-transition: 1s;
-	-moz-transition: 1s;
-	transition: 1s;
+	position: fixed;	bottom: 20px;	margin-left: 10px;	width: 100px;
+	display: block;	margin-bottom: 7px;
+    background-color: #dddddd;
+    
+   /* rounded corners */	-webkit-border-radius: 5px;	-moz-border-radius: 5px;	border-radius: 5px;
+	/* background color transition */	-webkit-transition: 1s;	-moz-transition: 1s;	transition: 1s;
 }
 
-#back-top a {
-	display: block;
-	text-align: center;
-	font: 11px/100%;
-	text-transform: uppercase;
-	text-decoration: none;
-	color: #999999;
-  /* background color transition */
-	-webkit-transition: 1s;
-	-moz-transition: 1s;
-	transition: 1s;
+#back-top a {	display: block;	text-align: center;	font: 11px/100%;
+	text-transform: uppercase;	text-decoration: none;	color: #999999;
+  /* background color transition */	-webkit-transition: 1s;	-moz-transition: 1s;	transition: 1s;
 }
 
-#back-top a:hover {
-  text-decoration:underline;
+#back-top a:hover {  text-decoration:underline;
 }
+
