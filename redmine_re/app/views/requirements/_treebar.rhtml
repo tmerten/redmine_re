@@ -13,7 +13,7 @@
     <% for artifact_type in @re_artifact_order	%>
       <% artifact_settings = ReSetting.get_serialized(artifact_type, @project.id) %>
       <% if artifact_settings['in_use'] %>
-      <li><div class="bullet_add"></div><%= link_to artifact_settings['alias'] ? t(:re_new) + " " + artifact_settings['alias'] : t("re_new_#{artifact_type.underscore}"), {
+      <li><div class="bullet_add"></div><%= link_to artifact_settings['alias'] ? artifact_settings['alias'] : t(artifact_type.underscore), {
               :controller => artifact_type.underscore,
               :action => "new",
               :project_id => @project.id } ,
