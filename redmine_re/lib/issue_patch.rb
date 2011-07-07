@@ -19,9 +19,6 @@ module IssuePatch
       has_many :realizations
       has_many :re_artifact_properties, :as => :artifact, :class_name => "ReArtifactProperties", :through => :realizations
 
-      puts "\n ISSUE PATCH LOADED \n"
-
-      
     end
 
   end
