@@ -113,20 +113,20 @@ en:
   
   #re_requirement
   re_requirement: 'Requirement'
-  re_new_re_requirement: 'New Requirement'
+  re_new_re_requirement: 'Requirement'
   re_create_re_requirement: 'Create Requirement'
   re_requirement_priority: 'Priority'
   re_requirement_saved: 'Requirement saved successfully'
   
   #re_scenario
   re_scenario: 'Scenario'
-  re_new_re_scenario: 'New Scenario'
+  re_new_re_scenario: 'Scenario'
   re_create_re_scenario: 'Create Scenario'
   re_scenario_priority: 'Priority'
   re_scenario_saved: 'Scenario saved successfully'
   
   # re_section
-  re_new_re_section: 'New Section'
+  re_new_re_section: 'Section'
   re_create_re_section: 'Create a new Section'
   re_section: 'Section'
   ReSection: 'Section'
@@ -138,7 +138,7 @@ en:
   
   # re_vision
   re_vision_priority: 'Priority'
-  re_new_re_vision: 'New Vision Statement'
+  re_new_re_vision: 'Vision Statement'
   re_vision: 'Vision Statement'
   re_create_re_vision: 'Create a new Vision Statement'
   re_vision_saved: 'Vision successfully saved'
@@ -150,7 +150,7 @@ en:
   re_workarea: 'Workarea'
   re_create_re_workarea: 'Create a new Workarea'
   ReWorkarea: 'Workarea'
-  re_new_re_workarea: 'New Workarea'
+  re_new_re_workarea: 'Workarea'
   re_workarea_priority: 'Priority'
   re_workarea_saved: 'Workare successfully saved'
   re_workarea_not_found: 'Could not find ReWorkarea with id %{id}.'
@@ -161,7 +161,7 @@ en:
   re_user_profile: 'User Profile'
   re_create_re_user_profile: 'Create a new User Profile'
   ReUserProfile: 'User Profile'
-  re_new_re_user_profile: 'New User Profile'
+  re_new_re_user_profile: 'User Profile'
   re_user_profile_priority: 'Priority'
   re_user_profile_saved: 'User Profile Sucessfully Saved'
   re_user_profile_deleted: 'The ReUserProfile %{name} has been deleted'
@@ -193,7 +193,7 @@ en:
   re_relationship_create_error: 'Relation could not be created'
 
   # re_goals
-  re_new_re_goal: 'New Goal'
+  re_new_re_goal: 'Goal'
   re_create_re_goal: 'Create a Goal'
   re_show_goals: 'Show Goals'
   re_goal: 'Goal'
@@ -206,7 +206,7 @@ en:
   re_goal_not_found: 'Could not find a Goal with id %{id} to delete'
   
   # re_tasks
-  re_new_re_task: 'New Task'
+  re_new_re_task: 'Task'
   re_create_re_task: 'Create a new Task'
   re_show_tasks: 'Show Tasks'
   re_task: 'Task'
@@ -228,7 +228,7 @@ en:
   re_update_difficult: 'Update Difficulties'
 
   # re_subtasks
-  re_new_re_subtask: 'New Subtask'
+  re_new_re_subtask: 'Subtask'
   re_show_subtasks: 'Show Subtasks'
   re_create_re_subtask: 'Create a new Subtask'
   re_subtask: 'Subtask'
@@ -252,7 +252,7 @@ en:
 
   # re_attachment
   re_attachment: 'File Attachment'
-  re_new_re_attachment: 'New File Attachment'
+  re_new_re_attachment: 'File Attachment'
   re_attachment_priority: 'Priority'
   re_create_re_attachment: 'Create a new File Attachment'
   re_attachment_saved: 'File Attachment successfully saved'
@@ -263,6 +263,13 @@ en:
   re_attachment_size_greater_zero: 'The Filesize has to be >0 byte !'
   re_attachment_validation_error: 'File Attachment error: %{msg}'
   re_attachment_file: 'File'
+  
+  
+  # knowledge artifact
+  re_knowledge_artifact: 'Knowledge'
+  re_create_re_knowledge_artifact: 'Create a new Knowledge'
+  re_new_re_knowledge_artifact: 'Knowledge'
+  re_knowledge_artifact_priority: 'Priority'
 
   # re_building_blocks
   re_bb_configuration_header: 'Configuration of %{builing_block} for Artifact Type %{artifact_type}' 
@@ -313,6 +320,7 @@ en:
   re_show_tree: 'Show Tree'
   re_show_general_tree_view: 'Show Overall Tree'
   re_treefilter: 'Filter'
+  re_create_in: 'create artifact in...'
   re_create_below: 'create artifact below...'
   re_create_relation: 'create relation to...'
   
@@ -330,3 +338,4 @@ en:
   re_lesser_than: 'lesser_than'
   re_none_specific: 'None specific'
   re_filter_results: 'Filter results'
+  
