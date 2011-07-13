@@ -17,7 +17,7 @@ module IssuePatch
 
       #puts base.methods
       has_many :realizations
-      has_many :re_artifact_properties, :as => :artifact, :class_name => "ReArtifactProperties", :through => :realizations
+      has_many :re_artifact_properties,  :through => :realizations, :uniq => true
 
     end
 

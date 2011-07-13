@@ -70,6 +70,34 @@ class ReArtifactPropertiesController < RedmineReController
     end
   end  
 
+  def autocomplete_issue
+    query = '%' + params[:issue_subject].gsub('%', '\%').gsub('_', '\_').downcase + '%'
+    issues_for_ac = Issue.find(:all, :conditions=>['subject like ?', query ])
+    list = '<ul>'
+    issues_for_ac.each do |issue|
+      list << '<li ' + 'id='+issue.id.to_s+'>'
+      list << issue.subject.to_s+' ('+issue.id.to_s+')'
+      list << '</li>'
+    end
+
+    list << '</ul>'
+    render :text => list
+  end
+
+    def autocomplete_artifact
+    query = '%' + params[:artifact_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
+    issues_for_ac = ReArtifactProperties.find(:all, :conditions=>['name like ?', query])
+    list = '<ul>'
+    issues_for_ac.each do |aprop|
+      list << '<li ' + 'id='+aprop.id.to_s+'>'
+      list << aprop.name.to_s+' ('+aprop.id.to_s+')'
+      list << '</li>'
+    end
+
+    list << '</ul>'
+    render :text => list
+  end
+
   def autocomplete_parent
     @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?    
 

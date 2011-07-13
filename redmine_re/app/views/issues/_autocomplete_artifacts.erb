@@ -1,0 +1,40 @@
+<fieldset>
+  <legend><%= t(:re_add_associated_requirements) %></legend>
+
+  <div class="splitcontentleft">
+
+    <p>
+      <%= text_field_tag :re_artifact_properties, '', {:size => 20, :class => 'autocomplete', :id => 'artifact_autocomplete'} %>
+    </p>
+
+    <div id="artifact_candidates" class="autocomplete"></div>
+      <% javascript_tag do %>
+      new Ajax.Autocompleter('artifact_autocomplete',
+      'artifact_candidates',
+      '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_artifact' %>',
+      {
+      paramName: 'artifact_name',
+      parameters:
+      'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
+      minChars: 3,
+      frequency: 0.5,
+      afterUpdateElement : getArtifactId});
+
+      function getArtifactId(text, li){
+          document.getElementById('artifact_autocomplete').value ="";
+          $('added_artifacts').appendChild(document.createTextNode(li.innerHTML + ', '));
+          $('added_artifacts').insert('<input id="artifact_id" type="hidden" name="artifact_id[]" value=' + li.id + ' >');
+
+      }
+
+    <% end %>
+
+  </div>
+
+  <div class='splitcontentright'>
+
+    <div id='added_artifacts'/>
+  </div>
+
+
+</fieldset>

@@ -29,4 +29,4 @@ class ReGoalController < RedmineReController
   #def edit_hook_invalid_artifact_cleanup(params)
   #end
 
-end
+  end

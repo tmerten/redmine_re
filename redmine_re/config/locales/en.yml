@@ -42,8 +42,9 @@ en:
   re_shows_after_reload: 'will be shown after a page reload'
   re_scroll_to_top: 'Scroll to top'
   re_associated_issues: 'Related Issues'
-  re_asscociated_requirements: 'Related Requirements'
-  
+  re_asscociated_requirements: 'Related Artifacts'
+  re_add_associated_requirements: 'Add related Artifacts'
+  add_issue_to_requirement: 'Add related Issue'
   re_404_invalid_project_id: 'The project (or project ID) could not be found or is invalid'
   re_404_artifact_not_found: 'The artifact (or artifact ID) could not be found'
   re_404_artifact_not_found_or_project_missing: 'No artifact could not be found and no project ID was supplied'

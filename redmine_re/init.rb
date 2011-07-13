@@ -4,6 +4,7 @@ require 'dispatcher'
 
 Dispatcher.to_prepare do
   require_dependency 'issue_patch'
+  require_dependency 'issue_controller_patch'
 end
 
 Redmine::Plugin.register :redmine_re do
@@ -27,8 +28,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree,
           :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree,
           :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
-          :reduce_search_result_with_parameter],
-        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent],
+          :reduce_search_result_with_parameter ],
+        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue, :autocomplete_artifact],
         :re_goal => [:edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
         :re_subtask => [:edit, :new],
@@ -38,7 +39,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_user_profile => [:edit, :new],
         :re_attachment => [:edit, :new, :download_or_show],
         :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
-          :visualization, :build_json_according_to_user_choice]
+          :visualization, :build_json_according_to_user_choice],
+      
       }
     )
     permission( :administrate_requirements,

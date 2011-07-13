@@ -4,7 +4,7 @@ class ReArtifactProperties < ActiveRecord::Base
   cattr_accessor :artifact_types
 
   has_many :realizations
-  has_many :issues, :through => :realizations
+  has_many :issues, :through => :realizations, :uniq => true
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",

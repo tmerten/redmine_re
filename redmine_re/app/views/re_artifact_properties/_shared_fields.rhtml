@@ -75,4 +75,48 @@
     <% end %>
   </fieldset>
 
+  <fieldset>
+    <legend><%= t(:add_issue_to_requirement) %></legend>
+
+
+    <div class="splitcontentleft">
+
+
+
+  <p>
+    <%= text_field_tag :issue, '', {:size => 20, :class => 'autocomplete', :id => 'issue_autocomplete'} %>
+  </p>
+
+  <div id="issue_candidates" class="autocomplete"></div>
+  <% javascript_tag do %>
+      new Ajax.Autocompleter('issue_autocomplete',
+      'issue_candidates',
+      '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
+      {
+      paramName: 'issue_subject',
+      parameters:
+      'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
+      minChars: 1,
+      frequency: 0.5,
+      afterUpdateElement : getIssueId});
+
+      function getIssueId(text, li){
+
+          jQuery('#added_issues').append(li.innerHTML + ', ');
+          jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
+          document.getElementById('issue_autocomplete').value ="";
+      }
+
+    <% end %>
+
+</div>
+
+<div class='splitcontentright'>
+
+<div id='added_issues'/>
+</div>
+
+
+</fieldset>
+
 </div>

@@ -1,65 +1,73 @@
 <% open = ReSetting.get_plain("relation_management_pane", @project.id).eql?("true") %>
-<fieldset id="relation-manager" class="collapsible <%= 'collapsed' unless open %>"><legend onclick="toggleFieldset(this);">Manage Relations</legend>
-<div style="overflow: visible; <%= "display: none;" unless open %>">
-  <div class="splitcontentleft">
-    <div id="relationship_link_list">
+<fieldset id="relation-manager" class="collapsible <%= 'collapsed' unless open %>">
+  <legend onclick="toggleFieldset(this);">Manage Relations</legend>
+  <div style="overflow: visible; <%= "display: none;" unless open %>">
+    <div class="splitcontentleft">
+      <div id="relationship_link_list">
         <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
         <% @re_artifact_properties = ReArtifactProperties.find(@artifact_properties_id) %>
 
         <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@artifact_properties_id) %>
-        <% @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}  %>
+        <% @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) } %>
 
         <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id) %>
-        <% @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}  %>
+        <% @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) } %>
 
         <%= render "re_artifact_relationship/relationship_links" %>
+      </div>
+      <br/>
     </div>
-  <br />
-  </div>
-  
-  <div class="splitcontentright">
-    <b><%= t(:re_create_new_relation) %></b>
-		<div>
-    <% form_remote_tag :url =>
-    	{ :action => :prepare_relationships,
-      	:controller => :re_artifact_relationship,
-        :id => params[:id],
-        :project_id => @project.id,
-        :original_controller => controller.controller_name},
-        :update => "relationship_link_list" do %>
-        <p>
-        <%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %>
-        <div style="padding-left:110px">
-				<% for relation_type in @re_relation_order %>
-				  <% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && relation_type != 'parentchild' %>
-				    <%= radio_button :re_artifact_relationship, :relation_type, relation_type %><%= l("re_" + relation_type)%><br/>
-          <% end %>				
-				<% end %>
-				</div>
-				</p>
-				<p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact) %>
-                    <%#= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>    
-	    	  <%= hidden_field_tag "re_artifact_relationship[artifact_id]", "no_value_yet", { :id => 'sink_artifact_id' } %>
-      <p>
-        <%= text_field_tag :sink_artifact, '', {:size => 30, :class => 'autocomplete', :id => 'sink_autocomplete'} %>
-      </p>
-      <div id="sink_artifact_candidates" class="autocomplete"></div>
-      <% javascript_tag do %>
-        new Ajax.Autocompleter('sink_autocomplete',
-           'sink_artifact_candidates',
-           '<%= url_for :controller => 're_artifact_relationship', :action => 'autocomplete_sink' %>',
-           { minChars: 3,
-             paramName: 'sink_name',
-             parameters: 'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
-             frequency: 0.5,
-             afterUpdateElement : function(text, li) { $('sink_artifact_id').setValue(li.id) }
-             });
-      <% end %>
 
-              <p><%= submit_tag t(:re_create) %></p>
-  	<% end -%>
+    <div class="splitcontentright">
+      <b><%= t(:re_create_new_relation) %></b>
+
+      <div>
+        <% form_remote_tag :url =>
+                                   {:action => :prepare_relationships,
+                                    :controller => :re_artifact_relationship,
+                                    :id => params[:id],
+                                    :project_id => @project.id,
+                                    :original_controller => controller.controller_name},
+                           :update => "relationship_link_list" do %>
+            <p>
+              <%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %>
+
+            <div style="padding-left:110px">
+              <% for relation_type in @re_relation_order %>
+                  <% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && relation_type != 'parentchild' %>
+                      <%= radio_button :re_artifact_relationship, :relation_type, relation_type %><%= l("re_" + relation_type) %>
+                      <br/>
+                  <% end %>
+              <% end %>
+            </div>
+            </p>
+            <p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact) %>
+              <%#= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>
+            <%= hidden_field_tag "re_artifact_relationship[artifact_id]", "no_value_yet", {:id => 'sink_artifact_id'} %>
+            <p>
+              <%= text_field_tag :sink_artifact, '', {:size => 30, :class => 'autocomplete', :id => 'sink_autocomplete'} %>
+            </p>
+
+            <div id="sink_artifact_candidates" class="autocomplete"></div>
+            <% javascript_tag do %>
+                new Ajax.Autocompleter('sink_autocomplete',
+                'sink_artifact_candidates',
+                '<%= url_for :controller => 're_artifact_relationship', :action => 'autocomplete_sink' %>',
+                { minChars: 3,
+                paramName: 'sink_name',
+                parameters:
+                'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>
+                ',
+                frequency: 0.5,
+                afterUpdateElement : function(text, li) { $('sink_artifact_id').setValue(li.id) }
+                });
+            <% end %>
+
+            <p><%= submit_tag t(:re_create) %></p>
+
+        <% end -%>
+      </div>
+      <br/>
     </div>
-    <br />
-	</div>
-</div>
+  </div>
 </fieldset>
