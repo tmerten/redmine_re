@@ -29,7 +29,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree,
           :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
           :reduce_search_result_with_parameter ],
-        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue, :autocomplete_artifact],
+        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue, :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue],
         :re_goal => [:edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
         :re_subtask => [:edit, :new],

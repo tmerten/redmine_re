@@ -71,7 +71,10 @@
   <fieldset>
     <legend><%= t(:re_associated_issues) %></legend>
     <% unless @issues.nil? %>
-        <%= @issues.collect { |issue| link_to issue.subject, issues_path+"/"+issue.id.to_s }.to_sentence %>
+        
+        <%= @issues.collect { |issue|
+            (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s+
+            (link_to '[X]', :controller => 're_artifact_properties', :action => 'remove_issue_from_artifact', :issueid => issue.id, :project_id=>@project.id, :id => @artifact_properties.id) }.to_sentence %>
     <% end %>
   </fieldset>
 

@@ -84,7 +84,16 @@ class ReArtifactPropertiesController < RedmineReController
     render :text => list
   end
 
-    def autocomplete_artifact
+  #TODO Refactor: move method to a more reasonable Controller
+  def remove_issue_from_artifact
+    issue_to_delete = Issue.find(params[:issueid])
+    artifact_type = self.controller_name
+    artifact_properties = artifact_type.camelcase.constantize.find_by_id(params[:id])
+    artifact_properties.issues.delete(issue_to_delete)
+    redirect_to(:back) 
+  end
+
+  def autocomplete_artifact
     query = '%' + params[:artifact_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
     issues_for_ac = ReArtifactProperties.find(:all, :conditions=>['name like ?', query])
     list = '<ul>'
@@ -96,6 +105,14 @@ class ReArtifactPropertiesController < RedmineReController
 
     list << '</ul>'
     render :text => list
+  end
+
+  #TODO Refactor: move method to a more reasonable Controller
+  def remove_artifact_from_issue
+    artifact_to_delete = ReArtifactProperties.find(params[:artifactid])
+    issue = Issue.find(params[:issueid])
+    issue.re_artifact_properties.delete(artifact_to_delete)
+    redirect_to(:back)
   end
 
   def autocomplete_parent
