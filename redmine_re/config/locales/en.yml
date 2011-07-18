@@ -340,3 +340,6 @@ en:
   re_none_specific: 'None specific'
   re_filter_results: 'Filter results'
   
+  #issues
+
+  implementation_of: 'Implementation of'

@@ -26,7 +26,6 @@
           $('added_artifacts').insert('<input id="artifact_id" type="hidden" name="artifact_id[]" value=' + li.id + ' >');
 
       }
-
     <% end %>
 
   </div>
@@ -38,3 +37,13 @@
 
 
 </fieldset>
+
+<% unless @insertvalues.blank? %>
+<% javascript_tag do %>
+    $('issue_subject').value= "<%= t(:implementation_of)+" "+@insertvalues["artifacttype"] + " " +@insertvalues["artifactname"]%>";
+    $('added_artifacts').insert('<%=@insertvalues["artifactname"] + " (" + @insertvalues["displayid"] +"), "%>');
+    $('added_artifacts').insert('<input id="artifact_id" type="hidden" name="artifact_id[]" value="<%= @insertvalues["associationid"]%>"  > ');
+    
+        
+<% end %>
+<% end %>
