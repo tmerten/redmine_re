@@ -35,6 +35,7 @@ module IssuesControllerPatch
     end
 
     def new_with_artifacts
+      new_without_artifacts
       @insertvalues = {"artifacttype" => params[:artifacttype], "artifactname"=>params[:artifactname], "displayid"=>params[:displayid], "associationid"=> params[:associationid]}
     end
 

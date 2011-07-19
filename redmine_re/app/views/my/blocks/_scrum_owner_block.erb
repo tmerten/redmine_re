@@ -1,0 +1,52 @@
+<%= stylesheet_link_tag 'my.css', :plugin => "redmine_re", :media => 'all' %>
+
+<h3><%= l(:open_requirements) %> </h3>
+
+<table class="list" id="myTable">
+  <thead>
+  <tr>
+    <th>Requirements</th>
+    <th colspan="2">Connected Issues </th>
+  </tr>
+  </thead>
+  <tbody>
+   <tr style="font-weight: bold;">
+     <td> </td>
+     <td>Subject</td>
+     <td>Dates</td>
+   </tr>
+  <% Realization.open_artifacts.each do |artifact| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+
+        <td>
+          <%= link_to '#'+artifact.id.to_s+' '+artifact.name, :controller => artifact.artifact_type.underscore, :action => 'edit', :id =>artifact.artifact_id %>&nbsp;
+          <br/>
+        </td>
+
+        <td>
+          <% artifact.issues.each do |issue| %>
+              <% unless issue.assigned_to_id.blank? %>
+                <% assignee=User.find(issue.assigned_to_id); assigneename=assignee.firstname + assignee.lastname; %>
+              <% else %>
+                <% assigneename="- " %>
+              <% end %>
+              <%= link_to ('#'+issue.id.to_s+' '+issue.subject), issue_path(issue) %> &nbsp;
+              (Assignee: <%=assigneename%>)
+              <br/>
+          <% end %>
+        </td>
+
+        <td>
+          <% artifact.issues.each do |issue| %>
+              <%= issue.start_date.to_s %> til <%= issue.due_date.to_s %> (Done: <%=  issue.done_ratio%>%)
+              <br/>
+          <% end %>
+        </td>
+
+
+
+      </tr>
+  <% end %>
+
+  </tbody>
+</table>
