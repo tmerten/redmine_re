@@ -333,7 +333,7 @@ var tree = jQuery("#tree")
     plugins : [ "themes", "json_data", "dnd", "types" , "ui", "contextmenu" ]
   });
   
-  jQuery("#tree a").live("dblclick", function(e) {
+  jQuery("#tree a").live("click", function(e) {
       var parent = jQuery(this).parent();
       jQuery.blockUI({
           "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + parent.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
@@ -343,7 +343,6 @@ var tree = jQuery("#tree")
       var id = parent.attr ? parent.attr("id").gsub('node_','') : -1;
       window.location.href = link + id
   })
-  
   jQuery(document).ready(function(){
 
     jQuery("#back-top").hide();
