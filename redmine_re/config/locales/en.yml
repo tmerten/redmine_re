@@ -348,3 +348,11 @@ en:
   #my blocks
   
   open_requirements: 'Open Requirements'
+  artifactcount: 'Number of Artifacts'
+  issuecount: 'Number of Issues'
+  ticketend_overdue: 'Tickets with End Date overdue'
+  ticketstart_overdue: 'Tickets with Start Date overdue'
+  artifact_issue_coverage: 'Artifact/Issue Coverage:'
+  subject: 'Subject'
+  status: 'Status'
+  dates: 'Dates'
