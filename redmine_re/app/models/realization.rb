@@ -19,15 +19,52 @@ class Realization < ActiveRecord::Base
         end
       end
       if has_open_issue == true
-          openartifacts << artifact
-        end
+        openartifacts << artifact
+      end
     end
+    openartifacts
 
-    #sort by issue due next
-    openartifacts.each do |artifact|
-      artifact.issues.sort!{|a,b| a.due_date <=> b.due_date}
-    end
-    openartifacts.sort!{|a,b| a.issues.first.due_date<=>b.issues.first.due_date}
+
   end
+
+  def self.openartifacts_by_due_date
+    artifacts = open_artifacts
+
+      #sort by issue due next
+    artifacts.each do |artifact|
+      artifact.issues.sort! { |a, b| a.due_date <=> b.due_date }
+    end
+    artifacts.sort! { |a, b| a.issues.first.due_date<=>b.issues.first.due_date }
+  end
+
+  def self.openartifacts_todo
+    artifacts = open_artifacts
+    artifacts.delete_if { |artifact|
+      del = true;
+      artifact.issues.each do |issue|
+        if issue.assigned_to_id.blank? && issue.status_id < 5
+          del = false
+        end
+      end
+      del
+    }
+
+    artifacts.sort! do |a, b|
+      self.artifact_done_ratio(b)<=>self.artifact_done_ratio(a)
+    end
+    artifacts
+
+  end
+
+  
+
+  def self.artifact_done_ratio(artifact)
+    progress = 0
+    artifact.issues.each do |issue|
+      progress+=(issue.status_id < 5 ? issue.done_ratio : 100)
+    end
+    progress/artifact.issues.count
+  end
+
 
 end

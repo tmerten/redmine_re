@@ -1,0 +1,48 @@
+<h3> Requirement Progress</h3>
+
+<table class="list" id="myTable">
+  <thead>
+  <tr>
+    <th>Requirements</th>
+    <th>Open Issues</th>
+    <th> Progress</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% Realization.openartifacts_todo.each do |artifact| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+
+        <td>
+          <%= link_to '#'+artifact.id.to_s+' '+artifact.name, :controller => artifact.artifact_type.underscore, :action => 'edit', :id =>artifact.artifact_id %>&nbsp;
+          <br/>
+        </td>
+
+        <% relevantissues = [] %>
+        <% artifact.issues.each do |issue| %>
+            <% if issue.assigned_to_id.blank? && issue.status_id < 5 %>
+                <% relevantissues << issue %>
+            <% end %>
+        <% end %>
+        <td>
+          <% relevantissues.each do |issue| %>
+
+              <%= link_to ('#'+issue.id.to_s+' '+issue.subject), issue_path(issue) %> &nbsp;
+              <br/>
+
+          <% end %>
+        </td>
+        <% progress = 0 %>
+        <% artifact.issues.each do |issue| %>
+            <% progress+=(issue.status_id < 5 ? issue.done_ratio : 100) %>
+        <% end %>
+        <% progress = progress/artifact.issues.count %>
+        <td class="progress">
+          <%= progress_bar progress, :width => '120px', :height =>'100px', :legend => progress.to_s+'%' %>
+        </td>
+
+
+      </tr>
+  <% end %>
+
+  </tbody>
+</table>

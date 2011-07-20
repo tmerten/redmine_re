@@ -356,3 +356,5 @@ en:
   subject: 'Subject'
   status: 'Status'
   dates: 'Dates'
+  todo: 'Open Tickets'
+  progress: 'Progress'
