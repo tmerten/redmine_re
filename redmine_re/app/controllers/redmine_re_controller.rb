@@ -116,6 +116,7 @@ class RedmineReController < ApplicationController
         @bb_error_hash = {}
         @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash)
         @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
+        redirect_to(:id => @artifact.id)
       else
         edit_hook_invalid_artifact_cleanup params
       end
