@@ -60,7 +60,10 @@ class Realization < ActiveRecord::Base
 
   def self.artifacts_without_issues
      ReArtifactProperties.find(:all, :conditions => 'id not in (select distinct re_artifact_properties_id from realizations)')
+  end
 
+  def self.artifacts_without_issues_by_project(project)
+     ReArtifactProperties.find(:all, :conditions => ['id not in (select distinct re_artifact_properties_id from realizations) AND project_id = ?', project.id])
   end
   
   private
