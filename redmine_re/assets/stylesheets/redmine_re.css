@@ -217,7 +217,7 @@ input.bb_checkbox {
   height: 13px;
   margin: 1px 1px 0 1px;
   background-color: #FFFFFF;
-  cursor: ew-resize;
+  cursor: e-resize;
 }
 
 .icon-subtask-before {
