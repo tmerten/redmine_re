@@ -23,8 +23,16 @@ class ReAttachmentController < RedmineReController
       :filename => filename_for_content_disposition(@re_attachment.attachment.filename),
       :type => detect_content_type(@re_attachment.attachment),
       :disposition => (@re_attachment.attachment.image? ? 'inline' : 'attachment')
-      
-      
+  end
+  
+  def delete_file
+    @re_attachment = ReAttachment.find(params[:id])
+    attachment = Attachment.find(params[:attachment_id])
+    if attachment.id?
+      attachment.destroy
+      flash[:notice] = t(:re_attachment_deleted, :name => attachment.filename)
+    end
+    redirect_to(:controller => :re_attachment, :action => :edit, :id => @re_attachment.id)
   end
 
   def detect_content_type(attachment)
