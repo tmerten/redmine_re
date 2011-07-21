@@ -7,6 +7,7 @@ class Realization < ActiveRecord::Base
 
     #an artifact is open iff one of the corresponding tickets is open
   def self.open_artifacts
+    #find all artifacts connected to at least one issue
     artifacts_with_issue = ReArtifactProperties.find(:all, :conditions => 'id in (select distinct re_artifact_properties_id from realizations)')
 
     openartifacts=[]
@@ -56,8 +57,13 @@ class Realization < ActiveRecord::Base
 
   end
 
-  
 
+  def self.artifacts_without_issues
+     ReArtifactProperties.find(:all, :conditions => 'id not in (select distinct re_artifact_properties_id from realizations)')
+
+  end
+  
+  private
   def self.artifact_done_ratio(artifact)
     progress = 0
     artifact.issues.each do |issue|

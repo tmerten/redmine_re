@@ -17,7 +17,7 @@
       <tr class="<%= cycle('odd', 'even') %>">
 
         <td>
-          <%= link_to '#'+artifact.id.to_s+' '+artifact.name, :controller => artifact.artifact_type.underscore, :action => 'edit', :id =>artifact.artifact_id %>&nbsp;
+          <%= link_to '#'+artifact.id.to_s+' '+ artifact.artifact_type+":  " + artifact.name, :controller => artifact.artifact_type.underscore, :action => 'edit', :id =>artifact.artifact_id %>&nbsp;
           <br/>
         </td>
 
@@ -36,7 +36,7 @@
 
         <td>
           <% artifact.issues.each do |issue| %>
-              <%= issue.start_date.to_s %> until <%= issue.due_date.to_s %> (Done: <%=  issue.done_ratio%>%)
+              <%= issue.start_date.to_s.blank? ? "n/a" : issue.start_date.to_s %> until <%= issue.due_date.to_s.blank? ? "n/a" : issue.due_date.to_s %> (Done: <%=  issue.status_id>4?"100":issue.done_ratio%>%)
               <br/>
           <% end %>
         </td>
