@@ -14,7 +14,7 @@
     <% if @re_attachment.id %>
       <ul>
       <% @re_attachment.attachments.each do |current_attachment| %>
-         <li><%= link_to(h(current_attachment.filename), {:controller => 're_attachment', :action => "download_or_show", :id => @re_attachment}, {:target => "blank", :class => 'icon icon-attachment'}) %></li>
+         <li><%= link_to(h(current_attachment.filename), {:controller => 're_attachment', :action => "download_or_show", :id => @re_attachment, :attachment_id => current_attachment}, {:target => "blank", :class => 'icon icon-attachment'}) %></li>
       <% end%>
       </ul>
       <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
