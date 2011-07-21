@@ -12,7 +12,12 @@
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_attachment.re_artifact_properties} %>
 
     <% if @re_attachment.id %>
-      <%=  link_to(h(@re_attachment.attachment.filename), {:controller => 're_attachment', :action => "download_or_show", :id => @re_attachment}, {:target => "blank", :class => 'icon icon-attachment'}) %>
+      <ul>
+      <% @re_attachment.attachments.each do |current_attachment| %>
+         <li><%= link_to(h(current_attachment.filename), {:controller => 're_attachment', :action => "download_or_show", :id => @re_attachment}, {:target => "blank", :class => 'icon icon-attachment'}) %></li>
+      <% end%>
+      </ul>
+      <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
     <% else %>
       <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
     <% end %>
