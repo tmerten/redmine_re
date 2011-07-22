@@ -11,5 +11,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :re_artifact_relationship, :path_prefix => '/projects/:project_id', :except => :edit
   map.resources :re_scenario, :path_prefix => '/projects/:project_id', :except => :edit
   map.resources :re_requirement, :path_prefix => '/projects/:project_id', :except => :edit
+  map.resources :re_settings, :path_prefix => '/projects/:project_id', :except => :edit
 
 end
