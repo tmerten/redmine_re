@@ -9,6 +9,7 @@ class ReBbSelection < ReBuildingBlock
   
   @@data_form_partial_strategy = 're_building_block/re_bb_selection/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_selection/multiple_data_form'
+  @@additional_work_before_save_strategies = {}
   @@additional_work_after_save_strategy = SAVE_OPTIONS_STRATEGY
   @@validation_strategies = {}
   @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_bb_option_selection_id'}}
@@ -20,6 +21,10 @@ class ReBbSelection < ReBuildingBlock
   
   def multiple_data_form_partial_strategy
     @@multiple_data_form_partial_strategy
+  end
+  
+  def additional_work_before_save_strategies
+    @@additional_work_before_save_strategies
   end
   
   def additional_work_after_save_strategy
@@ -57,6 +62,7 @@ class ReBbSelection < ReBuildingBlock
     end
   end 
   
+  # This method seems to be not called from anywhere. Please check this!
   def validate_for_specification(datum, bb_error_hash)
     @@validation_strategies.each do |validation_strategy|
       bb_error_hash = validation_strategy.call(self, datum, bb_error_hash)    

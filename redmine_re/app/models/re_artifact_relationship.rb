@@ -13,6 +13,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   # The relationship has ReArtifactProperties as source or sink 
   belongs_to :source, :class_name => "ReArtifactProperties"
   belongs_to :sink,   :class_name => "ReArtifactProperties"
+  has_many :re_bb_data_artifact_selection
   
   #validates_uniqueness_of :source, :scope => [:sink, :relation_type]
   validates_inclusion_of :relation_type, :in => RELATION_TYPES.values

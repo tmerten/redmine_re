@@ -132,6 +132,10 @@ textarea.bb_config {
 	rows: 5;
 }
 
+select.bb_config {
+	height: 70px;
+}
+
 #context-menu li.header {
   border-bottom-width: 1px;
   border-bottom-color: black;
@@ -179,6 +183,11 @@ label.behind_checkbox {
   clear:none;
   margin-left: 5px;
 }
+
+label.disabled_is_true {
+	color:#AAAAAA;
+}
+
 
 label.bb_config {
 	width: 130px;
@@ -341,7 +350,7 @@ a.re_knowledge_artifact {
    for example: class="tip subtask_error_tip"
 
    look in apllication.css of redmine which styles are already set and overwrite or add
-   the stylez for your custom tooltip
+   the styles for your custom tooltip
 */
 
 div.tooltip:hover span.subtask_error_tip {

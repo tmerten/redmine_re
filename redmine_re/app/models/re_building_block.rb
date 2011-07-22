@@ -83,4 +83,18 @@ class ReBuildingBlock < ActiveRecord::Base
     bb_error_hash
   end
   
+  
+  # This method can be called to do different additional work before saving of 
+  # the building_block. The buildingblock is transmitted and delivered back by
+  # each strategy.
+  def self.additional_work_before_save(params, re_bb)
+    additional_work_strategy_hash = re_bb.additional_work_before_save_strategies
+    unless additional_work_strategy_hash.empty?
+      additional_work_strategy_hash.keys.each do |additional_work_strategy|
+        re_bb = additional_work_strategy.call(params, re_bb, additional_work_strategy_hash[additional_work_strategy])    
+      end 
+    end    
+    re_bb
+  end
+  
 end

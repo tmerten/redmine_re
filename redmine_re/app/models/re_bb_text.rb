@@ -9,6 +9,7 @@ class ReBbText < ReBuildingBlock
   
   @@data_form_partial_strategy = 're_building_block/re_bb_text/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_text/multiple_data_form'
+  @@additional_work_before_save_strategies = {}
   @@additional_work_after_save_strategy = DO_NOTHING_STRATEGY
   @@validation_strategies = {VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY => nil}
   @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => nil}
@@ -22,6 +23,10 @@ class ReBbText < ReBuildingBlock
     @@multiple_data_form_partial_strategy
   end
   
+  def additional_work_before_save_strategies
+    @@additional_work_before_save_strategies
+  end
+    
   def additional_work_after_save_strategy
     @@additional_work_after_save_strategy
   end

@@ -1,6 +1,6 @@
 partial = "re_building_block/" + params[:building_block_type].underscore + "/config"
 page.replace_html('building_block_config',
-                  :partial => partial,
-                  :re_building_block => @re_building_block, 
+                  :partial => partial, 
                   :artifact_type => params[:artifact_type], 
-                  :project_id => params[:project_id])
+                  :project_id => params[:project_id],
+                  :f => params[:f])

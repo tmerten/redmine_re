@@ -40,6 +40,7 @@ en:
   re_from: 'from'
   re_hide: 'hide'
   re_shows_after_reload: 'will be shown after a page reload'
+  re_no_one_line_view_existent: 'Template missing: No One_line_view defined yet'
   re_scroll_to_top: 'Scroll to top'
   re_associated_issues: 'Related Issues'
   re_asscociated_requirements: 'Related Artifacts'
@@ -75,6 +76,9 @@ en:
   re_artifact_priority: 'Priority'
   re_artifact_description: 'Description'
   re_artifact_responsible: 'Responsible'
+  re_artifact_responsibles: 'Responsibles'
+  re_artifact_created_by: 'Created by'
+  re_artifact_updated_by: 'Updated by'
   re_description_fieldset: 'Artifact Description'
   re_priority_responsible: 'Priority and Responsibilities'
   re_update_description: 'Update description'
@@ -141,6 +145,7 @@ en:
   re_vision_priority: 'Priority'
   re_new_re_vision: 'Vision Statement'
   re_vision: 'Vision Statement'
+  ReVision: 'Vision Statement'
   re_create_re_vision: 'Create a new Vision Statement'
   re_vision_saved: 'Vision successfully saved'
   re_vision_not_found: 'Could not find ReVision with id %{id}.'
@@ -183,6 +188,13 @@ en:
   re_rationale: 'Rationale'
   re_part_of: 'Part of'
   re_refinement: 'Refinement'
+  relationship: 'Relationship'
+  conflict: 'Conflict'
+  dependency: 'Dependency'
+  parentchild: 'Parent Child'
+  rationale: 'Rationale'
+  part_of: 'Part of'
+  refinement: 'Refinement'
   re_create_new_relationship: 'Create new relationship'
   re_source_artifact: 'Source Artifact'
   re_sink_artifact: 'Sink Artifact'
@@ -271,6 +283,14 @@ en:
   re_create_re_knowledge_artifact: 'Create a new Knowledge'
   re_new_re_knowledge_artifact: 'Knowledge'
   re_knowledge_artifact_priority: 'Priority'
+  
+  # re_requirement
+  re_requirement: 'Requirement'
+  ReRequirement: 'Requirement'
+  
+  # re_scenario
+  re_scenario: 'Scenario'
+  ReScenario: 'Scenario'
 
   # re_building_blocks
   re_bb_configuration_header: 'Configuration of %{builing_block} for Artifact Type %{artifact_type}' 
@@ -315,6 +335,23 @@ en:
   re_bb_value: 'Value'
   re_bb_control: 'Control'
   re_bb_mandatory: '%{bb_name} is mandatory. Please enter data!'
+  re_bb_embedding: 'Embedded Representation'
+  re_bb_referred_artifact_types: 'Possible artifacts'
+  re_bb_referred_relationship_types: 'Possible relations'
+  re_bb_change_indication: 'Indication of Change'
+  re_bb_indicate_if_artifact_changed: 'Show if artifact changed'
+  re_bb_none: 'None'
+  re_bb_selected_attributes: 'Some attributes'
+  re_bb_complete: 'Complete'
+  re_bb_one_line: 'Use One-Line-Representation'
+  re_bb_creation_of_relationship: 'Creation of relationships'
+  re_bb_choose_artifact_type: 'Choose artifact type'
+  re_bb_choose_relationship_type: 'Choose relationship'
+  re_bb_choose_artifact: 'Choose artifact'
+  re_bb_choosen_artifact_type: 'Choosen type is %{type}'
+  re_bb_choosen_relationship_type: 'Choosen relation is %{type}'
+  re_bb_artifact_selection_to: '%{relation_type} to/with %{artifact_type}'
+  
 
   # re_tree
   re_tree_overview: 'Artifact Summary'

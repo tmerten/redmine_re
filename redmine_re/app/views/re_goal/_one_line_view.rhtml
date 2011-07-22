@@ -3,16 +3,28 @@
 		<tbody>
 			<tr>
 			<% for column in ReArtifactProperties.content_columns %>
-				<% unless column.name == "created_by" || column.name == "updated_by" %>
+				<% unless column.name == "created_at" || column.name == "updated_at" || column.name == "artifact_type" %>
 	              <td>
-	              	<label class='filter'><%= l('re_column_' + column.name) + ": " %></label>
-					<%= artifact.send(column.name) %>
+	              	<% value = artifact.send(column.name) %>
+					<% unless value.nil? or value == "" %>
+		              	<label class='filter'><%= l('re_artifact_' + column.name) + ": " %></label>
+						<% if column.name == 'name'%>
+							<%= link_to( artifact.name, {:action => :edit,
+						        					  	 :controller => artifact.artifact_type.underscore,
+						        					 	 :id => ReArtifactProperties.find_by_id(artifact.id).artifact_id}, 
+										:class => "icon #{artifact.artifact_type.underscore}" ) %>
+						<% else %>
+							<% value = value.slice(0, 50) + "..." if !value.nil? and value.is_a? String and value.length >= 50 %>
+							<% value = User.find(value).name if column.name.slice(-3, 3) == '_by'%>
+							<%= value %>
+						<% end %>
+					<% end %>
 	            </td>
 				<% end %>
 	        <% end %>
 			<% for column in ReGoal.content_columns %>
 	        	<td>
-	              	<label class='filter'><%= l('re_column_' + column.name) + ": " %></label>
+	              	<label class='filter'><%= l('re_goal_' + column.name) + ": " %></label>
 					<%= artifact.send(column.name) %>
 	            </td>  
 	        <% end %>

@@ -7,21 +7,49 @@ class ReBuildingBlockController < RedmineReController
   end
   
   def update_config_form
-    @project = Project.find(params[:project_id])
     @artifact_type = params[:artifact_type]
-    # just looks for the rjs-Template with the same name
+    @re_building_block = ReBuildingBlock.find_by_id(params[:id]) || ReBuildingBlock.new
+    # renders the rjs-Template with the same name
   end
+  
+  def react_to_change_in_field_multiple_values
+    @artifact_type = params[:artifact_type]
+    @re_building_block = ReBuildingBlock.find_by_id(params[:id]) || ReBuildingBlock.new
+    # renders the rjs-Template with the same name
+  end
+  
+  def react_to_change_in_field_referred_artifact_types
+    @artifact_type = params[:artifact_type]
+    @re_building_block = ReBuildingBlock.find_by_id(params[:id]) || ReBuildingBlock.new
+    # renders the rjs-Template with the same name
+  end
+  
+  def react_to_change_in_data_field_artifact_type
+    artifact_type = params[:artifact_type]
+    @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
+    @artifact_type = artifact_type
+    render :update do |page|   
+      page["re_bb_#{params[:re_bb_id]}_data_field_artifact_type_selection".to_sym].replace_html :partial => "re_building_block/re_bb_artifact_selection/data_field_artifact_type_selection", :selected_type => params[:selected_type], :params_path_artifact => params[:params_path_artifact]
+    end
+  end
+  
   
   def edit
    @re_building_block = ReBuildingBlock.find_by_id(params[:id]) || ReBuildingBlock.new
    @project = Project.find(params[:project_id])
    @artifact_type = params[:artifact_type]
-   
+   # Check for ArtifactSelectionBuildingBlock if one selected artifact is choosen already
+   if ! @re_building_block.referred_artifact_types.nil? and @re_building_block.referred_artifact_types.count == 1
+     @artifact_selected = @re_building_block.referred_artifact_types.first
+   else
+     @artifact_selected = nil
+   end
    if request.post?
       params[:re_building_block][:artifact_type] = params[:artifact_type]
       # Test if @re_builing_block is a new object
       @re_building_block = params[:type].constantize.new if @re_building_block.artifact_type.nil?
       @re_building_block.attributes = params[:re_building_block]
+      @re_building_block = ReBuildingBlock.additional_work_before_save(params[:re_building_block], @re_building_block)
       flash[:notice] = t(:re_bb_saved) if save_ok = @re_building_block.save
       # Calling the strategies for handling additional work after normal saving
       @re_building_block.additional_work_after_save_strategy.call(params[:options], @re_building_block)

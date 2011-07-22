@@ -104,6 +104,10 @@ JAVASCRIPT
     end
   end
   
+  def insert_one_line_representation(artifact)
+    render :partial => "#{artifact.artifact_type.underscore}/one_line_view", :locals => {:artifact => artifact}
+  end
+  
   def add_bb_section(artifact, bb_hash, bb_error_hash)
     if User.current.allowed_to?(:administrate_requirements, @project)
       render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash, :bb_error_hash => bb_error_hash}
@@ -121,6 +125,8 @@ JAVASCRIPT
       }
     end
   end
+  
+  
   
   
   

@@ -4,12 +4,13 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 're_building_block'
 
 class ReBuildingBlockTest < ActiveSupport::TestCase
-  fixtures :re_building_blocks, :re_bb_data_texts, :re_goals
+  fixtures :re_bb_data_texts, :re_goals
 
   def setup
     @simple_bb = ReBbText.new(:name => 'Note_', :artifact_type => 'ReGoal')
     @simple_bb.save
     @complex_bb_text = ReBuildingBlock.find_by_name('Solution Ideas')
+    logger.info("Example how to call the logger: #{@complex_bb_text.inspect} ")
   end
   
   def test_if_artifact_type_is_not_overrideable

@@ -65,6 +65,7 @@ class RedmineReController < ApplicationController
 
     @artifact = artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
+    @artifact_type = artifact_type # needed for ajax request (artifact selection building block)
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
     if params[:parent_artifact_id]
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
@@ -81,6 +82,7 @@ class RedmineReController < ApplicationController
 
     @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
+    @artifact_type = artifact_type # needed for ajax request (artifact selection building block)
     @parent = nil
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
     @bb_error_hash = {}

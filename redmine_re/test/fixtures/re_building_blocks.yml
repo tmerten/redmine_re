@@ -82,5 +82,45 @@ bb_selection_for_goal_usability_status:
   for_condensed_view: false
   for_search: false
   arrangable_by_users: false
-  position: 1
+  position: 3
   default_value: <%= Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability) %>
+  
+bb_artifact_selection_sections:
+  id: <%= Fixtures.identify(:bb_artifact_selection_sections) %>
+  type: ReBbArtifactSelection
+  artifact_type: ReGoal
+  name: Selection of Sections
+  help: Please select a section where the goal belongs to
+  mandatory: true
+  for_every_project: true
+  multiple_values: true
+  grouped: false
+  for_condensed_view: false
+  for_search: false
+  arrangable_by_users: false
+  position: 4 
+  referred_artifact_types: <%= ['ReSection'].to_yaml %>  
+  referred_relationship_types: <%= ['dependency'].to_yaml %>
+  embedding_type: attributes
+  selected_attributes: <%= ['re_artifact_properties_name', 're_artifact_properties_description'].to_yaml %>
+  indicate_changes: true 
+  
+bb_artifact_selection_rationale:
+  id: <%= Fixtures.identify(:bb_artifact_selection_rationale) %>
+  type: ReBbArtifactSelection
+  artifact_type: ReTask
+  name: Selection of Rationals
+  help: Please select a rationale for the task
+  mandatory: true
+  for_every_project: true
+  multiple_values: true
+  grouped: false
+  for_condensed_view: false
+  for_search: false
+  arrangable_by_users: false
+  position: 3
+  referred_artifact_types: <%= ['ReGoal', 'ReWorkarea', 'ReUserProfile'].to_yaml %>  
+  referred_relationship_types: <%= ['dependency', 'conflict'].to_yaml %>
+  embedding_type: one_line
+  selected_attributes: <%= ['re_artifact_properties_name', 're_artifact_properties_description'].to_yaml %>
+  indicate_changes: false 

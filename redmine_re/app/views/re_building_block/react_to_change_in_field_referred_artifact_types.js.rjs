@@ -1,0 +1,27 @@
+if (!params[:re_building_block_referred_artifact_types].nil?) 
+  referred_artifacts = params[:re_building_block_referred_artifact_types].split(',') 
+  if referred_artifacts.length == 1
+    # Just one artifact is selected. Change the form so that the user can
+    # decide which attributes of this artifact should be shown
+    page[:label_for_re_building_block_embedding_type_attributes].remove_class_name "disabled_is_true"
+    page[:label_for_re_building_block_embedding_type_attributes].add_class_name "disabled_is_false"
+    page[:re_building_block_embedding_type_attributes][:disabled] = false  
+    @artifact_selected = referred_artifacts.first
+    page[:selected_attributes].replace :partial => "re_building_block/re_bb_artifact_selection/attribute_selection" 
+    # If radio button for attribute representation is not choosen
+    # hide the newly replaced partial again
+    page << "if (!$('re_building_block_embedding_type_attributes').checked) {"
+      page[:selected_attributes].hide
+    page << "}"
+  else  
+    # Different kind of artifacts can be referred to. No attributes can be choosen.
+    page[:label_for_re_building_block_embedding_type_attributes].remove_class_name "disabled_is_false"
+    page[:label_for_re_building_block_embedding_type_attributes].add_class_name "disabled_is_true"
+    page[:re_building_block_embedding_type_attributes][:disabled] = true     
+    page[:selected_attributes].hide
+    page << "if ($('re_building_block_embedding_type_attributes').checked) {"
+      page[:re_building_block_embedding_type_attributes][:checked] = false
+      page[:re_building_block_embedding_type_one_line][:checked] = true 
+    page << "}"
+  end
+end

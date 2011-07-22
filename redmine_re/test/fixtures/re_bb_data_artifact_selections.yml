@@ -1,0 +1,10 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+re_bb_data_artifact_selection_for_goal_usability_and_bb_artifact_selection_sections:
+  id: <%= Fixtures.identify(:re_bb_data_artifact_selection_for_goal_usability_and_bb_artifact_selection_responsibles) %>
+  re_artifact_relationship_id: <%= Fixtures.identify(:relationship_section_goals_goal_usability) %>
+  re_checked_at: '2011-05-28 15:32:59'
+  re_artifact_properties_id: <%= Fixtures.identify(:art_goal_usability) %>
+  re_bb_artifact_selection_id: <%= Fixtures.identify(:bb_artifact_selection_sections) %>
+
+
