@@ -118,7 +118,8 @@ var tree = jQuery("#tree")
           "id" : jQuery(this).attr("id").replace("node_",""), 
           "new_parent_id" : data.rslt.np.attr("id").replace("node_",""),
           "ancestor_id" : data.rslt.r.attr("id").replace("node_",""),
-          "position" : data.rslt.p
+          "position" : data.rslt.p,
+          "authenticity_token" : encodeURIComponent(<%= "#{form_authenticity_token.inspect}" %>)
         },
         success : function (r) {
           if(!r.status) {
