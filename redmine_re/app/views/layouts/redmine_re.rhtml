@@ -5,6 +5,8 @@
 <title><%=h html_title %></title>
 <meta name="description" content="<%= Redmine::Info.app_name %>" />
 <meta name="keywords" content="issue,bug,tracker" />
+
+<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 <%= csrf_meta_tag %>
 <%= favicon %>
 <%= stylesheet_link_tag 'application', :media => 'all' %>
@@ -28,6 +30,7 @@
 <%= javascript_include_tag 'jquery.tools.min.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'slider.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'colorpicker.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'ccolorcalculator.js', :plugin => 'redmine_re' %>
 <%= stylesheet_link_tag 'colorpicker.css', :plugin => "redmine_re", :media => 'screen' %>
 <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 <%### REDMINE RE STUFF STOP 1 ###%>
