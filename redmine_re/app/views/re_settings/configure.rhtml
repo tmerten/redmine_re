@@ -40,7 +40,11 @@
       <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[in_use]]', 'yes', @re_artifact_configs[artifact_type]['in_use'] %></td>
       <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[alias]]', @re_artifact_configs[artifact_type]['alias'], :size => 20 %></td>
       <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[printable]]', 'yes', @re_artifact_configs[artifact_type]['printable'] %></td>
-      <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[color]]', @re_artifact_configs[artifact_type]['color'], :size => 6,  :class => 'colorpick', :style => "background-color:#" + @re_artifact_configs[artifact_type]['color'] %></td>
+      <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[color]]', @re_artifact_configs[artifact_type]['color'], :size => 6,  :class => 'colorpick', :style => "background-color:#" + @re_artifact_configs[artifact_type]['color'] %>
+      	<script type="text/javascript">
+      		getccolor(document.getElementById("<%= "re_artifact_configs_"+artifact_type.underscore+"_color" %>"));
+      	</script>
+      </td>
       <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[show_children_in_tree]]', 'yes', @re_artifact_configs[artifact_type]['show_children_in_tree'] %></td>
       <td><%= link_to t(:re_edit), :action => "children", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
       <td><%= link_to t(:re_edit), :action => "fields", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
@@ -71,7 +75,11 @@
       </td>
       <td><%= check_box_tag "re_relation_configs[" + relation_type.underscore + '[in_use]]', 'yes', @re_relation_configs[relation_type]['in_use'] %></td>
       <td><%= text_field_tag "re_relation_configs[" + relation_type.underscore + '[alias]]', @re_relation_configs[relation_type]['alias'], :size => 20 %></td>
-      <td><%= text_field_tag "re_relation_configs[" + relation_type.underscore + '[color]]', @re_relation_configs[relation_type]['color'], :size => 6,  :class => "colorpick", :style => "background-color:#" + @re_relation_configs[relation_type]['color']  %></td>
+      <td><%= text_field_tag "re_relation_configs[" + relation_type.underscore + '[color]]', @re_relation_configs[relation_type]['color'], :size => 6,  :class => "colorpick", :style => "background-color:#" + @re_relation_configs[relation_type]['color'], :onload => "getccolor(this)"  %>
+      	<script type="text/javascript">
+      		getccolor(document.getElementById("<%= "re_relation_configs_"+relation_type.underscore+"_color" %>"));
+      	</script>
+      </td>
       <td><%= check_box_tag "re_relation_configs[" + relation_type.underscore + '[directed]]', 'yes', @re_relation_configs[relation_type]['directed'] %></td>
       <td><%= check_box_tag "re_relation_configs[" + relation_type.underscore + '[show_in_visualization]]', 'yes', @re_relation_configs[relation_type]['show_in_visualization'] %></td>
     </tr>
