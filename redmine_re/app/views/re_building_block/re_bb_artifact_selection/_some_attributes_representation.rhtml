@@ -9,11 +9,10 @@
 
 		<% selected_attributes.each do |attribute| %>
 			<% unless attribute.starts_with? 're_bb_' or attribute.starts_with? 're_artifact_properties_' %>
-				<%= attribute %>
 				<% value = re_artifact_properties.artifact.send(attribute)%>
 				<% unless value.nil? or value == '' %>
 		        	<td>
-		              	<label class='filter'><%= l(artifact.re_artifact_type.underscore + '_' + attribute) + ": " %></label>
+		              	<label class='filter'><%= l(re_artifact_properties.artifact_type.underscore + '_' + attribute) + ": " %></label>
 						<%= value %>
 		            </td>  
 				<% end %>

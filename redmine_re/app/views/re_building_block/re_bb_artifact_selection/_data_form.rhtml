@@ -114,36 +114,36 @@
 				<div style="overflow: visible; display: none;">	
 					<table>
 						<tr>
-								<% if one_relationship %>
-							<td colspan='2'>
-									<%= l(:re_bb_choosen_relationship_type, :type => l('re_' + relation_type.to_s))%>	
-									<%= hidden_field_tag params_path_relationship, relation_type %>
-								<% else %>
-							<td>
-									<%= l(:re_bb_choose_relationship_type)%>
-							</td>
-							<td>
-									<%= select_tag params_path_relationship, options_relationship, {} %>
-								<% end %>
+							<% if one_relationship %>
+								<td colspan='2'>
+										<%= l(:re_bb_choosen_relationship_type, :type => l('re_' + relation_type.to_s))%>	
+										<%= hidden_field_tag params_path_relationship, relation_type %>
+							<% else %>
+								<td>
+										<%= l(:re_bb_choose_relationship_type)%>
+								</td>
+								<td>
+										<%= select_tag params_path_relationship, options_relationship, {} %>
+							<% end %>
 							</td>
 						</tr>
 						<tr>
 							
-								<% if one_type %>
-							<td colspan='2'>
-									<%= l(:re_bb_choosen_artifact_type, :type => l(artifact_type))%>	
-									<%= hidden_field_tag params_path_type, artifact_type %>
-								<% else %>
-							<td>
-									<%= l(:re_bb_choose_artifact_type)%>
-							</td>
-							<td>
-									<%= select_tag params_path_type, options_type, {} %>
-									<!-- Change selection of artifacts due to selection of artifact type -->
-									<%= observe_field(id_of_type_selection,
-							    					  :url => { :controller => :re_building_block, :action => :react_to_change_in_data_field_artifact_type, :project_id => @project.id, :artifact_type => @artifact_type, :id => @artifact.id, :re_bb_id => re_bb.id, :params_path_artifact => params_path_artifact, :params_path_type => params_path_type},
-							    					  :with => :selected_type) %>
-								<% end %>
+							<% if one_type %>
+								<td colspan='2'>
+										<%= l(:re_bb_choosen_artifact_type, :type => l(artifact_type))%>	
+										<%= hidden_field_tag params_path_type, artifact_type %>
+							<% else %>
+								<td>
+										<%= l(:re_bb_choose_artifact_type)%>
+								</td>
+								<td>
+										<%= select_tag params_path_type, options_type, {} %>
+										<!-- Change selection of artifacts due to selection of artifact type -->
+										<%= observe_field(id_of_type_selection,
+								    					  :url => { :controller => :re_building_block, :action => :react_to_change_in_data_field_artifact_type, :project_id => @project.id, :artifact_type => @artifact_type, :id => @artifact.id, :re_bb_id => re_bb.id, :params_path_artifact => params_path_artifact, :params_path_type => params_path_type},
+								    					  :with => :selected_type) %>
+							<% end %>
 							</td>
 						</tr>
 						<tr>
