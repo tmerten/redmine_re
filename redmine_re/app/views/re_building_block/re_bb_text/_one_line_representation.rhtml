@@ -1,0 +1,8 @@
+<% if re_bb.for_condensed_view and !data.empty? %>
+	<td class='one_line'>
+		<label class='filter'><%= re_bb.name + ": " %></label>
+		<% data.each do |datum| %>		
+			<%= datum.value.to_s %><br/>
+		<% end %>
+	</td>
+<% end %>

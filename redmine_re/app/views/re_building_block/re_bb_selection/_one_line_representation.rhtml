@@ -1,0 +1,8 @@
+<% if re_bb.for_condensed_view and !data.empty? %>
+	<td class='one_line'>
+		<label class='filter'><%= re_bb.name + ": " %></label></br>
+		<% data.each do |datum| %>		
+			<%= datum.re_bb_option_selection.value %><br/>
+		<% end %>
+	</td>
+<% end %>

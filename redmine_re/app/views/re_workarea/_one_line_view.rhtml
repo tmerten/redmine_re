@@ -1,0 +1,23 @@
+<div class="one_line_view">
+	<table>
+		<tr>
+		
+			<%= render :partial => "re_artifact_properties/shared_fields_one_line_representation", :locals => {:artifact => artifact}%>
+			
+			<% for column in ReWorkarea.content_columns %>
+				<% value = artifact.artifact.send(column.name)%>
+				<% unless value.nil? or value == '' %>
+		        	<td>
+		              	<label class='filter'><%= l('re_workarea_' + column.name) + ": " %></label>
+						<%= value %>
+		            </td>  
+				<% end %>
+	        <% end %>
+		
+		
+			<!-- Add Building Block One Line Representation --> 
+			<%= insert_building_blocks_one_line_representations(artifact) %>
+          	
+		</tr>
+	</table>
+</div>

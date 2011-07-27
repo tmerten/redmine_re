@@ -73,7 +73,6 @@ class ReBuildingBlock < ActiveRecord::Base
           end  
         end
         # Validation concerning the whole Building Block and all its data 
-        # (Only if multiple data is allowed)
         validation_whole_data_strategy_hash = bb.validation_whole_data_strategies
         validation_whole_data_strategy_hash.keys.each do |validation_strategy|
           bb_error_hash = validation_strategy.call(bb, bb_hash[bb], bb_error_hash, validation_whole_data_strategy_hash[validation_strategy]) 

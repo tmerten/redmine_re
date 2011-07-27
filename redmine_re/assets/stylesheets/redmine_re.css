@@ -106,6 +106,10 @@ td.subtask {
   border-top: 2px solid #505050;
 }
 
+td.one_line {
+	width: 20px;
+}
+
 tr.variant {
   background-color: #FFE6BF;
 }

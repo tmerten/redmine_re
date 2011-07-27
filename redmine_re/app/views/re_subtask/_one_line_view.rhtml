@@ -2,20 +2,21 @@
 	<p><table>
 		<tbody>
 			<tr>
-			<% for column in ReArtifactProperties.content_columns %>
-				<% unless column.name == "created_by" || column.name == "updated_by" %>
-	              <td>
-	              	<label class='filter'><%= l('re_column_' + column.name) + ": " %></label>
-					<%= artifact.send(column.name) %>
-	            </td>
-				<% end %>
-	        <% end %>
-			<% for column in ReSubtask.content_columns %>
-	        	<td>
-	              	<label class='filter'><%= l('re_column_' + column.name) + ": " %></label>
-					<%= artifact.send(column.name) %>
-	            </td>  
-	        <% end %>
+				
+				<%= render :partial => "re_artifact_properties/shared_fields_one_line_representation", :locals => {:artifact => artifact}%>
+
+				<% for column in ReSubtask.content_columns %>
+					<% value = artifact.artifact.send(column.name)%>
+					<% unless value.nil? or value == '' %>
+			        	<td>
+			              	<label class='filter'><%= l('re_subtask_' + column.name) + ": " %></label>
+							<%= value %>
+			            </td>  
+					<% end %>
+		        <% end %>
+				
+				<!-- Add Building Block One Line Representation --> 
+				<%= insert_building_blocks_one_line_representations(artifact) %>
 	          	
 			</tr>
 		</tbody>

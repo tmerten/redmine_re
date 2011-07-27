@@ -108,6 +108,19 @@ JAVASCRIPT
     render :partial => "#{artifact.artifact_type.underscore}/one_line_view", :locals => {:artifact => artifact}
   end
   
+  # renders a table data field for every building block in bb_hash that is
+  # used for condensed view (bb.for_condensed_view == true)
+  def insert_building_blocks_one_line_representations(artifact)
+    bb_hash = ReBuildingBlock.find_all_bbs_and_data(artifact)
+    html_code = ""
+    bb_hash.keys.each do |re_bb|
+      data = re_bb.find_my_data(artifact) 
+      bb_class_name = re_bb.type.is_a?(String) ? re_bb.type : re_bb.type.name
+      html_code += render :partial => "re_building_block/#{bb_class_name.underscore}/one_line_representation", :locals => {:re_bb => re_bb, :data => data}
+    end
+    html_code
+  end
+  
   def add_bb_section(artifact, bb_hash, bb_error_hash)
     if User.current.allowed_to?(:administrate_requirements, @project)
       render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash, :bb_error_hash => bb_error_hash}

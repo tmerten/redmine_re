@@ -95,7 +95,7 @@ module StrategyProcs
  
   # This proc adds an error to the error_hash if for mandatory building blocks no data is saved.
   # This proc needs the Building Block (bb) which user-defined fields shall be checked. The bb 
-  # deliverd is supposed to allow multiple data. The data is transmitted all together in one 
+  # deliverd might allow multiple data. The data is transmitted all together in one 
   # array. As usual, the error_hash as built up since now has to be given to the proc as well.
   # The hash attribute_names is needed if the data to check stores its information in another
   # attribute than "value".
@@ -112,6 +112,30 @@ module StrategyProcs
         if data_array.empty? or eval "data_array[0].#{attribute_names[:value]} == ''"
           bb_error_hash = StrategyProcs.add_error(bb.id, :general, bb_error_hash, I18n.t(:re_bb_mandatory, :bb_name => bb.name))         
         end
+      end
+    end
+    bb_error_hash
+  end
+  
+  # This proc adds an error to the error_hash if the building block is out of date. This is
+  # possible for example if the Building Block (bb) refers to an artifact and the artifact 
+  # was updated after the bb-data was saved. 
+  # This proc needs the bb which shall be checked. As usual, the error_hash as built up since 
+  # now has to be given to the proc as well. The hash attribute_names is needed if the datum of 
+  # the update of the bb is stored in another attribute than "re_checked_at" and the id of the 
+  # artifact to check against is not stored in "re_artifact_properties_id"  
+  VALIDATE_UP_TO_DATE = lambda do |bb, datum, bb_error_hash, attribute_names |
+    if attribute_names.nil?
+      attribute_names = {:re_checked_at => :re_checked_at, :re_artifact_relationship_id => :re_artifact_relationship_id, :sink => :sink, :indicate_changes => :indicate_changes}
+    end
+    # Check if bb is up to date only if changes of the referred artifact shall be indicated
+    if eval "bb.#{attribute_names[:indicate_changes].to_s}"
+      bb_checked_at = datum[attribute_names[:re_checked_at]]
+      relation = ReArtifactRelationship.find(datum[attribute_names[:re_artifact_relationship_id]])
+      artifact_id = eval "relation.#{attribute_names[:sink]}.id"
+      artifact_updated_at = ReArtifactProperties.find(artifact_id).updated_at
+      if artifact_updated_at > bb_checked_at 
+        bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_out_of_date, :bb_name => bb.name))  
       end
     end
     bb_error_hash

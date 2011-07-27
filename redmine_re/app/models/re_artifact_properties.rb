@@ -29,6 +29,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
   has_many :re_bb_data_texts
   has_many :re_bb_data_selections
+  has_many :re_bb_data_artifact_selections
 
   after_destroy :destroy_artifact
   
