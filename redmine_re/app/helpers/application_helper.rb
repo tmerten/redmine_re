@@ -104,9 +104,6 @@ JAVASCRIPT
     end
   end
   
-  def insert_one_line_representation(artifact)
-    render :partial => "#{artifact.artifact_type.underscore}/one_line_view", :locals => {:artifact => artifact}
-  end
   
   # renders a table data field for every building block in bb_hash that is
   # used for condensed view (bb.for_condensed_view == true)

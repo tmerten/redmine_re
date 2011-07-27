@@ -1,20 +1,5 @@
 <% for column in ReArtifactProperties.content_columns %> 
 	<% unless column.name == "created_at" || column.name == "updated_at"|| column.name == "artifact_type" %>
-      	<% value = artifact.send(column.name) %>
-		<% unless value.nil? or value == "" %>
-			<td>
-              	<label class='filter'><%= l('re_artifact_' + column.name) + ": " %></label>
-				<% if column.name == 'name'%>
-					<%= link_to( artifact.name, {:action => :edit,
-				        					  	 :controller => artifact.artifact_type.underscore,
-				        					 	 :id => ReArtifactProperties.find_by_id(artifact.id).artifact_id}, 
-								:class => "icon #{artifact.artifact_type.underscore}" ) %>
-				<% else %>
-					<% value = value.slice(0, 50) + "..." if !value.nil? and value.is_a? String and value.length >= 50 %>
-					<% value = User.find(value).name if column.name.slice(-3, 3) == '_by'%>
-					<%= value %>
-				<% end %>
-			</td>	
-		<% end %>
+      	<%= render :partial => "re_artifact_properties/table_data_for_shared_fields_one_line_representation", :locals => {:name => column.name, :artifact => artifact}%>
 	<% end %>
 <% end %>

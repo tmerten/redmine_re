@@ -40,7 +40,7 @@ class ReBuildingBlockController < RedmineReController
    @artifact_type = params[:artifact_type]
    # Check for ArtifactSelectionBuildingBlock if one selected artifact is choosen already
    if ! @re_building_block.referred_artifact_types.nil? and @re_building_block.referred_artifact_types.count == 1
-     @artifact_selected = @re_building_block.referred_artifact_types.first
+     @artifact_selected = @re_building_block.referred_artifact_types.first.camelcase
    else
      @artifact_selected = nil
    end

@@ -28,6 +28,12 @@ class ReBuildingBlock < ActiveRecord::Base
     bb_hash
   end
   
+  # This method delivers an array with all bb that belong to a given 
+  # artifact type like "ReGoal".
+  def self.find_bbs_of_artifact_type(artifact_type)
+    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_type})
+  end
+  
   # This method delivers an array with all data objects for 
   # the building block from which it is called, reducing the 
   # result to data for on special artifact

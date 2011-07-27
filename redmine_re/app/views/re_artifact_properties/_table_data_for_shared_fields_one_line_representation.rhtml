@@ -1,0 +1,16 @@
+<% value = artifact.send(name) %>
+<% unless value.nil? or value == "" %>
+	<td>
+      	<label class='filter'><%= l('re_artifact_' + name) + ": " %></label>
+		<% if name == 'name'%>
+			<%= link_to( artifact.name, {:action => :edit,
+		        					  	 :controller => artifact.artifact_type.underscore,
+		        					 	 :id => ReArtifactProperties.find_by_id(artifact.id).artifact_id}, 
+						:class => "icon #{artifact.artifact_type.underscore}" ) %>
+		<% else %>
+			<% value = value.slice(0, 50) + "..." if !value.nil? and value.is_a? String and value.length >= 50 %>
+			<% value = User.find(value).name if name.slice(-3, 3) == '_by'%>
+			<%= value %>
+		<% end %>
+	</td>	
+<% end %>
