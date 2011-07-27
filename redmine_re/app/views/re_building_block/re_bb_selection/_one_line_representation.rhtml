@@ -2,11 +2,8 @@
 	<td class='one_line'>
 		<label class='filter'><%= re_bb.name + ": " %></label>
 		<% data.each do |datum| %>	
-			<% sink_artifact = datum.re_artifact_relationship.sink %>	
-			<%= link_to( sink_artifact.name, {:action => :edit,
-						        		 	  	:controller => sink_artifact.artifact_type.underscore,
-						        		 	  	:id => sink_artifact.id}, 
-										 	  :class => "icon #{sink_artifact.artifact_type.underscore}" ) %>
+			<% option = ReBbOptionSelection.find(datum.re_bb_option_selection_id) %>	
+			<%= option.value %>
 		<% end %><br/>
 	</td>
 <% end %>
