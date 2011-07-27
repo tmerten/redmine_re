@@ -1,0 +1,167 @@
+<!-- This view is not prepared to show error-warnings concerning a single datum. So if you add errors for ReBbArtifactSelection, add suitable code here -->
+
+<% if !data.empty? %>
+	<% data_id = data[0].id.to_s %>
+	<% relation = ReArtifactRelationship.find_by_id(ReBbDataArtifactSelection.find(data_id).re_artifact_relationship_id)%>
+	<% sink_id = relation.sink.id %>
+	<% sink = ReArtifactProperties.find(sink_id)%>
+	<% artifact_type = relation.sink.artifact_type %>
+	<% relation_type = relation.relation_type %>
+<% else %>
+	<% data_id = 'no_id' %>
+<% end %>
+
+
+<% params_path_relationship = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][relation_type]'  %>
+<% if re_bb.referred_relationship_types.nil? or re_bb.referred_relationship_types.empty? %>
+	<% options_relationship = options_for_select(@re_relation_order.collect {|relationship| [l('re_' + relationship.to_s) , relationship.to_s]}, relation_type) %>	
+<% else %>
+	<% one_relationship = false %>
+	<% relation_type = re_bb.referred_relationship_types.first if data.empty? %>
+	<% if re_bb.referred_relationship_types.count != 1%>
+		<% options_relationship = options_for_select(re_bb.referred_relationship_types.collect {|relationship| [l('re_' + relationship.to_s) , relationship.to_s]}, relation_type) %>
+	<% else %>
+		<% one_relationship = true %>
+	<% end %>
+<% end %>
+
+
+<% params_path_type = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][artifact_type]'  %>
+<% id_of_type_selection = 're_bb_' + re_bb.id.to_s + '_' + data_id + '_artifact_type'  %>
+<% if re_bb.referred_artifact_types.nil? or re_bb.referred_artifact_types.empty? %>
+	<% options_type = options_for_select(@re_artifact_order.collect {|artifact| [l(artifact), artifact.to_s]}, artifact_type) %>	
+<% else %>
+	<% one_type = false %>
+	<% artifact_type = re_bb.referred_artifact_types.first if data.empty? %>
+	<% if re_bb.referred_artifact_types.count != 1%>
+		<% options_type = options_for_select(re_bb.referred_artifact_types.collect {|artifact| [l(artifact), artifact.to_s]}, artifact_type)  %>
+	<% else %>
+		<% one_type = true %>
+	<% end %>
+<% end %>
+
+
+<% params_path_artifact = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][related_artifact_id]'  %>
+<% options_artifact = options_for_select(ReArtifactProperties.find_all_by_artifact_type_and_project_id(artifact_type, @project.id).collect {|artifact| [artifact.name , artifact.id]}.insert(0, ['', nil]), sink_id) %>	
+
+<% params_path_checked = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][confirm_checked]'  %>
+
+
+<table>
+	<tr>
+		<td>
+			<%= label_tag params_path_relationship, re_bb.name, :class => "user_defined" %>
+		</td>
+		<td>
+			<% unless re_bb.help.nil? || re_bb.help == "" %>
+				<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
+			  		<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
+			 	</div>
+			<% else %>
+				<div class="tooltip placeholder">&nbsp;
+ 				</div>
+			<% end %>
+		</td>
+		<td colspan='3'>
+			<% unless data_id == 'no_id' or re_bb.embedding_type == 'none' %> 
+				<%# begin %>
+					<fieldset id="represent_data_<%= data_id %>_bb_<%= re_bb.id %>" class="collapsible">
+						<legend onclick="toggleFieldset(this);"><%= l(:re_bb_artifact_selection_to_type, :relation_type => l('re_' + relation_type.to_s), :artifact_type => l(artifact_type)) %></legend>
+							<% if re_bb.embedding_type == 'one_line' or re_bb.selected_attributes.nil? or re_bb.selected_attributes == "" or re_bb.selected_attributes.empty? %>
+								<%= render :partial => "#{sink.artifact_type.underscore}/one_line_view", :locals => {:artifact => sink} %>
+							<% else %>
+								<%= render :partial => "re_building_block/re_bb_artifact_selection/some_attributes_representation", :locals => {:re_artifact_properties => sink, :selected_attributes => re_bb.selected_attributes}%>
+							<% end %>
+					</fieldset>
+				<%# rescue %>
+					<%# l(:re_no_one_line_view_existent)%>
+				<%# end %>
+			<% end %>
+			
+		</td>
+	</tr>
+	<% unless bb_error_hash.nil? %>
+		<tr>
+			<td></td>
+			<td></td>
+			<td colspan='3'>
+				<table>
+					<tr>
+						<td>
+							<%= validation_warning(bb_error_hash, re_bb, data_id.to_i) %>
+							<%= validation_warning(bb_error_hash, re_bb, :general) %>
+							<% unless data_id == 'no_id' %> 
+								<% if sink.updated_at > ReBbDataArtifactSelection.find(data_id).re_checked_at and re_bb.indicate_changes %>
+									</td>
+									<td>
+										<%= check_box_tag params_path_checked %>
+									</td>
+									<td>
+										<%= l(:re_confirm)%><br/>
+								<% end %>
+							<% end %>
+						</td>
+					</tr>	
+				</table>
+			</td>
+		</tr>
+	<% end %>
+	<tr>
+		<td></td>
+		<td></td>
+		<td rowspan='3'>
+			<fieldset id="artifact_selection_<%= re_bb.id %>_mangement" class="collapsible collapsed"><legend onclick="toggleFieldset(this);"><%= l(:re_bb_creation_of_relationship) %></legend>
+				<div style="overflow: visible; display: none;">	
+					<table>
+						<tr>
+								<% if one_relationship %>
+							<td colspan='2'>
+									<%= l(:re_bb_choosen_relationship_type, :type => l('re_' + relation_type.to_s))%>	
+									<%= hidden_field_tag params_path_relationship, relation_type %>
+								<% else %>
+							<td>
+									<%= l(:re_bb_choose_relationship_type)%>
+							</td>
+							<td>
+									<%= select_tag params_path_relationship, options_relationship, {} %>
+								<% end %>
+							</td>
+						</tr>
+						<tr>
+							
+								<% if one_type %>
+							<td colspan='2'>
+									<%= l(:re_bb_choosen_artifact_type, :type => l(artifact_type))%>	
+									<%= hidden_field_tag params_path_type, artifact_type %>
+								<% else %>
+							<td>
+									<%= l(:re_bb_choose_artifact_type)%>
+							</td>
+							<td>
+									<%= select_tag params_path_type, options_type, {} %>
+									<!-- Change selection of artifacts due to selection of artifact type -->
+									<%= observe_field(id_of_type_selection,
+							    					  :url => { :controller => :re_building_block, :action => :react_to_change_in_data_field_artifact_type, :project_id => @project.id, :artifact_type => @artifact_type, :id => @artifact.id, :re_bb_id => re_bb.id, :params_path_artifact => params_path_artifact, :params_path_type => params_path_type},
+							    					  :with => :selected_type) %>
+								<% end %>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<%= l(:re_bb_choose_artifact)%>
+							</td>
+							<td>
+								<div id="<%= "re_bb_#{re_bb.id}_data_field_artifact_type_selection" %>">
+									<%=  select_tag params_path_artifact, options_artifact, {} %>
+								</div>
+								
+							</td>
+						</tr>
+					</table>
+				</div>
+			</fieldset>	
+				
+			
+		</td>
+	</tr> 
+</table>

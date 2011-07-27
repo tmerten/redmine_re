@@ -1,0 +1,12 @@
+<% if (re_bb.for_condensed_view or params[:force_representation]) and !data.empty? %>
+	<td class='one_line'>
+		<label class='filter'><%= re_bb.name + ": " %></label>
+		<% data.each do |datum| %>	
+			<% sink_artifact = datum.re_artifact_relationship.sink %>	
+			<%= link_to( sink_artifact.name, {:action => :edit,
+						        		 	  	:controller => sink_artifact.artifact_type.underscore,
+						        		 	  	:id => sink_artifact.id}, 
+										 	  :class => "icon #{sink_artifact.artifact_type.underscore}" ) %>
+		<% end %><br/>
+	</td>
+<% end %>

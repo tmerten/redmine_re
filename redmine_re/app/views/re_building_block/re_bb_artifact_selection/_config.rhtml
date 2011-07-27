@@ -1,0 +1,65 @@
+ 
+  <h2><%= t(:re_bb_configuration_header, :builing_block => t(:re_bb_artifact_selection), :artifact_type => t(params[:artifact_type])) %></h2>
+
+  <%= errors_and_flash :re_building_block %>
+  
+  <% form_for :re_building_block, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+      <%= hidden_field_tag :project_id, @project.id %>
+  	  <%= hidden_field_tag :artifact_type, @artifact_type %>
+	  <%= hidden_field_tag :type, 'ReBbArtifactSelection' %>
+	  <div class="box">
+	  	
+	    <fieldset>
+	  	  <%= render "re_building_block/common_config", :f => f %>
+	      <div class="splitcontentright" >
+	        <fieldset><legend><%= l(:re_bb_special_configuration, :building_block => t(:re_bb_artifact_selection)) %> </legend>
+		
+		      <p>
+		      	<%= f.label :referred_artifact_types, l(:re_bb_referred_artifact_types) %> 
+				<%=  f.select "referred_artifact_types", @re_artifact_order.collect {|artifact| [l(artifact), artifact.to_s]}, {}, {:class => "bb_config", :multiple => true} %>
+		      </p>
+		      <p>
+		      	<% @re_building_block.nil? ? selected_types = [] : selected_types = @re_building_block.referred_relationship_types%>
+		      	<%= f.label :referred_relationship_types, l(:re_bb_referred_relationship_types) %> 
+				<%=  f.select "referred_relationship_types", options_for_select(@re_relation_order.collect {|relationship| [l('re_' + relationship.to_s) , relationship.to_s]}, selected_types), {}, {:class => "bb_config", :multiple => true} %>
+			  </p>
+			  <div id="config_embedded_representation">
+			  	<% @re_building_block.nil? ? embedding_type = nil : @re_building_block.embedding_type%>
+			  	<%= render "re_building_block/re_bb_artifact_selection/config_embedding", :f => f, :embedding_type => embedding_type %>
+			  </div>
+			  <!-- Change embedding options according to multiple value select box -->
+			  <!-- If multiple value select box is set, an embedding of the whole artifacts is not allowed  -->
+			  <%= observe_field(:re_building_block_multiple_values,
+	    						:url => { :action => :react_to_change_in_field_multiple_values, :project_id => @project.id, :artifact_type => @artifact_type, :id => @re_building_block.id},
+	    						:with => :re_building_block_multiple_values) %>
+			  <!-- Change embedding options according to artifact select box -->
+			  <!-- Only if just one artifact is choosen, allow embedding of user selected attributes  -->
+			  <%= observe_field(:re_building_block_referred_artifact_types,
+	    						:url => { :action => :react_to_change_in_field_referred_artifact_types, :project_id => @project.id, :artifact_type => @artifact_type, :id => @re_building_block.id},
+	    						:with => :re_building_block_referred_artifact_types) %>
+			  <p>
+			  	<fieldset><legend><%= l(:re_bb_change_indication)%></legend>
+			  		<p>
+						<%= f.check_box :indicate_changes, :class => "bb_checkbox" %>
+						<%= f.label :indicate_changes, l(:re_bb_indicate_if_artifact_changed), :class => "behind_checkbox" %>
+					</p>	
+			  	</fieldset>
+			  </p>
+		  	</fieldset>
+		  </div> 
+	  	  	
+	    </fieldset>
+	  
+	  </div>
+	 
+ 
+  <br />	
+  
+      <p>
+        <%= submit_tag l(:re_save) %>
+        <%= link_to(t(:re_cancel), :project_id => @project.id) %>
+      </p>
+  
+  <% end %>
+  
+  
