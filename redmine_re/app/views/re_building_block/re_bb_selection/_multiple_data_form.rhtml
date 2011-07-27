@@ -49,7 +49,7 @@
 			<% if data.empty? and re_bb.mandatory? %>		
 				<%= select_tag param_path, options_for_select(options.map {|opt| [opt.value, opt.id]}, selected.to_i) %>
 			<% else %>
-				<%= select_tag param_path, options_for_select(options.map {|opt| [opt.value, opt.id]}.insert(0, ''))%>
+				<%= select_tag param_path, options_for_select(options.map {|opt| [opt.value, opt.id]}.insert(0, '')) %>
 			<% end %>
 		</td>
 		<td>
