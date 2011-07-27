@@ -1,0 +1,31 @@
+<% if !@re_building_block.nil? and @re_building_block.embedding_type == 'attributes'%>
+	<div id="selected_attributes" >
+<% else %>
+	<div id="selected_attributes" style="display: none">
+<% end %>
+	<% options = '' %>
+	<% unselectable_attributes = ['id', 'artifact_id', 'project_id', 'created_at', 'updated_at', 'artifact_type']%>
+	<% ReArtifactProperties.column_names.each do |column| %>
+		<% unless unselectable_attributes.include? column %>
+			<% if !@re_building_block.nil? and !@re_building_block.selected_attributes.nil? and @re_building_block.selected_attributes.include?('re_artifact_properties_' + column)%>
+			  <% options += '<option value="re_artifact_properties_' + column + '" selected ="selected" >' + l(('re_artifact_' + column).to_sym) + '</option>' %>	
+			<% else %>
+			  <% options += '<option value="re_artifact_properties_' + column + '">' + l(('re_artifact_' + column).to_sym) + '</option>' %>	
+			<% end %>
+			
+		<% end %>
+	<% end unless @artifact_selected.nil? %>
+	<% @artifact_selected.constantize.column_names.each do |column| %>
+		<% unless column == 'id' %>
+			<% if !@re_building_block.nil? and !@re_building_block.selected_attributes.nil? and @re_building_block.selected_attributes.include?(column)%>
+			  <% options += '<option value="' + column + '" selected ="selected" >' + l((@artifact_selected.underscore + '_' + column).to_sym) + '</option>' %>
+			<% else %>
+			  <% options += '<option value="' + column + '">' + l((@artifact_selected.underscore + '_' + column).to_sym) + '</option>' %>
+			<% end %>
+				
+		<% end %>
+	<% end unless @artifact_selected.nil? %> 	
+	<%= select_tag 're_building_block[selected_attributes][]', options, :multiple => true %>
+	
+</div>
+
