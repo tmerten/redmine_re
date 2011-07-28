@@ -75,6 +75,7 @@ en:
   re_conf_bb_for_condensed_view: 'Decide if this field should be displayed in a condensed view of the artifact, e.g. in search results.'
   re_conf_bb_multiple_values: 'Should this field collect multiple values of just one datum?'
   re_conf_bb_for_search: 'Not implemented yet!!!'
+  re_conf_bb_detailed_configuration: 'Configure special aspects of this building block.'
   re_conf_display_order: 'Display order'
   re_field_configuration: 'Configuration of fields for artifact type %{artifact_type}'
 
@@ -324,6 +325,7 @@ en:
   re_bb_multiple_values: 'Multiple values'
   re_bb_for_search: 'Used in searches'
   re_bb_special_configuration: 'Special Configuration for %{building_block}'
+  re_bb_special_config: 'Special Configuration'
   re_bb_default_value: 'Default value'
   re_bb_min_length: 'Minimal length'
   re_bb_max_length: 'Maximal length'

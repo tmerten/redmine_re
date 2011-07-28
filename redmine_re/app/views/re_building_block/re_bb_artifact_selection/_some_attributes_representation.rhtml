@@ -16,17 +16,16 @@
 						<%= value %>
 		            </td>  
 				<% end %>
-				<% selected_attributes = selected_attributes.delete attribute %>
 			<% end %>
 		<% end %>
 		
 		<% selected_attributes.each do |attribute| %>
 			<% if attribute.starts_with? 're_bb_' %>
-				<% id = attribute.delete('re_bb_').to_i %>
+				<% id = attribute.sub('re_bb_', '').to_i %>
 				<% re_bb = ReBuildingBlock.find(id) %>
 				<% data = re_bb.find_my_data(re_artifact_properties)%>
 				<% bb_class_name = re_bb.type.is_a?(String) ? re_bb.type : re_bb.type.name %>
-	      		<%= render :partial => "re_building_block/#{bb_class_name.underscore}/one_line_representation", :locals => {:re_bb => re_bb, :data => data}, :force_representation => true %>
+	      		<%= render :partial => "re_building_block/#{bb_class_name.underscore}/one_line_representation", :locals => {:re_bb => re_bb, :data => data, :force_representation => true} %>
 			<% end %>
 		<% end %>		
 
