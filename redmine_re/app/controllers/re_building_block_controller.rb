@@ -49,6 +49,8 @@ class ReBuildingBlockController < RedmineReController
       # Test if @re_builing_block is a new object
       @re_building_block = params[:type].constantize.new if @re_building_block.artifact_type.nil?
       @re_building_block.attributes = params[:re_building_block]
+      # Set new postion of building block if new object
+      @re_building_block.position = get_new_position(@artifact_type)
       @re_building_block = ReBuildingBlock.additional_work_before_save(params[:re_building_block], @re_building_block)
       flash[:notice] = t(:re_bb_saved) if save_ok = @re_building_block.save
       # Calling the strategies for handling additional work after normal saving
@@ -65,6 +67,15 @@ class ReBuildingBlockController < RedmineReController
    bb_error_hash = {} 
    bb_error_hash = ReBuildingBlock.validate_building_blocks(re_artifact_properties, bb_error_hash)
    render :partial => bb.multiple_data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb.find_my_data(re_artifact_properties), :bb_error_hash => bb_error_hash}
+ end
+ 
+ #######
+ private
+ #######
+ 
+ def get_new_position(artifact_type)
+   my_bbs = ReBuildingBlock.find_bbs_of_artifact_type(artifact_type)
+   my_bbs.last.position + 1 
  end
 
 end

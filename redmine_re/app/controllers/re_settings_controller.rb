@@ -70,6 +70,29 @@ class ReSettingsController < RedmineReController
 
   end
 
+  def configure_fields
+    @building_blocks = ReBuildingBlock.find_bbs_of_artifact_type(params[:artifact_type].camelcase)
+    @artifact_type = params[:artifact_type]
+    @re_userdefined_fields_order = @building_blocks.map {|bb| 're_bb_' + bb.id.to_s}
+    
+    if request.post?
+      @re_userdefined_fields_order = ActiveSupport::JSON.decode(params[:re_userdefined_fields_order])
+      @re_userdefined_fields_order.each_with_index do |id_string, i|
+        id = id_string.gsub('re_bb_', '').to_i
+        re_bb = ReBuildingBlock.find(id)
+        re_bb.position = i
+        re_bb.mandatory = params[:re_artifact_configs][:bb][id.to_s][:mandatory]
+        re_bb.for_condensed_view = params[:re_artifact_configs][:bb][id.to_s][:for_condensed_view]
+        re_bb.for_every_project = params[:re_artifact_configs][:bb][id.to_s][:for_every_project]
+        re_bb.for_search = params[:re_artifact_configs][:bb][id.to_s][:for_search]
+        re_bb.multiple_values = params[:re_artifact_configs][:bb][id.to_s][:multiple_values]
+        re_bb.save
+      end
+      @building_blocks = ReBuildingBlock.find_bbs_of_artifact_type(params[:artifact_type].camelcase)
+    end
+  end
+
+
 #######
 private
 #######

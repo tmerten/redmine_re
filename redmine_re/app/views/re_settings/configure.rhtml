@@ -47,7 +47,7 @@
       </td>
       <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[show_children_in_tree]]', 'yes', @re_artifact_configs[artifact_type]['show_children_in_tree'] %></td>
       <td><%= link_to t(:re_edit), :action => "children", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
-      <td><%= link_to t(:re_edit), :action => "fields", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
+      <td><%= link_to t(:re_edit), :action => "configure_fields", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
     </tr>
   <% end %>
   </tbody>

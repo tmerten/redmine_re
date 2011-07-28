@@ -20,8 +20,8 @@ class ReBuildingBlock < ActiveRecord::Base
   # an array with all bb_data_objects belonging to the artifact properties and the
   # building block being the key. 
   def self.find_all_bbs_and_data(artifact_properties)
-    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_properties.artifact_type})
-    bb_hash = {}
+    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_properties.artifact_type}, :order => :position)
+    bb_hash = ActiveSupport::OrderedHash.new
     for bb in building_blocks do 
       bb_hash[bb] = bb.find_my_data(artifact_properties)
     end
@@ -31,7 +31,7 @@ class ReBuildingBlock < ActiveRecord::Base
   # This method delivers an array with all bb that belong to a given 
   # artifact type like "ReGoal".
   def self.find_bbs_of_artifact_type(artifact_type)
-    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_type})
+    ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_type}, :order => :position)
   end
   
   # This method delivers an array with all data objects for 

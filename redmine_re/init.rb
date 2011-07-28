@@ -47,6 +47,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
     permission( :administrate_requirements,
       {
         :requirements => [:setup, :configure],
+        :re_settings => [:configure_fields],
         :re_building_block => [:edit, :new, :update_config_form, :delete_data, 
           :react_to_change_in_field_multiple_values, :re_building_block_referred_artifact_types,
           :react_to_check_of_embedding_type_attributes, :react_to_change_in_data_field_artifact_type,

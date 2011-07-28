@@ -69,6 +69,14 @@ en:
   re_conf_child_artifacts: 'You may want to forbid some artifact types to be direct children of this artifact. E.g. you may not want goals below workareas.'
   re_conf_fields: 'Configure fields that get displayed along with this artifact type'
   re_conf_overwritable: 'What was the intention of this field, again?'
+  re_conf_field_configuration: 'Configuration of Fields belonging to %{artifact_type}'
+  re_conf_bb_mandatory_field: 'Decide if data is needed for this field to make the artifact valid.'
+  re_conf_bb_for_every_project: 'Not implemented yet!!!'
+  re_conf_bb_for_condensed_view: 'Decide if this field should be displayed in a condensed view of the artifact, e.g. in search results.'
+  re_conf_bb_multiple_values: 'Should this field collect multiple values of just one datum?'
+  re_conf_bb_for_search: 'Not implemented yet!!!'
+  re_conf_display_order: 'Display order'
+  re_field_configuration: 'Configuration of fields for artifact type %{artifact_type}'
 
   # re_artifact_properties
   re_artifact_name: 'Name'

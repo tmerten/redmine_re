@@ -1,17 +1,17 @@
 <% data_id = 'no_id' %>
-<% re_bb.mandatory? and !data.empty? ? shown_value = "" : shown_value = re_bb.default_value %>
+<% re_bb.mandatory? and !data.empty? ? shown_value = "" : shown_value = h(re_bb.default_value) %>
 
 <% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
 
 <table>
 	<tr>
 		<td>
-			<%= label_tag param_path, re_bb.name, :class => "user_defined" %>
+			<%= label_tag param_path, h(re_bb.name), :class => "user_defined" %>
 		</td>
 		<td>
 			<% unless re_bb.help.nil? || re_bb.help == "" %>
 				<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
-		      		<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
+		      		<span class="tip userdefined_fields_tip"><%= h(re_bb.help) %></span>
 		     	</div>
 			<% else %>
 				<div class="tooltip placeholder">&nbsp;
@@ -24,7 +24,7 @@
 		<td></td>
 		<td></td>
 		<td>
-			<%= datum.value %>
+			<%= h(datum.value) %>
 		</td>
 		<td>
 			<%= validation_warning(bb_error_hash, re_bb, datum.id.to_i) %>
@@ -42,7 +42,7 @@
 		<td></td>
 		<td></td>	
 		<td colspan=3>
-			<%= text_area_tag param_path, shown_value, {:size => '25*3', :id => param_path} %>	
+			<%= text_area_tag param_path, h(shown_value), {:size => '25*3', :id => param_path} %>	
 	    </td>
 		<td>
 			<%= validation_warning(bb_error_hash, re_bb, :general) %>	

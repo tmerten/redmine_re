@@ -1,0 +1,66 @@
+<div id='detail_view' class='detail_view'>
+<h1><%= t(:re_field_configuration, :artifact_type => @artifact_type) %></h1>
+<% flash.each do |k,v| %>
+  <%= content_tag('div', v, :class => "flash " + k.to_s) %>
+<% end %>
+<br/>
+
+<% form_for :config, :url => {:action => "configure_fields", :project_id => @project.id, :artifact_type => @artifact_type}, :html => { :style => "margin:0;padding:0;display:inline" } do |f| %>
+
+<h2><%=t(:re_bb_userdefined_fields)%></h2>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th title="<%= t(:re_conf_artifact_display_order) %>"><%=t(:re_conf_display_order)%></th>
+      <th title="<%= t(:re_conf_bb_mandatory_field) %>"><%=t(:re_bb_mandatory_field)%></th>
+      <th title="<%= t(:re_conf_bb_multiple_values) %>"><%=t(:re_bb_multiple_values)%></th>
+      <th title="<%= t(:re_conf_bb_for_condensed_view) %>"><%=t(:re_bb_for_condensed_view)%></th>
+      <th title="<%= t(:re_conf_bb_for_every_project) %>"><%=t(:re_bb_for_every_project)%></th>
+      <th title="<%= t(:re_conf_bb_for_search) %>"><%= t(:re_bb_for_search) %></th>
+    </tr>
+  </thead>
+  <tbody id="building_block_list">
+  <% @building_blocks.each do |bb| %>
+    <tr id="<%= 're_bb_' + bb.id.to_s %>">
+      <td class="dnd">
+        <label><%= h(bb.name) %></label>
+      </td>
+      <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][mandatory]', true, bb.mandatory %></td>
+      <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][multiple_values]', true, bb.multiple_values %></td>
+      <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][for_condensed_view]', true, bb.for_condensed_view %></td>
+   	  <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][for_every_project]', true, bb.for_every_project %></td>
+      <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][for_search]', true, bb.for_search %></td>	
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</p>
+
+  <%= hidden_field_tag 're_userdefined_fields_order', ActiveSupport::JSON.encode(@re_userdefined_fields_order) %><br/>
+
+  <%= submit_tag l(:re_save), :accesskey => "s" %>
+  &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>  
+  
+<% end %>
+
+<%= sortable_element "building_block_list",
+	:tag => 'tr',
+	:complete => visual_effect(:highlight, 'building_block_list'),
+	:onUpdate => "function(el) { elements_to_json(el, 'building_block_list', 're_userdefined_fields_order'); }" %>
+
+<script type="text/javascript">
+//<![CDATA[
+  function elements_to_json(el, table_id, update_field) {
+  	var json = '[';
+		$$('#' + table_id + ' tr').each(function(el){
+			var artifact_type = el.id;
+			json += '"' + artifact_type + '",';
+		});
+		json = json.gsub(/.$/,'') + ']';
+  	$(update_field).value = json;
+  };
+
+</script>  
+
+</div>

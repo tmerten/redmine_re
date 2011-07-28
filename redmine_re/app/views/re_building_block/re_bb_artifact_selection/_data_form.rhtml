@@ -50,12 +50,12 @@
 <table>
 	<tr>
 		<td>
-			<%= label_tag params_path_relationship, re_bb.name, :class => "user_defined" %>
+			<%= label_tag params_path_relationship, h(re_bb.name), :class => "user_defined" %>
 		</td>
 		<td>
 			<% unless re_bb.help.nil? || re_bb.help == "" %>
 				<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
-			  		<span class="tip userdefined_fields_tip"><%= re_bb.help %></span>
+			  		<span class="tip userdefined_fields_tip"><%= h(re_bb.help) %></span>
 			 	</div>
 			<% else %>
 				<div class="tooltip placeholder">&nbsp;
