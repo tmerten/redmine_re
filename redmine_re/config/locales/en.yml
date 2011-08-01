@@ -55,6 +55,7 @@ en:
   # Configuration
   re_administrate: 'Administration'
   re_configure_plugin: 'Configure Plugin'
+  re_configure_fields_treebar: 'Configure Fields of %{artifact_type}'
   re_relation_management_pane: 'Always show relation management pane'
   re_visualization_size: 'Visualization size (in pixels)'
   re_child_artifacts: 'Child artifacts'
@@ -341,6 +342,7 @@ en:
   re_bb_max_length_under_zero: "Value for maximal length mustn't be negativ."
   re_bb_default_value_outside_min_max: 'Length of default value must fit minimal and maximal length.'
   re_bb_out_of_date: '%{bb_name} is out of date. Referred artifact was updated. Check if %{bb_name} is still valid!'
+  re_bb_no_multiple_data_allowed: "%{bb_name} doesn't allow multiple data. Please delete all but one entry."
   re_bb_options_field: 'Options for select (comma seperated)'
   re_bb_options: 'Options for select'
   re_bb_no_options_defined: 'No options defined so far.'
@@ -363,6 +365,9 @@ en:
   re_bb_choosen_artifact_type: 'Choosen type is %{type}'
   re_bb_choosen_relationship_type: 'Choosen relation is %{type}'
   re_bb_artifact_selection_to_type: '%{relation_type} to/with %{artifact_type}'
+  re_bb_some_attribute_rep_failed: 'The representation choosen in configuration failed. Loading one line view instead.'
+  re_bb_relation_type_does_not_match: "The relation's type (%{:type}) is not allowed by the current configuration."
+  re_bb_artifact_type_does_not_match: "The referred artifact's type (%{:type}) is not allowed by the current configuration."
   
 
   # re_tree

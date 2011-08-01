@@ -1,7 +1,6 @@
 <!-- This view is not prepared to show error-warnings concerning a single datum. So if you add errors for ReBbSelection, add suitable code here -->
 <% data_id = 'no_id' %>
-<% default_option = ReBbOptionSelection.find(:first, :conditions => {:re_bb_selection_id => re_bb.id, :value => re_bb.default_value}) %>
-<% selected = default_option.id.to_i unless default_option.nil?%>
+
 
 <% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][re_bb_option_selection_id]'  %>
 

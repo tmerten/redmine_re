@@ -1,5 +1,5 @@
 <div id='detail_view' class='detail_view'>
-<h1><%= t(:re_field_configuration, :artifact_type => @artifact_type) %></h1>
+<h1><%= t(:re_field_configuration, :artifact_type => l(@artifact_type.camelcase.to_sym)) %></h1>
 <% flash.each do |k,v| %>
   <%= content_tag('div', v, :class => "flash " + k.to_s) %>
 <% end %>
@@ -26,6 +26,7 @@
     <tr id="<%= 're_bb_' + bb.id.to_s %>">
       <td class="dnd">
         <label><%= h(bb.name) %></label>
+		<%= hidden_field "re_artifact_configs[bb][" + bb.id.to_s + "][hidden]", true %>
       </td>
       <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][mandatory]', true, bb.mandatory %></td>
       <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][multiple_values]', true, bb.multiple_values %></td>

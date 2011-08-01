@@ -12,7 +12,7 @@ class ReBbText < ReBuildingBlock
   @@additional_work_before_save_strategies = {}
   @@additional_work_after_save_strategy = DO_NOTHING_STRATEGY
   @@validation_strategies = {VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY => nil}
-  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => nil}
+  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => nil, VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}
   
   #ToDo: später auslagern in eigenes Modul
   def data_form_partial_strategy

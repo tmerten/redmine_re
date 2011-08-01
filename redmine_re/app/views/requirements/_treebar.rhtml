@@ -44,6 +44,16 @@
         :action => "configure", 
         :project_id => @project.identifier } %>
       </li>
+		<% unless params[:artifact_type_for_treebar].nil? or ['re_settings', 're_building_block'].include? params[:artifact_type_for_treebar] %>
+			<li>
+				<%= link_to l(:re_configure_fields_treebar, :artifact_type => l(params[:artifact_type_for_treebar].camelcase.to_sym)), {
+									:controller => "re_settings",
+									:action => "configure_fields",
+									:project_id => @project.id,
+									:artifact_type => params[:artifact_type_for_treebar]
+				} %>
+			</li>
+		<% end %>
     </ul>
   </div>
   <% end %>

@@ -5,11 +5,23 @@
 	<% relation = ReArtifactRelationship.find_by_id(ReBbDataArtifactSelection.find(data_id).re_artifact_relationship_id)%>
 	<% sink_id = relation.sink.id %>
 	<% sink = ReArtifactProperties.find(sink_id)%>
-	<% artifact_type = relation.sink.artifact_type %>
 	<% relation_type = relation.relation_type %>
+	<% unless re_bb.referred_relationship_types.nil? %>
+		<% if relation_type != re_bb.referred_relationship_types.first %>
+			<% relation_type = re_bb.referred_relationship_types.first %>
+		<% end %>
+	<% end %>
+	<% artifact_type = sink.artifact_type %>	
+	<% unless re_bb.referred_artifact_types.nil? %>
+		<% if artifact_type != re_bb.referred_artifact_types.first %>
+			<% artifact_type = re_bb.referred_artifact_types.first %>
+			<% selected_attributes_do_not_fit_data = true %>
+		<% end %>
+	<% end %>
 <% else %>
 	<% data_id = 'no_id' %>
 <% end %>
+
 
 
 <% params_path_relationship = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][relation_type]'  %>
@@ -64,18 +76,26 @@
 		</td>
 		<td colspan='3'>
 			<% unless data_id == 'no_id' or re_bb.embedding_type == 'none' %> 
-				<%# begin %>
-					<fieldset id="represent_data_<%= data_id %>_bb_<%= re_bb.id %>" class="collapsible">
-						<legend onclick="toggleFieldset(this);"><%= l(:re_bb_artifact_selection_to_type, :relation_type => l('re_' + relation_type.to_s), :artifact_type => l(artifact_type)) %></legend>
-							<% if re_bb.embedding_type == 'one_line' or re_bb.selected_attributes.nil? or re_bb.selected_attributes == "" or re_bb.selected_attributes.empty? %>
-								<%= render :partial => "#{sink.artifact_type.underscore}/one_line_view", :locals => {:artifact => sink} %>
-							<% else %>
-								<%= render :partial => "re_building_block/re_bb_artifact_selection/some_attributes_representation", :locals => {:re_artifact_properties => sink, :selected_attributes => re_bb.selected_attributes}%>
-							<% end %>
-					</fieldset>
-				<%# rescue %>
-					<%# l(:re_no_one_line_view_existent)%>
-				<%# end %>
+				<fieldset id="represent_data_<%= data_id %>_bb_<%= re_bb.id %>" class="collapsible">
+					<legend onclick="toggleFieldset(this);"><%= l(:re_bb_artifact_selection_to_type, :relation_type => l('re_' + relation.relation_type.to_s), :artifact_type => l(sink.artifact_type)) %></legend>
+					<% some_attributes_view_failed = false %>
+					<% if re_bb.embedding_type == 'attributes' and ! selected_attributes_do_not_fit_data %>
+						<% begin %>
+							<%= render :partial => "re_building_block/re_bb_artifact_selection/some_attributes_representation", :locals => {:re_artifact_properties => sink, :selected_attributes => re_bb.selected_attributes}%>
+						<% rescue %>
+							<%# if something failed with the "some-attribute-representation", signal via variable "some_attributes_view_failed" that the one_line_view has to be rendered. %>
+							<%= l(:re_bb_some_attribute_rep_failed)%>
+							<% some_attributes_view_failed = true %>
+						<% end %>
+					<% end %>
+					<% if re_bb.embedding_type == 'one_line' or some_attributes_view_failed or selected_attributes_do_not_fit_data %>
+						<% begin %>
+							<%= render :partial => "#{sink.artifact_type.underscore}/one_line_view", :locals => {:artifact => sink} %>
+						<% rescue %>
+							<% l(:re_no_one_line_view_existent)%>
+						<% end %>
+					<% end %>
+				</fieldset>
 			<% end %>
 			
 		</td>
@@ -91,13 +111,17 @@
 							<%= validation_warning(bb_error_hash, re_bb, data_id.to_i) %>
 							<%= validation_warning(bb_error_hash, re_bb, :general) %>
 							<% unless data_id == 'no_id' %> 
-								<% if sink.updated_at > ReBbDataArtifactSelection.find(data_id).re_checked_at and re_bb.indicate_changes %>
-									</td>
-									<td>
-										<%= check_box_tag params_path_checked %>
-									</td>
-									<td>
-										<%= l(:re_confirm)%><br/>
+								<% datum = ReBbDataArtifactSelection.find(data_id)%>
+								<% if sink.updated_at > datum.re_checked_at and re_bb.indicate_changes %>
+									<%# Checkbox shall only be displayed if data matches the configuration %>
+									<% if (re_bb.referred_artifact_types.empty? or re_bb.referred_artifact_types.include? sink.artifact_type) and (re_bb.referred_relationship_types.empty? or re_bb.referred_relationship_types.include? relation.relation_type) %>
+										</td>
+										<td>
+											<%= check_box_tag params_path_checked %>
+										</td>
+										<td>
+											<%= l(:re_confirm)%><br/>
+									<% end %>
 								<% end %>
 							<% end %>
 						</td>
@@ -116,7 +140,7 @@
 						<tr>
 							<% if one_relationship %>
 								<td colspan='2'>
-										<%= l(:re_bb_choosen_relationship_type, :type => l('re_' + relation_type.to_s))%>	
+										<%= l(:re_bb_choosen_relationship_type, :type => l('re_' + re_bb.referred_relationship_types.first.to_s))%>	
 										<%= hidden_field_tag params_path_relationship, relation_type %>
 							<% else %>
 								<td>

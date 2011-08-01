@@ -13,9 +13,13 @@ module StrategyProcs
     end
   end
       
+      
+      
   DO_NOTHING_STRATEGY = lambda do
     true
   end
+  
+  
   
   # This strategy handles the saving of empty arrays. If an array is saved in the
   # database via serialize, an (internal) error occures if no data is filled in the 
@@ -43,6 +47,8 @@ module StrategyProcs
     re_bb
   end
   
+  
+  
   # This method takes an building block and its parameters as well as a hash with three keys to 
   # determine which field(s) should be deleted if some field, specified by the value of the key 
   # "name_of_field_to_check", has not the value specified by the value of the key "value_to_have"
@@ -64,12 +70,14 @@ module StrategyProcs
   end
   
 
+
   def self.add_error(bb_id, datum_id, bb_error_hash, error_text)
     bb_error_hash[bb_id] = {datum_id => []} if bb_error_hash[bb_id].nil?
     bb_error_hash[bb_id][datum_id] = [] if bb_error_hash[bb_id][datum_id].nil? 
     bb_error_hash[bb_id][datum_id] << error_text
     bb_error_hash
   end
+  
   
   
   # This proc adds an error to the error_hash if the value of the data is not within minimal 
@@ -92,6 +100,54 @@ module StrategyProcs
     end
     bb_error_hash
   end
+  
+  
+  
+  # This proc adds an error to the error_hash if the building block is out of date. This is
+  # possible for example if the Building Block (bb) refers to an artifact and the artifact 
+  # was updated after the bb-data was saved. 
+  # This proc needs the bb which shall be checked. As usual, the error_hash as built up since 
+  # now has to be given to the proc as well. The hash attribute_names is needed if the datum of 
+  # the update of the bb is stored in another attribute than "re_checked_at" and the id of the 
+  # artifact to check against is not stored in "re_artifact_properties_id"  
+  VALIDATE_UP_TO_DATE = lambda do |bb, datum, bb_error_hash, attribute_names |
+    if attribute_names.nil?
+      attribute_names = {:re_checked_at => :re_checked_at, :re_artifact_relationship_id => :re_artifact_relationship_id, :sink => :sink, :indicate_changes => :indicate_changes}
+    end
+    # Check if bb is up to date only if changes of the referred artifact shall be indicated
+    if eval "bb.#{attribute_names[:indicate_changes].to_s}"
+      bb_checked_at = datum[attribute_names[:re_checked_at]]
+      relation = ReArtifactRelationship.find(datum[attribute_names[:re_artifact_relationship_id]])
+      artifact_id = eval "relation.#{attribute_names[:sink]}.id"
+      artifact_updated_at = ReArtifactProperties.find(artifact_id).updated_at
+      if artifact_updated_at > bb_checked_at 
+        bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_out_of_date, :bb_name => bb.name))  
+      end
+    end
+    bb_error_hash
+  end  
+  
+  
+  # This proc adds an error to the error_hash if the building block's data doesn't match its
+  # configuration. This can be the case when the bb's configuration was changed after the 
+  # creation of the data. 
+  # This proc needs the bb which shall be checked. As usual, the error_hash as built up since 
+  # now has to be given to the proc as well. The hash attribute_names is only needed to match
+  # the interface of all validation strategies, as this strategy is too particular to be reused.
+  VALIDATE_DATUM_FITS_CONFIG = lambda do |bb, datum, bb_error_hash, attribute_names |
+    relation = ReArtifactRelationship.find(datum.re_artifact_relationship_id)
+    sink = ReArtifactProperties.find(relation.sink_id)
+    unless bb.referred_relationship_types.nil? or bb.referred_relationship_types.empty? or bb.referred_relationship_types.include?(relation.relation_type)
+      bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_relation_type_does_not_match, :type => l('re_' + relation.relation_type.to_s)))  
+    end
+    unless bb.referred_artifact_types.nil? or bb.referred_artifact_types.empty? or bb.referred_artifact_types.include?(sink.artifact_type)
+      bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_artifact_type_does_not_match, :type => l(sink.artifact_type)))  
+    end
+    bb_error_hash
+  end 
+  
+  
+  
  
   # This proc adds an error to the error_hash if for mandatory building blocks no data is saved.
   # This proc needs the Building Block (bb) which user-defined fields shall be checked. The bb 
@@ -117,25 +173,22 @@ module StrategyProcs
     bb_error_hash
   end
   
-  # This proc adds an error to the error_hash if the building block is out of date. This is
-  # possible for example if the Building Block (bb) refers to an artifact and the artifact 
-  # was updated after the bb-data was saved. 
+  
+  # This proc adds an error to the error_hash if the building block (bb) has more data entries 
+  # than allowed. This can be the case when the bb was configured to allow multiple values
+  # before but the configuration was changed to allow single data values only. 
   # This proc needs the bb which shall be checked. As usual, the error_hash as built up since 
-  # now has to be given to the proc as well. The hash attribute_names is needed if the datum of 
-  # the update of the bb is stored in another attribute than "re_checked_at" and the id of the 
-  # artifact to check against is not stored in "re_artifact_properties_id"  
-  VALIDATE_UP_TO_DATE = lambda do |bb, datum, bb_error_hash, attribute_names |
-    if attribute_names.nil?
-      attribute_names = {:re_checked_at => :re_checked_at, :re_artifact_relationship_id => :re_artifact_relationship_id, :sink => :sink, :indicate_changes => :indicate_changes}
-    end
-    # Check if bb is up to date only if changes of the referred artifact shall be indicated
-    if eval "bb.#{attribute_names[:indicate_changes].to_s}"
-      bb_checked_at = datum[attribute_names[:re_checked_at]]
-      relation = ReArtifactRelationship.find(datum[attribute_names[:re_artifact_relationship_id]])
-      artifact_id = eval "relation.#{attribute_names[:sink]}.id"
-      artifact_updated_at = ReArtifactProperties.find(artifact_id).updated_at
-      if artifact_updated_at > bb_checked_at 
-        bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_out_of_date, :bb_name => bb.name))  
+  # now has to be given to the proc as well. The hash attribute_names is only needed to match
+  # the interface of all validation strategies.
+  VALIDATE_MULTIPLE_DATA_NOT_ALLOWED = lambda do |bb, data_array, bb_error_hash, attribute_names |
+    # Check bb only if no multiple data is allowed
+    unless bb.multiple_values
+      if bb_error_hash[bb.id].nil? or bb_error_hash[bb.id][:general].nil? or not bb_error_hash[bb.id][:general].include?(I18n.t(:re_bb_no_multiple_data_allowed, :bb_name => bb.name))   
+        # There is no general error message stating that the bb is mandatory yet. 
+        # So check if there are to many data elements
+        if data_array.count > 1
+          bb_error_hash = StrategyProcs.add_error(bb.id, :general, bb_error_hash, I18n.t(:re_bb_no_multiple_data_allowed, :bb_name => bb.name))         
+        end
       end
     end
     bb_error_hash

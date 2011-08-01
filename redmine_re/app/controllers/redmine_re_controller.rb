@@ -13,7 +13,7 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
 
-  before_filter :find_project, :load_settings, :authorize
+  before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize
 
   def load_settings
     # Check the settings cache for each request
@@ -57,6 +57,11 @@ class RedmineReController < ApplicationController
         render_404 :message => t(:re_404_artifact_not_found_or_project_missing)
       end
     end
+  end
+  
+  # If an artifact is displayed, find the artifact_type
+  def find_artifact_type_for_treebar
+    params[:artifact_type_for_treebar] = self.controller_name
   end
 
   def new
