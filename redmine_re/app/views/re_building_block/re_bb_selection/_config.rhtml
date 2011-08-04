@@ -33,7 +33,8 @@
   
       <p>
         <%= submit_tag l(:re_save) %>
-        <%= link_to(t(:re_cancel), :project_id => @project.id) %>
+        <%= link_to(t(:re_cancel), :project_id => @project.id) %> |
+		<%= add_bb_configuration_link(@artifact_type) %>
       </p>
   
   <% end %>
