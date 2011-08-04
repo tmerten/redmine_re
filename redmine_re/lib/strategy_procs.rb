@@ -69,8 +69,7 @@ module StrategyProcs
     re_bb
   end
   
-
-
+  
   def self.add_error(bb_id, datum_id, bb_error_hash, error_text)
     bb_error_hash[bb_id] = {datum_id => []} if bb_error_hash[bb_id].nil?
     bb_error_hash[bb_id][datum_id] = [] if bb_error_hash[bb_id][datum_id].nil? 
@@ -138,10 +137,10 @@ module StrategyProcs
     relation = ReArtifactRelationship.find(datum.re_artifact_relationship_id)
     sink = ReArtifactProperties.find(relation.sink_id)
     unless bb.referred_relationship_types.nil? or bb.referred_relationship_types.empty? or bb.referred_relationship_types.include?(relation.relation_type)
-      bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_relation_type_does_not_match, :type => l('re_' + relation.relation_type.to_s)))  
+      bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_relation_type_does_not_match, :type => I18n.t('re_' + relation.relation_type.to_s)))  
     end
     unless bb.referred_artifact_types.nil? or bb.referred_artifact_types.empty? or bb.referred_artifact_types.include?(sink.artifact_type)
-      bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_artifact_type_does_not_match, :type => l(sink.artifact_type)))  
+      bb_error_hash = StrategyProcs.add_error(bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_artifact_type_does_not_match, :type => I18n.t(sink.artifact_type)))  
     end
     bb_error_hash
   end 
@@ -184,7 +183,7 @@ module StrategyProcs
     # Check bb only if no multiple data is allowed
     unless bb.multiple_values
       if bb_error_hash[bb.id].nil? or bb_error_hash[bb.id][:general].nil? or not bb_error_hash[bb.id][:general].include?(I18n.t(:re_bb_no_multiple_data_allowed, :bb_name => bb.name))   
-        # There is no general error message stating that the bb is mandatory yet. 
+        # There is no general error message stating that no multiple data is allowed yet. 
         # So check if there are to many data elements
         if data_array.count > 1
           bb_error_hash = StrategyProcs.add_error(bb.id, :general, bb_error_hash, I18n.t(:re_bb_no_multiple_data_allowed, :bb_name => bb.name))         

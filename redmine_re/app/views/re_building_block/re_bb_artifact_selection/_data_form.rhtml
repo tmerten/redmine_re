@@ -13,7 +13,7 @@
 	<% end %>
 	<% artifact_type = sink.artifact_type %>	
 	<% unless re_bb.referred_artifact_types.nil? %>
-		<% if artifact_type != re_bb.referred_artifact_types.first %>
+		<% unless re_bb.referred_artifact_types.include? artifact_type %>
 			<% artifact_type = re_bb.referred_artifact_types.first %>
 			<% selected_attributes_do_not_fit_data = true %>
 		<% end %>
@@ -74,6 +74,10 @@
  				</div>
 			<% end %>
 		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
 		<td colspan='3'>
 			<% unless data_id == 'no_id' or re_bb.embedding_type == 'none' %> 
 				<fieldset id="represent_data_<%= data_id %>_bb_<%= re_bb.id %>" class="collapsible">
@@ -92,7 +96,7 @@
 						<% begin %>
 							<%= render :partial => "#{sink.artifact_type.underscore}/one_line_view", :locals => {:artifact => sink} %>
 						<% rescue %>
-							<% l(:re_no_one_line_view_existent)%>
+							<%= l(:re_no_one_line_view_existent)%>
 						<% end %>
 					<% end %>
 				</fieldset>
@@ -141,7 +145,7 @@
 							<% if one_relationship %>
 								<td colspan='2'>
 										<%= l(:re_bb_choosen_relationship_type, :type => l('re_' + re_bb.referred_relationship_types.first.to_s))%>	
-										<%= hidden_field_tag params_path_relationship, relation_type %>
+										<%= hidden_field_tag params_path_relationship, re_bb.referred_relationship_types.first.to_s %>
 							<% else %>
 								<td>
 										<%= l(:re_bb_choose_relationship_type)%>
@@ -155,8 +159,8 @@
 							
 							<% if one_type %>
 								<td colspan='2'>
-										<%= l(:re_bb_choosen_artifact_type, :type => l(artifact_type))%>	
-										<%= hidden_field_tag params_path_type, artifact_type %>
+										<%= l(:re_bb_choosen_artifact_type, :type => l(re_bb.referred_artifact_types.first.to_s))%>	
+										<%= hidden_field_tag params_path_type, re_bb.referred_artifact_types.first.to_s %>
 							<% else %>
 								<td>
 										<%= l(:re_bb_choose_artifact_type)%>

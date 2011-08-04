@@ -49,49 +49,62 @@ class ReBbArtifactSelection < ReBuildingBlock
 
 
   def save_datum(datum_hash, artifact_properties_id)
-    id = datum_hash.keys.first
-    # If no artifact is choosen, data that is already existant 
-    # will be deleted, if the bb is not configured to accept multiple  
-    # data. The relationship won't be deleted since we do not know
-    # if it was created especially for the building block or not .
-    if datum_hash[id][:related_artifact_id] == ""
-      # if no multiple values are allowed, delete given data
-      # else do nothing
-      if ! self.multiple_values
-        bb_data = ReBbDataArtifactSelection.find_by_id(id)
-        bb_data.delete unless bb_data.nil?
-      end    
-    else
-      # An artifact is choosen. Therefore check relationships.
-      # Try to find a realtionship with the given parameters . If none exsist, create one
-      relation = ReArtifactRelationship.find(:first, :conditions => {:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type]}) || ReArtifactRelationship.new(:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type])
-      relation.save if relation.new_record?
-      # Try to find a bb_data_object with the given id . 
-      # If no matching object is found, create a new one
-      bb_data = ReBbDataArtifactSelection.find_by_id(id) || ReBbDataArtifactSelection.new    
-      # Checking if new data is submitted by the user. This results in 
-      # another relation used for the bb. If another relation is used, 
-      # it was checked and confirmed by the user. Therefore the timestamp 
-      # of the last check has to be updated.
-      other_relation = true unless relation.id == bb_data.re_artifact_relationship_id
-      # If data is new or another relation is used, set timestamp 
-      # of last check to now. This is done as well if the user checked 
-      # the relation manually by checking a corresponding checkbox.
-      if bb_data.new_record? or other_relation or datum_hash[id][:confirm_checked]  
-        datum_hash[id][:re_checked_at] = Time.now     
-      end
-      ## Preparing save of data
-      # Deleting attributes from datum_hash that were used to
-      # create / update the relationship but are not needed for
-      # the saving of the artifact_selection_datum
-      [:relation_type, :artifact_type, :related_artifact_id, :confirm_checked].each {|key| datum_hash[id].delete(key)}
-      datum_hash[id][:re_artifact_relationship_id] = relation.id
-      bb_data.attributes = datum_hash[id]
-      bb_data.re_artifact_properties_id = artifact_properties_id
-      bb_data.re_bb_artifact_selection_id = self.id
-      bb_data.save  
+    datum_hash.keys.each do |id|
+      # If only the parameter 'confirm_checked' is given, try to update
+      # the corresponding data by setting the re_checked_at attribute to now.
+      if id != 'no_id' and datum_hash[id][:confirm_checked] == '1'
+        begin
+          bb_data = ReBbDataArtifactSelection.find_by_id(id)
+          bb_data.re_checked_at = Time.now
+          bb_data.save
+        end
+      else
+        # normal treatment of parameters
+        
+        # If no artifact is choosen, data that is already existant 
+        # will be deleted, if the bb is not configured to accept multiple  
+        # data. The relationship won't be deleted since we do not know
+        # if it was created especially for the building block or not .
+        if datum_hash[id][:related_artifact_id] == ""
+          # if no multiple values are allowed, delete given data
+          # else do nothing
+          if ! self.multiple_values
+            bb_data = ReBbDataArtifactSelection.find_by_id(id)
+            bb_data.delete unless bb_data.nil?
+          end    
+        else
+          # An artifact is choosen. Therefore check relationships.
+          # Try to find a realtionship with the given parameters . If none exsist, create one
+          relation = ReArtifactRelationship.find(:first, :conditions => {:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type]}) || ReArtifactRelationship.new(:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type])
+          relation.save if relation.new_record?
+          # Try to find a bb_data_object with the given id . 
+          # If no matching object is found, create a new one
+          bb_data = ReBbDataArtifactSelection.find_by_id(id) || ReBbDataArtifactSelection.new    
+          # Checking if new data is submitted by the user. This results in 
+          # another relation used for the bb. If another relation is used, 
+          # it was checked and confirmed by the user. Therefore the timestamp 
+          # of the last check has to be updated.
+          other_relation = true unless relation.id == bb_data.re_artifact_relationship_id
+          # If data is new or another relation is used, set timestamp 
+          # of last check to now. This is done as well if the user checked 
+          # the relation manually by checking a corresponding checkbox.
+          if bb_data.new_record? or other_relation or datum_hash[id][:confirm_checked]  
+            datum_hash[id][:re_checked_at] = Time.now     
+          end
+          ## Preparing save of data
+          # Deleting attributes from datum_hash that were used to
+          # create / update the relationship but are not needed for
+          # the saving of the artifact_selection_datum
+          [:relation_type, :artifact_type, :related_artifact_id, :confirm_checked].each {|key| datum_hash[id].delete(key)}
+          datum_hash[id][:re_artifact_relationship_id] = relation.id
+          bb_data.attributes = datum_hash[id]
+          bb_data.re_artifact_properties_id = artifact_properties_id
+          bb_data.re_bb_artifact_selection_id = self.id
+          bb_data.save  
+        end
+      end      
     end
-    
   end
+  
   
 end

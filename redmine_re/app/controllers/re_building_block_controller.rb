@@ -62,11 +62,18 @@ class ReBuildingBlockController < RedmineReController
  def delete_data
    bb = ReBuildingBlock.find(params[:re_bb_id])
    datum = bb.get_data_class_name.constantize.find(params[:re_bb_data_id])
-   re_artifact_properties = ReArtifactProperties.find(datum.re_artifact_properties_id)
+   @artifact = ReArtifactProperties.find(datum.re_artifact_properties_id)
+   @artifact_type = @artifact.artifact_type   
    datum.delete unless datum.nil?
    bb_error_hash = {} 
-   bb_error_hash = ReBuildingBlock.validate_building_blocks(re_artifact_properties, bb_error_hash)
-   render :partial => bb.multiple_data_form_partial_strategy, :locals => {:re_bb => bb, :data => bb.find_my_data(re_artifact_properties), :bb_error_hash => bb_error_hash}
+   bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact, bb_error_hash)
+   data = bb.find_my_data(@artifact)
+   if data.count <= 1 and ! bb.multiple_values
+     partial = bb.data_form_partial_strategy
+   else
+     partial = bb.multiple_data_form_partial_strategy
+   end
+   render :partial => partial, :locals => {:re_bb => bb, :data => data, :bb_error_hash => bb_error_hash}
  end
  
  #######

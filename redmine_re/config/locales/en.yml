@@ -366,8 +366,8 @@ en:
   re_bb_choosen_relationship_type: 'Choosen relation is %{type}'
   re_bb_artifact_selection_to_type: '%{relation_type} to/with %{artifact_type}'
   re_bb_some_attribute_rep_failed: 'The representation choosen in configuration failed. Loading one line view instead.'
-  re_bb_relation_type_does_not_match: "The relation's type (%{:type}) is not allowed by the current configuration."
-  re_bb_artifact_type_does_not_match: "The referred artifact's type (%{:type}) is not allowed by the current configuration."
+  re_bb_relation_type_does_not_match: "The relation's type (%{type}) is not allowed by the current configuration."
+  re_bb_artifact_type_does_not_match: "The referred artifact's type (%{type}) is not allowed by the current configuration."
   
 
   # re_tree
