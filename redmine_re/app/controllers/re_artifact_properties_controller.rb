@@ -7,6 +7,8 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def redirect action
+
+
     @re_artifact_properties = ReArtifactProperties.find_by_id(params[:id])
       
     if @re_artifact_properties.nil?

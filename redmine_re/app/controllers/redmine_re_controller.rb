@@ -82,6 +82,7 @@ class RedmineReController < ApplicationController
   end
 
   def edit
+
     artifact_type = self.controller_name
     logger.debug("############ Called edit for artifact of type: " + artifact_type) if logger
 
