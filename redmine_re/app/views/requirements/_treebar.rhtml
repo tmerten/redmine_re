@@ -296,6 +296,28 @@ var tree = jQuery("#tree")
           <% end %>
           }
         },
+        "new2" : {
+          "label" : "<%= t('re_create_below') %>",
+          "separator_before" : false,
+          "separator_after"	: false,
+          "icon" : "new",
+          "submenu" : {
+          <% for artifact_type in @re_artifact_order	%>
+            "<%= artifact_type.underscore %>" : {
+              "label" : "<%= t(artifact_type.underscore) %>",
+              "action" : function (node) {
+                jQuery.blockUI({
+                    "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= t('re_new_' + artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
+                });                  
+                var id = node[0].id.gsub('node_','');
+                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
+                window.location.href = link + '?sibling_id=' + id;
+              },
+              "icon" : "<%= artifact_type.underscore %>"
+            }<%= "," unless artifact_type == @re_artifact_order.last %>
+          <% end %>
+          }
+        },
         "relation" : {
           "label" : "<%= t('re_create_relation') %>",
           "separator_before" : false,
