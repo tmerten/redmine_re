@@ -35,6 +35,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_subtask => [:edit, :new],
         :re_section => [:edit, :new],
         :re_workarea => [:edit, :new],
+        :re_scenario => [:edit, :new],
         :re_vision => [:edit, :new],
         :re_user_profile => [:edit, :new],
         :re_settings => [:edit, :configure],
