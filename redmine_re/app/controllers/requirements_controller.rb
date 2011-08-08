@@ -15,7 +15,7 @@ class RequirementsController < RedmineReController
     # It transmits the drops done in the tree to the database in order to last
     # longer than the next refresh of the browser.
     new_parent_id = params[:new_parent_id]
-    ancestor_id = params[:ancestor_id]
+    sibling_id = params[:ancestor_id] # WRONG NOMENCLATUR! ancestor_id => sibling_id
     moved_artifact_id = params[:id]
     insert_postition = params[:position]
 
@@ -29,16 +29,16 @@ class RequirementsController < RedmineReController
 		end
     session[:expanded_nodes] << new_parent.id
 		
-		ancestor = nil
-    ancestor = ReArtifactProperties.find(ancestor_id) if not ancestor_id.empty?
+		sibling = nil
+    sibling = ReArtifactProperties.find(sibling_id) if not sibling_id.empty?
 
     position = 1
     
     case insert_postition
     when 'before'
-      position = (ancestor.position - 1) unless ancestor.nil? || ancestor.position.nil?
+      position = (sibling.position - 1) unless sibling.nil? || sibling.position.nil?
     when 'after'
-      position = (ancestor.position + 1) unless ancestor.nil? || ancestor.position.nil?
+      position = (sibling.position + 1) unless sibling.nil? || sibling.position.nil?
     else
       position = 1
     end
@@ -49,7 +49,7 @@ class RequirementsController < RedmineReController
     result = {}
     result['status'] = 1
     result['insert_pos'] = position.to_s
-    result['ancestor'] = ancestor.position.to_s + ' ' + ancestor.name.to_s unless ancestor.nil? || ancestor.position.nil?
+    result['sibling'] = sibling.position.to_s + ' ' + sibling.name.to_s unless sibling.nil? || sibling.position.nil?
     
     render :json => result
   end
