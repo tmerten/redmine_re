@@ -72,8 +72,13 @@ class RedmineReController < ApplicationController
     @artifact_properties = @artifact.re_artifact_properties
     @artifact_type = artifact_type # needed for ajax request (artifact selection building block)
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
+    
     if params[:parent_artifact_id]
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+    end
+    
+    if params[:sibling_id]
+      @sibling = ReArtifactProperties.find(params[:sibling_id])
     end
 
     new_hook params
@@ -100,6 +105,11 @@ class RedmineReController < ApplicationController
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
     end
 
+    unless params[:sibling_id].blank?
+      @sibling = ReArtifactProperties.find(params[:sibling_id])
+      @parent = ReArtifactProperties.find(@sibling.parent)
+    end
+    
     edit_hook_after_artifact_initialized params
 
     if request.post?
@@ -119,6 +129,13 @@ class RedmineReController < ApplicationController
         flash[:notice] = t(artifact_type + '_saved', :name=>@artifact.name) if flash[:notice].blank?
         edit_hook_valid_artifact_after_save params
         @artifact.set_parent(@parent, 1) unless @parent.nil?
+        
+        # If sibling is not blank, then the option "create new artifact below" was called
+        # and the artifact should beplaced below its sibling
+        unless @sibling.blank?
+           @artifact.set_parent( @parent, @sibling.position + 1)
+        end
+        
           # Saving of user defined Fields (Building Blocks)
         ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
         @bb_error_hash = {}
@@ -337,7 +354,5 @@ end
     list << '</ul>'
     render :text => list
   end
-
-
 
 end
