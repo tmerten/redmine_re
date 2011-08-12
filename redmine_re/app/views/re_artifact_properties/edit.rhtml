@@ -8,14 +8,13 @@
   
   <ul class="tabs">
   	<li><a href="#">Main Tab</a></li>
-  	<li><a href="#">Artifact options</a></li>
   	<li><a href="#">Bilding blocks</a></li>
   	<li><a href="#">Relations</a></li>
   </ul>
 
-  <% form_for :artifact, :update => :detail_view, :url => {:action => "edit"} do |f| %>
   <div class="panes">
   	<div class="box">
+        <% form_for :artifact, :update => :detail_view, :url => {:action => "edit"} do |f| %>
 	    <%= hidden_field_tag :project_id, @project.id %>
 	    <fieldset>
 	      <legend><%= t(:re_common_attributes) %></legend>
@@ -143,10 +142,14 @@
 	  <%= link_to 'create related Issue', :controller=> 'Issues', :action=>'new', :project_id => @project.id,
 	      :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id unless @artifact.id.blank?%>
 	  </fieldset>
-  	</div><!-- end of tab one -->
-  	
-	<div class="box">
-	    <%= render params[:controller]+"/formfields", {:f => f} rescue nil %>
+		<p>
+		    <%= render params[:controller]+"/formfields", {:f => f} rescue nil %>
+		  <%= submit_tag t(:re_save) %>
+		  &nbsp;
+		  <%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
+		</p>
+		
+		<% end %><!-- form end tag -->
   	</div><!-- end of tab two -->
   	
   	<div class="box">
@@ -159,14 +162,7 @@
 	<div class="box">
 	  <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
 	</div><!-- end of tab four -->  
-	
-<p>
-  <%= submit_tag t(:re_save) %>
-  &nbsp;
-  <%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
-</p>
   </div>
-<% end %><!-- form end tag -->
 <script type="text/javascript">
 jQuery(function() {
 	// setup ul.tabs to work as tabs for each div directly under div.panes
