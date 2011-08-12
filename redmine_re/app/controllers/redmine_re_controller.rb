@@ -65,12 +65,11 @@ class RedmineReController < ApplicationController
   end
 
   def new
-    artifact_type = self.controller_name
-    logger.debug("############ CALLED NEW FOR ARTIFACT OF TYPE: " + artifact_type) if logger
+    @artifact_type = self.controller_name # needed for ajax request (artifact selection building block)
+    logger.debug("############ CALLED NEW FOR ARTIFACT OF TYPE: " + @artifact_type) if logger
 
-    @artifact = artifact_type.camelcase.constantize.new
+    @artifact = @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
-    @artifact_type = artifact_type # needed for ajax request (artifact selection building block)
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
     
     if params[:parent_artifact_id]
@@ -113,7 +112,7 @@ class RedmineReController < ApplicationController
     edit_hook_after_artifact_initialized params
 
     if request.post?
-      @artifact.attributes = params[artifact_type]
+      @artifact.attributes = params[:artifact]
         # attributes that cannot be set by the user
       author = find_current_user
       @artifact.project_id = @project.id
@@ -123,9 +122,10 @@ class RedmineReController < ApplicationController
   
       valid = @artifact.valid?
       valid = edit_hook_validate_before_save(params, valid)
-  
       if valid
         @artifact.save
+        logger.debug('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        logger.debug(@artifact.to_yaml)
         flash[:notice] = t(artifact_type + '_saved', :name=>@artifact.name) if flash[:notice].blank?
         edit_hook_valid_artifact_after_save params
         @artifact.set_parent(@parent, 1) unless @parent.nil?
