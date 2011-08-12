@@ -17,6 +17,10 @@ class ReArtifactRelationship < ActiveRecord::Base
   
   #validates_uniqueness_of :source, :scope => [:sink, :relation_type]
   validates_inclusion_of :relation_type, :in => RELATION_TYPES.values
+
+  def valid_type?
+    RELATION_TYPES.has_value?(self.relation_type)
+  end
   
   acts_as_list :scope => :source
 end

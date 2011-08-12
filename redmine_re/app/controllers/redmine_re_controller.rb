@@ -83,7 +83,7 @@ class RedmineReController < ApplicationController
 
     new_hook params
 
-    render :edit
+    render 're_artifact_properties/edit'
   end
 
   def edit
@@ -120,10 +120,10 @@ class RedmineReController < ApplicationController
       @artifact.updated_at = Time.now
       @artifact.updated_by = author.id
       @artifact.created_by = author.id if @artifact.new_record?
-
+  
       valid = @artifact.valid?
       valid = edit_hook_validate_before_save(params, valid)
-
+  
       if valid
         @artifact.save
         flash[:notice] = t(artifact_type + '_saved', :name=>@artifact.name) if flash[:notice].blank?
@@ -141,17 +141,18 @@ class RedmineReController < ApplicationController
         @bb_error_hash = {}
         @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash)
         @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
-        redirect_to(:id => @artifact.id)
+        #redirect_to(:id => @artifact.id)
       else
         edit_hook_invalid_artifact_cleanup params
       end
-
+  
       unless params[:issue_id].blank?
-       params[:issue_id].each do |iid|
-         @artifact_properties.issues << Issue.find(iid)
-       end
+        params[:issue_id].each do |iid|
+          @artifact_properties.issues << Issue.find(iid)
+        end
       end
-  end # request.post? end
+    end # request.post? end
+  render 're_artifact_properties/edit'
 end
  
 

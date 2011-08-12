@@ -130,4 +130,4 @@
 </div>
 
 <%= link_to 'create related Issue', :controller=> 'Issues', :action=>'new', :project_id => @project.id,
-    :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id%>
+    :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id unless @artifact.id.blank?%>

@@ -1,0 +1,165 @@
+<div id='detail_view' class='detail_view'>
+
+  <%= render 're_artifact_properties/action_menu', {:artifact => @artifact} %>
+  
+  <h2><%= t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + t( params[:controller] ) unless @artifact.nil? %></h2>
+
+  <%= errors_and_flash :re_goal %>
+  
+  <% form_for :artifact, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+  
+  <div class="box">
+    <%= hidden_field_tag :project_id, @project.id %>
+    <fieldset>
+      <legend><%= t(:re_common_attributes) %></legend>
+  
+      <div class="splitcontentleft">
+        <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, {:id => 'parent_artifact_id'} %>
+        <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id, {:id => 'sibling_id'} %>
+        <p>
+        <% unless @sibling.nil? %>
+          <%= label_tag :parent_autocomplete, l(:re_set_parent), {:class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @sibling.nil? ? '' : @sibling.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
+        <% else %>
+          <%= label_tag :parent_autocomplete, l(:re_set_parent), {:class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @parent.nil? ? '' : @parent.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
+        <% end %>
+        </p>
+  
+        <div id="parent_artifact_candidates" class="autocomplete"></div>
+        <% javascript_tag do %>
+            new Ajax.Autocompleter('parent_autocomplete',
+            'parent_artifact_candidates',
+            '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
+            { minChars: 3,cr
+            paramName: 'parent_name',
+            parameters: 'project_id=<%= @project.id %><%= '&id=' + @artifact_properties.id.to_s unless @artifact_properties.id.blank? %>',
+            frequency: 0.5,
+            afterUpdateElement : function(text, li) { $('parent_artifact_id').setValue(li.id) }
+            });
+        <% end %>
+        <p>
+          <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
+        </p>
+        <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
+        <br/>
+        <%= number_field_with_slider(controller.controller_name, :priority, 0, 50) %>
+      </div>
+  
+      <div class="splitcontentright">
+        <p>
+          <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact(@project, @artifact_properties) %>
+        </p>
+        <%
+           re_users = []
+           re_users << User.current
+           re_users.concat User.all.sort_by { |u| u.lastname }
+           re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
+           re_users.uniq!
+        %>
+        <p>
+          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
+        </p>
+      </div>
+  
+    </fieldset>
+  
+    <br/>
+  
+    <fieldset>
+      <legend><%= t(:re_description_fieldset) %></legend>
+      <% unless @artifact.id.nil? %>
+          <div class="contextual">
+            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', '<%=controller.controller_name -%>_description'); return false;"><%= l(:re_update_description) %></a>
+          </div>
+          <%= textilizable(@artifact, :description, :only_path => false) %>
+          <br/>
+      <% end %>
+      <div id='update-description' <%= 'style="display:none;"' unless @artifact.id.nil? %>>
+        <%= f.text_area :description,
+                        :cols => 60,
+                        :rows => (@artifact.description.blank? ? 10 : [[10, @artifact.description.length / 50].max, 100].min),
+                        :accesskey => accesskey(:edit),
+                        :class => 'wiki-edit' %>
+        <%= wikitoolbar_for controller.controller_name + '_description' %>
+      </div>
+    </fieldset>
+  
+    <fieldset>
+      <legend><%= t(:re_associated_issues) %></legend>
+      <% unless @issues.nil? %>
+          
+          <%= @issues.collect { |issue|
+              (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s+
+              (link_to '[X]', :controller => 're_artifact_properties', :action => 'remove_issue_from_artifact', :issueid => issue.id, :project_id=>@project.id, :id => @artifact_properties.id) }.to_sentence %>
+      <% end %>
+    </fieldset>
+  
+    <fieldset>
+      <legend><%= t(:add_issue_to_requirement) %></legend>
+  
+  
+      <div class="splitcontentleft">
+  
+  
+  
+    <p>
+      <%= text_field_tag :issue, '', {:size => 20, :class => 'autocomplete', :id => 'issue_autocomplete'} %>
+    </p>
+  
+    <div id="issue_candidates" class="autocomplete"></div>
+    <% javascript_tag do %>
+        new Ajax.Autocompleter('issue_autocomplete',
+        'issue_candidates',
+        '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
+        {
+        paramName: 'issue_subject',
+        parameters:
+        'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
+        minChars: 1,
+        frequency: 0.5,
+        afterUpdateElement : getIssueId});
+  
+        function getIssueId(text, li){
+  
+            jQuery('#added_issues').append(li.innerHTML + ', ');
+            jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
+            document.getElementById('issue_autocomplete').value ="";
+        }
+  
+      <% end %>
+  
+  </div>
+  
+  <div class='splitcontentright'>
+  
+  <div id='added_issues'/>
+  </div>
+  
+  
+  </fieldset>
+  
+  </div>
+  
+  <%= link_to 'create related Issue', :controller=> 'Issues', :action=>'new', :project_id => @project.id,
+      :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id unless @artifact.id.blank?%>
+  
+    <%= render params[:controller]+"/formfields", {:f => f} rescue nil %>
+
+	  <div id='re_bb_section'>
+	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
+	  </div>
+
+	  <p>
+      <%= submit_tag l(:re_save) %>
+      &nbsp;
+      <%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
+    </p>
+	  
+
+  <% end %>
+  
+
+  <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
+  
+  <br>
+  <%= add_bb_configuration_link(:ReGoal)%>
+</div>
