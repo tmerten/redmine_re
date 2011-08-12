@@ -1,0 +1,1 @@
+page["re_bb_#{params[:re_bb_id]}_data_field_artifact_type_selection".to_sym].replace_html :partial => "re_building_block/re_bb_artifact_selection/data_field_artifact_type_selection", :selected_type => params[:selected_type], :params_path_artifact => params[:params_path_artifact]

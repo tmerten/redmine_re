@@ -29,9 +29,8 @@ class ReBuildingBlockController < RedmineReController
     artifact_type = params[:artifact_type]
     @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
     @artifact_type = artifact_type
-    render :update do |page|   
-      page["re_bb_#{params[:re_bb_id]}_data_field_artifact_type_selection".to_sym].replace_html :partial => "re_building_block/re_bb_artifact_selection/data_field_artifact_type_selection", :selected_type => params[:selected_type], :params_path_artifact => params[:params_path_artifact]
-    end
+    @re_bb = ReBuildingBlock.find(params[:re_bb_id]) 
+    # renders the rjs-Template with the same name
   end
   
   
@@ -83,7 +82,11 @@ class ReBuildingBlockController < RedmineReController
  
  def get_new_position(artifact_type)
    my_bbs = ReBuildingBlock.find_bbs_of_artifact_type(artifact_type)
-   my_bbs.last.position + 1 
+   if my_bbs.count > 0
+     my_bbs.last.position + 1 
+   else
+     0
+   end  
  end
 
 end

@@ -117,19 +117,21 @@ module StrategyProcs
   #                  length of the data value
   # If no attribute_names hash is delivered, a default hash with values being the same as the keys is created.
   VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY = lambda do |re_bb, datum, bb_error_hash, attribute_names|
-  if attribute_names.nil?
+    if attribute_names.nil?
       attribute_names = {:min_length => :min_length, :max_length => :max_length}
     end
-  min = eval "re_bb.#{attribute_names[:min_length]}"
-  max = eval "re_bb.#{attribute_names[:max_length]}"
-    unless min.nil?
-      if datum.value.length < min 
-         bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_short, :bb_name => re_bb.name, :min_length => min))       
+    unless datum.value == ""
+      min = eval "re_bb.#{attribute_names[:min_length]}"
+      max = eval "re_bb.#{attribute_names[:max_length]}"
+      unless min.nil?
+        if datum.value.length < min 
+           bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_short, :bb_name => re_bb.name, :min_length => min))       
+        end
       end
-    end
-    unless max.nil?
-      if datum.value.length > max 
-        bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_long, :bb_name => re_bb.name, :max_length => max))       
+      unless max.nil?
+        if datum.value.length > max 
+          bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_long, :bb_name => re_bb.name, :max_length => max))       
+        end
       end
     end
     bb_error_hash

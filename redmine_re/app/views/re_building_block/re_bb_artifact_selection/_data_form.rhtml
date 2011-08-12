@@ -54,7 +54,11 @@
 
 
 <% params_path_artifact = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][related_artifact_id]'  %>
-<% options_artifact = options_for_select(ReArtifactProperties.find_all_by_artifact_type_and_project_id(artifact_type, @project.id).collect {|artifact| [artifact.name , artifact.id]}.insert(0, ['', nil]), sink_id) %>	
+<% if re_bb.mandatory? %>
+    <% options_artifact = options_for_select(ReArtifactProperties.find_all_by_artifact_type_and_project_id(artifact_type, @project.id).collect {|artifact| [artifact.name , artifact.id]}, sink_id) %>	
+<% else %>
+	<% options_artifact = options_for_select(ReArtifactProperties.find_all_by_artifact_type_and_project_id(artifact_type, @project.id).collect {|artifact| [artifact.name , artifact.id]}.insert(0, ['', nil]), sink_id) %>	
+<% end %>
 
 <% params_path_checked = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][confirm_checked]'  %>
 

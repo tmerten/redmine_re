@@ -40,6 +40,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_user_profile => [:edit, :new],
         :re_settings => [:edit, :configure, :children],
         :re_attachment => [:edit, :new, :download_or_show, :delete_file],
+        :re_processword => [:edit, :new],
+        :re_requirement => [:edit, :new],
         :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
           :visualization, :build_json_according_to_user_choice],
       

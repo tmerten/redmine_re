@@ -339,6 +339,13 @@ a.re_scenario {
     background: url(../images/icons/newspaper.png) no-repeat left top;
     margin-left: -16px;
 }
+ins.re_processword {
+    background: url(../images/icons/cog.png) no-repeat left top;
+}
+a.re_processword {
+    background: url(../images/icons/cog.png) no-repeat left top;
+	margin-left: -16px;
+}
 
 ins.re_knowledge_artifact {
     background: url(../images/icons/note.png) no-repeat left top;

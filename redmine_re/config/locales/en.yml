@@ -302,6 +302,18 @@ en:
   # re_scenario
   re_scenario: 'Scenario'
   ReScenario: 'Scenario'
+  
+  # re_processword
+  re_processword: 'Processword'
+  ReProcessword: 'Processword'
+  re_processword_synonyms: 'Synonyms'
+  re_new_re_processword: 'New Processword'
+  re_processword_priority: 'Priority'
+  re_create_re_processword: 'Create a new File Processword'
+  re_processword_saved: 'Processword successfully saved'
+  re_processword_deleted: 'The Processword %{name} has been deleted'
+  re_processword_not_deleted: 'The Processword %{name} could not be deleted'
+  re_processword_validation_error: 'Processword error: %{msg}'
 
   # re_building_blocks
   re_bb_configuration_header: 'Configuration of %{builing_block} for Artifact Type %{artifact_type}' 
