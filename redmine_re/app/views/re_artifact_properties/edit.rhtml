@@ -142,8 +142,9 @@
 	  <%= link_to 'create related Issue', :controller=> 'Issues', :action=>'new', :project_id => @project.id,
 	      :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id unless @artifact.id.blank?%>
 	  </fieldset>
+	  <br />
+	  <%= render( params[:controller]+"/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{params[:controller]}/_formfields.rhtml") %>
 		<p>
-		    <%= render params[:controller]+"/formfields", {:f => f} rescue nil %>
 		  <%= submit_tag t(:re_save) %>
 		  &nbsp;
 		  <%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
