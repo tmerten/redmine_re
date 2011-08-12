@@ -27,9 +27,9 @@ class ReArtifactProperties < ActiveRecord::Base
     :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
     :source => "source"
 
-  has_many :re_bb_data_texts
-  has_many :re_bb_data_selections
-  has_many :re_bb_data_artifact_selections
+  has_many :re_bb_data_texts, :dependent => :delete_all
+  has_many :re_bb_data_selections, :dependent => :delete_all
+  has_many :re_bb_data_artifact_selections, :dependent => :delete_all
 
   after_destroy :destroy_artifact
   
