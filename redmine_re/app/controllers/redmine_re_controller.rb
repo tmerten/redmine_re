@@ -122,10 +122,8 @@ class RedmineReController < ApplicationController
   
       valid = @artifact.valid?
       valid = edit_hook_validate_before_save(params, valid)
-      if valid
+      if valid && @artifact_properties.valid?
         @artifact.save
-        logger.debug('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        logger.debug(@artifact.to_yaml)
         flash[:notice] = t(artifact_type + '_saved', :name=>@artifact.name) if flash[:notice].blank?
         edit_hook_valid_artifact_after_save params
         @artifact.set_parent(@parent, 1) unless @parent.nil?
