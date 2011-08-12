@@ -1,5 +1,7 @@
 class ReBuildingBlock < ActiveRecord::Base
   unloadable
+      
+  include StrategyProcs
   
   validates_presence_of :name
   before_save :prohibit_save_of_new_artifact_type
@@ -92,14 +94,29 @@ class ReBuildingBlock < ActiveRecord::Base
   # This method can be called to do different additional work before saving of 
   # the building_block. The buildingblock is transmitted and delivered back by
   # each strategy.
-  def self.additional_work_before_save(params, re_bb)
+  def self.additional_work_before_save(re_bb, params)
     additional_work_strategy_hash = re_bb.additional_work_before_save_strategies
     unless additional_work_strategy_hash.empty?
       additional_work_strategy_hash.keys.each do |additional_work_strategy|
-        re_bb = additional_work_strategy.call(params, re_bb, additional_work_strategy_hash[additional_work_strategy])    
+        re_bb = additional_work_strategy.call(re_bb, params, additional_work_strategy_hash[additional_work_strategy])    
       end 
     end    
     re_bb
   end
+  
+  
+  # This method can be called to do different additional work after saving of 
+  # the building_block. 
+  def self.additional_work_after_save(re_bb, params)
+    additional_work_strategy_hash = re_bb.additional_work_after_save_strategies
+    unless additional_work_strategy_hash.empty?
+      additional_work_strategy_hash.keys.each do |additional_work_strategy|
+        re_bb = additional_work_strategy.call(re_bb, params, additional_work_strategy_hash[additional_work_strategy])    
+      end 
+    end    
+    re_bb
+  end
+  
+  
   
 end

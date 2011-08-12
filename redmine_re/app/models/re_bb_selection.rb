@@ -1,7 +1,5 @@
 class ReBbSelection < ReBuildingBlock
   unloadable
-  
-  include StrategyProcs
 
   has_many :re_bb_data_selections 
   has_many :re_bb_option_selections
@@ -10,9 +8,10 @@ class ReBbSelection < ReBuildingBlock
   @@data_form_partial_strategy = 're_building_block/re_bb_selection/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_selection/multiple_data_form'
   @@additional_work_before_save_strategies = {}
-  @@additional_work_after_save_strategy = SAVE_OPTIONS_STRATEGY
+  @@additional_work_after_save_strategies = {SAVE_OPTIONS_STRATEGY => nil}
   @@validation_strategies = {}
-  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_bb_option_selection_id'}, VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}
+  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_bb_option_selection_id'}, 
+                                        VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}
   
   #ToDo: später auslagern in eigenes Modul
   def data_form_partial_strategy
@@ -27,8 +26,8 @@ class ReBbSelection < ReBuildingBlock
     @@additional_work_before_save_strategies
   end
   
-  def additional_work_after_save_strategy
-    @@additional_work_after_save_strategy
+  def additional_work_after_save_strategies
+    @@additional_work_after_save_strategies
   end
   
   def validation_strategies

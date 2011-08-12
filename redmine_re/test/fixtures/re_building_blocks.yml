@@ -67,7 +67,7 @@ bb_selection_for_task_frequency:
   for_search: true
   arrangable_by_users: true
   position: 1
-  default_value: <%= Fixtures.identify(:re_bb_option_selection_daily_for_task_frequency) %>
+  default_value: <%= Fixtures.identify(:re_bb_option_selection_daily_for_task_frequency).to_i %>
 
 bb_selection_for_goal_usability_status:
   id: <%= Fixtures.identify(:bb_selection_for_goal_usability_status) %>
@@ -83,7 +83,7 @@ bb_selection_for_goal_usability_status:
   for_search: false
   arrangable_by_users: false
   position: 3
-  default_value: <%= Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability) %>
+  default_value: <%= Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability).to_i %>
   
 bb_artifact_selection_sections:
   id: <%= Fixtures.identify(:bb_artifact_selection_sections) %>
@@ -99,10 +99,10 @@ bb_artifact_selection_sections:
   for_search: false
   arrangable_by_users: false
   position: 4 
-  referred_artifact_types: <%= ['ReSection'].to_yaml %>  
-  referred_relationship_types: <%= ['dependency'].to_yaml %>
+  referred_artifact_types: <%= ['ReSection'].to_yaml.inspect %>  
+  referred_relationship_types: <%= ['dependency'].to_yaml.inspect %>
   embedding_type: attributes
-  selected_attributes: <%= ['re_artifact_properties_name', 're_artifact_properties_description'].to_yaml %>
+  selected_attributes: <%= ['re_artifact_properties_name', 're_artifact_properties_description'].to_yaml.inspect %>
   indicate_changes: true 
   
 bb_artifact_selection_rationale:
@@ -119,8 +119,9 @@ bb_artifact_selection_rationale:
   for_search: false
   arrangable_by_users: false
   position: 3
-  referred_artifact_types: <%= ['ReGoal', 'ReWorkarea', 'ReUserProfile'].to_yaml %>  
-  referred_relationship_types: <%= ['dependency', 'conflict'].to_yaml %>
+  referred_artifact_types: <%= ['ReGoal', 'ReWorkarea', 'ReUserProfile'].to_yaml.inspect %>  
+  referred_relationship_types: <%= ['dependency', 'conflict'].to_yaml.inspect %>
   embedding_type: one_line
-  selected_attributes: <%= ['re_artifact_properties_name', 're_artifact_properties_description'].to_yaml %>
+  selected_attributes: <%= ['re_artifact_properties_name', 're_artifact_properties_description'].to_yaml.inspect %>
   indicate_changes: false 
+

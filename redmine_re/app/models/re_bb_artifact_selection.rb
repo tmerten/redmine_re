@@ -1,7 +1,5 @@
 class ReBbArtifactSelection < ReBuildingBlock
   unloadable
-  
-  include StrategyProcs
 
   has_many :re_bb_data_artifact_selections 
   
@@ -15,7 +13,7 @@ class ReBbArtifactSelection < ReBuildingBlock
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_artifact_selection/multiple_data_form'
   @@additional_work_before_save_strategies = {SET_EMPTY_ARRAY_IF_NEEDED => {:fields_to_check => [:referred_artifact_types, :referred_relationship_types]},
                                               DELETE_DATA_FROM_DATA_FIELDS_BEFORE_SAVE => nil}
-  @@additional_work_after_save_strategy = DO_NOTHING_STRATEGY
+  @@additional_work_after_save_strategies = {}
   @@validation_strategies = {VALIDATE_UP_TO_DATE => nil, 
                              VALIDATE_DATUM_FITS_CONFIG => nil}
   @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_artifact_properties_id'}, 
@@ -34,8 +32,8 @@ class ReBbArtifactSelection < ReBuildingBlock
     @@additional_work_before_save_strategies
   end
   
-  def additional_work_after_save_strategy
-    @@additional_work_after_save_strategy
+  def additional_work_after_save_strategies
+    @@additional_work_after_save_strategies
   end
   
   def validation_strategies

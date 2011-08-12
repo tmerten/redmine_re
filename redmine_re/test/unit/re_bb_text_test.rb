@@ -1,6 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class ReBbTextTest < ActiveSupport::TestCase
+  
+  fixtures :re_building_blocks
 
   def setup
     @simple_bb = ReBbText.new(:name => 'Note', :artifact_type => 'ReGoal')
