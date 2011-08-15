@@ -1,5 +1,6 @@
 <% open = ReSetting.get_plain("relation_management_pane", @project.id).eql?("true") %>
 <fieldset id="relation-manager">
+  <legend><%= t(:re_artifact_relationships) %></legend>
   <div style="overflow: visible;">
     <div class="splitcontentleft">
       <div id="relationship_link_list">
@@ -19,8 +20,6 @@
 
     <div class="splitcontentright">
       <b><%= t(:re_create_new_relation) %></b>
-
-      <div>
         <% form_remote_tag :url =>
                                    {:action => :prepare_relationships,
                                     :controller => :re_artifact_relationship,
@@ -62,10 +61,7 @@
             <% end %>
 
             <p><%= submit_tag t(:re_create) %></p>
-
         <% end -%>
       </div>
-      <br/>
-    </div>
-  </div>
+   </div>
 </fieldset>

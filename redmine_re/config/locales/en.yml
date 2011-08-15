@@ -50,6 +50,7 @@ en:
   re_404_artifact_not_found: 'The artifact (or artifact ID) could not be found'
   re_404_artifact_not_found_or_project_missing: 'No artifact could not be found and no project ID was supplied'
   re_confirm: 'Confirm'
+  re_artifact_details: 'Artifact Details'
   
   
   # Configuration
@@ -316,6 +317,7 @@ en:
   re_processword_validation_error: 'Processword error: %{msg}'
 
   # re_building_blocks
+  re_building_blocks: 'Building Blocks'
   re_bb_configuration_header: 'Configuration of %{builing_block} for Artifact Type %{artifact_type}' 
   re_bb_choose_builing_block_to_expand_artifact: 'Choose Building Block Type'
   re_bb_text: 'Text Building Block'
