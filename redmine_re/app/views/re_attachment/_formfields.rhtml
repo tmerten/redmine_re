@@ -1,0 +1,17 @@
+     <div class="box">
+	    <fieldset>
+	    	<legend><%= t(:re_attachment_file)%></legend>
+		    <% if @artifact.id %>
+		      <ul>
+		      <% @artifact.attachments.each do |current_attachment| %>
+		         <li><%= link_to(h(current_attachment.filename), {:controller => 're_attachment', :action => "download_or_show", :id => @artifact, :attachment_id => current_attachment}, {:target => "blank", :class => 'icon icon-attachment'}) %> 
+		         	(<%= link_to(t(:re_delete), {:controller => 're_attachment', :action => "delete_file", :id => @artifact, :attachment_id => current_attachment}, {:class => 'icon icon-del'}) %>)
+		         </li>
+		      <% end%>
+		      </ul>
+		      <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
+		    <% else %>
+		      <%= label_tag t(:re_attachment_file) %><%= file_field_tag 'attachment[1][file]', :size => 30 %>
+		    <% end %>
+	    </fieldset>
+	 </div>

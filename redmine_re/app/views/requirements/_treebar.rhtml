@@ -318,25 +318,6 @@ var tree = jQuery("#tree")
           <% end %>
           }
         },
-        "relation" : {
-          "label" : "<%= t('re_create_relation') %>",
-          "separator_before" : false,
-          "separator_after"	: true,
-          "icon" : "relation",
-          "submenu" : {
-          <% for relation_type in @re_relation_order %>
-            "<%= relation_type %>" : {
-              "label" : "<%= relation_type %>",
-              "action" : function (node) {
-                var id = node[0].id.gsub('node_','');
-                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
-                alert('RELATION CREATOR COMING SOON');
-              },
-              "icon" : "<%= artifact_type.underscore %>"
-            }<%= "," unless relation_type == @re_relation_order.last %>
-          <% end %>
-          }
-        },
         "edit" : {
           "label" : "<%= t(:re_edit) %>",
           "icon" : "edit",
