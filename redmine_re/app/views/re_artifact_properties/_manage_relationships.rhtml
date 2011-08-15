@@ -1,7 +1,6 @@
 <% open = ReSetting.get_plain("relation_management_pane", @project.id).eql?("true") %>
-<fieldset id="relation-manager" class="collapsible <%= 'collapsed' unless open %>">
-  <legend onclick="toggleFieldset(this);">Manage Relations</legend>
-  <div style="overflow: visible; <%= "display: none;" unless open %>">
+<fieldset id="relation-manager">
+  <div style="overflow: visible;">
     <div class="splitcontentleft">
       <div id="relationship_link_list">
         <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
@@ -27,7 +26,7 @@
                                     :controller => :re_artifact_relationship,
                                     :id => params[:id],
                                     :project_id => @project.id,
-                                    :original_controller => controller.controller_name},
+                                    :original_controller => params[:controller]},
                            :update => "relationship_link_list" do %>
             <p>
               <%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %>
@@ -56,8 +55,7 @@
                 { minChars: 3,
                 paramName: 'sink_name',
                 parameters:
-                'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>
-                ',
+                'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
                 frequency: 0.5,
                 afterUpdateElement : function(text, li) { $('sink_artifact_id').setValue(li.id) }
                 });
