@@ -150,7 +150,7 @@
 		  <%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
 		</p>
 		
-		<% end %><!-- form end tag -->
+		
   	</div><!-- end of tab two -->
   	
   	<div class="box">
@@ -158,6 +158,8 @@
 	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
 	  </div>
       <%= add_bb_configuration_link(params[:controller].camelcase)%>
+	  
+	<% end %><!-- form end tag -->
   	</div><!-- end of tab three -->  
   	
 	<div class="box">
