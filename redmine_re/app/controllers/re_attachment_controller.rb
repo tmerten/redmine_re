@@ -10,6 +10,10 @@ class ReAttachmentController < RedmineReController
     attachment_hash = params["attachment"] || {}
     attachment_uploaded = @artifact.attach_file(attachment_hash)
     
+    unless attachment_uploaded
+      flash[:error] = t(:re_attachment_no_file_error)
+    end
+    
     attachment_uploaded
   end
 
