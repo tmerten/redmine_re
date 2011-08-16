@@ -81,6 +81,8 @@ en:
   re_conf_display_order: 'Display order'
   re_field_configuration: 'Configuration of fields for artifact type %{artifact_type}'
 
+  artifact_priority: 'Priority'
+  
   # re_artifact_properties
   re_artifact_name: 'Name'
   re_artifacts: 'Artifacts'
