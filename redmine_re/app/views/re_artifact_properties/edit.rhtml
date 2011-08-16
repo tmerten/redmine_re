@@ -16,6 +16,7 @@
   	<div class="box">
         <% form_for :artifact, :update => :detail_view, :url => {:action => "edit"}, :html => {:multipart => true } do |f| %>
 	    <%= hidden_field_tag :project_id, @project.id %>
+	    <%= hidden_field_tag (:id, @artifact.id) unless @artifact.id.nil? %>
 	    <fieldset>
 	      <legend><%= t(:re_common_attributes) %></legend>
 	  
