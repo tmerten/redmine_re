@@ -410,22 +410,48 @@ div.bullet_add {
     position: relative;
     width: 16px;
 }
-/*Back to top button */
+/*
+Back to top button 
+*/
 #back-top {
-	position: fixed;	bottom: 20px;	margin-left: 10px;	width: 100px;
-	display: block;	margin-bottom: 7px;
+	position: fixed;
+	bottom: 20px;
+	margin-left: 10px;
+	width: 100px;
+	display: block;
+	margin-bottom: 7px;
     background-color: #dddddd;
     
-   /* rounded corners */	-webkit-border-radius: 5px;	-moz-border-radius: 5px;	border-radius: 5px;
-	/* background color transition */	-webkit-transition: 1s;	-moz-transition: 1s;	transition: 1s;
-}
+   /* rounded corners */
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 
-#back-top a {	display: block;	text-align: center;	font: 11px/100%;
-	text-transform: uppercase;	text-decoration: none;	color: #999999;
-  /* background color transition */	-webkit-transition: 1s;	-moz-transition: 1s;	transition: 1s;
-}
+	/* background color transition */
+	-webkit-transition: 1s;
+	-moz-transition: 1s;
+	transition: 1s;
 
-#back-top a:hover {  text-decoration:underline;
+}
+
+
+#back-top a {
+	display: block;
+	text-align: center;
+	font: 11px/100%;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #999999;
+  /* background color transition */
+	-webkit-transition: 1s;
+	-moz-transition: 1s;
+	transition: 1s;
+
+}
+
+
+#back-top a:hover {
+  text-decoration:underline;
 }
 
 /* root element for tabs  */
@@ -503,4 +529,18 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 /* initially all panes are hidden */ 
 .panes .pane {
 	display:none;		
+}
+
+
+/* My page block layout */
+.coverage_critical {
+    color: #CA2114;
+}
+
+.coverage_normal {
+    color: #FF7A00;
+}
+
+.coverage_good{
+    color: #17A600;
 }
