@@ -76,13 +76,15 @@ class RequirementsController < RedmineReController
     ret = ''
     case params[:open]
       when 'data'
+        ret = nil
         if node_id.eql? -1
           re_artifact_properties = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+          ret = create_tree(re_artifact_properties, 1)
         else
           session[:expanded_nodes] << node_id
           re_artifact_properties =  ReArtifactProperties.find(node_id)
+          ret = render_json_tree(re_artifact_properties, 1)
         end
-        ret = render_json_tree(re_artifact_properties, 1)
         render :json => ret
       when 'true'
         session[:expanded_nodes] << node_id
