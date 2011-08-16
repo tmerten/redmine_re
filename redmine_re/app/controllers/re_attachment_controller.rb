@@ -1,3 +1,5 @@
+# @deprecated This artifact will be removed soon. For more information view
+# https://korem.de/redmine/issues/222
 class ReAttachmentController < RedmineReController
   unloadable
 
@@ -9,10 +11,6 @@ class ReAttachmentController < RedmineReController
   def edit_hook_validate_before_save(params, valid)
     attachment_hash = params["attachment"] || {}
     attachment_uploaded = @artifact.attach_file(attachment_hash)
-    
-    unless attachment_uploaded
-      flash[:error] = t(:re_attachment_no_file_error)
-    end
     
     attachment_uploaded
   end
