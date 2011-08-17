@@ -21,12 +21,13 @@
 	      <legend><%= t(:re_common_attributes) %></legend>
 	  
 	      <div class="splitcontentleft">
-	        <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, {:id => 'parent_artifact_id'} %>
-	        <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id, {:id => 'sibling_id'} %>
 	        <p>
 	        <% unless @sibling.nil? %>
+	        
+	          <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id, {:id => 'sibling_id'} %>
 	          <%= label_tag :parent_autocomplete, l(:re_set_parent), {:class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @sibling.nil? ? '' : @sibling.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
 	        <% else %>
+	          <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, {:id => 'parent_artifact_id'} %>
 	          <%= label_tag :parent_autocomplete, l(:re_set_parent), {:class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @parent.nil? ? '' : @parent.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
 	        <% end %>
 	        </p>
@@ -75,7 +76,7 @@
 	      <legend><%= t(:re_description_fieldset) %></legend>
 	      <% unless @artifact.id.nil? %>
 	          <div class="contextual">
-	            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', '<%=controller.controller_name -%>_description'); return false;"><%= l(:re_update_description) %></a>
+	            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', 'artifact_description'); return false;"><%= l(:re_update_description) %></a>
 	          </div>
 	          <%= textilizable(@artifact, :description, :only_path => false) %>
 	          <br/>
@@ -86,7 +87,7 @@
 	                        :rows => (@artifact.description.blank? ? 10 : [[10, @artifact.description.length / 50].max, 100].min),
 	                        :accesskey => accesskey(:edit),
 	                        :class => 'wiki-edit' %>
-	        <%= wikitoolbar_for controller.controller_name + '_description' %>
+	        <%= wikitoolbar_for 'artifact_description' %>
 	      </div>
 	    </fieldset>
 	  
