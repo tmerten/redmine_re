@@ -103,6 +103,7 @@ function load_items(node) {
             "<%= artifact_type.underscore %>" : {
               "label" : "<%= t(artifact_type.underscore) %>",
               "action" : function (node) {
+
                 jQuery.blockUI({
                     "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= t('re_new_' + artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
                 });                  
@@ -115,22 +116,22 @@ function load_items(node) {
           <% end %>
           }
         },
-        "new2" : {
+        "sibling" : {
           "label" : "<%= t('re_create_below') %>",
           "separator_before" : false,
-          "separator_after"	: false,
+          "separator_after"	: true,
           "icon" : "new",
           "submenu" : {
           <% for artifact_type in @re_artifact_order	%>
-            "<%= artifact_type.underscore %>" : {
+            "<%= artifact_type.underscore %>_sibling" : {
               "label" : "<%= t(artifact_type.underscore) %>",
               "action" : function (node) {
                 jQuery.blockUI({
                     "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= t('re_new_' + artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
                 });                  
                 var id = node[0].id.gsub('node_','');
-                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
-                window.location.href = link + '?sibling_id=' + id;
+                var link2 = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
+                window.location.href = link2 + '?sibling_id=' + id;
               },
               "icon" : "<%= artifact_type.underscore %>"
             }<%= "," unless artifact_type == @re_artifact_order.last %>
