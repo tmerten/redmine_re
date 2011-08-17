@@ -47,7 +47,7 @@
 	        <p>
 	          <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
 	        </p>
-	        <%= javascript_tag "Form.Element.focus('" + controller.controller_name + "_name');" %>
+	        <%= javascript_tag "Form.Element.focus('artifact_name');" %>
 	        <br/>
 	        <%= number_field_with_slider('artifact', :priority, 0, 50) %>
 	      </div>
