@@ -170,7 +170,7 @@ private
   end
   
   def generate_default_config
-     flash[:notice] = 'load_and_save_default_config dosent work yet'
+     flash[:notice] = t(:re_settings_have_to_save)
   end
   
   
