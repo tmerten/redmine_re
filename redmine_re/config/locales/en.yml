@@ -291,6 +291,9 @@ en:
   re_attachment_validation_error: 'File Attachment error: %{msg}'
   re_attachment_file: 'File'
   
+  # re_settings
+  re_settings_have_to_save: 'No configuration saved yet: You have to click on save before you leave this page!'
+  
   
   # knowledge artifact
   re_knowledge_artifact: 'Knowledge'
