@@ -2,26 +2,26 @@
 <h3> Coverage Statistics </h3>
 
 <h4>Overall Coverage</h4>
-<% artifactcount = ReArtifactProperties.find(:all).count %>
-<% artifacts_wo_issues = Realization.artifacts_without_issues.count %>
-<% coverage = (100 - (artifacts_wo_issues.to_f/artifactcount.to_f) * 100).round(2) %>
+<% issuecount = Issue.find(:all).count %>
+<% issues_wo_artifacts = Realization.issues_without_artifacts.count %>
+<% coverage = (issuecount != 0 ? (100 - (issues_wo_artifacts.to_f/issuecount.to_f) * 100).round(2) : "-") %>
 <table class="list">
   <tr class="<%= case coverage; when 0..50 then "coverage_critical" when 51..80 then "coverage_normal" when 81..100 then "coverage_good"  end;  %>">
-    <td><%= t(:artifactcount) %> <%= artifactcount %></td>
-    <td><%= t(:artifacts_wo_issues) %>  <%= artifacts_wo_issues%></td>
+    <td><%= t(:issuecount) %> <%= issuecount%></td>
+    <td><%= t(:issues_wo_artifacts) %>  <%= issues_wo_artifacts%></td>
     <td><%= t(:artifact_issue_coverage) %> <%= coverage %>%</td>
   </tr>
 </table>
 
 <% Project.find(:all).each do |project| %>
-    <% artifacts_wo_issues = Realization.artifacts_without_issues_by_project(project).count %>
-    <% artifactcount = ReArtifactProperties.find(:all, :conditions=>['project_id = ?', project.id]).count %>
-    <% coverage = (100 - (artifacts_wo_issues.to_f/artifactcount.to_f) * 100).round(2) %>
+    <% issues_wo_artifacts = Realization.issues_without_artifacts_by_project(project).count %>
+    <% issuecount = Issue.find(:all, :conditions=>['project_id = ?', project.id]).count %>
+    <% coverage = (issuecount != 0 ? (100 - (issues_wo_artifacts.to_f/issuecount.to_f) * 100).round(2): "-") %>
     <h4><%= project.name %></h4>
   <table class="list">
   <tr class="<%= case coverage; when 0..50 then "coverage_critical" when 51..80 then "coverage_normal" when 81..100 then "coverage_good"  end;  %>">
-    <td><%= t(:artifactcount) %> <%= artifactcount %></td>
-    <td><%= t(:artifacts_wo_issues) %>  <%= artifacts_wo_issues %></td>
+    <td><%= t(:issuecount) %> <%= issuecount %></td>
+    <td><%= t(:issues_wo_artifacts) %>  <%= issues_wo_artifacts%></td>
     <td><%= t(:artifact_issue_coverage) %> <%= coverage %>%</td>
   </tr>
 </table>
