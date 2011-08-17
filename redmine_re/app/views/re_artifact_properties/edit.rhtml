@@ -37,7 +37,7 @@
 	            new Ajax.Autocompleter('parent_autocomplete',
 	            'parent_artifact_candidates',
 	            '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
-	            { minChars: 3,cr
+	            { minChars: 3,
 	            paramName: 'parent_name',
 	            parameters: 'project_id=<%= @project.id %><%= '&id=' + @artifact_properties.id.to_s unless @artifact_properties.id.blank? %>',
 	            frequency: 0.5,
