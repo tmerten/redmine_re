@@ -14,7 +14,7 @@
 
       <% unless @artifact.id.nil? %>
         <div class="contextual">
-          <a href="#" class="icon icon-edit" onclick="showAndScrollTo('update-difficult', '<%=controller.controller_name -%>_difficult'); return false;"><%= l(:re_update_difficult) %></a>
+          <a href="#" class="icon icon-edit" onclick="showAndScrollTo('update-difficult', 'artifact_difficult'); return false;"><%= l(:re_update_difficult) %></a>
           </div>
       <%= textilizable(@artifact, :difficult, :only_path => false) %>
       <br/>
@@ -24,7 +24,7 @@
                          :cols => 60,
                          :rows => (@artifact.difficult.blank? ? 10 : [[10, @artifact.difficult.length / 50].max, 100].min),
                          :class => 'wiki-edit' %>
-        <%= wikitoolbar_for controller.controller_name + '_difficult' %>
+        <%= wikitoolbar_for  'artifact_difficult' %>
       </div>      
       </fieldset>    
     </div>
