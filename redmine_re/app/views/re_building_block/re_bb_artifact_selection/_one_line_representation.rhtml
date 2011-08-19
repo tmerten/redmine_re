@@ -7,7 +7,7 @@
 		<%= l('re_' + datum.re_artifact_relationship.relation_type.to_s)%>	
 		<%= link_to( h(sink_artifact.name), {:action => :edit,
 					        		 	  	:controller => sink_artifact.artifact_type.underscore,
-					        		 	  	:id => sink_artifact.id}, 
+					        		 	  	:id => sink_artifact.artifact_id}, 
 									 	  :class => "icon #{sink_artifact.artifact_type.underscore}" ) %>
 		<br/>
 		<%= '...' if data.count > 1 %>
