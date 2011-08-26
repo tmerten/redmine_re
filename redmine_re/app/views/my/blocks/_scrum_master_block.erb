@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag "redmine_re.css", :plugin => "redmine_re", :media => 'all' %>
-<h3> Coverage Statistics </h3>
-
+<h3> <%= link_to_function "Coverage Statistics", "Effect.toggle('cov_stat')" %></h3>
+<div id="cov_stat">
 <h4>Overall Coverage</h4>
 <% issuecount = Issue.find(:all).count %>
 <% issues_wo_artifacts = Realization.issues_without_artifacts.count %>
@@ -27,8 +27,14 @@
 </table>
 <% end %>
 
-<h3>Critical Tickets</h3>
-
+</div>
+<h3><%= link_to_function "Critical Tickets", "Effect.toggle('crit_tickets')" %></h3>
+<div id="crit_tickets" >
+<% Project.find(:all).each do |project| %>
+<% tickets_with_end_overdue = Issue.tickets_with_end_overdue(project) %>
+<h4><%= link_to_function project.name, "Effect.toggle('#{project.name}')" %></h4>
+ <div id="<%=project.name%>">
+    <% unless  tickets_with_end_overdue.blank?  %>
 <table class="list">
   <thead>
   <tr>
@@ -43,7 +49,7 @@
   </tr>
 
 
-  <% Issue.tickets_with_end_overdue.each do |ticket| %>
+  <% tickets_with_end_overdue.each do |ticket| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td><%= link_to '#'+ticket.id.to_s+' '+ticket.subject, issue_path(ticket) %></td>
         <td><%= IssueStatus.find(ticket.status_id).name %></td>
@@ -51,9 +57,12 @@
 
       </tr>
   <% end %>
+  <% end %>
   </tbody>
 </table>
 
+    <% tickets_with_start_overdue = Issue.tickets_with_start_overdue(project) %>
+  <% unless tickets_with_start_overdue.blank? %>
 <table class="list">
   <thead>
   <tr>
@@ -67,8 +76,7 @@
     <td><%= t(:dates) %></td>
   </tr>
 
-
-  <% Issue.tickets_with_start_overdue.each do |ticket| %>
+  <% Issue.tickets_with_start_overdue(project).each do |ticket| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td><%= link_to '#'+ticket.id.to_s+' '+ticket.subject, issue_path(ticket) %></td>
         <td><%= IssueStatus.find(ticket.status_id).name %></td>
@@ -78,3 +86,8 @@
   <% end %>
   </tbody>
 </table>
+
+<% end %>
+     </div>
+<% end %>
+</div>

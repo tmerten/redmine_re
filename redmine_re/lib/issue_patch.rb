@@ -26,13 +26,13 @@ module IssuePatch
 
 module ClassMethods
 
-  def tickets_with_end_overdue
+  def tickets_with_end_overdue(project)
     #Tickets whose status should be set to closed by now!
-    self.find(:all, :conditions=> ["due_date > ? AND status_id < 5", Time.now] )
+    self.find(:all, :conditions=> ["due_date > ? AND status_id < 5 AND project_id= ?", Time.now, project.id] )
   end
 
-  def tickets_with_start_overdue
-    self.find(:all, :conditions=> ["start_date < ? AND status_id < 2", Time.now])
+  def tickets_with_start_overdue(project)
+    self.find(:all, :conditions=> ["start_date < ? AND status_id < 2 AND project_id=?", Time.now, project.id])
   end
 
 end

@@ -6,9 +6,9 @@ class Realization < ActiveRecord::Base
 
 
     #an artifact is open iff one of the corresponding tickets is open
-  def self.open_artifacts
+  def self.open_artifacts(project)
     #find all artifacts connected to at least one issue
-    artifacts_with_issue = ReArtifactProperties.find(:all, :conditions => 'id in (select distinct re_artifact_properties_id from realizations)')
+    artifacts_with_issue = ReArtifactProperties.find(:all, :conditions => ['id in (select distinct re_artifact_properties_id from realizations) AND project_ID=?', project.id])
 
     openartifacts=[]
 
@@ -28,8 +28,8 @@ class Realization < ActiveRecord::Base
 
   end
 
-  def self.openartifacts_by_due_date
-    artifacts = open_artifacts
+  def self.openartifacts_by_due_date(project)
+    artifacts = open_artifacts(project)
 
       #sort by issue due next
     artifacts.each do |artifact|
@@ -38,8 +38,8 @@ class Realization < ActiveRecord::Base
     artifacts.sort! { |a, b| a.issues.first.due_date<=>b.issues.first.due_date }
   end
 
-  def self.openartifacts_todo
-    artifacts = open_artifacts
+  def self.openartifacts_todo(project)
+    artifacts = open_artifacts(project)
     artifacts.delete_if { |artifact|
       del = true
       artifact.issues.each do |issue|

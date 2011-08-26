@@ -1,6 +1,8 @@
-<h3><%= l(:open_requirements) %> </h3>
-
-<table class="list" id="myTable">
+<h3><%= link_to_function l(:open_requirements), "Effect.toggle('open_reqs')" %> </h3>
+<div id="open_reqs">
+ <% project = Project.find(:all).each do |project| %>
+ <h4><%= link_to_function project.name, "Effect.toggle('myTable#{project.id}')" %></h4>
+<table class="list" id="myTable<%=project.id%>">
   <thead>
   <tr>
     <th>Requirements</th>
@@ -13,7 +15,7 @@
      <td>Subject</td>
      <td>Dates</td>
    </tr>
-  <% Realization.open_artifacts.each do |artifact| %>
+  <% Realization.open_artifacts(project).each do |artifact| %>
       <tr class="<%= cycle('odd', 'even') %>">
 
         <td>
@@ -48,3 +50,5 @@
 
   </tbody>
 </table>
+<% end %>
+</div>
