@@ -15,7 +15,7 @@ class Realization < ActiveRecord::Base
     artifacts_with_issue.each do |artifact|
       has_open_issue = false
       artifact.issues.each do |issue|
-        if issue.status.to_s!="Closed"
+        if issue.status_id < 5
           has_open_issue = true
         end
       end
@@ -41,7 +41,7 @@ class Realization < ActiveRecord::Base
   def self.openartifacts_todo
     artifacts = open_artifacts
     artifacts.delete_if { |artifact|
-      del = true;
+      del = true
       artifact.issues.each do |issue|
         if issue.assigned_to_id.blank? && issue.status_id < 5
           del = false

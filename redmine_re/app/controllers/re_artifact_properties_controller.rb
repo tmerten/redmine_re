@@ -74,7 +74,7 @@ class ReArtifactPropertiesController < RedmineReController
 
   def autocomplete_issue
     query = '%' + params[:issue_subject].gsub('%', '\%').gsub('_', '\_').downcase + '%'
-    issues_for_ac = Issue.find(:all, :conditions=>['subject like ?', query ])
+    issues_for_ac = Issue.find(:all, :conditions=>['subject like ? AND project_id=?', query , @project.id])
     list = '<ul>'
     issues_for_ac.each do |issue|
       list << '<li ' + 'id='+issue.id.to_s+'>'
@@ -97,7 +97,7 @@ class ReArtifactPropertiesController < RedmineReController
 
   def autocomplete_artifact
     query = '%' + params[:artifact_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
-    issues_for_ac = ReArtifactProperties.find(:all, :conditions=>['name like ?', query])
+    issues_for_ac = ReArtifactProperties.find(:all, :conditions=>['name like ? AND project_id = ?', query, @project.id])
     list = '<ul>'
     issues_for_ac.each do |aprop|
       list << '<li ' + 'id='+aprop.id.to_s+'>'

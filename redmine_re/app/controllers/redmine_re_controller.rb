@@ -340,18 +340,5 @@ end
     children
   end
 
-  def autocomplete_artifact
-    query = '%' + params[:artifact_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
-    issues_for_ac = ReArtifactProperties.find(:all, :conditions=>['name like ?', query])
-    list = '<ul>'
-    issues_for_ac.each do |aprop|
-      list << '<li ' + 'id='+aprop.id.to_s+'>'
-      list << aprop.name.to_s+' ('+aprop.artifact_id.to_s+')'
-      list << '</li>'
-    end
-
-    list << '</ul>'
-    render :text => list
-  end
 
 end
