@@ -31,13 +31,17 @@ class Realization < ActiveRecord::Base
   def self.openartifacts_by_due_date(project)
     artifacts = open_artifacts(project)
 
-      #sort by issue due next
+    #sort by issue due next
+    #Time.now+5.years = sort issues without due_date aftmost
     artifacts.each do |artifact|
-      artifact.issues.sort! { |a, b| a.due_date <=> b.due_date }
+      artifact.issues.sort! { |a, b| (a.due_date.blank? ? Time.now+5.years : a.due_date) <=> (b.due_date.blank? ? Time.now+5.years : b.due_date) }
     end
-    artifacts.sort! { |a, b| a.issues.first.due_date<=>b.issues.first.due_date }
+    artifacts.sort!{|x,y| (x.issues.first.due_date.blank? ? Time.now+5.years : x.issues.first.due_date) <=> (y.issues.first.due_date.blank? ? Time.now+5.years : y.issues.first.due_date)}
+
   end
 
+
+  
   def self.openartifacts_todo(project)
     artifacts = open_artifacts(project)
     artifacts.delete_if { |artifact|
@@ -83,6 +87,7 @@ class Realization < ActiveRecord::Base
     end
     progress/artifact.issues.count
   end
+
 
 
 end
