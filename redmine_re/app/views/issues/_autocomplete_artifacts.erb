@@ -16,7 +16,7 @@
       paramName: 'artifact_name',
       parameters:
       'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
-      minChars: 3,
+      minChars: 2,
       frequency: 0.5,
       afterUpdateElement : getArtifactId});
 

@@ -1,6 +1,8 @@
 require 'redmine'
 require 'redmine_re/hooks'
 require 'dispatcher'
+require 'rubygems'
+require 'gchart'
 
 Dispatcher.to_prepare do
   require_dependency 'issue_patch'

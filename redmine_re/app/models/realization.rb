@@ -33,11 +33,13 @@ class Realization < ActiveRecord::Base
 
     #sort by issue due next
     #Time.now+5.years = sort issues without due_date aftmost
+    begin
     artifacts.each do |artifact|
-      artifact.issues.sort! { |a, b| (a.due_date.blank? ? Time.now+5.years : a.due_date) <=> (b.due_date.blank? ? Time.now+5.years : b.due_date) }
+     artifact.issues.sort! { |a, b|  (a.due_date.blank? ? Time.now+5.years : a.due_date) <=> (b.due_date.blank? ? Time.now+5.years : b.due_date) }
     end
-    artifacts.sort!{|x,y| (x.issues.first.due_date.blank? ? Time.now+5.years : x.issues.first.due_date) <=> (y.issues.first.due_date.blank? ? Time.now+5.years : y.issues.first.due_date)}
-
+    artifacts.sort!{|x,y| ( x.issues.first.due_date.blank? ? Time.now+5.years : x.issues.first.due_date) <=> (y.issues.first.due_date.blank? ? Time.now+5.years : y.issues.first.due_date)}
+    rescue
+    end
   end
 
 
@@ -53,7 +55,6 @@ class Realization < ActiveRecord::Base
       end
       del
     }
-
     artifacts.sort! do |a, b|
       self.artifact_done_ratio(b)<=>self.artifact_done_ratio(a)
     end
