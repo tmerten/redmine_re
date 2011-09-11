@@ -11,10 +11,12 @@ class BdchartController < ApplicationController
     @allversions.sort!{|a,b| a.effective_date <=> b.effective_date }
 
     currentversion = @allversions.first
+    lastv = @allversions[1]
     @allversions.each do |version|
-      if(Time.now.to_date < version.effective_date)
+      if(Time.now.to_date < version.effective_date && Time.now.to_date > lastv.effective_date)
         currentversion=version
       end
+      lastv=version
     end
     if currentversion.nil?
       flash[:error] = "Kann Chart nicht berechnen"
@@ -62,10 +64,12 @@ class BdchartController < ApplicationController
 
     #only print prediction if show version current version
     data =[]
-    if(@version_id == currentversion.id)
+    if(@version_id == currentversion.id && openartifacts.any? {|artifact| !artifact.blank?})
+      puts openartifacts.inspect
       prediction = get_prediction_values(openartifacts.slice(0, dev_duration), itlength.to_i)
       data << openartifacts
       data << prediction
+        
     else
       @foo = data = openartifacts
     end
@@ -74,7 +78,7 @@ class BdchartController < ApplicationController
 
 
     @charturl =Gchart.line(:size => '750x400',
-                           :title => "Chart for #{currentversion.name}",
+                           :title => "Chart for Version#{Version.find(@version_id).name}",
                            :bg => 'ffffff',
                            :axis_with_labels => ['x', 'y'],
                            :axis_labels => [[label_days], [label_no_of_artifacts]],
@@ -139,12 +143,15 @@ class BdchartController < ApplicationController
     #returns the date when the last issue of the artifact was closed
   def date_of_closing(artifact)
     date=nil
+
     artifact.issues.each do |issue|
       journals = issue.journals
       journals.each do |journal|
         journal.details.each do |detail|
-          if (detail.prop_key == "status_id" && detail.value.to_i >= 5 && (date.blank? || date<journal.created_on))
+          if (detail.prop_key == "status_id" && detail.value.to_i >= 5 && (date.blank? || date<journal.created_on)  )
             date=journal.created_on
+          elsif (detail.prop_key == "status_id" && detail.value.to_i < 5 )
+            date=nil
           end
         end
       end

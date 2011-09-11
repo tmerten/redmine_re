@@ -44,7 +44,7 @@
   <p>Generate a Burndownchart and see, how many artifacts have been completed in this iteration.  </p>
   <ul>
     <li>
-      <%= link_to "Burndown Chart", :controller => 'bdchart', :action=>"index"%>
+      <%= link_to "Burndown Chart", :controller => 'bdchart', :action=>"index", :project_id=>@project.id%>
     </li>
   </ul>
 

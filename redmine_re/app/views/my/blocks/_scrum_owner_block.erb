@@ -1,8 +1,8 @@
 <h3><%= link_to_function l(:open_requirements), "Effect.toggle('open_reqs')" %> </h3>
 <div id="open_reqs">
  <% project = Project.find(:all).each do |project| %>
- <h4><%= link_to_function project.name, "Effect.toggle('myTable#{project.id}')" %></h4>
-<table class="list" id="myTable<%=project.id%>">
+ <h4><%= link_to_function project.name, "Effect.toggle('myTableOR#{project.id}')" %></h4>
+<table class="list" id="myTableOR<%=project.id%>">
   <thead>
   <tr>
     <th>Requirements</th>
