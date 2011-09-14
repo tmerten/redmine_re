@@ -19,3 +19,11 @@ def extract_error_messages(hash)
   end
   messages
 end
+
+def save_building_block_completely(re_bb, params)
+  re_bb.attributes = params[:re_building_block]
+  re_bb = ReBuildingBlock.do_additional_work_before_save(re_bb, params)
+  assert re_bb.save
+  re_bb = ReBuildingBlock.do_additional_work_after_save(re_bb, params)
+  re_bb
+end

@@ -51,10 +51,10 @@ class ReBuildingBlockController < RedmineReController
       @re_building_block.attributes = params[:re_building_block]
       # Set new postion of building block if new object
       @re_building_block.position = get_new_position(@artifact_type) if @re_building_block.new_record?
-      @re_building_block = ReBuildingBlock.additional_work_before_save(@re_building_block, params)
+      @re_building_block = ReBuildingBlock.do_additional_work_before_save(@re_building_block, params)
       flash[:notice] = t(:re_bb_saved) if save_ok = @re_building_block.save
       # Calling the strategies for handling additional work after normal saving
-      ReBuildingBlock.additional_work_after_save(@re_building_block, params)
+      ReBuildingBlock.do_additional_work_after_save(@re_building_block, params)
       redirect_to :action => 'edit', :id => @re_building_block.id, :building_block => @re_building_block, :building_block_type => params[:type].underscore, :artifact_type => params[:artifact_type], :project_id => @project.id and return if save_ok
    end
  end

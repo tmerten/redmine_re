@@ -183,7 +183,7 @@
 								<%= l(:re_bb_choose_artifact)%>
 							</td>
 							<td>
-								<div id="<%= "re_bb_#{re_bb.id}_data_field_artifact_type_selection" %>">
+								<div id="<%= "re_bb_" + re_bb.id.to_s + "_data_field_artifact_type_selection" %>">
 									<%=  select_tag params_path_artifact, options_artifact, {} %>
 								</div>
 								

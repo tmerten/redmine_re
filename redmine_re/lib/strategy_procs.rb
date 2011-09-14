@@ -27,7 +27,7 @@ module StrategyProcs
     # Test for all data fields if null values shall be stored. Transform these values
     # into empty arrays [].
     attribute_names[:fields_to_check].each do |data_field|
-      if !params_re_bb.keys.include? data_field.to_s
+      if !params_re_bb.keys.include? data_field.to_s and !params_re_bb.keys.include? data_field.to_sym
         params_re_bb[data_field] = empty_array
       end
     end
@@ -90,12 +90,13 @@ module StrategyProcs
     option_string = eval "params#{attribute_names[:param_path_to_option_string]}"
     options = option_string.split(%r{,\s*})
     options = options.insert(0, re_bb.default_value) unless options.include? re_bb.default_value
-    options = options.delete_if {|x| x == "" }
+    options = options.delete_if {|x| x == "" or x.nil?}
     existing_options = ReBbOptionSelection.find_all_by_re_bb_selection_id(re_bb.id).map {|x| x.value.to_s}
     options -= existing_options
     options.each do |option|
-      ReBbOptionSelection.new(:value => option, :re_bb_selection_id => re_bb.id).save
+      option_object = ReBbOptionSelection.new(:value => option, :re_bb_selection_id => re_bb.id).save
     end
+    re_bb
   end
 
 

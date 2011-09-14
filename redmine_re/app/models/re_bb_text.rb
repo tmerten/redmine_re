@@ -39,21 +39,22 @@ class ReBbText < ReBuildingBlock
     
 
   def save_datum(datum_hash, artifact_properties_id)
-    id = datum_hash.keys.first
-    # Data should only be saved if no other data object with
-    # the same content is existent.
-    attributes = datum_hash[id]
-    if ReBbDataText.find(:first, :conditions => {:value => attributes[:value], :re_artifact_properties_id => artifact_properties_id, :re_bb_text_id => self.id}).nil?
-      # With multiple values possible, the saving of empty data should be forbidden
-      unless (attributes[:value].nil? or attributes[:value] == "") and self.multiple_values == true
-        #Try to find a bb_data_object with the given id . 
-        #If no matching object is found, create a new one
-        bb_data = ReBbDataText.find_by_id(id) || ReBbDataText.new
-        bb_data.attributes = attributes
-        bb_data.re_artifact_properties_id = artifact_properties_id
-        bb_data.re_bb_text_id = self.id
-        bb_data.save
-      end      
+    datum_hash.keys.each do |id|
+      # Data should only be saved if no other data object with
+      # the same content is existent.
+      attributes = datum_hash[id]
+      if ReBbDataText.find(:first, :conditions => {:value => attributes[:value], :re_artifact_properties_id => artifact_properties_id, :re_bb_text_id => self.id}).nil?
+        # With multiple values possible, the saving of empty data should be forbidden
+        unless (attributes[:value].nil? or attributes[:value] == "") and self.multiple_values == true
+          #Try to find a bb_data_object with the given id . 
+          #If no matching object is found, create a new one
+          bb_data = ReBbDataText.find_by_id(id) || ReBbDataText.new
+          bb_data.attributes = attributes
+          bb_data.re_artifact_properties_id = artifact_properties_id
+          bb_data.re_bb_text_id = self.id
+          bb_data.save
+        end      
+      end
     end
   end 
     

@@ -1,9 +1,5 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-#   RELATION_TYPES parentchild => 1, dependency => 2, rationale => 3, conflict => 4, refinement => 5, part_of => 6
-
-
-
 
 # Relationships between tasks and subtasks
 
@@ -11,67 +7,75 @@ relationship_task_login_subtask_get_user_data_from_user:
   id: <%= Fixtures.identify(:relationship_task_login_subtask_get_user_data_from_user) %>
   source_id: <%= Fixtures.identify(:art_task_login) %>
   sink_id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_user) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 1
-  directed: true
+
   
 relationship_task_login_subtask_get_user_data_from_cookie:
   id: <%= Fixtures.identify(:relationship_task_login_subtask_get_user_data_from_cookie) %>
   source_id: <%= Fixtures.identify(:art_task_login) %>
   sink_id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_cookie) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 2
-  directed: true
+
   
 relationship_task_login_subtask_problem_with_forgotten_user_data:
   id: <%= Fixtures.identify(:relationship_task_login_subtask_problem_with_forgotten_user_data) %>
   source_id: <%= Fixtures.identify(:art_task_login) %>
   sink_id: <%= Fixtures.identify(:art_subtask_login_problem_with_forgotten_user_data) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 3
-  directed: true
+
 
 relationship_task_login_subtask_hash_password:
   id: <%= Fixtures.identify(:relationship_task_login_subtask_hash_password) %>
   source_id: <%= Fixtures.identify(:art_task_login) %>
   sink_id: <%= Fixtures.identify(:art_subtask_login_hash_password) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 4
-  directed: true
+
   
 relationship_task_login_subtask_data_check:
   id: <%= Fixtures.identify(:relationship_task_login_subtask_data_check) %>
   source_id: <%= Fixtures.identify(:art_task_login) %>
   sink_id: <%= Fixtures.identify(:art_subtask_login_data_check) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 5
-  directed: true
+
   
 relationship_task_test_vocabulary_subtask_choose_lecture:
   id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_choose_lecture) %>
   source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
   sink_id: <%= Fixtures.identify(:art_subtask_test_vocabulary_choose_lecture) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 1
-  directed: true
+
   
 relationship_task_test_vocabulary_subtask_control_knowledge:
   id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_control_knowledge) %>
   source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
   sink_id: <%= Fixtures.identify(:art_subtask_test_vocabulary_control_knowledge) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 2
-  directed: true
+
   
 relationship_task_test_vocabulary_subtask_show_results:
   id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_show_results) %>
   source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
   sink_id: <%= Fixtures.identify(:art_subtask_test_vocabulary_show_results) %>
-  relation_type: 1
+  relation_type: parentchild
   position: 3
-  directed: true
+
   
- 
+# Relationships between tasks and goals
+
+# Do not change this relation, otherwise test of re_artifact_selection will fail!
+relationship_task_test_vocabulary_subtask_show_results:
+  id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_show_results) %>
+  source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
+  sink_id: <%= Fixtures.identify(:art_goal_usability) %>
+  relation_type: conflict
+  position: 1
  
  
 # Relationships between two goals 
@@ -80,9 +84,9 @@ relationship_goal_usability_goal_keyboard_control:
   id: <%= Fixtures.identify(:relationship_goal_usability_goal_keyboard_control) %>
   source_id: <%= Fixtures.identify(:art_goal_usability) %>
   sink_id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
-  relation_type: 5
+  relation_type: conflict
   position: 1
-  directed: true
+
   
   
   
@@ -93,17 +97,17 @@ relationship_goal_usability_section_goals:
   id: <%= Fixtures.identify(:relationship_section_goals_goal_usability) %>
   source_id: <%= Fixtures.identify(:art_goal_usability) %>
   sink_id: <%= Fixtures.identify(:art_section_goals) %>
-  relation_type: 6
+  relation_type: part_of
   position: 1
-  directed: true
+
   
 relationship_goal_keyboard_control_section_goals:
   id: <%= Fixtures.identify(:relationship_section_goals_goal_keyboard_control) %>
   source_id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
   sink_id: <%= Fixtures.identify(:art_section_goals) %>
-  relation_type: 6
+  relation_type: part_of
   position: 2
-  directed: true
+
   
   
   
@@ -114,9 +118,9 @@ relationship_task_test_vocabulary_workarea_public_test_for_toefel:
   id: <%= Fixtures.identify(:relationship_task_test_vocabulary_workarea_public_test_for_toefel) %>
   source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
   sink_id: <%= Fixtures.identify(:art_workarea_public_test_for_toefel) %>
-  relation_type: 2
+  relation_type: conflict
   position: 1
-  directed: true
+
 
 
 

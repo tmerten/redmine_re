@@ -4,4 +4,6 @@
 	<% options = options_for_select(ReArtifactProperties.find_all_by_artifact_type_and_project_id(params[:selected_type], @project.id).collect {|artifact| [artifact.name, artifact.id]}.insert(0, ['', nil]), nil) %>
 <% end %>
 
-<%= select_tag params[:params_path_artifact], options, {} %>
+<%= select_tag params[:params_path_artifact].to_s, options, {} %>
+
+

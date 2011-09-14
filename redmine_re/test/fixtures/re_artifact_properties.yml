@@ -2,7 +2,15 @@
 
 # TODO renamed from "old" artifacts
 
-
+# Artifact to simulate project
+art_project:
+  id: <%= Fixtures.identify(:art_project) %>
+  name: Some Project
+  description: One unit of work to achive a set goal
+  priority: 1
+  created_by: 1
+  project_id: 4
+  artifact_type: Project
 
 # Artifact Properties for Goals
 

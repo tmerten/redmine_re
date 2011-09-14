@@ -279,6 +279,7 @@ en:
 
   # re_attachment
   re_attachment: 'File Attachment'
+  ReAttachment: 'File Attachment'
   re_new_re_attachment: 'File Attachment'
   re_attachment_priority: 'Priority'
   re_create_re_attachment: 'Create a new File Attachment'
@@ -315,7 +316,7 @@ en:
   re_processword_synonyms: 'Synonyms'
   re_new_re_processword: 'New Processword'
   re_processword_priority: 'Priority'
-  re_create_re_processword: 'Create a new File Processword'
+  re_create_re_processword: 'Create a new Processword'
   re_processword_saved: 'Processword successfully saved'
   re_processword_deleted: 'The Processword %{name} has been deleted'
   re_processword_not_deleted: 'The Processword %{name} could not be deleted'

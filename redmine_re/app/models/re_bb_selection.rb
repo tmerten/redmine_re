@@ -40,24 +40,24 @@ class ReBbSelection < ReBuildingBlock
   
 
   def save_datum(datum_hash, artifact_properties_id)
-    id = datum_hash.keys.first
-    # Save new datum only if this wouldn't result in a duplicate
-    if ReBbDataSelection.find(:first, :conditions => {:re_bb_option_selection_id => datum_hash[id][:re_bb_option_selection_id], :re_artifact_properties_id => artifact_properties_id, :re_bb_selection_id => self.id}).nil?
-      #Try to find a bb_data_object with the given id . 
-      #If no matching object is found, create a new one
-      bb_data = ReBbDataSelection.find_by_id(id) || ReBbDataSelection.new
-      # Test if user chose to overwrite existing data (only possible in case of single data)
-      if !bb_data.new_record? and datum_hash[id][:re_bb_option_selection_id] == ''
-        bb_data.delete
-      else
-        unless datum_hash[id][:re_bb_option_selection_id] == ''
-          bb_data.attributes = datum_hash[id]
-          bb_data.re_artifact_properties_id = artifact_properties_id
-          bb_data.re_bb_selection_id = self.id
-          bb_data.save
+    datum_hash.keys.each do |id|
+      # Save new datum only if this wouldn't result in a duplicate
+      if ReBbDataSelection.find(:first, :conditions => {:re_bb_option_selection_id => datum_hash[id][:re_bb_option_selection_id], :re_artifact_properties_id => artifact_properties_id, :re_bb_selection_id => self.id}).nil?
+        #Try to find a bb_data_object with the given id . 
+        #If no matching object is found, create a new one
+        bb_data = ReBbDataSelection.find_by_id(id) || ReBbDataSelection.new
+        # Test if user chose to overwrite existing data (only possible in case of single data)
+        if !bb_data.new_record? and datum_hash[id][:re_bb_option_selection_id] == ''
+          bb_data.delete
+        else
+          unless datum_hash[id][:re_bb_option_selection_id] == ''
+            bb_data.attributes = datum_hash[id]
+            bb_data.re_artifact_properties_id = artifact_properties_id
+            bb_data.re_bb_selection_id = self.id
+            bb_data.save
+          end
         end
       end
-      
     end
   end 
   
