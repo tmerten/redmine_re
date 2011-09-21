@@ -194,6 +194,7 @@ en:
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
   re_artifact_relationships_incoming: 'Incoming Relationships'
   re_relationship_visualization: 'Artifact Traceability Visualization'
+  re_connected_nodes: 'Connected Nodes'
   re_artifact_details: 'Artifact Details'
   re_relationship: 'Relationship'
   re_conflict: 'Conflict'
@@ -218,6 +219,15 @@ en:
   re_conflict_relation_type: 'Conflict'
   re_relation_type: 'Relation Type'
   re_relationship_create_error: 'Relation could not be created'
+  ReArtifactRelationship: 'RE Relationship'
+  Requirements: 'Requirements'
+  
+  
+  re_please_select_visualization_type: 'Please select how to visualize your data by choosing the visualization type.'
+  re_visualization_type: 'Visualiztation Type'
+  re_space_tree: 'Space Tree'
+  re_sunburst: 'Sunburst'
+  re_netmap: 'Netmap'
 
   # re_goals
   re_new_re_goal: 'Goal'

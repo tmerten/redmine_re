@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  #map.project "/project/edit/:id", :controller => 'requirements', :action => 'index'
+    
   map.resources :requirements, :path_prefix => '/projects/:project_id', :except => :edit
   map.resources :re_goal  , :path_prefix => '/projects/:project_id', :except => :edit
   map.resources :re_section, :path_prefix => '/projects/:project_id', :except => :edit

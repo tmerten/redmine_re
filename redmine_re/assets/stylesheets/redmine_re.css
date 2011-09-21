@@ -531,6 +531,43 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 	display:none;		
 }
 
+/* Visualization layout */
+#visualization_filters td {
+  padding-top: 0px;
+  padding-bottom: 1px;
+}
+
+#infovis {
+	overflow: hidden;
+}
+
+#visualization_filters {
+	float: left;
+	width: 250px;
+}
+
+div#visualization_filters div.text form label {
+  	width: 150px;
+}
+
+#node-details {
+		font-size: 10px;
+}
+
+.tip {
+    color: #111;
+    width: 180px;
+    background-color: white;
+    border:1px solid #ccc;
+    -moz-box-shadow:#555 2px 2px 8px;
+    -webkit-box-shadow:#555 2px 2px 8px;
+    -o-box-shadow:#555 2px 2px 8px;
+    box-shadow:#555 2px 2px 8px;
+    opacity:0.9;
+    filter:alpha(opacity=90);
+    font-size:10px;
+    padding:7px;
+}
 
 /* My page block layout */
 .coverage_critical {
@@ -543,4 +580,3 @@ ul.tabs a.xl.current { background-position: 0 -62px; }
 
 .coverage_good{
     color: #17A600;
-}

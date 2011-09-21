@@ -13,8 +13,14 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
 
-  before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize
+  before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize, :initialize_tree_data
+  after_filter :initialize_tree_data
 
+  def initialize_tree_data
+    project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+    @json_tree_data = create_tree(project_artifact, 1).to_json
+  end
+  
   def load_settings
     # Check the settings cache for each request
     ReSetting.check_cache

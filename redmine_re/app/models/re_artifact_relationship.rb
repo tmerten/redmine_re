@@ -21,6 +21,18 @@ class ReArtifactRelationship < ActiveRecord::Base
   def valid_type?
     RELATION_TYPES.has_value?(self.relation_type)
   end
+
+  def self.find_all_relations_for_artifact_id(artifact_id)
+    artifact = ReArtifactProperties.find(artifact_id)
+    self.find_all_relations_for_artifact(artifact)
+  end
+  
+  def self.find_all_relations_for_artifact(artifact)
+    relations = []
+    relations.concat(self.find_all_by_source_id(artifact.id))
+    relations.concat(self.find_all_by_sink_id(artifact.id))
+    relations.uniq
+  end
   
   acts_as_list :scope => :source
 end

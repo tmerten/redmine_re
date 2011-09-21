@@ -1,6 +1,4 @@
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'sunburst.css', :plugin => "redmine_re", :media => 'all' %>
-    <%= stylesheet_link_tag 'base.css', :plugin => "redmine_re", :media => 'all' %>
     <%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
 <% end%>
 
@@ -10,216 +8,275 @@
 <div id='detail_view' class='detail_view'>
 <h2><%= l(:re_relationship_visualization)%></h2>
 
-
-<div id="infovis_filters">
-  <div class="text">
-    <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
-                                 :project_id => params[:project_id]},
-                        :complete => 'sb.loadJSON(request.responseJSON);
-                                      sb.refresh();' do %>
-    <p>                                                                                                    
-      <h4><%= l(:re_artifacts) %> <br/></h4>
-        <% @re_artifact_order.each_with_index do |artifact_type, i| %>
+  <div id="visualization_filters">
+      <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
+                                   :project_id => params[:project_id]},
+                          :complete => "init(request.responseJSON, request.request.parameters.visualization_type);" do %>
+    <table>
+      <tr>
+        <td colspan="3">
+          <h4><%= l(:re_artifacts) %></h4>
+        </td>
+      </tr>
+      <% @re_artifact_order.each_with_index do |artifact_type, i| %>
+        <% if ReSetting.get_serialized(artifact_type, @project.id)['in_use'] %>
+        <tr>
         <% colors = "#" + ReSetting.get_serialized(artifact_type, @project.id)['color'] %>
-          <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
-          <%= check_box_tag 'artifact_clicked[]', artifact_type.to_s, true %>
-          <%= label :artifacts_to_choose, t(artifact_type.to_s.underscore)%><br/>
+        <td>
+            <%=t(artifact_type.to_s.underscore) %>
+          </td>
+          <td>
+            <span style="padding-left: 20px; alpha=0.2; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
+          </td>
+          <td>
+            <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, true %>
+          </td>
+        </tr>
         <% end %>
-    </p>
-      <br/>                                                                                                                    
-    <p>                                           
-        <h4><%= l(:re_artifact_relationships) %><br/></h4>
-        <% for key, value in ReArtifactRelationship::RELATION_TYPES do %>
-          <% colors = "#" + ReSetting.get_serialized(value, @project.id)['color'] %>
+      <% end %>
+      <tr>
+        <td colspan="3">
+          <h4><%= l(:re_artifact_relationships) %></h4>
+        </td>
+      </tr>
+      <% for key, value in ReArtifactRelationship::RELATION_TYPES do %>
+      <tr>
+        <% colors = "#" + ReSetting.get_serialized(value, @project.id)['color'] %>
+        <td>
+          <%= t('re_' + value.to_s.underscore)%>
+        </td>
+        <td>
           <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
-          <%= check_box_tag 'relation_clicked[]', key.to_s, true %>
-          <%= label :relations_to_choose, t('re_' + value.to_s.underscore)%><br/>
-          <% end %>
-    </p>
-    <p>
-    <%= label :show_tree, t('re_show_tree')%><%= radio_button_tag 'show_tree', 'no' %>No
-    <%= radio_button_tag 'show_tree', 'yes' %>Yes
-    </p>
-    
-      <%= submit_tag l(:re_show)%>
+        </td>
+        <td>
+          <%= check_box_tag 'relation_filter[]', key.to_s, true %>
+        </td>
+      </tr>
+      <% end %>
+      <tr>
+      <td colspan="3">
+        <h4><%= l(:re_visualization_type) %></h4>
+      </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <%= t('re_sunburst') %>
+        </td>
+        <td>
+          <%= radio_button_tag 'visualization_type', 'sunburst' %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <%= t('re_netmap')%>
+        </td>
+        <td>
+          <%= radio_button_tag 'visualization_type', 'netmap' %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3"><%= submit_tag l(:re_show), :onClick => "clear_canvas()"%></td>
+      </tr>
+      
+    </table>
     <% end %>
     <p>
      <h4><%= t(:re_artifact_details) %></h4>
      <div id="node-details"></div>
     </p>
   </div>
-</div>
 
-<% canvas_size = ReSetting.get_plain("visualization_size", @project.id) %>
-<div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
+  <% canvas_size = ReSetting.get_plain("visualization_size", @project.id) %>
+  <div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
 
 </div>
 
 <script type="text/javascript">
   //<![CDATA[
 
-var labelType, useGradients, nativeTextSupport, animate;
-var sb = null;
-var json = null;
+var visualization = null;
+var form = null;
 
-(function() {
-  var ua = navigator.userAgent,
-      iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
-      typeOfCanvas = typeof HTMLCanvasElement,
-      nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
-      textSupport = nativeCanvasSupport
-        && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
-  //I'm setting this based on the fact that ExCanvas provides text support for IE
-  //and that as of today iPhone/iPad current text support is lame
-  labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
-  nativeTextSupport = labelType == 'Native';
-  useGradients = nativeCanvasSupport;
-  animate = !(iStuff || !nativeCanvasSupport);
-})();
+function clear_canvas() {
+  $jit.id('infovis').innerHTML = '';
+};
 
-function init(){
-  //init Sunburst
-  json = <%= @json_netmap %>;
-  sb = new $jit.Sunburst({
-    //id container for the visualization
-    injectInto: 'infovis',
-    //Change node and edge styles such as
-    //color, width, lineWidth and edge types
-    Node: {
-      overridable: true,
-      type: 'multipie',
-      height: 90
-    },
-    Edge: {
-      overridable: true,
-      type: 'line',
-      alpha: 1
-    },      
-    //Draw canvas text. Can also be
-    //'HTML' or 'SVG' to draw DOM labels
-    Label: {
-      type: nativeTextSupport? 'Native' : 'SVG',
-      color: '#000'
-    },
-    Tips: {
-      enable: true,
-      onShow: function(tip, node, elem) {
-        var data = node.data;
-        var html = "<b>" + data.full_name + "</b>"; 
-        if(data.description) {
-          html += "<br />" + data.description.replace("\n", "<br />");
-        }
-        if(data.user) {
-          html += "<br /><b>Last modified:</b> " + data.updated_at + " by " + data.user;
+function init(data, visualization_type) {
+  
+  switch(visualization_type) {
+  case "sunburst":
+    visualization = new $jit.Sunburst({
+      //id container for the visualization
+      injectInto: 'infovis',
+      //Change node and edge styles such as
+      //color, width, lineWidth and edge types
+      Node: {
+        overridable: true,
+        type: 'multipie',
+        height: 90
+      },
+      Edge: {
+        overridable: true,
+        type: 'line',
+        alpha: 1
+      },      
+      //Draw canvas text. Can also be
+      //'HTML' or 'SVG' to draw DOM labels
+      Label: {
+        type: 'Native',
+        color: '#000000'
+      },
+      Tips: {
+        enable: true,
+        onShow: function(tip, node, elem) {
+          var data = node.data;
+          var html = "<b>" + data.full_name + "</b>"; 
+          if(data.description) {
+            html += "<br />" + data.description.replace("\n", "<br />");
+          }
+          if(data.user) {
+            html += "<br /><b>Last modified:</b> " + data.updated_at + " by " + data.user;
+          }    
+          if(data.responsibles) {
+            html += "<br /><b>Responsible user:</b> " + data.responsibles;
+          }    
+          tip.innerHTML = html;
         }    
-        if(data.responsibles) {
-          html += "<br /><b>Responsible user:</b> " + data.responsibles;
-        }    
-        tip.innerHTML = html;
-      }    
-    },
+      },
+      Events: {
+        enable: true,
+        type: 'Native',
+        //List node connections onClick
+        onClick: function(node, eventInfo, e) {
+          if (!node) return;
+          var data = node.data
+          var id = node.id.gsub('node_','');
+          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/";        
+          var html = "<b>Name: <a href=" + link + id + ">" + data.full_name + "</a></b>"
+          if (data.description) {
+            html += "<br/><br/><b><%= t(:re_artifact_description) %></b><br/>"
+            html += data.description.replace("\n", "<br />")
+          }
+          html += "<br/><br/><b><%= t(:re_connected_nodes) %></b><br/>"
+          html += "<ul class=\"filterdetails\"><li>", ans = [];
     
-    //Add animations when hovering and clicking nodes
-    NodeStyles: {
-      enable: true,
-      type: 'Native',
-      stylesClick: {
-        'color': '#33dddd'
+          var relationships = data.relationship_data;
+          for (i=0; i<relationships.size(); i++) {
+            ans.push(relationships[i].direction +  " <a href=" + link + relationships[i].id + ">" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
+          }
+          $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
+        },
+        onRightClick: function(node) {
+          if(node.collapsed) {
+            visualization.op.expand(node, {
+              'type': 'animate',
+              'duration': 700,
+              'transition': $jit.Trans.Back.easeOut
+            });
+          } else {
+            visualization.op.contract(node, {
+              'type': 'animate',
+              'duration': 700,
+              'transition': $jit.Trans.Quart.easeInOut
+            });
+          }
+        }      
       },
-      stylesHover: {
-        'color': '#dd3333'
+      levelDistance: '90'
+    });
+    visualization.loadJSON(data);
+    visualization.refresh();
+    break;
+    
+  case "netmap":
+    visualization = new $jit.Sunburst({
+      //id container for the visualization
+      injectInto: 'infovis',
+      //Change node and edge styles such as
+      //color, width, lineWidth and edge types
+      Node: {
+        overridable: true,
+        type: 'multipie',
+        height: 90
       },
-      duration: 700
-    },
-    Events: {
-      enable: true,
-      type: 'Native',
-      //List node connections onClick
-      onClick: function(node, eventInfo, e){
-        if (!node) return;
-        var data = node.data
-        var id = node.id.gsub('node_','');
-        var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/";        
-        var html = "<b>Name: <a href=" + link + id + ">" + data.full_name.truncate(30, '...') + "</a></b>"
-        if (data.description) {
-          html += "<br/><br/><b>Description:</b><br/>"
-          html += data.description.replace("\n", "<br />")
-        }
-        html += "<br/><br/><b>Connected Nodes:</b><br/>"
-        html += "<ul class=\"filterdetails\"><li>", ans = [];
-        node.eachAdjacency(function(adj){
-          // if on the same level i.e siblings
-            if (adj.nodeTo._depth == node._depth) { 
-              id = adj.nodeTo.id.gsub('node_','');
-              ans.push("<a href=" + link + id + ">" + adj.nodeTo.data.full_name.truncate(22, '...') + "</a>");
-            }                         
-          });
-        $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
+      Edge: {
+        overridable: true,
+        type: 'line',
+        alpha: 1
+      },      
+      //Draw canvas text. Can also be
+      //'HTML' or 'SVG' to draw DOM labels
+      Label: {
+        type: 'Native',
+        color: '#000000'
       },
-      onRightClick: function(node) {
-        if(node.collapsed) {
-          sb.op.expand(node, {
-            'type': 'animate',
-            'duration': 700,
-            'transition': $jit.Trans.Back.easeOut
-          });
-        } else {
-          sb.op.contract(node, {
-            'type': 'animate',
-            'duration': 700,
-            'transition': $jit.Trans.Quart.easeInOut
-          });
-        }
-      }      
-    },
-    levelDistance: 150,         
-    // Only used when Label type is 'HTML' or 'SVG'
-    // Add text to the labels.
-    // This method is only triggered on label creation
-    onCreateLabel: function(domElement, node){
-      var labels = sb.config.Label.type;
-      if (labels === 'HTML') {
-        domElement.innerHTML = node.name;
-      } else if (labels === 'SVG') {
-        domElement.firstChild.appendChild(document.createTextNode(node.name));
-      }
-    },
-    // Only used when Label type is 'HTML' or 'SVG'
-    // Change node styles when labels are placed
-    // or moved.
-    onPlaceLabel: function(domElement, node){
-      var labels = sb.config.Label.type;
-      if (labels === 'SVG') {
-        var fch = domElement.firstChild;
-        var style = fch.style;
-        style.display = '';
-        style.cursor = 'pointer';
-        style.fontSize = "0.8em";
-        fch.setAttribute('fill', "#fff");
-      } else if (labels === 'HTML') {
-        var style = domElement.style;
-        style.display = '';
-        style.cursor = 'pointer';
-        if (node._depth <= 1) {
-          style.fontSize = "0.8em";
-          style.color = "#ddd";
-        }
-        var left = parseInt(style.left);
-        var w = domElement.offsetWidth;
-        style.left = (left - w / 2) + 'px';
-      }
-    }
-  });
-  // load JSON data.
-  sb.loadJSON(json);
-  // compute positions and plot.
-  sb.refresh();
-  //end   
-}
-
-  // Start Sunburst
-  init();
-
+      Tips: {
+        enable: true,
+        onShow: function(tip, node, elem) {
+          var data = node.data;
+          var html = "<b>" + data.full_name + "</b>"; 
+          if(data.description) {
+            html += "<br />" + data.description.replace("\n", "<br />");
+          }
+          if(data.user) {
+            html += "<br /><b>Last modified:</b> " + data.updated_at + " by " + data.user;
+          }    
+          if(data.responsibles) {
+            html += "<br /><b>Responsible user:</b> " + data.responsibles;
+          }    
+          tip.innerHTML = html;
+        }    
+      },
+      Events: {
+        enable: true,
+        type: 'Native',
+        //List node connections onClick
+        onClick: function(node, eventInfo, e) {
+          if (!node) return;
+          var data = node.data
+          var id = node.id.gsub('node_','');
+          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/";        
+          var html = "<b>Name: <a href=" + link + id + ">" + data.full_name + "</a></b>"
+          if (data.description) {
+            html += "<br/><br/><b><%= t(:re_artifact_description) %></b><br/>"
+            html += data.description.replace("\n", "<br />")
+          }
+          html += "<br/><br/><b><%= t(:re_connected_nodes) %></b><br/>"
+          html += "<ul class=\"filterdetails\"><li>", ans = [];
+    
+          var relationships = data.relationship_data;
+          for (i=0; i<relationships.size(); i++) {
+            ans.push(relationships[i].direction +  " <a href=" + link + relationships[i].id + ">" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
+          }
+          $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
+        },
+        onRightClick: function(node) {
+          if(node.collapsed) {
+            visualization.op.expand(node, {
+              'type': 'animate',
+              'duration': 700,
+              'transition': $jit.Trans.Back.easeOut
+            });
+          } else {
+            visualization.op.contract(node, {
+              'type': 'animate',
+              'duration': 700,
+              'transition': $jit.Trans.Quart.easeInOut
+            });
+          }
+        }      
+      },
+      levelDistance: '<%= canvas_size.to_i / 2 - 90 %>'
+    });
+    visualization.loadJSON(data);
+    visualization.refresh();
+    break;
+  
+  default :
+  alert ("<%= t(:re_please_select_visualization_type) %>");
+    break;
+  }
+};
   //]]>
 </script>
 

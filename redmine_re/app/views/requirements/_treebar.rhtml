@@ -205,19 +205,8 @@ var tree = jQuery("#tree")
   })
   .bind("open_node.jstree", function (event, data) {
     var node = data.args[0];
-    var node_postition = node.position();
-    var node_width = node.outerWidth();
     /* TODO: Resize the trees div (actually resize the contents left margin);
     there is a post open/close hook, where this can be implemented */
-         
-    var width = this.getWidth();
-    
-    if (node_position + node_width > width) {
-      alert('its bigger: ' + node_position + node_width);
-    }
-    
-    var treebar = jQuery(".treebar");
-    
     jQuery.ajax({
       "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
     });        
@@ -263,6 +252,7 @@ var tree = jQuery("#tree")
       "icons" : true
     },
     "json_data" : {
+      "data" : <%= @json_tree_data %>,
       "ajax" : {
         "url" : function (n) {
           var url = "<%= url_for :controller => 'requirements', :action => 'treestate' %>";
@@ -271,6 +261,51 @@ var tree = jQuery("#tree")
           return url + "/" + id + params;
         }
       }		    
+    },
+    "dnd" : {
+      "drop_finish" : function (data) {
+        var drag = data.o;
+        var drop = data.r;
+        var id = drag.attr("id").replace('node_','');
+        var name = jQuery("a:first", drag.first()).text();
+        var name = jQuery.trim(name);
+        
+        var parent_id_field = jQuery('#parent_artifact_id');
+        var parent_text_field = jQuery('#parent_autocomplete');
+        
+        parent_id_field.val(id);
+        parent_text_field.val(name);
+      },
+      "drop_check" : function (data) {
+        var drag = data.o;
+        var drag_id = drag.attr("id");
+        
+        var invalid_ids = [];
+        var artifact_in_editor = "node_<%= @artifact.id.to_s unless @artifact.nil? || @artifact.id.nil? %>";
+        invalid_ids.push(artifact_in_editor);
+        
+        jQuery("#" + artifact_in_editor).find("li").each(function () {
+          invalid_ids.push(this.id);
+        });
+        
+        if (jQuery.inArray(drag_id, invalid_ids) > -1)
+          return false;
+        
+        /*TODO: We need to make sure that this is also checked in the controller
+        since we are still throwing exceptions if not*/
+        
+        return true;
+      }
+    },
+    "ui" : {
+      <%= '"initially_select" : [ "node_' + @artifact.id.to_s + '" ],' unless @artifact.nil? || @artifact.id.nil? %>
+      "select_limit" : 1,
+      "selected_parent_close" : "select_parent"
+    },
+    "contextmenu" : {
+      "select_node" : true,
+      "show_at_node" : false,
+      "items" : load_items
     },
     "types" : {
       "types" : {
@@ -326,56 +361,13 @@ var tree = jQuery("#tree")
           "icon" : { 
             "image" :"<%= image_path 'icons/newspaper.png', :plugin => 'redmine_re' %>"
           }
-        }        
-        
+        },
+        "project" : {
+          "open_node"   : true
+        }
       }
-    },
-    "dnd" : {
-      "drop_finish" : function (data) {
-        var drag = data.o;
-        var drop = data.r;
-        var id = drag.attr("id").replace('node_','');
-        var name = jQuery("a:first", drag.first()).text();
-        var name = jQuery.trim(name);
-        
-        var parent_id_field = jQuery('#parent_artifact_id');
-        var parent_text_field = jQuery('#parent_autocomplete');
-        
-        parent_id_field.val(id);
-        parent_text_field.val(name);
-      },
-      "drop_check" : function (data) {
-        var drag = data.o;
-        var drag_id = drag.attr("id");
-        
-        var invalid_ids = [];
-        var artifact_in_editor = "node_<%= @artifact.id.to_s unless @artifact.nil? || @artifact.id.nil? %>";
-        invalid_ids.push(artifact_in_editor);
-        
-        jQuery("#" + artifact_in_editor).find("li").each(function () {
-          invalid_ids.push(this.id);
-        });
-        
-        if (jQuery.inArray(drag_id, invalid_ids) > -1)
-          return false;
-        
-        /*TODO: We need to make sure that this is also checked in the controller
-        since we are still throwing exceptions if not*/
-        
-        return true;
-      }
-    },
-    "ui" : {
-      <%= '"initially_select" : [ "node_' + @artifact.id.to_s + '" ],' unless @artifact.nil? || @artifact.id.nil? %>
-      "select_limit" : 1,
-      "selected_parent_close" : "select_parent"
-    },
-    "contextmenu" : {
-      "select_node" : true,
-      "show_at_node" : false,
-      "items" : load_items
-    },
-    plugins : [ "themes", "json_data", "dnd", "types" , "ui", "contextmenu" ]
+    },    
+    plugins : [ "themes", "json_data", "dnd", "ui", "contextmenu", "types" ]
   });
   
   jQuery("#tree a").live("click", function(e) {

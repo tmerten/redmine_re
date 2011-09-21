@@ -68,18 +68,10 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
   def visualization
-    # Building JSON-Tree for Netmap-Visualization. As the JIT-Sunburst-Visualization
-    # is usually build for trees, we have to add a dummy root element which isn't shown
-    # and insert all the artifacts we are interested in as children of this very root node
-    @artifacts = ReArtifactProperties.find_all_by_project_id(@project.id, :order => "artifact_type, name")
-    @artifacts.delete_if { |a| a.artifact_type.eql? 'Project' }
-    
-    #@artifacts = ReArtifactProperties.find(:all, :order => "name", :conditions => ["project_id = ? and artifact_type = ?", params[:project_id], "ReGoal"])
-    @json_netmap = build_json_for_netmap(@artifacts)
-    # preparing html for tree view
+
   end
 
-  def build_json_for_netmap(artifacts, relation_search_string = nil)
+  def build_json_for_netmap(artifacts, relations)
     json = []
 
     rootnode = {}
@@ -90,64 +82,53 @@ class ReArtifactRelationshipController < RedmineReController
     root_node_data['$type'] = "none"
     rootnode['data'] = root_node_data
 
-    if @show_tree
-      re_artifact_properties = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
-      
-      children= gather_children(re_artifact_properties)
-      rootnode['children'] = children
-      
-      json = rootnode
-    else
+    case @visualization_type
+      when "sunburst"
+        re_artifact_properties = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+        children= gather_children(re_artifact_properties)
+        rootnode['children'] = children
+        json = rootnode
+      when "netmap"
+        adjacencies = []
+        for artifact in artifacts do
+          adjacent_node = {}
+          adjacent_node['nodeTo'] = "node_" + artifact.id.to_s
+          edge_data = {}
+          edge_data['$type'] = "none"
+          adjacent_node['data'] = edge_data
+          adjacencies << adjacent_node      
+        end
+        
+        rootnode['adjacencies'] = adjacencies
+        json << rootnode
     
-      adjacencies = []
-      for artifact in artifacts do
-        adjacent_node = {}
-        adjacent_node['nodeTo'] = "node_" + artifact.id.to_s
-        edge_data = {}
-        edge_data['$type'] = "none"
-        adjacent_node['data'] = edge_data
-        adjacencies << adjacent_node      
+        artifacts.each do |artifact|
+          outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact(artifact)
+          drawable_relationships = ReArtifactRelationship.find_all_by_source_id_and_relation_type(artifact.id, relations)
+          artifact_ids = @artifacts.collect { |a| a.id }
+          drawable_relationships.delete_if { |r| ! artifact_ids.include? r.sink_id }
+          json << add_artifact(artifact, drawable_relationships, outgoing_relationships)
       end
-      
-      rootnode['adjacencies'] = adjacencies
-      json << rootnode
-  
-      for artifact in artifacts do
-        if relation_search_string
-          @outgoing_relationships = ReArtifactRelationship.find(:all,  :order => "relation_type", :conditions => [ relation_search_string, artifact.id])
-        else
-          @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.id)
-        end
-        @showable_relations = []
-        for outgoing_relation in @outgoing_relationships do
-          @showable_relations << outgoing_relation if artifacts.include?(ReArtifactProperties.find_by_id(outgoing_relation.sink_id))  
-        end
-        json << add_artifact(artifact, @showable_relations)
-      end
-      
-    end #if show_tree
-   
+    else
+      json = rootnode
+    end
     json.to_json
   end
   
   def gather_children(artifact)
     children = []
     for child in artifact.children
-      next unless (@artifact_choice.include? child.artifact_type.to_s)
-
-      if @chosen_relations_or_string
-        @outgoing_relationships = ReArtifactRelationship.find(:all,  :order => "relation_type", :conditions => [  @chosen_relations_or_string, child.id])
-      else
-        @outgoing_relationships = ReArtifactRelationship.find_all_by_source_id(child.id)
-      end
-      json_artifact = add_artifact(child, @outgoing_relationships)
+      next unless (@chosen_artifacts.include? child.artifact_type.to_s)
+      outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact(child.id)
+      drawable_relationships = ReArtifactRelationship.find_all_by_source_id(child.id)
+      json_artifact = add_artifact(child, drawable_relationships, outgoing_relationships)
       json_artifact['children'] = gather_children(child)
       children << json_artifact
     end
     children
   end
 
-  def add_artifact(artifact, outgoing_relationships)
+  def add_artifact(artifact, drawable_relationships, outgoing_relationships)
     type = artifact.artifact_type
     node_settings = ReSetting.get_serialized(type.underscore, @project.id)
     
@@ -168,10 +149,35 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['$height'] = 90                                                    
     node_data['$angularWidth'] = 13.00
     
+
+    adjacencies= []
+
+    relationship_data = []
+    outgoing_relationships.each do |relation|
+      artifact_is_source = (artifact == relation.source)
+      other_artifact = artifact_is_source ? relation.sink : relation.source
+      logger.debug("/////////// RELATION ///////////") if logger
+      logger.debug("is_source?" + artifact_is_source.to_s + " source:" + relation.source_id.to_s + " sink:" + relation.sink_id.to_s + " type:" + relation.relation_type.to_s) if logger
+      
+      relation_data = {}
+      relation_data['id'] = other_artifact.id
+      relation_data['full_name'] = other_artifact.name
+      relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+      relation_data['priority'] = other_artifact.priority.to_s
+      relation_data['created_at'] = other_artifact.created_at.to_s(:short)
+      relation_data['author'] = other_artifact.author.to_s
+      relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
+      relation_data['user'] = other_artifact.user.to_s
+      relation_data['responsibles'] = other_artifact.responsibles
+      relation_data['relation_type'] = relation.relation_type
+      relation_data['direction'] = artifact_is_source ? 'to':'from'
+      relationship_data << relation_data
+    end
+
+    node_data['relationship_data'] = relationship_data 
     node['data'] = node_data
-    
-    adjacencies= []                                     
-    for relation in outgoing_relationships do
+
+    drawable_relationships.each do |relation|
       sink = ReArtifactProperties.find_by_id(relation.sink_id)                                                       
       relation_settings = ReSetting.get_serialized(relation.relation_type, @project.id)
                 
@@ -193,27 +199,27 @@ class ReArtifactRelationshipController < RedmineReController
     node['adjacencies'] = adjacencies
 
     node
-  end                                                             
+  end
 
   def build_json_according_to_user_choice
     # This method build a new json string in variable @json_netmap which is returned
-    # Meanwhile it computes queries for the search for the chosen artifacts and relations.
+    # Meanwhile it computes queries for the search for the chosen artifacts and relations.                                
     # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
-    @show_tree = params[:show_tree] == "yes"
+    @visualization_type = params[:visualization_type]
     
     # String for condition to find the chosen artifacts
+    
     @chosen_artifacts = []
     @chosen_relations = []
+    @json_netmap = []
     
-    @session_artifacts_chosen = {}
-    for artifact in params[:artifact_clicked] do
-      @chosen_artifacts << artifact.to_s
+    unless params[:artifact_filter].blank? || params[:relation_filter].blank?
+      params[:artifact_filter].each { |a| @chosen_artifacts << a.to_s.camelize }
+      params[:relation_filter].each { |r| @chosen_relations << ReArtifactRelationship::RELATION_TYPES[r.to_sym] }
+  
+      @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, @chosen_artifacts, :order => "artifact_type, name")
+      @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations)
     end
-    for relation in params[:relation_clicked] do
-      @chosen_relations << ReArtifactRelationship::RELATION_TYPES[relation.to_sym]
-    end
-    @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, type, :order => "artifact_type, name")
-    @json_netmap = build_json_for_netmap(@artifacts, nil)
     
     render :json => @json_netmap
   end

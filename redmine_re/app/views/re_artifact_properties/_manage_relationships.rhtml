@@ -39,11 +39,10 @@
               <% end %>
             </div>
             </p>
-            <p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact) %>
-              <%#= select :re_artifact_relationship, :artifact_id, ReArtifactProperties.find_all_by_project_id(@project.id).collect { |d| [truncate(d.name, :length => 40, :omission => "..."), d.id]}, {:prompt => l(:re_select_artifact)} %></p>
+            <p><%= label :re_artifact_relationship, :artifact_id, t(:re_sink_artifact), {:class => 'jstree-drop'} %>
             <%= hidden_field_tag "re_artifact_relationship[artifact_id]", "no_value_yet", {:id => 'sink_artifact_id'} %>
             <p>
-              <%= text_field_tag :sink_artifact, '', {:size => 30, :class => 'autocomplete', :id => 'sink_autocomplete'} %>
+              <%= text_field_tag :sink_artifact, '', {:size => 30, :class => 'autocomplete jstree-drop', :id => 'sink_autocomplete'} %>
             </p>
 
             <div id="sink_artifact_candidates" class="autocomplete"></div>
