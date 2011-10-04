@@ -4,14 +4,22 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title><%=h html_title %></title>
 <meta name="description" content="<%= Redmine::Info.app_name %>" />
-<meta name="keywords" content="issue,bug,tracker" />
+<meta name="keywords" content="issue, bug, tracker" />
 
 <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
-<%= csrf_meta_tag %>
+
+<% if redmine_version_is_higher_or_equal_than?("1.2.0")  %>
+    <%= csrf_meta_tag %>
+<% end %>
+  
 <%= favicon %>
 <%= stylesheet_link_tag 'application', :media => 'all' %>
 <%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
-<%= javascript_heads %>
+
+<% if redmine_version_is_higher_or_equal_than?("1.2.0")  %>
+    <%= javascript_heads %>
+<% end %>
+
 <%= heads_for_theme %>
 <!--[if IE 6]>
     <style type="text/css">

@@ -135,10 +135,31 @@ JAVASCRIPT
       }
     end
   end
-  
-  
-  
-  
-  
-  
+
+  # helper which checks if the current redmine version is higher or equal than another
+  def redmine_version_is_higher_or_equal_than?(compare_version_str)
+
+    # complete version string example: 1.1.2.stable
+    current_version_str = Redmine::VERSION.to_s
+    
+    # get the version numbers 1.2.1.stable => [1, 2, 1]
+    get_version_numbers = Regexp.new(/\A(\d+)\.(\d+)\.(\d+)/)
+
+    m = compare_version_str.match(get_version_numbers)
+    raise ArgumentError, "The version string: #{compare_version_str} contains not a valid version!" if m.nil?
+    compare_version_numbers = [$1.to_i, $2.to_i, $3.to_i]
+
+    current_version_str.match(get_version_numbers)
+    current_version_numbers = [$1.to_i, $2.to_i, $3.to_i]
+
+    # compare the version numbers 
+    result = true
+    current_version_numbers.each_index do |i|
+      if( current_version_numbers[i] < compare_version_numbers[i] )
+        result = false
+      end
+    end
+
+    return result
+  end
 end
