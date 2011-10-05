@@ -5,7 +5,7 @@ class ReArtifactRelationshipController < RedmineReController
   TRUNCATE_NAME_IN_VISUALIZATION_AFTER_CHARS = 18
   TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS = 150
   TRUNCATE_OMISSION = "..."
-  
+
   include ActionView::Helpers::JavaScriptHelper
 
   def delete
@@ -41,7 +41,7 @@ class ReArtifactRelationshipController < RedmineReController
     list << '</ul>'
     render :text => list
   end
-  
+
   def prepare_relationships
     artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
     relation = params[:re_artifact_relationship]
@@ -77,7 +77,7 @@ class ReArtifactRelationshipController < RedmineReController
     rootnode = {}
     rootnode['id'] = "node0"
     rootnode['name'] = "Project"
-    
+
     root_node_data = {}
     root_node_data['$type'] = "none"
     rootnode['data'] = root_node_data
@@ -98,10 +98,10 @@ class ReArtifactRelationshipController < RedmineReController
           adjacent_node['data'] = edge_data
           adjacencies << adjacent_node      
         end
-        
+
         rootnode['adjacencies'] = adjacencies
         json << rootnode
-    
+
         artifacts.each do |artifact|
           outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact(artifact)
           drawable_relationships = ReArtifactRelationship.find_all_by_source_id_and_relation_type(artifact.id, relations)
@@ -178,21 +178,23 @@ class ReArtifactRelationshipController < RedmineReController
     node['data'] = node_data
 
     drawable_relationships.each do |relation|
-      sink = ReArtifactProperties.find_by_id(relation.sink_id)                                                       
+      sink = ReArtifactProperties.find_by_id(relation.sink_id)
+
+      directed = ReArtifactRelationship.find_by_source_id_and_sink_id(relation.sink_id, relation.source.id).nil?
       relation_settings = ReSetting.get_serialized(relation.relation_type, @project.id)
-                
+
       adjacent_node = {}
 
       logger.debug("Relation Settings: " + relation_settings.to_yaml )
-      
+
       adjacent_node['nodeTo'] = "node_" + sink.id.to_s
-      #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s     
-      edge_data = {}                                            
+      #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
+      edge_data = {}
       edge_data['$color'] = "#" + relation_settings['color']
       edge_data['$lineWidth'] = 2
-      edge_data['$type'] = "arrow" if relation_settings['directed']
-      edge_data['$direction'] = [ "node_" + sink.id.to_s, "node_" + artifact.id.to_s ] if relation_settings['directed']
-      edge_data['$type'] = "hyperline" unless relation_settings['directed']                
+      edge_data['$type'] = "arrow" if directed
+      edge_data['$direction'] = [ "node_" + sink.id.to_s, "node_" + artifact.id.to_s ] if directed
+      edge_data['$type'] = "hyperline" unless directed
       adjacent_node['data'] = edge_data
       adjacencies << adjacent_node
     end
@@ -206,21 +208,21 @@ class ReArtifactRelationshipController < RedmineReController
     # Meanwhile it computes queries for the search for the chosen artifacts and relations.                                
     # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
     @visualization_type = params[:visualization_type]
-    
+
     # String for condition to find the chosen artifacts
-    
+
     @chosen_artifacts = []
     @chosen_relations = []
     @json_netmap = []
-    
+
     unless params[:artifact_filter].blank? || params[:relation_filter].blank?
       params[:artifact_filter].each { |a| @chosen_artifacts << a.to_s.camelize }
       params[:relation_filter].each { |r| @chosen_relations << ReArtifactRelationship::RELATION_TYPES[r.to_sym] }
-  
+
       @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, @chosen_artifacts, :order => "artifact_type, name")
       @json_netmap = build_json_for_netmap(@artifacts, @chosen_relations)
     end
-    
+
     render :json => @json_netmap
   end
 end
