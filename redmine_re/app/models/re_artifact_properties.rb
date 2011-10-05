@@ -4,6 +4,7 @@ class ReArtifactProperties < ActiveRecord::Base
   cattr_accessor :artifact_types
 
   has_many :realizations
+  has_many :comments, :as => :commented
   has_many :issues, :through => :realizations, :uniq => true
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
