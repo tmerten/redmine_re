@@ -7,9 +7,9 @@
   <%= errors_and_flash params[:controller] %>
   
   <ul class="tabs">
-  	<li><a href="#">Main Tab</a></li>
+  	<li><a href="#"><%= t(:main_tab) %></a></li>
   	<!--<li><a href="#">Building blocks</a></li>-->
-  	<li><a href="#">Relations</a></li>
+  	<% if params.has_key? :id %><li><a href="#"><%= t(:relations) %></a></li><% end %>
   </ul>
 
   <div class="panes">
@@ -151,6 +151,22 @@
 	  </div>
       <%= add_bb_configuration_link(params[:controller].camelcase)%>
 	  
+	  <% if params.has_key? :id %>
+	  	<fieldset>
+	      <legend><%= t(:comments) %></legend>
+	  	  <textarea name="comment"></textarea>
+	  	  
+	  	  <% @artifact.comments.each do |comment| %>
+	  	     <hr />
+	  	     <p><b><%= comment.created_on.to_datetime.to_s[0,10] %> 
+	  	     	<%= comment.created_on.to_datetime.to_s[-14,8] %> - 
+	  	     	<%= User.find(comment.author_id).to_s %></b><br />
+	  	     	<%= comment.comments %></p>
+	  	  <% end %>
+	  	  
+	  	</fieldset>
+	  <% end %>
+	  
 	  <p>
 		<%= submit_tag t(:re_save) %>
 			  &nbsp;
@@ -163,9 +179,11 @@
 	<% end %><!-- form end tag -->
   	</div> <!--end of tab one -->  
   	
-    <div class="box">
-	  <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
-	</div><!-- end of tab two -->  
+  	<% if params.has_key? :id %>
+	    <div class="box">
+		  <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
+		</div><!-- end of tab two -->  
+	<% end %>
   </div>
 <script type="text/javascript">
 jQuery(function() {
