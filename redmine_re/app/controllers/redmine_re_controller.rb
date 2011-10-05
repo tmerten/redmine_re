@@ -135,7 +135,7 @@ class RedmineReController < ApplicationController
         @artifact.set_parent(@parent, 1) unless @parent.nil?
         
         # Add Comment
-        unless params[:comment].empty?
+        unless params[:comment].blank?
           comment = Comment.new
           comment.comments = params[:comment]
           comment.author = author
