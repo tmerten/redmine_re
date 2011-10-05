@@ -134,6 +134,15 @@ class RedmineReController < ApplicationController
         edit_hook_valid_artifact_after_save params
         @artifact.set_parent(@parent, 1) unless @parent.nil?
         
+        # Add Comment
+        unless params[:comment].empty?
+          comment = Comment.new
+          comment.comments = params[:comment]
+          comment.author = author
+          @artifact_properties.comments << comment
+          comment.save
+        end
+        
         # If sibling is not blank, then the option "create new artifact below" was called
         # and the artifact should beplaced below its sibling
         unless @sibling.blank?
