@@ -1,5 +1,5 @@
 # English strings go here for Rails i18n
-en:
+en:  
   # general stuff
   re_new: 'New'
   re_requirements: 'Requirements'
@@ -431,6 +431,10 @@ en:
   
   #my blocks
   
+  
+  relations: 'Relations'
+  main_tab: 'Main tab'
+  comments: 'Comments'
   open_requirements: 'Open Requirements'
   artifactcount: 'Number of Artifacts'
   artifacts_wo_issues: 'Number of Artifacts not connected to any Issue'
