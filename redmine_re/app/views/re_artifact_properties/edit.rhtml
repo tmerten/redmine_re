@@ -48,8 +48,6 @@
 	          <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
 	        </p>
 	        <%= javascript_tag "Form.Element.focus('artifact_name');" %>
-	        <br/>
-	        <%= number_field_with_slider('artifact', :priority, 0, 50) %>
 	      </div>
 	  
 	      <div class="splitcontentright">
@@ -158,7 +156,12 @@
 	  	  
 	  	  <% @artifact.comments.each do |comment| %>
 	  	     <hr />
-	  	     <p><b><%= comment.created_on.to_datetime.to_s[0,10] %> 
+	  	     <p>
+	  	     	<% if User.current.allowed_to?(:administrate_requirements, @project) %>
+	  	     	  [<%= link_to 'X', :controller => @artifact.artifact_type.underscore, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
+	  	     	<% end %>
+	  	     	
+	  	     	<b><%= comment.created_on.to_datetime.to_s[0,10] %> 
 	  	     	<%= comment.created_on.to_datetime.to_s[-14,8] %> - 
 	  	     	<%= User.find(comment.author_id).to_s %></b><br />
 	  	     	<%= comment.comments %></p>
