@@ -116,7 +116,15 @@ class RedmineReController < ApplicationController
     end
     
     edit_hook_after_artifact_initialized params
-
+    
+    # Remove Comment (Initiated via GET)
+    if User.current.allowed_to?(:administrate_requirements, @project)
+      unless params[:deletecomment_id].blank?
+        comment = Comment.find_by_id(params[:deletecomment_id])
+        comment.destroy unless comment.nil?
+      end
+    end
+    
     if request.post?
       @artifact.attributes = params[:artifact]
         # attributes that cannot be set by the user
@@ -148,6 +156,8 @@ class RedmineReController < ApplicationController
         unless @sibling.blank?
            @artifact.set_parent( @parent, @sibling.position + 1)
         end
+        
+        initialize_tree_data
         
           # Saving of user defined Fields (Building Blocks)
         ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
