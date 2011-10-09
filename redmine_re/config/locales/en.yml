@@ -451,3 +451,5 @@ en:
   requirement_progress: 'Requirement Progress'
 
   rating: 'Rating'
+  rating_average: 'Rating average'
+  own_rating: 'Your rating'

@@ -59,5 +59,7 @@ de:
   re_lesser_than: 'kleiner als'
 
   rating: 'Bewertung'
+  rating_average: 'Durchschnitt'
+  own_rating: 'Ihre Bewertung'
 
 
