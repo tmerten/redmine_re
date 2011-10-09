@@ -131,6 +131,15 @@ class ReArtifactPropertiesController < RedmineReController
     render :text => list   
   end
 
+  def rate_artifact
+     @artifact = ReArtifactProperties.find(params[:id])
+     @artifact.rate(params[:stars], User.current, params[:dimension])
+     render :update do |page|
+       page.replace_html :rating, render(:partial => '/re_artifact_properties/rating', :locals => {:artifact => @artifact})
+       page.visual_effect :pulsate, @artifact.wrapper_dom_id(params)
+     end
+  end
+
   private
   
   def gather_children(artifact)

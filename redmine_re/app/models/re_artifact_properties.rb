@@ -2,7 +2,7 @@ class ReArtifactProperties < ActiveRecord::Base
   unloadable
 
   cattr_accessor :artifact_types
-
+  ajaxful_rateable :stars => 5, :dimensions => [:first]
   has_many :realizations
   has_many :comments, :as => :commented, :dependent => :destroy
   

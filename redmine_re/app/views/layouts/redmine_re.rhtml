@@ -41,6 +41,9 @@
 <%= javascript_include_tag 'ccolorcalculator.js', :plugin => 'redmine_re' %>
 <%= stylesheet_link_tag 'colorpicker.css', :plugin => "redmine_re", :media => 'screen' %>
 <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+  
+<%= ajaxful_rating_style %>
+<%= ajaxful_rating_script %>
 <%### REDMINE RE STUFF STOP 1 ###%>
 <%= call_hook :view_layouts_base_html_head %>
 <!-- page specific tags -->

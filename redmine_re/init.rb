@@ -7,6 +7,8 @@ require 'gchart'
 Dispatcher.to_prepare do
   require_dependency 'issue_patch'
   require_dependency 'issue_controller_patch'
+  require_dependency 'ajaxful_rating_patch'
+  require_dependency 'user_patch'
 end
 
 Redmine::Plugin.register :redmine_re do
@@ -31,7 +33,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree,
           :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
           :reduce_search_result_with_parameter ],
-        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue, :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue],
+        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue, :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue, :rate_artifact],
         :re_goal => [:edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
         :re_subtask => [:edit, :new],
@@ -72,6 +74,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 	#Observers
 	config.active_record.observers = :re_artifact_properties_observer
 
+  config.gem "ajaxful_rating_jquery"
 	#ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
 
 	# add "acts_as_re_artifact" method to any ActiveRecord::Base class
@@ -84,8 +87,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 		def self.acts_as_re_artifact
 			include Artifact
 		end
-	end
-
+  end
 end
 
 config.after_initialize do

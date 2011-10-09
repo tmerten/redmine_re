@@ -148,7 +148,13 @@
 	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
 	  </div>
       <%= add_bb_configuration_link(params[:controller].camelcase)%>
-	  
+
+    <% if @artifact.id %>
+        <div id="rating">
+            <%= render :partial => '/re_artifact_properties/rating', :locals => {:artifact => @artifact.re_artifact_properties} %>
+        </div>
+    <% end %>
+
 	  <% if params.has_key? :id %>
 	  	<fieldset>
 	      <legend><%= t(:comments) %></legend>

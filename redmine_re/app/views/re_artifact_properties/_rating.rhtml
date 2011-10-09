@@ -1,0 +1,22 @@
+<fieldset>
+  <legend><%= t(:Rating) %></legend>
+
+      <%= ratings_for artifact,
+                      :url => {:action => :rate_artifact,
+                               :controller => :re_artifact_properties,
+                               :id => artifact.id}
+      %>
+      <span id="rating_average">Rating average:</span>
+      <%= artifact.rating_average %>
+
+      <br><span id="own_rating">Your rating:</span>
+      <%= ratings_for artifact,
+                      User.current,
+                      :static,
+                      :url => {:action => :rate_artifact,
+                               :controller => :re_artifact_properties,
+                               :id => artifact.id},
+                      :size => "small",
+                      :show_user_rating => true
+      %>
+</fieldset>
