@@ -144,10 +144,6 @@
 	  </fieldset>
 	  <br />
 	  <%= render( params[:controller]+"/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{params[:controller]}/_formfields.rhtml") %>
-	  <div id='re_bb_section'>
-	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
-	  </div>
-      <%= add_bb_configuration_link(params[:controller].camelcase)%>
 
     <% if @artifact.id %>
         <div id="rating">
@@ -175,16 +171,16 @@
 	  	  
 	  	</fieldset>
 	  <% end %>
-	  
+      <div id='re_bb_section'>
+	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
+	  </div>
+      <%= add_bb_configuration_link(params[:controller].camelcase)%>
 	  <p>
 		<%= submit_tag t(:re_save) %>
 			  &nbsp;
 		<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
 	  </p>
 		
-		
-
-	  
 	<% end %><!-- form end tag -->
   	</div> <!--end of tab one -->  
   	

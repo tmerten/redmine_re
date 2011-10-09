@@ -449,3 +449,5 @@ en:
   todo: 'Open Tickets'
   progress: 'Progress'
   requirement_progress: 'Requirement Progress'
+
+  rating: 'Rating'
