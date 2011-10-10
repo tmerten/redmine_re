@@ -142,35 +142,43 @@
 	  <%= link_to 'create related Issue', :controller=> 'Issues', :action=>'new', :project_id => @project.id,
 	      :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id unless @artifact.id.blank?%>
 	  </fieldset>
-	  <br />
 	  <%= render( params[:controller]+"/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{params[:controller]}/_formfields.rhtml") %>
 
     <% if @artifact.id %>
-        <div id="rating">
-            <%= render :partial => '/re_artifact_properties/rating', :locals => {:artifact => @artifact.re_artifact_properties} %>
-        </div>
+        <div class="rating_comments">
+            <div class="rating_comments_left">
+                <fieldset class="rating">
+                    <legend><%= t(:rating) %></legend>
+
+                    <div id="rating">
+                        <%= render :partial => '/re_artifact_properties/rating', :locals => {:artifact => @artifact.re_artifact_properties} %>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="rating_comments_right">
+                <fieldset class="comment">
+                    <legend> <%= t(:comments) %></legend>
+
+                    <textarea class="comment_input" name="comment"></textarea>
+
+                    <% @artifact.comments.each do |comment| %>
+                       <hr />
+                       <p>
+                          <% if User.current.allowed_to?(:administrate_requirements, @project) %>
+                            [<%= link_to 'X', :controller => @artifact.artifact_type.underscore, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
+                          <% end %>
+
+                          <b><%= comment.created_on.to_datetime.to_s[0,10] %>
+                          <%= comment.created_on.to_datetime.to_s[-14,8] %> -
+                          <%= User.find(comment.author_id).to_s %></b><br />
+                          <%= comment.comments %></p>
+                    <% end %>
+                </fieldset>
+            </div>
+            <div class="rating_comments_clear"></div>
+       </div>
     <% end %>
 
-	  <% if params.has_key? :id %>
-	  	<fieldset>
-	      <legend><%= t(:comments) %></legend>
-	  	  <textarea name="comment"></textarea>
-	  	  
-	  	  <% @artifact.comments.each do |comment| %>
-	  	     <hr />
-	  	     <p>
-	  	     	<% if User.current.allowed_to?(:administrate_requirements, @project) %>
-	  	     	  [<%= link_to 'X', :controller => @artifact.artifact_type.underscore, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
-	  	     	<% end %>
-	  	     	
-	  	     	<b><%= comment.created_on.to_datetime.to_s[0,10] %> 
-	  	     	<%= comment.created_on.to_datetime.to_s[-14,8] %> - 
-	  	     	<%= User.find(comment.author_id).to_s %></b><br />
-	  	     	<%= comment.comments %></p>
-	  	  <% end %>
-	  	  
-	  	</fieldset>
-	  <% end %>
       <div id='re_bb_section'>
 	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
 	  </div>

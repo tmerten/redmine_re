@@ -584,3 +584,34 @@ div#visualization_filters div.text form label {
 
 .coverage_good{
     color: #17A600;
+}
+
+.rating_comments{
+height:100px;
+}
+.rating_comments_left {
+    float: left;
+    height: 100%;
+    width: 35%;
+}
+.rating_comments_right {
+    float: right;
+    height: 100%;
+    width: 64%;
+}
+.rating_comments_clear {
+clear:left;
+}
+
+.comment_input{
+    height: 90%;
+    width: 99%;
+}
+
+fieldset.rating{
+    height:85%;
+}
+
+fieldset.comment{
+    height:85%;
+}
