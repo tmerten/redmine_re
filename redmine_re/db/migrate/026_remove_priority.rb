@@ -1,6 +1,6 @@
 class RemovePriority < ActiveRecord::Migration
   def self.up
-    remove_column :re_artifact_properties, "priority", :integer
+#    remove_column :re_artifact_properties, "priority"
   end
 
   def self.down
