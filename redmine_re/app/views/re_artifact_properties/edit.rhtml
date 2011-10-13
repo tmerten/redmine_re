@@ -190,7 +190,15 @@
 	  </p>
 		
 	<% end %><!-- form end tag -->
+	
+	
+  	<div id="watchers">
+      <%= render :partial => 'watchers/watchers', :locals => {:watched => @artifact_properties} %>
+    </div>
+	
+	
   	</div> <!--end of tab one -->  
+  	
   	
   	<% if params.has_key? :id %>
 	    <div class="box">
@@ -204,3 +212,4 @@ jQuery(function() {
 	jQuery("ul.tabs").tabs("div.panes > div");
 });
 </script>  
+
