@@ -6,7 +6,6 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :realizations
   has_many :comments, :as => :commented, :dependent => :destroy
   
-  
   has_many :issues, :through => :realizations, :uniq => true
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
@@ -56,8 +55,7 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :artifact, :polymorphic => true #, :dependent => :destroy
   
-  # TODO: Implement author and watchable module into the common fields.
-  #acts_as_watchable
+  acts_as_watchable
   
   validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
   validates_presence_of :created_by, :message => l(:re_artifact_properties_validates_presence_of_created_by)
