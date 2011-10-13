@@ -2,6 +2,9 @@ class ReArtifactPropertiesController < RedmineReController
   unloadable
   menu_item :re
 
+  helper :watchers
+  include WatchersHelper
+  
   def edit
     redirect 'edit'
   end

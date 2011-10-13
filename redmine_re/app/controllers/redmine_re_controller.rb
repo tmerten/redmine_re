@@ -13,6 +13,9 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
 
+  helper :watchers
+  include WatchersHelper
+  
   before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize, :initialize_tree_data
   after_filter :initialize_tree_data
 
