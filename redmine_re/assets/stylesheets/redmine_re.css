@@ -587,20 +587,20 @@ div#visualization_filters div.text form label {
 }
 
 .rating_comments{
-height:100px;
+height:auto;
 }
 .rating_comments_left {
     float: left;
     height: 100%;
+    margin-right: 10px;
     width: 35%;
 }
 .rating_comments_right {
-    float: right;
     height: 100%;
-    width: 64%;
 }
+
 .rating_comments_clear {
-clear:left;
+clear:both;
 }
 
 .comment_input{
