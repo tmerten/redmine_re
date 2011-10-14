@@ -5,11 +5,11 @@
 				
 				<%= render :partial => "re_artifact_properties/shared_fields_one_line_representation", :locals => {:artifact => artifact}%>
 
-				<% for column in ReSubtask.content_columns %>
+				<% for column in ReRequirement.content_columns %>
 					<% value = artifact.artifact.send(column.name)%>
-					<% unless value.nil? or value == '' or column.name == "sub_type" %>
+					<% unless value.nil? or value == '' %>
 			        	<td>
-			              	<label class='filter'><%= l('re_subtask_' + column.name) + ": " %></label>
+			              	<label class='filter'><%= l('re_requirement_' + column.name) + ": " %></label>
 							<%= value %>
 			            </td>  
 					<% end %>

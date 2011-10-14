@@ -91,11 +91,11 @@
 												<% end %>
 											<% end %>
 											<% if re_bb.embedding_type == 'one_line' or some_attributes_view_failed or selected_attributes_do_not_fit_data %>
-												<% begin %>
+												<%# begin %>
 													<%= render :partial => "#{sink.artifact_type.underscore}/one_line_view", :locals => {:artifact => sink} %>
-												<% rescue %>
-													<%= l(:re_no_one_line_view_existent)%>
-												<% end %>
+												<%# rescue %>
+													<%# l(:re_no_one_line_view_existent)%>
+												<%# end %>
 											<% end %>
 										</td>
 									</tr>

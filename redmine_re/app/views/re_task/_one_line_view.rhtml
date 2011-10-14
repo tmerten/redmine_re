@@ -14,6 +14,24 @@
 			            </td>  
 					<% end %>
 		        <% end %>
+				<!-- Add links to subtasks -->
+				<% subtasks = [] %>
+    			<% artifact.children.each {|c| subtasks << c.artifact if c.artifact_type == "ReSubtask"}%>
+				<% max = subtasks.count > 2 ? 2 : subtasks.count %>
+				<% unless subtasks.count == 0 %> 
+					<td colspan='2'>
+					  	<label class='filter'><%= l('re_subtasks') + "...: " %></label> 	
+						<% (0..max).each do |number| %>
+					  
+							<%= link_to( subtasks[number].name.slice(0, 40), {	:action => :edit,
+			        					  	 									:controller => :re_task,
+			        					 	 									:id => subtasks[number].artifact_id},
+																			:class => "icon re_subtask" ) %>
+							<br>
+					  
+						<% end %>
+					</td>
+				<% end %>
 				
 				<!-- Add Building Block One Line Representation --> 
 				<%= insert_building_blocks_one_line_representations(artifact) %>

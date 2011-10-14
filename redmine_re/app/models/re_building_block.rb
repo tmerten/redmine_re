@@ -3,6 +3,8 @@ class ReBuildingBlock < ActiveRecord::Base
       
   include StrategyProcs
   
+  belongs_to :project
+  
   validates_presence_of :name
   before_save :prohibit_save_of_new_artifact_type
   

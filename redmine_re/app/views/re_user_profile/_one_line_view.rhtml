@@ -1,15 +1,15 @@
 <div class="one_line_view">
-	<p><table>
+	<table>
 		<tbody>
 			<tr>
 				
 				<%= render :partial => "re_artifact_properties/shared_fields_one_line_representation", :locals => {:artifact => artifact}%>
-
-				<% for column in ReSubtask.content_columns %>
+		
+				<% for column in ReUserProfile.content_columns %>
 					<% value = artifact.artifact.send(column.name)%>
-					<% unless value.nil? or value == '' or column.name == "sub_type" %>
+					<% unless value.nil? or value == '' %>
 			        	<td>
-			              	<label class='filter'><%= l('re_subtask_' + column.name) + ": " %></label>
+			              	<label class='filter'><%= l('re_user_profile_' + column.name) + ": " %></label>
 							<%= value %>
 			            </td>  
 					<% end %>
@@ -20,5 +20,5 @@
 	          	
 			</tr>
 		</tbody>
-	</table></p>
+	</table>
 </div>

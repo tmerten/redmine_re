@@ -7,7 +7,7 @@ class ReTask < ActiveRecord::Base
 
    #acts_as_versioned
 
-  #virtual attribuite
+  #virtual attribute
   def subtask_attributes=(subtask_attributes)
     if subtask_attributes.blank?
       return
