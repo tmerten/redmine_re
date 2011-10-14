@@ -1,27 +1,17 @@
 <div id='detail_view' class='detail_view'>
-<h2> <%= t(:re_prepare_deletion) %></h2>
+<h2> <%= t(:re_preparing_deletion) %></h2>
 <p>
 
-<%= t(:re_you_asked_for_deleting_the_following_artifact) %>: <b><%= @artifact_properties.name %></b> (#<%= @artifact_properties.id %>)
+<%= t(:re_you_asked_for_deleting_the_following_artifact) %>: <b><%= @artifact_properties.name %></b> (#<%= @artifact_properties.id %>).
+<br />
+<%= t(:re_what_will_be_deleted) %>
 </p>
-
-<p>
-<h3><%= t(:re_choose_option_for_deletion) %></h3>
-<ul>
-  <li><%= link_to t(:re_delete_everything), { :action => "delete", :id => @artifact_properties.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %> (<%= t(:re_deletes_this_artifact) %><%= t(:re_and_all_relations) unless @relationships_outgoing.empty? && @relationships_incoming.empty? %><%= t(:re_and_all_children) unless @children.empty? %>)</li>
-  <% unless @children.empty? %>
-  <li><%= link_to t(:re_move_children_to_the_parent), { :action => "delete", :id => @artifact_properties.id, :mode => 'move' }, :confirm => t(:re_are_you_sure) %> "<%= @parent.name %>" <%= t(:re_and_delete_afterwards, :artifact_name => @artifact_properties.name) %></li>
-  <% end %>
-</ul>
-</p>
-
-<h3><%= t(:re_relations_and_artifacts_found) %></h3>
 
 <p>
   <div id="relationship_link_list" class="splitcontentleft">
     <%= render 're_artifact_relationship/relationship_links' %>
   </div>
-  
+
   <div class="splitcontentright">
     <p>
       <b><%= t(:re_parent) %></b>
@@ -39,7 +29,7 @@
         </li>
       </ul>
     </p>
-    
+
     <p>
       <b><%= t(:re_children) %></b>
       <ul>
@@ -55,6 +45,29 @@
       </ul>
     </p>
   </div>
+</p>
+<div style="clear:both;"> </div>
+<p>
+<h3><%= t(:re_confirm_deletion_by_choosing) %></h3>
+<ul>
+  <% if @children.empty? %>
+    <li>
+      <%= link_to t(:re_delete_artifact), { :action => "delete", :id => @artifact_properties.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %>:<br />
+      <%= t(:re_will_delete_artifact_and_relations, :name => @artifact_properties.name) %>
+    </li>
+  <% else %>
+    <li>
+      <%= link_to t(:re_delete_and_move_children), { :action => "delete", :id => @artifact_properties.id, :mode => 'move' }, :confirm => t(:re_are_you_sure) %>:<br />
+      <%= t(:re_will_delete_artifact_and_move_children, { :name => @artifact_properties.name, :parent => @parent.name }) %>
+    </li>
+    <br /> 
+    <li>
+      <%= link_to t(:re_delete_recursively), { :action => "delete", :id => @artifact_properties.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %>: <br />
+      <%= t(:re_will_delete_artifact_and_all_children, { :name => @artifact_properties.name }) %>
+    </li>
+  <% end %>
+
+</ul>
 </p>
 
 </div>

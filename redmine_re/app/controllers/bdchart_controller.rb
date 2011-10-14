@@ -5,7 +5,9 @@ class BdchartController < ApplicationController
   def index
     @project = Project.find(params[:project_id])
 
-    @allversions = Version.find(:all, :conditions=> ["project_id = ? AND effective_date NOT NULL", @project.id])
+    @allversions = Version.find(:all, :conditions=> ["project_id = ? AND effective_date NOT NULL", @project.id]) # FIXME: refactor to something that works with mysql and sqlite
+
+    #@allversions = Version.find_by_project_id_and_effective_date( @project.id, )
 
 
     @allversions.sort!{|a,b| a.effective_date <=> b.effective_date }
@@ -19,76 +21,63 @@ class BdchartController < ApplicationController
       lastv=version
     end
     if currentversion.nil?
-      flash[:error] = "Kann Chart nicht berechnen"
+      flash[:error] = "Kann Chart nicht berechnen" # FIXME: to translation
     else
+      @version_id= (params[:showversion].nil? ? currentversion.id : params[:showversion].to_i)
+      logger.debug @version_id.inspect if logger
+      dates = version_length[Version.find(@version_id)]
+      itlength = version_length[Version.find(@version_id)][2]
+      openartifacts = []
+      label_days = []
+      label_no_of_artifacts = []
+      day = dates[0]
+      i=1
+      dev_duration = 0
 
+      #calc y values of graph
+      itlength.to_i.times do
+        if (day <= Time.now.to_date)
+          openartifacts << number_of_artifacts_open(day, @version_id)
+          dev_duration += 1
+        else
+          openartifacts << nil
+        end
 
-    @version_id= (params[:showversion].nil? ? currentversion.id : params[:showversion].to_i)
-
-
-    puts "\n\n\n"+@version_id.inspect
-
-    dates = version_length[Version.find(@version_id)]
-
-    itlength = version_length[Version.find(@version_id)][2]
-
-    openartifacts = []
-    label_days = []
-    label_no_of_artifacts = []
-    day = dates[0]
-    i=1
-    dev_duration = 0
-
-    #calc y values of graph
-    itlength.to_i.times do
-      if (day <= Time.now.to_date)
-        openartifacts << number_of_artifacts_open(day, @version_id)
-        dev_duration += 1
-      else
-        openartifacts<<nil
+        #label abscissa
+        day+=1.days
+        label_days << i
+        i+=1
       end
 
-      #label abscissa
-      day+=1.days
-      label_days << i
-      i+=1
+      # label ordinate
+      (number_of_artifacts_open(dates[0], @version_id)+1).times do |x|
+        label_no_of_artifacts << x
+      end
+
+      #only print prediction if show version current version
+      data =[]
+      if(@version_id == currentversion.id && openartifacts.any? {|artifact| !artifact.blank?})
+        puts openartifacts.inspect
+        prediction = get_prediction_values(openartifacts.slice(0, dev_duration), itlength.to_i)
+        data << openartifacts
+        data << prediction
+
+      else
+        @foo = data = openartifacts
+      end
+
+      @charturl =Gchart.line(:size => '750x400',
+                             :title => "Chart for Version#{Version.find(@version_id).name}",
+                             :bg => 'ffffff',
+                             :axis_with_labels => ['x', 'y'],
+                             :axis_labels => [[label_days], [label_no_of_artifacts]],
+                             :data => data,
+                             :line_colors => ['FFC400', '76A4FB'],
+                             :legend => ['Number of open Artifacts', 'Projection'],
+                             :custom => ''
+                            )
+
     end
-
-    # label ordinate
-    (number_of_artifacts_open(dates[0], @version_id)+1).times do |x|
-      label_no_of_artifacts << x
-    end
-
-
-
-
-    #only print prediction if show version current version
-    data =[]
-    if(@version_id == currentversion.id && openartifacts.any? {|artifact| !artifact.blank?})
-      puts openartifacts.inspect
-      prediction = get_prediction_values(openartifacts.slice(0, dev_duration), itlength.to_i)
-      data << openartifacts
-      data << prediction
-        
-    else
-      @foo = data = openartifacts
-    end
-
-
-
-
-    @charturl =Gchart.line(:size => '750x400',
-                           :title => "Chart for Version#{Version.find(@version_id).name}",
-                           :bg => 'ffffff',
-                           :axis_with_labels => ['x', 'y'],
-                           :axis_labels => [[label_days], [label_no_of_artifacts]],
-                           :data => data,
-                           :line_colors => ['FFC400', '76A4FB'],
-                           :legend => ['Number of open Artifacts', 'Projection'],
-                           :custom => ''
-    )
-
-  end
   end
 
 
@@ -121,7 +110,7 @@ class BdchartController < ApplicationController
     count
   end
 
-    #return array with [startdate, enddate, length]
+  #return array with [startdate, enddate, length]
   def version_length()
     versions = Version.find(:all, :conditions => ["project_id=? AND effective_date IS NOT NULL", @project.id])
     versions.sort! { |a, b| a.effective_date <=> b.effective_date }
@@ -140,10 +129,12 @@ class BdchartController < ApplicationController
     itdim
   end
 
-    #returns the date when the last issue of the artifact was closed
   def date_of_closing(artifact)
+    #returns the date when the last issue of the artifact was closed
+
     date=nil
 
+    # FIXME refactorme to use real closed status instead of => 5 and < 5
     artifact.issues.each do |issue|
       journals = issue.journals
       journals.each do |journal|
@@ -160,8 +151,7 @@ class BdchartController < ApplicationController
     date
   end
 
-
-    #artifacts which issues are all scheduled for a given version
+  #artifacts which issues are all scheduled for a given version
   def relevant_artifacts(version)
     issues = find_issues_for_version(version)
     all_artifacts = []
@@ -177,11 +167,10 @@ class BdchartController < ApplicationController
     end
   end
 
-
   def issue_open_at(issue, date)
     open = true
     statusupdates= []
-      #get all statusupdates for the issues
+    #get all statusupdates for the issues
     issue.journals.each do |journal|
       journal.details.each do |detail|
 
@@ -202,16 +191,13 @@ class BdchartController < ApplicationController
     open
   end
 
-
   def date_for_statusdetail(detail)
     Journal.find(detail.journal_id).created_on
   end
 
-
-    #find all issues of a given iteration
   def find_issues_for_version(version)
+    #find all issues of a given iteration
     issues = Issue.find(:all, :conditions => ["fixed_version_id=? AND project_id=?", version, @project.id])
   end
-
 
 end

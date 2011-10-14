@@ -107,29 +107,37 @@ en:
   re_artifact_properties_validates_presence_of_updated_by: 'Updated by cannot be blank.'
   re_artifact_properties_validates_presence_of_created_by: 'Created by cannot be blank.'
   re_artifact_properties_validates_presence_of_project: 'There is no project associated to this artifact.'
+  re_artifact_properties_validates_presence_of_artifact: 'No artifact has been associated with these artifact properties'
+  re_artifact_properties_validates_presence_of_parent: 'Every artifact needs a parent artifact, but no parent has been defined'
+  re_artifact_properties_validates_uniqueness_of_artifact: 'The artifact associated with these artifact properties has to be unique '
+
   field_re_artifact_properties:
-    name: 'Name'
-    updated_by: 'Updating User'
-    created_by: 'Creating User'
-    project: 'Project'
+    name: 'Name: '
+    updated_by: 'Updating User: '
+    created_by: 'Creating User: '
+    project: 'Project: '
+    parent: 'Parent Artifact: '
+
   re_parent: 'Parent'
   re_children: 'Children'
-  re_set_parent: 'Set Parent'
-    
+  re_set_parent: 'Set Parent Artifact'
+
   # re_artifact_properties_deletion
-  re_prepare_deletion: 'Prepare deletion'
+  re_preparing_deletion: 'Preparing deletion'
   re_you_asked_for_deleting_the_following_artifact: 'You asked for deleting the following artifact'
-  re_choose_option_for_deletion: 'Please confirm the deletion and choose an option below'
-  re_delete_everything: 'Delete everything'
-  re_move_children_to_the_parent: 'Move children to the parent'
-  re_deletes_this_artifact: 'deletes this artifact'
-  re_and_all_relations: ' and all relations'
-  re_and_all_children: ' and all children'
-  re_and_delete_afterwards: 'and delete "%{artifact_name}" afterwards.'
-  re_deleted_artifact_and_children: 'Successfully deleted the artifact and all its children'
-  re_deleted_artifact_and_moved_children: 'Succesfully moved all child artifacts to the parent and deleted the artifact'
-  re_relations_and_artifacts_found: 'The following relations and artifacts are connected'
-  
+  re_what_will_be_deleted: 'If you delete this artifact, the relationships listet below will also be deleted.'
+  re_confirm_deletion_by_choosing: 'Please confirm the deletion by choosing an option below'
+
+  re_delete_and_move_children: 'Delete artifact and move children'
+  re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listet above) to the parent of this artifact (%{parent}). Afterwards this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
+  re_delete_recursively: 'Delete recursively'
+  re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listet above). Additionally all its children and their children (listed above) as well as each childs relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
+  re_delete_artifact: 'Delete artifact'
+  re_will_delete_artifact_and_relations: 'Choosing this option will delete this artifact (%{name}) and its relationships (listet above).'
+
+  re_deleted_artifact_and_children: 'Successfully deleted the artifact and all its children.'
+  re_deleted_artifact_and_moved_children: 'Succesfully attached all child artifacts to the parent and deleted the artifact.'
+
   #re_requirement
   re_requirement: 'Requirement'
   re_new_re_requirement: 'Requirement'

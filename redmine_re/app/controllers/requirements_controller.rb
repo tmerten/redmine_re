@@ -4,53 +4,52 @@ class RequirementsController < RedmineReController
 
   def index
     @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
-    
+
     if @project_artifact.nil? || @re_artifact_order.nil? || @re_relation_order.nil?
       redirect_to :controller => "re_settings", :action => "configure", :project_id => @project.id, :firstload => '1'
     end
   end
-  
+
   def delegate_tree_drop
     # The following method is called via if somebody drops an artifact on the tree.
     # It transmits the drops done in the tree to the database in order to last
     # longer than the next refresh of the browser.
-    new_parent_id = params[:new_parent_id]
-    sibling_id = params[:ancestor_id] # WRONG NOMENCLATUR! ancestor_id => sibling_id
+    
+    #new_parent_id = params[:new_parent_id]
+    sibling_id = params[:sibling_id]
     moved_artifact_id = params[:id]
-    insert_postition = params[:position]
+    insert_position = params[:position]
 
     moved_artifact = ReArtifactProperties.find(moved_artifact_id)
-    
-		new_parent = nil
-		begin
-	 	  new_parent = ReArtifactProperties.find(new_parent_id) if not new_parent_id.empty?
-		rescue ActiveRecord::RecordNotFound
-      new_parent = ReArtifactProperties.find_by_project_id_and_artifact_type(moved_artifact.project_id, "Project")
-		end
-    session[:expanded_nodes] << new_parent.id
-		
-		sibling = nil
-    sibling = ReArtifactProperties.find(sibling_id) if not sibling_id.empty?
 
+    new_parent = nil
+    sibling = ReArtifactProperties.find(sibling_id)
     position = 1
-    
-    case insert_postition
+
+    case insert_position
     when 'before'
       position = (sibling.position - 1) unless sibling.nil? || sibling.position.nil?
+      new_parent = sibling.parent
     when 'after'
       position = (sibling.position + 1) unless sibling.nil? || sibling.position.nil?
-    else
+      new_parent = sibling.parent
+    when 'inside'
       position = 1
+      new_parent = sibling
+    else
+      render :text => "insert position invalid", :status => 501
     end
-      
-    
-    moved_artifact.set_parent(new_parent, position)
-   
+    session[:expanded_nodes] << new_parent.id
+
+    moved_artifact.parent_relation.remove_from_list
+    moved_artifact.parent = new_parent
+    moved_artifact.parent_relation.insert_at(position)
+
     result = {}
     result['status'] = 1
     result['insert_pos'] = position.to_s
     result['sibling'] = sibling.position.to_s + ' ' + sibling.name.to_s unless sibling.nil? || sibling.position.nil?
-    
+
     render :json => result
   end
 

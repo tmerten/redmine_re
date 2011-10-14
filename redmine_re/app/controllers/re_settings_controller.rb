@@ -16,7 +16,6 @@ class ReSettingsController < RedmineReController
        @project_artifact.artifact_type = "Project"
        @project_artifact.artifact_id = @project.id     
        @project_artifact.description = @project.description
-       @project_artifact.priority = 50
        @project_artifact.name = @project.name
        @project_artifact.save
     end
@@ -159,7 +158,6 @@ private
     new_relation_configs.each_pair do |k, v|
       v['in_use'] = v.has_key? 'in_use'
       v['show_in_visualization'] = v.has_key? 'show_in_visualization'
-      v['directed'] = v.has_key? 'directed'
       ReSetting.set_serialized(k, @project.id, v)
     end
 

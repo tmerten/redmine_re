@@ -45,7 +45,7 @@ def custom_ajaxful_rating_script
     end
   
   def errors_and_flash(artifact)
-    s = error_messages_for artifact
+    s = error_messages_for 'artifact'
     s += render_flash_messages_with_timeout
   end
   
@@ -161,7 +161,7 @@ JAVASCRIPT
     end
     html_code
   end
-  
+
   def add_bb_section(artifact, bb_hash, bb_error_hash)
     if User.current.allowed_to?(:administrate_requirements, @project)
       render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash, :bb_error_hash => bb_error_hash}
@@ -169,7 +169,7 @@ JAVASCRIPT
       ""
     end
   end
-  
+
   def validation_warning(bb_error_hash, re_bb, key_for_error_hash)
     unless bb_error_hash.nil? or bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][key_for_error_hash].nil?
       %Q{
@@ -180,12 +180,12 @@ JAVASCRIPT
     end
   end
 
-  # helper which checks if the current redmine version is higher or equal than another
   def redmine_version_is_higher_or_equal_than?(compare_version_str)
+  # helper which checks if the current redmine version is higher or equal than another
 
     # complete version string example: 1.1.2.stable
     current_version_str = Redmine::VERSION.to_s
-    
+
     # get the version numbers 1.2.1.stable => [1, 2, 1]
     get_version_numbers = Regexp.new(/\A(\d+)\.(\d+)\.(\d+)/)
 

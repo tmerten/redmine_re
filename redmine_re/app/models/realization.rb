@@ -14,8 +14,8 @@ class Realization < ActiveRecord::Base
 
     artifacts_with_issue.each do |artifact|
       has_open_issue = false
-      artifact.issues.each do |issue|
-        if issue.status_id < 5
+      artifact.issues.each do |issue| #refactor to .any?
+        unless issue.status.is_closed?
           has_open_issue = true
         end
       end

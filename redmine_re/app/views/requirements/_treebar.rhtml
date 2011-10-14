@@ -1,12 +1,12 @@
 <div id='treebar' class='treebar'>
   <!--<a href="#" id="hide_treebar" class="contextual" title="<%= t(:re_shows_after_reload) %>"><%= t(:re_hide) %></a>-->
-  
+
   <h2 class="current"><%= l(:re_tree_overview) %></h2>
   <div class="pane">
     <%= render :partial => 'requirements/filter' %>
     <div id="tree"></div>
   </div>
-  
+
   <h2><%= l(:re_show_relationships) %></h2>
   <div class="pane">
     <ul class="navigation">
@@ -27,39 +27,39 @@
         :action => "configure", 
         :project_id => @project.identifier } %>
       </li>
-	  	<% linktext = l(:re_configure_fields_treebar, :artifact_type => l(params[:artifact_type_for_treebar].camelcase.to_sym))%>
-	  	<% if ! params[:artifact_type_for_treebar].nil? and @re_artifact_order.include? params[:artifact_type_for_treebar] and ! linktext.slice('translation missing:')%>
-			<li>
-				<%= link_to linktext, {
-									:controller => "re_settings",
-									:action => "configure_fields",
-									:project_id => @project.id,
-									:artifact_type => params[:artifact_type_for_treebar]
-				} %>
-			</li>
-		<% end %>
+      <% linktext = l(:re_configure_fields_treebar, :artifact_type => l(params[:artifact_type_for_treebar].camelcase.to_sym))%>
+      <% if ! params[:artifact_type_for_treebar].nil? and @re_artifact_order.include? params[:artifact_type_for_treebar] and ! linktext.slice('translation missing:')%>
+        <li>
+          <%= link_to linktext, {
+          :controller => "re_settings",
+          :action => "configure_fields",
+          :project_id => @project.id,
+          :artifact_type => params[:artifact_type_for_treebar]
+          } %>
+        </li>
+      <% end %>
     </ul>
   </div>
   <% end %>
-  
+
   <span id="back-top"><a href="#top"><%= l(:re_scroll_to_top) %></a></span>
 </div>
 
 <script type="text/javascript">
   //<![CDATA[
-  
+
 jQuery("#hide_treebar").click(function () {
   jQuery("#treebar").hide();
   jQuery(".detail_view").css('margin-left', '10px');
 });
 
 function load_items(node) {
-	
-	var items;
-	
-	if ( node.attr("rel") == "project" ) {
-		
-		items = {
+
+  var items;
+
+  if ( node.attr("rel") == "project" ) {
+
+  items = {
         "create" : false,
         "rename" : false,
         "remove" : false,
@@ -76,9 +76,9 @@ function load_items(node) {
               "action" : function (node) {
                 jQuery.blockUI({
                     "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= t('re_new_' + artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-                });                  
+                });
                 var id = node[0].id.gsub('node_','');
-                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
+                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id, :id => nil) %>";
                 window.location.href = link + '?parent_artifact_id=' + id;
               },
               "icon" : "<%= artifact_type.underscore %>"
@@ -87,9 +87,9 @@ function load_items(node) {
           }
         }
       };
-	} else {
-		
-		items = {
+  } else {
+
+    items = {
         "create" : false,
         "rename" : false,
         "remove" : false,
@@ -107,9 +107,9 @@ function load_items(node) {
 
                 jQuery.blockUI({
                     "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= t('re_new_' + artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-                });                  
+                });
                 var id = node[0].id.gsub('node_','');
-                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
+                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id, :id=> nil) %>";
                 window.location.href = link + '?parent_artifact_id=' + id;
               },
               "icon" : "<%= artifact_type.underscore %>"
@@ -129,9 +129,9 @@ function load_items(node) {
               "action" : function (node) {
                 jQuery.blockUI({
                     "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= t('re_new_' + artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-                });                  
+                });
                 var id = node[0].id.gsub('node_','');
-                var link2 = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id) %>";
+                var link2 = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id, :id => nil) %>";
                 window.location.href = link2 + '?sibling_id=' + id;
               },
               "icon" : "<%= artifact_type.underscore %>"
@@ -147,9 +147,9 @@ function load_items(node) {
                 "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + node.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
             });
             var id = node[0].id.gsub('node_','');
-            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/";
+            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit', :id => nil) %>/";
             window.location.href = link + id;
-          }             
+          }
         },
         "delete" : {
           "label" : "<%= t(:re_delete) %>",
@@ -159,19 +159,14 @@ function load_items(node) {
                 "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + node.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
             });*/
             var id = node[0].id.gsub('node_','');
-            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'delete') %>/";
+            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'delete', :id => nil) %>/";
             window.location.href = link + id;
           }
         }
       };
-		
-		
-		
-		
-		
-	}
-	
-	return items;
+  }
+
+  return items;
 }
 
 /* if a user clicks a tab, this variable becomes true.
@@ -186,9 +181,9 @@ var accordion = jQuery("#treebar").tabs("#treebar div.pane", {
   effect: 'slide',
   initialIndex: null,
   history:true,
-	onClick: function(event, tabIndex) {
+  onClick: function(event, tabIndex) {
     cancel_showtree = true;
-	}
+  }
 });
 
 var tree = jQuery("#tree")
@@ -221,7 +216,7 @@ var tree = jQuery("#tree")
         data : { 
           "id" : jQuery(this).attr("id").replace("node_",""), 
           "new_parent_id" : data.rslt.np.attr("id").replace("node_",""),
-          "ancestor_id" : data.rslt.r.attr("id").replace("node_",""),
+          "sibling_id" : data.rslt.r.attr("id").replace("node_",""),
           "position" : data.rslt.p,
           "authenticity_token" : <%= "#{form_authenticity_token.inspect}" %>
         },
@@ -238,7 +233,7 @@ var tree = jQuery("#tree")
         }
       });
     });
-  })    
+  })
   .jstree({
     "core": {
       "animation" : 100,
@@ -261,7 +256,7 @@ var tree = jQuery("#tree")
           var params = "?project_id=<%= @project.id %>&open=data";
           return url + "/" + id + params;
         }
-      }		    
+      }
     },
     "dnd" : {
       "drop_finish" : function (data) {
@@ -270,36 +265,33 @@ var tree = jQuery("#tree")
         var id = drag.attr("id").replace('node_','');
         var name = jQuery("a:first", drag.first()).text();
         var name = jQuery.trim(name);
-        
+
         var parent_id_field = jQuery('#parent_artifact_id');
         var parent_text_field = jQuery('#parent_autocomplete');
-        
+
         parent_id_field.val(id);
         parent_text_field.val(name);
       },
       "drop_check" : function (data) {
         var drag = data.o;
         var drag_id = drag.attr("id");
-        
+
         var invalid_ids = [];
         var artifact_in_editor = "node_<%= @artifact.id.to_s unless @artifact.nil? || @artifact.id.nil? %>";
         invalid_ids.push(artifact_in_editor);
-        
+
         jQuery("#" + artifact_in_editor).find("li").each(function () {
           invalid_ids.push(this.id);
         });
-        
+
         if (jQuery.inArray(drag_id, invalid_ids) > -1)
           return false;
-        
-        /*TODO: We need to make sure that this is also checked in the controller
-        since we are still throwing exceptions if not*/
-        
+
         return true;
       }
     },
     "ui" : {
-      <%= '"initially_select" : [ "node_' + @artifact.id.to_s + '" ],' unless @artifact.nil? || @artifact.id.nil? %>
+      <%= '"initially_select" : [ "node_' + @artifact_properties.id.to_s + '" ],' unless @artifact_properties.blank? %>
       "select_limit" : 1,
       "selected_parent_close" : "select_parent"
     },
@@ -337,7 +329,7 @@ var tree = jQuery("#tree")
           "icon" : { 
             "image" :"<%= image_path 'icons/attach.png', :plugin => 'redmine_re' %>"
           }
-        },          
+        },
         "re_workarea" : {
           "icon" : { 
             "image" :"<%= image_path 'icons/bricks.png', :plugin => 'redmine_re' %>"
@@ -367,10 +359,10 @@ var tree = jQuery("#tree")
           "open_node"   : true
         }
       }
-    },    
+    },
     plugins : [ "themes", "json_data", "dnd", "ui", "contextmenu", "types" ]
   });
-  
+
   jQuery("#tree a").live("click", function(e) {
       var parent = jQuery(this).parent();
       jQuery.blockUI({
@@ -400,8 +392,6 @@ var tree = jQuery("#tree")
         return false;
       });
     });
-  
-
-});
+  });
   //]]>
 </script>

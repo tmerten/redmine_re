@@ -17,23 +17,26 @@ class RedmineReController < ApplicationController
   include WatchersHelper
   
   before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize, :initialize_tree_data
-  after_filter :initialize_tree_data
+
+  layout proc { |c| c.request.xhr? ? false : "redmine_re" }
 
   def initialize_tree_data
     project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+    session[:expanded_nodes] ||= Set.new
+    session[:expanded_nodes] << project_artifact.id
     @json_tree_data = create_tree(project_artifact, 1).to_json
   end
-  
+
   def load_settings
     # Check the settings cache for each request
     ReSetting.check_cache
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
-    session[:expanded_nodes] = Array.new unless session[:expanded_nodes]
   end
 
-    # uses redmine_re in combination with redmines base layout for the header unless it is an ajax-request
-  layout proc { |c| c.request.xhr? ? false : "redmine_re" }
+  def find_artifact_type_for_treebar
+    params[:artifact_type_for_treebar] = self.controller_name
+  end
 
   def find_project
     # find the current project either by project name ( new action,..)
@@ -67,11 +70,6 @@ class RedmineReController < ApplicationController
       end
     end
   end
-  
-  # If an artifact is displayed, find the artifact_type
-  def find_artifact_type_for_treebar
-    params[:artifact_type_for_treebar] = self.controller_name
-  end
 
   def new
     @artifact_type = self.controller_name # needed for ajax request (artifact selection building block)
@@ -80,11 +78,11 @@ class RedmineReController < ApplicationController
     @artifact = @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
-    
+
     if params[:parent_artifact_id]
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
     end
-    
+
     if params[:sibling_id]
       @sibling = ReArtifactProperties.find(params[:sibling_id])
     end
@@ -101,6 +99,7 @@ class RedmineReController < ApplicationController
 
     @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
+
     @artifact_type = artifact_type # needed for ajax request (artifact selection building block)
     @parent = nil
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
@@ -109,17 +108,9 @@ class RedmineReController < ApplicationController
 
     @issues = @artifact_properties.issues
 
-    unless params[:parent_artifact_id].blank?
-      @parent = ReArtifactProperties.find(params[:parent_artifact_id])
-    end
 
-    unless params[:sibling_id].blank?
-      @sibling = ReArtifactProperties.find(params[:sibling_id])
-      @parent = ReArtifactProperties.find(@sibling.parent)
-    end
-    
     edit_hook_after_artifact_initialized params
-    
+
     # Remove Comment (Initiated via GET)
     if User.current.allowed_to?(:administrate_requirements, @project)
       unless params[:deletecomment_id].blank?
@@ -127,24 +118,35 @@ class RedmineReController < ApplicationController
         comment.destroy unless comment.nil?
       end
     end
-    
-    if request.post?
+
+    if request.post? # we want to create or update an artifact
+
       @artifact.attributes = params[:artifact]
-        # attributes that cannot be set by the user
-      author = find_current_user
+      # attributes that cannot be set by the user
       @artifact.project_id = @project.id
       @artifact.updated_at = Time.now
-      @artifact.updated_by = author.id
-      @artifact.created_by = author.id if @artifact.new_record?
-  
+      @artifact.updated_by = User.current.id
+      @artifact.created_by = User.current.id if @artifact.new_record?
+
+      # realtion related attributes
+      unless params[:sibling_id].blank?
+        @sibling = ReArtifactProperties.find(params[:sibling_id])
+        @parent = ReArtifactProperties.find(@sibling.parent)
+      end
+      unless params[:parent_artifact_id].blank?
+        @parent = ReArtifactProperties.find(params[:parent_artifact_id])
+      end
+      @artifact.re_artifact_properties.parent = @parent unless @parent.nil?
+
       valid = @artifact.valid?
       valid = edit_hook_validate_before_save(params, valid)
+
+      logger.debug("############ errors after validating #{@artifact_type} ##{@artifact.id}: #{@artifact.errors.inspect}") if logger
+
       if valid && @artifact_properties.valid?
-        @artifact.save
-        flash[:notice] = t(artifact_type + '_saved', :name=>@artifact.name) if flash[:notice].blank?
+        flash[:notice] = t( artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
         edit_hook_valid_artifact_after_save params
-        @artifact.set_parent(@parent, 1) unless @parent.nil?
-        
+
         # Add Comment
         unless params[:comment].blank?
           comment = Comment.new
@@ -153,15 +155,12 @@ class RedmineReController < ApplicationController
           @artifact_properties.comments << comment
           comment.save
         end
-        
+
         # If sibling is not blank, then the option "create new artifact below" was called
         # and the artifact should beplaced below its sibling
-        unless @sibling.blank?
-           @artifact.set_parent( @parent, @sibling.position + 1)
-        end
-        
+
         initialize_tree_data
-        
+
           # Saving of user defined Fields (Building Blocks)
         ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
         @bb_error_hash = {}
@@ -171,7 +170,7 @@ class RedmineReController < ApplicationController
       else
         edit_hook_invalid_artifact_cleanup params
       end
-  
+
       unless params[:issue_id].blank?
         params[:issue_id].each do |iid|
           @artifact_properties.issues << Issue.find(iid)
@@ -180,7 +179,7 @@ class RedmineReController < ApplicationController
     end # request.post? end
   render 're_artifact_properties/edit'
 end
- 
+
 
   def new_hook(paramsparams)
     logger.debug("#############: new_hook not called") if logger
@@ -289,7 +288,7 @@ end
     grandparents = []
     grandparent = artifact.parent
     unless grandparent.nil?
-      while not grandparent.artifact_type.eql? "Project"
+      while (grandparent.artifact_type != "Project")
         grandparents << grandparent
         grandparent = grandparent.parent
       end
@@ -323,7 +322,6 @@ end
     # tree['children] = ARRAY OF MORE ARTIFACTS IN THE SAME STRUCTURE
     #
     # to be rendered as json or xml. Used together with JStree right now 
-    session[:expanded_nodes] ||= Set.new
     session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
     expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
 
@@ -367,6 +365,5 @@ end
     end
     children
   end
-
 
 end

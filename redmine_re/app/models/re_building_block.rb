@@ -40,7 +40,7 @@ class ReBuildingBlock < ActiveRecord::Base
   # the building block from which it is called, reducing the 
   # result to data for on special artifact
   def find_my_data(artifact_properties)
-    building_block_reference_column_name = (self.type.to_s.underscore + '_id').to_sym
+    building_block_reference_column_name = (self.class.to_s.underscore + '_id').to_sym
     bb_data_class = self.get_data_class_name
     data_for_bb = bb_data_class.constantize.find(:all, :conditions => {building_block_reference_column_name => self.id, :re_artifact_properties_id => artifact_properties.id}) 
     return data_for_bb
@@ -61,7 +61,7 @@ class ReBuildingBlock < ActiveRecord::Base
   # This method performs an easy string operation to
   # build the data class name from the type of the building block 
   def get_data_class_name
-    self.type.to_s.gsub('ReBb', 'ReBbData')
+    self.class.to_s.gsub('ReBb', 'ReBbData')
   end
   
   # This method can be called to validate the custom fields of an artifact.
