@@ -101,7 +101,7 @@ function load_items(node) {
           "icon" : "new",
           "submenu" : {
           <% for artifact_type in @re_artifact_order	%>
-            "<%= artifact_type.underscore %>" : {
+              "<%= artifact_type.underscore %>" : {
               "label" : "<%= t(artifact_type.underscore) %>",
               "action" : function (node) {
 

@@ -31,6 +31,7 @@ class RedmineReController < ApplicationController
     # Check the settings cache for each request
     ReSetting.check_cache
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
+
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
   end
 

@@ -2,6 +2,7 @@ require 'redmine'
 require 'redmine_re/hooks'
 require 'dispatcher'
 require 'rubygems'
+require_dependency 'googlecharts'
 
 Dispatcher.to_prepare do
   # redmine_re patches
@@ -10,7 +11,6 @@ Dispatcher.to_prepare do
   require_dependency 'user_patch'
   # gems
   require_dependency 'ajaxful_rating_patch'
-  require_dependency 'googlecharts'
 end
 
 Redmine::Plugin.register :redmine_re do

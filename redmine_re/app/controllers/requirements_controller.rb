@@ -14,8 +14,7 @@ class RequirementsController < RedmineReController
     # The following method is called via if somebody drops an artifact on the tree.
     # It transmits the drops done in the tree to the database in order to last
     # longer than the next refresh of the browser.
-    
-    #new_parent_id = params[:new_parent_id]
+
     sibling_id = params[:sibling_id]
     moved_artifact_id = params[:id]
     insert_position = params[:position]
