@@ -30,7 +30,7 @@
 			  </div>
 			  <!-- Change embedding options according to multiple value select box -->
 			  <!-- If multiple value select box is set, an embedding of the whole artifacts is not allowed  -->
-			  <%= observe_field(:re_building_block_multiple_values,
+			  <%# observe_field(:re_building_block_multiple_values,
 	    						:url => { :action => :react_to_change_in_field_multiple_values, :project_id => @project.id, :artifact_type => @artifact_type, :id => @re_building_block.id},
 	    						:with => :re_building_block_multiple_values) %>
 			  <!-- Change embedding options according to artifact select box -->

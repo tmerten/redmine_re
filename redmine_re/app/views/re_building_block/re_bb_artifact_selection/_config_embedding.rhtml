@@ -4,22 +4,22 @@
 	<% params[:embedding_type] = embedding_type %>
 <% end %>
 <fieldset><legend><%= l(:re_bb_embedding) %> </legend>
-	<p>
+	<!--<p>-->
 		<% checked = (params[:embedding_type] == 'complete') ? true : false %>
 		<% disabled = false %>
 		<% if !@re_building_block.nil? and @re_building_block.multiple_values == true %>
 			<% disabled = true %>
 		<% end %>
-		<%= radio_button_tag "re_building_block[embedding_type]", :complete, checked, 
+		<%# radio_button_tag "re_building_block[embedding_type]", :complete, checked, 
 							 {:disabled => disabled, 	
 							  :onclick => render(:update) do |page| 
                                 	page[:selected_attributes].hide 
 							  end } %>	
-		<%= label_tag "re_building_block[embedding_type][complete]", 
+		<%# label_tag "re_building_block[embedding_type][complete]", 
 					  l(:re_bb_complete), 
 						:class => "behind_checkbox disabled_is_" + disabled.to_s, 
 						:id => 'label_for_re_building_block_embedding_type_complete' %>
-	</p>
+	<!--</p>-->
 	<p>
 		<% checked = (params[:embedding_type] == 'attributes' ? true : false) %>
 		<% disabled = @artifact_selected.nil? ? true : false %>

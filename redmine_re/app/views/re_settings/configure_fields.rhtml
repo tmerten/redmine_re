@@ -17,7 +17,7 @@
       <th title="<%= t(:re_conf_bb_multiple_values) %>"><%=t(:re_bb_multiple_values)%></th>
       <th title="<%= t(:re_conf_bb_for_condensed_view) %>"><%=t(:re_bb_for_condensed_view)%></th>
       <th title="<%= t(:re_conf_bb_for_every_project) %>"><%=t(:re_bb_for_every_project)%></th>
-      <th title="<%= t(:re_conf_bb_for_search) %>"><%= t(:re_bb_for_search) %></th>
+      <!--<th title="<%# t(:re_conf_bb_for_search) %>"><%= t(:re_bb_for_search) %></th>-->
 	  <th title="<%= t(:re_conf_bb_detailed_configuration) %>"><%= t(:re_bb_special_config) %></th>
     </tr>
   </thead>
@@ -32,7 +32,7 @@
       <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][multiple_values]', true, bb.multiple_values %></td>
       <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][for_condensed_view]', true, bb.for_condensed_view %></td>
    	  <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][for_every_project]', true, bb.for_every_project %></td>
-      <td><%= check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][for_search]', true, bb.for_search %></td>	
+      <!--<td><%# check_box_tag "re_artifact_configs[bb][" + bb.id.to_s + '][for_search]', true, bb.for_search %></td>	-->
       <td><%= link_to t(:re_edit), {:controller => :re_building_block, 
 										:action => "edit", 
 										:id => bb.id, 
