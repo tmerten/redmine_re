@@ -70,7 +70,7 @@ class ReSettingsController < RedmineReController
   end
 
   def configure_fields
-    @building_blocks = ReBuildingBlock.find_bbs_of_artifact_type(params[:artifact_type].camelcase)
+    @building_blocks = ReBuildingBlock.find_bbs_of_artifact_type(params[:artifact_type].camelcase, @project.id)
     @artifact_type = params[:artifact_type]
     @re_userdefined_fields_order = @building_blocks.map {|bb| 're_bb_' + bb.id.to_s}
     
@@ -79,15 +79,24 @@ class ReSettingsController < RedmineReController
       @re_userdefined_fields_order.each_with_index do |id_string, i|
         id = id_string.gsub('re_bb_', '').to_i
         re_bb = ReBuildingBlock.find(id)
-        re_bb.position = i
         re_bb.mandatory = params[:re_artifact_configs][:bb][id.to_s][:mandatory].nil? ? false : true 
         re_bb.for_condensed_view = params[:re_artifact_configs][:bb][id.to_s][:for_condensed_view].nil? ? false : true 
+        # Save new position of the building block
+        position_object = ReBbProjectPosition.find(:first, :conditions => {:re_building_block_id => id, :project_id => @project.id}) || ReBbProjectPosition.new(:re_building_block_id => id, :project_id => @project.id)
+        position_object.position = i
+        position_object.save
+        # Test if for_every_project is changed from true to false. If so, delete the objects of class
+        # ReBbProjectPositions which are of no use any longer. Otherwise save the new position.
+        if params[:re_artifact_configs][:bb][id.to_s][:for_every_project].nil? and re_bb.for_every_project
+          position_objects = ReBbProjectPosition.find(:all, :conditions => {:re_building_block_id => re_bb.id})  
+          position_objects.each {|obj| obj.delete unless obj.project_id == re_bb.project_id}
+        end
         re_bb.for_every_project = params[:re_artifact_configs][:bb][id.to_s][:for_every_project].nil? ? false : true 
         re_bb.for_search = params[:re_artifact_configs][:bb][id.to_s][:for_search].nil? ? false : true 
         re_bb.multiple_values = params[:re_artifact_configs][:bb][id.to_s][:multiple_values].nil? ? false : true 
-        re_bb.save
+        re_bb.save     
       end
-      @building_blocks = ReBuildingBlock.find_bbs_of_artifact_type(params[:artifact_type].camelcase)
+      @building_blocks = ReBuildingBlock.find_bbs_of_artifact_type(params[:artifact_type].camelcase, @project.id)
     end
   end
 

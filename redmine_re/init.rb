@@ -52,6 +52,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_requirement => [:edit, :new],
         :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
           :visualization, :build_json_according_to_user_choice],
+        :re_building_block => [:delete_data, :re_building_block_referred_artifact_types,
+          :react_to_change_in_data_field_artifact_type]
 
       }
     )

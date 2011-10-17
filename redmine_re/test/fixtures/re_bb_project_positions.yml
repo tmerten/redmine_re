@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+
+  re_building_block_id: 1
+
+  project_id: 1
+
+  position: 1
+
+two:
+  id: 2
+
+  re_building_block_id: 1
+
+  project_id: 1
+
+  position: 1
+

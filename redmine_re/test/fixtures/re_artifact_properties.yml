@@ -7,7 +7,6 @@ art_project:
   id: <%= Fixtures.identify(:art_project) %>
   name: Some Project
   description: One unit of work to achive a set goal
-  priority: 1
   created_by: 1
   project_id: 4
   artifact_type: Project
@@ -18,7 +17,6 @@ art_goal_usability:
   id: <%= Fixtures.identify(:art_goal_usability) %>
   name: Usability
   description: The system shall be operated easily.
-  priority: 1
   created_by: 1
   project_id: 4
   artifact_id: <%= Fixtures.identify(:goal_usability) %>
@@ -28,7 +26,6 @@ art_goal_small_latency:
   id: <%= Fixtures.identify(:art_goal_small_latency) %>
   name: Small latency
   description: The system's latency should be small in order to not annoy the user. This goal has to be specified in more detail by corresponding requirements. 
-  priority: 5
   responsibles: Mister X
   created_by: 2
   created_at: 2011-03-02 19:55
@@ -40,7 +37,6 @@ art_goal_keyboard_control:
   id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
   name: Control of system via keyboard
   description: The system shall offer the possibility to be controlled via keyboard only.
-  priority: 4
   responsibles: Mr. Simpson, frequent user.
   created_by: 1
   created_at: 2011-03-09 08:22
@@ -57,7 +53,6 @@ art_task_login:
   id: <%= Fixtures.identify(:art_task_login) %>
   name: Login
   description: This task sums up all steps needed to perform a system login.
-  priority: 2
   created_by: 1
   project_id: 2
   artifact_id: <%= Fixtures.identify(:task_login) %>
@@ -67,7 +62,6 @@ art_task_test_vocabulary:
   id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
   name: Test of vocabulary
   description: This task describes how the user and the system perform a test of the user's knowledge about one lecture's vocabulary. 
-  priority: 4
   responsibles: Miss Mayhem, Speach Department
   created_by: 2
   created_at: 2011-03-07 10:31
@@ -84,7 +78,6 @@ art_subtask_login_get_user_data_from_user:
   id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_user) %>
   name: User data from user
   description: Gain user data (user name and password) from user.
-  priority: 1
   responsibles: Senior Seguridad, Security Department
   created_by: 2
   created_at: 2011-03-07 10:31
@@ -96,7 +89,6 @@ art_subtask_login_get_user_data_from_cookie:
   id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_cookie) %>
   name: User data from other sources
   description: Gain user data - - user name and password - from other sources like a cookie.
-  priority: 4
   responsibles: Senior Seguridad, Security Department
   created_by: 2
   created_at: 2011-03-07 10:32
@@ -108,7 +100,6 @@ art_subtask_login_problem_with_forgotten_user_data:
   id: <%= Fixtures.identify(:art_subtask_login_problem_with_forgotten_user_data) %>
   name: Forgotten password
   description: Provide a possibility to recover from password and/or username loss.
-  priority: 2
   responsibles: Senior Seguridad, Security Department
   created_by: 2
   created_at: 2011-03-07 10:36
@@ -120,7 +111,6 @@ art_subtask_login_hash_password:
   id: <%= Fixtures.identify(:art_subtask_login_hash_password) %>
   name: Hashing
   description: Hash password before sending to avoid exposure of password in plain text.
-  priority: 1
   responsibles: Senior Seguridad, Security Department
   created_by: 2
   created_at: 2011-03-07 10:38
@@ -132,7 +122,6 @@ art_subtask_login_data_check:
   id: <%= Fixtures.identify(:art_subtask_login_data_check) %>
   name: Check data
   description: Verify provided data against stored username and password hash. 
-  priority: 1
   responsibles: Senior Seguridad, Security Department
   created_by: 2
   created_at: 2011-03-07 10:33
@@ -144,7 +133,6 @@ art_subtask_test_vocabulary_choose_lecture:
   id: <%= Fixtures.identify(:art_subtask_test_vocabulary_choose_lecture) %>
   name: Choose lecture to test
   description: Choose one or more of the given lectures to create a test of the user's knowledge on this vocabulary.
-  priority: 2
   responsibles: Miss Mayhem, Speach Department
   created_by: 1
   created_at: 2011-03-08 14:08
@@ -156,7 +144,6 @@ art_subtask_test_vocabulary_control_knowledge:
   id: <%= Fixtures.identify(:art_subtask_test_vocabulary_control_knowledge) %>
   name: Performing a part of a a vocabulary test
   description: Test if user knows translations to words from choosen lecture.
-  priority: 1
   responsibles: Miss Contrella, Department of Knowledge Testing
   created_by: 1
   created_at: 2011-03-07 14:36
@@ -168,7 +155,6 @@ art_subtask_test_vocabulary_show_results:
   id: <%= Fixtures.identify(:art_subtask_test_vocabulary_show_results) %>
   name: Result presentation
   description: Show results from the test made before. Use a system to represent the users knowledge progress.
-  priority: 3
   responsibles: Miss Contrella, Department of Knowledge Testing
   created_by: 1
   created_at: 2011-03-07 14:45

@@ -359,7 +359,7 @@ en:
   re_bb_name: 'Name'
   re_bb_help_text: 'Help text'
   re_bb_mandatory_field: 'Mandatory'
-  re_bb_for_every_project: 'Used in every projekt'
+  re_bb_for_every_project: 'Used in every project'
   re_bb_for_condensed_view: 'Used in condensed representation'
   re_bb_multiple_values: 'Multiple values'
   re_bb_for_search: 'Used in searches'
@@ -460,4 +460,5 @@ en:
 
   rating: 'Rating'
   rating_average: 'Rating average'
+  re_artifact_rating_average: 'Rating average'
   own_rating: 'Your rating'

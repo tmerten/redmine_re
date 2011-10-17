@@ -152,7 +152,7 @@ JAVASCRIPT
   # renders a table data field for every building block in bb_hash that is
   # used for condensed view (bb.for_condensed_view == true)
   def insert_building_blocks_one_line_representations(artifact)
-    bb_hash = ReBuildingBlock.find_all_bbs_and_data(artifact)
+    bb_hash = ReBuildingBlock.find_all_bbs_and_data(artifact, @project.id)
     html_code = ""
     bb_hash.keys.each do |re_bb|
       data = re_bb.find_my_data(artifact) 
@@ -163,7 +163,7 @@ JAVASCRIPT
   end
 
   def add_bb_section(artifact, bb_hash, bb_error_hash)
-    if User.current.allowed_to?(:administrate_requirements, @project)
+    if User.current.allowed_to?(:edit_requirements, @project)
       render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash, :bb_error_hash => bb_error_hash}
     else
       ""

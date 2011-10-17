@@ -78,7 +78,7 @@ class RedmineReController < ApplicationController
 
     @artifact = @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
 
     if params[:parent_artifact_id]
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
@@ -103,9 +103,9 @@ class RedmineReController < ApplicationController
 
     @artifact_type = artifact_type # needed for ajax request (artifact selection building block)
     @parent = nil
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
     @bb_error_hash = {}
-    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash)
+    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
 
     @issues = @artifact_properties.issues
 
@@ -165,8 +165,8 @@ class RedmineReController < ApplicationController
           # Saving of user defined Fields (Building Blocks)
         ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
         @bb_error_hash = {}
-        @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash)
-        @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties)
+        @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
+        @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
         #redirect_to(:id => @artifact.id)
       else
         edit_hook_invalid_artifact_cleanup params

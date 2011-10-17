@@ -49,8 +49,9 @@ class ReBuildingBlockController < RedmineReController
       # Test if @re_builing_block is a new object
       @re_building_block = params[:type].constantize.new if @re_building_block.artifact_type.nil?
       @re_building_block.attributes = params[:re_building_block]
+      @re_building_block.project_id = @project.id if @re_building_block.new_record?
       # Set new postion of building block if new object
-      @re_building_block.position = get_new_position(@artifact_type) if @re_building_block.new_record?
+      #set_position_for_current_project(@artifact_type) if @re_building_block.new_record?
       @re_building_block = ReBuildingBlock.do_additional_work_before_save(@re_building_block, params)
       flash[:notice] = t(:re_bb_saved) if save_ok = @re_building_block.save
       # Calling the strategies for handling additional work after normal saving
@@ -66,7 +67,7 @@ class ReBuildingBlockController < RedmineReController
    @artifact_type = @artifact.artifact_type   
    datum.delete unless datum.nil?
    bb_error_hash = {} 
-   bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact, bb_error_hash)
+   bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact, bb_error_hash, @project.id)
    data = bb.find_my_data(@artifact)
    if data.count <= 1 and ! bb.multiple_values
      partial = bb.data_form_partial_strategy
@@ -80,7 +81,7 @@ class ReBuildingBlockController < RedmineReController
  private
  #######
  
- def get_new_position(artifact_type)
+ def set_position_for_current_project(artifact_type)
    my_bbs = ReBuildingBlock.find_bbs_of_artifact_type(artifact_type)
    if my_bbs.count > 0
      my_bbs.last.position + 1 

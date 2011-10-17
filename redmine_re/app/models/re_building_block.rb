@@ -4,6 +4,7 @@ class ReBuildingBlock < ActiveRecord::Base
   include StrategyProcs
   
   belongs_to :project
+  has_many :re_bb_project_positions
   
   validates_presence_of :name
   before_save :prohibit_save_of_new_artifact_type
@@ -23,8 +24,14 @@ class ReBuildingBlock < ActiveRecord::Base
   # to the type of the artifact properties passed. The value for each key is
   # an array with all bb_data_objects belonging to the artifact properties and the
   # building block being the key. 
-  def self.find_all_bbs_and_data(artifact_properties)
-    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_properties.artifact_type}, :order => :position)
+  def self.find_all_bbs_and_data(artifact_properties, project_id)
+    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_properties.artifact_type, :project_id => project_id})
+    building_blocks = building_blocks | ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_properties.artifact_type, :for_every_project => true})
+    logger.debug "#################### collected_building_blocks #{(building_blocks.map {|bb| bb.name}).to_s}"
+    building_blocks = building_blocks.sort_by do |bb| 
+      pos_obj = ReBbProjectPosition.find(:first, :conditions => {:project_id => project_id, :re_building_block_id => bb.id})
+      pos_obj && pos_obj.position || building_blocks.length
+    end
     bb_hash = ActiveSupport::OrderedHash.new
     for bb in building_blocks do 
       bb_hash[bb] = bb.find_my_data(artifact_properties)
@@ -34,8 +41,13 @@ class ReBuildingBlock < ActiveRecord::Base
   
   # This method delivers an array with all bb that belong to a given 
   # artifact type like "ReGoal".
-  def self.find_bbs_of_artifact_type(artifact_type)
-    ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_type}, :order => :position)
+  def self.find_bbs_of_artifact_type(artifact_type, project_id)
+    building_blocks = ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_type, :project_id => project_id})
+    building_blocks = building_blocks | ReBuildingBlock.find(:all, :conditions => {:artifact_type => artifact_type, :for_every_project => true})
+    building_blocks.sort_by do |bb|
+      pos_obj = ReBbProjectPosition.find(:first, :conditions => {:project_id => project_id, :re_building_block_id => bb.id})
+      pos_obj && pos_obj.position || building_blocks.length
+    end
   end
   
   # This method delivers an array with all data objects for 
@@ -68,8 +80,8 @@ class ReBuildingBlock < ActiveRecord::Base
   
   # This method can be called to validate the custom fields of an artifact.
   # Therefore the artifact properties of the artifact have to be transmitted.
-  def self.validate_building_blocks(re_artifact_properties, bb_error_hash)
-    bb_hash = self.find_all_bbs_and_data(re_artifact_properties)
+  def self.validate_building_blocks(re_artifact_properties, bb_error_hash, project_id)
+    bb_hash = self.find_all_bbs_and_data(re_artifact_properties, project_id)
     unless bb_hash.nil?
       bb_hash.keys.each do |bb|
         validation_strategy_hash = bb.validation_strategies

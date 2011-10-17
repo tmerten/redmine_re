@@ -5,6 +5,7 @@ class ReBbSelectionTest < ActiveSupport::TestCase
   fixtures :re_building_blocks, :re_tasks
 
   def setup
+    @project = Project.find(:first)
     @simple_bb = ReBbSelection.new
     params = {:re_building_block => {:name => 'Daytime', :artifact_type => 'ReTask'}, :options => ''}
     @simple_bb = save_building_block_completely(@simple_bb, params) 
@@ -61,21 +62,21 @@ class ReBbSelectionTest < ActiveSupport::TestCase
     my_bb = save_building_block_completely(my_bb, params) 
     assert_equal my_bb.re_bb_data_selections.count, 0
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert ! extract_error_messages(error_hash).include?(I18n.t(:re_bb_mandatory, :bb_name => my_bb.name)) 
     # Change configuration so that building block data is mandatory
     # Test if error message occurs.
     params = {:re_building_block => {:name => 'Mandatory', :artifact_type => 'ReTask', :default_value => '1', :mandatory => true}, :options => '2, 3, 4'}
     my_bb = save_building_block_completely(my_bb, params) 
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert extract_error_messages(error_hash).include?(I18n.t(:re_bb_mandatory, :bb_name => my_bb.name)) 
     # Create data and test if error_message is gone again
     option = my_bb.re_bb_option_selections.first
     params = {my_bb.id => {'no_id' => {:re_bb_selection_id => my_bb.id, :re_bb_option_selection_id => option.id, :re_artifact_properties_id => @task_prop.id}}}
     ReBuildingBlock.save_data(@task_prop.id, params)
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert ! extract_error_messages(error_hash).include?(I18n.t(:re_bb_mandatory, :bb_name => my_bb.name)) 
   end
 

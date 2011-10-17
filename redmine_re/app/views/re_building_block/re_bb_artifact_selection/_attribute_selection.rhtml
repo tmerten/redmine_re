@@ -28,7 +28,7 @@
 	<% end unless @artifact_selected.nil? %>
 	
 	<!-- options for selectbox to choose user definded fields (building blocks) -->
-	<% ReBuildingBlock.find_bbs_of_artifact_type(@artifact_selected).each do |bb| %>
+	<% ReBuildingBlock.find_bbs_of_artifact_type(@artifact_selected, @project.id).each do |bb| %>
 		<% if !@re_building_block.nil? and !@re_building_block.selected_attributes.nil? and @re_building_block.selected_attributes.include?('re_bb_' + bb.id.to_s)%>
 		  <% options += '<option value="re_bb_' + bb.id.to_s + '" selected ="selected" >' + bb.name + '</option>' %>
 		<% else %>

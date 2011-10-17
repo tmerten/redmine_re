@@ -5,6 +5,7 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
   fixtures :re_building_blocks, :re_goals, :re_tasks, :re_artifact_relationships
 
   def setup
+    @project = Project.find(:first)
     @artifact_selection_goals = ReBbArtifactSelection.new
     params = {:re_building_block => {:name => 'Select Goals', :artifact_type => 'ReTask', :referred_artifact_types => ['ReGoal'], :referred_relationship_types => ['conflict'], :embedding_type => 'one_line'}}
     @artifact_selection_goals = save_building_block_completely(@artifact_selection_goals, params) 
@@ -73,14 +74,14 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
     ReBuildingBlock.save_data(@task_prop.id, data_hash)
     datum = @artifact_selection_goals_or_tasks.find_my_data(@task_prop).first
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert error_hash[@artifact_selection_goals_or_tasks.id] == nil
     # Changing configurarion of building block so that created relation does not match any longer
     params = {:re_building_block => {:name => 'Select Goals or Tasks', :artifact_type => 'ReTask', :referred_artifact_types => ['ReTask'], :referred_relationship_types => ['refinement'], :embedding_type => 'none', :multiple_values => false, :mandatory => false}}
     @artifact_selection_goals_or_tasks = save_building_block_completely(@artifact_selection_goals_or_tasks, params) 
     # Assert that corresponding error messages are generated
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert error_hash[@artifact_selection_goals_or_tasks.id][datum.id].include?(I18n.t(:re_bb_artifact_type_does_not_match, :type => I18n.t(:ReGoal)))
     assert error_hash[@artifact_selection_goals_or_tasks.id][datum.id].include?(I18n.t(:re_bb_relation_type_does_not_match, :type => I18n.t(:re_conflict)))
     # Updating relationship so that it matches the config again
@@ -88,7 +89,7 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
     ReBuildingBlock.save_data(@task_prop.id, data_hash)
     # Asserting that no error messages concerning wrong types are generated
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert error_hash[@artifact_selection_goals_or_tasks.id] == nil    
   end
   
@@ -113,7 +114,7 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
     datum = @artifact_selection_goals.find_my_data(@task_prop).first
     # Test if no error message concerning the actuality of the relation occures
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert ! extract_error_messages(error_hash).include?(I18n.t(:re_bb_out_of_date, :bb_name => I18n.t(@artifact_selection_goals.name)))
     # Update referred artifact and test if error message still not present now,
     # as building block is not configured to show these messages
@@ -122,7 +123,7 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
     @goal_prop.description = 'New description.'
     assert @goal_prop.save
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert ! extract_error_messages(error_hash).include?(I18n.t(:re_bb_out_of_date, :bb_name => I18n.t(@artifact_selection_goals.name)))
     # Change config of building block so that out of date message is shown 
     params = {:re_building_block => {:indicate_changes => true}}

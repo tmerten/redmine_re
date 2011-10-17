@@ -3,6 +3,7 @@ bb_text_for_goal_note:
   id: <%= Fixtures.identify(:bb_text_for_goal_note) %>
   type: ReBbText
   artifact_type: ReGoal
+  project_id: 1
   name: Note
   help: Please enter any further information relevant for the artifact here.
   mandatory: false
@@ -21,6 +22,7 @@ bb_text_for_goal_ideas:
   id: <%= Fixtures.identify(:bb_text_for_goal_ideas) %>
   type: ReBbText
   artifact_type: ReGoal
+  project_id: 1
   name: Solution Ideas
   help: Please enter your ideas about how to achieve this goal
   mandatory: false
@@ -39,6 +41,7 @@ bb_text_for_task_note:
   id: <%= Fixtures.identify(:bb_text_for_task_note) %>
   type: ReBbText
   artifact_type: ReTask
+  project_id: 1
   name: Note
   help: Please enter any further information relevant for the artifact here.
   mandatory: false
@@ -57,6 +60,7 @@ bb_selection_for_task_frequency:
   id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
   type: ReBbSelection
   artifact_type: ReTask
+  project_id: 1
   name: Frequency
   help: Please select how often the task will be performed.
   mandatory: false
@@ -73,6 +77,7 @@ bb_selection_for_goal_usability_status:
   id: <%= Fixtures.identify(:bb_selection_for_goal_usability_status) %>
   type: ReBbSelection
   artifact_type: ReGoal
+  project_id: 1
   name: Status
   help: Please select one of the given status.
   mandatory: true
@@ -89,6 +94,7 @@ bb_artifact_selection_sections:
   id: <%= Fixtures.identify(:bb_artifact_selection_sections) %>
   type: ReBbArtifactSelection
   artifact_type: ReGoal
+  project_id: 1
   name: Selection of Sections
   help: Please select a section where the goal belongs to
   mandatory: true
@@ -109,6 +115,7 @@ bb_artifact_selection_rationale:
   id: <%= Fixtures.identify(:bb_artifact_selection_rationale) %>
   type: ReBbArtifactSelection
   artifact_type: ReTask
+  project_id: 1
   name: Selection of Rationals
   help: Please select a rationale for the task
   mandatory: true
