@@ -2,7 +2,6 @@ require 'redmine'
 require 'redmine_re/hooks'
 require 'dispatcher'
 require 'rubygems'
-require 'googlecharts'
 
 Dispatcher.to_prepare do
   # redmine_re patches
@@ -77,7 +76,6 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   config.active_record.observers = :re_artifact_properties_observer
 
   config.gem "ajaxful_rating_jquery"
-  config.gem 'googlecharts', :version => '1.6.0'
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
 
   settings :default => {
