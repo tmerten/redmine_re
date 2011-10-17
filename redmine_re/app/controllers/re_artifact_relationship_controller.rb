@@ -110,7 +110,7 @@ class ReArtifactRelationshipController < RedmineReController
     end
     json.to_json
   end
-  
+
   def gather_children(artifact)
     children = []
     for child in artifact.children
@@ -127,11 +127,11 @@ class ReArtifactRelationshipController < RedmineReController
   def add_artifact(artifact, drawable_relationships, outgoing_relationships)
     type = artifact.artifact_type
     node_settings = ReSetting.get_serialized(type.underscore, @project.id)
-    
+
     node = {}
     node['id'] = "node_" + artifact.id.to_s
     node['name'] = truncate(artifact.name, :length => TRUNCATE_NAME_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-    
+
     node_data = {}
     node_data['full_name'] = artifact.name
     node_data['description'] = truncate(artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
@@ -143,7 +143,7 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['$color'] = "#" + node_settings['color']
     node_data['$height'] = 90                                                    
     node_data['$angularWidth'] = 13.00
-    
+
 
     adjacencies= []
 
@@ -153,7 +153,7 @@ class ReArtifactRelationshipController < RedmineReController
       other_artifact = artifact_is_source ? relation.sink : relation.source
       logger.debug("/////////// RELATION ///////////") if logger
       logger.debug("is_source?" + artifact_is_source.to_s + " source:" + relation.source_id.to_s + " sink:" + relation.sink_id.to_s + " type:" + relation.relation_type.to_s) if logger
-      
+
       relation_data = {}
       relation_data['id'] = other_artifact.id
       relation_data['full_name'] = other_artifact.name
