@@ -2,7 +2,7 @@ require 'redmine'
 require 'redmine_re/hooks'
 require 'dispatcher'
 require 'rubygems'
-require_dependency 'googlecharts'
+require 'googlecharts'
 
 Dispatcher.to_prepare do
   # redmine_re patches
