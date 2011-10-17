@@ -135,7 +135,6 @@ class ReArtifactRelationshipController < RedmineReController
     node_data = {}
     node_data['full_name'] = artifact.name
     node_data['description'] = truncate(artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-    node_data['priority'] = artifact.priority.to_s
     node_data['created_at'] = artifact.created_at.to_s(:short)
     node_data['author'] = artifact.author.to_s
     node_data['updated_at'] = artifact.updated_at.to_s(:short)
@@ -159,7 +158,6 @@ class ReArtifactRelationshipController < RedmineReController
       relation_data['id'] = other_artifact.id
       relation_data['full_name'] = other_artifact.name
       relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-      relation_data['priority'] = other_artifact.priority.to_s
       relation_data['created_at'] = other_artifact.created_at.to_s(:short)
       relation_data['author'] = other_artifact.author.to_s
       relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
