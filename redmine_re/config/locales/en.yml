@@ -52,8 +52,7 @@ en:
   re_404_artifact_not_found_or_project_missing: 'No artifact could not be found and no project ID was supplied'
   re_confirm: 'Confirm'
   re_artifact_details: 'Artifact Details'
-  
-  
+
   # Configuration
   re_administrate: 'Administration'
   re_configure_plugin: 'Configure Plugin'
@@ -82,8 +81,6 @@ en:
   re_conf_display_order: 'Display order'
   re_field_configuration: 'Configuration of fields for artifact type %{artifact_type}'
 
-  artifact_priority: 'Priority'
-  
   # re_artifact_properties
   re_artifact_name: 'Name'
   re_artifacts: 'Artifacts'
@@ -145,14 +142,14 @@ en:
   re_create_re_requirement: 'Create Requirement'
   re_requirement_priority: 'Priority'
   re_requirement_saved: 'Requirement saved successfully'
-  
+
   #re_scenario
   re_scenario: 'Scenario'
   re_new_re_scenario: 'Scenario'
   re_create_re_scenario: 'Create Scenario'
   re_scenario_priority: 'Priority'
   re_scenario_saved: 'Scenario saved successfully'
-  
+
   # re_section
   re_new_re_section: 'Section'
   re_create_re_section: 'Create a new Section'
@@ -163,7 +160,7 @@ en:
   re_section_not_deleted: 'The Section %{name} could not be deleted.'
   re_section_saved: 'Section successfully saved'
   re_section_priority: 'Priority'
-  
+
   # re_vision
   re_vision_priority: 'Priority'
   re_new_re_vision: 'Vision Statement'
@@ -174,7 +171,7 @@ en:
   re_vision_not_found: 'Could not find ReVision with id %{id}.'
   re_vision_deleted: 'The ReVision %{name} has been sucessfully deleted.'
   re_vision_not_deleted: 'The ReVision %{name} could not be deleted.'
-  
+
   # re_workarea
   re_workarea: 'Workarea'
   re_create_re_workarea: 'Create a new Workarea'
@@ -185,7 +182,7 @@ en:
   re_workarea_not_found: 'Could not find ReWorkarea with id %{id}.'
   re_workarea_deleted: 'The ReWorkarea %{name} has been sucessfully deleted.'
   re_workarea_not_deleted: 'The ReWorkarea %{name} could not be deleted.'
-  
+
   # re_user_profile
   re_user_profile: 'User Profile'
   re_create_re_user_profile: 'Create a new User Profile'
@@ -230,8 +227,7 @@ en:
   re_relationship_create_error: 'Relation could not be created'
   ReArtifactRelationship: 'RE Relationship'
   Requirements: 'Requirements'
-  
-  
+
   re_please_select_visualization_type: 'Please select how to visualize your data by choosing the visualization type.'
   re_visualization_type: 'Visualiztation Type'
   re_space_tree: 'Space Tree'
@@ -250,7 +246,7 @@ en:
   re_goal_deleted: 'The Goal %{name} has been deleted'
   re_goal_not_deleted: 'The Goal %{name} could not be deleted'
   re_goal_not_found: 'Could not find a Goal with id %{id} to delete'
-  
+
   # re_tasks
   re_new_re_task: 'Task'
   re_create_re_task: 'Create a new Task'
@@ -294,8 +290,6 @@ en:
   re_subtask_not_deleted: 'The Subtask %{name} could not be deleted'
   re_subtask_not_found: 'Could not find a Subtask with id %{id} to delete'
 
-  
-
   # re_attachment
   re_attachment: 'File Attachment'
   ReAttachment: 'File Attachment'
@@ -310,25 +304,24 @@ en:
   re_attachment_size_greater_zero: 'The Filesize has to be >0 byte !'
   re_attachment_validation_error: 'File Attachment error: %{msg}'
   re_attachment_file: 'File'
-  
+
   # re_settings
   re_settings_have_to_save: 'No configuration saved yet: You have to click on save before you leave this page!'
-  
-  
+
   # knowledge artifact
   re_knowledge_artifact: 'Knowledge'
   re_create_re_knowledge_artifact: 'Create a new Knowledge'
   re_new_re_knowledge_artifact: 'Knowledge'
   re_knowledge_artifact_priority: 'Priority'
-  
+
   # re_requirement
   re_requirement: 'Requirement'
   ReRequirement: 'Requirement'
-  
+
   # re_scenario
   re_scenario: 'Scenario'
   ReScenario: 'Scenario'
-  
+
   # re_processword
   re_processword: 'Processword'
   ReProcessword: 'Processword'
@@ -407,7 +400,7 @@ en:
   re_bb_some_attribute_rep_failed: 'The representation choosen in configuration failed. Loading one line view instead.'
   re_bb_relation_type_does_not_match: "The relation's type (%{type}) is not allowed by the current configuration."
   re_bb_artifact_type_does_not_match: "The referred artifact's type (%{type}) is not allowed by the current configuration."
-  
+
 
   # re_tree
   re_tree_overview: 'Artifact Summary'
@@ -417,7 +410,7 @@ en:
   re_create_in: 'create artifact in...'
   re_create_below: 'create artifact below...'
   re_create_relation: 'create relation to...'
-  
+
   # fields
   field_re_artifact: 'field artifact'
 
@@ -432,15 +425,13 @@ en:
   re_lesser_than: 'lesser_than'
   re_none_specific: 'None specific'
   re_filter_results: 'Filter results'
-  
+
   #issues
 
   implementation_of: 'Implementation of'
-  
-  
+
   #my blocks
-  
-  
+
   relations: 'Relations'
   main_tab: 'Main tab'
   comments: 'Comments'
