@@ -3,10 +3,6 @@ class ReTask < ActiveRecord::Base
 
   acts_as_re_artifact
 
-  validates_presence_of :re_artifact_properties
-
-   #acts_as_versioned
-
   #virtual attribute
   def subtask_attributes=(subtask_attributes)
     if subtask_attributes.blank?
@@ -16,12 +12,12 @@ class ReTask < ActiveRecord::Base
     subtask_attributes.each do |id, attributes|
 
         is_new = id.to_s.start_with?("new") # Every new Subtask has id = new_XYZABC
-        saved = false
 
         if(is_new) #TODO : use get instance of subtask method
           subtask =  ReSubtask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => self.project_id,#TODO: getting project_id from task should be changed, otherwise create new task with new subtasks won't work
                                                                                        :created_by => User.current.id,
                                                                                        :updated_by => User.current.id))
+          subtask.parent=self
         else
           subtask = ReSubtask.find(id)
         end
@@ -31,10 +27,7 @@ class ReTask < ActiveRecord::Base
 
         subtask.attributes = attributes
         if subtask.valid? # empty subtask won't be saved'
-          saved = subtask.save
-        end
-
-        if(saved)
+          subtask.save
           subtask.parent_relation.insert_at(position)
         end
     end

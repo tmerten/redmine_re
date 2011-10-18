@@ -40,22 +40,24 @@ class ReTaskController < RedmineReController
   def edit_hook_validate_before_save(params, artifact_valid)
     # validates subtasks and recreates a subtask array from what has
     # been submitted in the last post
-    
+
     subtask_attributes = params[:subtask_attributes]
     #valid_subtask_attributes = @artifact.subtasks_valid?(subtask_attributes)
-    
+
     valid_subtasks = true
     unless subtask_attributes.blank?
       @subtasks = ReTask.sort_subtasks_attributes_by_position(subtask_attributes, @project.id)
       for st in @subtasks
+        st.parent = @artifact
         valid_subtasks = false unless st.valid?   
+        logger.debug(">>>>>>>>>>>" + st.errors.inspect)
       end
       @artifact.errors.add_to_base(t(:re_subtasks_not_valid)) unless valid_subtasks
     end
-    
+
     return valid_subtasks
   end
-  
+
   def edit_hook_valid_artifact_after_save params
     # saves the subtasks and rewrites flash message to include the subtasks
     
