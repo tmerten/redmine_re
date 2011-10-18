@@ -79,6 +79,8 @@
 	      </div>
 	    </fieldset>
 	  
+	    <br>
+	  
 	    <fieldset>
 	      <legend><%= t(:re_associated_issues) %></legend>
 	      <% unless @issues.nil? %>
@@ -132,7 +134,16 @@
 	  <%= link_to 'create related Issue', :controller=> 'Issues', :action=>'new', :project_id => @project.id,
 	      :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id unless @artifact.id.blank?%>
 	  </fieldset>
+	  
+	  <!-- Additional fields like subtasks for task which are described in an own partial --> 
 	  <%= render( params[:controller]+"/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{params[:controller]}/_formfields.rhtml") %>
+
+	  <!-- add building blocks if user obtains the rights needed for that -->
+	  <div id='re_bb_section'>
+	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
+	  </div>
+      <%# add_bb_configuration_link(params[:controller].camelcase)%>
+	  <p>
 
     <% if @artifact.id %>
         <div class="rating_comments">
@@ -169,11 +180,7 @@
        </div>
     <% end %>
 
-      <div id='re_bb_section'>
-	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
-	  </div>
-      <%= add_bb_configuration_link(params[:controller].camelcase)%>
-	  <p>
+      
 		<%= submit_tag t(:re_save) %>
 			  &nbsp;
 		<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>

@@ -1,24 +1,23 @@
 <% if bb_hash.keys.length != 0 %>
-	<div class="box">
-	
-	  <fieldset>
-	  	<legend>
-	  		<%= l(:re_bb_userdefined_fields) %>
-	  	</legend>
-		<% bb_hash.keys.each do |bb| %>
-			<% data = bb_hash[bb] %>
-			<div <%= 'id="bb_form_' + bb.id.to_s + '"'  %> class="re_bb_form">
-				<% if ! bb.multiple_values and data.count <= 1 %>
-					<%= render :partial => bb.data_form_partial_strategy, :locals => {:re_bb => bb, :data => data, :bb_error_hash => bb_error_hash} %>
-				<% else %>
-					<%= render :partial => bb.multiple_data_form_partial_strategy, :locals => {:re_bb => bb, :data => data, :bb_error_hash => bb_error_hash} %>	
-				<% end %>
-			</div>
-		<% end %>
-	      
-	    
-	  </fieldset>
-	
-	  <br />
-	</div>
+  <br>
+  <fieldset>
+  	
+  	<legend>
+  		<%= l(:re_bb_userdefined_fields) %>
+  	</legend>
+	<% bb_hash.keys.each do |bb| %>
+		<% data = bb_hash[bb] %>
+		<div <%= 'id="bb_form_' + bb.id.to_s + '"'  %> class="re_bb_form">
+			<% if ! bb.multiple_values and data.count <= 1 %>
+				<%= render :partial => bb.data_form_partial_strategy, :locals => {:re_bb => bb, :data => data, :bb_error_hash => bb_error_hash} %>
+			<% else %>
+				<%= render :partial => bb.multiple_data_form_partial_strategy, :locals => {:re_bb => bb, :data => data, :bb_error_hash => bb_error_hash} %>	
+			<% end %>
+		</div>
+	<% end %>
+      
+    
+  </fieldset>
+
+  <br />
 <% end %>
