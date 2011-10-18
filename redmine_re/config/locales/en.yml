@@ -2,10 +2,11 @@
 en:  
   # general stuff
   re_new: 'New'
+  re_of_type: 'of type'
   re_requirements: 'Requirements'
   re_save: 'Save'
   re_cancel: 'Cancel'
-  re_edit: 'edit'
+  re_edit: 'Edit'
   re_delete: 'delete'
   re_show: 'Show'
   re_requirements_overview: 'Requirements Overview'

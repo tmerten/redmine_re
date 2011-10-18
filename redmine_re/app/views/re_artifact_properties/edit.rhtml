@@ -1,11 +1,15 @@
 <div id='detail_view' class='detail_view'>
 
   <%= render 're_artifact_properties/action_menu', {:artifact => @artifact} %>
-  
-  <h2><%= t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + @artifact.name + ' (' + t( params[:controller] ) + ')' unless @artifact.nil? %></h2>
+
+  <% if @artifact.new_record? %>
+    <h2><%= t(:re_new) + ' ' + t(:re_artifact) + ' ' + t(:re_of_type) + ' ' + t( params[:controller] ) %></h2>
+  <% else %>
+    <h2><%= t(:re_edit) + ' ' + t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + @artifact.name + ' (' + t( params[:controller] ) + ')' unless @artifact.nil? %></h2>
+  <% end %>
 
   <%= errors_and_flash params[:controller] %>
-  
+
   <ul class="tabs">
   	<li><a href="#"><%= t(:main_tab) %></a></li>
   	<!--<li><a href="#">Building blocks</a></li>-->
@@ -19,15 +23,23 @@
       <%= hidden_field_tag(:id, @artifact.id) unless @artifact.id.nil? %>
 	    <fieldset>
 	      <legend><%= t(:re_common_attributes) %></legend>
-	  
+
 	      <div class="splitcontentleft">
+
+	        <p>
+	        <% unless @sibling.nil? %>
+	          <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id, {:id => 'sibling_id'} %>
+	        <% else %>
+	          <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, {:id => 'parent_artifact_id'} %>
+	        <% end %>
+	        </p>
 
 	        <p>
 	          <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
 	        </p>
 	        <%= javascript_tag "Form.Element.focus('artifact_name');" %>
 	      </div>
-	  
+
 	      <div class="splitcontentright">
 	        <p>
 	          <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact(@project, @artifact_properties) %>
@@ -43,11 +55,11 @@
 	          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
 	        </p>
 	      </div>
-	  
+
 	    </fieldset>
-	  
+
 	    <br/>
-	  
+
 	    <fieldset>
 	      <legend><%= t(:re_description_fieldset) %></legend>
 	      <% unless @artifact.id.nil? %>
@@ -137,7 +149,7 @@
                 <fieldset class="comment">
                     <legend> <%= t(:comments) %></legend>
 
-                    <textarea class="comment_input" name="comment"></textarea>
+                    <textarea class="comment_input" name="comment" cols="20" rows="3"></textarea>
 
                     <% @artifact.comments.each do |comment| %>
                        <hr />
@@ -184,10 +196,10 @@
 		</div><!-- end of tab two -->  
 	<% end %>
   </div>
-<script type="text/javascript">
-jQuery(function() {
-	// setup ul.tabs to work as tabs for each div directly under div.panes
-	jQuery("ul.tabs").tabs("div.panes > div");
-});
-</script>  
+<% javascript_tag do %>
+  jQuery(function() {
+    // setup ul.tabs to work as tabs for each div directly under div.panes
+    jQuery("ul.tabs").tabs("div.panes > div");
+    });
+<% end %>
 
