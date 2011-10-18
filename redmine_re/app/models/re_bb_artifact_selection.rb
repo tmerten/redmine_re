@@ -72,9 +72,26 @@ class ReBbArtifactSelection < ReBuildingBlock
           end    
         else
           # An artifact is choosen. Therefore check relationships.
-          # Try to find a realtionship with the given parameters . If none exsist, create one
-          relation = ReArtifactRelationship.find(:first, :conditions => {:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type]}) || ReArtifactRelationship.new(:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type])
-          relation.save if relation.new_record?
+          # Try to find a realtionship with the given parameters . If none exsist, 
+          # create one. If the relation to be created is of type parentchild, 
+          # the parent-property of the corresponding artifact has to be set and an 
+          # update of its former parent relationship has to be executed. 
+          relation = ReArtifactRelationship.find(:first, :conditions => {:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type]}) 
+          unless relation 
+            if datum_hash[id][:relation_type] == 'parentchild'
+              child_artifact = ReArtifactProperties.find_by_id(datum_hash[id][:related_artifact_id])
+              parent_artifact = ReArtifactProperties.find_by_id(artifact_properties_id)
+              building_block_data = ReBbDataArtifactSelection.find(:first, :conditions => {:re_artifact_relationship_id => child_artifact.parent_relation.id})
+              building_block_data.delete unless building_block_data.nil?
+              child_artifact.parent_relation.remove_from_list
+              child_artifact.parent = parent_artifact
+              child_artifact.parent_relation.insert_at(parent_artifact.children.count)
+              relation = ReArtifactRelationship.find(:first, :conditions => {:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type]}) 
+            else
+              relation = ReArtifactRelationship.new(:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type])
+            end
+          end
+          relation.save if relation && relation.new_record?
           # Try to find a bb_data_object with the given id . 
           # If no matching object is found, create a new one
           bb_data = ReBbDataArtifactSelection.find_by_id(id) || ReBbDataArtifactSelection.new    

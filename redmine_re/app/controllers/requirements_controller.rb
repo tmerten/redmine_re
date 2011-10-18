@@ -40,6 +40,8 @@ class RequirementsController < RedmineReController
     end
     session[:expanded_nodes] << new_parent.id
 
+    building_block_data = ReBbDataArtifactSelection.find(:first, :conditions => {:re_artifact_relationship_id => moved_artifact.parent_relation.id})
+    building_block_data.delete unless building_block_data.nil?
     moved_artifact.parent_relation.remove_from_list
     moved_artifact.parent = new_parent
     moved_artifact.parent_relation.insert_at(position)

@@ -169,6 +169,7 @@ JAVASCRIPT
       ""
     end
   end
+  
 
   def validation_warning(bb_error_hash, re_bb, key_for_error_hash)
     unless bb_error_hash.nil? or bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][key_for_error_hash].nil?
