@@ -2,7 +2,7 @@
 
   <%= render 're_artifact_properties/action_menu', {:artifact => @artifact} %>
   
-  <h2><%= t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + t( params[:controller] ) unless @artifact.nil? %></h2>
+  <h2><%= t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + @artifact.name + ' (' + t( params[:controller] ) + ')' unless @artifact.nil? %></h2>
 
   <%= errors_and_flash params[:controller] %>
   
@@ -21,29 +21,7 @@
 	      <legend><%= t(:re_common_attributes) %></legend>
 	  
 	      <div class="splitcontentleft">
-	        <p>
-	        <% unless @sibling.nil? %>
-	        
-	          <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id, {:id => 'sibling_id'} %>
-	          <%= label_tag :parent_autocomplete, l(:re_set_parent), {:class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @sibling.nil? ? '' : @sibling.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
-	        <% else %>
-	          <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, {:id => 'parent_artifact_id'} %>
-	          <%= label_tag :parent_autocomplete, l(:re_set_parent), {:class => 'jstree-drop'} %><%= text_field_tag 'parent_artifact', @parent.nil? ? '' : @parent.name, {:size => 30, :class => 'autocomplete jstree-drop', :id => 'parent_autocomplete'} %>
-	        <% end %>
-	        </p>
-	  
-	        <div id="parent_artifact_candidates" class="autocomplete"></div>
-	        <% javascript_tag do %>
-	            new Ajax.Autocompleter('parent_autocomplete',
-	            'parent_artifact_candidates',
-	            '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
-	            { minChars: 3,
-	            paramName: 'parent_name',
-	            parameters: 'project_id=<%= @project.id %><%= '&id=' + @artifact_properties.id.to_s unless @artifact_properties.id.blank? %>',
-	            frequency: 0.5,
-	            afterUpdateElement : function(text, li) { $('parent_artifact_id').setValue(li.id) }
-	            });
-	        <% end %>
+
 	        <p>
 	          <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
 	        </p>
