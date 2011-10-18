@@ -145,7 +145,7 @@ class RedmineReController < ApplicationController
       logger.debug("############ errors after validating #{@artifact_type} ##{@artifact.id}: #{@artifact.errors.inspect}") if logger
 
       if valid && @artifact_properties.valid?
-        flash[:notice] = t( artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
+        flash.now[:notice] = t( artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
         edit_hook_valid_artifact_after_save params
 
         # Add Comment
@@ -179,8 +179,14 @@ class RedmineReController < ApplicationController
         end
       end
     end # request.post? end
-  render 're_artifact_properties/edit'
-end
+#    if request.post? and (session[:preventing_edit_loop].nil? || session[:preventing_edit_loop] == false)
+#      session[:preventing_edit_loop] = true
+#      redirect_to 're_artifact_properties/edit'
+#    else
+#      session[:preventing_edit_loop] = false
+      render 're_artifact_properties/edit'  
+#    end
+  end
 
 
   def new_hook(paramsparams)
