@@ -156,18 +156,19 @@ class RedmineReController < ApplicationController
           @artifact_properties.comments << comment
           comment.save
         end
-
-        # If sibling is not blank, then the option "create new artifact below" was called
-        # and the artifact should beplaced below its sibling
-
-        initialize_tree_data
-
-          # Saving of user defined Fields (Building Blocks)
+        
+        # Saving of user defined Fields (Building Blocks)
         ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
         @bb_error_hash = {}
         @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
         @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
-        #redirect_to(:id => @artifact.id)
+        
+        
+        # If sibling is not blank, then the option "create new artifact below" was called
+        # and the artifact should beplaced below its sibling
+        initialize_tree_data
+    
+
       else
         edit_hook_invalid_artifact_cleanup params
       end
