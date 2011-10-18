@@ -15,10 +15,10 @@ class ReTask < ActiveRecord::Base
 
     subtask_attributes.each do |id, attributes|
 
-        is_new = id.to_s.start_with?("new") # Every new Subtask has id = new_394834384848
+        is_new = id.to_s.start_with?("new") # Every new Subtask has id = new_XYZABC
         saved = false
 
-        if(is_new)#todo : use get instance of subtask method
+        if(is_new) #TODO : use get instance of subtask method
           subtask =  ReSubtask.new(:re_artifact_properties => ReArtifactProperties.new(:project_id => self.project_id,#TODO: getting project_id from task should be changed, otherwise create new task with new subtasks won't work
                                                                                        :created_by => User.current.id,
                                                                                        :updated_by => User.current.id))
@@ -34,16 +34,15 @@ class ReTask < ActiveRecord::Base
           saved = subtask.save
         end
 
-      
         if(saved)
-          subtask.set_parent(self, position)
+          subtask.parent_relation.insert_at(position)
         end
     end
   end
 
   def self.sort_subtasks_attributes_by_position(subtask_attributes, project_id)
     #  returns an array of subtasks sorted by their positions
-    
+
     subtasks = Array.new(subtask_attributes.size - 1)
       subtask_attributes.each do |id, attributes|
         subtask = self.get_subtask_instance_from_attributes(id, attributes, project_id)
