@@ -16,11 +16,27 @@ class RedmineReController < ApplicationController
   helper :watchers
   include WatchersHelper
   
-  before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize, :initialize_tree_data
+  
+  before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize
+  before_filter :first_load, :except => :configure
+  before_filter :initialize_tree_data, :except => :configure
+   
 
   layout proc { |c| c.request.xhr? ? false : "redmine_re" }
 
+  def first_load
+     @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
+     if @project_artifact.nil? || @re_artifact_order.nil? || @re_relation_order.nil?
+      @firstload = true
+      redirect_to :controller => "re_settings", :action => "configure", :project_id => @project.id, :firstload => '1'    
+    else
+      @firstload = false
+    end 
+  end
+  
+  
   def initialize_tree_data
+    return if @firstload == true
     project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
     session[:expanded_nodes] ||= Set.new
     session[:expanded_nodes] << project_artifact.id

@@ -18,6 +18,7 @@ class ReSettingsController < RedmineReController
        @project_artifact.description = @project.description
        @project_artifact.name = @project.name
        @project_artifact.save
+       logger.debug "#####################       --------------------  Errors: #{@project_artifact.errors.inspect}"
     end
 
     if request.post?
@@ -43,6 +44,7 @@ class ReSettingsController < RedmineReController
         ReSetting.set_serialized(artifact_type, @project.id, configured_artifact)
       end
       @re_artifact_configs[artifact_type] = configured_artifact
+      initialize_tree_data
     end
 
     @re_relation_configs = {}

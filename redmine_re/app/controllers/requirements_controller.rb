@@ -3,11 +3,6 @@ class RequirementsController < RedmineReController
   menu_item :re
 
   def index
-    @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
-
-    if @project_artifact.nil? || @re_artifact_order.nil? || @re_relation_order.nil?
-      redirect_to :controller => "re_settings", :action => "configure", :project_id => @project.id, :firstload => '1'
-    end
   end
 
   def delegate_tree_drop
