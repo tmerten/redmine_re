@@ -435,6 +435,7 @@ en:
   relations: 'Relations'
   main_tab: 'Main tab'
   comments: 'Comments'
+  re_artifact_comments_count: 'Number of Comments'
   open_requirements: 'Open Requirements'
   artifactcount: 'Number of Artifacts'
   artifacts_wo_issues: 'Number of Artifacts not connected to any Issue'
