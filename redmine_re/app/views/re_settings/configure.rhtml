@@ -9,8 +9,6 @@
 
     <h2>General Settings</h2>
     <p>
-    <%= label_tag :relation_management_pane, l(:re_relation_management_pane), :class => 'large' %> <%= check_box_tag "re_settings[relation_management_pane]", 'yes', @re_settings['relation_management_pane'] %><br/>
-    </p><p>
     <%= label_tag :visualization_size, l(:re_visualization_size), :class => 'large' %> <%= text_field_tag 're_settings[visualization_size]', @re_settings['visualization_size'] %>
     </p>
 
@@ -23,11 +21,8 @@
           <th title="<%= t(:re_conf_artifact_display_order) %>">Display Order</th>
           <th title="<%= t(:re_conf_artifact_in_use) %>">Use</th>
           <th title="<%= t(:re_conf_alias_name) %>">Alias Name</th>
-          <th title="<%= t(:re_conf_printable) %>">Printable</th>
           <th title="<%= t(:re_conf_color) %>">Color</th>
-          <!--<th title="<%= t(:re_) %>">Icon</th>-->
           <th title="<%= t(:re_conf_show_in_tree) %>">Show in tree</th>
-          <th title="<%= t(:re_conf_child_artifacts) %>"><%= t(:re_child_artifacts) %></th>
           <th title="<%= t(:re_conf_fields) %>"><%= t(:re_fields) %></th>
         </tr>
       </thead>
@@ -39,14 +34,12 @@
             </td>
             <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[in_use]]', 'yes', @re_artifact_configs[artifact_type]['in_use'] %></td>
             <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[alias]]', @re_artifact_configs[artifact_type]['alias'], :size => 20 %></td>
-            <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[printable]]', 'yes', @re_artifact_configs[artifact_type]['printable'] %></td>
             <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[color]]', @re_artifact_configs[artifact_type]['color'], :size => 6,  :class => 'colorpick', :style => "background-color:#" + @re_artifact_configs[artifact_type]['color'] %>
             <script type="text/javascript">
               getccolor(document.getElementById("<%= "re_artifact_configs_"+artifact_type.underscore+"_color" %>"));
               </script>
             </td>
-            <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[show_children_in_tree]]', 'yes', @re_artifact_configs[artifact_type]['show_children_in_tree'] %></td>
-            <td><%= link_to t(:re_edit), :action => "children", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
+            <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[show_in_tree]]', 'yes', @re_artifact_configs[artifact_type]['show_in_tree'] %></td>
             <td><%= link_to t(:re_edit), :action => "configure_fields", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
           </tr>
         <% end %>
