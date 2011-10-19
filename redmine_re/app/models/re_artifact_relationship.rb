@@ -17,7 +17,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   has_many :re_bb_data_artifact_selection, :dependent => :destroy
 
   validates_uniqueness_of :source_id, :scope => [:sink_id, :relation_type], :message => :re_this_relation_already_exists
-  validates_uniqueness_of :source_id, :if => Proc.new { |rel| rel.relation_type == "parentchild" }
+  validates_uniqueness_of :sink_id, :if => Proc.new { |rel| rel.relation_type == "parentchild" }, :message => :re_only_one_parent_allowed
   validates_presence_of :relation_type
   validates_inclusion_of :relation_type, :in => RELATION_TYPES.values
 
