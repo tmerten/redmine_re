@@ -473,20 +473,22 @@ ul.tabs li {
 }
 
 /* link inside the tab. uses a background image */
-ul.tabs a { 
-	background: url("../images/tabs/blue.png") no-repeat -420px 0;
-	font-size:11px;
-	display:block;
-	height: 30px;  
-	line-height:30px;
-	width: 134px;
-	text-align:center;	
-	text-decoration:none;
-	color:#333;
-	padding:0px;
-	margin:0px;	
-	position:relative;
-	top:1px;
+ul.tabs a {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #CCCCCC;
+    color: #777777;
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    top: 1px;
+    width: 134px;
 }
 
 ul.tabs a:active {
@@ -496,14 +498,18 @@ ul.tabs a:active {
 /* when mouse enters the tab move the background image */
 ul.tabs a:hover {
 	background-position: -420px -31px;	
-	color:#fff;	
+	color:#777777;	
+	background: #ffffdd;
 }
 
 /* active tab uses a class name "current". its highlight is also done by moving the background image. */
 ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-	background-position: -420px -62px;		
-	cursor:default !important; 
-	color:#000 !important;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    color: #777777 !important;
+    cursor: default !important;
+    font-weight: bold;
+    margin: 0 14px;
 }
 
 /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
