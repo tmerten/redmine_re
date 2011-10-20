@@ -171,7 +171,7 @@ class RedmineReController < ApplicationController
         unless params[:comment].blank?
           comment = Comment.new
           comment.comments = params[:comment]
-          comment.author = author
+          comment.author = User.current
           @artifact_properties.comments << comment
           comment.save
         end
