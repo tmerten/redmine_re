@@ -480,15 +480,15 @@ ul.tabs a {
     display: block;
     font-size: 11px;
     font-weight: bold;
-    height: 30px;
-    line-height: 30px;
+    height: 24px;
+    line-height: 25px;
     margin: 0;
-    padding: 0;
+    padding: 0 9px;
     position: relative;
     text-align: center;
     text-decoration: none;
-    top: 1px;
-    width: 134px;
+    top: 6px;
+    margin-left: 14px;
 }
 
 ul.tabs a:active {
@@ -509,7 +509,7 @@ ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
     color: #777777 !important;
     cursor: default !important;
     font-weight: bold;
-    margin: 0 14px;
+    margin-left: 14px;
 }
 
 /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
