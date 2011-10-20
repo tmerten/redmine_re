@@ -17,7 +17,7 @@ class CreateReSettings < ActiveRecord::Migration
       5 => 'refinement',
       6 => 'part_of'
     }
-    
+
     stored_relations = {}
     ReArtifactRelationship.all.each do |rel|
       #print 'storing {' + rel.id.to_s + ' => ' + rel.relation_type.to_s + '} \n'

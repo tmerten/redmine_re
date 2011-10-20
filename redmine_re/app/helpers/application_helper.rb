@@ -4,51 +4,51 @@ module ApplicationHelper
     User.current
   end
 
-def custom_ajaxful_rating_script
-      if protect_against_forgery?
-        authenticity_script = %{
-          csrf_param = "authenticity_token";
-          csrf_token = #{form_authenticity_token.inspect};
+  def custom_ajaxful_rating_script
+    if protect_against_forgery?
+      authenticity_script = %{
+        csrf_param = "authenticity_token";
+        csrf_token = #{form_authenticity_token.inspect};
 
-          // Always send the authenticity_token with ajax
-          $(document).ajaxSend(function(event, request, settings) {
-            if ( settings.type == 'post' ) {
-              settings.data = (settings.data ? settings.data + "&" : "")
-                + encodeURIComponent( csrf_param ) + "=" + encodeURIComponent( csrf_token );
+        // Always send the authenticity_token with ajax
+        $(document).ajaxSend(function(event, request, settings) {
+          if ( settings.type == 'post' ) {
+            settings.data = (settings.data ? settings.data + "&" : "")
+              + encodeURIComponent( csrf_param ) + "=" + encodeURIComponent( csrf_token );
+          }
+        });
+      }
+    end
+
+    %{<script type="text/javascript">
+      #{authenticity_script}
+
+      $(document).ready(function(){
+        $('.ajaxful-rating a').bind('click',function(event){
+          event.preventDefault();
+          $.ajax({
+            type: $(this).attr('data-method'),
+            url: $(this).attr('href')+'?stars='+$(this).attr('data-stars')+'&dimension='+$(this).attr('data-dimension'),
+            data: {
+                    stars: $(this).attr('data-stars'),
+                    dimension: $(this).attr('data-dimension'),
+                    size: $(this).attr('data-size'),
+                    show_user_rating: $(this).attr('data-show_user_rating')
+                  },
+            success: function(response){
+              $('#' + response.id + ' .show-value').css('width', response.width + '%');
             }
           });
-        }
-      end
-
-      %{<script>
-        #{authenticity_script}
-
-        $(document).ready(function(){
-          $('.ajaxful-rating a').bind('click',function(event){
-            event.preventDefault();
-            $.ajax({
-              type: $(this).attr('data-method'),
-              url: $(this).attr('href')+'?stars='+$(this).attr('data-stars')+'&dimension='+$(this).attr('data-dimension'),
-              data: {
-                      stars: $(this).attr('data-stars'),
-                      dimension: $(this).attr('data-dimension'),
-                      size: $(this).attr('data-size'),
-                      show_user_rating: $(this).attr('data-show_user_rating')
-                    },
-              success: function(response){
-                $('#' + response.id + ' .show-value').css('width', response.width + '%');
-              }
-            });
-          });
         });
-      </script>}
-    end
-  
+      });
+    </script>}
+  end
+
   def errors_and_flash(artifact)
     s = error_messages_for 'artifact'
     s += render_flash_messages_with_timeout
   end
-  
+
   def render_flash_messages_with_timeout
     s = ''
     flash.each do |k,v|
@@ -59,37 +59,6 @@ def custom_ajaxful_rating_script
     s
   end
 
-	def number_field_with_slider(objectname, method, min, max)
-		fieldid = objectname.to_s + "_" + method.to_s
-
-		js = <<JAVASCRIPT 
-		Event.observe(window, 'load', function() {
-      var #{fieldid}Slider = new Control.Slider('#{fieldid}-handle' , '#{fieldid}-track',
-      {
-				range: $R(1,51),
-				values: $R(1,50),
-				sliderValue: $('#{fieldid}').value,
-				onChange: function(v) { $('#{fieldid}').value = v; },
-				onSlide:  function(v) { $('#{fieldid}').value = v; }
-      } );
-      
-			$('#{fieldid}').observe('change', function() {
-				if (this.value < #{min}) this.value = #{min};
-				if (this.value > #{max}) this.value = #{max};
-				#{fieldid}Slider.setValue(this.value);  
-			});
-	  });
-JAVASCRIPT
-  
-		js = javascript_tag(js)
-
-		sliderdivs = content_tag("div", "", :id => "#{fieldid}-handle", :class => "numberfield-handle")
-    sliderdivs = content_tag("div", sliderdivs, :id => "#{fieldid}-track", :class => "numberfield-track")
-	  field = label(objectname, method, t(fieldid))		
-		field << text_field(objectname, method, :size => 3)
-    sliderdivs = content_tag(:div, field+sliderdivs, :class => "numberfield-slider")
-    js + sliderdivs
-  end
 
   # creates a link to the wikipage of an artifact => wiki/#id_#artifact_type_#name/
   # if there is already a wikipage the content will be placed as a tooltip to the link
@@ -106,7 +75,7 @@ JAVASCRIPT
     has_no_wiki_page_yet = (wiki_page.nil?)? true : false
 
     # variable icon
-    
+
     if has_no_wiki_page_yet
     html_code += link_to t(:re_create_wiki_page_for_re_artifact), {
       :controller => 'wiki',
@@ -122,19 +91,19 @@ JAVASCRIPT
       :project_id => project.identifier}
 
       html_code += " ("
-      
+
       html_code += link_to t(:re_edit), {
       :controller => 'wiki',
       :action => 'edit',
       :id => wiki_page_name,
       :project_id => project.identifier} ,
       { :class => "icon icon-subtask-wiki-edit" }     
-      
+
       html_code += ")"
     end
     return html_code
   end
-  
+
   def add_bb_configuration_link(artifact_type)
     if User.current.allowed_to?(:administrate_requirements, @project)
       link_to(  t(:re_bb_add), 
@@ -147,8 +116,8 @@ JAVASCRIPT
       ""
     end
   end
-  
-  
+
+
   # renders a table data field for every building block in bb_hash that is
   # used for condensed view (bb.for_condensed_view == true)
   def insert_building_blocks_one_line_representations(artifact)

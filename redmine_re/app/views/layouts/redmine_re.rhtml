@@ -11,7 +11,7 @@
 <% if redmine_version_is_higher_or_equal_than?("1.2.0")  %>
     <%= csrf_meta_tag %>
 <% end %>
-  
+
 <%= favicon %>
 <%= stylesheet_link_tag 'application', :media => 'all' %>
 <%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
@@ -41,7 +41,6 @@
 <%= javascript_include_tag 'ccolorcalculator.js', :plugin => 'redmine_re' %>
 <%= stylesheet_link_tag 'colorpicker.css', :plugin => "redmine_re", :media => 'screen' %>
 <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
-  
 <%= ajaxful_rating_style %>
 <%= ajaxful_rating_script %>
 <%### REDMINE RE STUFF STOP 1 ###%>

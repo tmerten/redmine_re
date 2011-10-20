@@ -25,14 +25,8 @@
 	      <legend><%= t(:re_common_attributes) %></legend>
 
 	      <div class="splitcontentleft">
-
-	        <p>
-	        <% unless @sibling.nil? %>
-	          <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id, {:id => 'sibling_id'} %>
-	        <% else %>
-	          <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id, {:id => 'parent_artifact_id'} %>
-	        <% end %>
-	        </p>
+	        <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id %>
+	        <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id %>
 
 	        <p>
 	          <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>

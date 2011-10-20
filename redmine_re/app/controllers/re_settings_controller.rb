@@ -24,7 +24,7 @@ class ReSettingsController < RedmineReController
     if request.post?
       save_user_config
     elsif params[:firstload] == "1"
-      generate_default_config
+      flash.now[:notice] = t(:re_settings_have_to_save)
     end
 
     # checking all artifacts should be done every time for now
@@ -174,11 +174,8 @@ private
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)      
 
-    flash[:notice] = t(:re_configs_saved)
+    flash.now[:notice] = t(:re_configs_saved)
   end
 
-  def generate_default_config
-     flash[:notice] = t(:re_settings_have_to_save)
-  end
 
 end

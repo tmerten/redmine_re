@@ -61,12 +61,13 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
 
   acts_as_watchable
-  
+
   validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
   validates_presence_of :created_by, :message => l(:re_artifact_properties_validates_presence_of_created_by)
   validates_presence_of :updated_by, :message => l(:re_artifact_properties_validates_presence_of_updated_by)
   validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
   validates_presence_of :parent,     :message => l(:re_artifact_properties_validates_presence_of_parent), :unless => Proc.new { |a| a.artifact_type == "Project" }
+  validates_associated :parent_relation
 
   after_destroy :delete_wiki_page
 

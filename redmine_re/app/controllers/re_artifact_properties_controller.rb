@@ -57,7 +57,7 @@ class ReArtifactPropertiesController < RedmineReController
         end
         @artifact_properties.destroy
 
-        flash[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
+        flash.now[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
         redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
 
       when 'recursive'
@@ -66,7 +66,7 @@ class ReArtifactPropertiesController < RedmineReController
         end
         @artifact_properties.destroy
 
-        flash[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
+        flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
         redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
       else
         @children = gather_children(@artifact_properties)

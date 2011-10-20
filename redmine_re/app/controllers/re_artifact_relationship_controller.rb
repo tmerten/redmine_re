@@ -1,7 +1,7 @@
 class ReArtifactRelationshipController < RedmineReController
   unloadable
   menu_item :re
-  
+
   TRUNCATE_NAME_IN_VISUALIZATION_AFTER_CHARS = 18
   TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS = 150
   TRUNCATE_OMISSION = "..."

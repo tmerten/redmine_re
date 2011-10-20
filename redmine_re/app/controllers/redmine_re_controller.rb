@@ -15,26 +15,24 @@ class RedmineReController < ApplicationController
 
   helper :watchers
   include WatchersHelper
-  
-  
-  before_filter :find_project, :find_artifact_type_for_treebar, :load_settings, :authorize
-  before_filter :first_load, :except => :configure
+
   before_filter :initialize_tree_data, :except => :configure
-   
+  before_filter :load_settings, :authorize
+  prepend_before_filter :first_load, :except => :configure
+  prepend_before_filter :find_project
 
   layout proc { |c| c.request.xhr? ? false : "redmine_re" }
 
   def first_load
      @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
-     if @project_artifact.nil? || @re_artifact_order.nil? || @re_relation_order.nil?
+     if @project_artifact.nil?
       @firstload = true
       redirect_to :controller => "re_settings", :action => "configure", :project_id => @project.id, :firstload => '1'    
     else
       @firstload = false
     end 
   end
-  
-  
+
   def initialize_tree_data
     return if @firstload == true
     project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
@@ -47,12 +45,17 @@ class RedmineReController < ApplicationController
     # Check the settings cache for each request
     ReSetting.check_cache
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
-
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
-  end
 
-  def find_artifact_type_for_treebar
-    params[:artifact_type_for_treebar] = self.controller_name
+    return if @re_artifact_order.nil?
+    return if @re_relation_order.nil?
+    @re_artifact_settings = {}
+    @re_artifact_order.each { |a| @re_artifact_settings[a] = ReSetting.get_serialized(a, @project.id) }
+    @re_artifact_order.delete_if { |a| @re_artifact_settings[a]['in_use'] == false }
+
+    @re_relation_settings = {}
+    @re_relation_order.each { |r| @re_relation_settings[r] = ReSetting.get_serialized(r, @project.id) }
+    @re_relation_order.delete_if { |r| @re_relation_settings[r]['in_use'] == false }
   end
 
   def find_project
@@ -111,20 +114,18 @@ class RedmineReController < ApplicationController
 
   def edit
 
-    artifact_type = self.controller_name
-    logger.debug("############ Called edit for artifact of type: " + artifact_type) if logger
+    @artifact_type = self.controller_name
+    logger.debug("############ Called edit for artifact of type: " + @artifact_type) if logger
 
-    @artifact = artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || artifact_type.camelcase.constantize.new
+    @artifact = @artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
 
-    @artifact_type = artifact_type # needed for ajax request (artifact selection building block)
     @parent = nil
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
     @bb_error_hash = {}
     @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
 
     @issues = @artifact_properties.issues
-
 
     edit_hook_after_artifact_initialized params
 
@@ -153,7 +154,9 @@ class RedmineReController < ApplicationController
       unless params[:parent_artifact_id].blank?
         @parent = ReArtifactProperties.find(params[:parent_artifact_id])
       end
-      @artifact.re_artifact_properties.parent = @parent unless @parent.nil?
+
+      logger.debug("############ parent to set #{@parent.inspect}")
+      @artifact_properties.parent = @parent unless @parent.nil?
 
       valid = @artifact.valid?
       valid = edit_hook_validate_before_save(params, valid)
@@ -161,7 +164,7 @@ class RedmineReController < ApplicationController
       logger.debug("############ errors after validating #{@artifact_type} ##{@artifact.id}: #{@artifact.errors.inspect}") if logger
 
       if valid && @artifact_properties.valid?
-        flash.now[:notice] = t( artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
+        flash.now[:notice] = t( @artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
         edit_hook_valid_artifact_after_save params
 
         # Add Comment
@@ -172,18 +175,18 @@ class RedmineReController < ApplicationController
           @artifact_properties.comments << comment
           comment.save
         end
-        
+
         # Saving of user defined Fields (Building Blocks)
         ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
         @bb_error_hash = {}
         @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
         @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
-        
-        
+
+
         # If sibling is not blank, then the option "create new artifact below" was called
         # and the artifact should beplaced below its sibling
         initialize_tree_data
-    
+
 
       else
         edit_hook_invalid_artifact_cleanup params
@@ -383,10 +386,13 @@ class RedmineReController < ApplicationController
     comma = false
 
     for child in re_artifact_properties.children
-      if (depth > 0 or expanded)
-        children << create_tree(child, depth)
+    #logger.debug "####### " + child.artifact_type + " ##### "  + @re_artifact_settings[child.artifact_type].inspect
+    #if child.artifact_type == 'Project' || (@re_artifact_settings[child.artifact_type] && @re_artifact_settings[child.artifact_type]['in_use']) 
+      if (depth > 0 || expanded)
+          children << create_tree(child, depth)
+        end
       end
-    end
+    #end
     children
   end
 

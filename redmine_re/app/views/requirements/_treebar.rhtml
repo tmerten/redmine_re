@@ -27,14 +27,14 @@
         :action => "configure", 
         :project_id => @project.identifier } %>
       </li>
-      <% linktext = l(:re_configure_fields_treebar, :artifact_type => l(params[:artifact_type_for_treebar].camelcase.to_sym))%>
-      <% if ! params[:artifact_type_for_treebar].nil? and @re_artifact_order.include? params[:artifact_type_for_treebar] and ! linktext.slice('translation missing:')%>
+      <% linktext = l(:re_configure_fields_treebar, :artifact_type => controller_name.camelcase.to_sym)%>
+      <% if @re_artifact_order.include? controller_name and ! linktext.slice('translation missing:')%>
         <li>
           <%= link_to linktext, {
           :controller => "re_settings",
           :action => "configure_fields",
           :project_id => @project.id,
-          :artifact_type => params[:artifact_type_for_treebar]
+          :artifact_type => controller_name
           } %>
         </li>
       <% end %>
