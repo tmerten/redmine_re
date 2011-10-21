@@ -9,7 +9,30 @@ a:active {
 }
 
 .detail_view {
-  margin-left: 240px;
+  margin-left: 10px;
+  width: 800px;
+  cursor: auto;
+}
+
+/**
+ * 	Left- and RightPane are used by splitcontent
+ */
+#LeftPane {
+	background: #def;
+	overflow: hidden;
+	width: 240px;		/* optional, initial splitbar position */
+	min-width: 50px;	/* optional */
+	/* No margin or border allowed */
+}
+/*
+ * Right-side element of the splitter.
+ */
+#RightPane {
+	background: #def;
+	overflow: auto;
+	width: 10px;
+	position: relative;
+	/* No margin or border allowed */
 }
 
 .re_bb_form {
@@ -54,6 +77,7 @@ a:active {
 	border-right: 1px solid #dddddd;
 	display:none;
 	padding:5px;
+	overflow: hidden;
 	color:#fff;
 }
 
