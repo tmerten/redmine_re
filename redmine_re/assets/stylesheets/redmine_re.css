@@ -17,7 +17,7 @@ a:active {
 }
 
 .treebar {
-  position: absolute;
+  position: relative;
   float: left;
   min-width: 220px;
   height: 100%;
@@ -437,6 +437,7 @@ Back to top button
 
 #back-top a {
 	display: block;
+	display: none;
 	text-align: center;
 	font: 11px/100%;
 	text-transform: uppercase;
