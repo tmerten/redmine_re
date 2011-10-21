@@ -39,6 +39,7 @@
 <%= javascript_include_tag 'slider.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'colorpicker.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'ccolorcalculator.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'splitter.js', :plugin => 'redmine_re' %>
 <%= stylesheet_link_tag 'colorpicker.css', :plugin => "redmine_re", :media => 'screen' %>
 <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 <%= ajaxful_rating_style %>
@@ -47,6 +48,17 @@
 <%= call_hook :view_layouts_base_html_head %>
 <!-- page specific tags -->
 <%= yield :header_tags -%>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	jQuery("#content").splitter({
+		splitVertical: true,
+		sizeLeft: true,
+		accessKey: 'I'
+	});
+});
+</script>
+
 </head>
 <body class="<%=h body_css_classes %>">
 <div id="wrapper">
@@ -91,7 +103,7 @@
         <%= render :partial => 'requirements/treebar' %>
         <%#= render_flash_messages %>
 <%### REDMINE RE STUFF END 2 ###%>
-        <%= yield %>
+        <div><%= yield %></div>
         <%= call_hook :view_layouts_base_content %>
 				<div style="clear:both;"></div>
     </div>
@@ -99,13 +111,17 @@
 
 <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
 	
-<div id="footer">
-  <div class="bgl"><div class="bgr">
-    Powered by <%= link_to Redmine::Info.app_name, Redmine::Info.url %> &copy; 2006-2011 Jean-Philippe Lang
-  </div></div>
-</div>
 </div>
 </div>
 <%= call_hook :view_layouts_base_body_bottom %>
+
+<div style="clear:both;"></div>
+<div id="footer">
+  <div class="bgl">
+  	<div class="bgr">
+       Powered by <%= link_to Redmine::Info.app_name, Redmine::Info.url %> &copy; 2006-2011 Jean-Philippe Lang
+    </div>
+  </div>
+</div>
 </body>
 </html>
