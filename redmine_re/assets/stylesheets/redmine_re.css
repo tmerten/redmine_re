@@ -34,6 +34,9 @@ a:active {
 	position: relative;
 	/* No margin or border allowed */
 }
+.vsplitbar {
+	width: 10px ! important;
+}
 
 .re_bb_form {
 	width: 500px;
