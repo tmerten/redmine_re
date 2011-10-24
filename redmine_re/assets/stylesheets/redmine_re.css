@@ -9,9 +9,9 @@ a:active {
 }
 
 .detail_view {
-  margin-left: 10px;
-  width: 800px;
-  cursor: auto;
+    cursor: auto;
+    margin-left: 270px;
+    position: relative;
 }
 
 /**
