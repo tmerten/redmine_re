@@ -75,7 +75,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   activity_provider :re_artifact_properties, :class_name => 'ReArtifactProperties', :default => true
 
   #Observers
-  config.active_record.observers = :re_artifact_properties_observer
+  #config.active_record.observers = :re_artifact_properties_observer
 
   config.gem "ajaxful_rating_jquery"
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
