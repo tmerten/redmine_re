@@ -22,10 +22,10 @@ class RequirementsController < RedmineReController
 
     case insert_position
     when 'before'
-      position = (sibling.position - 1) unless sibling.nil? || sibling.position.nil?
+      position = (sibling.position - 1) unless sibling.nil?
       new_parent = sibling.parent
     when 'after'
-      position = (sibling.position + 1) unless sibling.nil? || sibling.position.nil?
+      position = (sibling.position + 1) unless sibling.nil?
       new_parent = sibling.parent
     when 'inside'
       position = 1

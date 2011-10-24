@@ -149,14 +149,16 @@ class RedmineReController < ApplicationController
       # realtion related attributes
       unless params[:sibling_id].blank?
         @sibling = ReArtifactProperties.find(params[:sibling_id])
-        @parent = ReArtifactProperties.find(@sibling.parent)
+        @parent = @sibling.parent
       end
       unless params[:parent_artifact_id].blank?
         @parent = ReArtifactProperties.find(params[:parent_artifact_id])
       end
 
       logger.debug("############ parent to set #{@parent.inspect}")
-      @artifact_properties.parent = @parent unless @parent.nil?
+      unless @parent.nil?
+        @artifact_properties.parent = @parent
+      end
 
       valid = @artifact.valid?
       valid = edit_hook_validate_before_save(params, valid)
@@ -166,6 +168,11 @@ class RedmineReController < ApplicationController
       if valid && @artifact_properties.valid?
         flash.now[:notice] = t( @artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
         edit_hook_valid_artifact_after_save params
+
+        unless @sibling.nil?# TODO: Implement this correct: && @sibling.parent.eql(@parent)
+          @artifact_properties.parent_relation.insert_at(@sibling.parent_relation.position + 1)
+          logger.debug("######/////ICH BIN WIEDER HIER")
+        end
 
         # Add Comment
         unless params[:comment].blank?
