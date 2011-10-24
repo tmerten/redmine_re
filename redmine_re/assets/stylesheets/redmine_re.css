@@ -10,8 +10,9 @@ a:active {
 
 .detail_view {
     cursor: auto;
-    margin-left: 270px;
-    position: relative;
+    float: left;
+    margin-left: 10px;
+    min-width: 740px;
 }
 
 /**
@@ -627,7 +628,7 @@ height:auto;
     float: left;
     height: 100%;
     margin-right: 10px;
-    width: 35%;
+    width: 265px;
 }
 .rating_comments_right {
     height: 100%;
