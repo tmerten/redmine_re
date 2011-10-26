@@ -27,7 +27,7 @@
         :action => "configure", 
         :project_id => @project.identifier } %>
       </li>
-      <% linktext = l(:re_configure_fields_treebar, :artifact_type => controller_name.camelcase.to_sym)%>
+      <% linktext = l(:re_configure_fields_treebar, :artifact_type => l(controller_name.camelcase.to_sym))%>
       <% if @re_artifact_order.include? controller_name and ! linktext.slice('translation missing:')%>
         <li>
           <%= link_to linktext, {

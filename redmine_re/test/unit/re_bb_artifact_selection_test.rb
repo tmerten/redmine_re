@@ -121,6 +121,9 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
     assert @artifact_selection_goals.indicate_changes == false
     sleep 2
     @goal_prop.description = 'New description.'
+    @goal_prop.parent_relation = ReArtifactRelationship.find( Fixtures.identify(:relationship_art_project_art_goal_usability_parentchild) )
+    @goal_prop.save
+    logger.debug("#########################_______________ Errors on goal: #{@goal_prop.errors.inspect}")
     assert @goal_prop.save
     error_hash = {}
     error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
@@ -130,7 +133,7 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
     @artifact_selection_goals = save_building_block_completely(@artifact_selection_goals, params) 
     assert @artifact_selection_goals.indicate_changes == true
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert extract_error_messages(error_hash).include?(I18n.t(:re_bb_out_of_date, :bb_name => @artifact_selection_goals.name))
     # Confirm that relation and referred artifact are still valid by setting the confirm
     # parameter
@@ -138,7 +141,7 @@ class ReBbArtifactSelectionTest < ActiveSupport::TestCase
     ReBuildingBlock.save_data(@task_prop.id, data_hash)
     # Test if no error message concerning the actuality of the relation occures again
     error_hash = {}
-    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash)
+    error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert ! extract_error_messages(error_hash).include?(I18n.t(:re_bb_out_of_date, :bb_name => I18n.t(@artifact_selection_goals.name)))
   end
   

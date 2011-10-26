@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 're_building_block'
 
 class ReBuildingBlockTest < ActiveSupport::TestCase
-  fixtures  :re_building_blocks, :re_bb_data_texts, :re_goals
+  fixtures  :re_building_blocks, :re_bb_data_texts, :re_goals, :re_bb_option_selections, :re_bb_data_selections
 
   def setup
     @project = Project.find(:first)
@@ -116,6 +116,36 @@ class ReBuildingBlockTest < ActiveSupport::TestCase
     error_hash = {}
     error_hash = ReBuildingBlock.validate_building_blocks(@task_prop, error_hash, @project.id)
     assert ! extract_error_messages(error_hash).include?(I18n.t(:re_bb_no_multiple_data_allowed, :bb_name => my_bb.name)) 
+  end
+  
+  def test_if_deletion_deletes_corresponding_data
+    # Create value selection building block. Then create two data-items.
+    # Check that all values and all data is deleted.
+    my_bb = ReBbSelection.new()
+    params = {:re_building_block => {:name => 'Values_deletion', :artifact_type => 'ReTask', :default_value => 'Eins', :multiple_values => true}, :options => 'Zwei, Drei'}
+    my_bb = save_building_block_completely(my_bb, params) 
+    option_1 = my_bb.re_bb_option_selections.first
+    option_2 = my_bb.re_bb_option_selections.last
+    params = {my_bb.id => {'no_id' => {:re_bb_selection_id => my_bb.id, :re_bb_option_selection_id => option_1.id, :re_artifact_properties_id => @task_prop.id}}}
+    ReBuildingBlock.save_data(@task_prop.id, params)
+    params = {my_bb.id => {'no_id' => {:re_bb_selection_id => my_bb.id, :re_bb_option_selection_id => option_2.id, :re_artifact_properties_id => @task_prop.id}}}
+    ReBuildingBlock.save_data(@task_prop.id, params) 
+    total_value_count = ReBbOptionSelection.find(:all).count
+    my_bb_value_count = ReBbOptionSelection.find(:all, :conditions => {:re_bb_selection_id => my_bb.id}).count
+    total_data_count = ReBbDataSelection.find(:all).count
+    my_bb_data_count = ReBbDataSelection.find(:all, :conditions => {:re_bb_selection_id => my_bb.id}).count
+    assert total_value_count != my_bb_value_count
+    assert total_data_count != my_bb_data_count
+    # Actual deletion of building block
+    my_bb.destroy
+    new_total_value_count = ReBbOptionSelection.find(:all).count
+    new_my_bb_value_count = ReBbOptionSelection.find(:all, :conditions => {:re_bb_selection_id => my_bb.id}).count
+    new_total_data_count = ReBbDataSelection.find(:all).count
+    new_my_bb_data_count = ReBbDataSelection.find(:all, :conditions => {:re_bb_selection_id => my_bb.id}).count
+    assert new_my_bb_value_count == 0
+    assert new_my_bb_data_count == 0
+    assert new_total_value_count == total_value_count - my_bb_value_count
+    assert new_total_data_count == total_data_count - my_bb_data_count
   end
   
 

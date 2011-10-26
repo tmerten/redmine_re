@@ -1,7 +1,7 @@
 class ReBbText < ReBuildingBlock
   unloadable
 
-  has_many :re_bb_data_texts 
+  has_many :re_bb_data_texts, :dependent => :destroy  
   
   validate :min_max_values_must_be_possible
   

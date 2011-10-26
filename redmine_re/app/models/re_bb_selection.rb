@@ -1,8 +1,8 @@
 class ReBbSelection < ReBuildingBlock
   unloadable
 
-  has_many :re_bb_data_selections 
-  has_many :re_bb_option_selections
+  has_many :re_bb_data_selections, :dependent => :destroy  
+  has_many :re_bb_option_selections, :dependent => :destroy 
   
   
   @@data_form_partial_strategy = 're_building_block/re_bb_selection/data_form'

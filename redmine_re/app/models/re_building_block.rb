@@ -4,7 +4,7 @@ class ReBuildingBlock < ActiveRecord::Base
   include StrategyProcs
   
   belongs_to :project
-  has_many :re_bb_project_positions
+  has_many :re_bb_project_positions, :dependent => :destroy 
   
   validates_presence_of :name
   before_save :prohibit_save_of_new_artifact_type

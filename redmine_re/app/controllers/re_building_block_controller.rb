@@ -7,6 +7,11 @@ class ReBuildingBlockController < RedmineReController
     redirect_to :action => 'edit', :project_id => params[:project_id], :artifact_type => params[:artifact_type]
   end
   
+  def delete
+    ReBuildingBlock.find(params[:id]).destroy
+    redirect_to :controller => :re_settings, :action => 'configure_fields', :project_id => params[:project_id], :artifact_type => params[:artifact_type]  
+  end
+  
   def update_config_form
     @artifact_type = params[:artifact_type]
     @re_building_block = ReBuildingBlock.find_by_id(params[:id]) || ReBuildingBlock.new

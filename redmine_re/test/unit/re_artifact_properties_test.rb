@@ -82,9 +82,11 @@ class ReArtifactPropertiesTest < ActiveSupport::TestCase
     dependend = ReArtifactProperties.all[3]
     part_of = ReArtifactProperties.all[4]
 
-    artifact.relate_to(dependend, :dependency)
-    artifact.relate_to(part_of, :part_of)
-    artifact.set_parent(parent)
+    relation1 = ReArtifactRelationship.new(:source_id => artifact.id, :sink_id => dependend.id, :relation_type => :dependency)
+    relation1.save
+    relation2 = ReArtifactRelationship.new(:source_id => artifact.id, :sink_id => part_of.id, :relation_type => :part_of)
+    relation2.save 
+    artifact.parent = parent
 
     artifact.destroy
 

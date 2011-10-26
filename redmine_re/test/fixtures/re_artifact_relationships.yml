@@ -1,7 +1,75 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 
-# Relationships between tasks and subtasks
+# ParentChildRelations for artifact properties except subtasks
+
+relationship_art_project_art_goal_usability_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_goal_usability_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_goal_usability) %>
+  relation_type: parentchild
+  position: 1
+  
+relationship_art_project_art_goal_small_latency_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_goal_small_latency_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_goal_small_latency) %>
+  relation_type: parentchild
+  position: 2
+  
+relationship_art_goal_small_latency_art_goal_keyboard_control_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_goal_small_latency_art_goal_keyboard_control_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_goal_small_latency) %>
+  sink_id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
+  relation_type: parentchild
+  position: 1
+  
+relationship_art_project_art_task_login_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_task_login_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_task_login) %>
+  relation_type: parentchild
+  position: 3
+  
+relationship_art_project_art_task_test_vocabulary_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_task_test_vocabulary_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
+  relation_type: parentchild
+  position: 4
+  
+relationship_art_project_art_section_goals_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_section_goals_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_section_goals) %>
+  relation_type: parentchild
+  position: 5
+  
+relationship_art_project_art_section_szenarios_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_section_szenarios_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_section_szenarios) %>
+  relation_type: parentchild
+  position: 6
+  
+relationship_art_project_art_workarea_learning_at_home_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_workarea_learning_at_home_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_workarea_learning_at_home) %>
+  relation_type: parentchild
+  position: 7
+  
+relationship_art_project_art_workarea_public_test_for_toefel_parentchild:
+  id: <%= Fixtures.identify(:relationship_art_project_art_workarea_public_test_for_toefel_parentchild) %>
+  source_id: <%= Fixtures.identify(:art_project) %>
+  sink_id: <%= Fixtures.identify(:art_workarea_public_test_for_toefel) %>
+  relation_type: parentchild
+  position: 8
+  
+
+
+
+# Relationships between tasks and subtasks of type parent child
 
 relationship_task_login_subtask_get_user_data_from_user:
   id: <%= Fixtures.identify(:relationship_task_login_subtask_get_user_data_from_user) %>

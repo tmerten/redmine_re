@@ -3,14 +3,14 @@
 
 	<% if !@artifact.nil? -%>
 	        <li class="header"><%= @artifact.name %></li> 
-	        <li><%= link_to 'Edit', {
+	        <li><%= link_to l(:re_edit), {
   	          :controller => 're_artifact_properties',
   	          :action => 'edit', :id => @artifact.id
   	        },
-            :class => "icon-edit" %>
+            :icon => "icon-edit" %>
           </li>
 	        
-					<li><%= link_to 'Delete', {
+					<li><%= link_to l(:re_delete), {
   	          :controller => 're_artifact_properties',
   	          :action => 'delete', :id => @artifact.id,
   	        },

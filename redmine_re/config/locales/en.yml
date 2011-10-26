@@ -7,7 +7,7 @@ en:
   re_save: 'Save'
   re_cancel: 'Cancel'
   re_edit: 'Edit'
-  re_delete: 'delete'
+  re_delete: 'Delete'
   re_show: 'Show'
   re_requirements_overview: 'Requirements Overview'
   re_create_new_artifacts: 'Create New Artifacts'
@@ -190,9 +190,9 @@ en:
   re_new_re_user_profile: 'User Profile'
   re_user_profile_priority: 'Priority'
   re_user_profile_saved: 'User Profile Sucessfully Saved'
-  re_user_profile_deleted: 'The ReUserProfile %{name} has been deleted'
-  re_user_profile_not_deleted: 'The ReUserProfile %{name} could not be deleted'
-  re_user_profile_not_found: 'Could not find a ReUserProfile with id %{id} to delete'
+  re_user_profile_deleted: 'The User Profile %{name} has been deleted'
+  re_user_profile_not_deleted: 'The User Profile %{name} could not be deleted'
+  re_user_profile_not_found: 'Could not find a User Profile with id %{id} to delete'
 
   # re_artifact_relationships
   re_artifact_relationships: 'Relationships'
