@@ -104,7 +104,7 @@ jQuery(document).ready(function(){
         <%= render :partial => 'requirements/treebar' %>
         <%#= render_flash_messages %>
 <%### REDMINE RE STUFF END 2 ###%>
-        <div><%= yield %></div>
+        <%= yield %>
         <%= call_hook :view_layouts_base_content %>
 				<div style="clear:both;"></div>
     </div>

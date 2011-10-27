@@ -10,9 +10,8 @@ a:active {
 
 .detail_view {
     cursor: auto;
-    float: left;
-    margin-left: 10px;
-    min-width: 740px;
+    margin-left: 21%;
+    width: 79%;
 }
 
 /**
@@ -44,10 +43,10 @@ a:active {
 }
 
 .treebar {
-  position: relative;
-  float: left;
-  min-width: 220px;
-  height: 100%;
+    float: left;
+    height: 100%;
+    position: relative;
+    width: 20%;
 }
 
 /* accordion header */
@@ -74,15 +73,13 @@ a:active {
 
 /* accordion pane */
 #treebar .pane {
-  padding-top: 4px;
-  padding-left: 7px;
-	border-left: 10px solid #dddddd;
-	border-bottom: 1px solid #dddddd;
-	border-right: 1px solid #dddddd;
-	display:none;
-	padding:5px;
-	overflow: hidden;
-	color:#fff;
+    border-bottom: 1px solid #DDDDDD;
+    border-left: 10px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    color: #FFFFFF;
+    display: none;
+    overflow-x: scroll;
+    padding: 5px;
 }
 
 #treebar .pane h2 {
