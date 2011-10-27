@@ -44,11 +44,17 @@ class RedmineReArtifactControllerGenerator < ControllerGenerator
                             class_path,
                             "#{file_name}_helper.rb")
                             
-      m.template 'edit.html.erb',
+      m.template 'formfields.html.erb',
                   File.join('app/views',
                             class_path,
                             file_name,
-                            "edit.rhtml")                      
+                            "_formfields.rhtml")  
+                            
+      m.template 'one_line_view.html.erb',
+                  File.join('app/views',
+                            class_path,
+                            file_name,
+                            "_one_line_view.rhtml")    
     end
   end
 end

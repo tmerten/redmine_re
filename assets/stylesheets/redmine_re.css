@@ -383,6 +383,10 @@ a.re_knowledge_artifact {
     margin-left: 0px;
 }
 
+ins.re_my_requirement_artifact {
+    background: url(../images/icons/report.png) no-repeat left top;
+}
+
 /***** custom tooltips visualization*****/
 
 /* if you define a tooltip use for the tip 2 css class: class="tip customtipname"
