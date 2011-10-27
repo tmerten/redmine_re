@@ -1,51 +1,36 @@
-<% type = 'subtask' %>
+<% fields_for "artifact[re_subtasks_attributes][]", re_subtask do |st_form| %>
 
-<% if re_subtask.new_record? %>
-    <%  index = "new" %>
-  <%= '<tr id="subtask_drag_' + index + '" class="draggable ' + type + '" >' %>
-      <td><%= hidden_field_tag "subtask_attributes[#{index}][position]", "no_pos", :class => "position" %></td>
-<% else %>
-  <% type = 'variant' if re_subtask.sub_type == 1 %>
-  <% type = 'problem' if re_subtask.sub_type == 2 %>
-  <%  index = re_subtask.id %>
-  <%= '<tr id="subtask_drag_' + re_subtask.position.to_s + '" class="draggable ' + type + '" >' %>
-      <td><%= hidden_field_tag "subtask_attributes[#{index}][position]", re_subtask.position, :class => "position" %></td>
-<% end %>
+  <% type_class = "subtask" %>
+  <% type_class = "variant" if re_subtask.sub_type == 1 %>
+  <% type_class = "problem" if re_subtask.sub_type == 2 %>
 
-    <td style="cursor: pointer;" class="<%=type-%>" ></td>
-    <td class="<%=type-%>">
-      <%= select_tag("subtask_attributes[#{index}][sub_type]", options_for_select([['ST',0],['V', 1],['P',2]], re_subtask.sub_type ), :onchange => "changeSubtaskRowColor($(this.parentNode.parentNode), this.value)" ) %>
-    </td>
-    <td class="<%=type-%>">
-      <% re_subtask.errors.on("re_artifact_properties.name")? border_style = "border-color:#EC705B;" : border_style = ""  %>
-      <%= text_area_tag "subtask_attributes[#{index}][name]", re_subtask.name, {:cols => 40, :rows => 1, :class => "subtask", :style => border_style } %>
-    </td>
-    <td class="<%=type-%>">
-     <% if re_subtask.errors.on("re_artifact_properties.name")%>
-     <div class="tooltip"><%= image_tag("exclamation.png") %>
-      <span class="tip subtask_error_tip"><%= re_subtask.errors.on("re_artifact_properties.name")%></span>
-     </div>
-     <% end %>
-    </td>
-    <td class="<%=type-%>">
-      <% re_subtask.errors.on(:solution)? border_style = "border-color:#EC705B;" : border_style = ""  %>
-      <%= text_area_tag "subtask_attributes[#{index}][solution]", re_subtask.solution, {:cols => 40, :rows => 1, :class => "subtask", :style => border_style} %>
-    </td>
-    <td class="<%=type-%>">
-     <% if re_subtask.errors.on(:solution) %>
-     <div class="tooltip"><%= image_tag("exclamation.png") %>
-      <span class="tip subtask_error_tip"><%= re_subtask.errors.on(:solution)%></span>
-     </div>
-     <% end %>
-    </td>
-    <td class="<%=type-%>">
+  <tr id="subtask_drag_<%= re_subtask.position %>" class="draggable <%= type_class %> subtask_row">
 
-        <% if( re_subtask.id) %>
-          <%= link_to_remote l(:re_delete_subtask),  :url => {:action => "delete_subtask", :id => re_subtask.id , :pos => re_subtask.position, :project_id => @project}, :confirm => t(:re_are_you_sure), :html=> {:class => "icon icon-del"} %>
-          <%= add_subtask_link l(:re_insert_st_after), "subtask_drag_#{re_subtask.position}", "after" %>
-        <% else %>
-          <%= link_to_remote l(:re_delete_subtask),  :url => {:action => "delete_subtask", :id => index, :pos => index, :project_id => @project}, :confirm => t(:re_are_you_sure), :html=> {:class => "icon icon-del"} %>
-          <%= add_subtask_link l(:re_insert_st_after), "subtask_drag_#{index}", "after" %>
-        <% end %>
-    </td>
-</tr>
+  <td style="cursor: pointer;" class="<%= type_class %>" ></td>
+  <td class="<%= type_class -%>">
+    <%= st_form.hidden_field :position, :index => nil, :class => "position"  %>
+    <%= st_form.select :sub_type, [['ST', 0],['V', 1],['P', 2]], { }, { :index => nil,  :onchange => "changeSubtaskRowColor($(this.parentNode.parentNode), this.value)" } %>
+  </td>
+  <td class="<%= type_class -%>">
+    <% re_subtask.errors.on("name")? border_style = "border-color:#EC705B;" : border_style = ""  %>
+    <%= st_form.text_area :name, { :size => "12x2", :index => nil,  :class => "subtask_textarea" } %>
+  </td>
+  <td class="<%= type_class -%>">
+  </td>
+  <td class="<%= type_class -%>">
+    <%= st_form.text_area :solution, :index => nil, :size => "12x2", :class => "subtask_textarea" %>
+  </td>
+  <td class="<%= type_class -%>">
+  </td>
+  <td class="<%= type_class -%>">
+    <% if re_subtask.new_record? %>
+      <%= link_to_function t(:re_delete_subtask), "$(this).up('.subtask_row').remove()", :class => "icon icon-del" %> <br/>
+    <% else %>
+      <%= link_to_function t(:re_delete_subtask), "markSubtaskForDestroy(this)", :class => "icon icon-del" %> <br/>
+      <%= st_form.hidden_field(:id, :index => nil) %>
+      <%= st_form.hidden_field(:_destroy, :index => nil, :class => "should_destroy") %>
+    <% end %>
+    <%= link_to_function( t(:re_insert_st_after), "addSubtask($(this.parentNode.parentNode).id, 'after')", :class => "icon icon-subtask-after" ) %>
+  </td>
+  </tr>
+ <% end %>

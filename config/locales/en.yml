@@ -1,5 +1,9 @@
 # English strings go here for Rails i18n
 en:  
+  datetime:
+    formats:
+      short: "%m/%d/%y, %H:%M"
+
   # general stuff
   re_new: 'New'
   re_of_type: 'of type'
@@ -52,6 +56,9 @@ en:
   re_404_artifact_not_found_or_project_missing: 'No artifact could not be found and no project ID was supplied'
   re_confirm: 'Confirm'
   re_artifact_details: 'Artifact Details'
+  re_created_by: 'created by'
+  re_last_update: 'last update'
+  re_by: 'by'
 
   # Configuration
   re_administrate: 'Administration'
@@ -248,6 +255,7 @@ en:
   re_goal_not_found: 'Could not find a Goal with id %{id} to delete'
 
   # re_tasks
+
   re_new_re_task: 'Task'
   re_create_re_task: 'Create a new Task'
   re_show_tasks: 'Show Tasks'
@@ -268,6 +276,8 @@ en:
   re_subtasks: 'Subtasks'
   re_task_difficulties: 'Difficulties'
   re_update_difficult: 'Update Difficulties'
+  re_st_type_not_allowed: 'This subtask type is not allowed'
+  re_st_position_not_allowed: 'This subtask position is not allowed'
 
   # re_subtasks
   re_new_re_subtask: 'Subtask'
