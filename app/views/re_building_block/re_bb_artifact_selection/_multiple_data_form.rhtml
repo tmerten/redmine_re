@@ -75,7 +75,7 @@
 				<td></td>
 				<td colspan='3'>
 					<fieldset id="represent_data_<%= data_id %>_bb_<%= re_bb.id %>" class="collapsible">
-						<legend onclick="toggleFieldset(this);"><%= l(:re_bb_artifact_selection_to_type, :relation_type => l('re_' + relation.relation_type.to_s), :artifact_type => l(sink.artifact_type)) %></legend>
+						<legend onclick="toggleFieldset(this);"><%= l(:re_bb_artifact_selection_to_type, :relation_type => l('re_' + relation.relation_type.to_s), :artifact_type => rendered_artifact_type(sink.artifact_type.underscore)) %></legend>
 							<div>
 								<table>
 									<tr>
@@ -175,7 +175,7 @@
 							<% if one_type %>
 								<td colspan='2'>
 										<%= l(:re_bb_choosen_artifact_type, :type => l(re_bb.referred_artifact_types.first.to_s))%>	
-										<%= hidden_field_tag params_path_type, re_bb.referred_artifact_types.first.to_s %>
+										<%= hidden_field_tag params_path_type, re_bb.referred_artifact_types.first.to_s %> <% todo:rendered_artifacty_type %>
 							<% else %>
 								<td>
 										<%= l(:re_bb_choose_artifact_type)%>

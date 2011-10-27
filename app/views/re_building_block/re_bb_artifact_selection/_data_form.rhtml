@@ -85,7 +85,7 @@
 		<td colspan='3'>
 			<% unless data_id == 'no_id' or re_bb.embedding_type == 'none' %> 
 				<fieldset id="represent_data_<%= data_id %>_bb_<%= re_bb.id %>" class="collapsible">
-					<legend onclick="toggleFieldset(this);"><%= l(:re_bb_artifact_selection_to_type, :relation_type => l('re_' + relation.relation_type.to_s), :artifact_type => l(sink.artifact_type)) %></legend>
+					<legend onclick="toggleFieldset(this);"><%= l(:re_bb_artifact_selection_to_type, :relation_type => l('re_' + relation.relation_type.to_s), :artifact_type => rendered_artifact_type(sink.artifact_type.underscore)) %></legend>
 					<% some_attributes_view_failed = false %>
 					<% if re_bb.embedding_type == 'attributes' and ! selected_attributes_do_not_fit_data %>
 						<% begin %>

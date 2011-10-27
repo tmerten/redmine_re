@@ -6,6 +6,8 @@ de:
   re_edit: 'Editieren'
   re_requirements_overview: 'Anforderungs&uuml;bersicht'
   re_create_child: 'Erzeuge Kind'
+  re_create_new: 'Neues '
+
 
   # columns
   re_column_name: 'Name'

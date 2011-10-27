@@ -1,5 +1,5 @@
   
-  <h2><%= t(:re_bb_configuration_header, :builing_block => t(:re_bb_selection), :artifact_type => t(params[:artifact_type])) %></h2>
+  <h2><%= t(:re_bb_configuration_header, :builing_block => t(:re_bb_selection), :artifact_type => rendered_artifact_type(params[:artifact_type].underscore)) %></h2>
 
   <%= errors_and_flash :re_building_block %>
   

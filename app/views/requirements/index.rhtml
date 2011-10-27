@@ -13,10 +13,10 @@
   </p>
 
   <% for artifact_type in @re_artifact_order	%>
-    <h3><%= t(artifact_type.underscore) %></h3>
+    <h3><%= rendered_artifact_type(artifact_type.underscore) %></h3>
     <%= render :partial => "re_artifact_descriptions/#{artifact_type.underscore}_description" %>
     <ul>
-      <li><%= link_to t("re_create_#{artifact_type.underscore}"), {
+      <li><%= link_to t(:re_create_new) + "" + rendered_artifact_type(artifact_type.underscore), {
             :controller => artifact_type.underscore,
             :action => 'new',
             :project_id => @project.id,

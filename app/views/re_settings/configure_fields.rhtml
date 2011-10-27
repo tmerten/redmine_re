@@ -1,5 +1,5 @@
 <div id='detail_view' class='detail_view'>
-<h1><%= t(:re_field_configuration, :artifact_type => l(@artifact_type.camelcase.to_sym)) %></h1>
+<h1><%= t(:re_field_configuration, :artifact_type => rendered_artifact_type(@artifact_type.underscore)) %></h1>
 <% flash.each do |k,v| %>
   <%= content_tag('div', v, :class => "flash " + k.to_s) %>
 <% end %>
