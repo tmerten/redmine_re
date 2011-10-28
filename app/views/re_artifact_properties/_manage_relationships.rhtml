@@ -32,7 +32,7 @@
             <div style="padding-left:110px">
               <% for relation_type in @re_relation_order %>
                   <% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && relation_type != 'parentchild' %>
-                      <%= radio_button :re_artifact_relationship, :relation_type, relation_type %><%= l("re_" + relation_type) %>
+                      <%= radio_button :re_artifact_relationship, :relation_type, relation_type %><%= rendered_relation_type(relation_type) %>
                       <br/>
                   <% end %>
               <% end %>

@@ -10,7 +10,7 @@
 
         <div class="splitcontentleft ">
           <%= label legend, l(:re_artifact_type) %>
-          <%= select (legend, :type, ReArtifactProperties.find(:all, :select => 'distinct artifact_type').collect { |item| [l(item.artifact_type), item.artifact_type]}, { :include_blank => l(:re_none_specific), :class => :select_field_filter }) %>
+          <%= select (legend, :type, ReArtifactProperties.find(:all, :select => 'distinct artifact_type').collect { |item| [rendered_artifact_type(item.artifact_type), item.artifact_type]}, { :include_blank => l(:re_none_specific), :class => :select_field_filter }) %>
         </div>
 
         <div class="splitcontentright " >

@@ -22,7 +22,7 @@
                       :class => 'icon icon-del'
                     })
               %>]
-      <%= relationship.relation_type.to_s.humanize %> <%= t(:re_to) %>		
+      <%= rendered_relation_type(relationship.relation_type) %> <%= t(:re_to) %>		
       <%= link_to( sink.name, {
         :action => :edit,
         :controller => sink.artifact_type.underscore,
@@ -57,7 +57,7 @@
               :class => 'icon icon-del'
             })
       %>]		
-      <%= relationship.relation_type.to_s.humanize %> <%= t(:re_from) %> 			
+      <%= rendered_relation_type(relationship.relation_type) %> <%= t(:re_from) %>
 			<%= link_to( source.name, {
         :action => :edit,
         :controller => source.artifact_type.underscore,

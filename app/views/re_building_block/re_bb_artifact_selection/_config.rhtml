@@ -18,11 +18,11 @@
 		      	<% @re_building_block.nil? ? selected_types = [] : selected_types = @re_building_block.referred_artifact_types%>
 		      	<%= f.label :referred_artifact_types, l(:re_bb_referred_artifact_types) %> 
 				<%=  f.select "referred_artifact_types", @re_artifact_order.collect {|artifact| [rendered_artifact_type(artifact), artifact.to_s.camelcase]}, {}, {:class => "bb_config", :multiple => true} %>
-		      </p><%= debug(@re_artifact_order.inspect) %>
+		      </p>
 		      <p>
 		      	<% @re_building_block.nil? ? selected_types = [] : selected_types = @re_building_block.referred_relationship_types%>
 		      	<%= f.label :referred_relationship_types, l(:re_bb_referred_relationship_types) %> 
-				<%=  f.select "referred_relationship_types", options_for_select(@re_relation_order.collect {|relationship| [l('re_' + relationship.to_s) , relationship.to_s]}, selected_types), {}, {:class => "bb_config", :multiple => true} %>
+				<%=  f.select "referred_relationship_types", options_for_select(@re_relation_order.collect {|relationship| [rendered_relation_type(relationship) , relationship.to_s]}, selected_types), {}, {:class => "bb_config", :multiple => true} %>
 			  </p>
 			  <div id="config_embedded_representation">
 			  	<% @re_building_block.nil? ? embedding_type = nil : @re_building_block.embedding_type%>

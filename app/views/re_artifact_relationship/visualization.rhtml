@@ -43,7 +43,7 @@
       <tr>
         <% colors = "#" + ReSetting.get_serialized(value, @project.id)['color'] %>
         <td>
-          <%= t('re_' + value.to_s.underscore)%>
+          <%= rendered_relation_type(value) %>
         </td>
         <td>
           <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>

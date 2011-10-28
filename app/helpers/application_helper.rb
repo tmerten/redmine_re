@@ -1,5 +1,16 @@
 module ApplicationHelper
 
+  def rendered_relation_type(relation_type)
+    relation_type_alias = @re_relation_settings[relation_type]['alias']
+    relation_type_humanized =  relation_type.humanize
+
+    if relation_type_alias.blank? or  relation_type_humanized.eql?(relation_type_alias)
+      return t('re_' + relation_type)
+    else
+      return relation_type_alias
+    end
+  end
+
   # artifact_type bsp: => "re_task"
   def rendered_artifact_type(artifact_type)
     artifact_type_alias = @re_artifact_settings[artifact_type]['alias']
