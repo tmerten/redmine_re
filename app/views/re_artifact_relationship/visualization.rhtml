@@ -23,7 +23,7 @@
         <tr>
         <% colors = "#" + ReSetting.get_serialized(artifact_type, @project.id)['color'] %>
         <td>
-            <%=t(artifact_type.to_s.underscore) %>
+            <%= rendered_artifact_type(artifact_type.underscore) %>
           </td>
           <td>
             <span style="padding-left: 20px; alpha=0.2; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
