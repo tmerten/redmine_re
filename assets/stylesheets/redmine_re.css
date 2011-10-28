@@ -181,6 +181,10 @@ label.medium {
 label.large {
   width: 300px;
 }
+label.large_content{
+  width: 300px;
+  clear: none;
+}
 
 label {
   font-weight: bold;
