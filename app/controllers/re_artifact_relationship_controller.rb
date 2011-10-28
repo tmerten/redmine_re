@@ -141,7 +141,7 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['user'] = artifact.user.to_s
     node_data['responsibles'] = artifact.responsibles
     node_data['$color'] = "#" + node_settings['color']
-    node_data['$height'] = 90                                                    
+    node_data['$height'] = 90
     node_data['$angularWidth'] = 13.00
 
 
@@ -149,23 +149,21 @@ class ReArtifactRelationshipController < RedmineReController
 
     relationship_data = []
     outgoing_relationships.each do |relation|
-      artifact_is_source = (artifact == relation.source)
-      other_artifact = artifact_is_source ? relation.sink : relation.source
-      logger.debug("/////////// RELATION ///////////") if logger
-      logger.debug("is_source?" + artifact_is_source.to_s + " source:" + relation.source_id.to_s + " sink:" + relation.sink_id.to_s + " type:" + relation.relation_type.to_s) if logger
-
-      relation_data = {}
-      relation_data['id'] = other_artifact.id
-      relation_data['full_name'] = other_artifact.name
-      relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-      relation_data['created_at'] = other_artifact.created_at.to_s(:short)
-      relation_data['author'] = other_artifact.author.to_s
-      relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
-      relation_data['user'] = other_artifact.user.to_s
-      relation_data['responsibles'] = other_artifact.responsibles
-      relation_data['relation_type'] = relation.relation_type
-      relation_data['direction'] = artifact_is_source ? 'to':'from'
-      relationship_data << relation_data
+      other_artifact = relation.sink
+      unless other_artifact.nil? # TODO: actually, this should not possible
+        relation_data = {}
+        relation_data['id'] = other_artifact.id
+        relation_data['full_name'] = other_artifact.name
+        relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+        relation_data['created_at'] = other_artifact.created_at.to_s(:short)
+        relation_data['author'] = other_artifact.author.to_s
+        relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
+        relation_data['user'] = other_artifact.user.to_s
+        relation_data['responsibles'] = other_artifact.responsibles
+        relation_data['relation_type'] = relation.relation_type
+        relation_data['direction'] = 'to'
+        relationship_data << relation_data
+      end
     end
 
     node_data['relationship_data'] = relationship_data 
@@ -173,23 +171,22 @@ class ReArtifactRelationshipController < RedmineReController
 
     drawable_relationships.each do |relation|
       sink = ReArtifactProperties.find_by_id(relation.sink_id)
-
       directed = ReArtifactRelationship.find_by_source_id_and_sink_id(relation.sink_id, relation.source.id).nil?
       relation_settings = ReSetting.get_serialized(relation.relation_type, @project.id)
 
       adjacent_node = {}
-
-      logger.debug("Relation Settings: " + relation_settings.to_yaml )
-
       adjacent_node['nodeTo'] = "node_" + sink.id.to_s
       #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
+
       edge_data = {}
-      edge_data['$color'] = "#" + relation_settings['color']
+      edge_data['$color'] = "#" + relation_settings['color'] if directed
+      edge_data['$color'] = "#111111" unless directed
       edge_data['$lineWidth'] = 2
       edge_data['$type'] = "arrow" if directed
-      edge_data['$direction'] = [ "node_" + sink.id.to_s, "node_" + artifact.id.to_s ] if directed
+      edge_data['$direction'] = [ "node_" + artifact.id.to_s, "node_" + sink.id.to_s ] if directed
       edge_data['$type'] = "hyperline" unless directed
       adjacent_node['data'] = edge_data
+
       adjacencies << adjacent_node
     end
     node['adjacencies'] = adjacencies
@@ -199,7 +196,7 @@ class ReArtifactRelationshipController < RedmineReController
 
   def build_json_according_to_user_choice
     # This method build a new json string in variable @json_netmap which is returned
-    # Meanwhile it computes queries for the search for the chosen artifacts and relations.                                
+    # Meanwhile it computes queries for the search for the chosen artifacts and relations.
     # ToDo Refactor this method: The same is done for relationships and artifacts --> outsource!
     @visualization_type = params[:visualization_type]
 
