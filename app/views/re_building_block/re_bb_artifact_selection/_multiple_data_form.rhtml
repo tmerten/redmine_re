@@ -175,7 +175,7 @@
 							<% if one_type %>
 								<td colspan='2'>
 										<%= l(:re_bb_choosen_artifact_type, :type => l(re_bb.referred_artifact_types.first.to_s))%>	
-										<%= hidden_field_tag params_path_type, re_bb.referred_artifact_types.first.to_s %> <% todo:rendered_artifacty_type %>
+										<%= hidden_field_tag params_path_type, re_bb.referred_artifact_types.first.to_s %>
 							<% else %>
 								<td>
 										<%= l(:re_bb_choose_artifact_type)%>

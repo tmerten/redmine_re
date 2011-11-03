@@ -346,6 +346,17 @@ en:
   re_processword_not_deleted: 'The Processword %{name} could not be deleted'
   re_processword_validation_error: 'Processword error: %{msg}'
   
+  # re_rationale
+  re_rationale: 'Rationale'
+  ReRationale: 'Rationale'
+  re_new_re_rationale: 'New Rationale'
+  re_create_re_rationale: 'Create a new Rationale'
+  re_rationale_specific_attributes: 'Rationale specific attributes'
+  re_rationale_saved: 'Rationale Sucessfully Saved'
+  re_rationale_deleted: 'The Rationale %{name} has been deleted'
+  re_rationale_not_deleted: 'The Rationale %{name} could not be deleted'
+  re_rationale_not_found: 'Could not find a Rationale with id %{id} to delete'
+  
   
   # re_building_blocks
   re_building_blocks: 'Building Blocks'

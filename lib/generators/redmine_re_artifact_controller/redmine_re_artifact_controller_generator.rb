@@ -32,8 +32,8 @@ class RedmineReArtifactControllerGenerator < ControllerGenerator
       m.template 'controller.rb.erb',
                   File.join('app/controllers',
                             class_path,
-                            "#{file_name}_controller.rb")
-
+                            "#{file_name}_controller.rb") 
+                            
       m.template 'functional_test.rb.erb',
                   File.join('test/functional',
                             class_path,
@@ -43,18 +43,20 @@ class RedmineReArtifactControllerGenerator < ControllerGenerator
                   File.join('app/helpers',
                             class_path,
                             "#{file_name}_helper.rb")
-                            
+                          
       m.template 'formfields.html.erb',
                   File.join('app/views',
                             class_path,
                             file_name,
-                            "_formfields.rhtml")  
+                            "_formfields.rhtml")
                             
       m.template 'one_line_view.html.erb',
                   File.join('app/views',
                             class_path,
                             file_name,
-                            "_one_line_view.rhtml")    
+                            "_one_line_view.rhtml")
+                            
+
     end
   end
 end

@@ -375,7 +375,13 @@ a.re_processword {
     background: url(../images/icons/cog.png) no-repeat left top;
 	margin-left: 0px;
 }
-
+ins.re_rationale {
+    background: url(../images/icons/anchor.png) no-repeat left top;
+}
+a.re_rationale {
+    background: url(../images/icons/anchor.png) no-repeat left top;
+	margin-left: 0px;
+}
 ins.re_knowledge_artifact {
     background: url(../images/icons/note.png) no-repeat left top;
 }
