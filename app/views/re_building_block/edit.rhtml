@@ -1,11 +1,13 @@
 <div id='detail_view' class='detail_view'>
-	<h2><%= t(:re_bb_choose_builing_block_to_expand_artifact)%></h2>
-	<p>
-	    <%= select_tag :building_block_type, options_for_select([ [l(:re_bb_text), "re_bb_text"], [l(:re_bb_selection), "re_bb_selection"], [l(:re_bb_artifact_selection), "re_bb_artifact_selection"]], params[:building_block_type]) %>
-		<%= observe_field(:building_block_type,
-	    	:url => { :action => :update_config_form, :artifact_type => params[:artifact_type], :project_id => params[:project_id], :id => @re_building_block.id },
-	    	:with => :building_block_type) %>
-	</p>
+	<% if @re_building_block.new_record? %>
+		<h2><%= t(:re_bb_choose_builing_block_to_expand_artifact)%></h2>
+		<p>
+		    <%= select_tag :building_block_type, options_for_select([ [l(:re_bb_text), "re_bb_text"], [l(:re_bb_selection), "re_bb_selection"], [l(:re_bb_artifact_selection), "re_bb_artifact_selection"]], params[:building_block_type]) %>
+			<%= observe_field(:building_block_type,
+		    	:url => { :action => :update_config_form, :artifact_type => params[:artifact_type], :project_id => params[:project_id], :id => @re_building_block.id },
+		    	:with => :building_block_type) %>
+		</p>
+	<% end %>
 	<div id="building_block_config">
 		<% if params[:building_block_type].nil? %>
 			<% partial = "re_building_block/re_bb_text/config" %>
