@@ -1,0 +1,6 @@
+<% configured_description = ReSetting.get_serialized('re_scenario', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	Managing scenarios to show processes in your system.
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 

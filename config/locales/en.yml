@@ -88,6 +88,10 @@ en:
   re_conf_bb_detailed_configuration: 'Configure special aspects of this building block.'
   re_conf_display_order: 'Display order'
   re_field_configuration: 'Configuration of fields for artifact type %{artifact_type}'
+  re_edit_artifact_type_description: 'Edit description of artifact type %{artifact_type}'
+  re_artifact_type_description_configuration: 'Configuration of description of artifact type %{artifact_type}'
+  re_artifact_type_description: 'Artifact type description'
+  re_description_updated_successfully: 'Description was updated successfully'
 
   # re_artifact_properties
   re_artifact_name: 'Name'

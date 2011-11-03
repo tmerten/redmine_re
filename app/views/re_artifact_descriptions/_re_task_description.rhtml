@@ -1,4 +1,11 @@
-If you are unfamiliar with using Lauesens Task-Based aproach for RE - it is very similiar to the famouse Use-Cases by Cockburn - 
-simply <a href="http://www.itu.dk/~slauesen/SorenReqs.html">check his website</a> or have a look
-at his <a href="http://www.itu.dk/~slauesen/Papers/RequirementsSL-07.doc">Task Template (MS Word Doc)</a>.<br />
-Most important is that you recognize the demand solution prinziple coming with the two columns of the approach.
+<% configured_description = ReSetting.get_serialized('re_task', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	If you are unfamiliar with using Lauesens Task-Based aproach for RE - it is very similiar to the famouse Use-Cases by Cockburn - 
+	simply <a href="http://www.itu.dk/~slauesen/SorenReqs.html">check his website</a> or have a look
+	at his <a href="http://www.itu.dk/~slauesen/Papers/RequirementsSL-07.doc">Task Template (MS Word Doc)</a>.<br />
+	Most important is that you recognize the demand solution prinziple coming with the two columns of the approach.
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 
+
+

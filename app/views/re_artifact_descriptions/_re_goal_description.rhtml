@@ -1,2 +1,7 @@
- You may want to use goals as high level requirements or to structure your requirements.
- There are also approaches using goals for the whole RE, especially for understanding the requirements. 
+<% configured_description = ReSetting.get_serialized('re_goal', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	You may want to use goals as high level requirements or to structure your requirements.
+	There are also approaches using goals for the whole RE, especially for understanding the requirements.
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %>

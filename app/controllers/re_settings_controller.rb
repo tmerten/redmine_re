@@ -103,6 +103,20 @@ class ReSettingsController < RedmineReController
     # returns the settings hash for the according artifact_type
     self.get_serialized(artifact_type, project_id)
   end
+  
+  def edit_artifact_type_description
+    @artifact_type = params[:artifact_type]
+    configured_artifact = ReSetting.get_serialized(@artifact_type, @project.id)
+    @description = configured_artifact['description']
+    # Needed to use the form for helper and fill the textfield properly
+    if request.post?
+      configured_artifact['description'] = params[:description] unless params[:description].nil? 
+      ReSetting.set_serialized(@artifact_type, @project.id, configured_artifact)
+      flash.now[:notice] = l(:re_description_updated_successfully)
+      @description = configured_artifact['description']
+    end
+    
+  end
 
 private
 

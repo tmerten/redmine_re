@@ -1,3 +1,10 @@
-Use sections to structure your requirements in the tree to the left.<br />
-You can add sections to organize the types of your requirements (e.g. introduce a goals section and a workareas section) and put the according requirements below.<br /> 
+<% configured_description = ReSetting.get_serialized('re_section', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	Use sections to structure your requirements in the tree to the left.<br />
+	You can add sections to organize the types of your requirements (e.g. introduce a goals section and a workareas section) and put the according requirements below.<br /> 
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 
+
+
 

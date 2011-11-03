@@ -1,1 +1,7 @@
-You can use user profiles to describe your users.
+<% configured_description = ReSetting.get_serialized('re_user_profile', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	You can use user profiles to describe your users.
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 
+

@@ -1,0 +1,6 @@
+<% configured_description = ReSetting.get_serialized('re_requirement', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	For managing the most important RE artifact.
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 

@@ -1,1 +1,8 @@
-Workareas are used to structure a couple of tasks.
+<% configured_description = ReSetting.get_serialized('re_workarea', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	Workareas are used to structure a couple of tasks.
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 
+
+

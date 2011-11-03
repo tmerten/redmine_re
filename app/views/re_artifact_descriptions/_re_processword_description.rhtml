@@ -1,1 +1,6 @@
-Processwords are needed for the use of a syntactic requirements template. You can define synonyms for the word here and deliver a proper definition of the term.
+<% configured_description = ReSetting.get_serialized('re_processword', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	Processwords are needed for the use of a syntactic requirements template. You can define synonyms for the word here and deliver a proper definition of the term.
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 

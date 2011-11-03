@@ -1,1 +1,6 @@
- You may want to add a file ( Image ( PNG,JPEG, GIF ) , ..)
+<% configured_description = ReSetting.get_serialized('re_attachment', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	You may want to add a file ( Image ( PNG,JPEG, GIF ) , ..)
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 
