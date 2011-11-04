@@ -13,7 +13,11 @@ module ApplicationHelper
 
   # artifact_type bsp: => "re_task"
   def rendered_artifact_type(artifact_type)
-    artifact_type_alias = @re_artifact_settings[artifact_type]['alias']
+    artifact_type_alias = ''
+
+    unless artifact_type_alias = @re_artifact_settings[artifact_type].nil?
+      artifact_type_alias = @re_artifact_settings[artifact_type]['alias']
+    end
     artifact_type_humanized =  artifact_type.gsub(/^re_/, '').humanize
 
     if artifact_type_alias.blank? or  artifact_type_humanized.eql?(artifact_type_alias)
