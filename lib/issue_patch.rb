@@ -16,7 +16,7 @@ module IssuePatch
       unloadable
 
       #puts base.methods
-      has_many :realizations
+      has_many :realizations, :dependent => :destroy
       has_many :re_artifact_properties,  :through => :realizations, :uniq => true
 
     end
