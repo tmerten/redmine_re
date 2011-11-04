@@ -1,16 +1,22 @@
 <div id='detail_view' class='detail_view'>
   <h2>Create a new Reqirements Artifact</h2>
 
-  <p>
-  Get started by creating a new requirements artifact. You may select from the artifacts below.<br />
-  You will find the artifacts you created in the tree to your left. You can drag and drop each artifact 
-  in the tree to reorder or restructure your RE artifacts.<br />
-  The tree represents the structure of your requirements document.
-  </p>
-  <p>
-  Once you left this page you can always add a new artifact by right-click on an element of the tree below
-  the Artifact Summary. A context menu will open up, wich provides all operations you need.
-  </p>
+  	<% configured_description = ReSetting.get_plain('plugin_description', @project.id)%>
+	<% if configured_description.nil? or configured_description == '' %> 
+		<p>
+		  Get started by creating a new requirements artifact. You may select from the artifacts below.<br />
+		  You will find the artifacts you created in the tree to your left. You can drag and drop each artifact 
+		  in the tree to reorder or restructure your RE artifacts.<br />
+		  The tree represents the structure of your requirements document.
+		</p>
+		<p>
+		  Once you left this page you can always add a new artifact by right-click on an element of the tree below
+		  the Artifact Summary. A context menu will open up, wich provides all operations you need.
+		</p>
+	<% else %> 
+		<%= textilizable(configured_description, :only_path => false) %> 
+	<% end %>
+  
 
   <% for artifact_type in @re_artifact_order	%>
     <h3><%= rendered_artifact_type(artifact_type.underscore) %></h3>

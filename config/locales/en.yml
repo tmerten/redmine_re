@@ -67,6 +67,8 @@ en:
   re_configure_fields_treebar: 'Configure Fields of %{artifact_type}'
   re_relation_management_pane: 'Always show relation management pane'
   re_visualization_size: 'Visualization size (in pixels)'
+  re_plugin_description: 'Plugin description'
+  re_update_plugin_description: 'Update plugin description'
   re_child_artifacts: 'Child artifacts'
   re_fields: 'Fields'
   re_configs_saved: 'Configurations saved sucessfully'

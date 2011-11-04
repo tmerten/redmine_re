@@ -11,6 +11,26 @@
     <p>
     <%= label_tag :visualization_size, l(:re_visualization_size), :class => 'large_content' %> <%= text_field_tag 're_settings[visualization_size]', @re_settings['visualization_size'] %>
     </p>
+	<p>
+    <fieldset>
+      <legend><%= t(:re_plugin_description) %></legend>
+      <% unless @plugin_description.nil? or @plugin_description == '' %>
+	          <div class="contextual">
+	            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-plugin-description', 'plugin_description'); return false;"><%= l(:re_update_plugin_description) %></a>
+	          </div>
+	          <%= textilizable(@plugin_description, :only_path => false) %>
+	          <br/>
+	      <% end %>
+	      <div id='update-plugin-description' <%= 'style="display:none;"' unless @plugin_description.nil? or @plugin_description == '' %>>
+	        <%= text_area_tag 'plugin_description', @plugin_description,
+	                        :cols => 60,
+	                        :rows => (@plugin_description.blank? ? 10 : [[10, @plugin_description.length / 50].max, 100].min),
+	                        :accesskey => accesskey(:edit),
+	                        :class => 'wiki-edit' %>
+	        <%= wikitoolbar_for 'plugin_description' %>
+	      </div>
+    </fieldset>
+    </p>
 
     <p>
     <h2>Artifact Configuration</h2>

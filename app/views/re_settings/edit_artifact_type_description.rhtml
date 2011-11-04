@@ -10,14 +10,14 @@
     
 	<fieldset>
       <legend><%= t(:re_artifact_type_description) %></legend>
-      <% unless @description.nil? %>
+      <% unless @description.nil? or @description == ''  %>
 	          <div class="contextual">
 	            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', 'description'); return false;"><%= l(:re_update_description) %></a>
 	          </div>
 	          <%= textilizable(@description, :only_path => false) %>
 	          <br/>
 	      <% end %>
-	      <div id='update-description' <%= 'style="display:none;"' unless @description.nil? %>>
+	      <div id='update-description' <%= 'style="display:none;"' unless @description.nil? or @description == '' %>>
 	        <%= text_area_tag :description, @description,
 	                        :cols => 60,
 	                        :rows => (@description.blank? ? 10 : [[10, @description.length / 50].max, 100].min),

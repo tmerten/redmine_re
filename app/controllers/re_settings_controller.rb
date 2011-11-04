@@ -20,6 +20,7 @@ class ReSettingsController < RedmineReController
        @project_artifact.save
        logger.debug "#####################       --------------------  Errors: #{@project_artifact.errors.inspect}"
     end
+    @plugin_description = ReSetting.get_plain("plugin_description", @project.id)
 
     if request.post?
       save_user_config
@@ -164,6 +165,8 @@ private
 
     ReSetting.set_plain("relation_management_pane", @project.id, new_settings.has_key?("relation_management_pane").to_s)
     ReSetting.set_plain("visualization_size", @project.id, new_settings["visualization_size"])
+    ReSetting.set_plain("plugin_description", @project.id, params["plugin_description"])
+    @plugin_description = params["plugin_description"]
 
     ReSetting.set_serialized("artifact_order", @project.id, new_artifact_order)
     ReSetting.set_serialized("relation_order", @project.id, new_relation_order)
