@@ -3,7 +3,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
   cattr_accessor :artifact_types
   ajaxful_rateable :stars => 10, :allow_update => false#, :dimensions => [:first]
-  has_many :realizations
+  has_many :realizations, :dependent => :destroy
   has_many :comments, :as => :commented, :dependent => :destroy
   has_many :issues, :through => :realizations, :uniq => true
 
@@ -38,7 +38,6 @@ class ReArtifactProperties < ActiveRecord::Base
 
   has_many :sources, :through => :relationships_as_sink,   :order => "re_artifact_relationships.position"
   has_one :parent, :through => :parent_relation, :source => "source"
-  #acts_as_list :scope => "parent_relation.parent_id", :order => "parent_relation.position"
 
   has_many :re_bb_data_texts, :dependent => :delete_all
   has_many :re_bb_data_selections, :dependent => :delete_all
