@@ -169,9 +169,8 @@ class RedmineReController < ApplicationController
         flash.now[:notice] = t( @artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
         edit_hook_valid_artifact_after_save params
 
-        unless @sibling.nil?# TODO: Implement this correct: && @sibling.parent.eql(@parent)
+        unless @sibling.nil?
           @artifact_properties.parent_relation.insert_at(@sibling.parent_relation.position + 1)
-          logger.debug("######/////ICH BIN WIEDER HIER")
         end
 
         # Add Comment
