@@ -41,7 +41,6 @@ class ReSettingsController < RedmineReController
         configured_artifact['in_use'] = true
         configured_artifact['alias'] = artifact_type.gsub(/^re_/, '').humanize
         configured_artifact['color'] = "%06x" % (rand * 0xffffff)
-        configured_artifact['show_children_in_tree'] = true
         ReSetting.set_serialized(artifact_type, @project.id, configured_artifact)
       end
       @re_artifact_configs[artifact_type] = configured_artifact
@@ -176,7 +175,6 @@ private
       # disabled checkboxes do not send a key/value pair
       v['in_use'] = v.has_key? 'in_use'
       v['printable'] = v.has_key? 'printable'
-      v['show_children_in_tree'] = v.has_key? 'show_children_in_tree'
       logger.debug('storing:' + k + ' ' + @project.id.to_s + ' ' + v.to_yaml)
       ReSetting.set_serialized(k, @project.id, v)
     end

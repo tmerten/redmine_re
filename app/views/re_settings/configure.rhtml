@@ -38,11 +38,10 @@
     <table class="list">
       <thead>
         <tr>
-          <th title="<%= t(:re_conf_artifact_display_order) %>">Display Order</th>
-          <th title="<%= t(:re_conf_artifact_in_use) %>">Use</th>
-          <th title="<%= t(:re_conf_alias_name) %>">Alias Name</th>
-          <th title="<%= t(:re_conf_color) %>">Color</th>
-          <th title="<%= t(:re_conf_show_in_tree) %>">Show in tree</th>
+          <th title="<%= t(:re_conf_artifact_display_order) %>"><%= t(:re_display_order) %></th>
+          <th title="<%= t(:re_conf_artifact_in_use) %>"><%= t(:re_use) %></th>
+          <th title="<%= t(:re_conf_alias_name) %>"><%= t(:re_alias_name) %></th>
+          <th title="<%= t(:re_conf_color) %>"><%= t(:re_color) %></th>
           <th title="<%= t(:re_conf_fields) %>"><%= t(:re_fields) %></th>
         </tr>
       </thead>
@@ -54,7 +53,7 @@
 			  <%= link_to image_tag('edit.png'),  
 						  {:action => "edit_artifact_type_description", 
 						   :artifact_type => artifact_type,  
-						   :project_id => @project.id}, {:title => l(:re_edit_artifact_type_description, :artifact_type => l(:artifact_type))} %> 
+						   :project_id => @project.id}, {:title => l(:re_edit_artifact_type_description, :artifact_type => l(artifact_type))} %> 
             </td>
             <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[in_use]]', 'yes', @re_artifact_configs[artifact_type]['in_use'] %></td>
             <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[alias]]', @re_artifact_configs[artifact_type]['alias'], :size => 20 %></td>
@@ -63,7 +62,6 @@
               getccolor(document.getElementById("<%= "re_artifact_configs_"+artifact_type.underscore+"_color" %>"));
               </script>
             </td>
-            <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[show_in_tree]]', 'yes', @re_artifact_configs[artifact_type]['show_in_tree'] %></td>
             <td><%= link_to t(:re_edit), :action => "configure_fields", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
           </tr>
         <% end %>
@@ -76,11 +74,11 @@
     <table class="list">
       <thead>
         <tr>
-          <th title="<%= t(:re_conf_artifact_display_order) %>">Display Order</th>
-          <th title="<%= t(:re_conf_artifact_in_use) %>">Use</th>
-          <th title="<%= t(:re_conf_alias_name) %>">Alias Name</th>
-          <th title="<%= t(:re_conf_color) %>">Color</th>
-          <th title="<%= t(:re_conf_show_in_tree) %>">Show in Visualization</th>
+          <th title="<%= t(:re_conf_artifact_display_order) %>"><%= t(:re_display_order) %></th>
+          <th title="<%= t(:re_conf_artifact_in_use) %>"><%= t(:re_use) %></th>
+          <th title="<%= t(:re_conf_alias_name) %>"><%= t(:re_alias_name) %></th>
+          <th title="<%= t(:re_conf_color) %>"><%= t(:re_color) %></th>
+          <th title="<%= t(:re_conf_show_in_visualization) %>"><%= t(:re_show_in_visualization) %></th>
         </tr>
       </thead>
       <tbody id="relation_types_list">
