@@ -2,22 +2,21 @@ class ReArtifactRelationship < ActiveRecord::Base
   unloadable
 
   RELATION_TYPES = {
-  	:pch => "parentchild",
-  	:dep => "dependency",
-  	:con => "conflict",
+    :pch => "parentchild",
+    :dep => "dependency",
+    :con => "conflict",
     :rat => "rationale",
     :ref => "refinement",
     :pof => "part_of"
-	}
+  }
 
   # The relationship has ReArtifactProperties as source or sink 
   belongs_to :source, :class_name => "ReArtifactProperties"
-
   belongs_to :sink,   :class_name => "ReArtifactProperties"
   has_many :re_bb_data_artifact_selection, :dependent => :destroy
 
   validates_uniqueness_of :source_id, :scope => [:sink_id, :relation_type], :message => :re_this_relation_already_exists
-  validates_uniqueness_of :sink_id, :if => Proc.new { |rel| rel.relation_type == "parentchild" }, :message => :re_only_one_parent_allowed
+  validates_uniqueness_of :sink_id, :scope => :relation_type, :if => Proc.new { |rel| rel.relation_type == "parentchild" }, :message => :re_only_one_parent_allowed
   validates_presence_of :relation_type
   validates_inclusion_of :relation_type, :in => RELATION_TYPES.values
 
