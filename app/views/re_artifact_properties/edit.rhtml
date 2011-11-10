@@ -73,7 +73,7 @@
 	      </div>
 	    </fieldset>
 	  
-	    <br>
+	    <br />
 	  
 	    <fieldset>
 	      <legend><%= t(:re_associated_issues) %></legend>
@@ -137,7 +137,7 @@
 	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
 	  </div>
       <%# add_bb_configuration_link(params[:controller].camelcase)%>
-	  <p>
+
 
     <% if @artifact.id %>
         <div class="rating_comments">
@@ -197,6 +197,7 @@
 		</div><!-- end of tab two -->  
 	<% end %>
   </div>
+</div><!-- panes-->
 <% javascript_tag do %>
   jQuery(function() {
     // setup ul.tabs to work as tabs for each div directly under div.panes

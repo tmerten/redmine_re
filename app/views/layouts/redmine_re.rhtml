@@ -62,60 +62,63 @@ jQuery(document).ready(function(){
 
 </head>
 <body class="<%=h body_css_classes %>">
-<div id="wrapper">
-<div id="wrapper2">
-<div id="top-menu">
-    <div id="account">
-        <%= render_menu :account_menu -%>
-    </div>
-    <%= content_tag('div', "#{l(:label_logged_as)} #{link_to_user(User.current, :format => :username)}", :id => 'loggedas') if User.current.logged? %>
-    <%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
-</div>
-      
-<div id="header">
-    <% if User.current.logged? || !Setting.login_required? %>
-    <div id="quick-search">
-        <% form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
-        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
-        <%= link_to l(:label_search), {:controller => 'search', :action => 'index', :id => @project}, :accesskey => accesskey(:search) %>:
-        <%= text_field_tag 'q', @question, :size => 20, :class => 'small', :accesskey => accesskey(:quick_search) %>
-        <% end %>
-        <%= render_project_jump_box %>
-    </div>
-    <% end %>
-    
-    <h1><%= page_header_title %></h1>
-    
-    <% if display_main_menu?(@project) %>
-    <div id="main-menu">
-        <%= render_main_menu(@project) %>
-    </div>
-    <% end %>
-</div>
-
-<%= tag('div', {:id => 'main', :class => (has_content?(:sidebar) ? '' : 'nosidebar')}, true) %>
-    <div id="sidebar">        
-        <%= yield :sidebar %>
-        <%= call_hook :view_layouts_base_sidebar %>
-    </div>
-    
-    <div id="content">
-<%### REDMINE RE STUFF START 2 ###%>
-        <%= render :partial => 'requirements/treebar' %>
-        <%#= render_flash_messages %>
-<%### REDMINE RE STUFF END 2 ###%>
-        <%= yield %>
-        <%= call_hook :view_layouts_base_content %>
-				<div style="clear:both;"></div>
-    </div>
-</div>
-
-<div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
 	
-</div>
-</div>
-<%= call_hook :view_layouts_base_body_bottom %>
+<div id="wrapper">
+	<div id="wrapper2">
+		
+		<div id="top-menu">
+		    <div id="account">
+		        <%= render_menu :account_menu -%>
+		    </div>
+		    <%= content_tag('div', "#{l(:label_logged_as)} #{link_to_user(User.current, :format => :username)}", :id => 'loggedas') if User.current.logged? %>
+		    <%= render_menu :top_menu if User.current.logged? || !Setting.login_required? -%>
+		</div>
+	      
+		<div id="header">
+		    <% if User.current.logged? || !Setting.login_required? %>
+		    <div id="quick-search">
+		        <% form_tag({:controller => 'search', :action => 'index', :id => @project}, :method => :get ) do %>
+		        <%= hidden_field_tag(controller.default_search_scope, 1, :id => nil) if controller.default_search_scope %>
+		        <%= link_to l(:label_search), {:controller => 'search', :action => 'index', :id => @project}, :accesskey => accesskey(:search) %>:
+		        <%= text_field_tag 'q', @question, :size => 20, :class => 'small', :accesskey => accesskey(:quick_search) %>
+		        <% end %>
+		        <%= render_project_jump_box %>
+		    </div>
+		    <% end %>
+		    
+		    <h1><%= page_header_title %></h1>
+		    
+		    <% if display_main_menu?(@project) %>
+		    <div id="main-menu">
+		        <%= render_main_menu(@project) %>
+		    </div>
+		    <% end %>
+		</div>
+	
+		<%= tag('div', {:id => 'main', :class => (has_content?(:sidebar) ? '' : 'nosidebar')}, true) %>
+		    <div id="sidebar">        
+		        <%= yield :sidebar %>
+		        <%= call_hook :view_layouts_base_sidebar %>
+		    </div>
+	    
+		    <div id="content">
+				<%### REDMINE RE STUFF START 2 ###%>
+		        <%= render :partial => 'requirements/treebar' %>
+		        <%#= render_flash_messages %>
+				<%### REDMINE RE STUFF END 2 ###%>
+		        <%= yield %>
+		        <%= call_hook :view_layouts_base_content %>
+				<div style="clear:both;"></div>
+		    </div>
+		</div>
+	
+		<div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
+		
+	</div> <!-- Close wrapper 2-->
+</div> <!-- Close wrapper-->
 
+<%= call_hook :view_layouts_base_body_bottom %>
+	
 <div style="clear:both;"></div>
 <div id="footer">
   <div class="bgl">
@@ -124,5 +127,6 @@ jQuery(document).ready(function(){
     </div>
   </div>
 </div>
+
 </body>
 </html>

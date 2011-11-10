@@ -118,6 +118,7 @@ class ReArtifactPropertiesController < RedmineReController
     redirect_to(:back)
   end
 
+  # Ajax call
   def autocomplete_parent
     @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?    
 
