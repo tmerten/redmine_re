@@ -15,7 +15,7 @@ module ApplicationHelper
   def rendered_artifact_type(artifact_type)
     artifact_type_alias = ''
 
-    unless artifact_type_alias = @re_artifact_settings[artifact_type].nil?
+    unless @re_artifact_settings[artifact_type].nil?
       artifact_type_alias = @re_artifact_settings[artifact_type]['alias']
     end
     artifact_type_humanized =  artifact_type.gsub(/^re_/, '').humanize
