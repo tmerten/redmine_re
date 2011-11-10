@@ -46,7 +46,7 @@
 											:id => bb.id, 
 											:artifact_type => bb.artifact_type, 
 											:building_block_type => bb.type.underscore, 
-											:project_id => @project.id} %></li></td>
+											:project_id => @project.id}, :confirm => t(:re_are_you_sure) %></li></td>
 	</tr>
   <% end %>
   </tbody>
