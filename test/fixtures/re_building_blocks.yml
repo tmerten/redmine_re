@@ -13,7 +13,6 @@ bb_text_for_goal_note:
   for_condensed_view: false
   for_search: false
   arrangable_by_users: true
-  position: 2
   default_value: Take a note here.
   min_length: 5
   max_length: 2000
@@ -32,7 +31,6 @@ bb_text_for_goal_ideas:
   for_condensed_view: false
   for_search: true
   arrangable_by_users: true
-  position: 1
   default_value: Your ideas.
   min_length: 
   max_length: 2000
@@ -51,7 +49,6 @@ bb_text_for_task_note:
   for_condensed_view: false
   for_search: false
   arrangable_by_users: true
-  position: 2
   default_value: Take a note here.
   min_length: 5
   max_length: 2000
@@ -70,7 +67,6 @@ bb_selection_for_task_frequency:
   for_condensed_view: true
   for_search: true
   arrangable_by_users: true
-  position: 1
   default_value: <%= Fixtures.identify(:re_bb_option_selection_daily_for_task_frequency).to_i %>
 
 bb_selection_for_goal_usability_status:
@@ -87,7 +83,6 @@ bb_selection_for_goal_usability_status:
   for_condensed_view: false
   for_search: false
   arrangable_by_users: false
-  position: 3
   default_value: <%= Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability).to_i %>
   
 bb_artifact_selection_sections:
@@ -104,7 +99,6 @@ bb_artifact_selection_sections:
   for_condensed_view: false
   for_search: false
   arrangable_by_users: false
-  position: 4 
   referred_artifact_types: <%= ['ReSection'].to_yaml.inspect %>  
   referred_relationship_types: <%= ['dependency'].to_yaml.inspect %>
   embedding_type: attributes
@@ -125,7 +119,6 @@ bb_artifact_selection_rationale:
   for_condensed_view: false
   for_search: false
   arrangable_by_users: false
-  position: 3
   referred_artifact_types: <%= ['ReGoal', 'ReWorkarea', 'ReUserProfile'].to_yaml.inspect %>  
   referred_relationship_types: <%= ['dependency', 'conflict'].to_yaml.inspect %>
   embedding_type: one_line

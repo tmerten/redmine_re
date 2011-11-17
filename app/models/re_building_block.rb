@@ -9,7 +9,7 @@ class ReBuildingBlock < ActiveRecord::Base
   validates_presence_of :name
   before_save :prohibit_save_of_new_artifact_type
   before_destroy :delete_occurances_of_bb_from_some_attributes_representation
-  
+
 
   ##### Methods to build data arrays or hashes of building blocks and data ##### 
   
@@ -73,21 +73,15 @@ class ReBuildingBlock < ActiveRecord::Base
   # Therefore the artifact properties of the artifact have to be transmitted.
   # The error hash has to be transmitted as well. It will be changed if needed
   # and delivered back by the method.
-  def self.validate_building_blocks(re_artifact_properties, bb_error_hash, project_id)
-    logger.debug("___________________________Inside validate bbs.")       
-    bb_hash = self.find_all_bbs_and_data(re_artifact_properties, project_id)
-    logger.debug("___________________________bb_hash #{bb_hash.inspect}.") 
+  def self.validate_building_blocks(re_artifact_properties, bb_error_hash, project_id)      
+    bb_hash = self.find_all_bbs_and_data(re_artifact_properties, project_id) 
     unless bb_hash.nil?
       bb_hash.keys.each do |bb|
-        logger.debug("___________________________bb_name #{bb.name}.")
         validation_strategy_hash = bb.validation_strategies
-        logger.debug("___________________________bb_validation_strategies #{validation_strategy_hash.inspect}.")
         unless bb_hash[bb].nil?
-          logger.debug("___________________________bb_hash[bb] #{bb_hash[bb].inspect}.")
           unless validation_strategy_hash.empty?
             validation_strategy_hash.keys.each do |validation_strategy|
               bb_hash[bb].each do |datum|
-                logger.debug("___________________________Call validation strategy #{validation_strategy} on bb #{bb.name}.")
                 bb_error_hash = validation_strategy.call(bb, datum, bb_error_hash, validation_strategy_hash[validation_strategy])    
               end
             end
@@ -159,13 +153,11 @@ class ReBuildingBlock < ActiveRecord::Base
   # selection building block. Otherwise an exception is thrown and
   # caught so that the "one_line_representation" is rendered instead.
   def delete_occurances_of_bb_from_some_attributes_representation
-    logger.debug("_________________________ Called delete_occurances_of_bb_from_some_attributes_representation for re_bb_#{self.id.to_s}")
     bbs_with_some_attribute_representation = ReBuildingBlock.find(:all, :conditions => {:embedding_type => 'attributes'})
     bbs_with_some_attribute_representation.each do |bb|
       attributes_to_show = bb.selected_attributes
       attributes_to_show.delete("re_bb_" + self.id.to_s) unless attributes_to_show.nil?
       bb.selected_attributes = attributes_to_show
-      logger.debug("_____________self.id.to_s = #{self.id.to_s}")
       bb.save
     end
   end

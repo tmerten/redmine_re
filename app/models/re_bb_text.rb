@@ -44,7 +44,7 @@ class ReBbText < ReBuildingBlock
       if ReBbDataText.find(:first, :conditions => {:value => attributes[:value], :re_artifact_properties_id => artifact_properties_id, :re_bb_text_id => self.id}).nil?
         # With multiple values possible, the saving of empty data should be forbidden
         unless (attributes[:value].nil? or attributes[:value] == "") and self.multiple_values == true
-          #Try to find a bb_data_object with the given id . 
+          #Try to find a bb_data_object with the given id. 
           #If no matching object is found, create a new one
           bb_data = ReBbDataText.find_by_id(id) || ReBbDataText.new
           bb_data.attributes = attributes
@@ -74,9 +74,8 @@ class ReBbText < ReBuildingBlock
         errors.add_to_base(l(:re_bb_max_length_smaller_min_length))
         return false
       end   
-    end
-      
-    true      
+    end 
+    return true      
   end
   
  

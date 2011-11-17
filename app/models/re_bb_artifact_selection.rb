@@ -18,8 +18,8 @@ class ReBbArtifactSelection < ReBuildingBlock
   @@validation_strategies = {VALIDATE_UP_TO_DATE => nil, 
                              VALIDATE_DATUM_FITS_CONFIG => nil}
   @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_artifact_properties_id'}, 
-                                        VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}
-  
+                                        VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}                                
+
   def data_form_partial_strategy
     @@data_form_partial_strategy
   end
@@ -42,8 +42,7 @@ class ReBbArtifactSelection < ReBuildingBlock
   
   def validation_whole_data_strategies
     @@validation_whole_data_strategies
-  end                                       
- 
+  end
  
   def save_datum(datum_hash, artifact_properties_id)
     datum_hash.keys.each do |id|
