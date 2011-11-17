@@ -3,6 +3,7 @@
   <%= "<ul>" unless @relationships_outgoing.empty? -%>
     <% for relationship in @relationships_outgoing %>
     <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
+	<% logger.debug("_____________________________________Relationship_id bei der es kracht: #{relationship.id}")%>
     <li>
               [<%= link_to_remote(
                 t(:re_remove),

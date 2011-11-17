@@ -164,7 +164,7 @@ module StrategyProcs
       relation = ReArtifactRelationship.find(datum[attribute_names[:re_artifact_relationship_id]])
       artifact_id = eval "relation.#{attribute_names[:sink]}.id"
       artifact_updated_at = ReArtifactProperties.find(artifact_id).updated_at
-      if artifact_updated_at > bb_checked_at 
+      if artifact_updated_at > bb_checked_at
         bb_error_hash = StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_out_of_date, :bb_name => re_bb.name))  
       end
     end

@@ -20,7 +20,6 @@ class ReBbArtifactSelection < ReBuildingBlock
   @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_artifact_properties_id'}, 
                                         VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}
   
-  #ToDo: später auslagern in eigenes Modul
   def data_form_partial_strategy
     @@data_form_partial_strategy
   end
@@ -32,13 +31,9 @@ class ReBbArtifactSelection < ReBuildingBlock
   def additional_work_before_save_strategies
     @@additional_work_before_save_strategies
   end
-  
+    
   def additional_work_after_save_strategies
     @@additional_work_after_save_strategies
-  end 
-    
-  def additional_work_after_delete_strategies
-    @@additional_work_after_delete_strategies
   end
   
   def validation_strategies
@@ -47,10 +42,9 @@ class ReBbArtifactSelection < ReBuildingBlock
   
   def validation_whole_data_strategies
     @@validation_whole_data_strategies
-  end
-
-
-
+  end                                       
+ 
+ 
   def save_datum(datum_hash, artifact_properties_id)
     datum_hash.keys.each do |id|
       # If only the parameter 'confirm_checked' is given, try to update
