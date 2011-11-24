@@ -4,7 +4,7 @@ class ReArtifactProperties < ActiveRecord::Base
   cattr_accessor :artifact_types
   ajaxful_rateable :stars => 10, :allow_update => false#, :dimensions => [:first]
   has_many :realizations, :dependent => :destroy
-  has_many :comments, :as => :commented, :dependent => :destroy
+  has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
   has_many :issues, :through => :realizations, :uniq => true
 
   has_many :relationships_as_source,

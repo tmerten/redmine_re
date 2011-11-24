@@ -128,7 +128,7 @@ class RedmineReController < ApplicationController
     @issues = @artifact_properties.issues
 
     edit_hook_after_artifact_initialized params
-
+    
     # Remove Comment (Initiated via GET)
     if User.current.allowed_to?(:administrate_requirements, @project)
       unless params[:deletecomment_id].blank?

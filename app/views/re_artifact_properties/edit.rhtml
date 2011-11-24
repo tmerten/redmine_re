@@ -156,7 +156,10 @@
 
                     <textarea class="comment_input" name="comment" cols="20" rows="3"></textarea>
 
-                    <% @artifact.comments.each do |comment| %>
+                    <%
+                    if ( User.current.preference[:others][:comments_sorting]  == "asc" )
+                    	@artifact.comments.each do |comment| 
+                    %>
                        <hr />
                        <p>
                           <% if User.current.allowed_to?(:administrate_requirements, @project) %>
@@ -167,6 +170,22 @@
                           <%= comment.created_on.to_datetime.to_s[-14,8] %> -
                           <%= User.find(comment.author_id).to_s %></b><br />
                           <%= comment.comments %></p>
+                    <% end %>
+                    <%
+                    elsif
+                    	@artifact.comments.reverse.each do |comment|
+                    %>
+                       <hr />
+                       <p>
+                          <% if User.current.allowed_to?(:administrate_requirements, @project) %>
+                            [<%= link_to 'X', :controller => @artifact.artifact_type.underscore, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
+                          <% end %>
+
+                          <b><%= comment.created_on.to_datetime.to_s[0,10] %>
+                          <%= comment.created_on.to_datetime.to_s[-14,8] %> -
+                          <%= User.find(comment.author_id).to_s %></b><br />
+                          <%= comment.comments %></p>
+                    <% end %>
                     <% end %>
                 </fieldset>
             </div>
