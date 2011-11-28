@@ -70,10 +70,10 @@ class ReBbArtifactSelection < ReBuildingBlock
           end    
         else
           # An artifact is choosen. Therefore check relationships.
-          # Try to find a realtionship with the given parameters . If none exsist, 
+          # Try to find a relationship with the given parameters . If none exsist, 
           # create one. If the relation to be created is of type parentchild, 
           # the parent-property of the corresponding artifact has to be set and an 
-          # update of its former parent relationship has to be executed. 
+          # update of its former parent relationship has to be done. 
           relation = ReArtifactRelationship.find(:first, :conditions => {:source_id => artifact_properties_id, :sink_id => datum_hash[id][:related_artifact_id], :relation_type => datum_hash[id][:relation_type]}) 
           unless relation 
             if datum_hash[id][:relation_type] == 'parentchild'

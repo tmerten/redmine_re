@@ -3,9 +3,7 @@ class CreateReBbProjectPositions < ActiveRecord::Migration
     create_table :re_bb_project_positions do |t|
 
       t.column :re_building_block_id, :integer
-
       t.column :project_id, :integer
-
       t.column :position, :integer
 
     end

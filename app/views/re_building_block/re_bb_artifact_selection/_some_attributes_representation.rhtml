@@ -1,12 +1,13 @@
 <table>
 	<tr>
+		<!-- Attributes which belong to the shared fields of every artifact -->
 		<% selected_attributes.each do |attribute| %>
 			<% if attribute.starts_with? 're_artifact_properties_' %>
 				<% name = attribute.sub('re_artifact_properties_', '') %>
 				<%= render :partial => "re_artifact_properties/table_data_for_shared_fields_one_line_representation", :locals => {:name => name, :artifact => re_artifact_properties}%>
 			<% end %>
 		<% end %>
-
+		<!-- Attributes which belong to the subclass of the artifacts, e.g. "start" for "task" -->
 		<% selected_attributes.each do |attribute| %>
 			<% unless attribute.starts_with? 're_bb_' or attribute.starts_with? 're_artifact_properties_' %>
 				<% value = re_artifact_properties.artifact.send(attribute)%>
@@ -18,7 +19,7 @@
 				<% end %>
 			<% end %>
 		<% end %>
-		
+		<!-- Attributes which are building blocks -->
 		<% selected_attributes.each do |attribute| %>
 			<% if attribute.starts_with? 're_bb_' %>
 				<% id = attribute.sub('re_bb_', '').to_i %>
