@@ -66,6 +66,7 @@ class ReArtifactProperties < ActiveRecord::Base
   validates_presence_of :updated_by, :message => l(:re_artifact_properties_validates_presence_of_updated_by)
   validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
   validates_presence_of :parent,     :message => l(:re_artifact_properties_validates_presence_of_parent), :unless => Proc.new { |a| a.artifact_type == "Project" }
+  validates_associated :parent_relation
 
   after_destroy :delete_wiki_page
 
