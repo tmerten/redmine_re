@@ -157,7 +157,7 @@
                     <textarea class="comment_input" name="comment" cols="20" rows="3"></textarea>
 
                     <%
-                    if ( User.current.preference[:others][:comments_sorting]  == "asc" )
+                    if ( User.current.preference[:others].nil? or User.current.preference[:others][:comments_sorting]  == "asc" )
                     	@artifact.comments.each do |comment| 
                     %>
                        <hr />
