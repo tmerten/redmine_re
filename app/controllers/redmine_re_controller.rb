@@ -161,7 +161,6 @@ class RedmineReController < ApplicationController
       end
 
       valid = @artifact.valid?
-      valid = edit_hook_validate_before_save(params, valid)
 
       logger.debug("############ errors after validating #{@artifact_type} ##{@artifact.id}: #{@artifact.errors.inspect}") if logger
 
@@ -219,11 +218,11 @@ class RedmineReController < ApplicationController
   end
 
   def edit_hook_after_artifact_initialized(params)
-    logger.debug("#############: edit_validate_before_save_hook not called") if logger
+    logger.debug("#############: edit_validate_before_save_hook not called(1)") if logger
   end
 
   def edit_hook_validate_before_save(params, artifact_valid)
-    logger.debug("#############: edit_validate_before_save_hook not called") if logger
+    logger.debug("#############: edit_validate_before_save_hook not called(2)") if logger
     return true
   end
 
