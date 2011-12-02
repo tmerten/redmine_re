@@ -91,6 +91,16 @@ module ApplicationHelper
     return html_code
   end
 
+
+
+
+##### Helpers for building blocks ######
+
+
+  # This helper builds up a link to add a new bb to the artifact_type
+  # given in the variable. The link is delivered back if the user has
+  # the appropriate rights (adminstration of requirements). Otherwise  
+  # an empty string is returned.
   def add_bb_configuration_link(artifact_type)
     if User.current.allowed_to?(:administrate_requirements, @project)
       link_to(  t(:re_bb_add), 
@@ -105,8 +115,11 @@ module ApplicationHelper
   end
 
 
-  # renders a table data field for every building block in bb_hash that is
-  # used for condensed view (bb.for_condensed_view == true)
+  # This method builds up some html to describe a part of the condensed 
+  # representation of artifacts. To be more precise, the html constructed
+  # here consists of a tabel-data-entry for each bb of the given artifact 
+  # which is configured to be part of the standard condensed representation.
+  # The html is returned to be integrated in a view.
   def insert_building_blocks_one_line_representations(artifact)
     bb_hash = ReBuildingBlock.find_all_bbs_and_data(artifact, @project.id)
     html_code = ""
@@ -118,6 +131,11 @@ module ApplicationHelper
     html_code
   end
 
+
+  # This method allows to add the whole bb-section to an edit-artifact-
+  # view with only one line of code. This is needed because the section 
+  # has to be included in views of non-bb-models and therefore shall be
+  # hidden behind a very easy command.
   def add_bb_section(artifact, bb_hash, bb_error_hash)
     if User.current.allowed_to?(:edit_requirements, @project)
       render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash, :bb_error_hash => bb_error_hash}
@@ -127,6 +145,9 @@ module ApplicationHelper
   end
   
 
+  # This method builds up a html-string to add an icon to the view which 
+  # has all error messages of the given bb as a tooltip. The html-code is 
+  # returned by the method.
   def validation_warning(bb_error_hash, re_bb, key_for_error_hash)
     unless bb_error_hash.nil? or bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][key_for_error_hash].nil?
       %Q{

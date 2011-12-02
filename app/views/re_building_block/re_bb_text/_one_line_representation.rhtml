@@ -1,3 +1,6 @@
+<!-- The variable force representation is defined if the building block was chosen to be part of a 
+"some_attributes_representation". Then the bb should be shown in the condensed representation although
+it is not configured to be part of the standard condensed representation (one_line_view). -->
 <% if (re_bb.for_condensed_view or defined? force_representation) and !data.empty? and data[0].value != "" %>
 	<td class='one_line'>
 		<label class='filter'><%= h(re_bb.name) + ": " %></label>
