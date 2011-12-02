@@ -138,7 +138,6 @@ class RedmineReController < ApplicationController
     end
 
     if request.post? # we want to create or update an artifact
-      dfdgdfgdfg
       @artifact.attributes = params[:artifact]
       # attributes that cannot be set by the user
       @artifact.project_id = @project.id
