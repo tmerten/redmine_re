@@ -28,7 +28,7 @@ class ReArtifactRelationshipController < RedmineReController
     @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?
 
     query = '%' + params[:sink_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
-    @sinks = ReArtifactProperties.find(:all, :conditions => ['lower(name) like lower(?) AND project_id = ?', query, @project.id])
+    @sinks = ReArtifactProperties.find(:all, :conditions => ['lower(name) like ? AND project_id = ? AND artifact_type <> ?', query.downcase, @project.id, "Project"])
 
     if @artifact
       @sinks.delete_if{ |p| p == @artifact }
