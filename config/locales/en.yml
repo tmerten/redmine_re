@@ -431,7 +431,7 @@ en:
   re_bb_complete: 'Complete'
   re_bb_one_line: 'Use condensed representation'
   re_bb_slider_usage: 'Use slider'
-  re_bb_creation_of_relationship: 'Creation of relationships'
+  re_bb_connect_artifact: 'Connect Artifact'
   re_bb_choose_artifact_type: 'Choose artifact type'
   re_bb_choose_relationship_type: 'Choose relationship'
   re_bb_choose_artifact: 'Choose artifact'

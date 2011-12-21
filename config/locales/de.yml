@@ -141,7 +141,7 @@ de:
   re_bb_complete: 'Vollst&auml;ndig'
   re_bb_one_line: 'Verwende komprimierte Darstellung'
   re_bb_slider_usage: 'Benutze Schieberegler'
-  re_bb_creation_of_relationship: 'Erzeugung von Beziehungen'
+  re_bb_connect_artifact: 'Verknüpfe Artefakt'
   re_bb_choose_artifact_type: 'W&auml;hle den Typ des Artefakts'
   re_bb_choose_relationship_type: 'W&auml;hle Beziehung'
   re_bb_choose_artifact: 'W&auml;hle Artefakt'
