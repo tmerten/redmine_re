@@ -1,0 +1,27 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+
+  number_format: MyString
+
+  minimal_value: 9.99
+
+  maximal_value: 9.99
+
+  slider: false
+
+  number_of_digits: 1
+
+two:
+  id: 2
+
+  number_format: MyString
+
+  minimal_value: 9.99
+
+  maximal_value: 9.99
+
+  slider: false
+
+  number_of_digits: 1
+

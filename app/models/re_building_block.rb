@@ -1,3 +1,5 @@
+require 'decimal'
+
 class ReBuildingBlock < ActiveRecord::Base
   unloadable
       
@@ -82,7 +84,11 @@ class ReBuildingBlock < ActiveRecord::Base
           unless validation_strategy_hash.empty?
             validation_strategy_hash.keys.each do |validation_strategy|
               bb_hash[bb].each do |datum|
-                bb_error_hash = validation_strategy.call(bb, datum, bb_error_hash, validation_strategy_hash[validation_strategy])    
+                if validation_strategy_hash[validation_strategy].nil?
+                  bb_error_hash = validation_strategy.call(bb, datum, bb_error_hash, nil, nil)
+                else
+                  bb_error_hash = validation_strategy.call(bb, datum, bb_error_hash, validation_strategy_hash[validation_strategy][:attribute_names], validation_strategy_hash[validation_strategy][:error_messages])    
+                end    
               end
             end
           end  
@@ -90,7 +96,12 @@ class ReBuildingBlock < ActiveRecord::Base
         # Validation concerning the whole Building Block and all its data 
         validation_whole_data_strategy_hash = bb.validation_whole_data_strategies
         validation_whole_data_strategy_hash.keys.each do |validation_strategy|
-          bb_error_hash = validation_strategy.call(bb, bb_hash[bb], bb_error_hash, validation_whole_data_strategy_hash[validation_strategy]) 
+          if validation_whole_data_strategy_hash[validation_strategy].nil?
+            bb_error_hash = validation_strategy.call(bb, bb_hash[bb], bb_error_hash, nil, nil)
+          else
+            bb_error_hash = validation_strategy.call(bb, bb_hash[bb], bb_error_hash, validation_whole_data_strategy_hash[validation_strategy][:attribute_names], validation_whole_data_strategy_hash[validation_strategy][:error_messages]) 
+          end
+#          bb_error_hash = validation_strategy.call(bb, bb_hash[bb], bb_error_hash, validation_whole_data_strategy_hash[validation_strategy], nil) 
         end
       end
     end

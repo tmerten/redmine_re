@@ -8,16 +8,15 @@ class ReBbArtifactSelection < ReBuildingBlock
   serialize :referred_artifact_types
   serialize :referred_relationship_types
   
-  
+
   @@data_form_partial_strategy = 're_building_block/re_bb_artifact_selection/data_form'
-  @@multiple_data_form_partial_strategy = 're_building_block/re_bb_artifact_selection/multiple_data_form'
+  @@multiple_data_form_partial_strategy = 're_building_block/re_bb_artifact_selection/multiple_data_form'                               
   @@additional_work_before_save_strategies = {SET_EMPTY_ARRAY_IF_NEEDED => {:fields_to_check => [:referred_artifact_types, :referred_relationship_types]},
-                                              DELETE_DATA_FROM_DATA_FIELDS_BEFORE_SAVE => nil}
+                                              DELETE_DATA_FROM_DATA_FIELDS_BEFORE_SAVE => nil}  
   @@additional_work_after_save_strategies = {}
-  @@additional_work_after_delete_strategies = {}
   @@validation_strategies = {VALIDATE_UP_TO_DATE => nil, 
                              VALIDATE_DATUM_FITS_CONFIG => nil}
-  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_artifact_properties_id'}, 
+  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:attribute_names => {:value => 're_artifact_properties_id'}, :error_messages => nil}, 
                                         VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}                                
 
   def data_form_partial_strategy

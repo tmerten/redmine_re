@@ -10,7 +10,7 @@ class ReBbSelection < ReBuildingBlock
   @@additional_work_before_save_strategies = {}
   @@additional_work_after_save_strategies = {SAVE_OPTIONS_STRATEGY => nil}
   @@validation_strategies = {}
-  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:value => 're_bb_option_selection_id'}, 
+  @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => {:attribute_names => {:value => 're_bb_option_selection_id'}, :error_messages => nil}, 
                                         VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil}
                                                                         
   def data_form_partial_strategy

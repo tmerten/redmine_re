@@ -34,11 +34,7 @@
 			<% if re_bb.mandatory? %>		
 				<%= select_tag param_path, options_for_select(options.map {|opt| [h(opt.value), opt.id]}, selected.to_i) %>
 			<% else %>
-				<% if !data.empty? %>
-					<%= select_tag param_path, options_for_select(options.map {|opt| [h(opt.value), opt.id]}.insert(0, ''), selected.to_i) %>
-				<% else %>
-					<%= select_tag param_path, options_for_select(options.map {|opt| [h(opt.value), opt.id]}.insert(0, '')) %>
-				<% end %>
+				<%= select_tag param_path, options_for_select(options.map {|opt| [h(opt.value), opt.id]}.insert(0, ''), selected.to_i) %>
 			<% end %>
 		</td>
 		<td>

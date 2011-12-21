@@ -31,11 +31,13 @@ module ApplicationHelper
     User.current
   end
 
+  # Error messages have to be created for the artifact
+  # or builiding block that is named in the variable artifact 
   def errors_and_flash(artifact)
-    s = error_messages_for 'artifact'
+    s = error_messages_for artifact
     s += render_flash_messages_with_timeout
   end
-
+  
   def render_flash_messages_with_timeout
     s = ''
     flash.each do |k,v|
@@ -156,6 +158,46 @@ module ApplicationHelper
         </div>
       }
     end
+  end
+  
+  # Helper for the slider for the number bb. 
+  def number_field_with_slider(re_bb_id, re_bb_data_id, data_value, min, max)
+    # To match the id's needed for building block form elements, the use of
+    # []-bracets is needed. Rails changes these brackets to underscores in the 
+    # text_field_tag-helper to use this changed string as the id. But as the javascript 
+    # won't do these adaptions on their own, the field_id must be change manually to be 
+    # used as input for the sliders.
+    fieldid = "re_bb[" + re_bb_id.to_s + "][" + re_bb_data_id.to_s + "][value]"
+    fieldid_slider = fieldid.gsub('[', '_').gsub(']', '')
+    #data = ReBbDataNumber.find(re_bb_data_id) unless re_bb_data_id == 'no_id'
+
+    js = <<JAVASCRIPT   
+    Event.observe(window, 'load', function() {
+      var #{fieldid_slider}Slider = new Control.Slider('#{fieldid_slider}-handle' , '#{fieldid_slider}-track',
+      {
+        range: $R(#{min},#{max}),
+        values: $R(#{min},#{max}),
+        sliderValue: $('#{fieldid_slider}').value,
+        onChange: function(v) { $('#{fieldid_slider}').value = v; },
+        onSlide:  function(v) { $('#{fieldid_slider}').value = v; }
+      } );
+      
+      $('#{fieldid_slider}').observe('change', function() {
+        if (this.value < #{min}) this.value = #{min};
+        if (this.value > #{max}) this.value = #{max};
+        #{fieldid_slider}Slider.setValue(this.value);  
+      });
+    });
+JAVASCRIPT
+
+    js = javascript_tag(js)
+
+    sliderdivs = content_tag("div", "", :id => "#{fieldid_slider}-handle", :class => "numberfield-handle")
+    sliderdivs = content_tag("div", sliderdivs, :id => "#{fieldid_slider}-track", :class => "numberfield-track")
+    size = max.nil? ? '5' : max.to_i.to_s.length.to_i
+    field = text_field_tag(fieldid, data_value, :size => size)
+    sliderdivs = content_tag(:div, field+sliderdivs, :class => "numberfield-slider")
+    js + sliderdivs
   end
 
   def redmine_version_is_higher_or_equal_than?(compare_version_str)

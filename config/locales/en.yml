@@ -393,19 +393,28 @@ en:
   re_bb_default_value: 'Default value'
   re_bb_min_length: 'Minimal length'
   re_bb_max_length: 'Maximal length'
-  re_bb_min_value: 'Minimal value'
-  re_bb_max_value: 'Maximal value'
+  re_bb_minimal_value: 'Minimal value'
+  re_bb_maximal_value: 'Maximal value'
+  re_bb_integer: 'Integer'
+  re_bb_decimal: 'Decimal'
+  re_bb_number_of_digits: 'Fractional digits'
+  re_bb_number_configuration_integer: 'Configuration of natural numbers'
+  re_bb_number_configuration_decimal: 'Configuration of decimal numbers'
   re_bb_saved: 'Building Block was saved successfully.'
   re_bb_userdefined_fields: 'Userdefined Fields'
-  re_bb_too_short: '%{bb_name} is too short. Should have at least %{min_length} characters.'
-  re_bb_too_long: "%{bb_name} is too long. Shouldn't have more than %{max_length} characters."
+  re_bb_too_short: '%{bb_name} should have at least %{min_length} characters.'
+  re_bb_too_long: "%{bb_name} shouldn't have more than %{max_length} characters."
   re_bb_data_required: 'Data is required here.'
   re_bb_max_length_smaller_min_length: 'Value for minimal length is bigger than value for maximal length.'
-  re_bb_min_length_under_zero: "Value for minimal length mustn't be negativ."
-  re_bb_max_length_under_zero: "Value for maximal length mustn't be negativ."
   re_bb_default_value_outside_min_max: 'Length of default value must fit minimal and maximal length.'
   re_bb_out_of_date: '%{bb_name} is out of date. Referred artifact was updated. Check if %{bb_name} is still valid!'
   re_bb_no_multiple_data_allowed: "%{bb_name} doesn't allow multiple data. Please delete all but one entry."
+  re_bb_must_be_integer: 'must be an integer.'
+  re_bb_number_must_be_integer: 'This number needs to be an integer!'
+  re_bb_too_many_fractional_digits: "This number has too many fractional digits. Shouldn't be more than %{number_of_digits}."
+  re_bb_must_not_be_negative: 'must not be negative'
+  re_bb_max_value_smaller_minimal_value: "Minimal value must not be greater that maximal value."
+  re_bb_value_must_be_a_number:  'This value must be a number.'  
   re_bb_options_field: 'Options for select (comma seperated)'
   re_bb_options: 'Options for select'
   re_bb_no_options_defined: 'No options defined so far.'
@@ -421,6 +430,7 @@ en:
   re_bb_selected_attributes: 'Some attributes'
   re_bb_complete: 'Complete'
   re_bb_one_line: 'Use condensed representation'
+  re_bb_slider_usage: 'Use slider'
   re_bb_creation_of_relationship: 'Creation of relationships'
   re_bb_choose_artifact_type: 'Choose artifact type'
   re_bb_choose_relationship_type: 'Choose relationship'
@@ -431,7 +441,8 @@ en:
   re_bb_some_attribute_rep_failed: 'The representation choosen in configuration failed. Loading one line view instead.'
   re_bb_relation_type_does_not_match: "The relation's type (%{type}) is not allowed by the current configuration."
   re_bb_artifact_type_does_not_match: "The referred artifact's type (%{type}) is not allowed by the current configuration."
-
+  re_bb_too_small: '%{bb_name} should be higher than %{min_length}.'
+  re_bb_too_big: '%{bb_name} should be less than %{max_length}.'
 
   # re_tree
   re_tree_overview: 'Artifact Summary'

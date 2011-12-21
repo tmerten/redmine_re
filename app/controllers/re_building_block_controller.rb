@@ -89,5 +89,11 @@ class ReBuildingBlockController < RedmineReController
     @re_bb = ReBuildingBlock.find(params[:re_bb_id]) 
     # renders the rjs-Template with the same name
   end
+  
+  def react_to_change_in_fields_minimal_maximal_numbers
+    @artifact_type = params[:artifact_type]
+    @re_building_block = ReBuildingBlock.find_by_id(params[:id]) || ReBuildingBlock.new
+    # renders the rjs-Template with the same name 
+  end
 
 end

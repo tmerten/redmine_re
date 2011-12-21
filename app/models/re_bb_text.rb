@@ -1,6 +1,6 @@
 class ReBbText < ReBuildingBlock
   unloadable
-
+  
   has_many :re_bb_data_texts, :dependent => :destroy  
   
   validate :min_max_values_must_be_possible
@@ -57,25 +57,26 @@ class ReBbText < ReBuildingBlock
   end 
     
   def min_max_values_must_be_possible
+    valid = true 
     unless min_length.nil?
       if min_length < 0
-        errors.add(:value, l(:re_bb_min_length_under_zero))
-        return false
+        errors.add(:min_length, l(:re_bb_must_not_be_negativ))
+        valid = false
       end
     end
     unless max_length.nil?
       if max_length < 0
-        errors.add(:value, l(:re_bb_max_length_under_zero))
-        return false
+        errors.add(:max_length, l(:re_bb_must_not_be_negativ))
+        valid = false
       end  
     end
     unless min_length.nil? or max_length.nil?
       if min_length > max_length 
         errors.add_to_base(l(:re_bb_max_length_smaller_min_length))
-        return false
+        valid = false
       end   
     end 
-    return true      
+    return valid      
   end
   
  

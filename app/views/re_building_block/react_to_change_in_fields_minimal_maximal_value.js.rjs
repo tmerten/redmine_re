@@ -1,0 +1,35 @@
+
+disabled = false
+if params[:re_building_block][:minimal_value].nil? or params[:re_building_block][:minimal_value].empty?
+  disabled = true
+elsif params[:re_building_block][:maximal_value].nil? or params[:re_building_block][:maximal_value].empty?
+  disabled = true
+else
+  begin
+    min = Decimal(params[:re_building_block][:minimal_value])
+    max = Decimal(params[:re_building_block][:maximal_value])
+    # Test if minmimal or maximal values are natural numbers. If not, set flag to disable slider
+    if (min.nil? or min - min.truncate) != 0 or min < 0
+      disabled = true
+    elsif (max.nil? or max - max.truncate) != 0 or max < 0
+      disabled = true
+    elsif min > max 
+    # Test if minimal and maximal values form a valid range. If not, set flag to disable slider
+      disabled = true
+    end
+  rescue # Convertion into decimal numbers was not possible
+    disabled = true
+  end
+  
+end
+
+if disabled
+  page[:label_for_re_building_block_slider].remove_class_name "disabled_is_false"
+  page[:label_for_re_building_block_slider].add_class_name "disabled_is_true"
+  page[:re_building_block_slider][:disabled] = true 
+  page[:re_building_block_slider][:checked] = false
+else
+  page[:label_for_re_building_block_slider].remove_class_name "disabled_is_true"
+  page[:label_for_re_building_block_slider].add_class_name "disabled_is_false"
+  page[:re_building_block_slider][:disabled] = false 
+end

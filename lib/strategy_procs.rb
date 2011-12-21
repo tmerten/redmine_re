@@ -1,7 +1,7 @@
+
 module StrategyProcs
   
   
-
 ###### Additional work before save strategies ###### 
 
 
@@ -116,22 +116,26 @@ module StrategyProcs
   #            length of the data value
   # The value of the key "max_length" is the name of the bb's attribute which stores the maximal 
   #                  length of the data value
+  # The value of the key "value" is the command which allows to to read out the datum.value's length or size
   # If no attribute_names hash is delivered, a default hash with values being the same as the keys is created.
-  VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY = lambda do |re_bb, datum, bb_error_hash, attribute_names|
+  VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY = lambda do |re_bb, datum, bb_error_hash, attribute_names, error_messages|
     if attribute_names.nil?
-      attribute_names = {:min_length => :min_length, :max_length => :max_length}
+      attribute_names = {:min_length => :min_length, :max_length => :max_length, :value => 'datum.value.length'}
+    end
+    if error_messages.nil?
+      error_messages = {:re_bb_too_short => :re_bb_too_short, :re_bb_too_long => :re_bb_too_long}
     end
     unless datum.value == ""
       min = eval "re_bb.#{attribute_names[:min_length]}"
       max = eval "re_bb.#{attribute_names[:max_length]}"
       unless min.nil?
-        if datum.value.length < min 
-           bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_short, :bb_name => re_bb.name, :min_length => min))       
+        if eval "#{attribute_names[:value]} < min" 
+           bb_error_hash = eval "StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:#{error_messages[:re_bb_too_short]}, :bb_name => re_bb.name, :min_length => min))"       
         end
       end
       unless max.nil?
-        if datum.value.length > max 
-          bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:re_bb_too_long, :bb_name => re_bb.name, :max_length => max))       
+        if eval "#{attribute_names[:value]} > max" 
+          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:#{error_messages[:re_bb_too_long]}, :bb_name => re_bb.name, :max_length => max))"       
         end
       end
     end
@@ -154,9 +158,12 @@ module StrategyProcs
   #                whose updated_at attribute shall be checked against re_checked_at
   # The value of the key "indicate_changes" is the name of the building_block attribute which states if 
   # If no attribute_names hash is delivered, a default hash with values being the same as the keys is created.
-  VALIDATE_UP_TO_DATE = lambda do |re_bb, datum, bb_error_hash, attribute_names |
+  VALIDATE_UP_TO_DATE = lambda do |re_bb, datum, bb_error_hash, attribute_names, error_messages |
     if attribute_names.nil?
       attribute_names = {:re_checked_at => :re_checked_at, :re_artifact_relationship_id => :re_artifact_relationship_id, :sink => :sink, :indicate_changes => :indicate_changes}
+    end
+    if error_messages.nil?
+      error_messages = {:re_bb_out_of_date => :re_bb_out_of_date}
     end
     # Check if bb is up to date only if changes of the referred artifact shall be indicated
     if eval "re_bb.#{attribute_names[:indicate_changes].to_s}"
@@ -165,7 +172,7 @@ module StrategyProcs
       artifact_id = eval "relation.#{attribute_names[:sink]}.id"
       artifact_updated_at = ReArtifactProperties.find(artifact_id).updated_at
       if artifact_updated_at > bb_checked_at
-        bb_error_hash = StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:re_bb_out_of_date, :bb_name => re_bb.name))  
+        bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_out_of_date]}, :bb_name => re_bb.name))"  
       end
     end
     bb_error_hash
@@ -181,8 +188,8 @@ module StrategyProcs
   # This proc needs the bb which shall be checked. As usual, the error_hash (as built up since 
   # now) has to be given to the proc as well. The hash attribute_names is only needed in the proc's 
   # parameter list to match the interface of all validation strategies, as this strategy is too 
-  # particular to be reused.
-  VALIDATE_DATUM_FITS_CONFIG = lambda do |re_bb, datum, bb_error_hash, attribute_names |
+  # particular to be reused. The same is valid for the error_messages-hash.
+  VALIDATE_DATUM_FITS_CONFIG = lambda do |re_bb, datum, bb_error_hash, attribute_names, error_messages |
     relation = ReArtifactRelationship.find(datum.re_artifact_relationship_id)
     sink = ReArtifactProperties.find(relation.sink_id)
     unless re_bb.referred_relationship_types.nil? or re_bb.referred_relationship_types.empty? or re_bb.referred_relationship_types.include?(relation.relation_type)
@@ -194,6 +201,43 @@ module StrategyProcs
     bb_error_hash
   end 
   
+  
+  # This proc adds an error to the error_hash if the number value given does not
+  # match the configuration: If the configuration asks for an integer value and the value
+  # is negative or has digits after it's decimal point, the error is added, that the 
+  # value should be an integer. If the configuration defines the number of digits, the
+  # given value is checked for this as well. 
+  # The value of the key "number_of_digits" is the name of the bb's attribute which stores the  
+  #            number of fractional digits that your number is allowed to have
+  # The value of the key ":number_format" is the name of the bb's attribute which stores which 
+  #                  format your number uses
+  # The value of the key "value" is the command which allows to to read out the datum.value's length or size
+  VALIDATE_NUMBER_FORMAT = lambda do |re_bb, datum, bb_error_hash, attribute_names, error_messages |
+    if attribute_names.nil?
+      attribute_names = {:number_of_digits => :number_of_digits, :number_format => :number_format, :value => 'datum.value'}
+    end
+    if error_messages.nil?
+      error_messages = {:re_bb_number_must_be_integer => :re_bb_number_must_be_integer, :re_bb_too_many_fractional_digits => :re_bb_too_many_fractional_digits, :re_bb_value_must_be_a_number => :re_bb_value_must_be_a_number}
+    end
+    begin
+      value = eval "Decimal(#{attribute_names[:value]}.to_s)"
+      if eval "re_bb.#{attribute_names[:number_format].to_s} == 'integer'"
+        # Test if value is an integer
+        if value - value.truncate != 0 or value < 0
+          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_number_must_be_integer]}))"
+        end
+      else
+        # Test if the number of digits matches the configuration
+        number_of_digits = eval("re_bb.#{attribute_names[:number_of_digits].to_s}")
+        if (value - value.truncate).digits.length > number_of_digits
+          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_too_many_fractional_digits]}, :number_of_digits => #{number_of_digits}))"
+        end 
+      end    
+    rescue # Value can not be transfered into a number
+      bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_value_must_be_a_number]}))"
+    end
+    bb_error_hash  
+  end
   
   
 ###### Validation whole data strategies #######
@@ -209,18 +253,21 @@ module StrategyProcs
   # The value of the key "value" is the name of the datum attribute which stores the actual data information
   #             (e.g. the value or the id of an option or relationship) 
   # If no attribute_names hash is delivered, a default hash with values being the same as the keys is created.
-  VALIDATE_MANDATORY_VALUES = lambda do |re_bb, data_array, bb_error_hash, attribute_names |
+  VALIDATE_MANDATORY_VALUES = lambda do |re_bb, data_array, bb_error_hash, attribute_names, error_messages |
     if attribute_names.nil?
       attribute_names = {:value => :value}
+    end
+    if error_messages.nil?
+      error_messages = {:re_bb_mandatory => :re_bb_mandatory}
     end
     # Multiple data is possible. Don't check for each datum on its own.
     # but check if there is data at all.
     if re_bb.mandatory?
-        if bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][:general].nil? or not bb_error_hash[re_bb.id][:general].include?(I18n.t(:re_bb_mandatory, :bb_name => re_bb.name))   
+        if bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][:general].nil? or not eval "bb_error_hash[re_bb.id][:general].include?(I18n.t(:#{error_messages[:re_bb_mandatory]}, :bb_name => re_bb.name))"   
         # There is no general error message stating that the bb is mandatory yet. 
         # So check if there is any data and if not, add the message.
         if data_array.empty? or eval "data_array[0].#{attribute_names[:value]} == ''"
-          bb_error_hash = StrategyProcs.add_error(re_bb.id, :general, bb_error_hash, I18n.t(:re_bb_mandatory, :bb_name => re_bb.name))         
+          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id, :general, bb_error_hash, I18n.t(:#{error_messages[:re_bb_mandatory]}, :bb_name => re_bb.name))"      
         end
       end
     end
@@ -235,15 +282,19 @@ module StrategyProcs
   # This proc needs the bb which shall be checked. As usual, the error_hash (as built up since 
   # now) has to be given to the proc as well. The hash attribute_names is only needed in the proc's 
   # parameter list to match the interface of all validation strategies, as this proc only operated 
-  # on attributes belonging to the building block base class "ReBuildingBlock".
-  VALIDATE_MULTIPLE_DATA_NOT_ALLOWED = lambda do |re_bb, data_array, bb_error_hash, attribute_names |
+  # on attributes belonging to the building block base class "ReBuildingBlock". Nevertheless the error
+  # messages can be adapted.
+  VALIDATE_MULTIPLE_DATA_NOT_ALLOWED = lambda do |re_bb, data_array, bb_error_hash, attribute_names, error_messages |
+    if error_messages.nil?
+      error_messages = {:re_bb_no_multiple_data_allowed => :re_bb_no_multiple_data_allowed}
+    end
     # Check bb only if no multiple data is allowed
     unless re_bb.multiple_values
-      if bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][:general].nil? or not bb_error_hash[re_bb.id][:general].include?(I18n.t(:re_bb_no_multiple_data_allowed, :bb_name => re_bb.name))   
+      if bb_error_hash[re_bb.id].nil? or bb_error_hash[re_bb.id][:general].nil? or not eval "bb_error_hash[re_bb.id][:general].include?(I18n.t(:#{error_messages[:re_bb_no_multiple_data_allowed]}, :bb_name => re_bb.name))"   
         # There is no general error message stating that no multiple data is allowed yet. 
         # So check if there are to many data elements
         if data_array.count > 1
-          bb_error_hash = StrategyProcs.add_error(re_bb.id, :general, bb_error_hash, I18n.t(:re_bb_no_multiple_data_allowed, :bb_name => re_bb.name))         
+          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id, :general, bb_error_hash, I18n.t(:#{error_messages[:re_bb_no_multiple_data_allowed]}, :bb_name => re_bb.name))"         
         end
       end
     end
