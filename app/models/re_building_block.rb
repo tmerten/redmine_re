@@ -1,5 +1,3 @@
-require 'decimal'
-
 class ReBuildingBlock < ActiveRecord::Base
   unloadable
       
