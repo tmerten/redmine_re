@@ -1,9 +1,20 @@
 <div>
+  <% unless @new_relation.nil? %>
+    <b><%= t :re_creating_a_new %> <%= ReArtifactRelationship.human_name %> </b>
+    <br />
+    <%= errors_and_flash :new_relation %>
+    <% if @new_relation.errors.empty? %>
+      <%= t :re_relation_sucessfull_created,
+        :source_name => @new_relation.source.name,
+        :sink_name => @new_relation.sink.name,
+        :relation_type => @new_relation.relation_type %>
+        <br /><br />
+    <% end %>
+  <% end %>
   <b><%= t(:re_artifact_relationships_outgoing) %></b>
   <%= "<ul>" unless @relationships_outgoing.empty? -%>
     <% for relationship in @relationships_outgoing %>
     <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
-	<% logger.debug("_____________________________________Relationship_id bei der es kracht: #{relationship.id}")%>
     <li>
               [<%= link_to_remote(
                 t(:re_remove),
@@ -30,9 +41,8 @@
         :id => ReArtifactProperties.find_by_id(sink.id).artifact_id
 			}, :class => "icon #{sink.artifact_type.underscore}" ) %>
 		</li>
-		<% end unless @relationships_outgoing.nil? %>
-		<%= "
-	</ul>" unless @relationships_outgoing.empty? -%>
+	<% end unless @relationships_outgoing.nil? %>
+	<%= "</ul>" unless @relationships_outgoing.empty? -%>
 </div>
 <br />
 <div>

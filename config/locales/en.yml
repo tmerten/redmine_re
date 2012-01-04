@@ -131,9 +131,31 @@ en:
     project: 'Project: '
     parent: 'Parent Artifact: '
 
+  activerecord:
+    errors:
+      models:
+        re_artifact_relationship:
+          attributes:
+            source_id:
+              re_the_specified_relation_already_exists: 'The specified relationship already exists'
+    models:
+      re_artifact_relationship: 'Relationship'
+      re_artifact_properties: 'Artifact'
+    attributes:
+      re_artifact_relationship:
+        sink: 'Sink Artifact'
+        source: 'Source Artifact'
+        source_id: 'Source Artifact'
+        relation_type: 'Relation type'
+      re_artifact_properties:
+        updaed_by: 'Updating User'
+        created_by: 'Creating User'
+        parent: 'Parent Artifact'
+
   re_parent: 'Parent'
   re_children: 'Children'
   re_set_parent: 'Set Parent Artifact'
+  re_creating_a_new: 'Creating a new'
 
   # re_artifact_properties_deletion
   re_preparing_deletion: 'Preparing deletion'
@@ -210,6 +232,7 @@ en:
   re_user_profile_not_found: 'Could not find a User Profile with id %{id} to delete'
 
   # re_artifact_relationships
+  re_relation_sucessfull_created: '"%{relation_type}"-relation sucessfully created from %{source_name} to %{sink_name}'
   re_artifact_relationships: 'Relationships'
   re_show_relationships: 'Show Relationships'
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
