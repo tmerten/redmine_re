@@ -1,0 +1,52 @@
+<% data_id = 'no_id' %>
+<% re_bb.mandatory? and !data.empty? ? shown_value = "" : shown_value = h(re_bb.default_value) %>
+
+<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
+
+<table>
+	<tr>
+		<td>
+			<%= label_tag param_path, h(re_bb.name), :class => "user_defined" %>
+		</td>
+		<td>
+			<% unless re_bb.help.nil? || re_bb.help == "" %>
+				<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
+		      		<span class="tip userdefined_fields_tip"><%= h(re_bb.help) %></span>
+		     	</div>
+			<% else %>
+				<div class="tooltip placeholder">&nbsp;
+ 				</div>
+			<% end %>						
+		</td>
+	</tr>
+  <% data.each do |datum| %>
+	<tr>
+		<td></td>
+		<td></td>
+		<td>
+			<%= h(datum.value) %>
+		</td>
+		<td>
+			<%= validation_warning(bb_error_hash, re_bb, datum.id.to_i) %>
+		</td>
+		<td>
+			<% div_id = 'bb_form_' + re_bb.id.to_s  %>
+			<%= link_to_remote 	(image_tag("delete.png"), 
+			  					:url => {:controller => 're_building_block', :action => 'delete_data', :re_bb_data_id => datum.id, :re_bb_id => re_bb.id, :project_id => @project.id },
+								:update => div_id	)
+			%>
+		</td>	
+	</tr>
+  <% end %>
+	<tr>
+		<td></td>
+		<td></td>	
+		<td colspan=3>
+			<%= text_area_tag param_path, h(shown_value), {:size => '25*3', :id => param_path} %>	
+	    </td>
+		<td>
+			<%= validation_warning(bb_error_hash, re_bb, :general) %>	
+		</td>
+	</tr>
+</table>
+		

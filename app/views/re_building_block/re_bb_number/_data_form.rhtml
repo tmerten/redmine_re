@@ -1,0 +1,38 @@
+<% if !data.empty? %>
+	<% data_id = data[0].id.to_s %>
+	<% shown_value = data[0].value.to_s %>
+<% else %>
+	<% data_id = 'no_id' %>
+	<% re_bb.mandatory? ? shown_value = h(re_bb.default_value) : show_value = "" %>
+<% end %>
+<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
+<table>
+	<tr>
+		<td>
+			<%= label_tag param_path, h(re_bb.name), :class => "user_defined" %>
+		</td>
+		<td>
+			<% unless re_bb.help.nil? || re_bb.help == "" %>
+				<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
+			  		<span class="tip userdefined_fields_tip"><%= h(re_bb.help) %></span>
+			 	</div>
+			<% else %>
+				<div class="tooltip placeholder">&nbsp;
+ 				</div>
+			<% end %>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td>
+			<%= text_area_tag param_path, h(shown_value), {:size => '25*3', :id => param_path} %>
+		</td>
+		<td>
+			<%= validation_warning(bb_error_hash, re_bb, :general)%>
+			<% if !data.empty? %>
+				<%= validation_warning(bb_error_hash, re_bb, data_id.to_i) %>
+			<% end %>
+		</td>
+	</tr>
+</table>

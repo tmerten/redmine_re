@@ -1,0 +1,44 @@
+  
+  <h2><%= t(:re_bb_configuration_header, :builing_block => t(:re_bb_text), :artifact_type => rendered_artifact_type(params[:artifact_type].underscore)) %></h2>
+
+  <%= errors_and_flash :re_building_block %>
+  
+  <% form_for :re_building_block, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+      <%= hidden_field_tag :project_id, @project.id %>
+  	  <%= hidden_field_tag :artifact_type, @artifact_type %>
+	  <%= hidden_field_tag :type, 'ReBbText' %>
+	  <div class="box">
+	  	
+	    <fieldset>
+	  	  <%= render "re_building_block/common_config", :f => f %>
+	      <div class="splitcontentright" >
+	        <fieldset><legend><%= l(:re_bb_special_configuration, :building_block => t(:re_bb_text)) %> </legend>
+		
+		      <p>
+		      	<%= f.label :default_value, l(:re_bb_default_value), :class => "bb_config" %> <%= f.text_field :default_value %>
+		      </p>
+		      <p>
+		      	<%= f.label :min_length, l(:re_bb_min_length), :class => "bb_config" %> <%= f.text_field :min_length %>
+		      </p>
+			  <p>
+		      	<%= f.label :max_length, l(:re_bb_max_length), :class => "bb_config" %> <%= f.text_field :max_length %>
+		      </p>
+		  	</fieldset>
+		  </div> 
+	  	  	
+	    </fieldset>
+	  
+	  </div>
+	 
+ 
+  <br />	
+  
+      <p>
+        <%= submit_tag l(:re_save) %>
+        <%= link_to(t(:re_cancel), :project_id => @project.id) %> |
+		<%= add_bb_configuration_link(@artifact_type) %>
+      </p>
+  
+  <% end %>
+  
+  
