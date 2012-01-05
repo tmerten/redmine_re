@@ -466,7 +466,10 @@ en:
   re_bb_artifact_type_does_not_match: "The referred artifact's type (%{type}) is not allowed by the current configuration."
   re_bb_too_small: '%{bb_name} should be higher than %{min_length}.'
   re_bb_too_big: '%{bb_name} should be less than %{max_length}.'
-
+  re_bb_no_further_configuration_necessary: 'No further configuration necessary.'
+  re_bb_url: 'Url'
+  re_bb_description: 'Description'
+  
   # re_tree
   re_tree_overview: 'Artifact Summary'
   re_show_tree: 'Show Tree'
