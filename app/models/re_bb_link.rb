@@ -34,14 +34,19 @@ class ReBbLink < ReBuildingBlock
     @@validation_whole_data_strategies
   end
 
-  def save_datum(datum_hash, artifact_properties_id)
+  def save_datum(datum_hash, artifact_properties_id)    
     datum_hash.keys.each do |id|
       # Data should only be saved if no other data object with
       # the same content is existent.
       attributes = datum_hash[id]
+      
+      logger.debug(attributes.to_yaml)
       if ReBbDataLink.find(:first, :conditions => {:url => attributes[:url], :re_artifact_properties_id => artifact_properties_id, :re_bb_link_id => self.id}).nil?
         # With multiple values possible, the saving of empty data should be forbidden
-        unless (attributes[:value].nil? or attributes[:value] == "") and self.multiple_values == true
+        unless (attributes[:url].nil? or attributes[:url] == "")
+          if attributes[:description].blank?
+            attributes[:description] = attributes[:url]
+          end
           #Try to find a bb_data_object with the given id. 
           #If no matching object is found, create a new one
           bb_data = ReBbDataLink.find_by_id(id) || ReBbDataLink.new
