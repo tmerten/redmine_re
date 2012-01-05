@@ -15,11 +15,10 @@
 		<td>
 			<% unless re_bb.help.nil? || re_bb.help == "" %>
 				<div class="tooltip userdefined_fields"><%= image_tag("help.png") %>
-					<span class="tip userdefined_fields_tip"><%= h(re_bb.help) %></span>
+			  		<span class="tip userdefined_fields_tip"><%= h(re_bb.help) %></span>
 			 	</div>
 			<% else %>
-				<div class="tooltip placeholder">&nbsp;
-				</div>
+				<div class="tooltip placeholder">&nbsp;</div>
 			<% end %>
 		</td>
 	</tr>
@@ -31,9 +30,7 @@
 		<td><%=t(:re_bb_description) %> <%= text_field_tag param_path_description, h(shown_description), {:id => param_path_description} %></td>
 	</tr>
 	<tr>
-		<td>
-			
-		</td>
+		<td></td>
 		<td>
 			<%= validation_warning(bb_error_hash, re_bb, :general)%>
 			<% if !data.empty? %>
