@@ -1,15 +1,16 @@
 <% if !data.empty? %>
 	<% data_id = data[0].id.to_s %>
-	<% shown_value = data[0].value.to_s %>
+	<% shown_url = data[0].url.to_s %>
+	<% shown_description = data[0].description.to_s %>
 <% else %>
 	<% data_id = 'no_id' %>
-	<% re_bb.mandatory? ? shown_value = h(re_bb.default_value) : show_value = "" %>
 <% end %>
-<% param_path = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][value]'  %>
+<% param_path_url = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][url]'  %>
+<% param_path_description = 're_bb[' + re_bb.id.to_s + '][' + data_id + '][description]'  %>
 <table>
 	<tr>
 		<td>
-			<%= label_tag param_path, h(re_bb.name), :class => "user_defined" %>
+			<%= label_tag param_path_url, h(re_bb.name), :class => "user_defined" %>
 		</td>
 		<td>
 			<% unless re_bb.help.nil? || re_bb.help == "" %>
@@ -23,10 +24,15 @@
 		</td>
 	</tr>
 	<tr>
-		<td></td>
-		<td></td>
+		<td colspan="2"><%= link_to( h(shown_description), h(shown_url), :target => '_blank')%></td>
+	</tr>
+	<tr>
+		<td><%=t(:re_bb_url) %> <%= text_field_tag param_path_url, h(shown_url), {:id => param_path_url} %></td>
+		<td><%=t(:re_bb_description) %> <%= text_field_tag param_path_description, h(shown_description), {:id => param_path_description} %></td>
+	</tr>
+	<tr>
 		<td>
-			<%= text_area_tag param_path, h(shown_value), {:size => '25*3', :id => param_path} %>
+			
 		</td>
 		<td>
 			<%= validation_warning(bb_error_hash, re_bb, :general)%>
