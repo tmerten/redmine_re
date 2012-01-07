@@ -1,0 +1,13 @@
+  
+<% if (!@re_building_block.nil? and @re_building_block.number_format == 'integer') or @re_building_block.number_format.nil?%>  
+	<div id="re_bb_number_configuration_decimal_div" style="display: none"> 
+<% else %>
+	<div id="re_bb_number_configuration_decimal_div"> 
+<% end %> 	
+		<fieldset><legend><%= l(:re_bb_number_configuration_decimal) %> </legend>
+		 	<p>
+		      	<%= f.label :number_of_digits, l(:re_bb_number_of_digits), :class => "bb_config" %> <%= f.text_field :number_of_digits %>
+		    </p>  
+		</fieldset>
+	</div>	
+  

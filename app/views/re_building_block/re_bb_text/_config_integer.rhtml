@@ -1,0 +1,22 @@
+
+<% if @re_building_block.nil? or @re_building_block.number_format.nil? or @re_building_block.number_format == 'integer'%>  
+	<div id="re_bb_number_configuration_integer_div">	 
+<% else %>
+	<div id="re_bb_number_configuration_integer_div" style="display: none"> 
+<% end %> 	
+  	
+	<fieldset><legend><%= l(:re_bb_number_configuration_integer) %> </legend>
+		<%if @re_building_block.new_record? %>
+		 	<p>
+				<%= f.check_box :slider, :class => "bb_checkbox" %><%= f.label :slider, l(:re_bb_slider_usage), {:class => "behind_checkbox disabled_is_true", :id => "label_for_re_building_block_slider"} %>
+			</p>  
+		<% else %>
+			<p>
+				<%= f.check_box :slider, :class => "bb_checkbox" %><%= f.label :slider, l(:re_bb_slider_usage), {:class => "behind_checkbox disabled_is_false", :id => "label_for_re_building_block_slider"} %>
+			</p> 
+		<% end %>
+		<%= observe_form(:re_building_block,
+	    				 :url => { :action => :react_to_change_in_fields_minimal_maximal_value, :project_id => @project.id, :artifact_type => @artifact_type, :id => @re_building_block.id}) %>
+	
+	</fieldset>
+</div>

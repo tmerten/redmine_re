@@ -1,6 +1,10 @@
 <% if !data.empty? %>
 	<% data_id = data[0].id.to_s %>
-	<% shown_value = data[0].value.to_s %>
+	<% if re_bb.number_format == 'integer' and (data[0].value - data[0].value.truncate) == 0  %>
+		<% shown_value = data[0].value.to_i.to_s %>
+	<% else %>
+		<% shown_value = data[0].value.to_s %>
+	<% end %>
 <% else %>
 	<% data_id = 'no_id' %>
 	<% re_bb.mandatory? ? shown_value = h(re_bb.default_value) : show_value = "" %>
@@ -26,7 +30,12 @@
 		<td></td>
 		<td></td>
 		<td>
-			<%= text_area_tag param_path, h(shown_value), {:size => '25*3', :id => param_path} %>
+			<% if re_bb.number_format == 'integer' and re_bb.slider %>
+				<%= number_field_with_slider(re_bb.id, data_id, h(shown_value), re_bb.minimal_value, re_bb.maximal_value) %>
+			<% else %>
+				<% size = re_bb.maximal_value.nil? ? '5' : re_bb.maximal_value.to_i.to_s.length.to_i %>
+				<%= text_field_tag param_path, h(shown_value), {:size => size, :id => param_path} %>
+			<% end %>
 		</td>
 		<td>
 			<%= validation_warning(bb_error_hash, re_bb, :general)%>
