@@ -7,6 +7,7 @@ Dispatcher.to_prepare do
   # redmine_re patches
   require_dependency 'issue_patch'
   require_dependency 'issue_controller_patch'
+  require_dependency 'query_patch'
   require_dependency 'user_patch'
   # gems
   require_dependency 'ajaxful_rating_patch'

@@ -1,0 +1,34 @@
+<% unless @issue.nil? or @issue.re_artifact_properties.length == 0 %>
+  <li class="folder">
+    <a href="#" class="submenu" onclick="return false;"><%= "#{l(:re_linked_artifacts)} (#{@issue.re_artifact_properties.length})" %></a>
+    <ul>
+      <% @issue.re_artifact_properties.all(:order => 'name ASC').each do |artifact_property| %>
+        <% controller_name = artifact_property.artifact_type.underscore %>
+        <li>
+          <%= context_menu_link artifact_property.name, { :controller => controller_name, :action => 'edit', :id => artifact_property.artifact },
+                                :class => 'icon ' + controller_name %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+<% end %>
+
+<% unless @issues.nil? or @issues.length <= 1 %>
+  <%
+    re_artifact_properties = ReArtifactProperties.find_all_by_common_issues(@issues, :order => 'name ASC')
+    if re_artifact_properties.length > 0
+  %>
+  <li class="folder">
+    <a href="#" class="submenu" onclick="return false;"><%= "#{l(:re_common_linked_artifacts)} (#{re_artifact_properties.length})" %></a>
+    <ul>
+      <% re_artifact_properties.each do |artifact_property| %>
+        <% controller_name = artifact_property.artifact_type.underscore %>
+        <li>
+          <%= context_menu_link artifact_property.name, { :controller => controller_name, :action => 'edit', :id => artifact_property.artifact },
+                                :class => 'icon ' + controller_name %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+  <% end %>
+<% end %>

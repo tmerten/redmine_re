@@ -1,0 +1,56 @@
+.icon {
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+
+.icon.project {
+  background: url(../images/icons/group_gear.png);
+}
+
+.icon.re_workarea {
+  background: url(../images/icons/bricks.png);
+}
+
+.icon.re_task {
+  background: url(../images/icons/report_user.png);
+}
+
+.icon.re_subtask {
+  background: url(../images/icons/report.png);
+}
+
+.icon.re_goal {
+  background: url(../images/icons/world.png);
+}
+
+.icon.re_user_profile {
+  background: url(../images/icons/user.png);
+}
+
+.icon.re_section {
+  background: url(../images/icons/text_padding_top.png);
+}
+
+.icon.re_attachment {
+  background: url(../images/icons/attach.png);
+}
+
+.icon.re_vision {
+  background: url(../images/icons/lightbulb.png);
+}
+
+.icon.re_requirement {
+  background: url(../images/icons/pencil.png);
+}
+
+.icon.re_scenario {
+  background: url(../images/icons/newspaper.png);
+}
+
+.icon.re_processword {
+  background: url(../images/icons/cog.png);
+}
+
+.icon.re_rationale {
+  background: url(../images/icons/anchor.png);
+}

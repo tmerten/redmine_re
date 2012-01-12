@@ -76,6 +76,19 @@ class ReArtifactProperties < ActiveRecord::Base
     @re_artifact_properties.id
   end
 
+  # Finds all artifacts that are commonly used by the supplied issues
+  def self.find_all_by_common_issues(issue_array, *args)
+    artifact_ids = []
+    issue_array.each do |issue|
+      if artifact_ids.empty?
+        artifact_ids = issue.realizations.collect { |r| r.re_artifact_properties_id }
+      else
+        artifact_ids = artifact_ids & (issue.realizations.collect { |r| r.re_artifact_properties_id })
+      end
+    end
+    ReArtifactProperties.find(artifact_ids, *args)
+  end
+
   def position
     return parent_relation.position
   end

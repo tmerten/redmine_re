@@ -98,7 +98,6 @@ en:
 
   # re_artifact_properties
   re_artifact_name: 'Name'
-  re_artifacts: 'Artifacts'
   re_artifact: 'Artifact'
   re_artifact_priority: 'Priority'
   re_artifact_description: 'Description'
@@ -114,6 +113,15 @@ en:
   re_show_wiki_page_for_re_artifact: 'Wiki Page'
   re_preview_wiki_page_for_re_artifact: 'Wiki Page Preview:'
   re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
+
+  re_artifacts: 'Artifacts'
+  re_my_artifacts: 'My Artifacts'
+  re_linked_artifact: 'Related Artifact'
+  re_linked_artifact_name: 'Related Artifact Name'
+  re_linked_artifact_type: 'Related Artifact Type'
+  re_linked_artifacts: 'Related Artifacts'
+  re_linked_artifacts_count: 'Related Artifacts'
+  re_common_linked_artifacts: 'Related Artifacts'
 
   re_artifact_properties_validates_presence_of_name: 'Enter the name of the artifact.'
   re_artifact_properties_validates_uniqueness_of_name: 'The name is used in another artifact, already.'
@@ -523,3 +531,8 @@ en:
   rating_average: 'Rating average'
   re_artifact_rating_average: 'Rating average'
   own_rating: 'Your rating'
+
+
+  # Other
+
+  project: Project
