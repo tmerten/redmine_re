@@ -661,3 +661,13 @@ fieldset.rating{
 fieldset.comment{
     height:85%;
 }
+
+.re_bb_link_update {
+	overflow: visible; 
+	position: absolute; 
+	margin-left: 58px; 
+	height: 124px; 
+	background: none repeat scroll 0 0 #E4E4E4; 
+	border: 1px solid #505050; 
+	padding: 10px;
+}

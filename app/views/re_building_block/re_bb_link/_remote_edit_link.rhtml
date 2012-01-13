@@ -1,0 +1,31 @@
+
+	<% div_id = 'bb_form_' + @params[:re_bb_id].to_s  %>
+		<td><%= link_to( h(@params[:description]), h(@params[:url]), :target => '_blank')%></td>
+		<td>
+			<%= link_to_remote  (image_tag('edit.png', :border => 0),
+                   				:url => { :controller => 're_link_building_block', :action => 'popup', :re_bb_data_id => @params[:re_bb_data_id], :re_bb_id => @params[:re_bb_id], :project_id => @params[:project_id], :url => @params[:url], :description => @params[:description] } ,
+								:update => div_id+"_"+@params[:re_bb_data_id].id.to_s+"_"+@params[:project_id].to_s)
+            %>
+
+			<%= link_to_remote 	(image_tag("delete.png"), 
+			  					:url => {:controller => 're_building_block', :action => 'delete_data', :re_bb_data_id => @params[:re_bb_data_id], :re_bb_id => @params[:re_bb_id], :project_id => @params[:project_id] },
+								:update => div_id)
+			%>
+			
+			<div class="re_bb_link_update">
+				<% remote_form_for(:post, @re_building_block, :url => {:controller => 're_link_building_block', :action => 'popup_close_and_update_link', :re_bb_data_id => @params[:re_bb_data_id], :re_bb_id => @params[:re_bb_id], :project_id => @params[:project_id]}, :update => @deletediv  ) do |f| %>
+					<%= f.error_messages %>
+					<p>
+					  <%= f.label :url %><br />
+					  <%= f.text_field :url, :value => @params[:url] %>
+					</p>
+					<p>
+					  <%= f.label :description %><br />
+					  <%= f.text_field :description, :value => @params[:description] %>
+					</p>
+				    <p>
+				      <%= f.submit 'Update' %>
+				    </p>
+				<% end %>
+			</div>
+		</td>	
