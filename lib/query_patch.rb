@@ -3,7 +3,6 @@ require_dependency 'query'
 # Mixin for introducing new Issue filters
 module QueryPatch
   def self.included(base)
-    base.extend(ClassMethods)
     base.send(:include, InstanceMethods)
 
     base.class_eval do
@@ -17,9 +16,6 @@ module QueryPatch
       alias_method_chain :available_filters, :re_filters
       alias_method_chain :sql_for_field, :re_filters
     end
-  end
-
-  module ClassMethods
   end
 
   module InstanceMethods
@@ -59,23 +55,30 @@ module QueryPatch
 
   # Outputs all artifacts' names prefixed by the particular artifact type (formatted for select box compatibility)
   def selectable_artifact_types_and_names
-    artifacts = ReArtifactProperties.all(:conditions => ["artifact_type != ?", "Project"])
-    artifacts.collect { |p| [ "[#{localized_artifact_type(p)}] #{p.name}", p.id.to_s ] }.sort! { |a, b| a.first <=> b.first }
+    conditions = ["#{Project.table_name}.id = ? AND #{ReArtifactProperties.table_name}.artifact_type NOT IN (?)",
+                  project_id, "Project"]
+
+    artifacts = ReArtifactProperties.all(:joins => [:realizations, :issues, :project],
+                                         :conditions => conditions, :group => :id)
+    artifacts.collect { |a| [ "[#{localized_artifact_type(a)}] #{a.name}", a.id.to_s ] }.sort! { |a, b| a.first <=> b.first }
   end
 
   # Outputs all artifact types (formatted for select box compatibility)
   def selectable_artifact_types
-    artifacts = ReArtifactProperties.all(:conditions => ["artifact_type != ?", "Project"],
-                                         :select => "DISTINCT(artifact_type)")
-    artifacts.collect { |p| [ localized_artifact_type(p), p.artifact_type ] }.sort! { |a, b| a.first <=> b.first }
+    conditions = ["#{Project.table_name}.id = ? AND #{ReArtifactProperties.table_name}.artifact_type NOT IN (?)",
+                  project_id, "Project"]
+
+    artifacts = ReArtifactProperties.all(:joins => [:realizations, :issues, :project],
+                                         :conditions => conditions, :group => :artifact_type)
+    artifacts.collect { |a| [ localized_artifact_type(a), a.artifact_type ] }.sort! { |a, b| a.first <=> b.first }
   end
 
   # Builds a SQL condition to filter for artifact properties
   def sql_for_artifact_field(db_table, db_field, value, is_numeric_value, invert)
-    inner_sql = %{SELECT DISTINCT(#{db_table}.id) FROM realizations
-                  INNER JOIN issues ON issues.id = realizations.issue_id
-                  INNER JOIN re_artifact_properties ON re_artifact_properties.id = realizations.re_artifact_properties_id
-                  WHERE re_artifact_properties.#{db_field}
+    inner_sql = %{SELECT DISTINCT(#{db_table}.id) FROM #{Realization.table_name}
+                  INNER JOIN #{Issue.table_name} ON #{Issue.table_name}.id = #{Realization.table_name}.issue_id
+                  INNER JOIN #{ReArtifactProperties.table_name} ON #{ReArtifactProperties.table_name}.id = #{Realization.table_name}.re_artifact_properties_id
+                  WHERE #{ReArtifactProperties.table_name}.#{db_field}
                   IN (#{(is_numeric_value ? value : value.collect { |v| "'#{connection.quote_string(v)}'" }).join(",")})}
     "#{db_table}.id #{invert ? "NOT " : ""}IN (#{inner_sql})"
   end

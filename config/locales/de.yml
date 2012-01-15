@@ -21,6 +21,7 @@ de:
 
   # re_artifact_properties
   re_artifact_name: 'Name'
+  re_artifacts: 'Artefakte'
   re_artifact_priority: 'Priorit&auml;t'
   re_artifact_description: 'Beschreibung'
   re_artifact_responsibles: 'Verantwortliche'
@@ -30,11 +31,11 @@ de:
   re_artifact_properties_validates_presence_of_created_by: 'Created by muss angegeben werden!'
   re_artifact_properties_validates_presence_of_project: 'Project muss angegeben werden!'
 
-  re_artifacts: 'Artefakte'
+  project: Projekt
   re_my_artifacts: 'Meine Artefakte'
   re_linked_artifact: 'Verkn&uuml;pftes Artifakt'
   re_linked_artifact_name: 'Verkn&uuml;pftes Artifakt (Name)'
-  re_linked_artifact_typ: 'Verkn&uuml;pftes Artifakt (Typ)'
+  re_linked_artifact_type: 'Verkn&uuml;pftes Artifakt (Typ)'
   re_linked_artifacts: 'Verkn&uuml;pfte Artifakte'
   re_linked_artifacts_count: 'Verkn&uuml;pfte Artefakte'
   re_common_linked_artifacts: 'Verkn&uuml;pfte Artefakte'
@@ -161,7 +162,3 @@ de:
   re_bb_artifact_type_does_not_match: "Der Typ (%{type}) des verbundenen Artefakts ist durch die aktuelle Konfiguration nicht erlaubt."
   re_bb_too_small: '%{bb_name} muss größer als %{min_length} sein.'
   re_bb_too_big: '%{bb_name} muss kleiner als %{max_length} sein.'
-
-  # Other
-
-  project: Projekt
