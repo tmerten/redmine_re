@@ -58,7 +58,7 @@
   
       <p>
         <%= submit_tag l(:re_save) %>
-        <%= link_to(t(:re_cancel), :project_id => @project.id) %> |
+        <%= link_to(t(:re_cancel), :controller => 're_settings', :action => 'configure_fields', :artifact_type => @artifact_type, :project_id => @project.id) %> |
 		<%= add_bb_configuration_link(@artifact_type) %>
       </p>
   
