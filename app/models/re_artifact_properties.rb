@@ -68,6 +68,9 @@ class ReArtifactProperties < ActiveRecord::Base
   validates_presence_of :parent,     :message => l(:re_artifact_properties_validates_presence_of_parent), :unless => Proc.new { |a| a.artifact_type == "Project" }
   validates_associated :parent_relation
 
+  validates_length_of :name, :minimum => 3, :message => l(:re_artifact_properties_not_enought_chars)
+  validates_length_of :name, :maximum =>50, :message => l(:re_artifact_properties_to_many_chars)
+
   after_destroy :delete_wiki_page
 
   def self.get_properties_id(controllername, subartifact_id)

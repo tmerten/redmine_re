@@ -114,6 +114,9 @@ en:
   re_show_wiki_page_for_re_artifact: 'Wiki Page'
   re_preview_wiki_page_for_re_artifact: 'Wiki Page Preview:'
   re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
+  re_artifact_properties_not_enought_chars: 'Minimum chars %d'
+  re_artifact_properties_to_many_chars: 'Maximum chars %d'
+
 
   project: Project
   re_my_artifacts: 'My Artifacts'
