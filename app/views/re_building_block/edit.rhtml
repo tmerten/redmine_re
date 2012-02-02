@@ -16,7 +16,7 @@
 	<% end %>
 	<div id="building_block_config">
 		<% if params[:building_block_type].nil? %>
-			<% partial = "re_building_block/re_bb_number/config" %>
+			<% partial = "re_building_block/re_bb_text/config" %>
 		<% else %>
 			<% partial = "re_building_block/" + params[:building_block_type] + "/config" %>
 		<% end %>
