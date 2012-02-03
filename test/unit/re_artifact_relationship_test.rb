@@ -27,10 +27,6 @@ class ReRelationshipTest < ActiveSupport::TestCase
 
     destroy_by_position(3)
 
-    #for i in 0..@last_child_position-1 do
-      #logger.debug("#{self} ######### #{parent_relation.position} <--> #{i+1}")
-    #end
-
     relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(project_artifact_id, "parentchild", :order => :position)
     relations.each_with_index do |r,i|
       logger.debug("#{self} ######### #{r.position} <--> #{i+1}")
@@ -79,7 +75,9 @@ class ReRelationshipTest < ActiveSupport::TestCase
         child_child = ReSection.new( :name => "level 2 section #{i.to_s},#{j.to_s}" )
         child_child.project = project
         child_child.parent = child
-        assert(child_child.save, "artifact should be saved")
+        saved  = child_child.save
+        assert(saved, "artifact should be saved")
+        logger.debug("#{self} ######### child_child_relation: #{child_child.parent_relation.errors.inspect}")
         assert_equal(j, child_child.parent_relation.position, "children position should increment")
       end
     end

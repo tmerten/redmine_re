@@ -57,7 +57,7 @@ module StrategyProcs
     params_re_bb = params[:re_building_block]
     # If the field to check has the same value as given by the key :value_not_to_have, 
     # the data of the fields spezified by the value of the key :fields_to_delete is deleted
-    unless eval "re_bb.#{attribute_names[:name_of_field_to_check]} == '#{attribute_names[:value_not_to_have]}'"
+    unless re_bb.send(attribute_names[:name_of_field_to_check]) == attribute_names[:value_not_to_have]
       attribute_names[:fields_to_delete].each do |data_field|
         params_re_bb[data_field] = nil
       end
@@ -116,26 +116,27 @@ module StrategyProcs
   #            length of the data value
   # The value of the key "max_length" is the name of the bb's attribute which stores the maximal 
   #                  length of the data value
-  # The value of the key "value" is the command which allows to to read out the datum.value's length or size
+  # The value of the key "get_size" is the command which allows to to read out the datum.value's length or size
   # If no attribute_names hash is delivered, a default hash with values being the same as the keys is created.
   VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY = lambda do |re_bb, datum, bb_error_hash, attribute_names, error_messages|
     if attribute_names.nil?
-      attribute_names = {:min_length => :min_length, :max_length => :max_length, :value => 'datum.value.length'}
+      attribute_names = {:min_length => :min_length, :max_length => :max_length}
     end
     if error_messages.nil?
       error_messages = {:re_bb_too_short => :re_bb_too_short, :re_bb_too_long => :re_bb_too_long}
     end
     unless datum.value == ""
-      min = eval "re_bb.#{attribute_names[:min_length]}"
-      max = eval "re_bb.#{attribute_names[:max_length]}"
-      unless min.nil?
-        if eval "#{attribute_names[:value]} < min" 
-           bb_error_hash = eval "StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:#{error_messages[:re_bb_too_short]}, :bb_name => re_bb.name, :min_length => min))"       
+      min = re_bb.send(attribute_names[:min_length].to_s)
+      max = re_bb.send(attribute_names[:max_length].to_s)
+      size = attribute_names[:get_size].nil? ? datum.value : datum.value.send(attribute_names[:get_size])
+      unless min.nil? || size.nil?
+        if size < min
+           bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(error_messages[:re_bb_too_short], :bb_name => re_bb.name, :min_length => min))
         end
       end
-      unless max.nil?
-        if eval "#{attribute_names[:value]} > max" 
-          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(:#{error_messages[:re_bb_too_long]}, :bb_name => re_bb.name, :max_length => max))"       
+      unless max.nil? || size.nil?
+        if size > max 
+          bb_error_hash = StrategyProcs.add_error(re_bb.id, datum.id, bb_error_hash, I18n.t(error_messages[:re_bb_too_long], :bb_name => re_bb.name, :max_length => max))
         end
       end
     end
@@ -166,13 +167,13 @@ module StrategyProcs
       error_messages = {:re_bb_out_of_date => :re_bb_out_of_date}
     end
     # Check if bb is up to date only if changes of the referred artifact shall be indicated
-    if eval "re_bb.#{attribute_names[:indicate_changes].to_s}"
+    if re_bb.send(attribute_names[:indicate_changes].to_s)
       bb_checked_at = datum[attribute_names[:re_checked_at]]
       relation = ReArtifactRelationship.find(datum[attribute_names[:re_artifact_relationship_id]])
-      artifact_id = eval "relation.#{attribute_names[:sink]}.id"
+      artifact_id = relation.send(attribute_names[:sink]).id
       artifact_updated_at = ReArtifactProperties.find(artifact_id).updated_at
       if artifact_updated_at > bb_checked_at
-        bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_out_of_date]}, :bb_name => re_bb.name))"  
+        bb_error_hash = StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(error_messages[:re_bb_out_of_date], :bb_name => re_bb.name))
       end
     end
     bb_error_hash
@@ -211,30 +212,29 @@ module StrategyProcs
   #            number of fractional digits that your number is allowed to have
   # The value of the key ":number_format" is the name of the bb's attribute which stores which 
   #                  format your number uses
-  # The value of the key "value" is the command which allows to to read out the datum.value's length or size
   VALIDATE_NUMBER_FORMAT = lambda do |re_bb, datum, bb_error_hash, attribute_names, error_messages |
     if attribute_names.nil?
-      attribute_names = {:number_of_digits => :number_of_digits, :number_format => :number_format, :value => 'datum.value'}
+      attribute_names = {:number_of_digits => :number_of_digits, :number_format => :number_format}
     end
     if error_messages.nil?
       error_messages = {:re_bb_number_must_be_integer => :re_bb_number_must_be_integer, :re_bb_too_many_fractional_digits => :re_bb_too_many_fractional_digits, :re_bb_value_must_be_a_number => :re_bb_value_must_be_a_number}
     end
     begin
-      value = eval "Decimal(#{attribute_names[:value]}.to_s)"
-      if eval "re_bb.#{attribute_names[:number_format].to_s} == 'integer'"
+      value = Decimal(datum.value)
+      if re_bb.send(attribute_names[:number_format].to_s) == 'integer'
         # Test if value is an integer
         if value - value.truncate != 0 or value < 0
-          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_number_must_be_integer]}))"
+          bb_error_hash = StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(error_messages[:re_bb_number_must_be_integer]))
         end
       else
         # Test if the number of digits matches the configuration
-        number_of_digits = eval("re_bb.#{attribute_names[:number_of_digits].to_s}")
+        number_of_digits = re_bb.send(attribute_names[:number_of_digits].to_s)
         if (value - value.truncate).digits.length > number_of_digits
-          bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_too_many_fractional_digits]}, :number_of_digits => #{number_of_digits}))"
+          bb_error_hash = StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(error_messages[:re_bb_too_many_fractional_digits], :number_of_digits => number_of_digits))
         end 
-      end    
+      end
     rescue # Value can not be transfered into a number
-      bb_error_hash = eval "StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(:#{error_messages[:re_bb_value_must_be_a_number]}))"
+      #bb_error_hash = StrategyProcs.add_error(re_bb.id.to_i, datum.id.to_i, bb_error_hash, I18n.t(error_messages[:re_bb_value_must_be_a_number]))
     end
     bb_error_hash  
   end
@@ -300,9 +300,7 @@ module StrategyProcs
     end
     bb_error_hash
   end  
-  
-  
-  
+
 ###### Helper methods ######  
   
     

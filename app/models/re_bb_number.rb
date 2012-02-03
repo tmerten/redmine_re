@@ -15,7 +15,7 @@ class ReBbNumber < ReBuildingBlock
   @@additional_work_before_save_strategies = {}
   @@additional_work_after_save_strategies = {}
   @@validation_strategies = {VALIDATE_NUMBER_FORMAT => nil, 
-                             VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY => {:attribute_names => {:min_length => :minimal_value, :max_length => :maximal_value, :value => 'datum.value'}, :error_messages => {:re_bb_too_short => :re_bb_too_small, :re_bb_too_long => :re_bb_too_big}}}
+                             VALIDATE_VALUE_BETWEEN_MIN_VALUE_AND_MAX_VALUE_STRATEGY => {:attribute_names => {:min_length => :minimal_value, :max_length => :maximal_value}, :error_messages => {:re_bb_too_short => :re_bb_too_small, :re_bb_too_long => :re_bb_too_big}}}
   @@validation_whole_data_strategies = {VALIDATE_MANDATORY_VALUES => nil, 
                                         VALIDATE_MULTIPLE_DATA_NOT_ALLOWED => nil} 
   

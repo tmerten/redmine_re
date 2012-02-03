@@ -20,7 +20,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   validates_presence_of :relation_type
   validates_presence_of :sink_id, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
   validates_presence_of :sink, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
-  validates_presence_of :source
+  validates_presence_of :source_id
   validates_inclusion_of :relation_type, :in => RELATION_TYPES.values
 
   def self.find_all_relations_for_artifact_id(artifact_id)
