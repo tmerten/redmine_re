@@ -10,6 +10,6 @@ class CreateReBbDataNumbers < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :re_bb_data_selections
+    drop_table :re_bb_data_numbers
   end
 end
