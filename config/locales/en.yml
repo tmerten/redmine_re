@@ -481,6 +481,9 @@ en:
   re_bb_no_further_configuration_necessary: 'No further configuration necessary.'
   re_bb_url: 'Url'
   re_bb_description: 'Description'
+  re_bb_file: 'File Building Block'
+  re_bb_inline_view_allowed: 'Inline-View allowed'
+  allowed_filetypes : 'Allowed filetypes'
   
   # re_tree
   re_tree_overview: 'Artifact Summary'

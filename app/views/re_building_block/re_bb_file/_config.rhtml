@@ -1,0 +1,40 @@
+  
+  <h2><%= t(:re_bb_configuration_header, :builing_block => t(:re_bb_text), :artifact_type => rendered_artifact_type(params[:artifact_type].underscore)) %></h2>
+
+  <%= errors_and_flash :re_building_block %>
+  
+  <% form_for :re_building_block, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+      <%= hidden_field_tag :project_id, @project.id %>
+  	  <%= hidden_field_tag :artifact_type, @artifact_type %>
+	  <%= hidden_field_tag :type, 'ReBbFile' %>
+	  <div class="box">
+	  	
+	    <fieldset>
+	  	  <%= render "re_building_block/common_config", :f => f %>
+	      <div class="splitcontentright" >
+	        <fieldset><legend><%= l(:re_bb_special_configuration, :building_block => t(:re_bb_file)) %> </legend>
+		
+		      <p>
+		      	<%= f.label :inline_view_allowed, l(:re_bb_inline_view_allowed), :class => "bb_config" %> <%= f.text_field :inline_view_allowed %>
+		      </p>
+		      <p>
+		      	<%= f.label :allowed_filetypes, l(:allowed_filetypes), :class => "bb_config" %> <%= f.text_field :allowed_filetypes %>
+		      </p>
+		  	</fieldset>
+		  </div> 
+	  	  	
+	    </fieldset>
+	  
+	  </div>
+	 
+ 
+  <br />	
+  
+      <p>
+        <%= submit_tag l(:re_save) %>
+        <%= link_to(t(:re_cancel), :controller => 're_settings', :action => 'configure_fields', :artifact_type => @artifact_type, :project_id => @project.id) %> |
+		<%= add_bb_configuration_link(@artifact_type) %>
+      </p>
+  
+  <% end %>
+  
