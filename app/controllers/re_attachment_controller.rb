@@ -1,5 +1,3 @@
-# @deprecated This artifact will be removed soon. For more information view
-# https://korem.de/redmine/issues/222
 class ReAttachmentController < RedmineReController
   unloadable
 
