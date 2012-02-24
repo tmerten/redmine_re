@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+  trigger: MyText
+  precondition: MyText
+  postcondition: MyText
+  goal_level: 
+two:
+  id: 2
+  trigger: MyText
+  precondition: MyText
+  postcondition: MyText
+  goal_level: 

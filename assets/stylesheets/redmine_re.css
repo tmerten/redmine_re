@@ -382,11 +382,11 @@ a.re_rationale {
     background: url(../images/icons/anchor.png) no-repeat left top;
 	margin-left: 0px;
 }
-ins.re_knowledge_artifact {
-    background: url(../images/icons/note.png) no-repeat left top;
+ins.re_use_case {
+    background: url(../images/icons/page_user.png) no-repeat left top;
 }
-a.re_knowledge_artifact {
-    background: url(../images/icons/note.png) no-repeat left top;
+a.re_use_case {
+    background: url(../images/icons/page_user.png) no-repeat left top;
     margin-left: 0px;
 }
 

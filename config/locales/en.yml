@@ -361,15 +361,20 @@ en:
   # re_settings
   re_settings_have_to_save: 'No configuration saved yet: You have to click on save before you leave this page!'
 
-  # knowledge artifact
-  re_knowledge_artifact: 'Knowledge'
-  re_create_re_knowledge_artifact: 'Create a new Knowledge'
-  re_new_re_knowledge_artifact: 'Knowledge'
-  re_knowledge_artifact_priority: 'Priority'
-
   # re_requirement
   re_requirement: 'Requirement'
   ReRequirement: 'Requirement'
+
+  #re_use_case
+  re_use_case: 'Use Case'
+  ReUseCase: 'Use Case'
+  re_new_re_use_case: 'New Use Case'
+  re_create_re_use_case: 'Create a new Use Case'
+  re_use_case_specific_attributes: 'Use Case specific attributes'
+  re_use_case_saved: 'Use Case sucessfully saved'
+  re_use_case_deleted: 'Use Case %{name} has been deleted'
+  re_use_case_not_deleted: 'Use Case %{name} could not be deleted'
+  re_use_case_not_found: 'Could not find a Use Case with id %{id} to delete'
 
   # re_scenario
   re_scenario: 'Scenario'

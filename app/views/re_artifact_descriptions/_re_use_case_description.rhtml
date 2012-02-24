@@ -1,0 +1,9 @@
+<% configured_description = ReSetting.get_serialized('re_use_case', @project.id)['description']%>
+<% if configured_description.nil? %> 
+	Use Case template as found in Cockburns Book Writing effective Use-Cases..<br />
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 
+
+
+

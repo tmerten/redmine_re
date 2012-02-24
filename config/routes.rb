@@ -15,4 +15,5 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :re_processword, :path_prefix => '/projects/:project_id', :except => :edit
   map.resources :re_settings, :path_prefix => '/projects/:project_id', :except => :edit
   map.resources :re_rationale, :path_prefix => '/projects/:project_id', :except => :edit
+  map.resources :re_use_case, :path_prefix => '/projects/:project_id', :except => :edit
 end
