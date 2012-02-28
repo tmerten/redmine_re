@@ -1,0 +1,38 @@
+<!-- move to re_use_case/_formfields -->
+<fieldset><legend><%= t(:use_case_expansions) %></legend>
+  <table>
+    <thead class="epansions">
+      <tr>
+        <th><%= t(:re_use_case_expansion) %></th>
+        <th><%= t(:re_expansion_type) %></th>
+        <th><%= t(:re_expansion_description) %></th>
+      </tr>
+    </thead>
+    <tbody id="expansions">
+    </tbody>
+  </table>
+</fieldset>
+
+<!-- initial template -->
+<% fields_for "artifact[re_use_case_steps_attributes][re_use_case_expansions_attributes][]", re_use_case_expansion do |ex_form| %>
+  <% type = re_use_case_expansion.re_expansion_type %>
+  <tr>
+    <td>
+      <a href="#<%= 'anchor' %>">anchorlink to step</a>
+    </td>
+    <td>
+      <%= ex_form.select :re_expansion_type, [ ['Exception', 1], ['Data',2], ['Other',3] ], :index => nil %>
+    <td>
+      <%= text_area :re_use_case_expansion, :description, { :size => "35x2", :index => nil,  :class => "use_case_step_textarea" } %>
+    </td>
+    <td>
+      <% if re_use_case_expansion.new_record? %>
+        <%= link_to_function t(:re_delete_use_case_expansion), "$(this).up('.use_case_expansion_row').remove()", :class => "icon icon-del" %>
+      <% else %>
+        <%= link_to_function t(:re_delete_use_case_expansion), "markExpansionForDeletion(this)", :class => "icon icon-del" %>
+        <%= hidden_field(:re_use_case_expansion, :id, :index => nil) %>
+        <%= hidden_field(:re_use_case_expansion, :_destroy, :index => nil, :class => "should_destroy") %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

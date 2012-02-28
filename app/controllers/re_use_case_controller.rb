@@ -10,22 +10,27 @@ class ReUseCaseController < RedmineReController
   # hook method(s).
   # You find an example of how to use these hooks in the ReTaskController
   
-  #def new_hook(params)
-  #end
+  def new_hook(params)
+    @artifact.goal_level=3
+  end
 
   #def edit_hook_after_artifact_initialized(params)
   #end
-  
+
   #def edit_hook_validate_before_save(params, artifact_valid)
     # must return true, if the validation passed or false if invalid 
     # you should also attach your errors to the @artifact variable
 
   #  return true
   #end
-  
-  #def edit_hook_valid_artifact_after_save(params)
-  #end
-  
+
+  def edit_hook_valid_artifact_after_save params
+    unless @artifact.re_use_case_steps.empty?
+      @artifact.reload.re_use_case_steps
+      flash.now[:notice] = t(:re_use_case_and_steps_saved)
+    end
+  end
+
   #def edit_hook_invalid_artifact_cleanup(params)
   #end
 

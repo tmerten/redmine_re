@@ -1,0 +1,41 @@
+<% fields_for "artifact[re_use_case_steps_attributes][]", re_use_case_step do |uc_form| %>
+
+  <% type = re_use_case_step.step_type %>
+
+  <tr id="use_case_step_drag_<%= re_use_case_step.position %>" class="draggable use_case_step_row">
+
+
+  <td style="cursor: pointer;" >
+  <% if type==1 %>
+      <%= image_tag('icons/user.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)) %><%= uc_form.hidden_field :step_type, :index => nil %>
+    </td>
+    <td colspan=2 >
+  <% else %>
+    <%= image_tag('icons/monitor.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)) %><%= uc_form.hidden_field :step_type, :index => nil %>
+    </td>
+    <td>&nbsp;</td>
+    <td colspan=2 >
+  <% end %>
+  <%= uc_form.text_area :description, { :size => "35x2", :index => nil,  :class => "use_case_step_textarea" } %>
+  <%= uc_form.hidden_field :position, :index => nil, :class => "position" %>
+  <% if type==1 %>
+    </td>
+    <td>&nbsp;</td>
+  <% else %>
+    </td>
+  <% end %>
+  <td>&nbsp;</td>
+  <td>
+    <%= t(:re_uc_insert) %> <%= link_to_function( t(:re_user_step), "addStep($(this.parentNode.parentNode).id, 'after', 'user')", :class => "icon icon-subtask-after" ) %>
+    <%= link_to_function( t(:re_system_step), "addStep($(this.parentNode.parentNode).id, 'after', 'system')", :class => "icon icon-subtask-after" ) %>, <br />
+    <%= link_to_function( t(:re_uc_dialog), "addDialog($(this.parentNode.parentNode).id, 'after')", :class => "icon icon-subtask-after" ) %>,
+    <% if re_use_case_step.new_record? %>
+      <%= link_to_function t(:re_delete_use_case_step), "$(this).up('.use_case_step_row').remove()", :class => "icon icon-del" %>
+    <% else %>
+      <%= link_to_function t(:re_delete_use_case_step), "markStepForDeletion(this)", :class => "icon icon-del" %>
+      <%= uc_form.hidden_field(:id, :index => nil) %>
+      <%= uc_form.hidden_field(:_destroy, :index => nil, :class => "should_destroy") %>
+    <% end %>
+  </td>
+  </tr>
+ <% end %>

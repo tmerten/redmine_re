@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+  re_use_case_step_id: 
+  re_expansion_type: 
+  description: MyText
+two:
+  id: 2
+  re_use_case_step_id: 
+  re_expansion_type: 
+  description: MyText

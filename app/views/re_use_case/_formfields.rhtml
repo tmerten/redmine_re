@@ -1,8 +1,115 @@
+<fieldset><legend><%= l(:re_use_case_specific_attributes) %></legend>
+    <p>
+    <%= f.label :goal_level, l(:re_use_case_level) %>
+    <%#  image_tag('icons/use_case_cloud.png', :size => '40x40', :plugin => 'redmine_re', :alt => t(:re_use_case_abstract_overview)) => 5 %>
+    <%= f.select :goal_level, [
+      [t(:re_use_case_abstract_overview), 5],
+      [t(:re_use_case_overview) , 4 ],
+      [t(:re_use_case_user_goal) , 3 ],
+      [t(:re_use_case_function) , 2 ],
+      [t(:re_use_case_low) , 1 ] ] %>
+    </p>
+    <p>
+      <%= f.label :trigger, l(:re_use_case_trigger) %> <%= f.text_field :trigger, :size => 100 %>
+    </p>
+    <p>
+      <%= f.label :precondition, l(:re_use_case_precondition) %> <%= f.text_field :precondition, :size => 100 %>
+    </p>
+    <p>
+      <%= f.label :postcondition, l(:re_use_case_postcondition) %> <%= f.text_field :postcondition, :size => 100 %>
+    </p>
+</fieldset>
 
+<fieldset><legend><%= l(:re_use_case_steps) %></legend>
+  <table class="steps">
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th><%= t(:re_user_steps) %></th>
+        <th width="120px" >&nbsp;</th>
+        <th ><%= t(:re_system_steps) %></th>
+        <th>&nbsp;</th>
+        <th><%= t(:re_uc_add) %> <%= link_to_function( t(:re_user_step), "addStep('steps', 'top', 'user')", :class => "icon icon-subtask-after" ) %>,
+          <%= link_to_function( t(:re_system_step), "addStep('steps', 'top', 'system')", :class => "icon icon-subtask-after" ) %>, <br />
+          <%= link_to_function( t(:re_uc_dialog), "addDialog('steps', 'top')", :class => "icon icon-subtask-after" ) %>
+        </th>
+      </tr>
+    </thead>
+    <tbody id="steps">
+      <%= render :partial => 're_use_case_step', :collection => @artifact.re_use_case_steps %>
+    </tbody>
+    <%= sortable_element( "steps",
+      :tag => 'tr',
+      :complete => visual_effect(:highlight, 'steps'),
+      :onUpdate => "function() { updateStepPositionFields(); }"
+    ) %>
+  </table>
+</fieldset>
 
+<% javascript_tag do %>
+  setResizeableTextAreas();
 
-<div class='box'>
-  <fieldset><legend><%= l(:re_use_case_specific_attributes) %></legend>
+  function addDialog(element, add_pos) {
+    addStep(element, add_pos, 'system');
+    addStep(element, add_pos, 'user');
+  }
 
-  </fieldset>
-</div>
+  function addStep(element, add_pos, type) {
+    var rendered_step;
+
+    switch(type) {
+      case 'user':
+      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step", :object => ReUseCaseStep.new(:step_type=>1))) %>";
+      break;
+      case 'system':
+      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step", :object => ReUseCaseStep.new(:step_type=>2))) %>";
+    }
+
+    switch(add_pos) {
+      case 'after':  $(element).insert( { after: rendered_step} ); break;
+      case 'before': $(element).insert( { before: rendered_step} ); break;
+      case 'bottom': $(element).insert( { bottom: rendered_step} ); break;
+      case 'top':    $(element).insert( { top: rendered_step} ); break;
+      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
+    }
+
+    unregisterTextAreaEvents();
+    setResizeableTextAreas();
+    Sortable.create("steps", { onUpdate:function() { updateStepPositionFields(); }, tag:'tr' } );
+    updateStepPositionFields();
+  }
+
+  /* TODO
+  function addExtension(element) {
+    var rendered_expansion;
+    rendered_expansion = "<%#= escape_javascript(render(:partial => "re_use_case_expansion", :object => ReUseCaseStepExpansion.new(:re_expansion_type=>1))) %>";
+    $('expansions').insert( { bottom: rendered_expansion } );
+  }*/
+
+  function markStepForDeletion(element) {
+    $(element).next('.should_destroy').value = 1;
+    $(element).up('.use_case_step_row').hide();
+  }
+
+  function updateStepPositionFields() {
+    var pos = 1;
+    $('steps').childElements().each( function(child) {
+      $(child).id = 'use_case_step_drag_' + pos;
+      $(child).down('.position').value = pos;
+      pos++;
+    });
+  }
+
+  function setResizeableTextAreas() {
+      $$('textarea.use_case_step_textarea').each(function (el) {
+         new ResizingTextArea($(el));
+      });
+  }
+
+  function unregisterTextAreaEvents() {
+    $$('textarea.use_case_step_textarea').each(function (el) {
+     (el).stopObserving('click');
+     (el).stopObserving('keyup');
+    });
+  }
+<% end %>
