@@ -1,0 +1,46 @@
+<div class="field settings name">
+  <span class="column label">
+    <%= form.label :name, 'Name' %>
+  </span>
+  <span class="column value">
+    <%= form.text_field :name %>
+  </span>
+</div>
+
+<div class="field settings description">
+  <span class="column label">
+    <%= form.label :description, 'Description' %>
+  </span>
+  <span class="column value">
+    <%= form.text_area :description, :rows => 5 %>
+  </span>
+</div>
+
+<% if @query.editable?(false) %>
+
+<div class="field settings visibility">
+  <span class="column label">
+    <%= form.label :visibility, 'Visibility' %>
+  </span>
+  <span class="column mode">
+    <%= form.select :visibility, query_visibility_modes %>
+  </span>
+  <span class="column value">
+    <%= form.select :visible_role_ids, @visible_roles.map { |role| [role.name, role.id] }, {}, { :multiple => true } %>
+  </span>
+  <span class="column actions">
+    <a href="#" class="icon icon-checked select_all"><%= l(:re_select_all) %></a>
+    <a href="#" class="icon icon-del unselect_all"><%= l(:re_unselect_all) %></a>
+  </span>
+</div>
+
+<div class="field settings editable">
+  <span class="column label">
+    <%= form.label :editable, 'Editable?' %>
+  </span>
+  <span class="column value">
+    <%= form.check_box :editable %>
+  </span>
+</div>
+
+<% end %>

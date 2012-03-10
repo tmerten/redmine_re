@@ -270,6 +270,10 @@ en:
   re_source_artifact: 'Source Artifact'
   re_sink_artifact: 'Sink Artifact'
   re_artifact_type: 'Type'
+  re_source_artifact_name: 'Source Artifact Name'
+  re_sink_artifact_name: 'Sink Artifact Name'
+  re_source_artifact_type: 'Source Artifact Type'
+  re_sink_artifact_type: 'Sink Artifact Type'
   re_create_new_relation: 'Create a new relation'
   re_dependency_relation_type: 'Dependency'
   re_conflict_relation_type: 'Conflict'
@@ -526,18 +530,6 @@ en:
   # fields
   field_re_artifact: 'field artifact'
 
-  # filter
-  re_enhanced_filter: 'Enhanced filter'
-  re_apply_filter: 'Apply filter'
-  re_starts_with: 'starts with'
-  re_ends_with: 'ends with'
-  re_contains: 'contains'
-  re_equals: 'equals'
-  re_greater_than: 'greater than'
-  re_lesser_than: 'lesser_than'
-  re_none_specific: 'None specific'
-  re_filter_results: 'Filter results'
-
   #issues
 
   implementation_of: 'Implementation of'
@@ -567,3 +559,35 @@ en:
   rating_average: 'Rating average'
   re_artifact_rating_average: 'Rating average'
   own_rating: 'Your rating'
+
+  #query and filter
+  label_any: 'any'
+  label_some: 'some'
+  label_is_me: 'is me'
+  label_is_not_me: 'is not me'
+  label_asc: 'ascending'
+  label_desc: 'descending'
+  re_enhanced_filter: 'Enhanced Filter'
+  re_filter: 'Filter'
+  re_select_all: 'Select all'
+  re_unselect_all: 'Unselect all'
+  re_filter_apply: 'Apply'
+  re_filter_save: 'Save'
+  re_filter_save_and_apply: 'Save & Apply'
+  re_filter_source_artifacts: 'Source'
+  re_filter_sink_artifacts: 'Sink'
+  re_filter_related_issues: 'Related Issues'
+  re_filter_order: 'Order'
+
+  re_query_settings: 'Settings'
+  re_query_name: 'Name'
+
+  re_artifact_id: '#'
+  re_incoming_relationship_count: 'Incoming'
+  re_outgoing_relationship_count: 'Outgoing'
+  re_related_issues: 'Issues'
+  re_updated_at: 'Updated'
+
+  re_query_visibility_public: 'public'
+  re_query_visibility_me: 'just me'
+  re_query_visibility_roles: 'for'

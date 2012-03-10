@@ -1,0 +1,7 @@
+<% if @query.editable? %>
+  <%= render 'form', :mode => mode %>
+<% end %>
+
+<% if mode == :persist || (mode == :apply && @query.set_by_params?) %>
+  <%= render 'results', :mode => mode %>
+<% end %>

@@ -1,0 +1,164 @@
+div.input_container.suggestible {
+    display: inline-block;
+    position: relative;
+    margin-left: 2px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 2px;
+}
+div.input_container.suggestible .input {
+    display: block;
+    border: 1px solid #bbb;
+    margin: 0;
+    padding: 0;
+    cursor: text;
+    background-color: white;
+    width: 300px;
+}
+div.input_container.suggestible .input input[type="text"] {
+    border: none;
+    background-color: transparent;
+    min-width: 20px;
+    max-width: 100%;
+    padding-top: 2px;
+}
+div.input_container.suggestible .input input[type="text"]:disabled {
+    color: black;
+}
+div.input_container.suggestible .input input[type="text"]:focus {
+    outline: none;
+}
+div.input_container.suggestible .input ul.bits {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    float: left;
+}
+div.input_container.suggestible .input ul.bits li {
+    margin-top: 2px;
+    margin-left: 2px;
+    margin-right: 1px;
+    margin-bottom: 2px;
+    float: left;
+    border: 1px solid #999;
+    vertical-align: middle;
+    background-color: #eee;
+    cursor: default;
+    padding-left: 2px;
+    padding-top: 1px;
+    padding-right: 12px;
+    padding-bottom: 1px;
+    position: relative;
+    font-size: 8pt;
+    cursor: default;
+}
+div.input_container.suggestible .input ul.bits li.focus {
+    background-color: #ccc;
+    color: black;
+}
+div.input_container.suggestible .input ul.bits li .id {
+    color: #999;
+    margin-right: 4px;
+}
+div.input_container.suggestible .input ul.bits li .icon {
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+div.input_container.suggestible .input ul.bits li .name {
+    cursor: pointer;
+}
+div.input_container.suggestible .input ul.bits li .name a {
+    color: #484848;
+}
+div.input_container.suggestible .input ul.bits li .name a:hover {
+    color: #000;
+    text-decoration: none;
+}
+div.input_container.suggestible .input ul.bits li .close {
+    position: absolute;
+    top: -2px;
+    right: 2px;
+    font-size: 9px;
+    cursor: pointer;
+}
+div.input_container.suggestible ol.suggestions {
+    top: 0;
+    left: 0;
+    position: absolute;
+    border-left: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+    border-right: 1px solid #bbb;
+    background-color: #fff;
+    z-index: 300;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    -moz-box-shadow: 0 1px 3px #ccc;
+    -webkit-box-shadow: 0 1px 3px #ccc;
+    box-shadow: 0 1px 3px #ccc;
+    overflow: hidden;
+}
+div.input_container.suggestible ol.suggestions li {
+    display: block;
+    padding: 5px;
+    border-top: 1px solid #bbb;
+    cursor: pointer;
+    position: relative;
+    height: 13px;
+    font-size: 8pt;
+}
+div.input_container.suggestible ol.suggestions li .id {
+    display: inline-block;
+    width: 25px;
+    text-align: right;
+    color: #aaa;
+}
+div.input_container.suggestible ol.suggestions li .icon {
+    background-repeat: no-repeat;
+    background-position: 0 1px;
+    top: 2px;
+    height: 20px;
+    z-index: 3;
+    position: absolute;
+}
+div.input_container.suggestible ol.suggestions li .name {
+    color: #2A5685;
+    overflow: hidden;
+    white-space: nowrap;
+    position: absolute;
+    z-index: 2;
+    background-color: white;
+    padding-right: 5px;
+}
+div.input_container.suggestible ol.suggestions li.artifact .name {
+    margin-left: 22px;
+}
+div.input_container.suggestible ol.suggestions li.issue .name {
+    margin-left: 8px;
+}
+div.input_container.suggestible ol.suggestions li .type,
+div.input_container.suggestible ol.suggestions li .login,
+div.input_container.suggestible ol.suggestions li .count {
+    color: #aaa;
+    float: right;
+    overflow: hidden;
+    position: absolute;
+    right: 8px;
+    white-space: nowrap;
+    z-index: 1;
+}
+div.input_container.suggestible ol.suggestions li.focus {
+    background-color: #eee;
+}
+div.input_container.suggestible ol.suggestions li.focus .name {
+    color: #c61a1a;
+    background-color: #eee;
+}
+div.input_container.suggestible ol.suggestions li.focus .type,
+div.input_container.suggestible ol.suggestions li.focus .login,
+div.input_container.suggestible ol.suggestions li.focus .count {
+    color: #777;
+}
+div.input_container.suggestible ol.suggestions li:first-child {
+    border-top: 0;
+}

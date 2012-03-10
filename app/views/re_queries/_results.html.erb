@@ -1,0 +1,47 @@
+<fieldset class="collapsible filter_results">
+  <legend>Results (<%= @found_artifacts.count %>)</legend>
+  <div>
+    <% if @found_artifacts.count > 0 %>
+      <table class="list artifacts">
+        <thead>
+        <tr>
+          <% @query.class.available_columns.each do |column| %>
+            <th class="<%= column.name %>">
+              <% if column.sort %>
+                <% css_classes = (@query.order[:column] == column.name) ? "sort #{@query.order[:direction]}" : '' %>
+                <% direction = (@query.order[:direction] != 'asc' || @query.order[:column] != column.name) ? 'asc' : 'desc' %>
+                <% order_params = { :order => { :column => column.name, :direction => direction } } %>
+                <% order_params = @query.to_filter_params.merge(order_params) if mode == :apply %>
+                <%= link_to column.label, order_params, { :class => css_classes } %>
+              <% else %>
+                <%= column.label %>
+              <% end %>
+            </th>
+          <% end %>
+          <th class="actions"></th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @found_artifacts.each do |artifact| %>
+            <tr id="artifact-<%= artifact.id %>" class="artifact">
+              <% @query.class.available_columns.each do |column| %>
+                <td class="<%= column.name %>">
+                  <%= column.value.call(artifact) %>
+                </td>
+              <% end %>
+              <td class="actions">
+                <% if artifact.realizations.count > 0 %>
+                  <%= link_to artifact.realizations.count, issues_path(:project_id => @project.id, :set_filter => 1, :re_artifact_id => artifact.id),
+                                                           :class => 'icon icon-report', :title => 'Issues' %>
+                <% end %>
+                <%= link_to '', edit_artifact_path(artifact), :class => 'icon icon-edit', :title => 'Edit' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      This query has no results.
+    <% end %>
+  </div>
+</fieldset>

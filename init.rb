@@ -9,6 +9,8 @@ Dispatcher.to_prepare do
   require_dependency 'issue_controller_patch'
   require_dependency 'query_patch'
   require_dependency 'user_patch'
+  require_dependency 'role_patch'
+  require_dependency 'project_patch'
   # gems
   require_dependency 'ajaxful_rating_patch'
 end
@@ -38,7 +40,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree,
           :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
           :reduce_search_result_with_parameter ],
-        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue, :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue, :rate_artifact],
+        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue,
+                                    :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue,
+                                    :rate_artifact],
         :re_goal => [:edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
         :re_subtask => [:edit, :new],
@@ -58,7 +62,10 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :react_to_change_in_data_field_artifact_type],
         :re_rationale => [:edit, :new],
         :re_link_building_block => [:popup_close_and_update_link, :popup],
-
+        :re_queries => [:index, :new, :edit, :show, :delete, :create, :update, :query, :apply,
+                        :suggest_artifacts, :suggest_issues, :suggest_users,
+                        :artifacts_bits, :issues_bits, :users_bits],
+        :re_query_categories => [:index, :new, :edit, :show, :delete, :create, :update]
       }
     )
     permission( :administrate_requirements,

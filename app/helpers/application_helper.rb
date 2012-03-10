@@ -226,4 +226,11 @@ JAVASCRIPT
 
     return result
   end
+
+  def edit_artifact_path(artifact)
+    url_for :controller => artifact.artifact_type.underscore,
+            :action => 'edit',
+            :id => artifact.artifact_id
+  end
+
 end

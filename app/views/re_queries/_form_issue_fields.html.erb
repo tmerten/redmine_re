@@ -1,0 +1,42 @@
+<% values = @query.issue || {} %>
+<% form.fields_for(:issue, values) do |f| %>
+  <!-- Issue -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :ids,
+                                       :label => 'Issue', :modes => issue_modes, :items => @issues,
+                                       :option_label => :subject, :values => values, :css_class => 'issues' %>
+
+  <!-- Issue Name -->
+  <div class="field name">
+    <span class="column label">
+      <%= f.label :name_mode, 'Name' %>
+    </span>
+    <span class="column mode">
+      <%= f.select :name_mode, matching_modes_for_select(name_modes), :selected => values[:name_mode] %>
+    </span>
+    <span class="column value">
+      <%= f.text_field :name, :value => values[:name] %>
+    </span>
+  </div>
+
+  <!-- Author -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :author_ids, :label => 'Author',
+                                       :modes => author_modes, :items => @users,
+                                       :option_label => :login, :values => values, :css_class => 'author users' %>
+
+  <!-- Author Role -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :author_role_ids, :label => 'Author Role',
+                                       :modes => author_role_modes, :items => @roles,
+                                       :option_label => :name, :values => values, :css_class => 'author roles',
+                                       :selectable_unselectable => true %>
+
+  <!-- Assignee -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :assignee_ids, :label => 'Assignee',
+                                       :modes => assignee_modes, :items => @users,
+                                       :option_label => :login, :values => values, :css_class => 'assignee users' %>
+
+  <!-- Assignee Role -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :assignee_role_ids, :label => 'Assignee Role',
+                                       :modes => assignee_role_modes, :items => @roles,
+                                       :option_label => :name, :values => values, :css_class => 'assignee roles',
+                                       :selectable_unselectable => true %>
+<% end %>

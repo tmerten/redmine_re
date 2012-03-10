@@ -1,0 +1,16 @@
+<% if @queries.count > 0 %>
+  <% content_for :sidebar do %>
+    <h3>Queries (<%= @queries.count %>)</h3>
+    <ul class="queries">
+      <% @queries.each do |query| %>
+        <li id="query-<%= query.id %>" class="query">
+          <% if @query and @query.id == query.id %>
+            <%= query.name %>
+          <% else %>
+            <%= link_to query.name, re_query_path(@project.id, query) %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

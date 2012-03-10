@@ -1,0 +1,59 @@
+<div id="detail_view" class="detail_view">
+  <h2><%= h @query.name %></h2>
+  <%= render 'form_and_results', :mode => :persist %>
+</div>
+
+<% content_for :sidebar do %>
+  <h3>Actions</h3>
+  <%= link_to 'Back', re_queries_path, :class => 'icon icon-reload' %>
+  <% if @query.editable? %>
+    <br />
+    <%= link_to 'Edit', edit_re_query_path(@project.id, @query), :class => 'icon icon-edit' %>
+    <br />
+    <%= link_to 'Remove', delete_re_query_path(@project.id, @query),
+                          :confirm => 'Are you sure?', :class => 'icon icon-del' %>
+  <% end %>
+
+  <h3>Details</h3>
+  <div class="query details">
+    <table>
+      <tr class="results">
+        <td class="title">
+          Results
+        </td>
+        <td class="content">
+          <%= @found_artifacts.count %> artifacts found
+        </td>
+      </tr>
+      <tr class="created">
+        <td class="title">
+          Created
+        </td>
+        <td class="content">
+          <%= @query.created_at %>
+          <% if @query.created_by %>
+            by <%= link_to(@query.created_by.to_s, @query.created_by) %>
+          <% end %>
+        </td>
+      </tr>
+      <tr class="updated">
+        <td class="title">
+          Updated
+        </td>
+        <td class="content">
+          <%= @query.updated_at %>
+          <% if @query.updated_by %>
+            by <%= link_to(@query.updated_by.to_s, @query.updated_by) %>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+    <% unless @query.description.blank? %>
+      <div class="description">
+        <%= h(@query.description).gsub("\n", '<br />') %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render 'sidebar' %>

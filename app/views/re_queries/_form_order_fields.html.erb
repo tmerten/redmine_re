@@ -1,0 +1,16 @@
+<% values = @query.order || {} %>
+<div class="field order">
+  <% form.fields_for(:order, values) do |rel| %>
+    <span class="column label">
+      <%= rel.label :column, 'Order' %>
+    </span>
+    <span class="column value column">
+      <%= rel.select :column, @query.class.sortable_available_columns.map { |c| [c.label, c.name] },
+                     :selected => values[:column] %>
+    </span>
+    <span class="column value direction">
+      <%= rel.select :direction, matching_modes_for_select(order_directions),
+                     :selected => values[:direction] %>
+    </span>
+  <% end %>
+</div>

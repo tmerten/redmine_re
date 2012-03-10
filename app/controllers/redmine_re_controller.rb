@@ -400,4 +400,13 @@ class RedmineReController < ApplicationController
     children
   end
 
+  def filter
+    if request.post?
+      @filter = params[:filter]
+      render 'requirements/filter_result'
+    else
+      @filter = ReQuery.new
+      render 'requirements/filter'
+    end
+  end
 end

@@ -1,0 +1,21 @@
+<% selectable_unselectable ||= false %>
+<div class="field <%= css_class %>">
+  <span class="column label">
+    <%= fields.label :"#{field_name}_mode", label %>
+  </span>
+  <span class="column mode">
+    <%= fields.select :"#{field_name}_mode", matching_modes_for_select(modes),
+                      :selected => values[:"#{field_name}_mode"] %>
+  </span>
+  <span class="column value">
+    <%= fields.select field_name, items.map { |item| [item.send(option_label), item.id] },
+                      { :selected => [values[field_name]].flatten.compact.map(&:to_i) },
+                      { :multiple => true, :class => css_class } %>
+  </span>
+  <% if selectable_unselectable %>
+    <span class="column actions">
+      <a href="#" class="icon icon-checked select_all"><%= l(:re_select_all) %></a>
+      <a href="#" class="icon icon-del unselect_all"><%= l(:re_unselect_all) %></a>
+    </span>
+  <% end %>
+</div>

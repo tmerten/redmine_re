@@ -1,6 +1,9 @@
 .icon {
-  background-repeat: no-repeat;
+  background-repeat: no-repeat !important;
   background-position: left top;
+}
+a.icon {
+  background-repeat: no-repeat !important;
 }
 
 .icon.project {

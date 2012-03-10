@@ -23,6 +23,14 @@ class ReArtifactRelationship < ActiveRecord::Base
   validates_presence_of :source_id
   validates_inclusion_of :relation_type, :in => RELATION_TYPES.values
 
+  named_scope :of_project, lambda { |project|
+    project_id = (project.is_a? Project) ? project.id : project
+    first_join = "INNER JOIN #{ReArtifactProperties.table_name} AS source_artifacts ON source_artifacts.id = #{self.table_name}.source_id"
+    second_join = "INNER JOIN #{ReArtifactProperties.table_name} AS sink_artifacts ON sink_artifacts.id = #{self.table_name}.sink_id"
+    { :select => "#{self.table_name}.*", :joins => [first_join, second_join],
+      :conditions => ["source_artifacts.project_id = ? AND sink_artifacts.project_id = ?", project_id, project_id] }
+  }
+
   def self.find_all_relations_for_artifact_id(artifact_id)
     artifact = ReArtifactProperties.find(artifact_id)
     self.find_all_relations_for_artifact(artifact)
@@ -33,6 +41,10 @@ class ReArtifactRelationship < ActiveRecord::Base
     relations.concat(self.find_all_by_source_id(artifact.id))
     relations.concat(self.find_all_by_sink_id(artifact.id))
     relations.uniq
+  end
+
+  def self.relation_types
+    RELATION_TYPES.values
   end
 
   acts_as_list # see special scope condition below

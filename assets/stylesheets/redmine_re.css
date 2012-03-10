@@ -671,3 +671,219 @@ fieldset.comment{
 	border: 1px solid #505050; 
 	padding: 10px;
 }
+
+/* Filters */
+fieldset.filters > div,
+fieldset.filter_results > div,
+fieldset.filter_actions > div{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* Filter Form */
+form.filters .group {
+    padding: 10px;
+}
+form.filters .group.header {
+    /*border: 1px #ccc solid !important;*/
+    border: none;
+    background-color: transparent !important;
+}
+form.filters .group:first-child {
+    border-top: none;
+}
+form.filters .group:nth-child(odd) {
+    background-color: #F7F7F7;
+}
+form.filters .group:nth-child(even) {
+    background-color: #efefef;
+}
+form.filters .group .label {
+    font-weight: bold;
+    display: block;
+    float: left;
+    vertical-align: top;
+    width: 80px;
+    padding-top: 4px;
+}
+form.filters .group.buttons {
+    margin-bottom: 0;
+    margin-top: 0;
+    border: none;
+    background-color: transparent;
+}
+form.filters .group .fields {
+    display: block;
+    margin-left: 80px;
+}
+form.filters .group .fields .field {
+    padding-bottom: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #ddd;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    background-color: transparent;
+    margin: 0;
+}
+form.filters .group .fields .field:first-child {
+    padding-top: 0;
+    border-top: none;
+}
+form.filters .group .fields .field:last-child {
+    padding-bottom: 0;
+}
+form.filters .group .fields .field .column {
+    vertical-align: top;
+    display: inline-block;
+}
+form.filters .group .fields .field .column.narrow {
+    padding-right: 5px;
+}
+form.filters .group .fields .field .column.actions {
+    padding-left: 8px;
+    padding-top: 15px;
+}
+form.filters .group .fields .field .column.mode select {
+    width: 140px;
+}
+form.filters .group .fields .field .column.value select {
+    width: 200px;
+}
+form.filters .group .fields .field label {
+    font-weight: normal;
+    width: 65px;
+}
+form.filters .group .field .input {
+    vertical-align: top;
+    margin-top: 0;
+}
+form.filters .group .field input[type="checkbox"] {
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+form.filters .group .field .column a.icon {
+    display: block;
+    padding-top: 2px;
+    padding-bottom: 5px;
+}
+
+/* Filter Results */
+table.list.artifacts thead tr th:first-child,
+table.list.artifacts tbody tr td:first-child {
+    padding-left: 8px;
+}
+table.list.artifacts thead tr th,
+table.list.artifacts tbody tr td {
+    padding-top: 4px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+}
+table.list.artifacts thead tr th.id
+    table.list.artifacts tbody tr td.id {
+    text-align: right !important;
+}
+table.list.artifacts tbody tr td.name {
+    text-align: left;
+}
+table.list.artifacts tbody tr td.actions {
+    text-align: center;
+    word-wrap: normal;
+    word-break: keep-all;
+    line-break: strict;
+}
+table.list.artifacts tbody tr td.actions a.icon:first-child {
+    margin-left: 0;
+    border-left: 0;
+}
+table.list.artifacts tbody tr td.actions a.icon {
+    padding-left: 25px;
+    padding-right: 5px;
+    border-left: 1px solid #e4e4e4;
+    background-position: 5px 0;
+}
+table.list.artifacts tbody tr td {
+    text-align: center;
+}
+table.list.artifacts tbody tr td span.icon {
+    background-repeat: no-repeat !important;
+    background-position: 0 1px;
+}
+table.list.artifacts tbody tr:nth-child(odd) {
+    background-color: #F6F7F8;
+}
+table.list.artifacts tbody tr:nth-child(odd):hover {
+    background-color: #ffffdd;
+}
+
+/* Filter Left Sidebar Pane */
+#sidebar_filter_input_container {
+    width: 100%;
+}
+#sidebar_filter .inputs {
+    margin-top: 6px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 4px !important;
+    padding: 0 !important;
+    height: 22px;
+    border: 1px solid #BBB;
+    max-width: 300px;
+    display: none;
+}
+#sidebar_filter .inputs .input,
+#sidebar_filter .inputs .input input {
+    width: auto !important;
+}
+#sidebar_filter .buttons {
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 3px !important;
+    padding-top: 0 !important;
+    padding-bottom: 10px !important;
+    text-align: right !important;
+}
+#sidebar_filter_input_container {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+}
+#sidebar_filter_input_container .input {
+    border: none !important;
+    background-color: transparent !important;
+}
+#sidebar_filter_input_container .input input {
+}
+#sidebar_filter_input_container .suggestions {
+    min-width: 300px !important;
+    position: absolute !important;
+    z-index: 999;
+    border-top: 1px solid #BBB;
+    top: 22px !important;
+    left: -1px;
+}
+
+/* Filter Details */
+div.query.details {
+    margin-right: 15px;
+}
+div.query.details table {
+    border-collapse: collapse;
+}
+div.query.details td.title {
+    vertical-align: top;
+    padding-right: 10px;
+    color: #666;
+}
+div.query.details td.content {
+    vertical-align: top;
+}
+div.query.details div.description {
+    margin-top: 13px;
+    font-size: 10px;
+    line-height: 13px;
+    text-align: justify;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #ffffdd;
+}

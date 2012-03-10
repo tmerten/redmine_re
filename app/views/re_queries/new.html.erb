@@ -1,0 +1,11 @@
+<div id="detail_view" class="detail_view">
+  <h2>New Query</h2>
+  <%= render 'form', :mode => :persist %>
+</div>
+
+<% content_for :sidebar do %>
+  <h3>Actions</h3>
+  <%= link_to 'Back', re_queries_path, :class => 'icon icon-reload' %>
+<% end %>
+
+<%= render 'sidebar' %>

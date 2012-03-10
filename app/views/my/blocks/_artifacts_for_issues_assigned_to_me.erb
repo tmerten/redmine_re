@@ -1,0 +1,48 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'redmine_re', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'icons', :plugin => 'redmine_re' %>
+<% end %>
+
+<h3><%= link_to_function 'Artifacts for Issues assigned to me', "Effect.toggle('artifacts_for_issues_assigned_to_me')" %></h3>
+<div id="artifacts_for_issues_assigned_to_me">
+  <% Project.visible.all(:order => 'name ASC').each do |project|
+     query = ReQuery.new
+     query.project = project
+     query.source = :some
+     query.sink = :any
+     query.issue = { :ids_mode => 'some', :assignee_ids_mode => 'is_me' }
+     artifacts = ReArtifactProperties.all(:conditions => query.conditions) %>
+
+  <% if artifacts.count > 0 %>      
+    <h4><%= link_to h(project.name), project %></h4>
+    <table class="list artifacts">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Related Issues</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% artifacts.each do |artifact| %>
+          <tr>
+            <td class="id"><%= artifact.id %></td>
+            <td class="name icon <%= artifact.artifact_type.underscore %>">
+              <%= link_to h(artifact.name), url_for(:controller => artifact.artifact_type.underscore,
+                                                    :action => 'edit', :id => artifact.artifact_id) %></td>
+            <td class="type"><%= l artifact.artifact_type %></td>
+            <td class="issues">
+              <%= artifact.issues.all(:order => 'id ASC').
+                    select { |issue| issue.assigned_to == User.current }.
+                    map { |issue| link_to "##{issue.id} #{issue.subject}", issue }.
+                    join('<br />') %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% end %>
+</div>

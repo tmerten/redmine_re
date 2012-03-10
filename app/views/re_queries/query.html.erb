@@ -1,0 +1,17 @@
+<div id="detail_view" class="detail_view">
+  <h2><%= l(:re_enhanced_filter) %></h2>
+  <%= render 'form_and_results', :mode => :apply %>
+</div>
+
+<% content_for :sidebar do %>
+  <h3>Actions</h3>
+  <% if @query.new_record? and !@query.set_by_params? %>
+    <%= link_to 'New', new_re_query_path, :class => 'icon icon-add' %>
+  <% end %>
+  <% if @query.set_by_params? %>
+    <%= link_to 'Save', @query.to_filter_params.merge({ :action => 'new' }), { :class => 'icon icon-save' } %><br />
+    <%= link_to 'Reset', { :action => 'index' }, { :class => 'icon icon-reload' } %>
+  <% end %>
+<% end %>
+
+<%= render 'sidebar' %>

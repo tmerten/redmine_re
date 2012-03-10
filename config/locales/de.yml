@@ -162,3 +162,6 @@ de:
   re_bb_artifact_type_does_not_match: "Der Typ (%{type}) des verbundenen Artefakts ist durch die aktuelle Konfiguration nicht erlaubt."
   re_bb_too_small: '%{bb_name} muss größer als %{min_length} sein.'
   re_bb_too_big: '%{bb_name} muss kleiner als %{max_length} sein.'
+
+  #filter
+  re_filter: 'Filter'

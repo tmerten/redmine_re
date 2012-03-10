@@ -1,0 +1,16 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'redmine_re', :plugin => 'redmine_re' %>
+<% end %>
+
+<% @queries_by_project = ReQuery.visible.all(:order => 'name ASC') %>
+<h3><%= link_to_function 'Requirements Artifacts: Queries by Project', "Effect.toggle('stored_artifact_queries_by_project')" %></h3>
+
+<div id="stored_artifact_queries_by_project">
+  <% Project.visible.all(:order => 'name ASC').each do |project| %>
+    <% if project.re_queries.count > 0 %>
+      <h4><%= link_to h(project.name), project %></h4>
+      <%= render 'queries_list', :queries => project.re_queries.visible.all(:order => 'name ASC'),
+                                 :include_project => false %>
+    <% end %>
+  <% end %>
+</div>

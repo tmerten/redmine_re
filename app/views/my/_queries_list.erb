@@ -1,0 +1,41 @@
+<% container_id ||= '' %>
+<div id="<%= container_id %>">
+  <table class="list queries">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <% if include_project %>
+      <th>Project</th>
+      <% end %>
+      <th>Last Update</th>
+      <th class="actions"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% queries.each do |query| %>
+        <tr>
+          <td>
+            <%= link_to query.name, re_query_path(query.project_id, query) %>
+          </td>
+          <% if include_project %>
+          <td>
+            <%= link_to query.project.name, query.project %>
+          </td>
+          <% end %>
+          <td>
+            <%= query.updated_at %>
+            by <%= link_to query.updated_by.to_s, query.updated_by %>
+          </td>
+          <td class="actions">
+            <%= link_to 'Execute', re_query_path(query.project_id, query), :class => 'icon icon-checked' %>
+            <% if query.editable? %>
+                <%= link_to 'Edit', edit_re_query_path(query.project_id, query), :class => 'icon icon-edit' %>
+                <%= link_to 'Remove', delete_re_query_path(query.project_id, query),
+                            :confirm => 'Are you sure?', :class => 'icon icon-del' %>
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -49,6 +49,55 @@
 <!-- page specific tags -->
 <%= yield :header_tags -%>
 
+<%= stylesheet_link_tag 'icons', :plugin => 'redmine_re' %>
+<%= stylesheet_link_tag 'suggestible', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'suggestible', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'suggestible_custom', :plugin => 'redmine_re' %>
+
+<% javascript_tag do %>
+
+    (function($) {
+        $().ready(function() {
+            // hidden on init because of UJS
+            $('#sidebar_filter_input_nojs').remove();
+            $('#sidebar_filter .inputs').show();
+
+            $('#sidebar_filter_input').suggestible({
+                ajax: {
+                    suggestions: {
+                        url: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+                        dataType: 'json',
+                        data: function(value, helpers) {
+                            return { query: value };
+                        },
+                        loading: function(helpers) {
+                            $('#ajax-indicator').show();
+                            helpers.elements.textBox.attr('disabled', 'disabled');
+                        },
+                        loaded: function(helpers) {
+                            $('#ajax-indicator').hide();
+                            helpers.elements.textBox.removeAttr('disabled');
+                        }
+                    }
+                },
+                layout: {
+                    containers: function(selectBox, options) {
+                        return new SuggestBoxContainers(selectBox, options);
+                    },
+                    items: function(helpers) {
+                        return new DirectArtifactsSuggestBoxItems(helpers);
+                    }
+                }
+            });
+
+            var elements = $('#sidebar_filter_input_container').data('elements');
+            elements.textBox.attr('name', elements.inputName);
+        });
+    })(jQuery);
+
+<% end %>
+
+
 <!--<script type="text/javascript">
 jQuery(document).ready(function(){
 	jQuery("#content").splitter({

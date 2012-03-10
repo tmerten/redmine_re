@@ -1,14 +1,24 @@
-<!-- Don't enable as long as the filter is not usable.
-<fieldset id="treefilter" class="collapsible ">
+<fieldset id="treefilter" class="collapsible">
   <legend onclick="toggleFieldset(this);"><%= l(:re_treefilter) %></legend>
   <div>
-    <% remote_form_for :filter, :update => :detail_view, :url => {:controller => "requirements", :action => "treefilter"} do |f| %>
-      <%= f.text_field :filter, :size => 25 %>
+    <!-- Old Tree Filter Skeleton
+    <% remote_form_for :filter, :update => :detail_view,
+                       :url => {:controller => "requirements", :action => "treefilter"} do |f| %>
+      <%= f.text_field :query, :size => 25, :id => 'sidebar_filter' %>
     <% end %>
-    <%= link_to l(:re_enhanced_filter), {
-      :action => :enhanced_filter,
-      :controller => :redmine_re,
-      :project_id => params[:project_id]} %>
-   </div>
+    -->
+
+    <% form_tag re_queries_path(@project.id), :method => :get do %>
+      <%= hidden_field_tag 'source[name_mode]', 'contains' %>
+      <div id="sidebar_filter">
+        <div class="inputs">
+          <%= select_tag 'source[name]', {}, :id => 'sidebar_filter_input', :class => 'direct_artifacts' %>
+          <%= text_field_tag 'source[name]', nil, :id => 'sidebar_filter_input_nojs' %>
+        </div>
+        <div class="buttons">
+          <%= link_to l(:re_enhanced_filter), re_queries_path(@project) %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </fieldset>
--->

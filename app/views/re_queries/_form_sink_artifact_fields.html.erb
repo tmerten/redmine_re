@@ -1,0 +1,82 @@
+<% values = @query.sink || {} %>
+<% form.fields_for(:sink, values) do |f| %>
+
+  <!-- Sink Artifact IDs -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :ids,
+             :label => 'Artifact', :modes => sink_artifact_modes, :items => @artifacts,
+             :option_label => :name, :values => values, :css_class => 'artifacts' %>
+
+  <!-- Sink Artifact Name -->
+  <div class="field sink artifact name">
+    <span class="column label">
+      <%= f.label :name_mode, 'Name' %>
+    </span>
+    <span class="column mode">
+      <%= f.select :name_mode, matching_modes_for_select(name_modes),
+                   :selected => values[:name_mode] %>
+    </span>
+    <span class="column value">
+      <%= f.text_field :name, :value => values[:name] %>
+    </span>
+  </div>
+
+  <!-- Sink Artifact Type -->
+  <div class="field sink artifact type">
+    <span class="column label">
+      <%= f.label :types_mode, 'Type' %>
+    </span>
+    <span class="column mode">
+      <%= f.select :types_mode, matching_modes_for_select(artifact_type_modes),
+                   :selected => values[:types_mode] %>
+    </span>
+    <span class="column value">
+      <%= f.select :types, @artifact_types.map { |type| [l(type), type] },
+                   { :selected => values[:types] }, { :multiple => true } %>
+    </span>
+    <span class="column actions">
+      <a href="#" class="icon icon-checked select_all"><%= l(:re_select_all) %></a>
+      <a href="#" class="icon icon-del unselect_all"><%= l(:re_unselect_all) %></a>
+    </span>
+  </div>
+
+  <!-- Sink Artifact Relation Type -->
+  <div class="field sink artifact relation">
+    <span class="column label">
+      <%= f.label :relation_types_mode, 'Relation Type' %>
+    </span>
+    <span class="column mode">
+      <%= f.select :relation_types_mode, matching_modes_for_select(relation_type_modes),
+                     :selected => values[:relation_types_mode] %>
+    </span>
+    <span class="column value">
+      <%= f.select :relation_types, @relation_types.map { |type| [l(type), type] }.sort { |a, b| a.first <=> b.first },
+                     { :selected => values[:relation_types] }, { :multiple => true, :class => 'relations' } %>
+    </span>
+    <span class="column actions">
+      <a href="#" class="icon icon-checked select_all"><%= l(:re_select_all) %></a>
+      <a href="#" class="icon icon-del unselect_all"><%= l(:re_unselect_all) %></a>
+    </span>
+  </div>
+
+  <!-- Creator -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :creator_ids, :label => 'Creator',
+                                       :modes => creator_modes, :items => @users,
+                                       :option_label => :login, :values => values, :css_class => 'creator users' %>
+
+  <!-- Creator Role -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :creator_role_ids, :label => 'Creator Role',
+                                       :modes => creator_role_modes, :items => @roles,
+                                       :option_label => :name, :values => values, :css_class => 'creator roles',
+                                       :selectable_unselectable => true %>
+
+  <!-- Maintainer -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :maintainer_ids, :label => 'Maintainer',
+                                       :modes => maintainer_modes, :items => @users,
+                                       :option_label => :login, :values => values, :css_class => 'maintainer users' %>
+
+  <!-- Maintainer Role -->
+  <%= render 'form_multiselect_field', :fields => f, :field_name => :maintainer_role_ids, :label => 'Maintainer Role',
+                                       :modes => maintainer_role_modes, :items => @roles,
+                                       :option_label => :name, :values => values, :css_class => 'maintainer roles',
+                                       :selectable_unselectable => true %>
+<% end %>

@@ -1,0 +1,8 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'redmine_re', :plugin => 'redmine_re' %>
+<% end %>
+
+<% @queries = ReQuery.visible.all(:order => 'name ASC') %>
+<h3><%= link_to_function 'Requirements Artifacts: Stored Queries', "Effect.toggle('stored_artifact_queries')" %></h3>
+<%= render 'queries_list', :queries => @queries, :include_project => true,
+                           :container_id => 'stored_artifact_queries' %>

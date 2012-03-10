@@ -59,6 +59,12 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
 
+  named_scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
+  named_scope :of_project, lambda { |project|
+    project_id = (project.is_a? Project) ? project.id : project
+    { :conditions => { :project_id => project_id } }
+  }
+
   acts_as_watchable
 
   validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
@@ -90,6 +96,10 @@ class ReArtifactProperties < ActiveRecord::Base
       end
     end
     ReArtifactProperties.find(artifact_ids, *args)
+  end
+
+  def self.available_artifact_types
+    all(:group => :artifact_type, :select => :artifact_type).collect(&:artifact_type)
   end
 
   def position
