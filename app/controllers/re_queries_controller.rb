@@ -1,5 +1,6 @@
 class ReQueriesController < RedmineReController
   unloadable
+  menu_item :re
 
   before_filter :load_selectable_collections, :except => [:suggest_artifacts, :suggest_issues, :suggest_users,
                                                           :artifacts_bits, :issues_bits, :users_bits]

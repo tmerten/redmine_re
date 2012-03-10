@@ -65,7 +65,6 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_queries => [:index, :new, :edit, :show, :delete, :create, :update, :query, :apply,
                         :suggest_artifacts, :suggest_issues, :suggest_users,
                         :artifacts_bits, :issues_bits, :users_bits],
-        :re_query_categories => [:index, :new, :edit, :show, :delete, :create, :update]
       }
     )
     permission( :administrate_requirements,
