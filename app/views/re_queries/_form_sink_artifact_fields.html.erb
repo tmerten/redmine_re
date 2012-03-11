@@ -12,7 +12,7 @@
       <%= f.label :name_mode, 'Name' %>
     </span>
     <span class="column mode">
-      <%= f.select :name_mode, matching_modes_for_select(name_modes),
+      <%= f.select :name_mode, matching_modes_for_select(artifact_name_modes),
                    :selected => values[:name_mode] %>
     </span>
     <span class="column value">

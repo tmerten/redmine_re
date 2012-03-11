@@ -33,6 +33,10 @@ module ReQueriesHelper
     end
   end
 
+  def artifact_name_modes
+    %w(any equals not_equals contains not_contains)
+  end
+
   def artifact_type_modes
     %w(any contains not_contains)
   end
@@ -90,7 +94,7 @@ module ReQueriesHelper
     matching_modes.collect { |mode| [l(:"label_#{mode}"), mode] }
   end
 
-  private
+  # Basic operators
   def name_modes
     %w(any contains not_contains)
   end

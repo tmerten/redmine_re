@@ -217,10 +217,6 @@ class ReSourceRoleIdsFilter < ReFilter
 
   def conditions
     case mode
-      when 'some'
-        exists_sql(false)
-      when 'none'
-        exists_sql(true)
       when 'contains'
         contains_sql(false)
       when 'not_contains'
@@ -231,12 +227,6 @@ class ReSourceRoleIdsFilter < ReFilter
   end
 
   private
-  def exists_sql(invert)
-    sql = "EXISTS (#{inner_sql('created_by')})"
-    sql = "NOT " + sql if invert
-    [sql]
-  end
-
   def contains_sql(invert)
     return nil if value.blank?
     inner_sql = inner_sql(:joins => custom_joins, :conditions => "#{Role.table_name}.id IN (?)")
@@ -735,24 +725,6 @@ class ReIssueAssigneeRoleIdsFilter < ReIssueRoleIdsFilter
     'assigned_to_id'
   end
 end
-
-################################
-### Modify dependent classes ###
-################################
-
-#class Project
-#  has_many :re_queries, :dependent => :destroy
-#end
-
-#class User
-#  has_many :created_re_queries, :class_name => 'ReQuery', :foreign_key => 'created_by'
-#  has_many :updated_re_queries, :class_name => 'ReQuery', :foreign_key => 'updated_by'
-#end
-
-#class Role
-#  has_and_belongs_to_many :re_queries, :join_table => 're_queries_roles', :foreign_key => 'role_id',
-#                                                                          :association_foreign_key => 'query_id'
-#end
 
 ####################
 ### Query Column ###

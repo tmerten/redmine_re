@@ -19,7 +19,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :re_queries, :path_prefix => '/projects/:project_id',
                              :member => { :delete => :get },
                              :collection => { :apply => :post,
-                                              :delete => :get,
                                               :suggest_artifacts => :get,
                                               :suggest_issues => :get,
                                               :suggest_users => :get,

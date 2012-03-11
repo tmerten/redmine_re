@@ -20,19 +20,19 @@ module QueryPatch
   module InstanceMethods
     # Overwrites and wraps the available_filters method to add custom filters
     def available_filters_with_re_filters
-      @filters = available_filters_without_re_filters
-      @filters["re_artifact_id"] = { :name => l(:re_linked_artifact),
-                                     :type => :list,
-                                     :order => 20,
-                                     :values => selectable_artifact_types_and_names }
-      @filters["re_artifact_type"] = { :name => l(:re_linked_artifact_type),
-                                       :type => :list,
-                                       :order => 21,
-                                       :values => selectable_artifact_types }
-      @filters["re_artifact_name"] = { :name => l(:re_linked_artifact_name),
-                                       :type => :text,
-                                       :order => 22 }
-      @filters
+      filters = available_filters_without_re_filters
+      filters["re_artifact_id"] = { :name => l(:re_linked_artifact),
+                                    :type => :list,
+                                    :order => 20,
+                                    :values => selectable_artifact_types_and_names }
+      filters["re_artifact_type"] = { :name => l(:re_linked_artifact_type),
+                                      :type => :list,
+                                      :order => 21,
+                                      :values => selectable_artifact_types }
+      filters["re_artifact_name"] = { :name => l(:re_linked_artifact_name),
+                                      :type => :text,
+                                      :order => 22 }
+      filters
     end
 
     # Overwrites and wraps the sql_for_field method to introduce custom SQL conditions for specific filters
