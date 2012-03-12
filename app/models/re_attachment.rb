@@ -11,7 +11,6 @@ class ReAttachment < ActiveRecord::Base
   def attach_file(attachment_hash)
     #return false unless self.valid?
     #return true  if self.attachments
-    
     if attachment_hash.blank?
       self.errors.add_to_base(I18n.t(:re_attachment_no_file_error))
       return false

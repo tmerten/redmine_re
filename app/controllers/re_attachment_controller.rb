@@ -6,11 +6,9 @@ class ReAttachmentController < RedmineReController
 
   end
 
-  def edit_hook_validate_before_save(params, valid)
+  def edit_hook_valid_artifact_after_save(params)
     attachment_hash = params["attachment"] || {}
     attachment_uploaded = @artifact.attach_file(attachment_hash)
-
-    attachment_uploaded
   end
 
   def download_or_show
