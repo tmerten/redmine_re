@@ -33,12 +33,12 @@ de:
 
   project: Projekt
   re_my_artifacts: 'Meine Artefakte'
-  re_linked_artifact: 'Verkn&uuml;pftes Artifakt'
-  re_linked_artifact_name: 'Verkn&uuml;pftes Artifakt (Name)'
-  re_linked_artifact_type: 'Verkn&uuml;pftes Artifakt (Typ)'
-  re_linked_artifacts: 'Verkn&uuml;pfte Artifakte'
-  re_linked_artifacts_count: 'Verkn&uuml;pfte Artefakte'
-  re_common_linked_artifacts: 'Verkn&uuml;pfte Artefakte'
+  re_linked_artifact: 'Verknüpftes Artifakt'
+  re_linked_artifact_name: 'Verknüpftes Artifakt (Name)'
+  re_linked_artifact_type: 'Verknüpftes Artifakt (Typ)'
+  re_linked_artifacts: 'Verknüpfte Artifakte'
+  re_linked_artifacts_count: 'Verknüpfte Artefakte'
+  re_common_linked_artifacts: 'Verknüpfte Artefakte'
 
   # re_artifact_relationships
   re_artifact_relationships: 'Beziehung'
