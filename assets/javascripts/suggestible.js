@@ -302,11 +302,13 @@
                         data: _this.options.ajax.suggestions.data(value, _this),
                         dataType: _this.options.ajax.suggestions.dataType,
                         success: function(records) {
-                            _this.clearSuggestionsBox();
                             if (records.length > 0) {
                                 // Populate and show suggestions box if records were found
+                                _this.clearSuggestionsBox();
                                 _this.populateSuggestionsBox(records);
                                 _this.showSuggestionsBox();
+                            } else {
+                                _this.hideSuggestionsBox();
                             }
                         },
                         complete: function() {
