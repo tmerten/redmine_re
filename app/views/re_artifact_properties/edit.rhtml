@@ -44,13 +44,19 @@
 	           re_users.uniq!
 	        %>
 	        <p>
-	          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
-	        </p>
+          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
+          </p>
+          <% unless @artifact.new_record? %>
+            <p>
+            <%= f.label :created_by, t(:re_created_by) %> <%= @artifact.author.name %> <%= t(:re_at) %> <%= @artifact.created_at.strftime('%c') %><br/>
+            <%= f.label :last_changed_by, t(:re_changed_by) %> <%= @artifact.user.name %> <%= t(:re_at) %> <%= @artifact.updated_at.strftime('%c') %>
+            </p>
+          <% end %>
 	      </div>
 
 	      <div class="splitcontentright">
 	      	<b><%= t(:re_description_fieldset) %></b>
-		      <% unless @artifact.id.nil? %>
+		      <% unless @artifact.new_record? %>
 		          <div class="contextual">
 		            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', 'artifact_description'); return false;"><%= l(:re_update_description) %></a>
 		          </div>
@@ -66,7 +72,6 @@
 		        <%= wikitoolbar_for 'artifact_description' %>
 		      </div>
 	      </div>
-
 	    </fieldset>
 
 	    <br/>
@@ -193,22 +198,6 @@
 	  </p>
 		
 	<% end %><!-- form end tag -->
-	
-	<fieldset>
-		<legend>Further Information</legend>
-		<%
-		unless User.find_by_id(@artifact_properties.created_by).blank?
-		%>
-		   Created at <%= @artifact_properties.created_at %> by <%= link_to User.find_by_id(@artifact_properties.created_by).login, :controller => 'Users', :action => User.find_by_id(@artifact_properties.created_by).id %> |
-		<% end %>
-		
-		<%
-		unless User.find_by_id(@artifact_properties.updated_by).blank?
-		%>
-		Updated at <%= @artifact_properties.updated_at %> by <%= link_to User.find_by_id(@artifact_properties.updated_by).login, :controller => 'Users', :action => User.find_by_id(@artifact_properties.updated_by).id %>
-		<% end %>
-		
-	</fieldset>
 	
   	<div id="watchers">
       <%= render :partial => 'watchers/watchers', :locals => {:watched => @artifact_properties} %>
