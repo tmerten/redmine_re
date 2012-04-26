@@ -591,3 +591,9 @@ en:
   re_query_visibility_public: 'public'
   re_query_visibility_me: 'just me'
   re_query_visibility_roles: 'for'
+  
+  re_please_choose: 'please choose'
+  re_primary_actor: 'Primary actor'
+  re_secondary_actor: 'Secondary actor'
+  re_add_secondary_actor: 'Add secondary actor'
+  re_find_secondary_actor: 'Find secondary actor'

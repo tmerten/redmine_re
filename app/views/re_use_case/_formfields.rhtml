@@ -18,6 +18,33 @@
     <p>
       <%= f.label :postcondition, l(:re_use_case_postcondition) %> <%= f.text_field :postcondition, :size => 100 %>
     </p>
+    
+	<% 
+	    unless @user_profiles.nil?  
+			user_profiles_array = [l(:re_please_choose)]
+			user_profiles_array_2 = ['']
+			@user_profiles.each do |user_profile| 
+				user_profiles_array << [user_profile.re_artifact_properties.name, user_profile.id]
+				user_profiles_array_2 << [user_profile.re_artifact_properties.name, user_profile.id]
+			end
+			%>
+			<p><%= f.label :precondition, l(:re_primary_actor) %> 
+				<% unless @current_primary_user.blank? %>
+					<%ript= select_tag("primary_user_profile", options_for_select(user_profiles_array, :selected => @current_primary_user.sink_id) ) %>
+				<%else%>
+					<%= select_tag("primary_user_profile", options_for_select(user_profiles_array) ) %>
+				<% end%>
+			</p>
+	<%end%>
+	
+	<!-- -->
+	
+	
+    <b><%= t(:re_secondary_actor) %></b>
+
+	
+	<!-- -->
+	
 </fieldset>
 
 <fieldset><legend><%= l(:re_use_case_steps) %></legend>
@@ -29,8 +56,8 @@
         <th width="120px" >&nbsp;</th>
         <th ><%= t(:re_system_steps) %></th>
         <th>&nbsp;</th>
-        <th><%= t(:re_uc_add) %> <%= link_to_function( t(:re_user_step), "addStep('steps', 'top', 'user')", :class => "icon icon-subtask-after" ) %>,
-          <%= link_to_function( t(:re_system_step), "addStep('steps', 'top', 'system')", :class => "icon icon-subtask-after" ) %>, <br />
+        <th style="min-width: 300px;"><%= t(:re_uc_add) %> <%= link_to_function( t(:re_user_step), "addStep('steps', 'top', 'user')", :class => "icon icon-subtask-after" ) %>,
+          <%= link_to_function( t(:re_system_step), "addStep('steps', 'top', 'system')", :class => "icon icon-subtask-after" ) %>,
           <%= link_to_function( t(:re_uc_dialog), "addDialog('steps', 'top')", :class => "icon icon-subtask-after" ) %>
         </th>
       </tr>
