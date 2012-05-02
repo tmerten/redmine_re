@@ -54,13 +54,9 @@ class ReUseCaseController < RedmineReController
 
     
     unless params[:secondary_user_profile_id].blank?
-      logger.debug("///////////////////////////////////////:)")
-      logger.debug(params.to_yaml)
       params[:secondary_user_profile_id].each do |iid|
-        #tmp = ReArtifactProperties.find(iid)
         @new_relation = ReArtifactRelationship.new(:source_id => @artifact.artifact_properties.id, :sink_id => iid, :relation_type => ReArtifactRelationship::RELATION_TYPES[:dep])
         @new_relation.save
-        #@artifact_properties.user_profiles << ReUserProfile.find(tmp.artifact_id)
       end
     end
     @current_primary_user = ReArtifactRelationship.find_by_source_id_and_relation_type(@artifact.artifact_properties.id, ReArtifactRelationship::RELATION_TYPES[:pof])
@@ -69,11 +65,6 @@ class ReUseCaseController < RedmineReController
 
   #def edit_hook_invalid_artifact_cleanup(params)
   #end
-  
-  def prepare_secondary_actor params
-    logger.debug("/////////// SECONDARY USER PREPARED ///////////")
-    logger.debug(params.to_yaml)
-  end
 
   def autocomplete_sink
     
