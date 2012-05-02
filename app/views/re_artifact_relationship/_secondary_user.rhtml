@@ -1,0 +1,25 @@
+<div>
+    <% for relationship in @relationships_outgoing %>
+    <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
+    
+      <%= sink.name %>
+              <%= link_to_remote(
+                '',
+                    {
+                      :update => "relationship_link_list",
+                      :url => {
+                                :action => :delete,
+                                :controller => :re_artifact_relationship,
+                                :id => relationship.id,
+                                :re_artifact_properties_id => @artifact_properties.id,
+                                :project_id => @project.id
+
+                              },
+                      :confirm => t(:re_are_you_sure)
+                    },
+                    {
+                      :class => 'icon icon-del'
+                    })
+              %>	
+	<% end %>
+</div>

@@ -30,7 +30,7 @@
 			%>
 			<p><%= f.label :precondition, l(:re_primary_actor) %> 
 				<% unless @current_primary_user.blank? %>
-					<%ript= select_tag("primary_user_profile", options_for_select(user_profiles_array, :selected => @current_primary_user.sink_id) ) %>
+					<%= select_tag("primary_user_profile", options_for_select(user_profiles_array, :selected => @current_primary_user.sink_id) ) %>
 				<%else%>
 					<%= select_tag("primary_user_profile", options_for_select(user_profiles_array) ) %>
 				<% end%>
@@ -38,9 +38,88 @@
 	<%end%>
 	
 	<!-- -->
-	
-	
-    <b><%= t(:re_secondary_actor) %></b>
+
+
+
+
+
+
+	      <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
+		      <p>
+		      	<label><%= t(:re_secondary_actor) %></label>
+		      	<%= text_field_tag :secondary_actor, '', {:size => 20, :class => 'autocomplete', :id => 'secondary_actor_autocomplete'} %>
+		      </p>
+	      
+		  
+			    <div id="secondary_user_candidates" class="autocomplete"></div>
+			    <% javascript_tag do %>
+			        new Ajax.Autocompleter('secondary_actor_autocomplete',
+			        'secondary_user_candidates',
+			        '<%= url_for :controller => 're_use_case', :action => 'autocomplete_sink' %>',
+			        {
+			        paramName: 'user_profile_subject',
+			        parameters:
+			        'project_id=<%= @project.id %><%= '&id=' + @artifact.artifact_properties.id.to_s unless @artifact.artifact_properties.id.blank? %>',
+			        minChars: 1,
+			        frequency: 0.5,
+			        afterUpdateElement : getSecondaryUserProfileId});
+			  
+			        function getSecondaryUserProfileId(text, li){
+			  
+			            jQuery('#added_secondary_user').append(li.innerHTML + ', ');
+			            jQuery('#added_secondary_user').append('<input id="secondary_user_profile_id" type="hidden" name="secondary_user_profile_id[]" value=' + li.id + ' >');
+			            document.getElementById('secondary_actor_autocomplete').value ="";
+			        }
+			  
+			      <% end %>
+		  
+		  </div>
+		  <div class='splitcontentright'>
+		  	
+		  	<div id='added_secondary_user'>
+		  	  <%
+		  	  @secondary_user_profiles = []
+		  	  @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@artifact.artifact_properties.id, ReArtifactRelationship::RELATION_TYPES[:dep])
+		  	  
+		  	  unless @all_artifact_relations.blank?
+			  	  @all_artifact_relations.each do |relation|
+			  	  	tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id,'ReUserProfile') }
+			     	logger.debug(relation.to_yaml)
+			  	  	@secondary_user_profiles << tmp unless tmp.blank?
+			  	  end
+			  end
+		  	  %>
+		      <% unless @secondary_user_profiles.nil? %>
+		          
+		          <% @secondary_user_profiles.each do |secondary_user| %>
+		          	  <%= secondary_user[:properties].name %>
+		              <%= link_to_remote(
+		                '',
+		                    {
+		                      :update => "added_secondary_user",
+		                      :url => {
+		                                :action => :delete,
+		                                :controller => :re_artifact_relationship,
+		                                :id => secondary_user[:relation].id,
+		                                :re_artifact_properties_id => @artifact.artifact_properties.id,
+		                                :secondary_user_delete => true,
+		                                :project_id => @project.id
+		
+		                              },
+		                      :confirm => t(:re_are_you_sure)
+		                    },
+		                    {
+		                      :class => 'icon icon-del'
+		                    })
+		              %>,
+		         <% end %>     
+		      <% end %>
+		      </div>
+		  </div>
+	  
+
+
+
 
 	
 	<!-- -->

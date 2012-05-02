@@ -52,9 +52,17 @@ class ReUseCaseController < RedmineReController
       current_relation.save
     end
 
-      
-    #params[:secundary_user_profiles]
-
+    
+    unless params[:secondary_user_profile_id].blank?
+      logger.debug("///////////////////////////////////////:)")
+      logger.debug(params.to_yaml)
+      params[:secondary_user_profile_id].each do |iid|
+        #tmp = ReArtifactProperties.find(iid)
+        @new_relation = ReArtifactRelationship.new(:source_id => @artifact.artifact_properties.id, :sink_id => iid, :relation_type => ReArtifactRelationship::RELATION_TYPES[:dep])
+        @new_relation.save
+        #@artifact_properties.user_profiles << ReUserProfile.find(tmp.artifact_id)
+      end
+    end
     @current_primary_user = ReArtifactRelationship.find_by_source_id_and_relation_type(@artifact.artifact_properties.id, ReArtifactRelationship::RELATION_TYPES[:pof])
     
   end
@@ -68,9 +76,10 @@ class ReUseCaseController < RedmineReController
   end
 
   def autocomplete_sink
+    
     @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?
 
-    query = '%' + params[:sink_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
+    query = '%' + params[:user_profile_subject].gsub('%', '\%').gsub('_', '\_').downcase + '%'
     @sinks = ReArtifactProperties.find(:all, :conditions => ['lower(name) like ? AND project_id = ? AND artifact_type = ?', query.downcase, @project.id, "ReUserProfile"])
 
     if @artifact
