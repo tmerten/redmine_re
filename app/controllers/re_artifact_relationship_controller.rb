@@ -16,12 +16,17 @@ class ReArtifactRelationshipController < RedmineReController
     end
 
     @artifact_properties = ReArtifactProperties.find(params[:re_artifact_properties_id])
-    @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(params[:re_artifact_properties_id])
-    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(params[:re_artifact_properties_id])
     @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
 
-    render :partial => "relationship_links", :project_id => params[:project_id]
+    unless params[:secondary_user_delete].blank?
+      @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id_and_relation_type(params[:re_artifact_properties_id],ReArtifactRelationship::RELATION_TYPES[:dep])
+      render :partial => "secondary_user", :project_id => params[:project_id]
+    else
+      @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(params[:re_artifact_properties_id])
+      @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+      render :partial => "relationship_links", :project_id => params[:project_id]
+    end
   end
 
   def autocomplete_sink
