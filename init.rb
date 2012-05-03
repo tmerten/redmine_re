@@ -2,15 +2,19 @@ require 'redmine'
 require 'redmine_re/hooks'
 require 'dispatcher'
 require 'rubygems'
+require 're_artifact_properties_observer'
 
 Dispatcher.to_prepare do
   # redmine_re patches
   require_dependency 'issue_patch'
   require_dependency 'issue_controller_patch'
+  require_dependency 'mailer_patch'
+  #require_dependency 'notifiable_patch'  # Is not used
   require_dependency 'query_patch'
   require_dependency 'user_patch'
   require_dependency 'role_patch'
   require_dependency 'project_patch'
+  require_dependency 'projects_controller_patch'
   # gems
   require_dependency 'ajaxful_rating_patch'
 end
@@ -55,7 +59,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_attachment => [:edit, :new, :download_or_show, :delete_file],
         :re_processword => [:edit, :new],
         :re_requirement => [:edit, :new],
-        :re_use_case => [:edit, :new],
+        :re_use_case => [:edit, :new, :autocomplete_sink],
         :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
           :visualization, :build_json_according_to_user_choice],
         :re_building_block => [:delete_data, :re_building_block_referred_artifact_types,
@@ -86,6 +90,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 
   #Observers
   #config.active_record.observers = :re_artifact_properties_observer
+  config.active_record.observers = :re_artifact_properties_observer
 
   config.gem "ajaxful_rating_jquery"
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
