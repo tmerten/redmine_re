@@ -60,6 +60,7 @@ en:
   re_created_by: 'Created by'
   re_last_update: 'last update'
   re_by: 'by'
+  re_at: 'at'
 
   # Configuration
   re_administrate: 'Administration'
@@ -404,7 +405,11 @@ en:
   re_extension_type: 'Type'
   re_extension_description: 'Description'
   re_uc_dialog: 'dialog'
-
+  re_use_case_expansion: 'Expansion'
+  re_expansion_type: 'Type'
+  re_expansion_description: 'Description'
+  re_delete_use_case_expansion: 'Delete'
+  
   # re_scenario
   re_scenario: 'Scenario'
   ReScenario: 'Scenario'

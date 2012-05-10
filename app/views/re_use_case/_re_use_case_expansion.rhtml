@@ -1,25 +1,6 @@
-<!-- move to re_use_case/_formfields -->
-<fieldset><legend><%= t(:use_case_expansions) %></legend>
-  <table>
-    <thead class="epansions">
-      <tr>
-        <th><%= t(:re_use_case_expansion) %></th>
-        <th><%= t(:re_expansion_type) %></th>
-        <th><%= t(:re_expansion_description) %></th>
-      </tr>
-    </thead>
-    <tbody id="expansions">
-    </tbody>
-  </table>
-</fieldset>
-
-<!-- initial template -->
-<% fields_for "artifact[re_use_case_steps_attributes][re_use_case_expansions_attributes][]", re_use_case_expansion do |ex_form| %>
+<% fields_for "artifact[re_use_case_steps_attributes][][re_use_case_expansions_attributes][]", re_use_case_expansion do |ex_form| %>
   <% type = re_use_case_expansion.re_expansion_type %>
-  <tr>
-    <td>
-      <a href="#<%= 'anchor' %>">anchorlink to step</a>
-    </td>
+  <tr id="use_case_step_expansion_<%= ex_form.id %>" class="use_case_expansion_row">
     <td>
       <%= ex_form.select :re_expansion_type, [ ['Exception', 1], ['Data',2], ['Other',3] ], :index => nil %>
     <td>

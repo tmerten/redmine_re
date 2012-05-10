@@ -61,6 +61,7 @@ class ReUseCaseController < RedmineReController
     end
     @current_primary_user = ReArtifactRelationship.find_by_source_id_and_relation_type(@artifact.artifact_properties.id, ReArtifactRelationship::RELATION_TYPES[:pof])
     
+    logger.debug(@artifact.to_yaml)
   end
 
   #def edit_hook_invalid_artifact_cleanup(params)
