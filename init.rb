@@ -2,13 +2,13 @@ require 'redmine'
 require 'redmine_re/hooks'
 require 'dispatcher'
 require 'rubygems'
-require 're_artifact_properties_observer'
+#require 're_artifact_properties_observer' #Ist not ready implemented yet (dominic)
 
 Dispatcher.to_prepare do
   # redmine_re patches
   require_dependency 'issue_patch'
   require_dependency 'issue_controller_patch'
-  require_dependency 'mailer_patch'
+  #require_dependency 'mailer_patch' #Ist not ready implemented yet (dominic)
   #require_dependency 'notifiable_patch'  # Is not used
   require_dependency 'query_patch'
   require_dependency 'user_patch'
