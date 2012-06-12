@@ -1,3 +1,5 @@
+<%# Ugly way to provide f to partials. Must be refacturad %>
+<% @f = f %>
 <fieldset><legend><%= l(:re_use_case_specific_attributes) %></legend>
     <p>
     <%= f.label :goal_level, l(:re_use_case_level) %>
@@ -129,7 +131,7 @@
     </thead>
     <tbody id="steps">
       <%# @artifact.re_use_case_steps.each do |re_use_case_step| %>
-	      <%= render( :partial => 're_use_case_step', :collection => @artifact.re_use_case_steps, :locals => { :somefields => f }) %>
+	      <%= render( :partial => 're_use_case_step',  :collection => @artifact.re_use_case_steps ) %>
       <%# end %>
     </tbody>
     <%= sortable_element( "steps",
@@ -175,7 +177,7 @@
 
   function addExpansion(element, store_element) {
     var rendered_expansion;
-    rendered_expansion = "<%= escape_javascript(render(:partial => "re_use_case_expansion", :object => ReUseCaseStepExpansion.new(:re_expansion_type=>1))) %>";
+    rendered_expansion = "<%= escape_javascript(render(:partial => "re_use_case_step_expansion", :object => ReUseCaseStepExpansion.new(:re_expansion_type=>1))) %>";
     $(store_element).insert( { bottom: rendered_expansion } );
   }
   
