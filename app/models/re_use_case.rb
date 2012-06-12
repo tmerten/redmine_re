@@ -8,5 +8,8 @@ class ReUseCase < ActiveRecord::Base
 
   accepts_nested_attributes_for :re_use_case_steps, :allow_destroy => true,
     :reject_if => proc { |attributes| attributes['description'].blank? && attributes['step_type'].blank? }
+    
+  accepts_nested_attributes_for :re_use_case_step_expansions, :allow_destroy => true,
+    :reject_if => proc { |attributes| attributes['description'].blank? && attributes['re_expansion_type'].blank? }
 
 end

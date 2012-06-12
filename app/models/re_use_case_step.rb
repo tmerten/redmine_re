@@ -3,7 +3,7 @@ class ReUseCaseStep < ActiveRecord::Base
   
   belongs_to :re_use_case
 
-  has_many :re_use_case_step_expansions, :dependent => :destroy, :order => :position
+  has_many :re_use_case_step_expansion, :dependent => :destroy, :order => :position
 
 
   validates_presence_of :re_use_case
