@@ -2,7 +2,7 @@ class CreateReBbDataFiles < ActiveRecord::Migration
   def self.up
     create_table :re_bb_data_files do |t|
 
-      t.column :value, :string
+      t.column :attachment_id, :integer
       t.column :re_bb_file_id, :integer
       t.column :re_artifact_properties_id, :integer
 

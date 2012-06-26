@@ -7,6 +7,13 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
   has_many :issues, :through => :realizations, :uniq => true
 
+
+  has_many :user_profiles, 
+    :foreign_key => "source_id",
+    :class_name => "ReArtifactRelationship",
+    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:dep] ]
+    # not need to put :dependent => :destroy, since it will be destroyed through relationships_as_source
+
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",

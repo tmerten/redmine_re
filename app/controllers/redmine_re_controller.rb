@@ -119,7 +119,7 @@ class RedmineReController < ApplicationController
 
     @artifact = @artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
-
+    
     @parent = nil
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
     @bb_error_hash = {}
@@ -167,10 +167,14 @@ class RedmineReController < ApplicationController
         flash.now[:notice] = t( @artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
         edit_hook_valid_artifact_after_save params
 
+        # Send Notification to watchers
+        #Mailer.deliver_artifact_edited(@artifact) #if Setting.notified_events.include?('issue_added')
+        logger.debug('!!!!!!!!!!!!!!!!!!!Notified!!!!!!!!!!!!!!!!!!!!')
+        
         unless @sibling.nil?
           @artifact_properties.parent_relation.insert_at(@sibling.parent_relation.position + 1)
         end
-
+        
         # Add Comment
         unless params[:comment].blank?
           comment = Comment.new
@@ -217,11 +221,11 @@ class RedmineReController < ApplicationController
   end
 
   def edit_hook_after_artifact_initialized(params)
-    logger.debug("#############: edit_validate_before_save_hook not called(1)") if logger
+    logger.debug("#############: edit_hook_after_artifact_initialized not called") if logger
   end
 
   def edit_hook_validate_before_save(params, artifact_valid)
-    logger.debug("#############: edit_validate_before_save_hook not called(2)") if logger
+    logger.debug("#############: edit_validate_before_save_hook not called") if logger
     return true
   end
 

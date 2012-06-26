@@ -1,4 +1,4 @@
-<% fields_for :re_use_case_step_expansions do |ex_form| %>
+<% fields_for "re_use_case_step_expansions[]", re_use_case_step_expansion do |ex_form| %>
   <% type = re_use_case_step_expansion.re_expansion_type %>
   <tr id="use_case_step_expansion_<%= ex_form.id %>" class="use_case_expansion_row">
     <td>
