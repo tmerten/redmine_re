@@ -24,7 +24,15 @@ class ReUseCaseController < RedmineReController
     @user_profiles = []
     @user_profiles = "re_user_profile".camelcase.constantize.all
     @user_profiles.each { |user_profile| user_profile.re_artifact_properties }
-  
+    
+    # Re Use Case Expansions need to be saved heer, because
+    # Rails 2 has an Internal server error with nested forms of depth 2
+    logger.debug("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
+    
+
+    logger.debug(params.to_yaml)
+    #params[:artifact][:re_use_case_step_expansions] = nil
+
   end
 
   #def edit_hook_validate_before_save(params, artifact_valid)
