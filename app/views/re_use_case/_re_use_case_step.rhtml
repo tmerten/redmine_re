@@ -19,7 +19,7 @@
   <%= uc_form.text_area :description, { :size => "35x2", :index => nil,  :class => "use_case_step_textarea" } %>
   <%= uc_form.hidden_field :position, :index => nil, :class => "position" %>
   <fieldset class="collapsible">
-  	<legend onclick="toggleFieldset(this);">Expansions (0)</legend>
+  	<legend onclick="toggleFieldset(this);">Expansions</legend>
   	<div style="display: none;">
 	  <table>
 	    <thead class="epansions">
@@ -30,7 +30,7 @@
 	    </thead>
 	    <tbody id="expansions_<%=uc_form.id%>">
 	    	
-	    	<%= render( :partial => 're_use_case_step_expansion',  :collection => @artifact.re_use_case_step_expansions ) %>
+	    	<%= render( :partial => 're_use_case_step_expansion',  :collection => re_use_case_step.re_use_case_step_expansions ) %>
 	    </tbody>
 	  </table>
   		<%= link_to_function("addExpansion", "addExpansion($(this.parentNode.parentNode).id, 'expansions_"+uc_form.id.to_s+"')", :class => "" ) %>
