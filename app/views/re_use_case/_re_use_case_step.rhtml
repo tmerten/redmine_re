@@ -33,7 +33,7 @@
 	    	<%= render( :partial => 're_use_case_step_expansion',  :collection => re_use_case_step.re_use_case_step_expansions ) %>
 	    </tbody>
 	  </table>
-  		<%= link_to_function("addExpansion", "addExpansion($(this.parentNode.parentNode).id, 'expansions_"+uc_form.id.to_s+"')", :class => "" ) %>
+  		<%= link_to_function("addExpansion", "addExpansion($(this.parentNode.parentNode).id, 'expansions_"+uc_form.id.to_s+"', '"+re_use_case_step.id.to_s+"')", :class => "" ) %>
 	</div>  	
   </fieldset>
   
@@ -52,7 +52,7 @@
       <%= link_to_function t(:re_delete_use_case_step), "$(this).up('.use_case_step_row').remove()", :class => "icon icon-del" %>
     <% else %>
       <%= link_to_function t(:re_delete_use_case_step), "markStepForDeletion(this)", :class => "icon icon-del" %>
-      <%= uc_form.hidden_field(:id, :index => nil) %>
+      <%= uc_form.hidden_field(:id, :index => nil, :class => "current_use_case_step_id") %>
       <%= uc_form.hidden_field(:_destroy, :index => nil, :class => "should_destroy") %>
     <% end %>
   </td>

@@ -29,8 +29,13 @@ class ReUseCaseController < RedmineReController
     # Rails 2 has an Internal server error with nested forms of depth 2
     logger.debug("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
     
-
-    logger.debug(params.to_yaml)
+    unless params[:re_use_case_step_expansions].blank?
+      params[:re_use_case_step_expansions].each do |expansion|
+        logger.debug(expansion.to_yaml)
+      end
+      
+    end
+    
     #params[:artifact][:re_use_case_step_expansions] = nil
 
   end
