@@ -140,7 +140,9 @@
 
 <% javascript_tag do %>
   setResizeableTextAreas();
-
+  
+  var marker = 0;
+  
   function addDialog(element, add_pos) {
     addStep(element, add_pos, 'system');
     addStep(element, add_pos, 'user');
@@ -174,7 +176,8 @@
   function addExpansion(element, store_element, use_case_step_id) {
     var rendered_expansion;
     rendered_expansion = "<%= escape_javascript(render(:partial => "re_use_case_step_expansion", :object => ReUseCaseStepExpansion.new(:re_expansion_type=>1))) %>";
-    rendered_expansion = replaceAll(rendered_expansion, "XXuse_case_step_idXX", use_case_step_id);
+    rendered_expansion = replaceAll(rendered_expansion, "##use_case_step_id##", use_case_step_id);
+    rendered_expansion = replaceAll(rendered_expansion, "##marker##", Math.round(Math.random()*10000)+1000000);
     
     $(store_element).insert( { bottom: rendered_expansion } );
   }

@@ -1,8 +1,12 @@
-<% fields_for "re_use_case_step_expansions[XXuse_case_step_idXX][]", re_use_case_step_expansion do |ex_form| %>
+<% marker = re_use_case_step_expansion.id.to_s %>
+<% if marker.blank? %>
+	<% marker = "##marker##" %>
+<% end%>
+<% fields_for "re_use_case_step_expansions[##use_case_step_id##]["+marker+"][]", re_use_case_step_expansion do |ex_form| %>
   <% type = re_use_case_step_expansion.re_expansion_type %>
   <tr id="use_case_step_expansion_<%= ex_form.id %>" class="use_case_expansion_row">
     <td>
-      <%= ex_form.select :re_expansion_type, [ ['Exception', 1], ['Data',2], ['Other',3] ], :index => nil %>
+      <%= select :re_expansion_type, "re_use_case_step_expansions[##use_case_step_id##]["+marker+"][]", [ ['Exception', 1], ['Data',2], ['Other',3] ], :index => nil %>
     <td>
       <%= ex_form.text_area :description, { :size => "35x2", :index => nil,  :class => "use_case_step_textarea" } %>
     </td>
@@ -14,7 +18,7 @@
         <%= ex_form.hidden_field(:id, :index => nil) %>
         <%= ex_form.hidden_field(:_destroy, :index => nil, :class => "should_destroy") %>
       <% end %>
-      <%= ex_form.hidden_field(:use_case_step_id, :class => "use_case_step_id", :index => nil, :value => "XXuse_case_step_idXX") %>
+      <%= ex_form.hidden_field(:use_case_step_id, :class => "use_case_step_id", :index => nil, :value => "##use_case_step_id##") %>
       <%= ex_form.hidden_field :position, :index => nil, :class => "position" %>
     </td>
   </tr>

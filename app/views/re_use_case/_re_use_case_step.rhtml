@@ -30,7 +30,7 @@
 	    </thead>
 	    <tbody id="expansions_<%=uc_form.id%>">
 	    	
-	    	<%= render( :partial => 're_use_case_step_expansion',  :collection => re_use_case_step.re_use_case_step_expansions ) %>
+	    	<%= render( :partial => 're_use_case_step_expansion',  :collection => re_use_case_step.re_use_case_step_expansions ).to_s.gsub('##use_case_step_id##', re_use_case_step.id.to_s) %>
 	    </tbody>
 	  </table>
   		<%= link_to_function("addExpansion", "addExpansion($(this.parentNode.parentNode).id, 'expansions_"+uc_form.id.to_s+"', '"+re_use_case_step.id.to_s+"')", :class => "" ) %>
