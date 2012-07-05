@@ -604,3 +604,5 @@ en:
   re_add_secondary_actor: 'Add secondary actor'
   re_find_secondary_actor: 'Find secondary actor'
   re_changed_by: 'Changed by'
+  
+  re_delete_use_case_step_expansion: 'Delete'
