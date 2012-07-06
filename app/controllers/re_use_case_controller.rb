@@ -39,10 +39,8 @@ class ReUseCaseController < RedmineReController
             current_use_case_step_id = expansion_conts.to_s.to_i
             
             # Delete current use case step expansions
-            expansions = ReUseCaseStepExpansion.find_by_re_use_case_step_id(current_use_case_step_id)
-            unless expansions == nil
-              expansions.destroy
-            end
+            expansions = ReUseCaseStepExpansion.destroy_all(:re_use_case_step_id => current_use_case_step_id)
+
           else 
             expansion_conts.each do |expansion_conts_depth_2|
               
