@@ -4,7 +4,7 @@
 <% end%>
 <% fields_for "re_use_case_step_expansions[##use_case_step_id##]["+marker+"][]", re_use_case_step_expansion do |ex_form| %>
   <% type = re_use_case_step_expansion.re_expansion_type %>
-  <tr id="use_case_step_expansion_<%= ex_form.id %>" class="use_case_expansion_row">
+  <tr id="use_case_step_expansion_<%= ex_form.id %>" class="use_case_step_expansion_row">
     <td>
       <%= select :re_expansion_type, "re_use_case_step_expansions[##use_case_step_id##]["+marker+"][]", [ ['Exception', 1], ['Data',2], ['Other',3] ], :index => nil %>
     <td>
