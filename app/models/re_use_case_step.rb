@@ -10,4 +10,5 @@ class ReUseCaseStep < ActiveRecord::Base
 
   validates_presence_of :re_use_case
   validates_inclusion_of :step_type, :in => 1..2
+  
 end

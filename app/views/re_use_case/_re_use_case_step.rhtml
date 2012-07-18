@@ -21,6 +21,11 @@
   <fieldset class="collapsible">
   	<legend onclick="toggleFieldset(this);">Expansions</legend>
   	<div style="display: none;">
+		<%= sortable_element( "epansions_"+uc_form.id.to_s,
+		  :tag => 'tr',
+		  :complete => visual_effect(:highlight, 'epansions_'+uc_form.id.to_s),
+		  :onUpdate => "function() { updateStepPositionFields(); }"
+		) %>
 	  <table>
 	    <thead class="epansions">
 	      <tr>

@@ -55,7 +55,7 @@ class ReUseCaseController < RedmineReController
                   n.re_use_case_step_id = expansion_conts_depth_3[0][:use_case_step_id]
                   n.description         = expansion_conts_depth_3[0][:description]
                   n.position            = expansion_conts_depth_3[0][:position]
-                  n.re_expansion_type   = "1"
+                  n.re_expansion_type   = expansion_conts_depth_3[0][:re_expansion_type]
                   n.save 
                 end
               end

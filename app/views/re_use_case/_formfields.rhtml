@@ -205,6 +205,16 @@
     });
   }
 
+  function updateStepExpansionPositionFields() {
+    var pos = 1;
+    $('steps').childElements().each( function(child) {
+      $(child).id = 'use_case_step_expansion_drag_' + pos;
+      $(child).down('.position').value = pos;
+      pos++;
+    });
+  }
+
+
   function setResizeableTextAreas() {
       $$('textarea.use_case_step_textarea').each(function (el) {
          new ResizingTextArea($(el));
