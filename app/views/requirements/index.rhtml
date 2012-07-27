@@ -1,30 +1,43 @@
-<div id='detail_view' class='detail_view'>
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'jquery-1.7.2.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery-ui-1.8.21.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.layout-rc30.51.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
+
+<div id="infobar" class="ui-layout-west ui-layout-content">
+  <%= render "requirements/treebar" %>
+</div>
+
+<div id="re-index" class="ui-layout-center">
 
   <% configured_description = ReSetting.get_plain('plugin_description', @project.id)%>
-	<% if configured_description.nil? or configured_description == '' %> 
+  <% if configured_description.nil? or configured_description == '' %>
   <h2>Create a new Requirements Artifact</h2>
-		<p>
-		  Get started by creating a new requirements artifact. You may select from the artifacts below.<br />
-		  You will find the artifacts you created in the tree to your left. You can drag and drop each artifact 
-		  in the tree to reorder or restructure your RE artifacts.<br />
-		  The tree represents the structure of your requirements document.
-		</p>
-		<p>
-		  Once you left this page you can always add a new artifact by right-click on an element of the tree below
-		  the Artifact Summary. A context menu will open up, wich provides all operations you need.
-		</p>
-	<% else %> 
-		<%= textilizable(configured_description, :only_path => false) %> 
-	<% end %>
+    <p>
+      Get started by creating a new requirements artifact. You may select from the artifacts below.<br />
+      You will find the artifacts you created in the tree to your left. You can drag and drop each artifact
+      in the tree to reorder or restructure your RE artifacts.<br />
+      The tree represents the structure of your requirements document.
+    </p>
+    <p>
+      Once you left this page you can always add a new artifact by right-click on an element of the tree below
+      the Artifact Summary. A context menu will open up, wich provides all operations you need.
+    </p>
+  <% else %>
+    <%= textilizable(configured_description, :only_path => false) %>
+  <% end %>
 
-  <% for artifact_type in @re_artifact_order	%>
+  <% for artifact_type in @re_artifact_order  %>
     <h3><%= rendered_artifact_type(artifact_type.underscore) %></h3>
     <%= render :partial => "re_artifact_descriptions/#{artifact_type.underscore}_description" %>
     <ul>
-      <li><%= link_to t(:re_create_new) + "" + rendered_artifact_type(artifact_type.underscore), {
-            :controller => artifact_type.underscore,
-            :action => 'new',
-            :project_id => @project.id,
+      <li><%= link_to t(:re_create_new) + rendered_artifact_type(artifact_type.underscore), {
+            :controller => "re_artifact_properties",
+            :action => "new",
+            :project_id => @project.identifier,
+            :artifact_type => artifact_type,
             :parent_artifact_id => @project_artifact.id } %></li>
     </ul>
   <% end %>
@@ -33,6 +46,7 @@
 
   <p>
   You also may like to visualize the traces for the requirments artifacts you already created.
+  </p>
 
   <ul>
     <li><%= link_to l(:re_relationship_visualization), {
@@ -41,5 +55,6 @@
           :project_id => @project.id } %>
     </li>
   </ul>
+  <div style="clear:both;"></div>
 
 </div>

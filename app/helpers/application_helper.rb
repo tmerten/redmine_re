@@ -20,7 +20,7 @@ module ApplicationHelper
     end
     artifact_type_humanized =  artifact_type.gsub(/^re_/, '').humanize
 
-    if artifact_type_alias.blank? or  artifact_type_humanized.eql?(artifact_type_alias)
+    if artifact_type_alias.blank? or artifact_type_humanized.eql?(artifact_type_alias)
       return t(artifact_type)
     else
       return artifact_type_alias
@@ -132,20 +132,6 @@ module ApplicationHelper
     end
     html_code
   end
-
-
-  # This method allows to add the whole bb-section to an edit-artifact-
-  # view with only one line of code. This is needed because the section 
-  # has to be included in views of non-bb-models and therefore shall be
-  # hidden behind a very easy command.
-  def add_bb_section(artifact, bb_hash, bb_error_hash)
-    if User.current.allowed_to?(:edit_requirements, @project)
-      render :partial => "re_building_block/bb_section", :locals => {:bb_hash => bb_hash, :bb_error_hash => bb_error_hash}
-    else
-      ""
-    end
-  end
-  
 
   # This method builds up a html-string to add an icon to the view which 
   # has all error messages of the given bb as a tooltip. The html-code is 

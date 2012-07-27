@@ -4,13 +4,10 @@
   <div style="overflow: visible;">
     <div class="splitcontentleft">
       <div id="relationship_link_list">
-        <% @artifact_properties_id = ReArtifactProperties.get_properties_id(controller.controller_name, params[:id]) %>
-        <% @re_artifact_properties = ReArtifactProperties.find(@artifact_properties_id) %>
-
-        <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@artifact_properties_id) %>
+        <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@re_artifact_properties.id) %>
         <% @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) } %>
 
-        <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@artifact_properties_id) %>
+        <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@re_artifact_properties.id) %>
         <% @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) } %>
 
         <%= render "re_artifact_relationship/relationship_links" %>
@@ -46,11 +43,9 @@
             <% javascript_tag do %>
                 new Ajax.Autocompleter('sink_autocomplete',
                 'sink_artifact_candidates',
-                '<%= url_for :controller => 're_artifact_relationship', :action => 'autocomplete_sink' %>',
+                '<%= url_for :controller => 're_artifact_relationship', :action => 'autocomplete_sink', :project_id => @project.identifier, :id => @re_artifact_properties.id %>',
                 { minChars: 3,
                 paramName: 'sink_name',
-                parameters:
-                'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
                 frequency: 0.5,
                 afterUpdateElement : function(text, li) { $('sink_artifact_id').setValue(li.id) }
                 });

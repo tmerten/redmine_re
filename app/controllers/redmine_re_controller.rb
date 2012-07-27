@@ -21,8 +21,6 @@ class RedmineReController < ApplicationController
   prepend_before_filter :first_load, :except => :configure
   prepend_before_filter :find_project
 
-  layout proc { |c| c.request.xhr? ? false : "redmine_re" }
-
   def first_load
      @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
      if @project_artifact.nil?
@@ -50,12 +48,18 @@ class RedmineReController < ApplicationController
 
     return if @re_artifact_order.nil?
     return if @re_relation_order.nil?
-    @re_artifact_order.each { |a| @re_artifact_settings[a] = ReSetting.get_serialized(a, @project.id) }
-    @re_artifact_order.delete_if { |a| @re_artifact_settings[a]['in_use'] == false }
 
+    @re_artifact_settings = {}
+    @re_artifact_order.each do |a|
+      artifact_setting = ReSetting.get_serialized(a, @project.id)
+      @re_artifact_settings[a] = artifact_setting if artifact_setting["in_use"]
+    end
     @re_relation_settings = {}
-    @re_relation_order.each { |r| @re_relation_settings[r] = ReSetting.get_serialized(r, @project.id) }
-    @re_relation_order.delete_if { |r| @re_relation_settings[r]['in_use'] == false }
+    @re_relation_order.each do |r|
+      relation_setting = ReSetting.get_serialized(r, @project.id)
+      @re_relation_settings[r] = relation_setting if relation_setting["in_use"]
+    end
+
   end
 
   def find_project
@@ -67,27 +71,14 @@ class RedmineReController < ApplicationController
         render_404 :message => t(:re_404_invalid_project_id)
       end
       # or by artifact id (e.g. in edit actions or when called though ajax)
+    elsif (params[:id])
+      artifact = ReArtifactProperties.find(params[:id])
+      @project = artifact.project unless artifact.nil?
+    elsif (params[:re_artifact_properties])
+      project_id = params[:re_artifact_properties][:project_id]
+      @project = Project.find(project_id) unless project_id.blank?
     else
-      if (params[:id])
-        begin
-          controller_name = params[:controller]
-          artifact = nil
-
-          class_name = controller_name.classify
-          begin
-            artifact = class_name.constantize
-            artifact = artifact.find(params[:id])
-          rescue NameError
-            artifact = ReArtifactProperties.find(params[:id])
-          end
-          @project = artifact.project
-        rescue ActiveRecord::RecordNotFound
-          render_404 :message => t(:re_404_artifact_not_found)
-
-        end
-      else
-        render_404 :message => t(:re_404_artifact_not_found_or_project_missing)
-      end
+      render_404 :message => t(:re_404_artifact_not_found_or_project_missing)
     end
   end
 
@@ -112,7 +103,7 @@ class RedmineReController < ApplicationController
     render 're_artifact_properties/edit'
   end
 
-  def edit
+  def create
     @artifact_type = self.controller_name
     logger.debug("############ Called edit for artifact of type: " + @artifact_type) if logger
 
@@ -126,18 +117,10 @@ class RedmineReController < ApplicationController
 
     @issues = @artifact_properties.issues
 
-    edit_hook_after_artifact_initialized params
-    
-    # Remove Comment (Initiated via GET)
-    if User.current.allowed_to?(:administrate_requirements, @project)
-      unless params[:deletecomment_id].blank?
-        comment = Comment.find_by_id(params[:deletecomment_id])
-        comment.destroy unless comment.nil?
-      end
-    end
+    #edit_hook_after_artifact_initialized params
+    create_hook params
 
-    if request.post? # we want to create or update an artifact
-      @artifact.attributes = params[:artifact]
+       @artifact.attributes = params[:artifact]
       # attributes that cannot be set by the user
       @artifact.project_id = @project.id
       @artifact.updated_at = Time.now
@@ -189,11 +172,9 @@ class RedmineReController < ApplicationController
         @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
         @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
 
-
         # If sibling is not blank, then the option "create new artifact below" was called
         # and the artifact should beplaced below its sibling
         initialize_tree_data
-
 
       else
         edit_hook_invalid_artifact_cleanup params
@@ -204,14 +185,35 @@ class RedmineReController < ApplicationController
           @artifact_properties.issues << Issue.find(iid)
         end
       end
-    end # request.post? end
-#    if request.post? and (session[:preventing_edit_loop].nil? || session[:preventing_edit_loop] == false)
-#      session[:preventing_edit_loop] = true
-#      redirect_to 're_artifact_properties/edit'
-#    else
-#      session[:preventing_edit_loop] = false
-      render 're_artifact_properties/edit'  
-#    end
+    render :edit
+  end
+
+  def edit
+
+    @artifact_type = self.controller_name
+    logger.debug("############ Called edit for artifact of type: " + @artifact_type) if logger
+
+    @artifact = @artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || @artifact_type.camelcase.constantize.new
+    @artifact_properties = @artifact.re_artifact_properties
+
+    @parent = nil
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
+    @bb_error_hash = {}
+    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
+
+    @issues = @artifact_properties.issues
+
+    edit_hook_after_artifact_initialized params
+
+    # Remove Comment (Initiated via GET)
+    if User.current.allowed_to?(:administrate_requirements, @project)
+      unless params[:deletecomment_id].blank?
+        comment = Comment.find_by_id(params[:deletecomment_id])
+        comment.destroy unless comment.nil?
+      end
+    end
+
+    render 're_artifact_properties/edit'  
   end
 
 
@@ -367,7 +369,6 @@ class RedmineReController < ApplicationController
 
     tree = {}
     tree['data'] = artifact_shortened_name
-    tree['url'] = url_for :controller => artifact_type, :action => 'edit'
     if has_children
       tree ['state'] = 'open' if expanded
       tree ['state'] = 'closed' unless expanded
@@ -377,6 +378,8 @@ class RedmineReController < ApplicationController
     attr['id'] = "node_" + artifact_id.to_s
     attr['rel'] = artifact_type
     attr['title'] = artifact_name
+    attr['url'] = url_for(:controller => 're_artifact_properties', :action => 'edit', :id => artifact_id) unless artifact_type.eql?('project')
+    attr['delete_url'] = url_for(:controller => 're_artifact_properties', :action => 'destroy', :id => artifact_id) unless artifact_type.eql?('project')
 
     tree['attr'] = attr
 

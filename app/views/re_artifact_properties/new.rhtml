@@ -1,0 +1,154 @@
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'jquery-1.7.2.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery-ui-1.8.21.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.layout-rc30.51.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
+
+<% javascript_tag do %>
+
+<% end %>
+
+<div id="infobar" class="ui-layout-west ui-layout-content">
+  <%= render "requirements/treebar" %>
+</div>
+
+<div id="detail-view" class="ui-layout-center">
+
+  <h2><%= t(:re_create_a_new) + ' ' + ( rendered_artifact_type(@artifact_type) ) %></h2>
+
+  <%= error_messages_for @re_artifact_properties %>
+
+    <div class="box">
+    <% form_for @re_artifact_properties do |f| %>
+
+      <%= hidden_field_tag :parent_artifact_id, @parent_artifact_id %>
+      <%= hidden_field_tag :parent_relation_position, @parent_relation_position %>
+      <%= f.hidden_field :artifact_type %>
+      <%= f.hidden_field :project_id %>
+      <fieldset>
+        <legend><%= t(:re_common_attributes) %></legend>
+
+        <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
+
+          <p>
+          <%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name, :required => true %>
+          </p>
+          <%= javascript_tag "Form.Element.focus('artifact_name');" %>
+
+          <%
+             re_users = []
+             re_users << User.current
+             re_users.concat User.all.sort_by { |u| u.lastname }
+             re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
+             re_users.uniq!
+          %>
+          <p>
+          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
+          </p>
+        </div>
+
+        <div class="splitcontentright">
+          <b><%= t(:re_description_fieldset) %></b>
+          <div id='update-description' %>
+            <%= f.text_area :description,
+                            :cols => 60,
+                            :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
+                            :accesskey => accesskey(:edit),
+                            :class => 'wiki-edit' %>
+            <%= wikitoolbar_for 'artifact_description' %>
+          </div>
+        </div>
+      </fieldset>
+
+      <br/>
+
+      <fieldset>
+        <legend><%= t(:re_associated_issues) %></legend>
+
+
+        <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
+          <p>
+            <label><%= t(:add_issue_to_requirement) %></label>
+            <%= text_field_tag :issue, '', {:size => 20, :class => 'autocomplete', :id => 'issue_autocomplete'} %>
+          </p>
+            <%= link_to image_tag('add.png')+' create related Issue', :controller=> 'issues', :action=>'new', :project_id => @project.id,
+              :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :displayid => @re_artifact_properties.id, :associationid => @re_artifact_properties.artifact_id unless @re_artifact_properties.id.blank?%>
+
+
+          <div id="issue_candidates" class="autocomplete"></div>
+          <% javascript_tag do %>
+              new Ajax.Autocompleter('issue_autocomplete',
+              'issue_candidates',
+              '<%= url_for :project_id => @project.identifier, :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
+              {
+              paramName: 'issue_subject',
+              parameters: <%= 'id=' + @re_artifact_properties_id.to_s unless @re_artifact_properties_id.blank? %>',
+              minChars: 1,
+              frequency: 0.5,
+              afterUpdateElement : getIssueId});
+
+              function getIssueId(text, li){
+
+                  jQuery('#added_issues').append(li.innerHTML + ', ');
+                  jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
+                  document.getElementById('issue_autocomplete').value ="";
+              }
+
+            <% end %>
+
+      </div>
+
+      <div class='splitcontentright'>
+          <% unless @issues.nil? %>
+
+              <%= @issues.collect { |issue|
+                  (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s+
+                  (link_to image_tag('delete.png'), :controller => 're_artifact_properties', :action => 'remove_issue_from_artifact', :issueid => issue.id, :project_id=>@project.id, :id => @re_artifact_properties.id) }.to_sentence %>
+          <% end %>
+        <div id='added_issues'></div>
+      </div>
+
+
+      </fieldset>
+
+
+    <!-- Additional fields like subtasks for task which are described in an own partial -->
+    <%= render( "#{@artifact_type}/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{@artifact_type}/_formfields.rhtml") %>
+
+    <!-- add building blocks if user obtains the rights needed for that -->
+    <div id='re_bb_section'>
+      <%= render("re_building_block/bb_section", { :artifact => @re_artifact_properties, :bb_hash => @bb_hash, :bb_error_hash => @bb_error_hash } )%>
+    </div>
+      <%# add_bb_configuration_link(params[:controller].camelcase)%>
+
+    <p>
+    <%= submit_tag t(:re_save) %>
+        &nbsp;
+    <%#= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
+    </p>
+
+  <% end %><!-- form end tag -->
+
+    <div id="watchers">
+      <%#= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
+    </div>
+
+
+    </div> <!--end of tab one -->
+
+
+    <% if params.has_key? :id %>
+      <div class="box">
+      <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
+    </div><!-- end of tab two -->
+  <% end %>
+</div><!-- panes-->
+<% javascript_tag do %>
+  jQuery(function() {
+    // setup ul.tabs to work as tabs for each div directly under div.panes
+    jQuery("ul.tabs").tabs("div.panes > div");
+    });
+<% end %>
+

@@ -1,11 +1,11 @@
 # English strings go here for Rails i18n
-en:  
+en:
   datetime:
     formats:
       short: "%m/%d/%y, %H:%M"
 
   # general stuff
-  re_new: 'New'
+  re_create_a_new: 'Create a new'
   re_of_type: 'of type'
   re_requirements: 'Requirements'
   re_save: 'Save'
@@ -134,7 +134,7 @@ en:
   re_artifact_properties_validates_presence_of_created_by: 'Created by cannot be blank.'
   re_artifact_properties_validates_presence_of_project: 'There is no project associated to this artifact.'
   re_artifact_properties_validates_presence_of_artifact: 'No artifact has been associated with these artifact properties'
-  re_artifact_properties_validates_presence_of_parent: 'Every artifact needs a parent artifact, but no parent has been defined'
+  re_artifact_properties_validates_presence_of_parent: 'This artifact does not seem to have a parent artifact defined'
   re_artifact_properties_validates_uniqueness_of_artifact: 'The artifact associated with these artifact properties has to be unique '
 
   field_re_artifact_properties:
@@ -523,11 +523,9 @@ en:
   re_bb_file: 'File Building Block'
   re_bb_inline_view_allowed: 'Inline-View allowed'
   allowed_filetypes : 'Allowed filetypes'
-  
+
   # re_tree
-  re_tree_overview: 'Artifact Summary'
-  re_show_tree: 'Show Tree'
-  re_show_general_tree_view: 'Show Overall Tree'
+  re_specification_overview: 'Specification overview'
   re_treefilter: 'Filter'
   re_create_in: 'create artifact in...'
   re_create_below: 'create artifact below...'

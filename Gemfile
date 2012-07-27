@@ -1,1 +1,1 @@
-gem "ajaxful_rating_jquery", "2.2.9"
+gem "ajaxful_rating_jquery", ">=2.2.0"

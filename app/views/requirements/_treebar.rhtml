@@ -1,211 +1,141 @@
-<div id='treebar' class='treebar'>
-  <!--<a href="#" id="hide_treebar" class="contextual" title="<%= t(:re_shows_after_reload) %>"><%= t(:re_hide) %></a>-->
-
-  <h2 class="current"><%= l(:re_tree_overview) %></h2>
-  <div class="pane">
-    <%= render :partial => 'requirements/filter' %>
-    <div id="tree"></div>
-  </div>
-
-  <h2><%= l(:re_show_relationships) %></h2>
-  <div class="pane">
-    <ul class="navigation">
-      <li><%= link_to l(:re_relationship_visualization), {
-            :controller => "re_artifact_relationship",
-            :action => "visualization",
-            :project_id => @project.id } %>
-      </li>
-    </ul>
-  </div>
-
-  <% if User.current.allowed_to?(:administrate_requirements, @project) %>
-  <h2><%= l(:re_configure) %></h2>
-  <div class="pane">
-    <ul class="navigation">
-      <li><%= link_to l(:re_configure_plugin), {
-        :controller => "re_settings",
-        :action => "configure", 
-        :project_id => @project.identifier } %>
-      </li>
-      <% linktext = l(:re_configure_fields_treebar, :artifact_type => l(controller_name.camelcase.to_sym))%>
-      <% if @re_artifact_order.include? controller_name and ! linktext.slice('translation missing:')%>
-        <li>
-          <%= link_to linktext, {
-          :controller => "re_settings",
-          :action => "configure_fields",
-          :project_id => @project.id,
-          :artifact_type => controller_name
-          } %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'jquery.jstree/jquery.jstree.js', :plugin => 'redmine_re' %>
+  <% javascript_tag do %>
+    var re_config = {
+      "base_url" : "<%= url_for :controller => 'welcome' %>",
+      "project_id" : "<%= @project.identifier %>",
+      "artifact_settings" : <%= @re_artifact_settings.to_json %>,
+      "artifact_types" : <%= @re_artifact_order.to_json %>
+    };
   <% end %>
+<% end %>
 
-  <span id="back-top"><a href="#top"><%= l(:re_scroll_to_top) %></a></span>
+<div id="treebar">
+
+  <%= render :partial => 'requirements/filter' %>
+
+  <fieldset class="collapsible">
+    <legend onclick="toggleFieldset(this);"><%= l(:re_specification_overview) %></legend>
+    <div id="tree"></div>
+  </fieldset>
+
+  <fieldset class="collapsible">
+    <legend onclick="toggleFieldset(this);"><%= l(:re_configure) %></legend>
+    <div>
+      <ul class="navigation">
+        <li><%= link_to t(:re_relationship_visualization), {
+              :controller => "re_artifact_relationship",
+              :action => "visualization",
+              :project_id => @project.id } %>
+        </li>
+        <% if User.current.allowed_to?(:administrate_requirements, @project) %>
+          <li><%= link_to l(:re_configure_plugin), {
+            :controller => "re_settings",
+            :action => "configure", 
+            :project_id => @project.identifier } %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </fieldset>
 </div>
 
-<script type="text/javascript">
-  //<![CDATA[
+<% javascript_tag do %>
+  function createInsideArtifactSubmenu() {
+    var submenu_items = {};
+    for (artifact_type in re_config["artifact_settings"]) {
+      var artifact_setting = re_config["artifact_settings"][artifact_type];
+      submenu_items[artifact_type] = {
+        "label" : artifact_setting["alias"],
+        "artifact_type" : artifact_setting["artifact_type"],
+        "action" : function (node) {
+          var reference_id = node[0].id.gsub('node_','');
+          window.location.pathname = re_config['base_url'].substr(1) + '/projects/' + re_config['project_id'] + '/requirements/artifact/new/' + node[0].rel + '/inside_of/' + reference_id;
+        },
+        "icon" : artifact_type
+      }
+    }
+    return submenu_items;
+  };
 
-jQuery("#hide_treebar").click(function () {
-  jQuery("#treebar").hide();
-  jQuery(".detail_view").css('margin-left', '10px');
-});
+  function createBelowArtifactSubmenu() {
+    var submenu_items = {};
+    for (artifact_type in re_config["artifact_settings"]) {
+      var artifact_setting = null
 
-function load_items(node) {
+      artifact_setting = re_config["artifact_settings"][artifact_type];
+      link = re_config['base_url'] + '/projects/' + re_config['project_id'] + '/requirements/artifact/new/' + artifact_type + '/below_of/';
+      submenu_items[artifact_type] = {
+        "label" : artifact_setting["alias"],
+        "artifact_type" : artifact_setting["artifact_type"],
+        "action" : function (node) {
+          var reference_id = node[0].id.gsub('node_','');
+          var json_data = this.data.json_data.toString()
+          var artifact_type = null; //json_data.valueOf("artifact_type") 
+          window.location.pathname = re_config['base_url'].substr(1) + '/projects/' + re_config['project_id'] + '/requirements/artifact/new/' + artifact_type + '/inside_of/' + reference_id;
+        },
+        "icon" : artifact_type
+      }
+    }
+    return submenu_items;
+  };
 
-  var items;
-
-  if ( node.attr("rel") == "project" ) {
-
-  items = {
-        "create" : false,
-        "rename" : false,
-        "remove" : false,
-        "ccp" : false,
-        "new" : {
-          "label" : "<%= t('re_create_in') %>",
-          "separator_before" : false,
-          "separator_after"	: false,
-          "icon" : "new",
-          "submenu" : {
-          <% for artifact_type in @re_artifact_order	%>
-            "<%= artifact_type.underscore %>" : {
-              "label" : "<%= rendered_artifact_type(artifact_type.underscore) %>",
-              "action" : function (node) {
-                jQuery.blockUI({
-                    "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= rendered_artifact_type(artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-                });
-                var id = node[0].id.gsub('node_','');
-                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id, :id => nil) %>";
-                window.location.href = link + '?parent_artifact_id=' + id;
-              },
-              "icon" : "<%= artifact_type.underscore %>"
-            }<%= "," unless artifact_type == @re_artifact_order.last %>
-          <% end %>
-          }
-        }
-      };
-  } else {
+  function load_items(node) {
+    var items;
+    var artifact_types = re_config['artifact_settings'];
 
     items = {
-        "create" : false,
-        "rename" : false,
-        "remove" : false,
-        "ccp" : false,
-        "new" : {
-          "label" : "<%= t('re_create_in') %>",
-          "separator_before" : false,
-          "separator_after"	: false,
-          "icon" : "new",
-          "submenu" : {
-          <% for artifact_type in @re_artifact_order	%>
-              "<%= artifact_type.underscore %>" : {
-              "label" : "<%= rendered_artifact_type(artifact_type.underscore) %>",
-              "action" : function (node) {
-
-                jQuery.blockUI({
-                    "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= rendered_artifact_type(artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-                });
-                var id = node[0].id.gsub('node_','');
-                var link = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id, :id=> nil) %>";
-                window.location.href = link + '?parent_artifact_id=' + id;
-              },
-              "icon" : "<%= artifact_type.underscore %>"
-            }<%= "," unless artifact_type == @re_artifact_order.last %>
-          <% end %>
-          }
-        },
-        "sibling" : {
-          "label" : "<%= t('re_create_below') %>",
-          "separator_before" : false,
-          "separator_after"	: true,
-          "icon" : "new",
-          "submenu" : {
-          <% for artifact_type in @re_artifact_order	%>
-            "<%= artifact_type.underscore %>_sibling" : {
-              "label" : "<%= rendered_artifact_type(artifact_type.underscore) %>",
-              "action" : function (node) {
-                jQuery.blockUI({
-                    "message" : "<p><%= t(:re_editor_for) %><br/><br/><b><%= rendered_artifact_type(artifact_type.underscore) %></b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-                });
-                var id = node[0].id.gsub('node_','');
-                var link2 = "<%= url_for(:controller => artifact_type.underscore, :action => 'new', :project_id => @project.id, :id => nil) %>";
-                window.location.href = link2 + '?sibling_id=' + id;
-              },
-              "icon" : "<%= artifact_type.underscore %>"
-            }<%= "," unless artifact_type == @re_artifact_order.last %>
-          <% end %>
-          }
-        },
-        "edit" : {
-          "label" : "<%= t(:re_edit) %>",
-          "icon" : "edit",
-          "action" : function (node) {
-            jQuery.blockUI({
-                "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + node.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-            });
-            var id = node[0].id.gsub('node_','');
-            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit', :id => nil) %>/";
-            window.location.href = link + id;
-          }
-        },
-        "delete" : {
-          "label" : "<%= t(:re_delete) %>",
-          "icon" : "delete",
-          "action" : function (node) {
-            /*jQuery.blockUI({
-                "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + node.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-            });*/
-            var id = node[0].id.gsub('node_','');
-            var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'delete', :id => nil) %>/";
-            window.location.href = link + id;
-          }
+      "create" : false,
+      "rename" : false,
+      "remove" : false,
+      "ccp" : false,
+      "new" : {
+        "label" : "<%= t('re_create_in') %>",
+        "separator_before" : false,
+        "separator_after"	: false,
+        "icon" : "new",
+        "submenu" : createInsideArtifactSubmenu()
+      },
+      "sibling" : {
+        "label" : "<%= t('re_create_below') %>",
+        "separator_before" : false,
+        "separator_after"	: true,
+        "icon" : "new",
+        "submenu" : createBelowArtifactSubmenu()
+      },
+      "edit" : {
+        "label" : "<%= t(:re_edit) %>",
+        "icon" : "edit",
+        "action" : function (node) {
+          var id = node[0].id.gsub('node_','');
+          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit', :id => 2) %>/";
+          window.location.href = link;
         }
-      };
+      },
+      "delete" : {
+        "label" : "<%= t(:re_delete) %>",
+        "icon" : "delete",
+        "action" : function (node) {
+          var id = node[0].id.gsub('node_','');
+          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'destroy', :id => 2) %>/";
+          window.location.href = link + id;
+        }
+      }
+    }
+    return items;
   }
-
-  return items;
-}
-
-/* if a user clicks a tab, this variable becomes true.
-   If it is true, the tab containing the tree does not
-   get opened after the tree is loaded (since the
-   user has already chosen another tab)
-   (may be refactored as non-global variable) */
-var cancel_showtree = false;
-
-var accordion = jQuery("#treebar").tabs("#treebar div.pane", {
-  tabs: 'h2',
-  effect: 'slide',
-  initialIndex: null,
-  history:true,
-  onClick: function(event, tabIndex) {
-    cancel_showtree = true;
-  }
-});
 
 var tree = jQuery("#tree")
-  .bind("loaded.jstree", function (event, data) {
-    if (! cancel_showtree) {
-      var api = jQuery("#treebar").data("tabs");
-      api.click(0);
-      cancel_showtree = false;
-    }
-  })
   .bind("close_node.jstree", function (event, data) {
     jQuery.ajax({
-      "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') ,
-    });        
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') ,
+    });
   })
   .bind("open_node.jstree", function (event, data) {
     var node = data.args[0];
-    /* TODO: Resize the trees div (actually resize the contents left margin);
-    there is a post open/close hook, where this can be implemented */
     jQuery.ajax({
-      "url" : "<%= url_for :controller => 'requirements', :action => 'treestate' %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
-    });        
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate' %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
+    });
   })
   .bind("move_node.jstree", function (e, data) {
     data.rslt.o.each(function (i) {
@@ -251,10 +181,9 @@ var tree = jQuery("#tree")
       "data" : <%= @json_tree_data %>,
       "ajax" : {
         "url" : function (n) {
-          var url = "<%= url_for :controller => 'requirements', :action => 'treestate' %>";
+          var url = "<%= url_for :controller => 'requirements', :action => 'treestate', :project_id => @project.identifier %>";
           var id = n.attr ? n.attr("id").gsub('node_','') : -1;
-          var params = "?project_id=<%= @project.id %>&open=data";
-          return url + "/" + id + params;
+          return url + "/" + id + "?open=data";
         }
       }
     },
@@ -281,7 +210,7 @@ var tree = jQuery("#tree")
     "contextmenu" : {
       "select_node" : true,
       "show_at_node" : false,
-      "items" : load_items
+      "items" : load_items()
     },
     "types" : {
       "types" : {
@@ -361,35 +290,12 @@ var tree = jQuery("#tree")
     plugins : [ "themes", "json_data", "dnd", "ui", "contextmenu", "types" ]
   });
 
+  /*
+   * Watch click event on tree items to edit artifacts
+   */
   jQuery("#tree a").live("click", function(e) {
-      var parent = jQuery(this).parent();
-      jQuery.blockUI({
-          "message" : "<p><%= t(:re_editor_for) %><br/><br/><b>" + parent.attr("title") + "</b><br/><br/><%= t(:re_is_being_loaded) %></p>"
-      }); 
-      var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/"
-      var type = parent.attr("rel");
-      var id = parent.attr ? parent.attr("id").gsub('node_','') : -1;
-      window.location.href = link + id
-  })
-  jQuery(document).ready(function(){
-
-    jQuery("#back-top").hide();
-    jQuery(function () {
-      jQuery(window).scroll(function () {
-        if (jQuery(this).scrollTop() > 100) {
-          jQuery('#back-top').fadeIn();
-        } else {
-          jQuery('#back-top').fadeOut();
-        }
-      });
-      // scroll body to 0px on click
-      jQuery('#back-top a').click(function () {
-        jQuery('body,html').animate({
-          scrollTop: 0
-        }, 800);
-        return false;
-      });
-    });
+    var artifact = jQuery(this).parent();
+    link = artifact.attr("url"); 
+    if (link != undefined) window.location.href = link;
   });
-  //]]>
-</script>
+<% end %>

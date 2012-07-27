@@ -37,17 +37,15 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
     #   before_filter :authorize is set in the redmine_re_controller
     permission( :edit_requirements,
       {
-        # actions of redmine_re_controller are here too because the get executed by inheritance of requirements controller
-        # for example here:_tree partial: <%= url_for :controller => 'requirements', :action => 'context_menu' %>
         :requirements => [:index, :treeview, :context_menu, :treestate, :load_settings,
           :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree,
           :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree,
           :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
           :reduce_search_result_with_parameter ],
-        :re_artifact_properties => [:edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue,
+        :re_artifact_properties=> [:new, :create, :update, :edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue,
                                     :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue,
                                     :rate_artifact],
-        :re_goal => [:edit, :new] ,
+        :re_goal => [:create, :update, :edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
         :re_subtask => [:edit, :new],
         :re_section => [:edit, :new],

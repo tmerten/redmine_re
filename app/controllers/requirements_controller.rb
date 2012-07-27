@@ -44,7 +44,7 @@ class RequirementsController < RedmineReController
     result = {}
     result['status'] = 1
     result['insert_pos'] = position.to_s
-    result['sibling'] = sibling.position.to_s + ' ' + sibling.name.to_s unless sibling.nil? || sibling.position.nil?
+    result['sibling'] = position.to_s + ' ' + sibling.name.to_s unless sibling.nil?
 
     render :json => result
   end
@@ -68,10 +68,9 @@ class RequirementsController < RedmineReController
     # whenever you render the tree the rendering function will ask the
     # session for the nodes that are "opened" to render the children
     node_id = params[:id].to_i
-    ret = ''
     case params[:open]
       when 'data'
-        ret = nil
+        ret = ''
         if node_id.eql? -1
           re_artifact_properties = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
           ret = create_tree(re_artifact_properties, 1)

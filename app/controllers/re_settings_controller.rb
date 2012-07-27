@@ -65,7 +65,6 @@ class ReSettingsController < RedmineReController
     @re_settings = {}
     @re_settings["visualization_size"] = ReSetting.get_plain("visualization_size", @project.id)
     @re_settings["visualization_size"] ||= 800
-
   end
 
   def configure_fields
@@ -191,6 +190,5 @@ private
 
     flash.now[:notice] = t(:re_configs_saved)
   end
-
 
 end

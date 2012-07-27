@@ -1,150 +1,153 @@
-<div id='detail_view' class='detail_view'>
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'jquery-1.7.2.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery-ui-1.8.21.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.layout-rc30.51.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+  <%= stylesheet_link_tag 'ajaxful_rating.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
 
+<% javascript_tag do %>
+
+<% end %>
+
+<div id="infobar" class="ui-layout-west ui-layout-content">
+  <%= render "requirements/treebar" %>
+</div>
+
+<div id='detail_view' class='ui-layout-center'>
   <%= render 're_artifact_properties/action_menu', {:artifact => @artifact} %>
 
-  <% if @artifact.new_record? %>
-    <h2><%= t(:re_new) + ' ' + t(:re_artifact) + ' ' + t(:re_of_type) + ' ' + ( rendered_artifact_type(params[:controller]) ) %></h2>
-  <% else %>
-    <h2><%= t(:re_edit) + ' ' + t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + @artifact.name + ' (' + rendered_artifact_type(params[:controller]) + ')' unless @artifact.nil? %></h2>
-  <% end %>
+    <h2><%= t(:re_edit) + ' ' + t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + @artifact.name + ' (' + rendered_artifact_type(@artifact_type) + ')' unless @artifact.nil? %></h2>
 
   <%= errors_and_flash params[:controller] %>
 
   <ul class="tabs">
-  	<li><a href="#"><%= t(:main_tab) %></a></li>
-  	<!--<li><a href="#">Building blocks</a></li>-->
-  	<% if params.has_key? :id %><li><a href="#"><%= t(:relations) %></a></li><% end %>
+    <li><a href="#"><%= t(:main_tab) %></a></li>
+    <!--<li><a href="#">Building blocks</a></li>-->
+    <% if params.has_key? :id %><li><a href="#"><%= t(:relations) %></a></li><% end %>
   </ul>
 
   <div class="panes">
-  	<div class="box">
-        <% form_for :artifact, :update => :detail_view, :url => {:action => "edit"}, :html => {:multipart => true } do |f| %>
-	    <%= hidden_field_tag :project_id, @project.id %>
-      <%= hidden_field_tag(:id, @artifact.id) unless @artifact.id.nil? %>
-	    <fieldset>
-	      <legend><%= t(:re_common_attributes) %></legend>
+    <div class="box">
+      <% form_for @re_artifact_properties do |f| %>
+      <%= hidden_field_tag(:id, @re_artifact_properties.id) %>
+      <fieldset>
+        <legend><%= t(:re_common_attributes) %></legend>
 
-	      <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
-	        <%= hidden_field_tag :sibling_id, @sibling.nil? ? '' : @sibling.id %>
-	        <%= hidden_field_tag :parent_artifact_id, @parent.nil? ? '' : @parent.id %>
-
-	        <p>
+        <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
+          <p>
           <%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name, :required => true %>
-	        </p>
-	        <%= javascript_tag "Form.Element.focus('artifact_name');" %>
-	        
-	        <p>
-	          <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact(@project, @artifact_properties) %>
-	        </p>
-	        <%
-	           re_users = []
-	           re_users << User.current
-	           re_users.concat User.all.sort_by { |u| u.lastname }
-	           re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
-	           re_users.uniq!
-	        %>
-	        <p>
+          </p>
+          <%= javascript_tag "Form.Element.focus('artifact_name');" %>
+
+          <p>
+            <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact(@project, @re_artifact_properties) %>
+          </p>
+          <%
+             re_users = []
+             re_users << User.current
+             re_users.concat User.all.sort_by { |u| u.lastname }
+             re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
+             re_users.uniq!
+          %>
+          <p>
           <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
           </p>
-          <% unless @artifact.new_record? %>
             <p>
-            <%= f.label :created_by, t(:re_created_by) %> <%= @artifact.author.name %> <%= t(:re_at) %> <%= @artifact.created_at.strftime('%c') %><br/>
-            <%= f.label :last_changed_by, t(:re_changed_by) %> <%= @artifact.user.name %> <%= t(:re_at) %> <%= @artifact.updated_at.strftime('%c') %>
+            <%= f.label :created_by, t(:re_created_by) %> <%= @re_artifact_properties.author.name %> <%= t(:re_at) %> <%= @re_artifact_properties.created_at.strftime('%c') %><br/>
+            <%= f.label :last_changed_by, t(:re_changed_by) %> <%= @re_artifact_properties.user.name %> <%= t(:re_at) %> <%= @re_artifact_properties.updated_at.strftime('%c') %>
             </p>
+        </div>
+
+        <div class="splitcontentright">
+          <b><%= t(:re_description_fieldset) %></b>
+              <div class="contextual">
+                <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', 'artifact_description'); return false;"><%= l(:re_update_description) %></a>
+              </div>
+              <%= textilizable(@re_artifact_properties, :description, :only_path => false) %>
+              <br/>
+          <div id='update-description' <%= 'style="display:none;"' %>>
+            <%= f.text_area :description,
+                            :cols => 60,
+                            :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
+                            :accesskey => accesskey(:edit),
+                            :class => 'wiki-edit' %>
+          <%= wikitoolbar_for 'artifact_description' %>
+          </div>
+        </div>
+      </fieldset>
+
+      <br/>
+
+      <fieldset>
+        <legend><%= t(:re_associated_issues) %></legend>
+
+
+        <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
+          <p>
+            <label><%= t(:add_issue_to_requirement) %></label>
+            <%= text_field_tag :issue, '', {:size => 20, :class => 'autocomplete', :id => 'issue_autocomplete'} %>
+          </p>
+            <%= link_to image_tag('add.png')+' create related Issue', :controller=> 'issues', :action=>'new', :project_id => @project.identifier,
+              :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :displayid => @re_artifact_properties.id, :associationid => @re_artifact_properties.artifact_id unless @re_artifact_properties.id.blank?%>
+
+
+          <div id="issue_candidates" class="autocomplete"></div>
+          <% javascript_tag do %>
+              new Ajax.Autocompleter('issue_autocomplete',
+              'issue_candidates',
+              '<%= url_for :project_id => @project.identifier, :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
+              {
+              paramName: 'issue_subject',
+              parameters:
+              'project_id=<%= @project.id %><%= '&id=' + @re_artifact_properties_id.to_s unless @re_artifact_properties_id.blank? %>',
+              minChars: 1,
+              frequency: 0.5,
+              afterUpdateElement : getIssueId});
+
+              function getIssueId(text, li){
+
+                  jQuery('#added_issues').append(li.innerHTML + ', ');
+                  jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
+                  document.getElementById('issue_autocomplete').value ="";
+              }
+
+            <% end %>
+
+      </div>
+
+      <div class='splitcontentright'>
+          <% unless @issues.nil? %>
+
+              <%= @issues.collect { |issue|
+                  (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s+
+                  (link_to image_tag('delete.png'), :controller => 're_artifact_properties', :action => 'remove_issue_from_artifact', :issueid => issue.id, :project_id=>@project.id, :id => @re_artifact_properties.id) }.to_sentence %>
           <% end %>
-	      </div>
+        <div id='added_issues'></div>
+      </div>
 
-	      <div class="splitcontentright">
-	      	<b><%= t(:re_description_fieldset) %></b>
-		      <% unless @artifact.new_record? %>
-		          <div class="contextual">
-		            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', 'artifact_description'); return false;"><%= l(:re_update_description) %></a>
-		          </div>
-		          <%= textilizable(@artifact, :description, :only_path => false) %>
-		          <br/>
-		      <% end %>
-		      <div id='update-description' <%= 'style="display:none;"' unless @artifact.id.nil? %>>
-		        <%= f.text_area :description,
-		                        :cols => 60,
-		                        :rows => (@artifact.description.blank? ? 10 : [[10, @artifact.description.length / 50].max, 100].min),
-		                        :accesskey => accesskey(:edit),
-		                        :class => 'wiki-edit' %>
-		        <%= wikitoolbar_for 'artifact_description' %>
-		      </div>
-	      </div>
-	    </fieldset>
 
-	    <br/>
-	  
-	    <fieldset>
-	      <legend><%= t(:re_associated_issues) %></legend>
-	      
-	      
-	      <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
-		      <p>
-		      	<label><%= t(:add_issue_to_requirement) %></label>
-		      	<%= text_field_tag :issue, '', {:size => 20, :class => 'autocomplete', :id => 'issue_autocomplete'} %>
-		      </p>
-		      	<%= link_to image_tag('add.png')+' create related Issue', :controller=> 'Issues', :action=>'new', :project_id => @project.id,
-		          :artifacttype => @artifact.artifact_type, :artifactname => @artifact.name, :displayid => @artifact.id, :associationid => @artifact.artifact_id unless @artifact.id.blank?%>
-	      
-		  
-			    <div id="issue_candidates" class="autocomplete"></div>
-			    <% javascript_tag do %>
-			        new Ajax.Autocompleter('issue_autocomplete',
-			        'issue_candidates',
-			        '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
-			        {
-			        paramName: 'issue_subject',
-			        parameters:
-			        'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
-			        minChars: 1,
-			        frequency: 0.5,
-			        afterUpdateElement : getIssueId});
-			  
-			        function getIssueId(text, li){
-			  
-			            jQuery('#added_issues').append(li.innerHTML + ', ');
-			            jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
-			            document.getElementById('issue_autocomplete').value ="";
-			        }
-			  
-			      <% end %>
-		  
-		  </div>
-	  
-		  <div class='splitcontentright'>
-		      <% unless @issues.nil? %>
-		          
-		          <%= @issues.collect { |issue|
-		              (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s+
-		              (link_to image_tag('delete.png'), :controller => 're_artifact_properties', :action => 'remove_issue_from_artifact', :issueid => issue.id, :project_id=>@project.id, :id => @artifact_properties.id) }.to_sentence %>
-		      <% end %>
-		  	<div id='added_issues'></div>
-		  </div>
-	  
-	      
-	    </fieldset>
+      </fieldset>
 
-	  
-	  <!-- Additional fields like subtasks for task which are described in an own partial --> 
-	  <%= render( params[:controller]+"/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{params[:controller]}/_formfields.rhtml") %>
 
-	  <!-- add building blocks if user obtains the rights needed for that -->
-	  <div id='re_bb_section'>
-	  	<%= add_bb_section(@artifact, @bb_hash, @bb_error_hash)%>
-	  </div>
+    <!-- Additional fields like subtasks for task which are described in an own partial -->
+    <%= render( "#{@artifact_type}/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{@artifact_type}/_formfields.rhtml") %>
+
+    <!-- add building blocks if user obtains the rights needed for that -->
+    <div id='re_bb_section'>
+      <%= render :partial => "re_building_block/bb_section", :locals => {:bb_hash => @bb_hash, :bb_error_hash => @bb_error_hash} %>
+    </div>
       <%# add_bb_configuration_link(params[:controller].camelcase)%>
 
 
-    <% if @artifact.id %>
         <div class="rating_comments">
             <div class="rating_comments_left">
                 <fieldset class="rating">
                     <legend><%= t(:rating) %></legend>
 
                     <div id="rating">
-                        <%= render :partial => '/re_artifact_properties/rating', :locals => {:artifact => @artifact.re_artifact_properties} %>
+                        <%= render :partial => '/re_artifact_properties/rating', :locals => {:artifact => @re_artifact_properties} %>
                     </div>
                 </fieldset>
             </div>
@@ -156,12 +159,12 @@
 
                     <%
                     if ( User.current.preference[:others].nil? or User.current.preference[:others][:comments_sorting]  == "asc" )
-                    	@artifact.comments.each do |comment| 
+                      @artifact.comments.each do |comment|
                     %>
                        <hr />
                        <p>
                           <% if User.current.allowed_to?(:administrate_requirements, @project) %>
-                            [<%= link_to 'X', :controller => @artifact.artifact_type.underscore, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
+                            [<%= link_to 'X', :controller => @artifact_type, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
                           <% end %>
 
                           <b><%= comment.created_on.to_datetime.to_s[0,10] %>
@@ -171,12 +174,12 @@
                     <% end %>
                     <%
                     elsif
-                    	@artifact.comments.reverse.each do |comment|
+                      @re_artifact_properties.comments.reverse.each do |comment|
                     %>
                        <hr />
                        <p>
                           <% if User.current.allowed_to?(:administrate_requirements, @project) %>
-                            [<%= link_to 'X', :controller => @artifact.artifact_type.underscore, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
+                            [<%= link_to 'X', :controller => @artifact_type, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
                           <% end %>
 
                           <b><%= comment.created_on.to_datetime.to_s[0,10] %>
@@ -189,29 +192,26 @@
             </div>
             <div class="rating_comments_clear"></div>
        </div>
-    <% end %>
 
-    <p>  
-		<%= submit_tag t(:re_save) %>
-			  &nbsp;
-		<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
-	  </p>
-		
-	<% end %><!-- form end tag -->
-	
-  	<div id="watchers">
-      <%= render :partial => 'watchers/watchers', :locals => {:watched => @artifact_properties} %>
+    <p>
+    <%= submit_tag t(:re_save) %>
+        &nbsp;
+    <%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
+    </p>
+
+  <% end %><!-- form end tag -->
+
+    <div id="watchers">
+      <%= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
     </div>
-	
-	
-  	</div> <!--end of tab one -->  
 
+    </div> <!--end of tab one -->
 
-  	<% if params.has_key? :id %>
-	    <div class="box">
-		  <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
-		</div><!-- end of tab two -->  
-	<% end %>
+    <% if params.has_key? :id %>
+      <div class="box">
+      <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
+    </div><!-- end of tab two -->
+  <% end %>
   </div>
 </div><!-- panes-->
 <% javascript_tag do %>

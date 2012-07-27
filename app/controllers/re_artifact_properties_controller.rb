@@ -1,34 +1,93 @@
+include WatchersHelper
+
 class ReArtifactPropertiesController < RedmineReController
   unloadable
   menu_item :re
 
   helper :watchers
-  include WatchersHelper
-  
-  def edit
-    redirect 'edit'
+
+  def show
+    render :text => "not implemented"
   end
 
-  def redirect action
-    @re_artifact_properties = ReArtifactProperties.find_by_id(params[:id])
+  def new
+    @re_artifact_properties = ReArtifactProperties.new
+    @re_artifact_properties.artifact_type = params[:artifact_type].camelcase
+    @artifact_type = params[:artifact_type]
 
-    if @re_artifact_properties.nil?
-      render :template => 'error', :status => 500, :id => params[:id]
-    else
-      redirect_id = @re_artifact_properties.artifact_id
-      redirect_controller = @re_artifact_properties.artifact_type.underscore
+    @re_artifact_properties.project = @project
 
-      logger.info("Redirecting from ReArtifactProperties (name=" + @re_artifact_properties.name + ", id="+ @re_artifact_properties.id.to_s +
-              ") to instance (id=" + redirect_id.to_s + " ,controller=" + redirect_controller.to_s) if logger
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
 
-      if redirect_controller.eql? 'project'
-        redirector  = { :controller => 'requirements', :action => 'index', :project_id => @project.id }
-      else
-        redirector = { :controller => redirect_controller, :action => action, :id => redirect_id, :project_id => @project_id }
-      end
-
-      redirect_to redirector
+    unless params[:parent_artifact_id].blank?
+      parent = ReArtifactProperties.find(params[:parent_artifact_id])
+      @parent_artifact_id = parent.id
+      @parent_relation_position = parent.child_relations.last.position + 1
     end
+
+    unless params[:sibling_artifact_id].blank?
+      sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
+      @parent_artifact_id = sibling.parent.id
+      @parent_relation_position = sibling.parent_relation.position + 1
+    end
+  end
+
+  def create
+    @re_artifact_properties = ReArtifactProperties.new
+    @re_artifact_properties.attributes = params[:re_artifact_properties]
+    @artifact_type = @re_artifact_properties.artifact_type
+
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+    @bb_error_hash = {}
+    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@re_artifact_properties, @bb_error_hash, @project.id)
+
+    @issues = @re_artifact_properties.issues
+
+    # attributes that cannot be set by the user
+    # @re_artifact_properties.project_id = @project.id
+    @re_artifact_properties.created_at = Time.now
+    @re_artifact_properties.updated_at = Time.now
+    @re_artifact_properties.created_by = User.current.id
+    @re_artifact_properties.updated_by = User.current.id
+
+    # relation related attributes
+    unless params[:parent_artifact_id].blank? || params[:parent_relation_position].blank?
+      @re_artifact_properties.parent = ReArtifactProperties.find(params[:parent_artifact_id])
+      logger.debug("ReArtifactProperties.create => parent_relation: #{@re_artifact_properties.parent_relation.inspect}") if logger
+      @parent_artifact_id = params[:parent_artifact_id]
+      @parent_relation_position = params[:parent_relation_position]
+    end
+
+    if @re_artifact_properties.save
+      @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
+      render :edit
+    else
+      logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
+      render :new
+    end
+  end
+
+  def edit
+    @re_artifact_properties = ReArtifactProperties.find(params[:id])
+    @artifact_type = @re_artifact_properties.artifact_type
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+  end
+
+  def update
+    @re_artifact_properties = ReArtifactProperties.find(params[:id])
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+    @bb_error_hash = {}
+    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@re_artifact_properties, @bb_error_hash, @project.id)
+
+    @issues = @re_artifact_properties.issues
+
+    @re_artifact_properties.attributes = params[:re_artifact_properties]
+    # attributes that cannot be set by the user
+    @re_artifact_properties.updated_at = Time.now
+    @re_artifact_properties.updated_by = User.current.id
+
+    @re_artifact_properties.save
+    render :edit
   end
 
   def delete
@@ -87,13 +146,12 @@ class ReArtifactPropertiesController < RedmineReController
     render :text => list
   end
 
-  #TODO Refactor: move method to a more reasonable Controller
   def remove_issue_from_artifact
     issue_to_delete = Issue.find(params[:issueid])
     artifact_type = self.controller_name
     artifact_properties = artifact_type.camelcase.constantize.find_by_id(params[:id])
     artifact_properties.issues.delete(issue_to_delete)
-    redirect_to(:back) 
+    redirect_to(:back)
   end
 
   def autocomplete_artifact
@@ -110,7 +168,6 @@ class ReArtifactPropertiesController < RedmineReController
     render :text => list
   end
 
-  #TODO Refactor: move method to a more reasonable Controller
   def remove_artifact_from_issue
     artifact_to_delete = ReArtifactProperties.find(params[:artifactid])
     issue = Issue.find(params[:issueid])
@@ -120,23 +177,23 @@ class ReArtifactPropertiesController < RedmineReController
 
   # Ajax call
   def autocomplete_parent
-    @artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?    
+    artifact = ReArtifactProperties.find(params[:id]) unless params[:id].blank?
 
     query = '%' + params[:parent_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
-    @parents = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
+    parents = ReArtifactProperties.find(:all, :conditions => ['name like ?', query ])
 
-    if @artifact
-      children = @artifact.gather_children
-      @parents.delete_if{ |p| children.include? p }
-      @parents.delete_if{ |p| p == @artifact } 
+    if artifact
+      children = artifact.gather_children
+      parents.delete_if{ |p| children.include? p }
+      parents.delete_if{ |p| p == artifact }
     end
-    
+
     list = '<ul>'
-    for parent in @parents
+    for parent in parents
       list << render_autocomplete_artifact_list_entry(parent)
     end
     list << '</ul>'
-    render :text => list   
+    render :text => list
   end
 
   def rate_artifact
@@ -149,7 +206,7 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   private
-  
+
   def gather_children(artifact)
     # recursively gathers all children for the given artifact
     #
@@ -161,6 +218,5 @@ class ReArtifactPropertiesController < RedmineReController
     end
     children
   end
-    
 
 end

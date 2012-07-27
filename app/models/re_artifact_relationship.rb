@@ -50,8 +50,10 @@ class ReArtifactRelationship < ActiveRecord::Base
   acts_as_list # see special scope condition below
 
   def scope_condition()
-    # each relation_type is a seperate list
-    "source_id = #{source_id} AND #{connection.quote_column_name("relation_type")} = #{quote_value(self.relation_type)}"
+    # define a seperate list for each source id and relation type
+    "#{connection.quote_column_name("source_id")} = #{quote_value(self.source_id)}
+     AND
+     #{connection.quote_column_name("relation_type")} = #{quote_value(self.relation_type)}"
   end
 
 end

@@ -1,10 +1,13 @@
 class ReArtifactProperties < ActiveRecord::Base
   unloadable
 
-  cattr_accessor :artifact_types
+  #attr_accessible :artifact_type
+
   ajaxful_rateable :stars => 10, :allow_update => true#, :dimensions => [:first]
-  has_many :realizations, :dependent => :destroy
+
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
+
+  has_many :realizations, :dependent => :destroy
   has_many :issues, :through => :realizations, :uniq => true
 
 
@@ -50,21 +53,51 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :re_bb_data_selections, :dependent => :delete_all
   has_many :re_bb_data_artifact_selections, :dependent => :delete_all
 
-  acts_as_event :title => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
-  :description => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
-  :datetime => :updated_at,
-  :url => Proc.new {|o| {:controller => 're_artifact_properties', :action => 'edit', :id => o.id}}
+  acts_as_event(
+    :title => Proc.new { |o|
+      "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."
+      },
+    :description => Proc.new {|o|
+        "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."
+      },
+    :datetime => :updated_at,
+    :url => Proc.new {|o|
+        { :controller => 're_artifact_properties', :action => 'edit', :id => o.id}
+      }
+  )
 
-  acts_as_activity_provider :type => 're_artifact_properties',
-  :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
-  :author_key => "#{ReArtifactProperties.table_name}.updated_by",
-  :find_options => {:include => [:project, :user] },
-  :permission => :edit_requirements
+  acts_as_activity_provider(
+    :type => 're_artifact_properties',
+    :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
+    :author_key => "#{ReArtifactProperties.table_name}.updated_by",
+    :find_options => {:include => [:project, :user] },
+    :permission => :edit_requirements
+  )
 
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'created_by'
   belongs_to :user, :foreign_key => 'updated_by'
+
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
+
+  # attributes= and artifact_attributes are overwritten to instantiate
+  # the correct artifact_type and use nested attributes for re_artifact_properties
+  accepts_nested_attributes_for :artifact
+
+  def attributes=(attributes = {})
+    unless attributes[:artifact_type].blank?
+      self.artifact_type = attributes[:artifact_type]
+    end
+    super
+  end
+
+  def artifact_attributes=(attributes)
+    artifact = self.artifact_type.constantize.find_or_initilize_by_id(self.artifact_id)
+    artifact.attributes = attributes
+    self.artifact = artifact
+  end
+
+
 
   named_scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
   named_scope :of_project, lambda { |project|
@@ -80,6 +113,7 @@ class ReArtifactProperties < ActiveRecord::Base
   validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
   validates_presence_of :parent,     :message => l(:re_artifact_properties_validates_presence_of_parent), :unless => Proc.new { |a| a.artifact_type == "Project" }
   validates_associated :parent_relation
+  validates_presence_of :artifact_type
 
   validates_length_of :name, :minimum => 3, :message => l(:re_artifact_properties_not_enought_chars)
   validates_length_of :name, :maximum =>50, :message => l(:re_artifact_properties_to_many_chars)
@@ -131,17 +165,4 @@ class ReArtifactProperties < ActiveRecord::Base
     children
   end
 
-  private
-
-  # checks if o is of type re_artifact_properties or acts_as_artifact
-  # returns o or o's re_artifact_properties
-  def instance_checker(o)
-    if not o.instance_of? ReArtifactProperties
-      if not o.respond_to? :re_artifact_properties
-        raise ArgumentError, "You can relate ReArtifactProperties to other ReArtifactProperties or a class that acts_as_artifact, only."
-      end
-      o = o.re_artifact_properties
-    end
-    o
-  end
 end

@@ -8,11 +8,29 @@ a:active {
   outline: none;
 }
 
-.detail_view {
+#re-wrapper {
+	width: 100%;
+	height: 584px; /* #content is 600 with padding 6px, 10px, 10px, 10px */
+}
+
+#re-wrapper div {
+	overflow: auto;
+}
+
+.re-content {
+  padding: 6px, 10px, 10px, 10px;
+}
+
+.vsplitbar {
+	width: 3px;
+	background: #eee;
+}
+
+/*.detail_view {
     cursor: auto;
     margin-left: 21%;
     width: 79%;
-}
+}*/
 
 /**
  * 	Left- and RightPane are used by splitcontent
@@ -49,46 +67,6 @@ a:active {
     width: 20%;
 }
 
-/* accordion header */
-#treebar h2 {
-	background:#dddddd;
-	margin:0;
-	padding:4px 10px;
-  font-size: 12px;
-	font-weight:bold;
-	cursor:pointer;		
-}
-
-/* accordion header */
-#treebar h2:hover {
-  text-decoration:underline;
-	background:#dddddd;
-}
-
-/* currently active header */
-#treebar h2.current {
-	cursor:default;
-  text-decoration:none;
-}
-
-/* accordion pane */
-#treebar .pane {
-    border-bottom: 1px solid #DDDDDD;
-    border-left: 10px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
-    color: #FFFFFF;
-    display: none;
-    overflow-x: scroll;
-    padding: 5px;
-}
-
-#treebar .pane h2 {
-	font-weight:bold;
-	margin:0 0 -5px 0;
-	font-size:16px;
-	color:#999;
-}
-
 #treebar ul.navigation {
   list-style-type:none;
   padding: 0;
@@ -96,7 +74,7 @@ a:active {
 }
 
 #treebar ul.navigation li {
-  padding-bottom:4px;
+  padding-bottom: 4px;
 }
 
 .recopyright {
@@ -448,50 +426,6 @@ div.bullet_add {
     height: 16px;
     position: relative;
     width: 16px;
-}
-/*
-Back to top button 
-*/
-#back-top {
-	position: fixed;
-	bottom: 20px;
-	margin-left: 10px;
-	width: 100px;
-	display: block;
-	margin-bottom: 7px;
-    background-color: #dddddd;
-    
-   /* rounded corners */
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-
-	/* background color transition */
-	-webkit-transition: 1s;
-	-moz-transition: 1s;
-	transition: 1s;
-
-}
-
-
-#back-top a {
-	display: block;
-	display: none;
-	text-align: center;
-	font: 11px/100%;
-	text-transform: uppercase;
-	text-decoration: none;
-	color: #999999;
-  /* background color transition */
-	-webkit-transition: 1s;
-	-moz-transition: 1s;
-	transition: 1s;
-
-}
-
-
-#back-top a:hover {
-  text-decoration:underline;
 }
 
 /* root element for tabs  */
