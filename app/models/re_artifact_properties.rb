@@ -99,8 +99,8 @@ class ReArtifactProperties < ActiveRecord::Base
 
 
 
-  named_scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
-  named_scope :of_project, lambda { |project|
+  scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
+  scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
     { :conditions => { :project_id => project_id } }
   }

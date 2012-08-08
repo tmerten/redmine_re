@@ -1,10 +1,12 @@
 require 'redmine'
 require 'redmine_re/hooks'
-require 'dispatcher'
 require 'rubygems'
 #require 're_artifact_properties_observer' #Ist not ready implemented yet (dominic)
+require_dependency '../app/models/re_artifact_relationship'
+require_dependency '../app/models/re_artifact_properties'
 
-Dispatcher.to_prepare do
+#Rails.configuration.to_prepare do
+ActionDispatch::Callbacks.to_prepare do 
   # redmine_re patches
   require_dependency 'issue_patch'
   require_dependency 'issue_controller_patch'
@@ -88,9 +90,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 
   #Observers
   #config.active_record.observers = :re_artifact_properties_observer
-  config.active_record.observers = :re_artifact_properties_observer
+  #active_record.observers = :re_artifact_properties_observer (nett to be fixed for redmine_2_0
 
-  config.gem "ajaxful_rating_jquery"
+  gem "ajaxful_rating_jquery"
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
 
   settings :default => {

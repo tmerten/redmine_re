@@ -23,7 +23,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   validates_presence_of :source_id
   validates_inclusion_of :relation_type, :in => RELATION_TYPES.values
 
-  named_scope :of_project, lambda { |project|
+  scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
     first_join = "INNER JOIN #{ReArtifactProperties.table_name} AS source_artifacts ON source_artifacts.id = #{self.table_name}.source_id"
     second_join = "INNER JOIN #{ReArtifactProperties.table_name} AS sink_artifacts ON sink_artifacts.id = #{self.table_name}.sink_id"
