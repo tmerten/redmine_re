@@ -124,7 +124,7 @@ private
     stored_settings = ReSetting.get_serialized("artifact_order", project_id)
     configured_artifact_types.concat(stored_settings) if stored_settings
 
-    all_artifact_types = Dir["#{RAILS_ROOT}/vendor/plugins/redmine_re/app/models/re_*.rb"].map do |f|
+    all_artifact_types = Dir["#{Rails.root}/vendor/plugins/redmine_re/app/models/re_*.rb"].map do |f|
       fd = File.open(f, 'r')
       File.basename(f, '.rb') if fd.read.include? "acts_as_re_artifact"
     end
