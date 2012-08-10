@@ -7,7 +7,7 @@ class ReSettingsController < RedmineReController
     initialize_relation_order(@project.id)
 
     @project_artifact = nil
-    @project_artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", @project.id)
+    @project_artifact = ReArtifactProperties.project_artifact(@project.id)
     if @project_artifact.nil? # aka re plugin definetely unconfigured for this project
        @project_artifact = ReArtifactProperties.new 
        @project_artifact.project = @project
@@ -44,7 +44,6 @@ class ReSettingsController < RedmineReController
         ReSetting.set_serialized(artifact_type, @project.id, configured_artifact)
       end
       @re_artifact_configs[artifact_type] = configured_artifact
-      initialize_tree_data
     end
 
     @re_relation_configs = {}
@@ -124,7 +123,7 @@ private
     stored_settings = ReSetting.get_serialized("artifact_order", project_id)
     configured_artifact_types.concat(stored_settings) if stored_settings
 
-    all_artifact_types = Dir["#{Rails.root}/vendor/plugins/redmine_re/app/models/re_*.rb"].map do |f|
+    all_artifact_types = Dir["#{Rails.root}/plugins/redmine_re/app/models/re_*.rb"].map do |f|
       fd = File.open(f, 'r')
       File.basename(f, '.rb') if fd.read.include? "acts_as_re_artifact"
     end
@@ -140,6 +139,7 @@ private
 
     ReSetting.set_serialized("artifact_order", project_id, configured_artifact_types)
     @re_artifact_order = configured_artifact_types
+    logger.debug "#### RELATION ORDER FROM FILESYSTEM #{@re_artifact_order}"
   end
 
   def initialize_relation_order(project_id)

@@ -3,6 +3,8 @@ class ReArtifactProperties < ActiveRecord::Base
 
   #attr_accessible :artifact_type
 
+  scope :project_artifact, lambda { |project_id| where(:artifact_type => "Project", :project_id => project_id) } 
+
   ajaxful_rateable :stars => 10, :allow_update => true#, :dimensions => [:first]
 
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
