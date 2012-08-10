@@ -22,7 +22,11 @@ class ReArtifactPropertiesController < RedmineReController
     unless params[:parent_artifact_id].blank?
       parent = ReArtifactProperties.find(params[:parent_artifact_id])
       @parent_artifact_id = parent.id
-      @parent_relation_position = parent.child_relations.last.position + 1
+      begin
+        @parent_relation_position = parent.child_relations.last.position + 1
+      rescue NoMethodError # child_relations.last = nil -> creating the first artifact
+        @parent_relation_position = 1
+      end
     end
 
     unless params[:sibling_artifact_id].blank?
