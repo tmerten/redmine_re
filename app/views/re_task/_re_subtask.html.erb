@@ -1,4 +1,4 @@
-<% fields_for "artifact[re_subtasks_attributes][]", re_subtask do |st_form| %>
+<%= fields_for "artifact[re_subtasks_attributes][]", re_subtask do |st_form| %>
 
   <% type_class = "subtask" %>
   <% type_class = "variant" if re_subtask.sub_type == 1 %>

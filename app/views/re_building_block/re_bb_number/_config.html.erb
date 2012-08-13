@@ -4,7 +4,7 @@
 
   <%= errors_and_flash :re_building_block %>
 
-  <% form_for :re_building_block, :update => :detail_view, :url => {:action => "edit"}, :html =>{:id => 're_building_block'} do |f| %>
+  <%= form_for :re_building_block, :update => :detail_view, :url => {:action => "edit"}, :html =>{:id => 're_building_block'} do |f| %>
       <%= hidden_field_tag :project_id, @project.id %>
       <%= hidden_field_tag :artifact_type, @artifact_type %>
     <%= hidden_field_tag :type, 'ReBbNumber' %>

@@ -45,7 +45,7 @@
       </p>
       
 	  <div id="secondary_user_candidates" class="autocomplete"></div>
-	    <% javascript_tag do %>
+	    <%= javascript_tag do %>
 	        new Ajax.Autocompleter('secondary_actor_autocomplete',
 	        'secondary_user_candidates',
 	        '<%= url_for :controller => 're_use_case', :action => 'autocomplete_sink' %>',
@@ -138,7 +138,7 @@
   </table>
 </fieldset>
 
-<% javascript_tag do %>
+<%= javascript_tag do %>
   setResizeableTextAreas();
   
   var marker = 0;

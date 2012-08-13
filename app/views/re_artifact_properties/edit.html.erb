@@ -7,10 +7,6 @@
   <%= stylesheet_link_tag 'ajaxful_rating.css', :plugin => "redmine_re", :media => 'all' %>
 <% end %>
 
-<% javascript_tag do %>
-
-<% end %>
-
 <div id="infobar" class="ui-layout-west ui-layout-content">
   <%= render "requirements/treebar" %>
 </div>
@@ -30,7 +26,7 @@
 
   <div class="panes">
     <div class="box">
-      <% form_for @re_artifact_properties do |f| %>
+      <%= form_for @re_artifact_properties do |f| %>
       <%= hidden_field_tag(:id, @re_artifact_properties.id) %>
       <fieldset>
         <legend><%= t(:re_common_attributes) %></legend>
@@ -94,7 +90,7 @@
 
 
           <div id="issue_candidates" class="autocomplete"></div>
-          <% javascript_tag do %>
+          <%= javascript_tag do %>
               new Ajax.Autocompleter('issue_autocomplete',
               'issue_candidates',
               '<%= url_for :project_id => @project.identifier, :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
@@ -214,7 +210,7 @@
   <% end %>
   </div>
 </div><!-- panes-->
-<% javascript_tag do %>
+<%= javascript_tag do %>
   jQuery(function() {
     // setup ul.tabs to work as tabs for each div directly under div.panes
     jQuery("ul.tabs").tabs("div.panes > div");

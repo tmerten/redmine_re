@@ -1,6 +1,6 @@
 <% content_for :header_tags do %>
   <%= javascript_include_tag 'query_form', :plugin => 'redmine_re' %>
-  <% javascript_tag do %>
+  <%= javascript_tag do %>
       (function($) {
           $().ready(function() {
               // Auto-assign collapse fieldset behavior
@@ -47,7 +47,7 @@
     <% end %>
 <% end %>
 
-<% form_for @query, :url => re_query_form_url(@query, mode), :html => { :class => 'filters' } do |f| %>
+<%= form_for @query, :url => re_query_form_url(@query, mode), :html => { :class => 'filters' } do |f| %>
   <%= f.error_messages %>
 
   <% if mode == :persist %>

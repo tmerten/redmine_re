@@ -1,6 +1,6 @@
 <% values = @query.order || {} %>
 <div class="field order">
-  <% form.fields_for(:order, values) do |rel| %>
+  <%= form.fields_for(:order, values) do |rel| %>
     <span class="column label">
       <%= rel.label :column, 'Order' %>
     </span>

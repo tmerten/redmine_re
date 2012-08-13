@@ -14,7 +14,7 @@
         </div>
 
         <div class="splitcontentright " >
-          <% javascript_tag  do %>
+          <%= javascript_tag  do %>
           Event.observe(window, 'load', function() {
             var <%=legend -%>prioSlider = new Control.Slider('<%= legend -%>_numberfield_handle' , '<%= legend -%>_numberfield_track',
             {

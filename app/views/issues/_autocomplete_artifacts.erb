@@ -8,7 +8,7 @@
     </p>
 
     <div id="artifact_candidates" class="autocomplete"></div>
-      <% javascript_tag do %>
+      <%= javascript_tag do %>
       new Ajax.Autocompleter('artifact_autocomplete',
       'artifact_candidates',
       '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_artifact' %>',
@@ -41,7 +41,7 @@
 
 <% unless @insertvalues.blank?  %>
     <% unless @insertvalues["displayid"].blank? && @insertvalues["artifacttype"].blank? && @insertvalues["artifactname"].blank? && @insertvalues["associationid"].blank? %>
-        <% javascript_tag do %>
+        <%= javascript_tag do %>
         $('issue_subject').value= "<%= t(:implementation_of)+" "+@insertvalues["artifacttype"] + " " +@insertvalues["artifactname"]%>";
         $('added_artifacts').insert('<%=@insertvalues["artifactname"] + " (" + @insertvalues["displayid"] +"), "%>');
         $('added_artifacts').insert('<input id="artifact_id" type="hidden" name="artifact_id[]" value="<%= @insertvalues["associationid"]%>"  > ');

@@ -1,6 +1,6 @@
-<% content_for :header_tags do %>
+<%= content_for :header_tags do %>
   <%= javascript_include_tag 'jquery.jstree/jquery.jstree.js', :plugin => 'redmine_re' %>
-  <% javascript_tag do %>
+  <%= javascript_tag do %>
     var re_config = {
       "base_url" : "<%= url_for :controller => 'welcome' %>",
       "project_id" : "<%= @project.identifier %>",
@@ -40,7 +40,7 @@
   </fieldset>
 </div>
 
-<% javascript_tag do %>
+<%= javascript_tag do %>
   function createInsideArtifactSubmenu() {
     var submenu_items = {};
     for (artifact_type in re_config["artifact_settings"]) {
@@ -219,67 +219,67 @@ var tree = jQuery("#tree")
         },
         "re_goal" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/world.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/world.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_task" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/report_user.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/report_user.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_subtask" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/report.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/report.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_vision" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/lightbulb.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/lightbulb.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_attachment" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/attach.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/attach.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_workarea" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/bricks.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/bricks.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_user_profile" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/user.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/user.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_section" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/text_padding_top.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/text_padding_top.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_requirement" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/pencil.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/pencil.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_scenario" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/newspaper.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/newspaper.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_processword" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/cog.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/cog.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_rationale" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/anchor.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/anchor.png', :plugin => 'redmine_re') %>"
           }
         },
         "re_use_case" : {
           "icon" : { 
-            "image" :"<%= image_path 'icons/page_user.png', :plugin => 'redmine_re' %>"
+            "image" :"<%= plugin_asset_link( 'images/icons/page_user.png', :plugin => 'redmine_re') %>"
           }
         },
         "project" : {

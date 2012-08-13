@@ -4,7 +4,7 @@
   <h2><%= t(:re_artifact) + ' #' + @re_processword.artifact_id.to_s + ' - ' + l(:re_processword) %></h2>
   <%= render 're_artifact_properties/action_menu', {:artifact => @re_processword} %>
   <%= errors_and_flash :re_processword %>
-  <% form_for :re_processword, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+  <%= form_for :re_processword, :update => :detail_view, :url => {:action => "edit"} do |f| %>
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_processword.re_artifact_properties} %>
 

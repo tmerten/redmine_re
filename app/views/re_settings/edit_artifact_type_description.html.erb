@@ -6,7 +6,7 @@
 <% end %>
 <br/>
 
-<% form_tag url_for(:action => "edit_artifact_type_description", :project_id => @project.id, :artifact_type => @artifact_type) do  %>
+<%= form_tag url_for(:action => "edit_artifact_type_description", :project_id => @project.id, :artifact_type => @artifact_type) do  %>
     
 	<fieldset>
       <legend><%= t(:re_artifact_type_description) %></legend>

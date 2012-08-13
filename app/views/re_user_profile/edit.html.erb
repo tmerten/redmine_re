@@ -6,7 +6,7 @@
 <h2><%= t(:re_artifact) + ' #' + @re_user_profile.artifact_id.to_s + ' - ' + t(:re_user_profile) unless @re_user_profile.nil? %></h2>
 
 <%= errors_and_flash :re_user_profile %>
-<% form_for :re_user_profile, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+<%= form_for :re_user_profile, :update => :detail_view, :url => {:action => "edit"} do |f| %>
 
     <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_user_profile.re_artifact_properties} %>
 	
@@ -22,7 +22,7 @@
 
 <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
 
-<br>
+<br />
   <%= add_bb_configuration_link(:ReUserProfile)%>
   
 </div>

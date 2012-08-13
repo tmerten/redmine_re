@@ -9,7 +9,7 @@
 <h2><%= l(:re_relationship_visualization)%></h2>
 
   <div id="visualization_filters">
-      <% form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
+      <%= form_remote_tag  :url => {:action => :build_json_according_to_user_choice,
                                    :project_id => params[:project_id]},
                           :complete => "init(request.responseJSON, request.request.parameters.visualization_type);" do %>
     <table>

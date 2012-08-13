@@ -1,7 +1,7 @@
 <fieldset id="treefilter" class="collapsible">
   <legend onclick="toggleFieldset(this);"><%= l(:re_treefilter) %></legend>
   <div>
-    <% form_tag re_queries_path(@project.id), :method => :get do %>
+    <%= form_tag re_queries_path(@project.id), :method => :get do %>
       <%= hidden_field_tag 'source[name_mode]', 'contains' %>
       <div id="sidebar_filter">
         <div class="inputs">

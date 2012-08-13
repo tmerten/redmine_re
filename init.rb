@@ -21,6 +21,14 @@ ActionDispatch::Callbacks.to_prepare do
   require_dependency 'ajaxful_rating_patch'
 end
 
+require_dependency 'query_patch'
+require_dependency 'user_patch'
+require_dependency 'role_patch'
+require_dependency 'project_patch'
+require_dependency 'projects_controller_patch'
+# gems
+require_dependency 'ajaxful_rating_patch'
+
 Redmine::Plugin.register :redmine_re do
   name 'Redmine Requirements Engineering Plugin'
   author 'Bonn-Rhine-Sieg University of Applied Sciences (thorsten.merten@h-brs.de)'
