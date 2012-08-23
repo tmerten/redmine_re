@@ -4,7 +4,8 @@ require 'rubygems'
 #require 're_artifact_properties_observer' #Ist not ready implemented yet (dominic)
 require_dependency '../app/models/re_artifact_relationship'
 require_dependency '../app/models/re_artifact_properties'
-
+require_dependency '../app/helpers/re_application_helper'
+  
 #Rails.configuration.to_prepare do
 ActionDispatch::Callbacks.to_prepare do 
   # redmine_re patches
@@ -28,6 +29,10 @@ require_dependency 'project_patch'
 require_dependency 'projects_controller_patch'
 # gems
 require_dependency 'ajaxful_rating_patch'
+
+ActionView::Base.class_eval do
+  include ReApplicationHelper
+end 
 
 Redmine::Plugin.register :redmine_re do
   name 'Redmine Requirements Engineering Plugin'

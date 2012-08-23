@@ -14,6 +14,7 @@ class RedmineReController < ApplicationController
   include ActionView::Helpers::TextHelper
 
   helper :watchers
+  helper :application
   include WatchersHelper
 
   before_filter :initialize_tree_data, :except => :configure
