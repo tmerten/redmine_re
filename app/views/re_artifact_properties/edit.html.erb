@@ -155,7 +155,7 @@
 
                     <%
                     if ( User.current.preference[:others].nil? or User.current.preference[:others][:comments_sorting]  == "asc" )
-                      @artifact.comments.each do |comment|
+                      @re_artifact_properties.comments.each do |comment|
                     %>
                        <hr />
                        <p>
