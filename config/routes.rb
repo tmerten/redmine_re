@@ -18,7 +18,7 @@ RedmineApp::Application.routes.draw do
   resources :re_artifact_properties, :except => [:show, :new, :index]
   match 'artifact/:id/rate/:stars' => 're_artifact_properties#rate_artifact'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type' => 're_artifact_properties#new'
-  match 'projects/:project_id/requirements/artifact/new/:artifact_type/inside_of/:parent_artifact_id' => 're_artifact_properties#new'
+  match 'projects/:project_id/requirements/artifact/new/:artifact_type/inside_of/:parent_artifact_id', :to => 're_artifact_properties#new', :as => 're_artifact_properti'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type/below_of/:sibling_artifact_id' => 're_artifact_properties#new'
   resources :re_queries do
     collection do

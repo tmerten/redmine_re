@@ -128,7 +128,7 @@
 
 
     <!-- Additional fields like subtasks for task which are described in an own partial -->
-    <%= render( "#{@artifact_type}/formfields", {:f => f} ) if File.exists?("#{RAILS_ROOT}/vendor/plugins/redmine_re/app/views/#{@artifact_type}/_formfields.rhtml") %>
+    <%= render( "#{@artifact_type}/formfields", {:f => f} ) if File.exists?("#{Rails.root}/vendor/plugins/redmine_re/app/views/#{@artifact_type}/_formfields.rhtml") %>
 
     <!-- add building blocks if user obtains the rights needed for that -->
     <div id='re_bb_section'>
