@@ -4,8 +4,8 @@
     var re_config = {
       "base_url" : "<%= url_for :controller => 'welcome' %>",
       "project_id" : "<%= @project.identifier %>",
-      "artifact_settings" : <%= @re_artifact_settings.to_json %>,
-      "artifact_types" : <%= @re_artifact_order.to_json %>
+      "artifact_settings" : <%= @re_artifact_settings.to_json.html_safe %>,
+      "artifact_types" : <%= @re_artifact_order.to_json.html_safe %>
     };
   <% end %>
 <% end %>
@@ -41,45 +41,6 @@
 </div>
 
 <%= javascript_tag do %>
-  function createInsideArtifactSubmenu() {
-    var submenu_items = {};
-    for (artifact_type in re_config["artifact_settings"]) {
-      var artifact_setting = re_config["artifact_settings"][artifact_type];
-      submenu_items[artifact_type] = {
-        "label" : artifact_setting["alias"],
-        "artifact_type" : artifact_setting["artifact_type"],
-        "action" : function (node) {
-          var reference_id = node[0].id.gsub('node_','');
-          window.location.pathname = re_config['base_url'].substr(1) + '/projects/' + re_config['project_id'] + '/requirements/artifact/new/' + node[0].rel + '/inside_of/' + reference_id;
-        },
-        "icon" : artifact_type
-      }
-    }
-    return submenu_items;
-  };
-
-  function createBelowArtifactSubmenu() {
-    var submenu_items = {};
-    for (artifact_type in re_config["artifact_settings"]) {
-      var artifact_setting = null
-
-      artifact_setting = re_config["artifact_settings"][artifact_type];
-      link = re_config['base_url'] + '/projects/' + re_config['project_id'] + '/requirements/artifact/new/' + artifact_type + '/below_of/';
-      submenu_items[artifact_type] = {
-        "label" : artifact_setting["alias"],
-        "artifact_type" : artifact_setting["artifact_type"],
-        "action" : function (node) {
-          var reference_id = node[0].id.gsub('node_','');
-          var json_data = this.data.json_data.toString()
-          var artifact_type = null; //json_data.valueOf("artifact_type") 
-          window.location.pathname = re_config['base_url'].substr(1) + '/projects/' + re_config['project_id'] + '/requirements/artifact/new/' + artifact_type + '/inside_of/' + reference_id;
-        },
-        "icon" : artifact_type
-      }
-    }
-    return submenu_items;
-  };
-
   function load_items(node) {
     var items;
     var artifact_types = re_config['artifact_settings'];
@@ -94,14 +55,38 @@
         "separator_before" : false,
         "separator_after"	: false,
         "icon" : "new",
-        "submenu" : createInsideArtifactSubmenu()
+        "submenu" : {
+	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSettiong|%>
+	       "<%= currentArtifact %>" : {
+	        "label" : "<%= currentArtifactSettiong["alias"] %>",
+	        "action" : function (node) {
+	          var reference_id = node[0].id.gsub('node_','');
+	          var json_data = this.data.json_data.toString()
+			  window.location.pathname  = "<%= url_for :controller => 'welcome' %>".substr(1) + '/projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/inside_of/' + reference_id;
+	        },
+	        "icon" : "<%= currentArtifact %>"
+	       },
+	    <% end %>
+	      },
       },
       "sibling" : {
         "label" : "<%= t('re_create_below') %>",
         "separator_before" : false,
         "separator_after"	: true,
         "icon" : "new",
-        "submenu" : createBelowArtifactSubmenu()
+        "submenu" : {
+	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSettiong|%>
+	       "<%= currentArtifact %>" : {
+	        "label" : "<%= currentArtifactSettiong["alias"] %>",
+	        "action" : function (node) {
+	          var reference_id = node[0].id.gsub('node_','');
+	          var json_data = this.data.json_data.toString()
+			  window.location.pathname  = "<%= url_for :controller => 'welcome' %>".substr(1) + '/projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/below_of/' + reference_id;
+	        },
+	        "icon" : "<%= currentArtifact %>"
+	       },
+	    <% end %>
+	      },
       },
       "edit" : {
         "label" : "<%= t(:re_edit) %>",
@@ -148,7 +133,7 @@ var tree = jQuery("#tree")
           "new_parent_id" : data.rslt.np.attr("id").replace("node_",""),
           "sibling_id" : data.rslt.r.attr("id").replace("node_",""),
           "position" : data.rslt.p,
-          "authenticity_token" : <%= "#{form_authenticity_token.inspect}" %>
+          "authenticity_token" : <%= "#{form_authenticity_token.inspect.html_safe}".html_safe %>
         },
         success : function (r) {
           if(!r.status) {
@@ -178,7 +163,7 @@ var tree = jQuery("#tree")
       "icons" : true
     },
     "json_data" : {
-      "data" : <%= @json_tree_data %>,
+      "data" : <%= @json_tree_data.html_safe %>,
       "ajax" : {
         "url" : function (n) {
           var url = "<%= url_for :controller => 'requirements', :action => 'treestate', :project_id => @project.identifier %>";

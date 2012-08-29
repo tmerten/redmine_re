@@ -115,7 +115,7 @@ class ReArtifactProperties < ActiveRecord::Base
   validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
   validates_presence_of :parent,     :message => l(:re_artifact_properties_validates_presence_of_parent), :unless => Proc.new { |a| a.artifact_type == "Project" }
   validates_associated :parent_relation
-  validates_presence_of :artifact_type
+  validates :artifact_type, :presence => true, :inclusion => { :in => ['ReGoal', 'ReSection', 'ReVision', 'ReTask', 'ReSubtask', 'ReVision', 'reAttachment', 'ReWorkarea', 'ReUserProfile', 'ReSection', 'ReRequirement', 'ReScenario', 'ReProcessword', 'ReRational', 'ReUseCase'] }
 
   validates_length_of :name, :minimum => 3, :message => l(:re_artifact_properties_not_enought_chars)
   validates_length_of :name, :maximum =>50, :message => l(:re_artifact_properties_to_many_chars)
