@@ -1,8 +1,8 @@
 <% content_for :header_tags do %>
     <%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
+    <%= stylesheet_link_tag 'redmine_re.css', :plugin => 'redmine_re' %>
 <% end%>
 
-<!-- KoREM: We have to check if this is needed and to add the js-File.-->
 <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
 
 <div id='detail_view' class='detail_view'>
@@ -151,8 +151,8 @@ function init(data, visualization_type) {
           if (!node) return;
           var data = node.data
           var id = node.id.gsub('node_','');
-          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/";        
-          var html = "<b>Name: <a href=" + link + id + ">" + data.full_name + "</a></b>"
+          var link = "<%= re_artifact_properties_path %>";        
+          var html = "<b>Name: <a href=" + link + "/" + id + "edit>" + data.full_name + "</a></b>"
           if (data.description) {
             html += "<br/><br/><b><%= t(:re_artifact_description) %></b><br/>"
             html += data.description.replace("\n", "<br />")
@@ -162,7 +162,7 @@ function init(data, visualization_type) {
     
           var relationships = data.relationship_data;
           for (i=0; i<relationships.size(); i++) {
-            ans.push(relationships[i].direction +  " <a href=" + link + relationships[i].id + ">" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
+            ans.push(relationships[i].direction +  " <a href=" + link + "/" + relationships[i].id + "/edit>" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
           }
           $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
         },
@@ -235,8 +235,8 @@ function init(data, visualization_type) {
           if (!node) return;
           var data = node.data
           var id = node.id.gsub('node_','');
-          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit') %>/";        
-          var html = "<b>Name: <a href=" + link + id + ">" + data.full_name + "</a></b>"
+          var link = "<%= re_artifact_properties_path %>";        
+          var html = "<b>Name: <a href=" + link + "/" + id + "/edit>" + data.full_name + "</a></b>"
           if (data.description) {
             html += "<br/><br/><b><%= t(:re_artifact_description) %></b><br/>"
             html += data.description.replace("\n", "<br />")
@@ -246,7 +246,7 @@ function init(data, visualization_type) {
     
           var relationships = data.relationship_data;
           for (i=0; i<relationships.size(); i++) {
-            ans.push(relationships[i].direction +  " <a href=" + link + relationships[i].id + ">" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
+            ans.push(relationships[i].direction +  " <a href=" + link + "/" + relationships[i].id + "/edit>" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
           }
           $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
         },

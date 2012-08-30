@@ -104,7 +104,7 @@ class ReArtifactRelationshipController < RedmineReController
         json << rootnode
 
         artifacts.each do |artifact|
-          outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact(artifact)
+          outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(artifact.id)
           drawable_relationships = ReArtifactRelationship.find_all_by_source_id_and_relation_type(artifact.id, relations)
           artifact_ids = @artifacts.collect { |a| a.id }
           drawable_relationships.delete_if { |r| ! artifact_ids.include? r.sink_id }
@@ -120,7 +120,7 @@ class ReArtifactRelationshipController < RedmineReController
     children = []
     for child in artifact.children
       next unless (@chosen_artifacts.include? child.artifact_type.to_s)
-      outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact(child.id)
+      outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(child.id)
       drawable_relationships = ReArtifactRelationship.find_all_by_source_id(child.id)
       json_artifact = add_artifact(child, drawable_relationships, outgoing_relationships)
       json_artifact['children'] = gather_children(child)
