@@ -19,6 +19,12 @@ class ReArtifactPropertiesController < RedmineReController
 
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
 
+    unless params[:sibling_artifact_id].blank?
+      sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
+      @parent_artifact_id = sibling.parent.id
+      @parent_relation_position = sibling.parent_relation.position + 1
+    end
+    
     unless params[:parent_artifact_id].blank?
       parent = ReArtifactProperties.find(params[:parent_artifact_id])
       @parent_artifact_id = parent.id
@@ -28,12 +34,7 @@ class ReArtifactPropertiesController < RedmineReController
         @parent_relation_position = 1
       end
     end
-
-    unless params[:sibling_artifact_id].blank?
-      sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
-      @parent_artifact_id = sibling.parent.id
-      @parent_relation_position = sibling.parent_relation.position + 1
-    end
+    
   end
 
   def create

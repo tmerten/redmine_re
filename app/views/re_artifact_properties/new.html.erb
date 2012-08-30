@@ -29,9 +29,8 @@
         <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
 
           <p>
-          <%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name, :required => true %>
+						<%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name %>
           </p>
-          <%= javascript_tag "Form.Element.focus('artifact_name');" %>
 
           <%
              re_users = []
@@ -46,24 +45,26 @@
         </div>
 
         <div class="splitcontentright">
-          <b><%= t(:re_description_fieldset) %></b>
-          <div id='update-description' %>
-            <%= f.text_area :description,
-                            :cols => 60,
-                            :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
-                            :accesskey => accesskey(:edit),
-                            :class => 'wiki-edit' %>
-            <%= wikitoolbar_for 'artifact_description' %>
-          </div>
+						<%= f.label :created_at, t(:created_at)	%><%= @re_artifact_properties.created_at %><br/>
+						<%= f.label :created_by, t(:created_by)	%><%= User.current %>
         </div>
-      </fieldset>
+
+      <b><%= f.label :description, t(:description) %></b>
+      <div id='update-description' >
+        <%= f.text_area :description,
+                        :cols => 60,
+                        :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
+                        :accesskey => accesskey(:edit),
+                        :class => 'wiki-edit' %>
+        <%= wikitoolbar_for 're_artifact_properties_description' %>
+			</div>
+    </fieldset>
+
 
       <br/>
 
       <fieldset>
         <legend><%= t(:re_associated_issues) %></legend>
-
-
         <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
           <p>
             <label><%= t(:add_issue_to_requirement) %></label>
@@ -80,7 +81,7 @@
               '<%= url_for :project_id => @project.identifier, :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
               {
               paramName: 'issue_subject',
-              parameters: <%= 'id=' + @re_artifact_properties_id.to_s unless @re_artifact_properties_id.blank? %>',
+              parameters: '<%= 'id=' + @re_artifact_properties_id.to_s unless @re_artifact_properties_id.blank? %>',
               minChars: 1,
               frequency: 0.5,
               afterUpdateElement : getIssueId});
@@ -91,8 +92,7 @@
                   jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
                   document.getElementById('issue_autocomplete').value ="";
               }
-
-            <% end %>
+		  		<% end %>
 
       </div>
 
@@ -111,7 +111,7 @@
 
 
     <!-- Additional fields like subtasks for task which are described in an own partial -->
-    <%= render( "#{@artifact_type}/formfields", {:f => f} ) if File.exists?("#{::Rails.root}/vendor/plugins/redmine_re/app/views/#{@artifact_type}/_formfields.rhtml") %>
+    <%= render( "#{@artifact_type}/formfields", {:f => f} ) if File.exists?("#{::Rails.root}/plugins/redmine_re/app/views/#{@artifact_type}/_formfields.rhtml") %>
 
     <!-- add building blocks if user obtains the rights needed for that -->
     <div id='re_bb_section'>
@@ -127,24 +127,22 @@
 
   <% end %><!-- form end tag -->
 
-    <div id="watchers">
-      <%#= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
-    </div>
-
-
-    </div> <!--end of tab one -->
-
-
-    <% if params.has_key? :id %>
+  <div id="watchers">
+    <%#= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
+  </div>
+	
+	<% if params.has_key? :id %>
       <div class="box">
-      <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
-    </div><!-- end of tab two -->
+      	<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
+    	</div><!-- end of tab two -->
   <% end %>
-</div><!-- panes-->
+
+	</div>
+
+</div>
 <%= javascript_tag do %>
-  jQuery(function() {
-    // setup ul.tabs to work as tabs for each div directly under div.panes
-    jQuery("ul.tabs").tabs("div.panes > div");
-    });
+	$j(document).ready(function(){
+		$j("#re_artifact_properties_name").focus();
+	});
 <% end %>
 

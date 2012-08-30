@@ -12,7 +12,6 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :realizations, :dependent => :destroy
   has_many :issues, :through => :realizations, :uniq => true
 
-
   has_many :user_profiles, 
     :foreign_key => "source_id",
     :class_name => "ReArtifactRelationship",
@@ -31,19 +30,29 @@ class ReArtifactProperties < ActiveRecord::Base
     :class_name => "ReArtifactRelationship",
     :dependent => :destroy
 
+  has_many :traces_as_source,
+    :order => "re_artifact_relationships.position",
+    :foreign_key => "source_id",
+    :class_name => "ReArtifactRelationship",
+    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
+
+  has_many :traces_as_sink,
+    :order => "re_artifact_relationships.position",
+    :foreign_key => "sink_id",
+    :class_name => "ReArtifactRelationship",
+    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
+
   has_one :parent_relation,
     :order => "re_artifact_relationships.position",
     :foreign_key => "sink_id",
     :class_name => "ReArtifactRelationship",
     :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
-    # not need to put :dependent => :destroy, since it will be destroyed through relationships_as_source
 
   has_many :child_relations,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
     :class_name => "ReArtifactRelationship",
     :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
-    # not need to put :dependent => :destroy, since it will be destroyed through relationships_as_sink
 
   has_many :sinks,    :through => :relationships_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :child_relations, :order => "re_artifact_relationships.position", :source => "sink"
@@ -99,26 +108,27 @@ class ReArtifactProperties < ActiveRecord::Base
     self.artifact = artifact
   end
 
-
-
   scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
+
   scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
     { :conditions => { :project_id => project_id } }
   }
 
   acts_as_watchable
+  
+  validates :name, :length => { :minimum => 3, :maximum => 50 } 
+  validates :project, :presence => true
+  validates :created_by, :presence => true
+  validates :updated_by, :presence => true
+  validates :parent, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
+  validates :artifact_type, :presence => true, :inclusion => {
+    :in => ['ReGoal', 'ReSection', 'ReVision', 'ReTask', 'ReSubtask',
+      'ReVision', 'reAttachment', 'ReWorkarea', 'ReUserProfile',
+      'ReSection', 'ReRequirement', 'ReScenario', 'ReProcessword',
+      'ReRational', 'ReUseCase'] }
 
-  validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
-  validates_presence_of :created_by, :message => l(:re_artifact_properties_validates_presence_of_created_by)
-  validates_presence_of :updated_by, :message => l(:re_artifact_properties_validates_presence_of_updated_by)
-  validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
-  validates_presence_of :parent,     :message => l(:re_artifact_properties_validates_presence_of_parent), :unless => Proc.new { |a| a.artifact_type == "Project" }
   validates_associated :parent_relation
-  validates :artifact_type, :presence => true, :inclusion => { :in => ['ReGoal', 'ReSection', 'ReVision', 'ReTask', 'ReSubtask', 'ReVision', 'reAttachment', 'ReWorkarea', 'ReUserProfile', 'ReSection', 'ReRequirement', 'ReScenario', 'ReProcessword', 'ReRational', 'ReUseCase'] }
-
-  validates_length_of :name, :minimum => 3, :message => l(:re_artifact_properties_not_enought_chars)
-  validates_length_of :name, :maximum =>50, :message => l(:re_artifact_properties_to_many_chars)
 
   after_destroy :delete_wiki_page
 
