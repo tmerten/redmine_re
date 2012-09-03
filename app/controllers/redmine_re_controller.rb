@@ -17,7 +17,7 @@ class RedmineReController < ApplicationController
   helper :application
   include WatchersHelper
 
-  before_filter :initialize_tree_data, :except => :configure
+  #before_filter :initialize_tree_data, :except => :configure
   before_filter :load_settings, :authorize
   prepend_before_filter :first_load, :except => :configure
   prepend_before_filter :find_project

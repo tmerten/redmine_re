@@ -21,8 +21,20 @@ class ReArtifactPropertiesController < RedmineReController
 
     unless params[:sibling_artifact_id].blank?
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
-      @parent_artifact_id = sibling.parent.id
-      @parent_relation_position = sibling.parent_relation.position + 1
+      begin
+        @parent_artifact_id = sibling.parent.id
+        @parent_relation_position = sibling.parent_relation.position + 1
+      rescue RuntimeError
+        @parent_artifact_id = ReArtifactProperties.where({
+          :project_id => @project.id,
+          :artifact_type => "Project"}
+        ).limit(1).first.id
+        begin
+          @parent_relation_position = parent.child_relations.last.position + 1
+        rescue NoMethodError # child_relations.last = nil -> creating the first artifact
+          @parent_relation_position = 1
+        end        
+      end
     end
     
     unless params[:parent_artifact_id].blank?
@@ -34,7 +46,7 @@ class ReArtifactPropertiesController < RedmineReController
         @parent_relation_position = 1
       end
     end
-    
+    initialize_tree_data
   end
 
   def create
@@ -65,17 +77,20 @@ class ReArtifactPropertiesController < RedmineReController
 
     if @re_artifact_properties.save
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
-      render :edit
+      r = :edit
     else
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
-      render :new
+      r = :new
     end
+    initialize_tree_data
+    render r
   end
 
   def edit
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+    initialize_tree_data
   end
 
   def update
@@ -92,6 +107,7 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.updated_by = User.current.id
 
     @re_artifact_properties.save
+    initialize_tree_data
     render :edit
   end
 
@@ -135,6 +151,7 @@ class ReArtifactPropertiesController < RedmineReController
       else
         @children = gather_children(@artifact_properties)
     end
+    initialize_tree_data
   end
 
   def autocomplete_issue

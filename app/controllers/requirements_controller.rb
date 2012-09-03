@@ -3,6 +3,7 @@ class RequirementsController < RedmineReController
   menu_item :re
 
   def index
+    initialize_tree_data
   end
 
   def delegate_tree_drop
