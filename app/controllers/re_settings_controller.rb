@@ -6,20 +6,18 @@ class ReSettingsController < RedmineReController
     initialize_artifact_order(@project.id)
     initialize_relation_order(@project.id)
 
-    @project_artifact = nil
-    @project_artifact = ReArtifactProperties.project_artifact(@project.id)
-    if @project_artifact.nil? # aka re plugin definetely unconfigured for this project
-       @project_artifact = ReArtifactProperties.new 
-       @project_artifact.project = @project
-       @project_artifact.created_by = User.first # is there a better solution?
-       @project_artifact.updated_by = User.first # actually this is not editable anyway
-       @project_artifact.artifact_type = "Project"
-       @project_artifact.artifact_id = @project.id     
-       @project_artifact.description = @project.description
-       @project_artifact.name = @project.name
-       @project_artifact.save
-       logger.debug "#####################       --------------------  Errors: #{@project_artifact.errors.inspect}"
-    end
+    @project_artifact = ReArtifactProperties.where({
+      :project_id => @project.id,
+      :artifact_type => "Project"}
+      )
+    .first_or_create!({
+      :created_by => User.current,
+      :updated_by => User.current,
+      :artifact_id => @project.id,     
+      :description => @project.description,
+      :name => @project.name}
+      )
+    
     @plugin_description = ReSetting.get_plain("plugin_description", @project.id)
 
     if request.post?
@@ -134,12 +132,8 @@ private
     all_artifact_types.delete_if { |v| configured_artifact_types.include? v }
     configured_artifact_types.concat(all_artifact_types)
 
-
-    logger.debug(configured_artifact_types.to_yaml)
-
     ReSetting.set_serialized("artifact_order", project_id, configured_artifact_types)
     @re_artifact_order = configured_artifact_types
-    logger.debug "#### RELATION ORDER FROM FILESYSTEM #{@re_artifact_order}"
   end
 
   def initialize_relation_order(project_id)

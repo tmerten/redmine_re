@@ -3,7 +3,12 @@ class ReArtifactProperties < ActiveRecord::Base
 
   #attr_accessible :artifact_type
 
-  scope :project_artifact, lambda { |project_id| where(:artifact_type => "Project", :project_id => project_id) } 
+  scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
+
+  scope :of_project, lambda { |project|
+    project_id = (project.is_a? Project) ? project.id : project
+    { :conditions => { :project_id => project_id } }
+  }
 
   ajaxful_rateable :stars => 10, :allow_update => true#, :dimensions => [:first]
 
@@ -107,13 +112,6 @@ class ReArtifactProperties < ActiveRecord::Base
     artifact.attributes = attributes
     self.artifact = artifact
   end
-
-  scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
-
-  scope :of_project, lambda { |project|
-    project_id = (project.is_a? Project) ? project.id : project
-    { :conditions => { :project_id => project_id } }
-  }
 
   acts_as_watchable
   
