@@ -124,7 +124,7 @@ class ReArtifactProperties < ActiveRecord::Base
     :in => ['ReGoal', 'ReSection', 'ReVision', 'ReTask', 'ReSubtask',
       'ReVision', 'reAttachment', 'ReWorkarea', 'ReUserProfile',
       'ReSection', 'ReRequirement', 'ReScenario', 'ReProcessword',
-      'ReRational', 'ReUseCase', 'ReRationale'] }
+      'ReRational', 'ReUseCase', 'ReRationale', 'Project'] }
 
   validates_associated :parent_relation
 

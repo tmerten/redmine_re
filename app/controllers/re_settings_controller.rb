@@ -9,14 +9,13 @@ class ReSettingsController < RedmineReController
     @project_artifact = ReArtifactProperties.where({
       :project_id => @project.id,
       :artifact_type => "Project"}
-      )
-    .first_or_create!({
+    ).first_or_create!({
       :created_by => User.current,
       :updated_by => User.current,
       :artifact_id => @project.id,     
       :description => @project.description,
       :name => @project.name}
-      )
+    )
     
     @plugin_description = ReSetting.get_plain("plugin_description", @project.id)
 
