@@ -136,9 +136,6 @@ class ReArtifactPropertiesController < RedmineReController
 
     flash.now[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
-
-    initialize_tree_data
-    render :delete
   end
   
 
@@ -163,8 +160,6 @@ class ReArtifactPropertiesController < RedmineReController
     flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
 
-    initialize_tree_data
-    render :delete
   end
   
   def how_to_delete

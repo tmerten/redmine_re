@@ -20,7 +20,7 @@
           <% if @parent.artifact_type == "Project" %>
             <%= @parent.name %>
           <% else %>
-            <%= link_to @parent.name, re_artifact_properties_path+"/"+@parent.artifact_id+"/edit" %>
+            <%= link_to @parent.name, re_artifact_properties_path+"/"+@parent.id.to_s+"/edit" %>
           <% end %>  
         </li>
       </ul>
