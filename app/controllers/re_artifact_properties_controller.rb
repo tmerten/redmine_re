@@ -112,6 +112,62 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def delete
+    @artifact_properties = ReArtifactProperties.find(params[:id])
+
+    @relationships_incoming = @artifact_properties.relationships_as_sink
+    @relationships_outgoing = @artifact_properties.relationships_as_source
+    @parent = @artifact_properties.parent
+
+    @children = gather_children(@artifact_properties)
+
+    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+
+    direct_children = @artifact_properties.children
+    position = @artifact_properties.position
+    for child in direct_children
+      logger.debug "################### #{child.to_yaml}" if logger
+      child.parent_relation.remove_from_list
+      child.parent = @parent
+      child.parent_relation.insert_at(position)
+      position += 1
+    end
+    @artifact_properties.destroy
+
+    flash.now[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
+    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
+
+    initialize_tree_data
+    render :delete
+  end
+  
+
+  def delete_recursive
+    @artifact_properties = ReArtifactProperties.find(params[:id])
+
+    @relationships_incoming = @artifact_properties.relationships_as_sink
+    @relationships_outgoing = @artifact_properties.relationships_as_source
+    @parent = @artifact_properties.parent
+
+    @children = gather_children(@artifact_properties)
+
+    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+
+
+    for child in @children
+      child.destroy
+    end
+    @artifact_properties.destroy
+
+    flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
+    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
+
+    initialize_tree_data
+    render :delete
+  end
+  
+  def how_to_delete
     method = params[:mode]
     @artifact_properties = ReArtifactProperties.find(params[:id])
 
@@ -124,34 +180,8 @@ class ReArtifactPropertiesController < RedmineReController
     @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
     @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
 
-    case method
-      when 'move'
-        direct_children = @artifact_properties.children
-        position = @artifact_properties.position
-        for child in direct_children
-          logger.debug "################### #{child.to_yaml}" if logger
-          child.parent_relation.remove_from_list
-          child.parent = @parent
-          child.parent_relation.insert_at(position)
-          position += 1
-        end
-        @artifact_properties.destroy
-
-        flash.now[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
-        redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
-
-      when 'recursive'
-        for child in @children
-          child.destroy
-        end
-        @artifact_properties.destroy
-
-        flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
-        redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
-      else
-        @children = gather_children(@artifact_properties)
-    end
     initialize_tree_data
+    render :delete
   end
 
   def autocomplete_issue

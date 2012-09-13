@@ -14,15 +14,9 @@
 <div id='detail_view' class='ui-layout-center'>
   <%= render 're_artifact_properties/action_menu', {:artifact => @artifact} %>
 
-    <h2><%= t(:re_edit) + ' ' + t(:re_artifact) + ' #' + @artifact.artifact_id.to_s + ' - ' + @artifact.name + ' (' + rendered_artifact_type(@artifact_type) + ')' unless @artifact.nil? %></h2>
+    <h2><%= t(:re_edit) + ' ' + t(:re_artifact) + ' #' + @re_artifact_properties.id.to_s + ' - ' + @re_artifact_properties.name + ' (' + rendered_artifact_type(@artifact_type) + ')' unless @re_artifact_properties.nil? %></h2>
 
   <%= errors_and_flash params[:controller] %>
-
-  <ul class="tabs">
-    <li><a href="#"><%= t(:main_tab) %></a></li>
-    <!--<li><a href="#">Building blocks</a></li>-->
-    <% if params.has_key? :id %><li><a href="#"><%= t(:relations) %></a></li><% end %>
-  </ul>
 
   <div class="panes">
     <div class="box">

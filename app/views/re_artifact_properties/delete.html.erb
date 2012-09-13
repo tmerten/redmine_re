@@ -20,11 +20,11 @@
           <% if @parent.artifact_type == "Project" %>
             <%= @parent.name %>
           <% else %>
-            <%= link_to ( @parent.name, {
+            <%= link_to  @parent.name, 
                 :action => :edit,
                 :controller => @parent.artifact_type.underscore,
-                :id => @parent.artifact_id
-              }, :class => "icon #{@parent.artifact_type.underscore}" ) %>
+                :id => @parent.artifact_id,
+                :class => "icon #{@parent.artifact_type.underscore}"  %>
           <% end %>  
         </li>
       </ul>
@@ -35,11 +35,11 @@
       <ul>
         <% for child in @children %>
           <li>
-          <%= link_to ( child.name, {
+          <%= link_to child.name, 
                 :action => :edit,
                 :controller => child.artifact_type.underscore,
-                :id => child.artifact_id
-              }, :class => "icon #{child.artifact_type.underscore}" ) %>          
+                :id => child.artifact_id,
+                :class => "icon #{child.artifact_type.underscore}" %>          
           </li>
         <% end %>
       </ul>

@@ -20,6 +20,11 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/artifact/new/:artifact_type' => 're_artifact_properties#new'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type/inside_of/:parent_artifact_id', :to => 're_artifact_properties#new', :as => 're_artifact_properti'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type/below_of/:sibling_artifact_id' => 're_artifact_properties#new'
+  
+  match 're_artifact_properties/:id/edit' => 're_artifact_properties#edit'
+  match 're_artifact_properties/:id/delete' => 're_artifact_properties#delete'
+  match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
+  
   resources :re_queries do
     collection do
       post :apply

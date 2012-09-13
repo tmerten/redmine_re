@@ -93,8 +93,8 @@
         "icon" : "edit",
         "action" : function (node) {
           var id = node[0].id.gsub('node_','');
-          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'edit', :id => 2) %>/";
-          window.location.href = link;
+          var link = '<%= re_artifact_properties_path %>';
+          window.location.href = link+'/'+id+'/edit';
         }
       },
       "delete" : {
@@ -102,8 +102,8 @@
         "icon" : "delete",
         "action" : function (node) {
           var id = node[0].id.gsub('node_','');
-          var link = "<%= url_for(:controller => 're_artifact_properties', :action => 'destroy', :id => 2) %>/";
-          window.location.href = link + id;
+          var link = '<%= re_artifact_properties_path %>';
+          window.location.href = link+'/'+id+'/how_to_delete';
         }
       }
     }
