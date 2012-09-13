@@ -23,6 +23,7 @@ RedmineApp::Application.routes.draw do
   
   match 're_artifact_properties/:id/edit' => 're_artifact_properties#edit'
   match 're_artifact_properties/:id/delete' => 're_artifact_properties#delete'
+  match 're_artifact_properties/:id/delete_recursive' => 're_artifact_properties#delete_recursive'
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
   
   resources :re_queries do

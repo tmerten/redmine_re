@@ -20,11 +20,7 @@
           <% if @parent.artifact_type == "Project" %>
             <%= @parent.name %>
           <% else %>
-            <%= link_to  @parent.name, 
-                :action => :edit,
-                :controller => @parent.artifact_type.underscore,
-                :id => @parent.artifact_id,
-                :class => "icon #{@parent.artifact_type.underscore}"  %>
+            <%= link_to @parent.name, re_artifact_properties_path+"/"+@parent.artifact_id+"/edit" %>
           <% end %>  
         </li>
       </ul>
@@ -33,14 +29,12 @@
     <p>
       <b><%= t(:re_children) %></b>
       <ul>
-        <% for child in @children %>
-          <li>
-          <%= link_to child.name, 
-                :action => :edit,
-                :controller => child.artifact_type.underscore,
-                :id => child.artifact_id,
-                :class => "icon #{child.artifact_type.underscore}" %>          
-          </li>
+      	<% unless @children.blank? %>
+	        <% for child in @children %>
+	          <li>
+                 <%= link_to child.name, re_artifact_properties_path+"/"+child.id.to_s+"/edit" %>    
+	          </li>
+	        <% end %>
         <% end %>
       </ul>
     </p>
@@ -52,17 +46,17 @@
 <ul>
   <% if @children.empty? %>
     <li>
-      <%= link_to t(:re_delete_artifact), { :action => "delete", :id => @artifact_properties.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %>:<br />
+      <%= link_to t(:re_delete_artifact), { :action => "delete_recursive", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>:<br />
       <%= t(:re_will_delete_artifact_and_relations, :name => @artifact_properties.name) %>
     </li>
   <% else %>
     <li>
-      <%= link_to t(:re_delete_and_move_children), { :action => "delete", :id => @artifact_properties.id, :mode => 'move' }, :confirm => t(:re_are_you_sure) %>:<br />
+      <%= link_to t(:re_delete_and_move_children), { :action => "delete", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>:<br />
       <%= t(:re_will_delete_artifact_and_move_children, { :name => @artifact_properties.name, :parent => @parent.name }) %>
     </li>
     <br /> 
     <li>
-      <%= link_to t(:re_delete_recursively), { :action => "delete", :id => @artifact_properties.id, :mode => 'recursive' }, :confirm => t(:re_are_you_sure) %>: <br />
+      <%= link_to t(:re_delete_recursively), { :action => "delete_recursive", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>: <br />
       <%= t(:re_will_delete_artifact_and_all_children, { :name => @artifact_properties.name }) %>
     </li>
   <% end %>
