@@ -52,18 +52,14 @@
 
         <div class="splitcontentright">
           <b><%= t(:re_description_fieldset) %></b>
-              <div class="contextual">
-                <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', 'artifact_description'); return false;"><%= l(:re_update_description) %></a>
-              </div>
-              <%= textilizable(@re_artifact_properties, :description, :only_path => false) %>
               <br/>
-          <div id='update-description' <%= 'style="display:none;"' %>>
+          <div id='update-description'>
             <%= f.text_area :description,
                             :cols => 60,
                             :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
                             :accesskey => accesskey(:edit),
                             :class => 'wiki-edit' %>
-          <%= wikitoolbar_for 'artifact_description' %>
+          <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
           </div>
         </div>
       </fieldset>
