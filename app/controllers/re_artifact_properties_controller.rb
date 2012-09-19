@@ -107,6 +107,9 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.updated_by = User.current.id
 
     @re_artifact_properties.save
+    
+    @artifact_type = @re_artifact_properties.artifact_type
+    
     initialize_tree_data
     render :edit
   end
