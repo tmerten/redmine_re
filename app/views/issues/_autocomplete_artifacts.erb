@@ -11,11 +11,11 @@
       <%= javascript_tag do %>
       new Ajax.Autocompleter('artifact_autocomplete',
       'artifact_candidates',
-      '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_artifact' %>',
+      '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_artifact', :project_id => @project.id %> %>',
       {
       paramName: 'artifact_name',
       parameters:
-      'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
+      '<%= 'id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
       minChars: 2,
       frequency: 0.5,
       afterUpdateElement : getArtifactId});
