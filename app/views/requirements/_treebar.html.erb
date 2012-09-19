@@ -57,7 +57,7 @@
         "icon" : "new",
         "submenu" : {
 	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSettiong|%>
-	       "<%= currentArtifact %>" : {
+	       "<%= currentArtifact %>_in" : {
 	        "label" : "<%= currentArtifactSettiong["alias"] %>",
 	        "action" : function (node) {
 	          var reference_id = node[0].id.gsub('node_','');
@@ -76,7 +76,7 @@
         "icon" : "new",
         "submenu" : {
 	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSettiong|%>
-	       "<%= currentArtifact %>" : {
+	       "<%= currentArtifact %>_below" : {
 	        "label" : "<%= currentArtifactSettiong["alias"] %>",
 	        "action" : function (node) {
 	          var reference_id = node[0].id.gsub('node_','');
