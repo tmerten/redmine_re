@@ -46,7 +46,7 @@
 <ul>
   <% if @children.empty? %>
     <li>
-      <%= link_to t(:re_delete_artifact), { :action => "delete_recursive", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>:<br />
+      <%= link_to t(:re_delete_artifact), { :action => "recursive_delete", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>:<br />
       <%= t(:re_will_delete_artifact_and_relations, :name => @artifact_properties.name) %>
     </li>
   <% else %>
@@ -56,7 +56,7 @@
     </li>
     <br /> 
     <li>
-      <%= link_to t(:re_delete_recursively), { :action => "delete_recursive", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>: <br />
+      <%= link_to t(:re_delete_recursively), { :action => "recursive_delete", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>: <br />
       <%= t(:re_will_delete_artifact_and_all_children, { :name => @artifact_properties.name }) %>
     </li>
   <% end %>

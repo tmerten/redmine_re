@@ -139,7 +139,7 @@ class ReArtifactPropertiesController < RedmineReController
   end
   
 
-  def delete_recursive
+  def recursive_delete
     @artifact_properties = ReArtifactProperties.find(params[:id])
 
     @relationships_incoming = @artifact_properties.relationships_as_sink

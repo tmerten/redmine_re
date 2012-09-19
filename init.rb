@@ -59,7 +59,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :reduce_search_result_with_parameter ],
         :re_artifact_properties=> [:new, :create, :update, :edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue,
                                     :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue,
-                                    :rate_artifact, :how_to_delete, :delete_recursive],
+                                    :rate_artifact, :how_to_delete, :recursive_delete],
         :re_goal => [:create, :update, :edit, :new] ,
         :re_task => [:edit, :new, :delete_subtask],
         :re_subtask => [:edit, :new],
