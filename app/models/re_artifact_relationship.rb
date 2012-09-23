@@ -31,16 +31,12 @@ class ReArtifactRelationship < ActiveRecord::Base
       :conditions => ["source_artifacts.project_id = ? AND sink_artifacts.project_id = ?", project_id, project_id] }
   }
 
-  def self.find_all_relations_for_artifact_id(artifact_id)
-    artifact = ReArtifactProperties.find(artifact_id)
-    self.find_all_relations_for_artifact(artifact)
-  end
 
-  def self.find_all_relations_for_artifact(artifact)
-    relations = []
-    relations.concat(self.find_all_by_source_id(artifact.id))
-    relations.concat(self.find_all_by_sink_id(artifact.id))
-    relations.uniq
+   def self.find_all_relations_for_artifact_id(artifact_id)
+     relations = []
+     relations.concat(self.find_all_by_source_id(artifact_id))
+     relations.concat(self.find_all_by_sink_id(artifact_id))
+     relations.uniq
   end
 
   def self.relation_types
