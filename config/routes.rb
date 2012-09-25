@@ -28,6 +28,12 @@ RedmineApp::Application.routes.draw do
   match 're_artifact_properties/:id/recursive_delete' => 're_artifact_properties#recursive_delete'
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
   
+  
+  match 'projects/:project_id/ralation/prepare/:id' => 're_artifact_relationship_controller#prepare_relationships'
+  match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink'
+  
+  match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'
+  
   resources :re_queries do
     collection do
       post :apply

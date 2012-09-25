@@ -21,8 +21,7 @@
                                    {:action => :prepare_relationships,
                                     :controller => :re_artifact_relationship,
                                     :id => params[:id],
-                                    :project_id => @project.id,
-                                    :original_controller => params[:controller]},
+                                    :project_id => @project.id},
                            :update => "relationship_link_list" do %>
             <%= label :re_artifact_relationship, :relation_type_dependency, l(:re_relation_type) %>
 

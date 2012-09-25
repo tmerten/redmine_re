@@ -130,9 +130,9 @@ class ReArtifactProperties < ActiveRecord::Base
 
   after_destroy :delete_wiki_page
 
-  def self.get_properties_id(controllername, subartifact_id)
+  def self.get_properties_id(subartifact_id)
     # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
-    @re_artifact_properties = ReArtifactProperties.find_by_artifact_type_and_artifact_id(controllername.camelize, subartifact_id)
+    @re_artifact_properties = ReArtifactProperties.find(subartifact_id)
     @re_artifact_properties.id
   end
 

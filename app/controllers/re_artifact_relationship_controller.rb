@@ -48,7 +48,7 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
   def prepare_relationships
-    artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
+    artifact_properties_id = ReArtifactProperties.get_properties_id(params[:id])
     relation = params[:re_artifact_relationship]
 
     if relation[:relation_type].eql?(ReArtifactRelationship::RELATION_TYPES[:pch])
