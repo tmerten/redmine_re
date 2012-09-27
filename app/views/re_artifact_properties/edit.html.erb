@@ -106,9 +106,13 @@
       <div class='splitcontentright'>
           <% unless @issues.nil? %>
 
-              <%= @issues.collect { |issue|
-                  (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s+
-                  (link_to image_tag('delete.png'), :controller => 're_artifact_properties', :action => 'remove_issue_from_artifact', :issueid => issue.id, :project_id=>@project.id, :id => @re_artifact_properties.id) }.to_sentence %>
+              <% @issues.each do  |issue| %>
+                  <div id="issue_list_issue_<%= issue.id %>">
+                  	<input id="issue_id" type="hidden" name="issue_id[]" value="<%= issue.id %>" />
+                  	<%= (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s.html_safe %>
+                    <a href="#" onclick="Javascript: jQuery('#issue_list_issue_<%= issue.id %>').remove()"><%= image_tag('delete.png') %></a>
+                  </div>
+              <% end %>
           <% end %>
         <div id='added_issues'></div>
       </div>

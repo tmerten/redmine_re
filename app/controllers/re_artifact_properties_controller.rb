@@ -90,6 +90,7 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+    @issues = @re_artifact_properties.issues
     initialize_tree_data
   end
 
@@ -105,8 +106,27 @@ class ReArtifactPropertiesController < RedmineReController
     # attributes that cannot be set by the user
     @re_artifact_properties.updated_at = Time.now
     @re_artifact_properties.updated_by = User.current.id
-
+    
+    # Remove related issues (Refresh will be done later)
+    @re_artifact_properties.issues = []
+    
     @re_artifact_properties.save
+    
+    # Add Comment
+    unless params[:comment].blank?
+      comment = Comment.new
+      comment.comments = params[:comment]
+      comment.author = User.current
+      @re_artifact_properties.comments << comment
+      comment.save
+    end
+    
+    # Update related issues
+    unless params[:issue_id].blank?
+      params[:issue_id].each do |iid|
+        @re_artifact_properties.issues << Issue.find(iid)
+      end
+    end
     
     @artifact_type = @re_artifact_properties.artifact_type
     
@@ -196,13 +216,14 @@ class ReArtifactPropertiesController < RedmineReController
     render :text => list
   end
 
-  def remove_issue_from_artifact
-    issue_to_delete = Issue.find(params[:issueid])
-    artifact_type = self.controller_name
-    artifact_properties = artifact_type.camelcase.constantize.find_by_id(params[:id])
-    artifact_properties.issues.delete(issue_to_delete)
-    redirect_to(:back)
-  end
+  # TODO: If required anywhere else, remove comment, otherwise delete if finishing 0.9 
+  #def remove_issue_from_artifact
+  #  issue_to_delete = Issue.find(params[:issueid])
+  #  artifact_type = self.controller_name
+  #  artifact_properties = artifact_type.camelcase.constantize.find_by_id(params[:id])
+  #  artifact_properties.issues.delete(issue_to_delete)
+  #  redirect_to(:back)
+  #end
 
   def autocomplete_artifact
     query = '%' + params[:artifact_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
