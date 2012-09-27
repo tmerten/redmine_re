@@ -106,7 +106,7 @@
       <div class='splitcontentright'>
           <% unless @issues.nil? %>
 
-              <% @issues.each do  |issue| %>
+              <% @issues.each do |issue| %>
                   <div id="issue_list_issue_<%= issue.id %>">
                   	<input id="issue_id" type="hidden" name="issue_id[]" value="<%= issue.id %>" />
                   	<%= (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s.html_safe %>
@@ -154,7 +154,7 @@
                        <hr />
                        <p>
                           <% if User.current.allowed_to?(:administrate_requirements, @project) %>
-                            [<%= link_to 'X', :controller => @artifact_type, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
+                            [<%= link_to 'X', :controller => "re_artifact_properties", :action => 'edit', :deletecomment_id => comment.id, :id => @re_artifact_properties.id %>]
                           <% end %>
 
                           <b><%= comment.created_on.to_datetime.to_s[0,10] %>
@@ -169,7 +169,7 @@
                        <hr />
                        <p>
                           <% if User.current.allowed_to?(:administrate_requirements, @project) %>
-                            [<%= link_to 'X', :controller => @artifact_type, :action => 'edit', :deletecomment_id => comment.id, :id => @artifact.id %>]
+                            [<%= link_to 'X', :controller => "re_artifact_properties", :action => 'edit', :deletecomment_id => comment.id, :id => @re_artifact_properties.id %>]
                           <% end %>
 
                           <b><%= comment.created_on.to_datetime.to_s[0,10] %>

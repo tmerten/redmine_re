@@ -91,6 +91,17 @@ class ReArtifactPropertiesController < RedmineReController
     @artifact_type = @re_artifact_properties.artifact_type
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
+    
+
+    # Remove Comment (Initiated via GET)
+    if User.current.allowed_to?(:administrate_requirements, @project)
+      unless params[:deletecomment_id].blank?
+        comment = Comment.find_by_id(params[:deletecomment_id])
+        comment.destroy unless comment.nil?
+      end
+    end
+    
+    
     initialize_tree_data
   end
 
