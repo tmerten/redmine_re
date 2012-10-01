@@ -1,3 +1,52 @@
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'query_form.js', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'suggestible', :plugin => 'redmine_re' %>
+<% end %>
+
+<%= javascript_tag do %>
+
+    (function($) {
+        $().ready(function() {
+            // hidden on init because of UJS
+            $('#sidebar_filter_input_nojs').remove();
+            $('#sidebar_filter .inputs').show();
+
+            $('#sidebar_filter_input').suggestible({
+                ajax: {
+                    suggestions: {
+                        url: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+                        dataType: 'json',
+                        data: function(value, helpers) {
+                            return { query: value };
+                        },
+                        loading: function(helpers) {
+                            $('#ajax-indicator').show();
+                            helpers.elements.textBox.attr('disabled', 'disabled');
+                        },
+                        loaded: function(helpers) {
+                            $('#ajax-indicator').hide();
+                            helpers.elements.textBox.removeAttr('disabled');
+                        }
+                    }
+                },
+                layout: {
+                    containers: function(selectBox, options) {
+                        return new SuggestBoxContainers(selectBox, options);
+                    },
+                    items: function(helpers) {
+                        return new DirectArtifactsSuggestBoxItems(helpers);
+                    }
+                }
+            });
+
+            var elements = $('#sidebar_filter_input_container').data('elements');
+            elements.textBox.attr('name', elements.inputName);
+        });
+    })(jQuery);
+
+<% end %>
 <fieldset id="treefilter" class="collapsible">
   <legend onclick="toggleFieldset(this);"><%= l(:re_treefilter) %></legend>
   <div>
