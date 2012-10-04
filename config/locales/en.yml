@@ -604,3 +604,12 @@ en:
   re_changed_by: 'Changed by'
   
   re_delete_use_case_step_expansion: 'Delete'
+  
+  re_starts_with: 'Start with'
+  re_ends_with: 'Ends with'
+  re_contains: 'Contains'
+  re_equals: 'Equals'
+  re_lesser_than: 'Lesser than'
+  re_greater_than: 'Grater than'
+  re_none_specific: 'None specific'
+  re_apply_filter: 'Apply filter'

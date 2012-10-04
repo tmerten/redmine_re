@@ -1,6 +1,6 @@
 <div id='detail_view' class='detail_view'>
 
-  <%= form_tag :url => {:action => "edit"}, :html => { :style => "margin:0;padding:0;display:inline" } do %>
+  <%= form_tag @re_queries do %>
     <%= hidden_field_tag :project_id, @project.id %>
 
 

@@ -33,6 +33,8 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink'
   
   match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'
+  match 're_queries.:project_id' => 'redmine_re#enhanced_filter'
+  match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
 
   resources :re_queries do
     collection do

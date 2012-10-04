@@ -195,8 +195,8 @@ class ReQueriesController < RedmineReController
       :type => artifact.artifact_type,
       :type_name => l(artifact.artifact_type),
       :icon => underscored_artifact_type,
-      :url => url_for(:controller => underscored_artifact_type,
-                      :action => 'edit', :id => artifact.artifact_id) }
+      :url => url_for(:controller => "re_artifact_properties",
+                      :action => 'edit', :id => artifact.id) }
   end
 
   def issue_to_json(issue)
