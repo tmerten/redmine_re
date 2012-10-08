@@ -162,3 +162,7 @@ div.input_container.suggestible ol.suggestions li.focus .count {
 div.input_container.suggestible ol.suggestions li:first-child {
     border-top: 0;
 }
+
+ol.suggestions {
+	width: 200px;
+}
