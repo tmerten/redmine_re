@@ -113,13 +113,13 @@
 var tree = jQuery("#tree")
   .bind("close_node.jstree", function (event, data) {
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate' %>/" + data.args[0].attr("id").gsub('node_','') ,
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :id => nil %>/" + data.args[0].attr("id").gsub('node_','') ,
     });
   })
   .bind("open_node.jstree", function (event, data) {
     var node = data.args[0];
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate' %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :id => nil %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
     });
   })
   .bind("move_node.jstree", function (e, data) {
