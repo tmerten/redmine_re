@@ -1,14 +1,11 @@
 <div>
   <% unless @new_relation.nil? %>
     <br />
-    <%= errors_and_flash :new_relation %>
-    <% if @new_relation.errors.empty? %>
-      <%= t :re_relation_sucessfull_created,
-        :source_name => @new_relation.source.name,
-        :sink_name => @new_relation.sink.name,
-        :relation_type => @new_relation.relation_type %>
-        <br /><br />
-    <% end %>
+    <b><%= t :re_relation_sucessfull_created,
+    :source_name => @new_relation.source.name,
+    :sink_name => @new_relation.sink.name,
+    :relation_type => @new_relation.relation_type %></b>
+    <br /><br />
   <% end %>
   <b><%= t(:re_artifact_relationships_outgoing) %></b>
   <%= "<ul>".html_safe unless @relationships_outgoing.empty? -%>
