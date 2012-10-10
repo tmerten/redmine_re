@@ -83,6 +83,8 @@ class ReArtifactPropertiesController < RedmineReController
       r = :new
     end
     initialize_tree_data
+    handle_relations params
+    
     render r
   end
 
@@ -142,6 +144,8 @@ class ReArtifactPropertiesController < RedmineReController
     @artifact_type = @re_artifact_properties.artifact_type
     
     initialize_tree_data
+    handle_relations params
+    
     render :edit
   end
 
@@ -172,6 +176,23 @@ class ReArtifactPropertiesController < RedmineReController
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
   
+  def handle_relations params
+    params[:new_relation].each do |id, content|
+      if ( content['_destroy'] == "true" )
+        # id is sink id of re_artifact_properties (artifact id)
+        n = ReArtifactRelationship.find(id)
+        n.destroy
+      else
+        # id is relation id, that should created,
+        # content contains relation_type
+        unless content['relation_type'].blank?
+          new_relation = ReArtifactRelationship.new(:source_id => params[:id], :sink_id => id, :relation_type => content['relation_type'])
+          new_relation.save
+        end 
+      end
+    end
+    
+  end
 
   def recursive_delete
     @artifact_properties = ReArtifactProperties.find(params[:id])

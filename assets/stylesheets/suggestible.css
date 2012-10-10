@@ -164,5 +164,5 @@ div.input_container.suggestible ol.suggestions li:first-child {
 }
 
 ol.suggestions {
-	width: 200px;
+	width: 200px !important;
 }

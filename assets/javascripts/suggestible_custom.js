@@ -201,4 +201,31 @@
             return false;
         };
     };
+
+    // Encapsulates the creation functions for directly selectable artifact items
+    window.DirectArtifactsSuggestBoxItemsForRelations = function(helpers) {
+        this.helpers = helpers;
+
+        this.createSuggestion = function(record) {
+            this.addClass('artifact');
+            this.attr('title', record.name);
+            $('<span />', { 'class': 'icon ' + record.icon }).appendTo(this);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
+            this.click(function() {
+            	createRelation(record);
+                return false;
+            });
+            helpers.elements.textBox.keydown(function(event) {
+                if ((event.keyCode == 9 || event.keyCode == 13) && helpers.hasSelectedSuggestion()) {
+                    $.blockUI();
+                    document.location = helpers.selectedSuggestion().data('record').url;
+                }
+            })
+        };
+
+        this.createBit = function(record) {
+            return false;
+        };
+    };
 })(jQuery);
