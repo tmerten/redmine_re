@@ -103,12 +103,102 @@
                   (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s+
                   (link_to image_tag('delete.png'), :controller => 're_artifact_properties', :action => 'remove_issue_from_artifact', :issueid => issue.id, :project_id=>@project.id, :id => @re_artifact_properties.id) }.to_sentence %>
           <% end %>
+          
+          <% unless @added_issue_ids.nil? %>
+              <% @added_issue_ids.each do |issue_id| %>
+                  <div id="issue_list_issue_<%= issue_id %>">
+                  	<input id="issue_id" type="hidden" name="issue_id[]" value="<%= issue_id %>" />
+                  	<% current_issue = Issue.find(issue_id) %>
+                  	<%= (link_to current_issue.subject, issue_path(:issue))+'&nbsp; (new)'.to_s.html_safe %>
+                    <a href="#" onclick="Javascript: jQuery('#issue_list_issue_<%= issue_id %>').remove()"><%= image_tag('delete.png') %></a>
+                  </div>
+              <% end %>
+          <% end %>
         <div id='added_issues'></div>
       </div>
-
-
       </fieldset>
+      
 
+   <fieldset>
+   	<legend><%= t(:re_artifact_relationships)%></legend>
+
+    <div class="splitcontentleft">
+      <div id="relationship_link_list">
+        <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@re_artifact_properties.id) %>
+        <% @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) } %>
+
+        <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@re_artifact_properties.id) %>
+        <% @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) } %>
+
+        <%= render "re_artifact_relationship/relationship_links" %>
+      </div>
+      <br/>
+    </div>
+
+    <div class="splitcontentright">
+		<%= javascript_tag do %>
+		
+		    (function($) {
+		        $().ready(function() {
+		            // hidden on init because of UJS
+		            $('#relation_filter_input_nojs').remove();
+		            $('#relation_filter .inputs').show();
+		
+		            $('#relation_filter_input').suggestible({
+		                ajax: {
+		                    suggestions: {
+		                        url: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+		                        dataType: 'json',
+		                        data: function(value, helpers) {
+		                            return { query: value };
+		                        },
+		                        loading: function(helpers) {
+		                            $('#ajax-indicator').show();
+		                            helpers.elements.textBox.attr('disabled', 'disabled');
+		                        },
+		                        loaded: function(helpers) {
+		                            $('#ajax-indicator').hide();
+		                            helpers.elements.textBox.removeAttr('disabled');
+		                        }
+		                    }
+		                },
+		                layout: {
+		                    containers: function(selectBox, options) {
+		                        return new SuggestBoxContainers(selectBox, options);
+		                    },
+		                    items: function(helpers) {
+		                        return new DirectArtifactsSuggestBoxItemsForRelations(helpers);
+		                    }
+		                }
+		            });
+		
+		            var elements = $('#ralation_filter_input_container').data('elements');
+		            elements.textBox.attr('name', elements.inputName);
+		        });
+		    })(jQuery);
+		
+		<% end %>   	
+	   	
+        <b><%= t(:re_create_new_relation) %></b>
+	   	<div id="relationhandling">
+		   	
+	           <% for relation_type in @re_relation_order %>
+	               <% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && relation_type != 'parentchild' %>
+	                   <%= radio_button :re_artifact_relationship, :relation_type, relation_type %><%= rendered_relation_type(relation_type) %>
+	                   <br/>
+	               <% end %>
+	           <% end %>
+		       <%= hidden_field_tag 'source[name_mode]', 'contains' %>
+		       <div id="relation_filter">
+		          <div class="inputs">
+		             <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'relation_filter_input', :class => 'direct_artifacts' %>
+		             <%= text_field_tag 'source[name]', nil, :id => 'relation_filter_input_nojs' %>
+		          </div>
+		       </div>
+	        
+	     </div>
+	  </div>
+   </fieldset>
 
     <!-- Additional fields like subtasks for task which are described in an own partial -->
     <%= render( "#{@artifact_type}/formfields", {:f => f} ) if File.exists?("#{::Rails.root}/plugins/redmine_re/app/views/#{@artifact_type}/_formfields.rhtml") %>

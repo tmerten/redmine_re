@@ -109,11 +109,12 @@
               <% @issues.each do |issue| %>
                   <div id="issue_list_issue_<%= issue.id %>">
                   	<input id="issue_id" type="hidden" name="issue_id[]" value="<%= issue.id %>" />
-                  	<%= (link_to issue.subject, issue_path(issue))+'&nbsp'.to_s.html_safe %>
+                  	<%= (link_to issue.subject, issue_path(issue))+'&nbsp;'.to_s.html_safe %>
                     <a href="#" onclick="Javascript: jQuery('#issue_list_issue_<%= issue.id %>').remove()"><%= image_tag('delete.png') %></a>
                   </div>
               <% end %>
           <% end %>
+
         <div id='added_issues'></div>
       </div>
 

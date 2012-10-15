@@ -33,7 +33,7 @@
     <br /><br />
   <% end %>
   <b><%= t(:re_artifact_relationships_outgoing) %></b>
-  <%= "<ul id='outgoing_relations'>".html_safe unless @relationships_outgoing.empty? -%>
+  <%= "<ul id='outgoing_relations'>".html_safe %>
     <% for relationship in @relationships_outgoing %>
     <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
     <li id='relation_<%= relationship.id %>'>
@@ -47,7 +47,25 @@
 		<input type="hidden" name="relation[][id]" value="<%= relationship.id %>">
 	</li>
 	<% end unless @relationships_outgoing.nil? %>
-	<%= "</ul>".html_safe unless @relationships_outgoing.empty? -%>
+	
+	<% unless @added_relations.nil? %>
+		<% @added_relations.each do |cur_sink_id, cur_relationcontent|%>
+            <% sink = ReArtifactProperties.find_by_id(cur_sink_id) %>
+            <% relation_id = cur_sink_id+"_"+cur_relationcontent[:relation_type] %>
+		    <li id='relation_<%= relation_id %>'>
+		    	[ <a href="javascript: removeRelation('<%= relation_id %>')" class="icon icon-del"><%= t(:re_remove) %></a> ]
+		      <%= rendered_relation_type(cur_relationcontent[:relation_type]) %> <%= t(:re_to) %>		
+		      <%= link_to( sink.name, {
+		        :action => :edit,
+		        :controller => 're_artifact_properties',
+		        :id => ReArtifactProperties.find_by_id(sink.id).id
+					}, :class => "icon #{sink.artifact_type.underscore}" ) %>
+				<input type="hidden" name="new_relation[<%= cur_sink_id %>][relation_type]" value="<%=cur_relationcontent[:relation_type] %>" />
+			</li>
+		<% end %>
+	<% end%>
+	
+	<%= "</ul>".html_safe %>
 </div>
 <br />
 <div>
