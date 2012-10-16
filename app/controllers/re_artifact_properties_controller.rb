@@ -11,7 +11,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def new
-    logger.debug("NEW-Called 7777777777777777777777777777777")
     @re_artifact_properties = ReArtifactProperties.new
     @re_artifact_properties.artifact_type = params[:artifact_type].camelcase
     @artifact_type = params[:artifact_type]
@@ -51,7 +50,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def create
-    logger.debug("Create-Called 7777777777777777777777777777777")
     @re_artifact_properties = ReArtifactProperties.new
     @re_artifact_properties.attributes = params[:re_artifact_properties]
     @artifact_type = @re_artifact_properties.artifact_type
@@ -95,7 +93,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def edit
-    logger.debug("Edit-Called 7777777777777777777777777777777")
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
@@ -115,7 +112,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def update
-    logger.debug("Update-Called 7777777777777777777777777777777")
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @bb_error_hash = {}
@@ -154,7 +150,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def delete
-    logger.debug("Delete-Called 7777777777777777777777777777777")
     @artifact_properties = ReArtifactProperties.find(params[:id])
 
     @relationships_incoming = @artifact_properties.relationships_as_sink
@@ -182,7 +177,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
   
   def handle_relations params
-    logger.debug("HR1-Called 7777777777777777777777777777777")
     unless params[:new_relation].nil?
       params[:new_relation].each do |id, content|
         if ( content['_destroy'] == "true" )
@@ -205,7 +199,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
   
   def handle_relations_for_new_artifact params, new_source_artifact_id
-    logger.debug("HR2-Called 7777777777777777777777777777777")
     unless params[:new_relation].nil?
       params[:new_relation].each do |id, content|
         # id is relation id, that should created,
