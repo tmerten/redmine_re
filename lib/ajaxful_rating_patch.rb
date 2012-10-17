@@ -11,9 +11,9 @@ AjaxfulRating::StarsBuilder.class_eval do
         :class => css_class,
         :title => i18n(:hover, value)
       }
-      @template.link_to_remote(value,
+      @template.link_to(value,
                               {:url => options[:url].merge({:stars => value, :dimension => options[:dimension]}),
-                               :method => :post},
+                               :method => :post, :remote => true},
                                html)
     end
 end
