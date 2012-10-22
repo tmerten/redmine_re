@@ -17,12 +17,6 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :realizations, :dependent => :destroy
   has_many :issues, :through => :realizations, :uniq => true
 
-  has_many :user_profiles, 
-    :foreign_key => "source_id",
-    :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:dep] ]
-    # not need to put :dependent => :destroy, since it will be destroyed through relationships_as_source
-
   has_many :relationships_as_source,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
@@ -108,14 +102,15 @@ class ReArtifactProperties < ActiveRecord::Base
   end
 
   def artifact_attributes=(attributes)
-    artifact = self.artifact_type.constantize.find_or_initilize_by_id(self.artifact_id)
+    #artifact = self.artifact_type.camelcase.constantize.new
+    artifact = self.artifact_type.camelcase.constantize.find_or_create_by_id(self.artifact_id)
     artifact.attributes = attributes
     self.artifact = artifact
   end
 
   acts_as_watchable
   
-  validates :name, :length => { :minimum => 3, :maximum => 50 } 
+  validates :name, :length => { :minimum => 3, :maximum => 50 }
   validates :project, :presence => true
   validates :created_by, :presence => true
   validates :updated_by, :presence => true

@@ -12,8 +12,12 @@ class ReArtifactPropertiesController < RedmineReController
 
   def new
     @re_artifact_properties = ReArtifactProperties.new
-    @re_artifact_properties.artifact_type = params[:artifact_type].camelcase
     @artifact_type = params[:artifact_type]
+    @re_artifact_properties.artifact_type = @artifact_type.camelcase
+
+    #@re_artifact_properties.artifact.build
+    @re_artifact_properties.artifact = @artifact_type.camelcase.constantize.new
+
 
     @re_artifact_properties.project = @project
 
@@ -51,9 +55,10 @@ class ReArtifactPropertiesController < RedmineReController
 
   def create
     @re_artifact_properties = ReArtifactProperties.new
+    @artifact_type = params[:re_artifact_properties][:artifact_type]
+    #@re_artifact_properties.artifact = @artifact_type.camelcase.constantize.new
     @re_artifact_properties.attributes = params[:re_artifact_properties]
-    @artifact_type = @re_artifact_properties.artifact_type
-
+    
     @added_issue_ids = params[:issue_id]
     @added_relations = params[:new_relation]
     
@@ -77,7 +82,7 @@ class ReArtifactPropertiesController < RedmineReController
       @parent_artifact_id = params[:parent_artifact_id]
       @parent_relation_position = params[:parent_relation_position]
     end
-
+    
     if @re_artifact_properties.save
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
@@ -87,6 +92,12 @@ class ReArtifactPropertiesController < RedmineReController
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
       r = :new
     end
+    logger.debug @re_artifact_properties.to_yaml
+    logger.debug @re_artifact_properties.errors.to_yaml unless @re_artifact_properties.errors.nil?
+    logger.debug @re_artifact_properties.artifact.to_yaml
+    logger.debug @re_artifact_properties.artifact.errors.to_yaml unless @re_artifact_properties.artifact.errors.nil?
+    
+    
     initialize_tree_data
     
     render r
@@ -151,7 +162,6 @@ class ReArtifactPropertiesController < RedmineReController
 
   def delete
     @artifact_properties = ReArtifactProperties.find(params[:id])
-
     @relationships_incoming = @artifact_properties.relationships_as_sink
     @relationships_outgoing = @artifact_properties.relationships_as_source
     @parent = @artifact_properties.parent
@@ -238,6 +248,7 @@ class ReArtifactPropertiesController < RedmineReController
     for child in @children
       child.destroy
     end
+    
     @artifact_properties.destroy
 
     flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
