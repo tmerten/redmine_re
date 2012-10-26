@@ -43,10 +43,13 @@
 	            <th>&nbsp;</th>
 	            <th>Solution</th>
 	            <th>&nbsp;</th>
-	            <th><%= link_to_function( t(:re_insert_st_after), "addSubtask('top')", :class => "icon icon-subtask-after" ) %></th>
+	            <th><%= link_to_function( t(:re_insert_st_after), "addSubtask(document.getElementById('subtasks'), 'top')", :class => "icon icon-subtask-after" ) %></th>
 	         </tr>
 	      </thead>
 	      <tbody id="subtasks">
+          <%= 
+          #render(:partial => 're_subtask/formfields', :collection => @re_artifact_properties.re_subtasks) 
+          %>
 	      </tbody>
 	   </table>
 	</fieldset>
@@ -59,12 +62,74 @@
 	
 	
 	<%= javascript_tag do %>
-	  function addSubtask(where) {
-	  	jQuery("#subtasks").prepend(jQuery("#subtask_mask").html());
-	  }
+
+	  
+	  
+
+  function changeSubtaskRowColor(element, value) {
+    element.removeClassName('subtask');
+    element.removeClassName('variant');
+    element.removeClassName('problem');
+
+    switch(value) {
+      case '0': element.addClassName('subtask'); break;
+      case '1': element.addClassName('variant'); break;
+      case '2': element.addClassName('problem'); break;
+      default: alert('<%= t(:re_st_type_not_allowed) %>' + value);
+    }
+
+    element.childElements().each( function ( td ) {
+       changeSubtaskRowColor(td, value)
+    });
+  }
+
+  function addSubtask(element, add_pos) {
+    var rendered_subtask;
+    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact, :re_subtask =>ReSubtask.new } )) %>";
+
+    switch(add_pos) {
+      case 'after':  jQuery(element).prepend(rendered_subtask); break;
+      case 'before': $(element).insert( { before: rendered_subtask} ); break;
+      case 'bottom': $(element).insert( { bottom: rendered_subtask} ); break;
+      case 'top':    $(element).insert( { top: rendered_subtask} ); break;
+      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
+    }
+
+    unregisterTextAreaEvents();
+    setResizeableTextAreas();
+    Sortable.create("subtasks", {onUpdate:function() { updateSubtaskPositionFields(); }, tag:'tr'})
+    updateSubtaskPositionFields();
+  }
+
+  function markSubtaskForDestroy(element) {
+    $(element).next('.should_destroy').value = 1;
+    $(element).up('.subtask_row').hide();
+  }
+
+  function updateSubtaskPositionFields() {
+    var pos = 1;
+    $('subtasks').childElements().each( function(child) {
+      $(child).id = 'subtask_drag_' + pos;
+      $(child).down('.position').value = pos;
+      pos++;
+    });
+  }
+
+  function setResizeableTextAreas() {
+      $$('textarea.subtask_textarea').each(function (el) {
+         new ResizingTextArea($(el));
+      });
+  }
+
+  function unregisterTextAreaEvents() {
+    $$('textarea.subtask_textarea').each(function (el) {
+     (el).stopObserving('click');
+     (el).stopObserving('keyup');
+    });
+  }
+	  
+	  
+	  
+	  
 	<%end%>
-	
-	<div id="subtask_mask" style="display:none">
-		<%= render 're_subtask/formfields', :f => artifact %>
-	</div>
 <% end%>

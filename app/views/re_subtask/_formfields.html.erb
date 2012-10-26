@@ -1,29 +1,36 @@
-<%= f.fields_for :re_subtask do |subtask| %>
-  <p>
-     <%= subtask.label :solution, l(:re_subtask_solution) %> <%= subtask.text_field :solution %>
-  </p>
-  <p>
-    <%= label_tag t(:re_subtask) %>  
-    <% if(0 == 0) %>
-        <%= subtask.radio_button :sub_type, '0', {:checked => true} %>
+<%= f.fields_for :re_subtask do |st_form| %>
+
+  <% type_class = "subtask" %>
+  <% type_class = "variant" if re_subtask.sub_type == 1 %>
+  <% type_class = "problem" if re_subtask.sub_type == 2 %>
+
+
+  <tr id="subtask_drag_<%= re_subtask.position %>" class="draggable <%= type_class %> subtask_row">
+
+  <td style="cursor: pointer;" class="<%= type_class %>" ></td>
+  <td class="<%= type_class -%>">
+    <%= st_form.hidden_field :position, :index => nil, :class => "position"  %>
+    <%= st_form.select :sub_type, [['ST', 0],['V', 1],['P', 2]], { }, { :index => nil,  :onchange => "changeSubtaskRowColor($(this.parentNode.parentNode), this.value)" } %>
+  </td>
+  <td class="<%= type_class -%>">
+    <%= st_form.text_area :name, { :size => "12x2", :index => nil,  :class => "subtask_textarea" } %>
+  </td>
+  <td class="<%= type_class -%>">
+  </td>
+  <td class="<%= type_class -%>">
+    <%= st_form.text_area :solution, :index => nil, :size => "12x2", :class => "subtask_textarea" %>
+  </td>
+  <td class="<%= type_class -%>">
+  </td>
+  <td class="<%= type_class -%>">
+    <% if re_subtask.new_record? %>
+      <%= link_to_function t(:re_delete_subtask), "$(this).up('.subtask_row').remove()", :class => "icon icon-del" %> <br/>
     <% else %>
-        <%= subtask.radio_button :sub_type, '0', {:checked => false} %>
+      <%= link_to_function t(:re_delete_subtask), "markSubtaskForDestroy(this)", :class => "icon icon-del" %> <br/>
+      <%= st_form.hidden_field(:id, :index => nil) %>
+      <%= st_form.hidden_field(:_destroy, :index => nil, :class => "should_destroy") %>
     <% end %>
-  </p>
-  <p>
-    <%= label_tag t(:re_subtask_variant) %>  
-    <% if(0 == 1) %>
-        <%= subtask.radio_button :sub_type, '1', {:checked => true} %>
-    <% else %>
-        <%= subtask.radio_button :sub_type, '1', {:checked => false} %>
-    <% end %>
-  </p>
-  <p>
-    <%= label_tag t(:re_subtask_problem) %>  
-    <% if(0 == 2) %>
-        <%= subtask.radio_button :sub_type, '2', {:checked => true} %>
-    <% else %>
-        <%= subtask.radio_button :sub_type, '2', {:checked => false} %>
-    <% end %>
-  </p>
+    <%= link_to_function( t(:re_insert_st_after), "addSubtask($(this.parentNode.parentNode).id, 'after')", :class => "icon icon-subtask-after" ) %>
+  </td>
+  </tr>
 <%end%>
