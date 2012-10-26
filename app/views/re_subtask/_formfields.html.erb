@@ -1,26 +1,29 @@
-<%= fields_for :re_subtask do |subtask|%>
-      <p>
-         <%= subtask.label :solution, l(:re_subtask_solution) %> <%= subtask.text_field :solution %>
-      </p>
-      <p>
-        <%= label_tag t(:re_subtask) %>  <% if(0 == 0) %>
-                                        <%= radio_button_tag "re_subtask[sub_type]", '0', true %>
-                                    <% else %>
-                                        <%= radio_button_tag "re_subtask[sub_type]", '0', false %>
-                                    <% end %>
-      </p>
-      <p>
-        <%= label_tag t(:re_subtask_variant) %>  <% if(0 == 1) %>
-                                        <%= radio_button_tag "re_subtask[sub_type]", '1', true %>
-                                    <% else %>
-                                        <%= radio_button_tag "re_subtask[sub_type]", '1', false %>
-                                    <% end %>
-      </p>
-      <p>
-        <%= label_tag t(:re_subtask_problem) %>  <% if(0 == 2) %>
-                                        <%= radio_button_tag "re_subtask[sub_type]", '2', true %>
-                                    <% else %>
-                                        <%= radio_button_tag "re_subtask[sub_type]", '2', false %>
-                                    <% end %>
-      </p>
+<%= f.fields_for :re_subtask do |subtask| %>
+  <p>
+     <%= subtask.label :solution, l(:re_subtask_solution) %> <%= subtask.text_field :solution %>
+  </p>
+  <p>
+    <%= label_tag t(:re_subtask) %>  
+    <% if(0 == 0) %>
+        <%= subtask.radio_button :sub_type, '0', {:checked => true} %>
+    <% else %>
+        <%= subtask.radio_button :sub_type, '0', {:checked => false} %>
+    <% end %>
+  </p>
+  <p>
+    <%= label_tag t(:re_subtask_variant) %>  
+    <% if(0 == 1) %>
+        <%= subtask.radio_button :sub_type, '1', {:checked => true} %>
+    <% else %>
+        <%= subtask.radio_button :sub_type, '1', {:checked => false} %>
+    <% end %>
+  </p>
+  <p>
+    <%= label_tag t(:re_subtask_problem) %>  
+    <% if(0 == 2) %>
+        <%= subtask.radio_button :sub_type, '2', {:checked => true} %>
+    <% else %>
+        <%= subtask.radio_button :sub_type, '2', {:checked => false} %>
+    <% end %>
+  </p>
 <%end%>

@@ -1,61 +1,70 @@
 <%= f.fields_for :artifact do |artifact|%>
-<div class="box">
-	
+
   <fieldset>
   	 <legend><%= l(:re_task_specific_attributes) %></legend>
-	 <p><%= artifact.label :start, l(:re_task_start) %> <%= artifact.text_field :start, :size => 100 %></p>
-	 
-	 <p><%= artifact.label :end, l(:re_task_end) %> <%= artifact.text_field :end, :size => 100 %></p>
-	 
-	 <p><%= artifact.label :frequency, l(:re_task_frequency) %> <%= artifact.text_field :frequency, :size => 100 %></p>
+  	 <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
+		 <p><%= artifact.label :start, l(:re_task_start) %> <%= artifact.text_field :start %></p>
+		 
+		 <p><%= artifact.label :end, l(:re_task_end) %> <%= artifact.text_field :end %></p>
+		 
+		 <p><%= artifact.label :frequency, l(:re_task_frequency) %> <%= artifact.text_field :frequency %></p>
+     </div>
+     <div class="splitcontentright">
+		  <fieldset>
+		     <legend><%= l(:re_task_difficulties) %></legend>
+		     <% unless @re_artifact_properties.artifact.id.nil? %>
+			    <div class="contextual">
+			       <a href="#" class="icon icon-edit" onclick="showAndScrollTo('update-difficult', 'artifact_difficult'); return false;"><%= l(:re_update_difficult) %></a>
+			    </div>
+			    <%= textilizable(@re_artifact_properties.artifact, :difficult, :only_path => false) %>
+			    <br />
+			 <% end %>
+			 
+			 <div id='update-difficult' <%= 'style="display:none;"'.html_safe unless @re_artifact_properties.artifact.id.nil? %>>
+			   <%= artifact.text_area :difficult,
+			                    :cols => 60,
+			                    :rows => (@re_artifact_properties.artifact.difficult.blank? ? 10 : [[10, @re_artifact_properties.artifact.difficult.length / 50].max, 100].min),
+			                    :class => 'wiki-edit' %>
+			   <%= wikitoolbar_for  'artifact_difficult' %>
+			 </div>
+		  </fieldset>
+	   </div>
   </fieldset>
-  
-  <fieldset>
-     <legend><%= l(:re_task_difficulties) %></legend>
-     <% unless @re_artifact_properties.artifact.id.nil? %>
-	    <div class="contextual">
-	       <a href="#" class="icon icon-edit" onclick="showAndScrollTo('update-difficult', 'artifact_difficult'); return false;"><%= l(:re_update_difficult) %></a>
-	    </div>
-	    <%= textilizable(@re_artifact_properties.artifact, :difficult, :only_path => false) %>
-	    <br />
-	 <% end %>
-	 
-	 <div id='update-difficult' <%= 'style="display:none;"' unless @re_artifact_properties.artifact.id.nil? %>>
-	   <%= artifact.text_area :difficult,
-	                    :cols => 60,
-	                    :rows => (@re_artifact_properties.artifact.difficult.blank? ? 10 : [[10, @re_artifact_properties.artifact.difficult.length / 50].max, 100].min),
-	                    :class => 'wiki-edit' %>
-	   <%= wikitoolbar_for  'artifact_difficult' %>
-	 </div>
-  </fieldset>
-</div>
+ 
+
+	<fieldset>
+	   <legend><%= l(:re_subtasks) %></legend>
+	   <table class="subtasks">
+	      <thead>
+	         <tr>
+	            <th>&nbsp;</th>
+	            <th>Type</th>
+	            <th>Name</th>
+	            <th>&nbsp;</th>
+	            <th>Solution</th>
+	            <th>&nbsp;</th>
+	            <th><%= link_to_function( t(:re_insert_st_after), "addSubtask('top')", :class => "icon icon-subtask-after" ) %></th>
+	         </tr>
+	      </thead>
+	      <tbody id="subtasks">
+	      </tbody>
+	   </table>
+	</fieldset>
+	
+	<%= sortable_element( "subtasks",
+	  :tag => 'tr',
+	  :complete => visual_effect(:highlight, 'subtasks'),
+	  :onUpdate => "function() { updateSubtaskPositionFields(); }"
+	) %>
+	
+	
+	<%= javascript_tag do %>
+	  function addSubtask(where) {
+	  	jQuery("#subtasks").prepend(jQuery("#subtask_mask").html());
+	  }
+	<%end%>
+	
+	<div id="subtask_mask" style="display:none">
+		<%= render 're_subtask/formfields', :f => artifact %>
+	</div>
 <% end%>
-
-<fieldset>
-   <legend><%= l(:re_subtasks) %></legend>
-   <table class="subtasks">
-      <thead>
-         <tr>
-            <th>&nbsp;</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>&nbsp;</th>
-            <th>Solution</th>
-            <th>&nbsp;</th>
-            <th><%= link_to_function( t(:re_insert_st_after), "addSubtask('subtasks', 'top')", :class => "icon icon-subtask-after" ) %></th>
-         </tr>
-      </thead>
-      <tbody id="subtasks">
-		<% f.fields_for :re_subtasks do |builder| %>
-			<%= render 're_subtask/formfields', :f => builder %>
-		<% end %>
-      </tbody>
-   </table>
-</fieldset>
-
-<%= sortable_element( "subtasks",
-  :tag => 'tr',
-  :complete => visual_effect(:highlight, 'subtasks'),
-  :onUpdate => "function() { updateSubtaskPositionFields(); }"
-) %>
-

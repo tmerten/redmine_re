@@ -100,8 +100,7 @@
               }
 
             <% end %>
-
-      </div>
+            </div>
 
       <div class='splitcontentright'>
           <% unless @issues.nil? %>
@@ -119,7 +118,6 @@
       </div>
 
       </fieldset>
-      
 
     <!-- Additional fields like subtasks for task which are described in an own partial -->
     <%= render( @artifact_type.underscore+"/formfields", {:f => f} ) if File.exists?("#{Rails.root}/plugins/redmine_re/app/views/"+@artifact_type.underscore+"/_formfields.html.erb") %>
