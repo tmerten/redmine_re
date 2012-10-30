@@ -102,8 +102,17 @@ class ReArtifactProperties < ActiveRecord::Base
   end
 
   def artifact_attributes=(attributes)
-    #artifact = self.artifact_type.camelcase.constantize.new
     artifact = self.artifact_type.camelcase.constantize.find_or_create_by_id(self.artifact_id)
+    
+    unless attributes[:re_subtask].nil?
+      attributes[:re_subtask].each do |subtask|
+        ns = ReSubtask.new subtask
+        ns.save
+        artifact.re_subtasks << ns
+      end
+      attributes.delete(:re_subtask)
+    end
+        
     artifact.attributes = attributes
     self.artifact = artifact
   end
