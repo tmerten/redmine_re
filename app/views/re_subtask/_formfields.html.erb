@@ -10,7 +10,7 @@
   <td style="cursor: pointer;" class="<%= type_class %>" ></td>
   <td class="<%= type_class -%>">
     <%= st_form.hidden_field :position, :index => nil, :class => "position"  %>
-    <%= st_form.select :sub_type, [['ST', 0],['V', 1],['P', 2]], { }, { :index => nil,  :onchange => "changeSubtaskRowColor($(this.parentNode.parentNode), this.value)" } %>
+    <%= st_form.select :sub_type, [['ST', 0],['V', 1],['P', 2]], { }, { :index => nil,  :onchange => "changeSubtaskRowColor(jQuery(this).parent().parent(), this.value)" } %>
   </td>
   <td class="<%= type_class -%>">
     <%= st_form.text_area :name, { :size => "12x2", :index => nil,  :class => "subtask_textarea" } %>
@@ -24,13 +24,13 @@
   </td>
   <td class="<%= type_class -%>">
     <% if re_subtask.new_record? %>
-      <%= link_to_function t(:re_delete_subtask), "$(this).up('.subtask_row').remove()", :class => "icon icon-del" %> <br/>
+      <%= link_to_function t(:re_delete_subtask), "jQuery(this).parent().parent().remove()", :class => "icon icon-del" %> <br/>
     <% else %>
       <%= link_to_function t(:re_delete_subtask), "markSubtaskForDestroy(this)", :class => "icon icon-del" %> <br/>
       <%= st_form.hidden_field(:id, :index => nil) %>
       <%= st_form.hidden_field(:_destroy, :index => nil, :class => "should_destroy") %>
     <% end %>
-    <%= link_to_function( t(:re_insert_st_after), "addSubtask($(this.parentNode.parentNode).id, 'after')", :class => "icon icon-subtask-after" ) %>
+    <%= link_to_function( t(:re_insert_st_after), "addSubtask(jQuery(this).parent().parent(), 'after')", :class => "icon icon-subtask-after" ) %>
   </td>
   </tr>
 <%end%>

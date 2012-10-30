@@ -30,8 +30,6 @@
 		  </fieldset>
 	   </div>
   </fieldset>
- 
-
 	<fieldset>
 	   <legend><%= l(:re_subtasks) %></legend>
 	   <table class="subtasks">
@@ -62,74 +60,53 @@
 	
 	
 	<%= javascript_tag do %>
-
-	  
-	  
-
-  function changeSubtaskRowColor(element, value) {
-    element.removeClassName('subtask');
-    element.removeClassName('variant');
-    element.removeClassName('problem');
-
-    switch(value) {
-      case '0': element.addClassName('subtask'); break;
-      case '1': element.addClassName('variant'); break;
-      case '2': element.addClassName('problem'); break;
-      default: alert('<%= t(:re_st_type_not_allowed) %>' + value);
-    }
-
-    element.childElements().each( function ( td ) {
-       changeSubtaskRowColor(td, value)
-    });
-  }
-
-  function addSubtask(element, add_pos) {
-    var rendered_subtask;
-    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact, :re_subtask =>ReSubtask.new } )) %>";
-
-    switch(add_pos) {
-      case 'after':  jQuery(element).prepend(rendered_subtask); break;
-      case 'before': $(element).insert( { before: rendered_subtask} ); break;
-      case 'bottom': $(element).insert( { bottom: rendered_subtask} ); break;
-      case 'top':    $(element).insert( { top: rendered_subtask} ); break;
-      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
-    }
-
-    unregisterTextAreaEvents();
-    setResizeableTextAreas();
-    Sortable.create("subtasks", {onUpdate:function() { updateSubtaskPositionFields(); }, tag:'tr'})
-    updateSubtaskPositionFields();
-  }
-
-  function markSubtaskForDestroy(element) {
-    $(element).next('.should_destroy').value = 1;
-    $(element).up('.subtask_row').hide();
-  }
-
-  function updateSubtaskPositionFields() {
-    var pos = 1;
-    $('subtasks').childElements().each( function(child) {
-      $(child).id = 'subtask_drag_' + pos;
-      $(child).down('.position').value = pos;
-      pos++;
-    });
-  }
-
-  function setResizeableTextAreas() {
-      $$('textarea.subtask_textarea').each(function (el) {
-         new ResizingTextArea($(el));
-      });
-  }
-
-  function unregisterTextAreaEvents() {
-    $$('textarea.subtask_textarea').each(function (el) {
-     (el).stopObserving('click');
-     (el).stopObserving('keyup');
-    });
-  }
-	  
-	  
-	  
+	
+	  function changeSubtaskRowColor(element, value) {
+	    jQuery(element).removeClass('subtask');
+	    jQuery(element).removeClass('variant');
+	    jQuery(element).removeClass('problem');
+	
+	    switch(value) {
+	      case '0': jQuery(element).addClass('subtask'); break;
+	      case '1': jQuery(element).addClass('variant'); break;
+	      case '2': jQuery(element).addClass('problem'); break;
+	      default: alert('<%= t(:re_st_type_not_allowed) %>' + value);
+	    }
+	
+	    element.childElements().each( function ( td ) {
+	       changeSubtaskRowColor(td, value)
+	    });
+	  }
+	
+	  function addSubtask(element, add_pos) {
+	    var rendered_subtask;
+	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact, :re_subtask =>ReSubtask.new } )) %>";
+	
+	    switch(add_pos) {
+	      case 'top':
+	      case 'after':  jQuery(element).after(rendered_subtask); break;
+	      case 'before': jQuery(element).before(rendered_subtask); break;
+	      case 'bottom': jQuery(element).append(rendered_subtask); break;
+	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
+	    }
+	    
+	    Sortable.create("subtasks", {onUpdate:function() { updateSubtaskPositionFields(); }, tag:'tr'})
+	    updateSubtaskPositionFields();
+	  }
+	
+	  function markSubtaskForDestroy(element) {
+	    jQuery(element).next('.should_destroy').value = 1;
+	    jQuery(element).up('.subtask_row').hide();
+	  }
+	
+	  function updateSubtaskPositionFields() {
+	    var pos = 1;
+	    $('subtasks').childElements().each( function(child) {
+	      $(child).id = 'subtask_drag_' + pos;
+	      $(child).down('.position').value = pos;
+	      pos++;
+	    });
+	  }
 	  
 	<%end%>
 <% end%>
