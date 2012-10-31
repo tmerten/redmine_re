@@ -1,4 +1,10 @@
-<%= f.fields_for :re_subtask do |st_form| %>
+<%# TODO: Investigate: This should not be needed. Actually
+Rails should automatically render the correct fields if
+f.fields_for :re_subtasks are given
+because of nested attributes. It might be because
+the nested attributes for ReArtifactProperties to ReTask are
+polymorphic %>
+<%= f.fields_for :re_subtasks_attributes do |st_form| %>
 
   <% type_class = "subtask" %>
   <% type_class = "variant" if re_subtask.sub_type == 1 %>

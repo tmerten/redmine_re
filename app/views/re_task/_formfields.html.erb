@@ -1,13 +1,13 @@
-<%= f.fields_for :artifact do |artifact|%>
+<%= f.fields_for :artifact do |artifact_form|%>
 
   <fieldset>
   	 <legend><%= l(:re_task_specific_attributes) %></legend>
   	 <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
-		 <p><%= artifact.label :start, l(:re_task_start) %> <%= artifact.text_field :start %></p>
+		 <p><%= artifact_form.label :start, l(:re_task_start) %> <%= artifact_form.text_field :start %></p>
 		 
-		 <p><%= artifact.label :end, l(:re_task_end) %> <%= artifact.text_field :end %></p>
+		 <p><%= artifact_form.label :end, l(:re_task_end) %> <%= artifact_form.text_field :end %></p>
 		 
-		 <p><%= artifact.label :frequency, l(:re_task_frequency) %> <%= artifact.text_field :frequency %></p>
+		 <p><%= artifact_form.label :frequency, l(:re_task_frequency) %> <%= artifact_form.text_field :frequency %></p>
      </div>
      <div class="splitcontentright">
 		  <fieldset>
@@ -20,8 +20,8 @@
 			    <br />
 			 <% end %>
 			 
-			 <div id='update-difficult' <%= 'style="display:none;"'.html_safe unless @re_artifact_properties.artifact.id.nil? %>>
-			   <%= artifact.text_area :difficult,
+			 <div id='update-difficult' <%= 'style="display:none;"'.html_safe unless @re_artifact_properties.artifact.new_record? %>>
+			   <%= artifact_form.text_area :difficult,
 			                    :cols => 60,
 			                    :rows => (@re_artifact_properties.artifact.difficult.blank? ? 10 : [[10, @re_artifact_properties.artifact.difficult.length / 50].max, 100].min),
 			                    :class => 'wiki-edit' %>
@@ -51,8 +51,8 @@
 	      </tbody>
 	   </table>
 	</fieldset>
-	
-	<%= sortable_element( "subtasks",
+
+	<%#= sortable_element( "subtasks",
 	  :tag => 'tr',
 	  :complete => visual_effect(:highlight, 'subtasks'),
 	  :onUpdate => "function() { updateSubtaskPositionFields(); }"
@@ -80,7 +80,7 @@
 	
 	  function addSubtask(element, add_pos) {
 	    var rendered_subtask;
-	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact, :re_subtask =>ReSubtask.new } )) %>";
+	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
 	
 	    switch(add_pos) {
 	      case 'top':

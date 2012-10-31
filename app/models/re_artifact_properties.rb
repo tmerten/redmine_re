@@ -94,17 +94,23 @@ class ReArtifactProperties < ActiveRecord::Base
   # the correct artifact_type and use nested attributes for re_artifact_properties
   accepts_nested_attributes_for :artifact
 
+  def build_artifact properties, something_we_dont_know_yet
+    # is build_artifact only called when the re_artifact is new?
+    logger.debug properties.inspect
+    # properties.re_subtask => properties.re_subtask_attributes or properties_re_subtasks_attributes 
+    
+    if self.artifact_type
+      self.artifact = self.artifact_type.constantize.new(properties)
+    else
+      throw "ReArtifactProperties always need an ArtifactType"
+    end
+  end
+
   def attributes=(attributes = {})
     unless attributes[:artifact_type].blank?
       self.artifact_type = attributes[:artifact_type]
     end
     super
-  end
-
-  def artifact_attributes=(attributes)
-    artifact = self.artifact_type.camelcase.constantize.find_or_create_by_id(self.artifact_id)
-    artifact.attributes = attributes
-    self.artifact = artifact
   end
 
   acts_as_watchable

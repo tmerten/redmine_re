@@ -13,11 +13,11 @@ class ReArtifactPropertiesController < RedmineReController
   def new
     @re_artifact_properties = ReArtifactProperties.new
     @artifact_type = params[:artifact_type]
+
+    # create a typed artifact instance in re_artifact_properties.artifact
+    # (e.g. ReUseCase or ReTask)
     @re_artifact_properties.artifact_type = @artifact_type.camelcase
-
-    #@re_artifact_properties.artifact.build
     @re_artifact_properties.artifact = @artifact_type.camelcase.constantize.new
-
 
     @re_artifact_properties.project = @project
 
