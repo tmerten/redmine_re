@@ -84,8 +84,7 @@
 	
 	  function addSubtask(element, add_pos) {
 	    var rendered_subtask;
-	    rende
-			red_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
+	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
 	
 	    switch(add_pos) {
 	      case 'top':
@@ -98,7 +97,7 @@
 	    Sortable.create("subtasks", {onUpdate:function() { updateSubtaskPositionFields(); }, tag:'tr'})
 	    updateSubtaskPositionFields();
 
-			/* TODO: register changeSubtaskRowColor
+			/* TODO: register changeSubtaskRowColor */
 	  }
 	
 	  function markSubtaskForDestroy(element) {
