@@ -32,7 +32,7 @@ polymorphic %>
     <% if re_subtask.new_record? %>
       <%= link_to_function t(:re_delete_subtask), "jQuery(this).parent().parent().remove()", :class => "icon icon-del" %> <br/>
     <% else %>
-      <%= link_to_function t(:re_delete_subtask), "markSubtaskForDestroy(this)", :class => "icon icon-del" %> <br/>
+      <%= link_to_function t(:re_delete_subtask), "markSubtaskForDestroy(jQuery(this).parent())", :class => "icon icon-del" %> <br/>
       <%= st_form.hidden_field(:id, :value=> re_subtask.id, :index => nil) %>
       <%= st_form.hidden_field(:_destroy, :index => nil, :class => "should_destroy") %>
     <% end %>
