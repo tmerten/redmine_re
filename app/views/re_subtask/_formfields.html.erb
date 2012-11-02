@@ -42,7 +42,6 @@ is true in here.
   </td>
   <td class="<%= type_class -%>">
     <% if re_subtask.new_record? %>
-		<%# TODO why are we duplicating the above code? %>
       <%= link_to_function t(:re_delete_subtask), "jQuery(this).parent().parent().remove()", :class => "icon icon-del" %> <br/>
     <% else %>
       <%= link_to_function t(:re_delete_subtask), "markSubtaskForDestroy(jQuery(this).parent())", :class => "icon icon-del" %> <br/>
