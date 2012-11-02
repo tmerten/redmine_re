@@ -60,7 +60,11 @@
 	
 	
 	<%= javascript_tag do %>
-	
+
+		$j("select.subtask-type").change(function() {
+			changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
+		});
+		
 	  function changeSubtaskRowColor(element, value) {
 	    jQuery(element).removeClass('subtask');
 	    jQuery(element).removeClass('variant');
@@ -80,7 +84,8 @@
 	
 	  function addSubtask(element, add_pos) {
 	    var rendered_subtask;
-	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
+	    rende
+			red_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
 	
 	    switch(add_pos) {
 	      case 'top':
@@ -92,6 +97,8 @@
 	    
 	    Sortable.create("subtasks", {onUpdate:function() { updateSubtaskPositionFields(); }, tag:'tr'})
 	    updateSubtaskPositionFields();
+
+			/* TODO: register changeSubtaskRowColor
 	  }
 	
 	  function markSubtaskForDestroy(element) {

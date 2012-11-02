@@ -3,20 +3,32 @@ Rails should automatically render the correct fields if
 f.fields_for :re_subtasks are given
 because of nested attributes. It might be because
 the nested attributes for ReArtifactProperties to ReTask are
-polymorphic %>
+polymorphic 
+TODO 2: fields_for uses the following implementation to check for nested_attributes
+def nested_attributes_association?(association_name)
+  @object.respond_to?("#{association_name}_attributes=")
+end
+
+and
+
+f.to_model.object.respond_to?(:re_subtasks_attributes=)
+is true in here.
+%>
+
+
 <%= f.fields_for :re_subtasks_attributes do |st_form| %>
 
   <% type_class = "subtask" %>
   <% type_class = "variant" if re_subtask.sub_type == 1 %>
   <% type_class = "problem" if re_subtask.sub_type == 2 %>
-
+	
 
   <tr id="subtask_drag_<%= re_subtask.position %>" class="draggable <%= type_class %> subtask_row">
 
   <td style="cursor: pointer;" class="<%= type_class %>" ></td>
   <td class="<%= type_class -%>">
     <%= st_form.hidden_field :position, :index => nil, :class => "position"  %>
-    <%= (st_form.select :sub_type, [['ST', 0],['V', 1],['P', 2]], {}, { :selected => re_subtask.sub_type, :index => nil, :onchange => "changeSubtaskRowColor(jQuery(this).parent().parent(), this.value)" }).gsub('<option value="'+re_subtask.sub_type.to_s+'">', '<option value="'+re_subtask.sub_type.to_s+'" selected="selected">').html_safe %>
+    <%= st_form.select :sub_type, [['ST', 0],['V', 1],['P', 2]], { :selected => re_subtask.sub_type }, { :index => nil, :class => "subtask-type" } %>
   </td>
   <td class="<%= type_class -%>">
     <%= st_form.text_area :name, { :size => "12x2", :index => nil, :value=> re_subtask.name, :class => "subtask_textarea" } %>
@@ -30,6 +42,7 @@ polymorphic %>
   </td>
   <td class="<%= type_class -%>">
     <% if re_subtask.new_record? %>
+		<%# TODO why are we duplicating the above code? %>
       <%= link_to_function t(:re_delete_subtask), "jQuery(this).parent().parent().remove()", :class => "icon icon-del" %> <br/>
     <% else %>
       <%= link_to_function t(:re_delete_subtask), "markSubtaskForDestroy(jQuery(this).parent())", :class => "icon icon-del" %> <br/>
@@ -39,4 +52,4 @@ polymorphic %>
     <%= link_to_function( t(:re_insert_st_after), "addSubtask(jQuery(this).parent().parent(), 'after')", :class => "icon icon-subtask-after" ) %>
   </td>
   </tr>
-<%end%>
+<% end %>
