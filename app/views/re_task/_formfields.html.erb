@@ -1,3 +1,7 @@
+<% content_for :header_tags do %>
+	<%= javascript_include_tag 'jquery.autogrowtextarea.js', :plugin => 'redmine_re' %>
+<% end %>
+
 <%= f.fields_for :artifact do |artifact_form|%>
 
   <fieldset>
@@ -97,7 +101,7 @@
 	    Sortable.create("subtasks", {onUpdate:function() { updateSubtaskPositionFields(); }, tag:'tr'})
 	    updateSubtaskPositionFields();
 
-			/* TODO: register changeSubtaskRowColor */
+			/* TODO: register changeSubtaskRowColor
 	  }
 	
 	  function markSubtaskForDestroy(element) {

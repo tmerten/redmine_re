@@ -1,3 +1,7 @@
+<% content_for :header_tags do %>
+	<%= javascript_include_tag 'jquery.autogrowtextarea.js', :plugin => 'redmine_re' %>
+<% end %>
+
 <%# Ugly way to provide f to partials. Must be refacturad %>
 <% @f = f %>
 <fieldset><legend><%= l(:re_use_case_specific_attributes) %></legend>
@@ -217,7 +221,7 @@
 
   function setResizeableTextAreas() {
       $$('textarea.use_case_step_textarea').each(function (el) {
-         new ResizingTextArea($(el));
+         $(el).autoGrow();
       });
   }
 
