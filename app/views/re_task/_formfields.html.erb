@@ -45,9 +45,9 @@
 	         </tr>
 	      </thead>
 	      <tbody id="subtasks">
-          <%= 
-          #render(:partial => 're_subtask/formfields', :collection => @re_artifact_properties.re_subtasks) 
-          %>
+          <% @re_artifact_properties.artifact.re_subtasks.each do |current_re_subtask| %>
+             <%= render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask => current_re_subtask }) %>
+          <% end %>
 	      </tbody>
 	   </table>
 	</fieldset>
