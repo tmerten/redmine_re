@@ -1,234 +1,231 @@
-<% content_for :header_tags do %>
-	<%= javascript_include_tag 'jquery.autogrowtextarea.js', :plugin => 'redmine_re' %>
-<% end %>
-
-<%# Ugly way to provide f to partials. Must be refacturad %>
-<% @f = f %>
-<fieldset><legend><%= l(:re_use_case_specific_attributes) %></legend>
-    <p>
-    <%= f.label :goal_level, l(:re_use_case_level) %>
-    <%#  image_tag('icons/use_case_cloud.png', :size => '40x40', :plugin => 'redmine_re', :alt => t(:re_use_case_abstract_overview)) => 5 %>
-    <%= f.select :goal_level, [
-      [t(:re_use_case_abstract_overview), 5],
-      [t(:re_use_case_overview) , 4 ],
-      [t(:re_use_case_user_goal) , 3 ],
-      [t(:re_use_case_function) , 2 ],
-      [t(:re_use_case_low) , 1 ] ] %>
-    </p>
-    <p>
-      <%= f.label :trigger, l(:re_use_case_trigger) %> <%= f.text_field :trigger, :size => 100 %>
-    </p>
-    <p>
-      <%= f.label :precondition, l(:re_use_case_precondition) %> <%= f.text_field :precondition, :size => 100 %>
-    </p>
-    <p>
-      <%= f.label :postcondition, l(:re_use_case_postcondition) %> <%= f.text_field :postcondition, :size => 100 %>
-    </p>
-    
-	<%unless @user_profiles.nil?  
-		user_profiles_array = [l(:re_please_choose)]
-		user_profiles_array_2 = ['']
-		@user_profiles.each do |user_profile| 
-			user_profiles_array << [user_profile.re_artifact_properties.name, user_profile.id]
-			user_profiles_array_2 << [user_profile.re_artifact_properties.name, user_profile.id]
-		end
-		%>
-		<p><%= f.label :precondition, l(:re_primary_actor) %> 
-			<% unless @current_primary_user.blank? %>
-				<%= select_tag("primary_user_profile", options_for_select(user_profiles_array, :selected => @current_primary_user.sink_id) ) %>
-			<%else%>
-				<%= select_tag("primary_user_profile", options_for_select(user_profiles_array) ) %>
-			<% end%>
-		</p>
-	<%end%>
+<%= f.fields_for :re_use_case do |artifact_form| %>
+	<fieldset><legend><%= l(:re_use_case_specific_attributes) %></legend>
+	    <p>
+	    <%= artifact_form.label :goal_level, l(:re_use_case_level) %>
+	    <%#  image_tag('icons/use_case_cloud.png', :size => '40x40', :plugin => 'redmine_re', :alt => t(:re_use_case_abstract_overview)) => 5 %>
+	    <%= artifact_form.select :goal_level, [
+	      [t(:re_use_case_abstract_overview), 5],
+	      [t(:re_use_case_overview) , 4 ],
+	      [t(:re_use_case_user_goal) , 3 ],
+	      [t(:re_use_case_function) , 2 ],
+	      [t(:re_use_case_low) , 1 ] ] %>
+	    </p>
+	    <p>
+	      <%= artifact_form.label :trigger, l(:re_use_case_trigger) %> <%= artifact_form.text_field :trigger, :size => 100 %>
+	    </p>
+	    <p>
+	      <%= artifact_form.label :precondition, l(:re_use_case_precondition) %> <%= artifact_form.text_field :precondition, :size => 100 %>
+	    </p>
+	    <p>
+	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition, :size => 100 %>
+	    </p>
+	    
+		<%unless @user_profiles.nil?  
+			user_profiles_array = [l(:re_please_choose)]
+			user_profiles_array_2 = ['']
+			@user_profiles.each do |user_profile| 
+				user_profiles_array << [user_profile.re_artifact_properties.name, user_profile.id]
+				user_profiles_array_2 << [user_profile.re_artifact_properties.name, user_profile.id]
+			end
+			%>
+			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %> 
+				<% unless @current_primary_user.blank? %>
+					<%= select_tag("primary_user_profile", options_for_select(user_profiles_array, :selected => @current_primary_user.sink_id) ) %>
+				<%else%>
+					<%= select_tag("primary_user_profile", options_for_select(user_profiles_array) ) %>
+				<% end%>
+			</p>
+		<%end%>
+		
+	    <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
+	      <p>
+	      	<label><%= t(:re_secondary_actor) %></label>
+	      	<%= text_field_tag :secondary_actor, '', {:size => 20, :class => 'autocomplete', :id => 'secondary_actor_autocomplete'} %>
+	      </p>
+	      
+		  <div id="secondary_user_candidates" class="autocomplete"></div>
+		    <%= javascript_tag do %>
+		        new Ajax.Autocompleter('secondary_actor_autocomplete',
+		        'secondary_user_candidates',
+		        '<%= url_for :controller => 're_use_case', :action => 'autocomplete_sink' %>',
+		        {
+		        paramName: 'user_profile_subject',
+		        parameters:
+		        'project_id=<%= @project.id %><%= '&id=' + @re_artifact_properties.id.to_s unless @re_artifact_properties.id.blank? %>',
+		        minChars: 1,
+		        frequency: 0.5,
+		        afterUpdateElement : getSecondaryUserProfileId});
+		  
+		        function getSecondaryUserProfileId(text, li){
+		  
+		            jQuery('#added_secondary_user').append(li.innerHTML + ', ');
+		            jQuery('#added_secondary_user').append('<input id="secondary_user_profile_id" type="hidden" name="secondary_user_profile_id[]" value=' + li.id + ' >');
+		            document.getElementById('secondary_actor_autocomplete').value ="";
+		        }
+		     <% end %>
+		  </div>
+		  <div class='splitcontentright'>
+		  	
+		  	<div id='added_secondary_user'>
+		  	  <%
+		  	  @secondary_user_profiles = []
+		  	  @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::RELATION_TYPES[:dep])
+		  	  
+		  	  unless @all_artifact_relations.blank?
+			  	  @all_artifact_relations.each do |relation|
+			  	  	tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id,'ReUserProfile') }
+			     	logger.debug(relation.to_yaml)
+			  	  	@secondary_user_profiles << tmp unless tmp.blank?
+			  	  end
+			  end
+		  	  %>
+		      <% unless @secondary_user_profiles.nil? %>
+		          
+		          <% @secondary_user_profiles.each do |secondary_user| %>
+		          	  <%= secondary_user[:properties].name %>
+		              <%= link_to_remote(
+		                '',
+		                    {
+		                      :update => "added_secondary_user",
+		                      :url => {
+		                                :action => :delete,
+		                                :controller => :re_artifact_relationship,
+		                                :id => secondary_user[:relation].id,
+		                                :re_artifact_properties_id => @re_artifact_properties.id,
+		                                :secondary_user_delete => true,
+		                                :project_id => @project.id
+		
+		                              },
+		                      :confirm => t(:re_are_you_sure)
+		                    },
+		                    {
+		                      :class => 'icon icon-del'
+		                    })
+		              %>,
+		         <% end %>     
+		      <% end %>
+		      </div>
+		  </div>
+		
+	</fieldset>
 	
-    <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
-      <p>
-      	<label><%= t(:re_secondary_actor) %></label>
-      	<%= text_field_tag :secondary_actor, '', {:size => 20, :class => 'autocomplete', :id => 'secondary_actor_autocomplete'} %>
-      </p>
-      
-	  <div id="secondary_user_candidates" class="autocomplete"></div>
-	    <%= javascript_tag do %>
-	        new Ajax.Autocompleter('secondary_actor_autocomplete',
-	        'secondary_user_candidates',
-	        '<%= url_for :controller => 're_use_case', :action => 'autocomplete_sink' %>',
-	        {
-	        paramName: 'user_profile_subject',
-	        parameters:
-	        'project_id=<%= @project.id %><%= '&id=' + @artifact.artifact_properties.id.to_s unless @artifact.artifact_properties.id.blank? %>',
-	        minChars: 1,
-	        frequency: 0.5,
-	        afterUpdateElement : getSecondaryUserProfileId});
+	<fieldset><legend><%= l(:re_use_case_steps) %></legend>
+	  <table class="steps">
+	    <thead>
+	      <tr>
+	        <th>&nbsp;</th>
+	        <th><%= t(:re_user_steps) %></th>
+	        <th width="120px" >&nbsp;</th>
+	        <th ><%= t(:re_system_steps) %></th>
+	        <th>&nbsp;</th>
+	        <th style="min-width: 300px;"><%= t(:re_uc_add_below) %> <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep('steps', 'top', 'user')", :class => "" ) %>&nbsp;&nbsp;
+	          <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep('steps', 'top', 'system')", :class => "" ) %>&nbsp;&nbsp;
+	          <%= link_to_function( image_tag('icons/user_go.png', :plugin => 'redmine_re', :alt => t(:re_uc_user))+image_tag('icons/monitor_go_back.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addDialog('steps', 'top')", :class => "" ) %>
+	        </th>
+	      </tr>
+	    </thead>
+	    <tbody id="steps">
+          <% @re_artifact_properties.artifact.re_use_case_steps.each do |current_re_use_case_step| %>
+             <%= render(:partial => 're_use_case_step/formfields', :locals => { :f => artifact_form, :re_use_case_step => current_re_use_case_step }) %>
+          <% end %>
+	      </tbody>
+	    </tbody>
+	    <%= sortable_element( "steps",
+	      :tag => 'tr',
+	      :complete => visual_effect(:highlight, 'steps'),
+	      :onUpdate => "function() { updateStepPositionFields(); }"
+	    ) %>
+	  </table>
+	</fieldset>
+	
+	<%= javascript_tag do %>
+	  setResizeableTextAreas();
 	  
-	        function getSecondaryUserProfileId(text, li){
+	  var marker = 0;
 	  
-	            jQuery('#added_secondary_user').append(li.innerHTML + ', ');
-	            jQuery('#added_secondary_user').append('<input id="secondary_user_profile_id" type="hidden" name="secondary_user_profile_id[]" value=' + li.id + ' >');
-	            document.getElementById('secondary_actor_autocomplete').value ="";
-	        }
-	     <% end %>
-	  </div>
-	  <div class='splitcontentright'>
-	  	
-	  	<div id='added_secondary_user'>
-	  	  <%
-	  	  @secondary_user_profiles = []
-	  	  @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@artifact.artifact_properties.id, ReArtifactRelationship::RELATION_TYPES[:dep])
-	  	  
-	  	  unless @all_artifact_relations.blank?
-		  	  @all_artifact_relations.each do |relation|
-		  	  	tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id,'ReUserProfile') }
-		     	logger.debug(relation.to_yaml)
-		  	  	@secondary_user_profiles << tmp unless tmp.blank?
-		  	  end
-		  end
-	  	  %>
-	      <% unless @secondary_user_profiles.nil? %>
-	          
-	          <% @secondary_user_profiles.each do |secondary_user| %>
-	          	  <%= secondary_user[:properties].name %>
-	              <%= link_to_remote(
-	                '',
-	                    {
-	                      :update => "added_secondary_user",
-	                      :url => {
-	                                :action => :delete,
-	                                :controller => :re_artifact_relationship,
-	                                :id => secondary_user[:relation].id,
-	                                :re_artifact_properties_id => @artifact.artifact_properties.id,
-	                                :secondary_user_delete => true,
-	                                :project_id => @project.id
+	  function addDialog(element, add_pos) {
+	    addStep(element, add_pos, 'system');
+	    addStep(element, add_pos, 'user');
+	  }
 	
-	                              },
-	                      :confirm => t(:re_are_you_sure)
-	                    },
-	                    {
-	                      :class => 'icon icon-del'
-	                    })
-	              %>,
-	         <% end %>     
-	      <% end %>
-	      </div>
-	  </div>
+	  function addStep(element, add_pos, type) {
+	    var rendered_step;
 	
-</fieldset>
-
-<fieldset><legend><%= l(:re_use_case_steps) %></legend>
-  <table class="steps">
-    <thead>
-      <tr>
-        <th>&nbsp;</th>
-        <th><%= t(:re_user_steps) %></th>
-        <th width="120px" >&nbsp;</th>
-        <th ><%= t(:re_system_steps) %></th>
-        <th>&nbsp;</th>
-        <th style="min-width: 300px;"><%= t(:re_uc_add_below) %> <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep('steps', 'top', 'user')", :class => "" ) %>&nbsp;&nbsp;
-          <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep('steps', 'top', 'system')", :class => "" ) %>&nbsp;&nbsp;
-          <%= link_to_function( image_tag('icons/user_go.png', :plugin => 'redmine_re', :alt => t(:re_uc_user))+image_tag('icons/monitor_go_back.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addDialog('steps', 'top')", :class => "" ) %>
-        </th>
-      </tr>
-    </thead>
-    <tbody id="steps">
-      <%# @artifact.re_use_case_steps.each do |re_use_case_step| %>
-	      <%= render( :partial => 're_use_case_step',  :collection => @artifact.re_use_case_steps ) %>
-      <%# end %>
-    </tbody>
-    <%= sortable_element( "steps",
-      :tag => 'tr',
-      :complete => visual_effect(:highlight, 'steps'),
-      :onUpdate => "function() { updateStepPositionFields(); }"
-    ) %>
-  </table>
-</fieldset>
-
-<%= javascript_tag do %>
-  setResizeableTextAreas();
-  
-  var marker = 0;
-  
-  function addDialog(element, add_pos) {
-    addStep(element, add_pos, 'system');
-    addStep(element, add_pos, 'user');
-  }
-
-  function addStep(element, add_pos, type) {
-    var rendered_step;
-
-    switch(type) {
-      case 'user':
-      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step", :object => ReUseCaseStep.new(:step_type=>1))) %>";
-      break;
-      case 'system':
-      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step", :object => ReUseCaseStep.new(:step_type=>2))) %>";
-    }
-
-    switch(add_pos) {
-      case 'after':  $(element).insert( { after: rendered_step} ); break;
-      case 'before': $(element).insert( { before: rendered_step} ); break;
-      case 'bottom': $(element).insert( { bottom: rendered_step} ); break;
-      case 'top':    $(element).insert( { top: rendered_step} ); break;
-      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
-    }
-
-    unregisterTextAreaEvents();
-    setResizeableTextAreas();
-    Sortable.create("steps", { onUpdate:function() { updateStepPositionFields(); }, tag:'tr' } );
-    updateStepPositionFields();
-  }
-
-  function addExpansion(element, store_element, use_case_step_id) {
-    var rendered_expansion;
-    rendered_expansion = "<%= escape_javascript(render(:partial => "re_use_case_step_expansion", :object => ReUseCaseStepExpansion.new(:re_expansion_type=>1))) %>";
-    rendered_expansion = replaceAll(rendered_expansion, "##use_case_step_id##", use_case_step_id);
-    rendered_expansion = replaceAll(rendered_expansion, "##marker##", Math.round(Math.random()*10000)+1000000);
-    
-    $(store_element).insert( { bottom: rendered_expansion } );
-  }
-  
-  function replaceAll(txt, replace, with_this) {
-  	return txt.replace(new RegExp(replace, 'g'),with_this);
-  }
-  
-  function markExpansionForDeletion(element) {
-    $(element).next('.should_destroy').value = 1;
-    $(element).up('.use_case_step_expansion_row').hide();
-  }
-
-  function markStepForDeletion(element) {
-    $(element).next('.should_destroy').value = 1;
-    $(element).up('.use_case_step_row').hide();
-  }
-
-  function updateStepPositionFields() {
-    var pos = 1;
-    $('steps').childElements().each( function(child) {
-      $(child).id = 'use_case_step_drag_' + pos;
-      $(child).down('.position').value = pos;
-      pos++;
-    });
-  }
-
-  function updateStepExpansionPositionFields() {
-    var pos = 1;
-    $('steps').childElements().each( function(child) {
-      $(child).id = 'use_case_step_expansion_drag_' + pos;
-      $(child).down('.position').value = pos;
-      pos++;
-    });
-  }
-
-
-  function setResizeableTextAreas() {
-      $$('textarea.use_case_step_textarea').each(function (el) {
-         $(el).autoGrow();
-      });
-  }
-
-  function unregisterTextAreaEvents() {
-    $$('textarea.use_case_step_textarea').each(function (el) {
-     (el).stopObserving('click');
-     (el).stopObserving('keyup');
-    });
-  }
+	    switch(type) {
+	      case 'user':
+	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :locals => { :f => artifact_form, :re_use_case_step => ReUseCaseStep.new(:step_type=>1)})) %>";
+	      break;
+	      case 'system':
+	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :locals => { :f => artifact_form, :re_use_case_step => ReUseCaseStep.new(:step_type=>2)})) %>";
+	    }
+	
+	    switch(add_pos) {
+	      case 'after':  $(element).insert( { after: rendered_step} ); break;
+	      case 'before': $(element).insert( { before: rendered_step} ); break;
+	      case 'bottom': $(element).insert( { bottom: rendered_step} ); break;
+	      case 'top':    $(element).insert( { top: rendered_step} ); break;
+	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
+	    }
+	
+	    unregisterTextAreaEvents();
+	    setResizeableTextAreas();
+	    Sortable.create("steps", { onUpdate:function() { updateStepPositionFields(); }, tag:'tr' } );
+	    updateStepPositionFields();
+	  }
+	
+	  function addExpansion(element, store_element, use_case_step_id) {
+	    var rendered_expansion;
+	    rendered_expansion = "";
+	    rendered_expansion = replaceAll(rendered_expansion, "##use_case_step_id##", use_case_step_id);
+	    rendered_expansion = replaceAll(rendered_expansion, "##marker##", Math.round(Math.random()*10000)+1000000);
+	    
+	    $(store_element).insert( { bottom: rendered_expansion } );
+	  }
+	  
+	  function replaceAll(txt, replace, with_this) {
+	  	return txt.replace(new RegExp(replace, 'g'),with_this);
+	  }
+	  
+	  function markExpansionForDeletion(element) {
+	    $(element).next('.should_destroy').value = 1;
+	    $(element).up('.use_case_step_expansion_row').hide();
+	  }
+	
+	  function markStepForDeletion(element) {
+	    $(element).next('.should_destroy').value = 1;
+	    $(element).up('.use_case_step_row').hide();
+	  }
+	
+	  function updateStepPositionFields() {
+	    var pos = 1;
+	    $('steps').childElements().each( function(child) {
+	      $(child).id = 'use_case_step_drag_' + pos;
+	      $(child).down('.position').value = pos;
+	      pos++;
+	    });
+	  }
+	
+	  function updateStepExpansionPositionFields() {
+	    var pos = 1;
+	    $('steps').childElements().each( function(child) {
+	      $(child).id = 'use_case_step_expansion_drag_' + pos;
+	      $(child).down('.position').value = pos;
+	      pos++;
+	    });
+	  }
+	
+	
+	  function setResizeableTextAreas() {
+	      $$('textarea.use_case_step_textarea').each(function (el) {
+	         new ResizingTextArea($(el));
+	      });
+	  }
+	
+	  function unregisterTextAreaEvents() {
+	    $$('textarea.use_case_step_textarea').each(function (el) {
+	     (el).stopObserving('click');
+	     (el).stopObserving('keyup');
+	    });
+	  }
+	<% end %>
 <% end %>
