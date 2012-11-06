@@ -37,6 +37,8 @@ RedmineApp::Application.routes.draw do
   match 're_queries.:project_id' => 'redmine_re#enhanced_filter'
   match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
 
+  match '' => 're_use_case#autocomplete_sink'
+  
   resources :re_queries do
     collection do
       post :apply
