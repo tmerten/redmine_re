@@ -173,13 +173,8 @@
 	    updateStepPositionFields();
 	  }
 	
-	  function addExpansion(element, store_element, use_case_step_id) {
-	    var rendered_expansion;
-	    rendered_expansion = "";
-	    rendered_expansion = replaceAll(rendered_expansion, "##use_case_step_id##", use_case_step_id);
-	    rendered_expansion = replaceAll(rendered_expansion, "##marker##", Math.round(Math.random()*10000)+1000000);
-	    
-	    $(store_element).insert( { bottom: rendered_expansion } );
+	  function addExpansion(element, use_case_step_id, rendered_expansion) {
+	    jQuery(element).append( rendered_expansion );
 	  }
 	  
 	  function replaceAll(txt, replace, with_this) {
