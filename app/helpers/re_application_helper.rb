@@ -219,6 +219,17 @@ JAVASCRIPT
             :id => artifact.artifact_id
   end
 
+  def format_expansios_field_name (field_html, use_case_sept_id)
+     begin
+        field_html["re_artifact_properties[artifact_attributes][re_use_case_steps_attributes][re_use_case_step_expansions_attributes]"] = "re_artifact_properties[artifact_attributes][re_use_case_steps_attributes][][re_use_case_step_expansions_attributes]["+use_case_sept_id.to_s+"]"
+        field_html["["+use_case_sept_id.to_s+"][]"] = "["+use_case_sept_id.to_s+"]"
+     rescue
+       logger.debug("FAILD REPLACE !!!!!!!!!!!!")
+       logger.debug(field_html)
+     end
+     
+     field_html
+  end
   
   PLUGIN_NAME = File.expand_path('../../*', __FILE__).match(/.*\/(.*)\/\*$/)[1].to_sym
 
