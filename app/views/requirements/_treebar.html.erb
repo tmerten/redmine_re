@@ -56,12 +56,12 @@
         "separator_after"	: false,
         "icon" : "new",
         "submenu" : {
-	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSettiong|%>
+	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSetting|%>
 	       "<%= currentArtifact %>_in" : {
-	        "label" : "<%= currentArtifactSettiong["alias"] %>",
+	        "label" : "<%= currentArtifactSetting["alias"] %>",
 	        "action" : function (node) {
-	          var reference_id = node[0].id.gsub('node_','');
-	          var json_data = this.data.json_data.toString()
+						var reference_id = node[0].id.replace('node_','');
+	          var json_data = this.data.json_data.toString();
 			  window.location.pathname  = "<%= url_for :controller => 'welcome' %>".substr(1) + '/projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/inside_of/' + reference_id;
 	        },
 	        "icon" : "<%= currentArtifact %>"
@@ -75,12 +75,12 @@
         "separator_after"	: true,
         "icon" : "new",
         "submenu" : {
-	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSettiong|%>
+	    <% @re_artifact_settings.each do |currentArtifact, currentArtifactSetting|%>
 	       "<%= currentArtifact %>_below" : {
-	        "label" : "<%= currentArtifactSettiong["alias"] %>",
+	        "label" : "<%= currentArtifactSetting["alias"] %>",
 	        "action" : function (node) {
-	          var reference_id = node[0].id.gsub('node_','');
-	          var json_data = this.data.json_data.toString()
+	          var reference_id = node[0].id.replace('node_','');
+	          var json_data = this.data.json_data.toString();
 			  window.location.pathname  = "<%= url_for :controller => 'welcome' %>".substr(1) + '/projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/below_of/' + reference_id;
 	        },
 	        "icon" : "<%= currentArtifact %>"
