@@ -117,9 +117,21 @@ function init(data) {
       injectInto: 'infovis',
       //Change node and edge styles such as
       //color, width, lineWidth and edge types
+			
+		  NodeStyles: {  
+		    enable: true,  
+		    type: 'Native',  
+		    stylesClick: {  
+		      height: 105 
+		    },  
+		    stylesHover: {  
+		      height: 100  
+		    },  
+		    duration: 700  
+		  },
+			
       Node: {
         overridable: true,
-        type: 'multipie',
         height: 90
       },
       Edge: {
@@ -199,7 +211,7 @@ function init(data) {
 			var width = jQuery("#infovis").width();
 			var height = jQuery("#infovis").height();
 			var size = width > height ? width:height;
-			visualization_config.levelDistance=size/2-90;
+			visualization_config.levelDistance=size/2-110;
 	    break;
 	  default :
 	  	alert ("<%= t(:re_please_select_visualization_type) %>");
