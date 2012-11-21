@@ -9,7 +9,7 @@
 <h2><%= l(:re_relationship_visualization)%></h2>
 
   <div id="visualization_filters">
-      <%= form_tag  ({:action => :build_json_according_to_user_choice, :project_id => params[:project_id]} )  do %>
+      <%= form_tag({ :action => :build_json_according_to_user_choice}, {:id => "visualization", :remote => true }) do %>
     <table>
       <tr>
         <td colspan="3">
@@ -73,7 +73,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="3"><%= submit_tag l(:re_show), :onClick => "clear_canvas()"%></td>
+        <td colspan="3"><%= submit_tag l(:re_show), :id => "submitvisualization"%></td>
       </tr>
       
     </table>
@@ -92,6 +92,14 @@
 <script type="text/javascript">
   //<![CDATA[
 
+jQuery('#visualization').bind('ajax:success', function(evt, data, status, xhr){
+	init(data);
+});
+
+jQuery('#submitvisualization').click( function(){
+  clear_canvas();
+});
+
 var visualization = null;
 var form = null;
 
@@ -99,95 +107,11 @@ function clear_canvas() {
   $jit.id('infovis').innerHTML = '';
 };
 
-function init(data, visualization_type) {
+function init(data) {
   
-  switch(visualization_type) {
-  case "sunburst":
-    visualization = new $jit.Sunburst({
-      //id container for the visualization
-      injectInto: 'infovis',
-      //Change node and edge styles such as
-      //color, width, lineWidth and edge types
-      Node: {
-        overridable: true,
-        type: 'multipie',
-        height: 90
-      },
-      Edge: {
-        overridable: true,
-        type: 'line',
-        alpha: 1
-      },      
-      //Draw canvas text. Can also be
-      //'HTML' or 'SVG' to draw DOM labels
-      Label: {
-        type: 'Native',
-        color: '#000000'
-      },
-      Tips: {
-        enable: true,
-        onShow: function(tip, node, elem) {
-          var data = node.data;
-          var html = "<b>" + data.full_name + "</b>"; 
-          if(data.description) {
-            html += "<br />" + data.description.replace("\n", "<br />");
-          }
-          if(data.user) {
-            html += "<br /><b>Last modified:</b> " + data.updated_at + " by " + data.user;
-          }    
-          if(data.responsibles) {
-            html += "<br /><b>Responsible user:</b> " + data.responsibles;
-          }    
-          tip.innerHTML = html;
-        }    
-      },
-      Events: {
-        enable: true,
-        type: 'Native',
-        //List node connections onClick
-        onClick: function(node, eventInfo, e) {
-          if (!node) return;
-          var data = node.data
-          var id = node.id.gsub('node_','');
-          var link = "<%= re_artifact_properties_path %>";        
-          var html = "<b>Name: <a href=" + link + "/" + id + "edit>" + data.full_name + "</a></b>"
-          if (data.description) {
-            html += "<br/><br/><b><%= t(:re_artifact_description) %></b><br/>"
-            html += data.description.replace("\n", "<br />")
-          }
-          html += "<br/><br/><b><%= t(:re_connected_nodes) %></b><br/>"
-          html += "<ul class=\"filterdetails\"><li>", ans = [];
-    
-          var relationships = data.relationship_data;
-          for (i=0; i<relationships.size(); i++) {
-            ans.push(relationships[i].direction +  " <a href=" + link + "/" + relationships[i].id + "/edit>" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
-          }
-          $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
-        },
-        onRightClick: function(node) {
-          if(node.collapsed) {
-            visualization.op.expand(node, {
-              'type': 'animate',
-              'duration': 700,
-              'transition': $jit.Trans.Back.easeOut
-            });
-          } else {
-            visualization.op.contract(node, {
-              'type': 'animate',
-              'duration': 700,
-              'transition': $jit.Trans.Quart.easeInOut
-            });
-          }
-        }      
-      },
-      levelDistance: '90'
-    });
-    visualization.loadJSON(data);
-    visualization.refresh();
-    break;
-    
-  case "netmap":
-    visualization = new $jit.Sunburst({
+	var visualization_type = jQuery('input[name=visualization_type]:checked', '#visualization').val();
+	
+	var visualization_config = {
       //id container for the visualization
       injectInto: 'infovis',
       //Change node and edge styles such as
@@ -263,17 +187,24 @@ function init(data, visualization_type) {
             });
           }
         }      
-      },
-      levelDistance: '<%= canvas_size.to_i / 2 - 90 %>'
-    });
-    visualization.loadJSON(data);
-    visualization.refresh();
-    break;
-  
-  default :
-  alert ("<%= t(:re_please_select_visualization_type) %>");
-    break;
+      }
+		};	
+	
+  switch(visualization_type) {
+	  case "sunburst":
+			visualization_config.levelDistance='90';
+	    break;
+	  case "netmap":
+			visualization_config.levelDistance=<%= canvas_size.to_i / 2 - 90 %>;
+	    break;
+	  default :
+	  	alert ("<%= t(:re_please_select_visualization_type) %>");
+	    break;
   }
+  visualization = new $jit.Sunburst(visualization_config);
+  visualization.loadJSON(data);
+  visualization.refresh();
+
 };
   //]]>
 </script>
