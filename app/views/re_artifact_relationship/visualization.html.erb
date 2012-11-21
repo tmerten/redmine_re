@@ -69,7 +69,7 @@
           <%= t('re_netmap')%>
         </td>
         <td>
-          <%= radio_button_tag 'visualization_type', 'netmap' %>
+          <%= radio_button_tag 'visualization_type', 'netmap', checked = true %>
         </td>
       </tr>
       <tr>
@@ -112,6 +112,7 @@ function init(data) {
 	var visualization_type = jQuery('input[name=visualization_type]:checked', '#visualization').val();
 	
 	var visualization_config = {
+		
       //id container for the visualization
       injectInto: 'infovis',
       //Change node and edge styles such as
@@ -156,7 +157,7 @@ function init(data) {
         onClick: function(node, eventInfo, e) {
           if (!node) return;
           var data = node.data
-          var id = node.id.gsub('node_','');
+          var id = node.id.replace('node_','');
           var link = "<%= re_artifact_properties_path %>";        
           var html = "<b>Name: <a href=" + link + "/" + id + "/edit>" + data.full_name + "</a></b>"
           if (data.description) {
@@ -167,7 +168,7 @@ function init(data) {
           html += "<ul class=\"filterdetails\"><li>", ans = [];
     
           var relationships = data.relationship_data;
-          for (i=0; i<relationships.size(); i++) {
+          for (i=0; i<relationships.length; i++) {
             ans.push(relationships[i].direction +  " <a href=" + link + "/" + relationships[i].id + "/edit>" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
           }
           $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
@@ -192,10 +193,13 @@ function init(data) {
 	
   switch(visualization_type) {
 	  case "sunburst":
-			visualization_config.levelDistance='90';
+			visualization_config.levelDistance=90;
 	    break;
 	  case "netmap":
-			visualization_config.levelDistance=<%= canvas_size.to_i / 2 - 90 %>;
+			var width = jQuery("#infovis").width();
+			var height = jQuery("#infovis").height();
+			var size = width > height ? width:height;
+			visualization_config.levelDistance=size/2-90;
 	    break;
 	  default :
 	  	alert ("<%= t(:re_please_select_visualization_type) %>");
@@ -206,6 +210,6 @@ function init(data) {
   visualization.refresh();
 
 };
-  //]]>
+//]]>
 </script>
 
