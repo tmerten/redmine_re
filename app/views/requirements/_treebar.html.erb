@@ -92,7 +92,7 @@
         "label" : "<%= t(:re_edit) %>",
         "icon" : "edit",
         "action" : function (node) {
-          var id = node[0].id.gsub('node_','');
+          var id = node[0].id.replace('node_','');
           var link = '<%= re_artifact_properties_path %>';
           window.location.href = link+'/'+id+'/edit';
         }
@@ -101,7 +101,7 @@
         "label" : "<%= t(:re_delete) %>",
         "icon" : "delete",
         "action" : function (node) {
-          var id = node[0].id.gsub('node_','');
+          var id = node[0].id.replace('node_','');
           var link = '<%= re_artifact_properties_path %>';
           window.location.href = link+'/'+id+'/how_to_delete';
         }
@@ -113,13 +113,13 @@
 var tree = jQuery("#tree")
   .bind("close_node.jstree", function (event, data) {
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :id => nil %>/" + data.args[0].attr("id").gsub('node_','') ,
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :id => nil %>/" + data.args[0].attr("id").replace('node_','') ,
     });
   })
   .bind("open_node.jstree", function (event, data) {
     var node = data.args[0];
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :id => nil %>/" + node.attr("id").gsub('node_','') + "?open=true" ,
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :id => nil %>/" + node.attr("id").replace('node_','') + "?open=true" ,
     });
   })
   .bind("move_node.jstree", function (e, data) {
@@ -167,7 +167,7 @@ var tree = jQuery("#tree")
       "ajax" : {
         "url" : function (n) {
           var url = "<%= url_for :controller => 'requirements', :action => 'treestate', :project_id => @project.identifier %>";
-          var id = n.attr ? n.attr("id").gsub('node_','') : -1;
+          var id = n.attr ? n.attr("id").replace('node_','') : -1;
           return url + "/" + id + "?open=data";
         }
       }
