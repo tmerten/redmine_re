@@ -92,12 +92,6 @@ class ReArtifactPropertiesController < RedmineReController
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
       r = :new
     end
-    logger.debug @re_artifact_properties.to_yaml
-    logger.debug @re_artifact_properties.errors.to_yaml unless @re_artifact_properties.errors.nil?
-    logger.debug @re_artifact_properties.artifact.to_yaml
-    logger.debug @re_artifact_properties.artifact.errors.to_yaml unless @re_artifact_properties.artifact.errors.nil?
-    
-    
     initialize_tree_data
     
     render r
@@ -109,7 +103,6 @@ class ReArtifactPropertiesController < RedmineReController
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
     
-
     # Remove Comment (Initiated via GET)
     if User.current.allowed_to?(:administrate_requirements, @project)
       unless params[:deletecomment_id].blank?
@@ -117,7 +110,6 @@ class ReArtifactPropertiesController < RedmineReController
         comment.destroy unless comment.nil?
       end
     end
-    
     
     initialize_tree_data
   end
