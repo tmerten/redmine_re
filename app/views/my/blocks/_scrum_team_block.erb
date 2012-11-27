@@ -10,15 +10,14 @@
   <tr>
     <th>Requirements</th>
     <th>Open Issues</th>
-    <th> Progress</th>
+    <th>Progress</th>
   </tr>
   </thead>
   <tbody>
   <% Realization.openartifacts_todo(project).each do |artifact| %>
       <tr class="<%= cycle('odd', 'even') %>">
-
         <td>
-          <%= link_to '#'+artifact.id.to_s+' '+ artifact.artifact_type+":  " +artifact.name, :controller => artifact.artifact_type.underscore, :action => 'edit', :id =>artifact.artifact_id %>&nbsp;
+          <%= link_to '#'+artifact.id.to_s+' '+ artifact.artifact_type+":  " +artifact.name, :controller => 're_artifact_properties', :action => 'edit', :id =>artifact.id %>&nbsp;
           <br/>
         </td>
 
