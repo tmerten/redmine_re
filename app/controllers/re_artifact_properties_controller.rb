@@ -35,7 +35,7 @@ class ReArtifactPropertiesController < RedmineReController
         ).limit(1).first.id
         begin
           @parent_relation_position = parent.child_relations.last.position + 1
-        rescue NoMethodError # child_relations.last = nil -> creating the first artifact
+        rescue # child_relations.last = nil -> creating the first artifact
           @parent_relation_position = 1
         end        
       end

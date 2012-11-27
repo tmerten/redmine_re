@@ -15,108 +15,87 @@
   <%= render 're_artifact_properties/action_menu'%>
 
     <h2><%= t(:re_edit) + ' ' + t(:re_artifact) + ' #' + @re_artifact_properties.id.to_s + ' - ' + @re_artifact_properties.name + ' (' + rendered_artifact_type(@artifact_type) + ')' unless @re_artifact_properties.nil? %></h2>
+    <b><%= t(:re_created_by) %>:</b> <%= @re_artifact_properties.author.name %> <%= t(:re_at) %> <%= @re_artifact_properties.created_at.to_s(:short) %><br/>
+    <b><%= t(:re_changed_by) %>:</b> <%= @re_artifact_properties.user.name %> <%= t(:re_at) %> <%= @re_artifact_properties.updated_at.to_s(:short) %><br/>
+   <b><%= t(:re_wiki_page_for_artifact) %>:</b> <%= wiki_page_of_re_artifact(@project, @re_artifact_properties).html_safe %><br/><br/>
 
   <%= errors_and_flash params[:controller] %>
 
   <div class="panes">
-    <div class="box">
+  <div class="box">
       <%= form_for @re_artifact_properties do |f| %>
       <%= hidden_field_tag(:id, @re_artifact_properties.id) %>
-      <fieldset>
+
+      <fieldset class="tabular">
         <legend><%= t(:re_common_attributes) %></legend>
 
-        <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
-          <p>
-          <%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name, :required => true %>
-          </p>
-          <%= javascript_tag "Form.Element.focus('artifact_name');" %>
+				<div class="splitcontent">
+	        <div class="splitcontentleft">
+	          <p>
+	          <%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name, :required => true %>
+	          </p>
+	        </div>
+	        <div class="splitcontentright">
+	          <%= javascript_tag "jQuery('#artifact_name').focus();" %>
 
-          <p>
-            <label><%= t(:re_wiki_page_for_artifact) %></label> <%= wiki_page_of_re_artifact(@project, @re_artifact_properties).html_safe %>
-          </p>
-          <%
-             re_users = []
-             re_users << User.current
-             re_users.concat User.all.sort_by { |u| u.lastname }
-             re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
-             re_users.uniq!
-          %>
-          <p>
-          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
-          </p>
-            <p>
-            <%= f.label :created_by, t(:re_created_by) %> <%= @re_artifact_properties.author.name %> <%= t(:re_at) %> <%= @re_artifact_properties.created_at.strftime('%c') %><br/>
-            <%= f.label :last_changed_by, t(:re_changed_by) %> <%= @re_artifact_properties.user.name %> <%= t(:re_at) %> <%= @re_artifact_properties.updated_at.strftime('%c') %>
-            </p>
+							<%
+	             re_users = []
+	             re_users << User.current
+	             re_users.concat User.all.sort_by { |u| u.lastname }
+	             re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
+	             re_users.uniq!
+	          %>
+	          <p>
+	          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
+	          </p>
+					</div>
         </div>
-
-        <div class="splitcontentright">
-          <b><%= t(:re_description_fieldset) %></b>
-              <br/>
-          <div id='update-description'>
-            <%= f.text_area :description,
-                            :cols => 60,
-                            :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
-                            :accesskey => accesskey(:edit),
-                            :class => 'wiki-edit' %>
-          <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
-          </div>
-        </div>
+				<p>
+					<%= f.label :description %>
+	        <span id='update-description'>
+	          <%= f.text_area :description,
+	                          :cols => 60,
+	                          :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
+	                          :accesskey => accesskey(:edit),
+	                          :class => 'wiki-edit' %>
+	        <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
+	        </span>
+			  </p>
       </fieldset>
 
       <br/>
-
-      <fieldset>
+      <fieldset class="tabular">
         <legend><%= t(:re_associated_issues) %></legend>
+				<div class="splitcontent">
+	        <div class="splitcontentleft">
+		       <div id="issue_filter">
+		          <div class="inputs">
+		  					 <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'issue_filter_input', :class => 'direct_artifacts' %>
+		             <%= text_field_tag 'source[name]', nil, :id => 'issue_filter_input_nojs' %>
+		          </div>
+		       </div>
+					  <p>
+	            <%= link_to image_tag('add.png')+' create related Issue', :controller=> 'issues', :action=>'new', :project_id => @project.identifier,
+	              :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank?%>
+						</p>
 
+        </div>
 
-        <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
-          <p>
-            <label><%= t(:add_issue_to_requirement) %></label>
-            <%= text_field_tag :issue, '', {:size => 20, :class => 'autocomplete', :id => 'issue_autocomplete'} %>
-          </p>
-            <%= link_to image_tag('add.png')+' create related Issue', :controller=> 'issues', :action=>'new', :project_id => @project.identifier,
-              :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :displayid => @re_artifact_properties.id, :associationid => @re_artifact_properties.artifact_id unless @re_artifact_properties.id.blank?%>
+	      <div class='splitcontentright'>
+	          <% unless @issues.nil? %>
 
+	              <% @issues.each do |issue| %>
+	                  <div id="issue_list_issue_<%= issue.id %>">
+	                  	<input id="issue_id" type="hidden" name="issue_id[]" value="<%= issue.id %>" />
+	                  	<%= (link_to issue.subject, issue_path(issue))+'&nbsp;'.to_s.html_safe %>
+	                    <a href="#" onclick="Javascript: jQuery('#issue_list_issue_<%= issue.id %>').remove()"><%= image_tag('delete.png') %></a>
+	                  </div>
+	              <% end %>
+	          <% end %>
 
-          <div id="issue_candidates" class="autocomplete"></div>
-          <%= javascript_tag do %>
-              new Ajax.Autocompleter('issue_autocomplete',
-              'issue_candidates',
-              '<%= url_for :project_id => @project.identifier, :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
-              {
-              paramName: 'issue_subject',
-              parameters:
-              'project_id=<%= @project.id %><%= '&id=' + @re_artifact_properties_id.to_s unless @re_artifact_properties_id.blank? %>',
-              minChars: 1,
-              frequency: 0.5,
-              afterUpdateElement : getIssueId});
-
-              function getIssueId(text, li){
-
-                  jQuery('#added_issues').append(li.innerHTML + ', ');
-                  jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
-                  document.getElementById('issue_autocomplete').value ="";
-              }
-
-            <% end %>
-            </div>
-
-      <div class='splitcontentright'>
-          <% unless @issues.nil? %>
-
-              <% @issues.each do |issue| %>
-                  <div id="issue_list_issue_<%= issue.id %>">
-                  	<input id="issue_id" type="hidden" name="issue_id[]" value="<%= issue.id %>" />
-                  	<%= (link_to issue.subject, issue_path(issue))+'&nbsp;'.to_s.html_safe %>
-                    <a href="#" onclick="Javascript: jQuery('#issue_list_issue_<%= issue.id %>').remove()"><%= image_tag('delete.png') %></a>
-                  </div>
-              <% end %>
-          <% end %>
-
-        <div id='added_issues'></div>
-      </div>
-
+	        <div id='added_issues'></div>
+	      </div>
+			</div>
       </fieldset>
 
     <!-- Additional fields like subtasks for task which are described in an own partial -->
@@ -201,6 +180,42 @@
 		
 		    (function($) {
 		        $().ready(function() {
+	            // hidden on init because of UJS
+	            $('#issue_filter_input_nojs').remove();
+	            $('#issue_filter .inputs').show();
+		
+	            $('#issue_filter_input').suggestible({
+	                ajax: {
+	                    suggestions: {
+	                        url: '<%= suggest_issues_re_queries_path(@project.id) %>',
+	                        dataType: 'json',
+	                        data: function(value, helpers) {
+	                            return { query: value };
+	                        },
+	                        loading: function(helpers) {
+	                            $('#ajax-indicator').show();
+	                            helpers.elements.textBox.attr('disabled', 'disabled');
+	                        },
+	                        loaded: function(helpers) {
+	                            $('#ajax-indicator').hide();
+	                            helpers.elements.textBox.removeAttr('disabled');
+	                        }
+	                    }
+	                },
+	                layout: {
+	                    containers: function(selectBox, options) {
+	                        return new SuggestBoxContainers(selectBox, options);
+	                    },
+	                    items: function(helpers) {
+	                        return new IssuesSuggestBoxItems(helpers);
+	                    }
+	                }
+	            });
+		
+	            //var issue_elements = $('#issue_filter_input_container').data('elements');
+	            //issue_elements.textBox.attr('name', issue_elements.inputName);
+
+
 		            // hidden on init because of UJS
 		            $('#relation_filter_input_nojs').remove();
 		            $('#relation_filter .inputs').show();
@@ -233,7 +248,7 @@
 		                }
 		            });
 		
-		            var elements = $('#ralation_filter_input_container').data('elements');
+		            var elements = $('#relation_filter_input_container').data('elements');
 		            elements.textBox.attr('name', elements.inputName);
 		        });
 		    })(jQuery);

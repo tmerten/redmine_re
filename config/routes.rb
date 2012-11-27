@@ -28,14 +28,16 @@ RedmineApp::Application.routes.draw do
   match 're_artifact_properties/:id/delete' => 're_artifact_properties#delete'
   match 're_artifact_properties/:id/recursive_delete' => 're_artifact_properties#recursive_delete'
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
-  
-  
   match 'projects/:project_id/ralation/prepare/:id' => 're_artifact_relationship_controller#prepare_relationships'
   match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink'
+
+  match 'projects/:project_id/requirements/remove/:artifactid/from_issue/:issueid' => 're_artifact_properties#remove_artifact_from_issue'
+
   
   match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'
   match 're_queries.:project_id' => 'redmine_re#enhanced_filter'
   match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
+  match '/re_queries/suggest_issues.:id' => 're_queries#suggest_issues'
 
   match '' => 're_use_case#autocomplete_sink'
   

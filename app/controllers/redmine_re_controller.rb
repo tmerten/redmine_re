@@ -5,7 +5,7 @@ class RedmineReController < ApplicationController
   unloadable
   menu_item :re
 
-  TRUNCATE_NAME_IN_TREE_AFTER_CHARS = 18
+  TRUNCATE_NAME_IN_TREE_AFTER_CHARS = 100
   TRUNCATE_OMISSION = "..."
   NODE_CONTEXT_MENU_ICON = "bullet_toggle_plus.png"
 

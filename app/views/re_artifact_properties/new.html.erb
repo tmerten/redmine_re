@@ -1,6 +1,6 @@
 <% content_for :header_tags do %>
   <%= javascript_include_tag 'jquery-1.7.2.js', :plugin => 'redmine_re' %>
-  <%= javascript_include_tag 'jquery-ui-1.8.21.js', :plugin => 'redmine_re' %>
+  <%#= javascript_include_tag 'jquery-ui-1.8.21.js', :plugin => 'redmine_re' %>
   <%= javascript_include_tag 'jquery.layout-rc30.51.js', :plugin => 'redmine_re' %>
   <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
   <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
@@ -23,6 +23,8 @@
       <%= hidden_field_tag :parent_relation_position, @parent_relation_position %>
       <%= f.hidden_field :artifact_type %>
       <%= f.hidden_field :project_id %>
+
+
       <fieldset>
         <legend><%= t(:re_common_attributes) %></legend>
 
@@ -48,7 +50,8 @@
 						<%= f.label :created_at, t(:created_at)	%><%= @re_artifact_properties.created_at %><br/>
 						<%= f.label :created_by, t(:created_by)	%><%= User.current %>
         </div>
-
+			
+			<div>
       <b><%= f.label :description, t(:description) %></b>
       <div id='update-description' >
         <%= f.text_area :description,
@@ -58,6 +61,7 @@
                         :class => 'wiki-edit' %>
         <%= wikitoolbar_for 're_artifact_properties_description' %>
 			</div>
+			
     </fieldset>
 
 
@@ -87,7 +91,6 @@
               afterUpdateElement : getIssueId});
 
               function getIssueId(text, li){
-
                   jQuery('#added_issues').append(li.innerHTML + ', ');
                   jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
                   document.getElementById('issue_autocomplete').value ="";
