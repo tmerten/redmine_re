@@ -2,9 +2,9 @@
 <% type_class = "variant" if re_subtask.sub_type == 1 %>
 <% type_class = "problem" if re_subtask.sub_type == 2 %>
 
-<tr id="subtask_drag_<%= re_subtask.position %>" class="draggable <%= type_class %> subtask_row">
+<tr id="subtask_drag_<%= re_subtask.position %>" class="draggable <%= type_class %> subtask_row ui-state-default">
    <td style="cursor: pointer;" class="<%= type_class %>" ></td>
-   <td class="<%= type_class -%>">
+   <td class="<%= type_class -%> hasposition">
       <%= f.hidden_field :position, :index => nil, :class => "position"  %>
       <%= f.select :sub_type, [['ST', 0],['V', 1],['P', 2]], { }, { :index => nil,  :onchange => "changeSubtaskRowColor($(this.parentNode.parentNode), this.value)" } %>
    </td>

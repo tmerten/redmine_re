@@ -36,7 +36,7 @@
   </fieldset>
 	<fieldset>
 	   <legend><%= l(:re_subtasks) %></legend>
-	   <table class="subtasks">
+	   <table class="subtasks ui-sortable">
 	      <thead>
 	         <tr>
 	            <th>&nbsp;</th>
@@ -64,7 +64,24 @@
 	
 	
 	<%= javascript_tag do %>
-
+	
+		updateSubtaskPositionFields();
+		
+		jQuery(document).ready(function(){
+		    
+		    jQuery(".subtasks tbody").sortable({
+		      placeholder: 'ui-state-highlight',
+		      start: function(event, ui){
+		         jQuery(".ui-state-highlight").html("<td colspan='7' style='background:#4466AA'></td>");
+		      },
+		      update: function(event, ui){
+		         updateSubtaskPositionFields();
+		      },  
+		    });
+		  
+		});
+		
+	    
 		$j("select.subtask-type").change(function() {
 			changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
 		});
@@ -98,7 +115,6 @@
 	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
 	    }
 	    
-	    Sortable.create("subtasks", {onUpdate:function() { updateSubtaskPositionFields(); }, tag:'tr'})
 	    updateSubtaskPositionFields();
 
 			/* TODO: register changeSubtaskRowColor */
@@ -111,9 +127,9 @@
 	
 	  function updateSubtaskPositionFields() {
 	    var pos = 1;
-	    $('subtasks').childElements().each( function(child) {
-	      $(child).id = 'subtask_drag_' + pos;
-	      $(child).down('.position').value = pos;
+	    jQuery('#subtasks').children().each( function(child) {
+	      jQuery(this).attr('id','subtask_drag_' + pos);
+	      jQuery(this).next('.position').attr('value', pos);
 	      pos++;
 	    });
 	  }
