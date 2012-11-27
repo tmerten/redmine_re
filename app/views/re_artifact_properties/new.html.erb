@@ -25,45 +25,7 @@
       <%= f.hidden_field :project_id %>
 
 
-      <fieldset>
-        <legend><%= t(:re_common_attributes) %></legend>
-
-        <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
-
-          <p>
-						<%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name %>
-          </p>
-
-          <%
-             re_users = []
-             re_users << User.current
-             re_users.concat User.all.sort_by { |u| u.lastname }
-             re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
-             re_users.uniq!
-          %>
-          <p>
-          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
-          </p>
-        </div>
-
-        <div class="splitcontentright">
-						<%= f.label :created_at, t(:created_at)	%><%= @re_artifact_properties.created_at %><br/>
-						<%= f.label :created_by, t(:created_by)	%><%= User.current %>
-        </div>
-			
-			<div>
-      <b><%= f.label :description, t(:description) %></b>
-      <div id='update-description' >
-        <%= f.text_area :description,
-                        :cols => 60,
-                        :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
-                        :accesskey => accesskey(:edit),
-                        :class => 'wiki-edit' %>
-        <%= wikitoolbar_for 're_artifact_properties_description' %>
-			</div>
-			
-    </fieldset>
-
+      <%= render 'common_attributes', { :f => f } %>
 
       <br/>
 

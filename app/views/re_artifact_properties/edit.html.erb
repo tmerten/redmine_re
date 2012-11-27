@@ -26,42 +26,7 @@
       <%= form_for @re_artifact_properties do |f| %>
       <%= hidden_field_tag(:id, @re_artifact_properties.id) %>
 
-      <fieldset class="tabular">
-        <legend><%= t(:re_common_attributes) %></legend>
-
-				<div class="splitcontent">
-	        <div class="splitcontentleft">
-	          <p>
-	          <%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name, :required => true %>
-	          </p>
-	        </div>
-	        <div class="splitcontentright">
-	          <%= javascript_tag "jQuery('#artifact_name').focus();" %>
-
-							<%
-	             re_users = []
-	             re_users << User.current
-	             re_users.concat User.all.sort_by { |u| u.lastname }
-	             re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
-	             re_users.uniq!
-	          %>
-	          <p>
-	          <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
-	          </p>
-					</div>
-        </div>
-				<p>
-					<%= f.label :description %>
-	        <span id='update-description'>
-	          <%= f.text_area :description,
-	                          :cols => 60,
-	                          :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
-	                          :accesskey => accesskey(:edit),
-	                          :class => 'wiki-edit' %>
-	        <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
-	        </span>
-			  </p>
-      </fieldset>
+      <%= render 'common_attributes', { :f => f } %>
 
       <br/>
       <fieldset class="tabular">
