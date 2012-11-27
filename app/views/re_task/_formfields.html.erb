@@ -129,7 +129,7 @@
 	    var pos = 1;
 	    jQuery('#subtasks').children().each( function(child) {
 	      jQuery(this).attr('id','subtask_drag_' + pos);
-	      jQuery(this).next('.position').attr('value', pos);
+	      jQuery(this).children().next().children('.position').attr('value', pos);
 	      pos++;
 	    });
 	  }
