@@ -20,11 +20,6 @@
   <fieldset class="collapsible">
   	<legend onclick="toggleFieldset(this);">Expansions</legend>
   	<div style="display: none;">
-		<%= sortable_element( "epansions_"+re_use_case_step.id.to_s,
-		  :tag => 'tr',
-		  :complete => visual_effect(:highlight, 'epansions_'+re_use_case_step.id.to_s),
-		  :onUpdate => "function() { updateStepPositionFields(); }"
-		) %>
 	  <table>
 	    <thead class="epansions">
 	      <tr>
@@ -51,11 +46,11 @@
   <% end %>
   <td>&nbsp;</td>
   <td style="vertical-align: top;" >
-    <%= t(:re_uc_add_below) %> <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep($(this.parentNode.parentNode).id, 'after', 'user')", :class => "" ) %>&nbsp;&nbsp;
-    <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep($(this.parentNode.parentNode).id, 'after', 'system')", :class => "" ) %>&nbsp;&nbsp;
-    <%= link_to_function( image_tag('icons/user_go.png', :plugin => 'redmine_re', :alt => t(:re_uc_user))+image_tag('icons/monitor_go_back.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addDialog($(this.parentNode.parentNode).id, 'after')", :class => "" ) %><br />
+    <%= t(:re_uc_add_below) %> <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery(this).parent().parent(), 'after', 'user')", :class => "" ) %>&nbsp;&nbsp;
+    <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery(this).parent().parent(), 'after', 'system')", :class => "" ) %>&nbsp;&nbsp;
+    <%= link_to_function( image_tag('icons/user_go.png', :plugin => 'redmine_re', :alt => t(:re_uc_user))+image_tag('icons/monitor_go_back.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addDialog(jQuery(this).parent().parent(), 'after')", :class => "" ) %><br />
     <% if re_use_case_step.new_record? %>
-      <%= link_to_function t(:re_delete_use_case_step), "$(this).up('.use_case_step_row').remove()", :class => "icon icon-del" %>
+      <%= link_to_function t(:re_delete_use_case_step), "jQuery(this).parent().parent().remove()", :class => "icon icon-del" %>
     <% else %>
       <%= link_to_function t(:re_delete_use_case_step), "markStepForDeletion(this)", :class => "icon icon-del" %>
       <%= uc_form.hidden_field(:id, :value=> re_use_case_step.id, :index => nil, :class => "current_use_case_step_id") %>

@@ -11,13 +11,13 @@
 	      [t(:re_use_case_low) , 1 ] ] %>
 	    </p>
 	    <p>
-	      <%= artifact_form.label :trigger, l(:re_use_case_trigger) %> <%= artifact_form.text_field :trigger, :size => 100 %>
+	      <%= artifact_form.label :trigger, l(:re_use_case_trigger) %> <%= artifact_form.text_field :trigger, :size => 80 %>
 	    </p>
 	    <p>
-	      <%= artifact_form.label :precondition, l(:re_use_case_precondition) %> <%= artifact_form.text_field :precondition, :size => 100 %>
+	      <%= artifact_form.label :precondition, l(:re_use_case_precondition) %> <%= artifact_form.text_field :precondition, :size => 80 %>
 	    </p>
 	    <p>
-	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition, :size => 100 %>
+	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition, :size => 80 %>
 	    </p>
 	    
 		<%unless @user_profiles.nil?  
@@ -119,7 +119,7 @@
 	        <th ><%= t(:re_system_steps) %></th>
 	        <th>&nbsp;</th>
 	        <th style="min-width: 300px;"><%= t(:re_uc_add_below) %> <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep('steps', 'top', 'user')", :class => "" ) %>&nbsp;&nbsp;
-	          <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep('steps', 'top', 'system')", :class => "" ) %>&nbsp;&nbsp;
+	          <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery(this).parent().parent().parent(), 'top', 'system')", :class => "" ) %>&nbsp;&nbsp;
 	          <%= link_to_function( image_tag('icons/user_go.png', :plugin => 'redmine_re', :alt => t(:re_uc_user))+image_tag('icons/monitor_go_back.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addDialog('steps', 'top')", :class => "" ) %>
 	        </th>
 	      </tr>
@@ -130,16 +130,10 @@
           <% end %>
 	      </tbody>
 	    </tbody>
-	    <%= sortable_element( "steps",
-	      :tag => 'tr',
-	      :complete => visual_effect(:highlight, 'steps'),
-	      :onUpdate => "function() { updateStepPositionFields(); }"
-	    ) %>
 	  </table>
 	</fieldset>
 	
 	<%= javascript_tag do %>
-	  setResizeableTextAreas();
 	  
 	  var marker = 0;
 	  
@@ -160,16 +154,12 @@
 	    }
 	
 	    switch(add_pos) {
-	      case 'after':  $(element).insert( { after: rendered_step} ); break;
-	      case 'before': $(element).insert( { before: rendered_step} ); break;
-	      case 'bottom': $(element).insert( { bottom: rendered_step} ); break;
-	      case 'top':    $(element).insert( { top: rendered_step} ); break;
+	      case 'after':  jQuery(element).after( rendered_step ); break;
+	      case 'before': jQuery(element).before( rendered_ste ); break;
+	      case 'bottom': jQuery('#steps').append( rendered_step ); break;
+	      case 'top':    jQuery('#steps').prepend( rendered_step ); break;
 	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
 	    }
-	
-	    unregisterTextAreaEvents();
-	    setResizeableTextAreas();
-	    Sortable.create("steps", { onUpdate:function() { updateStepPositionFields(); }, tag:'tr' } );
 	    updateStepPositionFields();
 	  }
 	
@@ -182,45 +172,32 @@
 	  }
 	  
 	  function markExpansionForDeletion(element) {
-	    $(element).next('.should_destroy').value = 1;
-	    $(element).up('.use_case_step_expansion_row').hide();
+	    jQuery(element).next('.should_destroy').value = 1;
+	    jQuery(element).up('.use_case_step_expansion_row').hide();
 	  }
 	
 	  function markStepForDeletion(element) {
-	    $(element).next('.should_destroy').value = 1;
-	    $(element).up('.use_case_step_row').hide();
+	    jQuery(element).next('.should_destroy').value = 1;
+	    jQuery(element).parent().parent().hide();
 	  }
 	
 	  function updateStepPositionFields() {
 	    var pos = 1;
-	    $('steps').childElements().each( function(child) {
-	      $(child).id = 'use_case_step_drag_' + pos;
-	      $(child).down('.position').value = pos;
+	    jQuery('steps').childElements().each( function(child) {
+	      jQuery(child).id = 'use_case_step_drag_' + pos;
+	      jQuery(child).down('.position').value = pos;
 	      pos++;
 	    });
 	  }
 	
 	  function updateStepExpansionPositionFields() {
 	    var pos = 1;
-	    $('steps').childElements().each( function(child) {
-	      $(child).id = 'use_case_step_expansion_drag_' + pos;
-	      $(child).down('.position').value = pos;
+	    jQuery('steps').childElements().each( function(child) {
+	      jQuery(child).id = 'use_case_step_expansion_drag_' + pos;
+	      jQuery(child).down('.position').value = pos;
 	      pos++;
 	    });
 	  }
 	
-	
-	  function setResizeableTextAreas() {
-	      $$('textarea.use_case_step_textarea').each(function (el) {
-	         new ResizingTextArea($(el));
-	      });
-	  }
-	
-	  function unregisterTextAreaEvents() {
-	    $$('textarea.use_case_step_textarea').each(function (el) {
-	     (el).stopObserving('click');
-	     (el).stopObserving('keyup');
-	    });
-	  }
 	<% end %>
 <% end %>
