@@ -5,6 +5,7 @@
 
 
   <td style="cursor: pointer;padding-top: 20px; vertical-align: top;" >
+    <%= uc_form.hidden_field :position, :index => nil, :class => "position" %>
   <% if type==1 %>
       <%= image_tag('icons/user.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)) %><%= uc_form.hidden_field :step_type, :value => "1", :index => nil %>
     </td>
@@ -16,7 +17,6 @@
     <td colspan="2">
   <% end %>
   <%= uc_form.text_area :description, { :size => "35x2", :value => re_use_case_step.description,:index => nil,  :class => "use_case_step_textarea" } %>
-  <%= uc_form.hidden_field :position, :index => nil, :class => "position" %>
   <fieldset class="collapsible">
   	<legend onclick="toggleFieldset(this);">Expansions</legend>
   	<div style="display: none;">

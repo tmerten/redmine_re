@@ -135,7 +135,20 @@
 	
 	<%= javascript_tag do %>
 	  
-	  var marker = 0;
+		
+		function jsInitScript() {
+		    jQuery(".steps tbody").sortable({
+		      placeholder: 'ui-state-highlight',
+		      start: function(event, ui){
+		         jQuery(".ui-state-highlight").html("<td colspan='6' style='background:#4466AA'></td>");
+		      },
+		      update: function(event, ui){
+		         updateStepPositionFields();
+		      },  
+		    });
+		}
+		jsInitScript();
+		updateStepPositionFields();
 	  
 	  function addDialog(element, add_pos) {
 	    addStep(element, add_pos, 'system');
@@ -183,20 +196,15 @@
 	
 	  function updateStepPositionFields() {
 	    var pos = 1;
-	    jQuery('steps').childElements().each( function(child) {
-	      jQuery(child).id = 'use_case_step_drag_' + pos;
-	      jQuery(child).down('.position').value = pos;
+	    jQuery('#steps').children().each( function(child) {
+	      jQuery(this).attr('id','use_case_step_expansion_drag_' + pos);
+	      jQuery(this).children().children('.position').attr('value', pos);
 	      pos++;
 	    });
 	  }
 	
 	  function updateStepExpansionPositionFields() {
-	    var pos = 1;
-	    jQuery('steps').childElements().each( function(child) {
-	      jQuery(child).id = 'use_case_step_expansion_drag_' + pos;
-	      jQuery(child).down('.position').value = pos;
-	      pos++;
-	    });
+	    /** Not implemented **/
 	  }
 	
 	<% end %>
