@@ -69,7 +69,7 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
   def visualization
-
+    # renders view
   end
 
   def build_json_for_netmap(artifacts, relations)

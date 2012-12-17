@@ -1,27 +1,27 @@
+<% content_for :header_tags do %>
+	<%= javascript_include_tag 'jquery.autogrowtextarea.js', :plugin => 'redmine_re' %>
+<% end %>
+
 <fieldset class="tabular">
   <legend><%= t(:re_common_attributes) %></legend>
 
-	<div class="splitcontent">
-    <div class="splitcontentleft">
-      <p>
-      <%= f.label :name, t(:re_artifact_name) %> <%= f.text_field :name, :required => true %>
-      </p>
-    </div>
-    <div class="splitcontentright">
-      <%= javascript_tag "jQuery('#artifact_name').focus();" %>
+  <p>
+		<%= f.label :name, t(:re_artifact_name) %>
+		
+		<%= f.text_field :name, { :required => true, :class => "artifact_name" } %>
+  </p>
+  <%= javascript_tag "jQuery('#artifact_name').focus();" %>
 
-				<%
-         re_users = []
-         re_users << User.current
-         re_users.concat User.all.sort_by { |u| u.lastname }
-         re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
-         re_users.uniq!
-      %>
-      <p>
-      <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
-      </p>
-		</div>
-  </div>
+		<%
+     re_users = []
+     re_users << User.current
+     re_users.concat User.all.sort_by { |u| u.lastname }
+     re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
+     re_users.uniq!
+  %>
+  <p>
+  <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
+  </p>
 	<p>
 		<%= f.label :description %>
     <span id='update-description'>
@@ -31,6 +31,11 @@
                       :accesskey => accesskey(:edit),
                       :class => 'wiki-edit' %>
     <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
+		<%= javascript_tag do %>
+		$j(document).ready(function() {
+			$j("textarea.wiki-edit").autoGrow();
+		});
+		<% end %>
     </span>
   </p>
 </fieldset>

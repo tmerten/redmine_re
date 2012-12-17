@@ -34,7 +34,7 @@
                   <%= link_to artifact.realizations.count, issues_path(:project_id => @project.id, :set_filter => 1, :re_artifact_id => artifact.id),
                                                            :class => 'icon icon-report', :title => 'Issues' %>
                 <% end %>
-                <%= link_to '', edit_artifact_path(artifact), :class => 'icon icon-edit', :title => 'Edit' %>
+                <%= link_to '', edit_re_artifact_properties_path(artifact), :class => 'icon icon-edit', :title => 'Edit' %>
               </td>
             </tr>
           <% end %>

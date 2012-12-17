@@ -26,11 +26,19 @@ a:active {
 	background: #eee;
 }
 
-/*.detail_view {
-    cursor: auto;
-    margin-left: 21%;
-    width: 79%;
-}*/
+div.requirement_upper {
+	padding: 6px;
+	border: 1px solid #B8B8B8;
+}
+
+div.requirement_lower {
+	background: #F4F4F4;
+	padding: 6px;
+	border-left: 1px solid #B8B8B8;
+	border-right: 1px solid #B8B8B8;
+	border-bottom: 1px solid #B8B8B8;
+	margin-bottom: 6px;
+}
 
 /**
  * 	Left- and RightPane are used by splitcontent
@@ -60,11 +68,8 @@ a:active {
 	width: 500px;
 }
 
-.treebar {
-    float: left;
+#treebar {
     height: 100%;
-    position: relative;
-    width: 20%;
 }
 
 #treebar ul.navigation {
@@ -258,6 +263,10 @@ input.bb_checkbox {
 
 .select_field_filter {
   width: 110px;
+}
+
+.subject_icon {
+	padding-left: 25px;
 }
 
 ins.new {
@@ -790,6 +799,10 @@ table.list.artifacts tbody tr:nth-child(odd):hover {
     background-color: #ffffdd;
 }
 
+input.artifact_name {
+    width: 99%;
+}
+
 /* Filter Left Sidebar Pane */
 #sidebar_filter_input_container {
     width: 100%;
@@ -802,7 +815,7 @@ table.list.artifacts tbody tr:nth-child(odd):hover {
     padding: 0 !important;
     height: 22px;
     border: 1px solid #BBB;
-    max-width: 300px;
+    max-width: 250px;
     display: none;
 }
 #sidebar_filter .inputs .input,

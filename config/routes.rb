@@ -13,34 +13,33 @@ RedmineApp::Application.routes.draw do
   match 'projects/requirements/tree/drop' => 'requirements#delegate_tree_drop'
   match 'projects/:project_id/relation/prepare/:id' => 're_artifact_relationship#prepare_relationships'
   match 'projects/:project_id/relation/autocomplete/sink/:id' => 're_artifact_relationship#autocomplete_sink'
-  match 'projects/:project_id/requirements/artifact/autocomplete/issue' => 're_artifact_properties#autocomplete_issue'
   match 'projects/:project_id/issues/new/connected_to/:artifacttype/:associationid' => 'issues#new'
-  match 'projects/:project_id/requirements/artifact/autocomplete/artifact' => 're_artifact_properties#autocomplete_artifact'
-  resources :re_artifact_properties, :except => [:show, :new, :index]
-  match 'artifact/:id/rate/:stars' => 're_artifact_properties#rate_artifact'
+  match 'projects/:project_id/requirements/filtered_json' => 're_artifact_relationship#build_json_according_to_user_choice'
+
+  # ReArtifactProperties as "artifact"
+  resources :re_artifact_properties, :except => [:new, :index], :controller => "re_artifact_properties"
+  
+  match 're_artifact_properties/:id/recursive_destroy' => 're_artifact_properties#recursive_destroy'
+  match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
+  match 'projects/:project_id/requirements/remove/:artifactid/from_issue/:issueid' => 're_artifact_properties#remove_artifact_from_issue'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type' => 're_artifact_properties#new'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type/inside_of/:parent_artifact_id', :to => 're_artifact_properties#new', :as => 're_artifact_properti'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type/below_of/:sibling_artifact_id' => 're_artifact_properties#new'
+
   match 'projects/:project_id/requirements/autcomplete' => 're_artifact_properties#autocomplete_artifact'
-  match 'projects/:project_id/requirements/filtered_json' => 're_artifact_relationship#build_json_according_to_user_choice'
+  match 'projects/:project_id/requirements/artifact/autocomplete/issue' => 're_artifact_properties#autocomplete_issue'
+  match 'projects/:project_id/requirements/artifact/autocomplete/artifact' => 're_artifact_properties#autocomplete_artifact'
   
-  match 're_artifact_properties/:id/edit' => 're_artifact_properties#edit'
-  match 're_artifact_properties/:id/delete' => 're_artifact_properties#delete'
-  match 're_artifact_properties/:id/recursive_delete' => 're_artifact_properties#recursive_delete'
-  match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
+  
+  match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'
   match 'projects/:project_id/ralation/prepare/:id' => 're_artifact_relationship_controller#prepare_relationships'
   match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink'
 
-  match 'projects/:project_id/requirements/remove/:artifactid/from_issue/:issueid' => 're_artifact_properties#remove_artifact_from_issue'
-
   
-  match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'
   match 're_queries.:project_id' => 'redmine_re#enhanced_filter'
   match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
   match '/re_queries/suggest_issues.:id' => 're_queries#suggest_issues'
 
-  match '' => 're_use_case#autocomplete_sink'
-  
   resources :re_queries do
     collection do
       post :apply

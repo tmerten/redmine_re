@@ -6,10 +6,6 @@ class ReArtifactPropertiesController < RedmineReController
 
   helper :watchers
 
-  def show
-    render :text => "not implemented"
-  end
-
   def new
     @re_artifact_properties = ReArtifactProperties.new
     @artifact_type = params[:artifact_type]
@@ -96,6 +92,44 @@ class ReArtifactPropertiesController < RedmineReController
     
     render r
   end
+  
+  def show
+    @re_artifact_properties = ReArtifactProperties.find(params[:id])
+    @artifact_type = @re_artifact_properties.artifact_type
+    artifact_type = @re_artifact_properties.artifact_type.underscore
+    @lighter_artifact_color = calculate_lighter_color(@re_artifact_settings[artifact_type]['color'])
+
+    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+    @issues = @re_artifact_properties.issues
+
+    retrieve_previous_and_next_sibling_ids
+    initialize_tree_data
+  end    
+
+  def calculate_lighter_color(hex_color_string)
+    factor = 150
+    r = hex_color_string[1,2].to_i(16)
+    g = hex_color_string[3,2].to_i(16)
+    b = hex_color_string[5,2].to_i(16)
+    r += factor
+    g += factor
+    b += factor
+    r = r > 255 ? 255 : r 
+    g = g > 255 ? 255 : g 
+    b = b > 255 ? 255 : b 
+    "##{r.to_s(16) + g.to_s(16) + b.to_s(16)}"
+  end
+
+  def retrieve_previous_and_next_sibling_ids
+    position_id = Hash[@re_artifact_properties.parent.child_relations.collect { |s| [s.position, s.sink_id] } ]
+    my_position = @re_artifact_properties.position
+    @artifact_count = position_id.size
+    position_id.each_key do |pos| # ruby >= 1.9.2 uses a sorted hash such that the following works
+      @previous_re_artifact_properties_id = position_id[pos] unless pos >= my_position
+      @next_re_artifact_properties_id   ||= position_id[pos] if pos > my_position
+    end
+  end
+    
 
   def edit
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
@@ -130,7 +164,7 @@ class ReArtifactPropertiesController < RedmineReController
     # Remove related issues (Refresh will be done later)
     @re_artifact_properties.issues = []
     
-    @re_artifact_properties.save
+    saved = @re_artifact_properties.save
     
     # Add Comment
     unless params[:comment].blank?
@@ -148,34 +182,13 @@ class ReArtifactPropertiesController < RedmineReController
     
     initialize_tree_data
     handle_relations params
-    
-    render :edit
-  end
 
-  def delete
-    @artifact_properties = ReArtifactProperties.find(params[:id])
-    @relationships_incoming = @artifact_properties.relationships_as_sink
-    @relationships_outgoing = @artifact_properties.relationships_as_source
-    @parent = @artifact_properties.parent
-
-    @children = gather_children(@artifact_properties)
-
-    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
-    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
-
-    direct_children = @artifact_properties.children
-    position = @artifact_properties.position
-    for child in direct_children
-      logger.debug "################### #{child.to_yaml}" if logger
-      child.parent_relation.remove_from_list
-      child.parent = @parent
-      child.parent_relation.insert_at(position)
-      position += 1
+    if saved
+      #flash[:notice] = :re_artifact_properties_updated
+      redirect_to @re_artifact_properties, notice: t(:re_artifact_properties_updated)
+    else
+      render :action => 'edit'
     end
-    @artifact_properties.destroy
-
-    flash.now[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
-    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
   
   def handle_relations params
@@ -223,10 +236,39 @@ class ReArtifactPropertiesController < RedmineReController
       end
     end
   end
-  
-  def recursive_delete
-    @artifact_properties = ReArtifactProperties.find(params[:id])
 
+  def destroy
+    gather_artifact_and_relation_data_for_destroying
+
+    direct_children = @artifact_properties.children
+    position = @artifact_properties.position
+    for child in direct_children
+      logger.debug "################### #{child.to_yaml}"
+      child.parent_relation.remove_from_list
+      child.parent = @parent
+      child.parent_relation.insert_at(position)
+      position += 1
+    end
+    @artifact_properties.destroy
+
+    flash.now[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
+    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
+  end
+  
+  def recursive_destroy
+    gather_artifact_and_relation_data_for_destroying
+    
+    @children.each do |child|
+      child.destroy
+    end
+    @artifact_properties.destroy
+
+    flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
+    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
+  end
+
+  def gather_artifact_and_relation_data_for_destroying
+    @artifact_properties = ReArtifactProperties.find(params[:id])
     @relationships_incoming = @artifact_properties.relationships_as_sink
     @relationships_outgoing = @artifact_properties.relationships_as_source
     @parent = @artifact_properties.parent
@@ -235,23 +277,11 @@ class ReArtifactPropertiesController < RedmineReController
 
     @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
     @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
-
-
-    for child in @children
-      child.destroy
-    end
-    
-    @artifact_properties.destroy
-
-    flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
-    redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
-
   end
   
   def how_to_delete
     method = params[:mode]
     @artifact_properties = ReArtifactProperties.find(params[:id])
-
     @relationships_incoming = @artifact_properties.relationships_as_sink
     @relationships_outgoing = @artifact_properties.relationships_as_source
     @parent = @artifact_properties.parent
@@ -328,15 +358,6 @@ class ReArtifactPropertiesController < RedmineReController
     end
     list << '</ul>'
     render :text => list
-  end
-
-  def rate_artifact
-     @artifact = ReArtifactProperties.find(params[:id])
-     @artifact.rate(params[:stars], User.current, params[:dimension])
-     render :update do |page|
-       page.replace_html :rating, render(:partial => '/re_artifact_properties/rating', :locals => {:artifact => @artifact})
-       page.visual_effect :pulsate, @artifact.wrapper_dom_id(params)
-     end
   end
 
   private

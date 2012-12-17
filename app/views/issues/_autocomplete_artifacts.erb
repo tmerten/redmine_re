@@ -1,34 +1,24 @@
-<fieldset>
-  <legend><%= t(:re_add_associated_requirements) %></legend>
+<% if @project.module_enabled?(:requirements) %>
+<% if User.current.allowed_to?(:edit_requirements, @project) %>
+	<p>
+		<%= label_tag :add_related_artifact %>
+	  <%= text_field_tag :re_artifact_properties, '', {:size => 20, :class => 'autocomplete', :id => 'artifact_autocomplete'} %>
+	</p>
+	<% end %>
+	<% unless @issue.new_record? %>
+	<p>
+		<%= label_tag :related_artifacts %>
+	</p>
+	<% end %>
 
-  <div class="splitcontentleft">
+	<% unless @insertvalues.blank?  %>
+	    <% unless @insertvalues["artifactid"].blank? && @insertvalues["artifacttype"].blank? && @insertvalues["artifactname"].blank? %>
+	        <%= javascript_tag do %>
+	        jQuery('issue_subject').value= "<%= t(:implementation_of)+" "+ @insertvalues["artifacttype"] + " " +@insertvalues["artifactname"]%>";
+	        jQuery('div#added_artifacts').append('<%= @insertvalues["artifactname"] + " (" + @insertvalues["artifactid"] + ")" %><br/>');
+	        jQuery('div#added_artifacts').append('<input id="artifact_id" type="hidden" name="artifact_id[]" value="<%= @insertvalues["artifactid"] %>"> ');
+	        <% end %>
+	    <% end %>
+	<% end %>
 
-    <p>
-      <%= text_field_tag :re_artifact_properties, '', {:size => 20, :class => 'autocomplete', :id => 'artifact_autocomplete'} %>
-    </p>
-
-    <div id="artifact_candidates" class="autocomplete"></div>
-      <%= javascript_tag do %>
-			/* TODO adopt and add suggestible for artifacts here! */
-    <% end %>
-
-  </div>
-
-  <div class='splitcontentright'>
-
-    <div id='added_artifacts'/>
-  </div>
-
-
-</fieldset>
-
-
-<% unless @insertvalues.blank?  %>
-    <% unless @insertvalues["artifactid"].blank? && @insertvalues["artifacttype"].blank? && @insertvalues["artifactname"].blank? %>
-        <%= javascript_tag do %>
-        jQuery('issue_subject').value= "<%= t(:implementation_of)+" "+ @insertvalues["artifacttype"] + " " +@insertvalues["artifactname"]%>";
-        jQuery('div#added_artifacts').append('<%= @insertvalues["artifactname"] + " (" + @insertvalues["artifactid"] + ")" %><br/>');
-        jQuery('div#added_artifacts').append('<input id="artifact_id" type="hidden" name="artifact_id[]" value="<%= @insertvalues["artifactid"] %>"> ');
-        <% end %>
-    <% end %>
 <% end %>

@@ -118,7 +118,6 @@ en:
   re_artifact_properties_not_enought_chars: 'Minimum chars %d'
   re_artifact_properties_to_many_chars: 'Maximum chars %d'
 
-
   project: Project
   re_my_artifacts: 'My Artifacts'
   re_linked_artifact: 'Related Artifact'

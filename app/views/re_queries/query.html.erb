@@ -1,3 +1,9 @@
+<% content_for :header_tags do %>
+<%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
+<%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
+
 <div id="detail_view" class="detail_view">
   <h2><%= l(:re_enhanced_filter) %></h2>
   <%= render 'form_and_results', :mode => :apply %>

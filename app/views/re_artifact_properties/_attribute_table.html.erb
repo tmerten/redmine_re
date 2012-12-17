@@ -1,0 +1,58 @@
+<% sources = @re_artifact_properties.sources %>
+<% sinks   = @re_artifact_properties.sinks   %>
+<% issues  = @re_artifact_properties.issues  %>
+<table class="attributes">
+	<colgroup>
+		<col />
+		<col />
+		<col />
+		<col style="min-width:300px width:60%" />
+	</colgroup>
+	<tbody>
+		<tr>
+			<th><%= l(:re_artifact_responsible) %></th>
+			<td><%= @re_artifact_properties.responsibles %></td>
+			<th><%= t(:traces_to) -%></th>
+			<% s = sources.shift %>
+			<td ><%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}"}) if s %></td>
+		</tr>
+		<% sources.each do |s| %>
+		<tr>
+			<th></th>
+			<td></td>
+			<th></th>
+			<td><%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}"}) %></td>
+		</tr>
+		<% end %>
+		<tr>
+			<th></th>
+			<td></td>
+			<th><%= t(:traces_from) -%></th>
+			<% s = sinks.shift %>
+			<td><%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}"}) if s %></td>
+		</tr>				
+		<% sinks.each do |s| %>
+		<tr>
+			<th></th>
+			<td></td>
+			<th></th>
+			<td><%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}"}) %></td>
+		</tr>
+		<% end %>
+		<tr>
+			<th></th>
+			<td></td>
+			<th><%= t(:re_related_issues) -%></th>
+			<% i = issues.shift %>
+			<td><%= link_to(i.subject,i) if i %></td>
+		</tr>				
+		<% issues.each do |i| %>
+		<tr>
+			<th></th>
+			<td></td>
+			<th></th>
+			<td><%= link_to(i.subject,i) %></td>
+		</tr>
+		<% end %>		
+	</tbody>
+</table>

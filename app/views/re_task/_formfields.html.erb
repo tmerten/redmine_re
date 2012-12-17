@@ -71,15 +71,16 @@
 		         updateSubtaskPositionFields();
 		      },  
 		    });
-		
-			jQuery("select.subtask-type").change(function() {
-				changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
-			});
+
+				jQuery("select.subtask-type").change(function() {
+					changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
+				});
 			
-		}
+		};
 		
 		jQuery(document).ready(function(){
 		    jsInitScript();
+				/* jQuery(".subtask_textarea").autoGrow();*/
 		});
 		
 	  function changeSubtaskRowColor(element, value) {

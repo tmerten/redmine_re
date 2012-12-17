@@ -35,19 +35,11 @@ module ReApplicationHelper
   # or builiding block that is named in the variable artifact 
   def errors_and_flash(artifact)
     s = error_messages_for artifact
-    s += render_flash_messages_with_timeout
-  end
-  
-  def render_flash_messages_with_timeout
-    s = ''
     flash.each do |k,v|
-      id = "#{v} #{k}".gsub(" ", "_") # id should be a token (one word) WC3 valid..
-      s << content_tag('div', v, :class => "flash #{k}", :id => id)
-      s << content_tag('script', "setTimeout('new Effect.Fade(\"#{id}\");', 6000)", :type => "text/javascript")
+      s << content_tag('div', v, :class => "flash #{k}")
     end
-    s
+    s.html_safe
   end
-
 
   # creates a link to the wikipage of an artifact => wiki/#id_#artifact_type_#name/
   # if there is already a wikipage the content will be placed as a tooltip to the link
@@ -213,7 +205,7 @@ JAVASCRIPT
     return result
   end
 
-  def edit_artifact_path(artifact)
+  def edit_re_artifact_properties_path(artifact)
     url_for :controller => artifact.artifact_type.underscore,
             :action => 'edit',
             :id => artifact.artifact_id

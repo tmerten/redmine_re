@@ -46,17 +46,17 @@
 <ul>
   <% if @children.empty? %>
     <li>
-      <%= link_to t(:re_delete_artifact), { :action => "recursive_delete", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>:<br />
+      <%= link_to t(:re_delete_artifact), re_artifact_property_path(@artifact_properties.id), :method => 'delete', :confirm => t(:re_are_you_sure) %>:<br />
       <%= t(:re_will_delete_artifact_and_relations, :name => @artifact_properties.name) %>
     </li>
   <% else %>
     <li>
-      <%= link_to t(:re_delete_and_move_children), { :action => "delete", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>:<br />
+      <%= link_to t(:re_delete_and_move_children), re_artifact_property_path(@artifact_properties.id), :method => 'delete', :confirm => t(:re_are_you_sure) %>:<br />
       <%= t(:re_will_delete_artifact_and_move_children, { :name => @artifact_properties.name, :parent => @parent.name }) %>
     </li>
     <br /> 
     <li>
-      <%= link_to t(:re_delete_recursively), { :action => "recursive_delete", :id => @artifact_properties.id }, :confirm => t(:re_are_you_sure) %>: <br />
+      <%= link_to t(:re_delete_recursively), { :action => "recursive_destroy", :id => @artifact_properties.id }, :method => 'delete', :confirm => t(:re_are_you_sure) %>: <br />
       <%= t(:re_will_delete_artifact_and_all_children, { :name => @artifact_properties.name }) %>
     </li>
   <% end %>

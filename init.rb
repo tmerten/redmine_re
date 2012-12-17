@@ -14,21 +14,15 @@ ActionDispatch::Callbacks.to_prepare do
   #require_dependency 'mailer_patch' #Ist not ready implemented yet (dominic)
   #require_dependency 'notifiable_patch'  # Is not used
   require_dependency 'query_patch'
-  require_dependency 'user_patch'
   require_dependency 'role_patch'
   require_dependency 'project_patch'
   require_dependency 'projects_controller_patch'
-  # gems
-  require_dependency 'ajaxful_rating_patch'
 end
 
-require_dependency 'query_patch'
-require_dependency 'user_patch'
-require_dependency 'role_patch'
-require_dependency 'project_patch'
-require_dependency 'projects_controller_patch'
-# gems
-require_dependency 'ajaxful_rating_patch'
+#require_dependency 'query_patch'
+#require_dependency 'role_patch'
+#require_dependency 'project_patch'
+#require_dependency 'projects_controller_patch'
 
 ActionView::Base.class_eval do
   include ReApplicationHelper
@@ -62,22 +56,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :delegate_tree_drop, :render_to_html_tree, :render_children_to_html_tree,
           :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
           :reduce_search_result_with_parameter ],
-        :re_artifact_properties=> [:new, :create, :update, :edit, :redirect, :delete, :autocomplete_parent, :autocomplete_issue,
+        :re_artifact_properties=> [:show, :new, :create, :update, :edit, :redirect, :destroy, :autocomplete_parent, :autocomplete_issue,
                                     :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue,
-                                    :rate_artifact, :how_to_delete, :recursive_delete],
-        :re_goal => [:create, :update, :edit, :new] ,
-        :re_task => [:edit, :new, :delete_subtask],
-        :re_subtask => [:edit, :new],
-        :re_section => [:edit, :new],
-        :re_workarea => [:edit, :new],
-        :re_scenario => [:edit, :new],
-        :re_vision => [:edit, :new],
-        :re_user_profile => [:edit, :new],
-        :re_settings => [:edit, :configure, :children],
-        :re_attachment => [:edit, :new, :download_or_show, :delete_file],
-        :re_processword => [:edit, :new],
-        :re_requirement => [:edit, :new],
-        :re_use_case => [:edit, :new, :autocomplete_sink],
+                                    :rate_artifact, :how_to_delete, :recursive_destroy],
         :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
           :visualization, :build_json_according_to_user_choice],
         :re_building_block => [:delete_data, :re_building_block_referred_artifact_types,
@@ -86,13 +67,13 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_link_building_block => [:popup_close_and_update_link, :popup],
         :re_queries => [:index, :new, :edit, :show, :delete, :create, :update, :query, :apply,
                         :suggest_artifacts, :suggest_issues, :suggest_users,
-                        :artifacts_bits, :issues_bits, :users_bits],
+                        :artifacts_bits, :issues_bits, :users_bits]
       }
     )
     permission( :administrate_requirements,
       {
-        :requirements => [:setup, :configure],
-        :re_settings => [:configure_fields, :edit_artifact_type_description],
+        :requirements => [:setup],
+        :re_settings => [:configure, :configure_fields, :edit_artifact_type_description],
         :re_building_block => [:edit, :new, :delete, :update_config_form, :delete_data, 
           :react_to_change_in_field_multiple_values, :re_building_block_referred_artifact_types,
           :react_to_check_of_embedding_type_attributes, :react_to_change_in_data_field_artifact_type,
@@ -110,7 +91,6 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   #config.active_record.observers = :re_artifact_properties_observer
   #active_record.observers = :re_artifact_properties_observer (nett to be fixed for redmine_2_0
 
-  gem "ajaxful_rating_jquery"
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
 
   settings :default => {

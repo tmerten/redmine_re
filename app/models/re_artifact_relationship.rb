@@ -17,11 +17,11 @@ class ReArtifactRelationship < ActiveRecord::Base
 
   validates_uniqueness_of :source_id, :scope => [:sink_id, :relation_type], :message => :re_the_specified_relation_already_exists
   validates_uniqueness_of :sink_id, :scope => :relation_type, :if => Proc.new { |rel| rel.relation_type == "parentchild" }, :message => :re_only_one_parent_allowed
-  validates_presence_of :relation_type
-  validates_presence_of :sink_id, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
-  validates_presence_of :sink, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
-  validates_presence_of :source_id
-  validates_inclusion_of :relation_type, :in => RELATION_TYPES.values
+  validates_presence_of   :relation_type
+  validates_presence_of   :sink_id, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
+  validates_presence_of   :sink, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
+  validates_presence_of   :source_id
+  validates_inclusion_of  :relation_type, :in => RELATION_TYPES.values
 
   scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
@@ -30,7 +30,6 @@ class ReArtifactRelationship < ActiveRecord::Base
     { :select => "#{self.table_name}.*", :joins => [first_join, second_join],
       :conditions => ["source_artifacts.project_id = ? AND sink_artifacts.project_id = ?", project_id, project_id] }
   }
-
 
    def self.find_all_relations_for_artifact_id(artifact_id)
      relations = []

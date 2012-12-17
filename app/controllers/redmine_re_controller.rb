@@ -17,7 +17,6 @@ class RedmineReController < ApplicationController
   helper :application
   include WatchersHelper
 
-  #before_filter :initialize_tree_data, :except => :configure
   before_filter :load_settings, :authorize
   prepend_before_filter :first_load, :except => :configure
   prepend_before_filter :find_project
@@ -379,7 +378,7 @@ class RedmineReController < ApplicationController
     attr['id'] = "node_" + artifact_id.to_s
     attr['rel'] = artifact_type
     attr['title'] = artifact_name
-    attr['url'] = url_for(:controller => 're_artifact_properties', :action => 'edit', :id => artifact_id) unless artifact_type.eql?('project')
+    attr['url'] = url_for(:controller => 're_artifact_properties', :action => 'show', :id => artifact_id) unless artifact_type.eql?('project')
     attr['delete_url'] = url_for(:controller => 're_artifact_properties', :action => 'destroy', :id => artifact_id) unless artifact_type.eql?('project')
 
     tree['attr'] = attr

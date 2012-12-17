@@ -10,8 +10,6 @@ class ReArtifactProperties < ActiveRecord::Base
     { :conditions => { :project_id => project_id } }
   }
 
-  ajaxful_rateable :stars => 10, :allow_update => true#, :dimensions => [:first]
-
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
 
   has_many :realizations, :dependent => :destroy
@@ -53,10 +51,10 @@ class ReArtifactProperties < ActiveRecord::Base
     :class_name => "ReArtifactRelationship",
     :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
 
-  has_many :sinks,    :through => :relationships_as_source, :order => "re_artifact_relationships.position"
+  has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :child_relations, :order => "re_artifact_relationships.position", :source => "sink"
 
-  has_many :sources, :through => :relationships_as_sink,   :order => "re_artifact_relationships.position"
+  has_many :sources, :through => :traces_as_sink, :order => "re_artifact_relationships.position"
   has_one :parent, :through => :parent_relation, :source => "source"
 
   has_many :re_bb_data_texts, :dependent => :delete_all
@@ -87,7 +85,6 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'created_by'
   belongs_to :user, :foreign_key => 'updated_by'
-
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
 
   # attributes= and artifact_attributes are overwritten to instantiate
@@ -128,14 +125,6 @@ class ReArtifactProperties < ActiveRecord::Base
 
   validates_associated :parent_relation
 
-  after_destroy :delete_wiki_page
-
-  def self.get_properties_id(subartifact_id)
-    # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
-    @re_artifact_properties = ReArtifactProperties.find(subartifact_id)
-    @re_artifact_properties.id
-  end
-
   # Finds all artifacts that are commonly used by the supplied issues
   def self.find_all_by_common_issues(issue_array, *args)
     artifact_ids = []
@@ -157,12 +146,6 @@ class ReArtifactProperties < ActiveRecord::Base
     return parent_relation.position
   end
 
-  def delete_wiki_page
-    wiki_page_name = "#{self.id}_#{self.artifact_type}"
-    wiki_page = WikiPage.find_by_title(wiki_page_name)
-    wiki_page.destroy if wiki_page
-  end
-
   def gather_children
     # recursively gathers all children for the given artifact
     #
@@ -173,6 +156,10 @@ class ReArtifactProperties < ActiveRecord::Base
       children.concat child.gather_children
     end
     children
+  end
+  
+  def siblings
+    self.parent.children
   end
 
 end
