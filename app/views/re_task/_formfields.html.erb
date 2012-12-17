@@ -104,7 +104,7 @@
 	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
 	
 	    switch(add_pos) {
-	      case 'top':
+	      case 'top':    jQuery(element).prepend(rendered_subtask); break;
 	      case 'after':  jQuery(element).after(rendered_subtask); break;
 	      case 'before': jQuery(element).before(rendered_subtask); break;
 	      case 'bottom': jQuery(element).append(rendered_subtask); break;
