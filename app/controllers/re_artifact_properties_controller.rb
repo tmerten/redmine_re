@@ -185,7 +185,7 @@ class ReArtifactPropertiesController < RedmineReController
 
     if saved
       #flash[:notice] = :re_artifact_properties_updated
-      redirect_to @re_artifact_properties, notice: t(:re_artifact_properties_updated)
+      redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_updated)
     else
       render :action => 'edit'
     end
