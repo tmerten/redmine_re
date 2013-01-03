@@ -10,8 +10,8 @@ class ReSettingsController < RedmineReController
       :project_id => @project.id,
       :artifact_type => "Project"}
     ).first_or_create!({
-      :created_by => User.current,
-      :updated_by => User.current,
+      :created_by => User.current.id,
+      :updated_by => User.current.id,
       :artifact_id => @project.id,     
       :description => @project.description,
       :name => @project.name}
