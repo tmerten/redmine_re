@@ -34,10 +34,10 @@ Redmine::Plugin.register :redmine_re do
   description 'This is a plugin to handle requirements engineering artifacts within redmine. The plugin has been developed
 within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Applied Sciences (http://h-brs.de)'
   version '0.0.1'
-  url 'http://korem.de/redmineplugin'
+  url 'http://redmine.korem.de'
   author_url 'http://korem.de'
 
-  requires_redmine :version_or_higher => '1.1.0'
+  requires_redmine :version_or_higher => '2.1.0'
 
 
 	# this plugin creates a project module. navigate to 'settings->modules' in the app to activate the plugin per project
