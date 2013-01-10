@@ -1,5 +1,7 @@
 class ReUseCase < ActiveRecord::Base
   unloadable
+
+  INITIAL_COLOR="#0000ff"
   
   acts_as_re_artifact
 

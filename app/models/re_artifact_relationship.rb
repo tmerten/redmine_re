@@ -9,6 +9,15 @@ class ReArtifactRelationship < ActiveRecord::Base
     :ref => "refinement",
     :pof => "part_of"
   }
+  
+  INITIAL_COLORS= {
+    :pch => "#0000ff",
+    :dep => "#00ff00",
+    :con => "#ff0000",
+    :rat => "#993300",
+    :ref => "#33cccc",
+    :pof => "#ffcc00"
+  }  
 
   # The relationship has ReArtifactProperties as source or sink 
   belongs_to :source, :class_name => "ReArtifactProperties"

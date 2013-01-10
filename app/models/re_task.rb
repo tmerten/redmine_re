@@ -1,6 +1,8 @@
 class ReTask < ActiveRecord::Base
   unloadable
 
+  INITIAL_COLOR="#ff0000"
+
   acts_as_re_artifact
 
   has_many :re_subtasks, :inverse_of => :re_task, :dependent => :destroy, :order => :position, :autosave => true

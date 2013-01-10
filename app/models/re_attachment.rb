@@ -1,5 +1,7 @@
 class ReAttachment < ActiveRecord::Base
   unloadable
+
+  INITIAL_COLOR="#000000"
   
   acts_as_re_artifact
   acts_as_attachable :after_remove => :attachment_removed

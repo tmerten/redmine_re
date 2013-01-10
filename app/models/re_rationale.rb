@@ -1,5 +1,7 @@
 class ReRationale < ActiveRecord::Base
   unloadable
+
+  INITIAL_COLOR="#993300"
   
   acts_as_re_artifact
   
