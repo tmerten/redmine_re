@@ -24,13 +24,17 @@ class ReArtifactRelationship < ActiveRecord::Base
   belongs_to :sink,   :class_name => "ReArtifactProperties"
   has_many :re_bb_data_artifact_selection, :dependent => :destroy
 
-  validates_uniqueness_of :source_id, :scope => [:sink_id, :relation_type], :message => :re_the_specified_relation_already_exists
-  validates_uniqueness_of :sink_id, :scope => :relation_type, :if => Proc.new { |rel| rel.relation_type == "parentchild" }, :message => :re_only_one_parent_allowed
-  validates_presence_of   :relation_type
-  validates_presence_of   :sink_id, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
-  validates_presence_of   :sink, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
-  validates_presence_of   :source_id
-  validates_inclusion_of  :relation_type, :in => RELATION_TYPES.values
+  validates :source_id, :uniqueness => { :scope => [:sink_id, :relation_type],
+    :message => :re_the_specified_relation_already_exists }
+
+  validates :sink_id, :uniqueness => { :scope => :relation_type,
+    :message => :re_only_one_parent_allowed }, :if => Proc.new { |rel| rel.relation_type == "parentchild" }
+  
+  validates :relation_type, :presence => true
+  validates :sink_id, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
+  validates :sink, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
+  validates :source_id, :presence => true
+  validates :relation_type, :inclusion => { :in => RELATION_TYPES.values }
 
   scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project

@@ -811,9 +811,9 @@ class ReQuery < ActiveRecord::Base
     serialize filter_group
   end
 
-  # Validation
-  validates_presence_of :name, :allow_nil => true
-  validates_uniqueness_of :name
+  # Validation  
+  validates :name, :presence => true, :allow_nil => true
+  validates :name, :uniqueness => true
 
   # Hooks
   before_validation_on_create :assign_creator
