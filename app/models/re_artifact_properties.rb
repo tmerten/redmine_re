@@ -70,7 +70,7 @@ class ReArtifactProperties < ActiveRecord::Base
       },
     :datetime => :updated_at,
     :url => Proc.new {|o|
-        { :controller => 're_artifact_properties', :action => 'edit', :id => o.id}
+        { :controller => 're_artifact_properties', :action => 'show', :id => o.id}
       }
   )
 
