@@ -83,7 +83,7 @@ class ReArtifactPropertiesController < RedmineReController
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
       update_related_issues params
-      r = :edit
+      r = :show
     else
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
       r = :new
