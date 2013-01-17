@@ -16,7 +16,7 @@
 
   <%= errors_and_flash(@re_artifact_properties).html_safe %>
 
-	<div class="requirement_upper" style="background: <%= @lighter_artifact_color -%>">
+	<div class="requirement_upper issue" style="background: <%= @lighter_artifact_color -%>">
 	  <%= avatar(@re_artifact_properties.author, :size => "50") %>
 	  <% if @previous_re_artifact_properties_id || @next_re_artifact_properties_id %>
 	    <div class="next-prev-links contextual">
