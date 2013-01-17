@@ -1,5 +1,6 @@
 require 'redmine'
 module WikiExtensionsWikiMacro
+
   Redmine::WikiFormatting::Macros.register do
 
       desc "Generates a link to the artifact with the passed artifact id 
@@ -15,10 +16,9 @@ module WikiExtensionsWikiMacro
          
            #check if artifact exists
            artifact = ReArtifactProperties.find_by_id(args)
-           
            if (!artifact.nil?)
              #generate link to artifact#show            
-             output << link_to("##{artifact.id}", :controller => 're_artifact_properties', :action => 'show', :project_id => artifact.project_id, :id => artifact.id)            
+             output << link_to("#{rendered_artifact_type(artifact.artifact_type)} ##{artifact.id}", :controller => 're_artifact_properties', :action => 'show', :project_id => artifact.project_id, :id => artifact.id)
            else
              output = "{{a(#{args})}}"
            end 

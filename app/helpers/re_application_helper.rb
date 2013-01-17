@@ -15,6 +15,18 @@ module ReApplicationHelper
   def rendered_artifact_type(artifact_type)
     artifact_type_alias = ''
 
+    ReSetting.check_cache
+    @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
+    @re_artifact_settings = {}
+
+    return if @re_artifact_order.nil?
+
+    @re_artifact_settings = {}
+    @re_artifact_order.each do |a|
+      artifact_setting = ReSetting.get_serialized(a, @project.id)
+      @re_artifact_settings[a] = artifact_setting if artifact_setting["in_use"]
+    end
+
     unless @re_artifact_settings[artifact_type].nil?
       artifact_type_alias = @re_artifact_settings[artifact_type]['alias']
     end
