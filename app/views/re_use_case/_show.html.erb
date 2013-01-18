@@ -1,0 +1,36 @@
+<%	      
+  goal_levels = {
+  "5" => t(:re_use_case_abstract_overview),
+  "4" => t(:re_use_case_overview),
+  "3" => t(:re_use_case_user_goal),
+  "2" => t(:re_use_case_function),
+  "1" => t(:re_use_case_low)}
+		          
+%>
+
+<p><strong>Level</strong>: <%= goal_levels[@re_artifact_properties.artifact[:goal_level].to_s]  %></p>
+<p><strong>Trigger</strong>:  <%= @re_artifact_properties.artifact[:trigger] %></p>
+<p><strong>Precondition</strong>: <%= @re_artifact_properties.artifact[:precondition] %></p>
+<p><strong>Postcondition</strong>: <%= @re_artifact_properties.artifact[:postcondition] %></p>
+
+<hr />
+
+<strong><%= t(:re_use_case_steps)%></strong>
+
+<table class="steps">
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th><%= t(:re_user_steps) %></th>
+        <th width="120px" >&nbsp;</th>
+        <th ><%= t(:re_system_steps) %></th>
+        <th>&nbsp;</th>
+        <th style="min-width: 300px;"></th>
+      </tr>
+    </thead>
+    <tbody id="steps">
+	    <% @re_artifact_properties.artifact.re_use_case_steps.each do |current_re_use_case_step| %>
+	          <tr><td>AAA</td></tr>
+	    <% end %>
+    </tbody>
+</table>
