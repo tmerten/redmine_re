@@ -612,3 +612,5 @@ en:
   re_greater_than: 'Grater than'
   re_none_specific: 'None specific'
   re_apply_filter: 'Apply filter'
+  
+  re_artifact_attributes: 'Artifact attributes'

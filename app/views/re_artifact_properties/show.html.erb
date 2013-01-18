@@ -65,7 +65,10 @@
 			"#{Rails.root}/plugins/redmine_re/app/views/#{@artifact_type.underscore}/_show.html.erb"
 			) %>
 		<hr />
-		<%= render @artifact_type.underscore+"/_show" %> 
+		<fieldset>
+	       <legend><b><%= t(:re_artifact_attributes)%></b></legend>
+		      <%= render @artifact_type.underscore+"/show" %> 
+		</fieldset>
 		<% end %>
 	</div>
 
