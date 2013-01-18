@@ -17,7 +17,14 @@
 
   <% configured_description = ReSetting.get_plain('plugin_description', @project.id)%>
   <% if configured_description.nil? or configured_description == '' %>
-  <h2>Create a new Requirements Artifact</h2>
+  
+  <% if User.current.allowed_to?(:edit_requirements, @project) %>
+		<h2>Create a new Requirements Artifact</h2>
+  <% elsif  User.current.allowed_to?(:view_requirements, @project) %>	
+  		<h2>Requirements Artifact</h2>
+  <% end %>
+  
+  
     <p>
       Get started by creating a new requirements artifact. You may select from the artifacts below.<br />
       You will find the artifacts you created in the tree to your left. You can drag and drop each artifact
@@ -36,6 +43,8 @@
     <h3><%= rendered_artifact_type(currentArtifact.underscore) %></h3>
     <%= render :partial => "re_artifact_descriptions/#{currentArtifact.underscore}_description" %>
     <ul>
+     
+      <% if User.current.allowed_to?(:edit_requirements, @project) %>
       <li>
 				<%= link_to(
 					t(:re_create_new) + rendered_artifact_type(currentArtifact.underscore),
@@ -48,7 +57,9 @@
 					{
 						:class => "icon " + currentArtifact.underscore
 					}) %>
-			</li>
+	  </li>
+	  <% end %>
+	  
     </ul>
   <% end %>
 
