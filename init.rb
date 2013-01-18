@@ -48,6 +48,29 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 	project_module :requirements do
 
     #   before_filter :authorize is set in the redmine_re_controller
+    
+    permission( :view_requirements,
+      {
+        :requirements => [:index, :treeview, :treestate, :load_settings,
+          :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree,
+          :render_to_html_tree, :render_children_to_html_tree,
+          :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
+          :reduce_search_result_with_parameter ],
+        :redmine_re => [:enhanced_filter, :index, :treeview, :treestate, :load_settings,
+          :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree,
+          :render_to_html_tree, :render_children_to_html_tree,
+          :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
+          :reduce_search_result_with_parameter ],
+        :re_artifact_properties=> [:show, :redirect],
+        :re_artifact_relationship => [:prepare_relationships,:visualization, :build_json_according_to_user_choice],
+        :re_building_block => [:re_building_block_referred_artifact_types,
+          :react_to_change_in_data_field_artifact_type],        
+        :re_queries => [:index, :show, :query, :apply,
+                        :suggest_artifacts, :suggest_issues, :suggest_users,
+                        :artifacts_bits, :issues_bits, :users_bits]
+      }
+    )
+    
     permission( :edit_requirements,
       {
         :requirements => [:index, :treeview, :context_menu, :treestate, :load_settings,
@@ -84,6 +107,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :react_to_change_in_field_referred_artifact_types, :react_to_change_in_fields_minimal_maximal_value]
       }
     )
+    
   end
 
   # The Requirements item is added to the project menu after the Activity item
