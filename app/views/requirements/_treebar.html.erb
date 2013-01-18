@@ -272,7 +272,13 @@ var tree = jQuery("#tree")
         }
       }
     },
-    plugins : [ "themes", "json_data", "dnd", "ui", "contextmenu", "types" ]
+   
+  <% if User.current.allowed_to?(:edit_requirements, @project) %>
+		plugins : [ "themes", "json_data", "dnd", "ui", "contextmenu", "types" ]  
+  <% elsif  User.current.allowed_to?(:view_requirements, @project) %>	
+    	plugins : [ "themes", "json_data", "ui", "types" ]
+  <% end %>
+   
   });
 
   /*
