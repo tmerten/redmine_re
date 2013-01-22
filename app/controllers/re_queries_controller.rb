@@ -11,6 +11,7 @@ class ReQueriesController < RedmineReController
     @query = ReQuery.from_filter_params(request.query_parameters)
     @query.project = @project
     load_cropped_collections
+    initialize_tree_data
     if @query.set_by_params?
       @found_artifacts = ReArtifactProperties.all(:conditions => @query.conditions, :order => @query.order_string)
     else
@@ -22,6 +23,7 @@ class ReQueriesController < RedmineReController
   def show
     @query = ReQuery.visible.find(params[:id])
     @query.order = params[:order] if params[:order]
+    initialize_tree_data
     load_cropped_collections
     @found_artifacts = ReArtifactProperties.all(:conditions => @query.conditions, :order => @query.order_string)
   end
@@ -36,6 +38,7 @@ class ReQueriesController < RedmineReController
   def new
     @query = ReQuery.from_filter_params(params)
     @query.project = @project
+    initialize_tree_data
     load_cropped_collections
   end
 
@@ -174,10 +177,12 @@ class ReQueriesController < RedmineReController
 
   def load_cropped_collections
     return unless @query
-
+    
+      
     source_artifact_ids = [@query[:source][:ids]].flatten
     sink_artifact_ids = [@query[:sink][:ids]].flatten
     artifact_ids = source_artifact_ids.concat(sink_artifact_ids).compact.uniq
+    artifact_ids.delete_if {|v| v == ""} 
     @artifacts = (artifact_ids.empty?) ? [] : @project_artifacts.find(artifact_ids)
 
     issue_ids = [@query[:issue][:ids]].concat([@query[:issue][:ids_include]]).concat([@query[:issue][:ids_exclude]]).flatten.compact

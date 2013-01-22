@@ -48,8 +48,7 @@
 <% end %>
 
 <%= form_for @query, :url => re_query_form_url(@query, mode), :html => { :class => 'filters' } do |f| %>
-  <%= f.error_messages %>
-
+<%= hidden_field_tag(:id, @project.id) %>
   <% if mode == :persist %>
     <fieldset class="collapsible filter_settings">
       <legend>Settings</legend>

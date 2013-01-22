@@ -803,8 +803,8 @@ class ReQuery < ActiveRecord::Base
                                           :foreign_key => 'query_id', :association_foreign_key => 'role_id'
 
   # Scopes
-  named_scope :visible, lambda { visibility_condition(User.current) }
-  named_scope :visible_for, lambda { |user| visibility_condition(user) }
+  scope :visible, lambda { visibility_condition(User.current) }
+  scope :visible_for, lambda { |user| visibility_condition(user) }
 
   # Filter serialization
   @@available_filters.keys.each do |filter_group|
@@ -816,8 +816,8 @@ class ReQuery < ActiveRecord::Base
   validates :name, :uniqueness => true
 
   # Hooks
-  before_validation_on_create :assign_creator
-  before_validation_on_update :assign_maintainer
+  before_validation :assign_creator, :on => :create 
+  before_validation :assign_maintainer, :on => :create
   before_validation :repair_visibility
   before_save :clear_unassigned_visible_roles
 

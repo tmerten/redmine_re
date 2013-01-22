@@ -37,20 +37,27 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink'
 
   
-  match 're_queries.:project_id' => 'redmine_re#enhanced_filter'
-  match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
-  match '/re_queries/suggest_issues.:id' => 're_queries#suggest_issues'
+  #match 're_queries.:project_id' => 're_queries#index'
 
-  resources :re_queries do
-    collection do
-      post :apply
-      get :suggest_artifacts
-      get :suggest_issues
-      get :suggest_users
-      get :artifacts_bits
-      get :issues_bits
-      get :users_bits
-    end
+  match 'projects/:project_id/re_queries' => 're_queries#index', :via => :get
+
+
+  #match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
+  #match '/re_queries/suggest_issues.:id' => 're_queries#suggest_issues'
+
+   scope "(/projects/:project_id)" do
+    resources :re_queries do
+      collection do
+        post :apply
+        get :suggest_artifacts
+        get :suggest_issues
+        get :suggest_users
+        get :artifacts_bits
+        get :issues_bits
+        get :users_bits
+      end
+   end
+ 
   end
   #member do
   #  get :delete
