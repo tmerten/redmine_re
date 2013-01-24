@@ -842,7 +842,7 @@ input.artifact_name {
 #sidebar_filter_input_container .input input {
 }
 #sidebar_filter_input_container .suggestions {
-    min-width: 300px !important;
+    /*min-width: 300px !important;*/
     position: absolute !important;
     z-index: 999;
     border-top: 1px solid #BBB;

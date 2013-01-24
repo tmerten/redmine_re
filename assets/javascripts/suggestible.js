@@ -234,7 +234,6 @@
 
     function Helpers(elements, options) {
         var _this = this;
-
         this.elements = elements;
         this.options = options;
 
@@ -392,11 +391,13 @@
                 }
                 return;
             }
+             
             _this.unselectAllSuggestions();
             _this.elements.suggestionsBox.css({
                 top: _this.elements.inputWrapper.outerHeight(),
-                width: _this.elements.inputWrapper.width()
+                width: _this.elements.inputContainer.parent().width()                               
             });
+            
             _this.elements.suggestionsBox.fadeIn('fast', function() {
                 if (callback) {
                     callback();
