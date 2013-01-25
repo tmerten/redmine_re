@@ -184,7 +184,7 @@ class ReArtifactRelationshipController < RedmineReController
       #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
 
       edge_data = {}
-      edge_data['$color'] = "#" + relation_settings['color'] if directed
+      edge_data['$color'] = relation_settings['color'] if directed
       edge_data['$color'] = "#111111" unless directed
       edge_data['$lineWidth'] = 2
       edge_data['$type'] = "arrow" if directed
