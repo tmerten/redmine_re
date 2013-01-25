@@ -40,6 +40,7 @@ RedmineApp::Application.routes.draw do
   #match 're_queries.:project_id' => 're_queries#index'
 
   match 'projects/:project_id/re_queries' => 're_queries#index', :via => :get
+  match 'projects/:project_id/re_queries/:id/delete' => 're_queries#delete', :via => :get
 
 
   #match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'

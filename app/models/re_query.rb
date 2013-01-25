@@ -843,9 +843,64 @@ class ReQuery < ActiveRecord::Base
   # Creates a new non-persistent query
   def self.from_filter_params(params)
     query = new
+
     @@available_filters.keys.each do |filter_group|
       query.send :"#{filter_group}=", params[filter_group]
     end
+    
+    unless query.source[:ids].nil?
+      query.source[:ids].delete_if {|v| v == ""} 
+    
+    end
+    
+    unless query.source[:builder].nil?
+        
+        query.source.delete(:builder)  
+    
+    end
+
+    unless query.source[:namespace].nil?
+        
+        query.source.delete(:namespace)  
+    
+    end
+
+    unless query.sink[:builder].nil?
+        
+        query.sink.delete(:builder)  
+    
+    end
+
+    unless query.sink[:namespace].nil?
+        
+        query.sink.delete(:namespace)  
+    
+    end
+
+    unless query.issue[:builder].nil?
+        
+        query.issue.delete(:builder)  
+    
+    end
+
+    unless query.issue[:namespace].nil?
+        
+        query.issue.delete(:namespace)  
+    
+    end
+
+    unless query.order[:builder].nil?
+        
+        query.order.delete(:builder)  
+    
+    end
+
+    unless query.order[:namespace].nil?
+        
+        query.order.delete(:namespace)  
+    
+    end
+
     query
   end
 
@@ -918,6 +973,7 @@ class ReQuery < ActiveRecord::Base
 
   # Builds the SQL string that can be passed as condition in a ReArtifactProperties finder method
   def conditions
+    
     conditions = []
     # Basic conditions
     conditions << ["#{ReArtifactProperties.table_name}.artifact_type != ?", 'Project']

@@ -25,6 +25,7 @@ class ReQueriesController < RedmineReController
     @query.order = params[:order] if params[:order]
     initialize_tree_data
     load_cropped_collections
+
     @found_artifacts = ReArtifactProperties.all(:conditions => @query.conditions, :order => @query.order_string)
   end
 
@@ -36,14 +37,18 @@ class ReQueriesController < RedmineReController
   end
 
   def new
+
     @query = ReQuery.from_filter_params(params)
     @query.project = @project
+
     initialize_tree_data
     load_cropped_collections
+
   end
 
   def edit
     @query = ReQuery.visible.find(params[:id])
+    initialize_tree_data
     load_cropped_collections
   end
 
@@ -51,6 +56,7 @@ class ReQueriesController < RedmineReController
     @query = ReQuery.new(params[:re_query])
     @query.project = @project
     load_cropped_collections
+    initialize_tree_data
     if @query.save
       redirect_to re_query_path(@project.id, @query)
     else
@@ -61,6 +67,7 @@ class ReQueriesController < RedmineReController
   def update
     @query = ReQuery.visible.find(params[:id])
     @query.update_attributes(params[:re_query])
+    
     load_cropped_collections
     if @query.save
       redirect_to re_query_path(@project.id, @query)
@@ -70,7 +77,6 @@ class ReQueriesController < RedmineReController
   end
 
   def delete
-    # TODO: Not RESTful?
     @query = ReQuery.visible.find(params[:id])
     @query.destroy
     redirect_to re_queries_path(@project.id)
