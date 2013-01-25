@@ -145,7 +145,7 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['updated_at'] = artifact.updated_at.to_s(:short)
     node_data['user'] = artifact.user.to_s
     node_data['responsibles'] = artifact.responsibles
-    node_data['$color'] = "#" + node_settings['color']
+    node_data['$color'] = node_settings['color']
     node_data['$height'] = 90
     node_data['$angularWidth'] = 13.00
 

@@ -44,22 +44,8 @@ class RedmineReController < ApplicationController
     ReSetting.check_cache
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
-    @re_artifact_settings = {}
-
-    return if @re_artifact_order.nil?
-    return if @re_relation_order.nil?
-
-    @re_artifact_settings = {}
-    @re_artifact_order.each do |a|
-      artifact_setting = ReSetting.get_serialized(a, @project.id)
-      @re_artifact_settings[a] = artifact_setting if artifact_setting["in_use"]
-    end
-    @re_relation_settings = {}
-    @re_relation_order.each do |r|
-      relation_setting = ReSetting.get_serialized(r, @project.id)
-      @re_relation_settings[r] = relation_setting if relation_setting["in_use"]
-    end
-
+    @re_artifact_settings = ReSetting.active_re_artifact_settings(@project.id)
+    @re_relation_settings = ReSetting.active_re_relation_settings(@project.id)
   end
 
   def find_project

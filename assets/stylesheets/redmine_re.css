@@ -31,6 +31,16 @@ div.requirement_upper {
 	border: 1px solid #B8B8B8;
 }
 
+div.requirement_upper div.subject div div { padding-left: 16px; }
+div.requirement_upper div.subject p {margin: 0; margin-bottom: 0.1em; font-size: 90%; color: #999;}
+div.requirement_upper div.subject>div>p { margin-top: 0.5em; }
+div.requirement_upper div.subject h3 {margin: 0; margin-bottom: 0.1em;}
+div.requirement_upper span.private { position:relative; bottom: 2px; text-transform: uppercase; background: #d22; color: #fff; font-weight:bold; padding: 0px 2px 0px 2px; font-size: 60%; margin-right: 2px; border-radius: 2px;}
+div.requirement_upper .next-prev-links {color:#999;}
+/*div.requirement_upper table.attributes th {width:22%;}
+div.requirement_upper table.attributes td {width:28%;}*/
+
+
 div.requirement_lower {
 	background: #F4F4F4;
 	padding: 6px;

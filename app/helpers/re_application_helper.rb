@@ -11,28 +11,18 @@ module ReApplicationHelper
     end
   end
 
-  # artifact_type bsp: => "re_task"
+  # shows the default or configured name for an artifact type
+  # e.g. rendered_artifact_type('artifact_type')
+  # or   rendered_artifact_type(my_artifact_instance.artifact_type)
   def rendered_artifact_type(artifact_type)
     artifact_type_alias = ''
-
-    ReSetting.check_cache
-    @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
-    @re_artifact_settings = {}
-
-    return if @re_artifact_order.nil?
-
-    @re_artifact_settings = {}
-    @re_artifact_order.each do |a|
-      artifact_setting = ReSetting.get_serialized(a, @project.id)
-      @re_artifact_settings[a] = artifact_setting if artifact_setting["in_use"]
+    re_artifact_settings = ReSetting.active_re_artifact_settings(@project.id)
+    unless re_artifact_settings[artifact_type].nil?
+      artifact_type_alias = re_artifact_settings[artifact_type]['alias']
     end
+    humanized_artifact_type =  artifact_type.gsub(/^re_/, '').humanize
 
-    unless @re_artifact_settings[artifact_type].nil?
-      artifact_type_alias = @re_artifact_settings[artifact_type]['alias']
-    end
-    artifact_type_humanized =  artifact_type.gsub(/^re_/, '').humanize
-
-    if artifact_type_alias.blank? or artifact_type_humanized.eql?(artifact_type_alias)
+    if artifact_type_alias.blank? or humanized_artifact_type.eql?(artifact_type_alias)
       return t(artifact_type)
     else
       return artifact_type_alias
