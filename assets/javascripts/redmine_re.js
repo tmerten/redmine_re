@@ -1,5 +1,8 @@
-/* initialize jQuery's $() as $j() to avoid conflicts with prototype */
-var $j = jQuery.noConflict();
+/* initialize jQuery's $() as $j() to avoid conflicts with prototype 
+   For redmine version already using jquery don't call noConflict 
+   as it destroys redmine's $ object*/
+//var $j = jQuery.noConflict();
+var $j = $;
 
 /* resize the layout horizontally on window resize */
 $j(window).resize(function() {
