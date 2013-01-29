@@ -1,14 +1,12 @@
-# Load the normal Rails helper
-require File.expand_path(File.dirname(__FILE__) + '/../../../../test/test_helper')
+# Default Rails Application Test_Helper
+require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 
-# Ensure that we are using the temporary fixture path
-Engines::Testing.set_fixture_path
-
-# This method id needed to be able to call the 
-# well-known "logger.debug"-command inside tests.
-def logger
-  RAILS_DEFAULT_LOGGER
+class ActiveSupport::TestCase
+  # This should speedup testrunning although it does not create data. Instead it uses tranactions for temporarily
+  # creating and rolling back test data
+  # self.use_transactional_fixtures = true
 end
+
 
 
 # This method extracts all messages from the given 
@@ -25,16 +23,4 @@ def extract_error_messages(hash)
     end
   end
   messages
-end
-
-# As the proper saving of building blocks contains the calling
-# of the additional_work_before/after_saving_strategies, this 
-# saving is encapsulated in this method. It eases the many saving-
-# proceedings needed during tests.
-def save_building_block_completely(re_bb, params)
-  re_bb.attributes = params[:re_building_block]
-  re_bb = ReBuildingBlock.do_additional_work_before_save(re_bb, params)
-  assert re_bb.save
-  re_bb = ReBuildingBlock.do_additional_work_after_save(re_bb, params)
-  re_bb
 end

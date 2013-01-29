@@ -1,6 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 bb_text_for_goal_note:
-  id: <%= Fixtures.identify(:bb_text_for_goal_note) %>
+  id: <%= ActiveRecord::Fixtures.identify(:bb_text_for_goal_note) %>
   type: ReBbText
   artifact_type: ReGoal
   project_id: 1
@@ -18,7 +18,7 @@ bb_text_for_goal_note:
   max_length: 2000
 
 bb_text_for_goal_ideas:
-  id: <%= Fixtures.identify(:bb_text_for_goal_ideas) %>
+  id: <%= ActiveRecord::Fixtures.identify(:bb_text_for_goal_ideas) %>
   type: ReBbText
   artifact_type: ReGoal
   project_id: 1
@@ -36,7 +36,7 @@ bb_text_for_goal_ideas:
   max_length: 2000
   
 bb_text_for_task_note:
-  id: <%= Fixtures.identify(:bb_text_for_task_note) %>
+  id: <%= ActiveRecord::Fixtures.identify(:bb_text_for_task_note) %>
   type: ReBbText
   artifact_type: ReTask
   project_id: 1
@@ -54,7 +54,7 @@ bb_text_for_task_note:
   max_length: 2000
   
 bb_selection_for_task_frequency:
-  id: <%= Fixtures.identify(:bb_selection_for_task_frequency) %>
+  id: <%= ActiveRecord::Fixtures.identify(:bb_selection_for_task_frequency) %>
   type: ReBbSelection
   artifact_type: ReTask
   project_id: 1
@@ -67,10 +67,10 @@ bb_selection_for_task_frequency:
   for_condensed_view: true
   for_search: true
   arrangable_by_users: true
-  default_value: <%= Fixtures.identify(:re_bb_option_selection_daily_for_task_frequency).to_i %>
+  default_value: <%= ActiveRecord::Fixtures.identify(:re_bb_option_selection_daily_for_task_frequency).to_i %>
 
 bb_selection_for_goal_usability_status:
-  id: <%= Fixtures.identify(:bb_selection_for_goal_usability_status) %>
+  id: <%= ActiveRecord::Fixtures.identify(:bb_selection_for_goal_usability_status) %>
   type: ReBbSelection
   artifact_type: ReGoal
   project_id: 1
@@ -83,10 +83,10 @@ bb_selection_for_goal_usability_status:
   for_condensed_view: false
   for_search: false
   arrangable_by_users: false
-  default_value: <%= Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability).to_i %>
+  default_value: <%= ActiveRecord::Fixtures.identify(:re_bb_option_selection_unaudited_for_goal_usability).to_i %>
   
 bb_artifact_selection_sections:
-  id: <%= Fixtures.identify(:bb_artifact_selection_sections) %>
+  id: <%= ActiveRecord::Fixtures.identify(:bb_artifact_selection_sections) %>
   type: ReBbArtifactSelection
   artifact_type: ReGoal
   project_id: 1
@@ -106,7 +106,7 @@ bb_artifact_selection_sections:
   indicate_changes: true 
   
 bb_artifact_selection_rationale:
-  id: <%= Fixtures.identify(:bb_artifact_selection_rationale) %>
+  id: <%= ActiveRecord::Fixtures.identify(:bb_artifact_selection_rationale) %>
   type: ReBbArtifactSelection
   artifact_type: ReTask
   project_id: 1
