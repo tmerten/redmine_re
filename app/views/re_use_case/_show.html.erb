@@ -29,8 +29,61 @@
       </tr>
     </thead>
     <tbody id="steps">
+		<% counter = 1 %>
 	    <% @re_artifact_properties.artifact.re_use_case_steps.each do |current_re_use_case_step| %>
-	          <tr><td>AAA</td></tr>
+	    	<% if ( current_re_use_case_step.step_type == 2 ) %>
+	          <tr>
+	          	<td><%= image_tag('icons/monitor.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)) %></td>
+	          	<td>&nbsp;</td>
+	          	<td>
+	          		<%= current_re_use_case_step.description %>
+	          		<div class="step_expansions">
+						<% unless current_re_use_case_step.re_use_case_step_expansions.blank? %>
+					    	<% current_re_use_case_step.re_use_case_step_expansions.each do |current_re_use_case_step_expansion| %>
+								<div class="assigned_expansion"><%= counter %></div>
+								<% counter = counter + 1 %>
+							<% end %>
+						<% end %>
+					</div>
+	          	</td>
+	         </tr>
+	        <% else %>
+	          <tr>
+	          	<td><%= image_tag('icons/user.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)) %></td>
+	          	<td>
+	          		<%= current_re_use_case_step.description %>
+	          		<div class="step_expansions">
+						<% unless current_re_use_case_step.re_use_case_step_expansions.blank? %>
+					    	<% current_re_use_case_step.re_use_case_step_expansions.each do |current_re_use_case_step_expansion| %>
+								<div class="assigned_expansion"><%= counter %></div>
+								<% counter = counter + 1 %>
+							<% end %>
+						<% end %>
+					</div>
+	          	</td>	          	
+	          	<td>&nbsp;</td>
+	         </tr>
+	        <% end %>
 	    <% end %>
     </tbody>
 </table>
+
+<% unless @re_artifact_properties.artifact.re_use_case_steps.blank? %>
+	<table>
+		<tr>
+			<th colspan="2"><%= t(:re_expansions) %></th>
+		</tr>
+		<% counter = 1 %>
+		<% @re_artifact_properties.artifact.re_use_case_steps.each do |current_re_use_case_step| %>
+			<% unless current_re_use_case_step.re_use_case_step_expansions.blank? %>
+		    	<% current_re_use_case_step.re_use_case_step_expansions.each do |current_re_use_case_step_expansion| %>
+					<tr>
+						<td><%= counter %></td>
+						<td><%= current_re_use_case_step_expansion.description %></td>
+					</tr>
+					<% counter = counter + 1 %>
+				<% end %>
+			<% end %>
+		<% end %>
+	</table>
+<% end %>
