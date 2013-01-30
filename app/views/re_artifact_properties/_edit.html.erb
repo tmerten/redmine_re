@@ -14,12 +14,8 @@
         <legend><%= t(:re_associated_issues) %></legend>
 		       <div id="issue_filter">
 		          <div class="inputs">
-    			<%= #f.select ':id', @re_artifact_properties.issues.map { |item| [item.send("subject"), item.id] },
-                     # { :selected => [1].flatten.compact.map(&:to_i) },
-                      #{ :multiple => true, :class => 'direct_artifacts' } 
-               %>
 
-		  			<%= #select_tag 'issue_id[]', "<option></option>".html_safe, :id => 'issue_filter_input', :class => 'direct_artifacts' 
+		  			<%= 
 					select_tag 'issue_id[]', options_for_select(@re_artifact_properties.issues.collect{ |u| [u.subject, u.id] }), :id => 'issue_filter_input', :class => 'direct_artifacts', :multiple => true	  			
 		  			%>
 		            <%= text_field_tag 'issue_id[]', nil, :id => 'issue_filter_input_nojs' %>
@@ -118,54 +114,18 @@
                   bitsUrl: '<%= issues_bits_re_queries_path(@project.id) %>'
               }));
 
-		            // hidden on init because of UJS
-		            $('#relation_filter_input_nojs').remove();
-		            $('#relation_filter .inputs').show();
+		      // hidden on init because of UJS
+		      $('#relation_filter_input_nojs').remove();
+		      $('#relation_filter .inputs').show();
 
               $('#relation_filter_input').suggestible(suggestibleOptions({
                   suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
                   suggestionsLayout: function(helpers) {
                       return new DirectArtifactsSuggestBoxItemsForRelationsWithoutKeyEvents(helpers);
                   },
-                  bitsUrl: null
+                  except_ids: <%= @re_artifact_properties.id %> //avoid suggestion of own artifact
               }));
-
-				/*
-
-		
-		            $('#relation_filter_input').suggestible({
-		                ajax: {
-		                    suggestions: {
-		                        url: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
-		                        dataType: 'json',
-		                        data: function(value, helpers) {
-		                            return { query: value, except_ids: <%= @re_artifact_properties.id %> };
-		                        },
-		                        loading: function(helpers) {
-		                            $('#ajax-indicator').show();
-		                            helpers.elements.textBox.attr('disabled', 'disabled');
-		                        },
-		                        loaded: function(helpers) {
-		                            $('#ajax-indicator').hide();
-		                            helpers.elements.textBox.removeAttr('disabled');
-		                        }
-		                    }
-		                },
-		                layout: {
-		                    containers: function(selectBox, options) {
-		                        return new SuggestBoxContainers(selectBox, options);
-		                    },
-		                    items: function(helpers) {
-		                        return new DirectArtifactsSuggestBoxItemsForRelations(helpers);
-		                    }
-		                }
-		            });
-				
-				*/
-		            var elements = $('#relation_filter_input_container').data('elements');
-		            elements.textBox.attr('name', elements.inputName);
-		       
-					       
+       
 		        });
 		        
 		        

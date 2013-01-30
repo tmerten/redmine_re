@@ -101,7 +101,6 @@ class ReArtifactPropertiesController < RedmineReController
 
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
-    puts @issues.to_yaml
     retrieve_previous_and_next_sibling_ids
     initialize_tree_data
   end    

@@ -8,7 +8,15 @@
                     dataType: 'json',
                     data: function(value, helpers) {
                         var params = { query: value };
-                        var exceptIds = helpers.recordIdsInBits(helpers.elements.bitsBox);
+                        
+                        
+                        var exceptIds = [];
+                        if (options.except_ids !== null && options.except_ids !== '' ) {
+                        	exceptIds.push(options.except_ids);
+                        	
+                        } else {
+                        	exceptIds = helpers.recordIdsInBits(helpers.elements.bitsBox);
+                        }
                         if (exceptIds.length > 0) {
                             params.except_ids = exceptIds;
                         }
