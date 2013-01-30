@@ -31,25 +31,29 @@ class ReArtifactProperties < ActiveRecord::Base
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
+    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :dependent => :destroy
 
   has_many :traces_as_sink,
     :order => "re_artifact_relationships.position",
     :foreign_key => "sink_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
+    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :dependent => :destroy
 
   has_one :parent_relation,
     :order => "re_artifact_relationships.position",
     :foreign_key => "sink_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
+    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :dependent => :destroy
 
   has_many :child_relations,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
+    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :dependent => :destroy
 
   has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :child_relations, :order => "re_artifact_relationships.position", :source => "sink"
