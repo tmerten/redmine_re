@@ -117,6 +117,7 @@ en:
   re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
   re_artifact_properties_not_enought_chars: 'Minimum chars %d'
   re_artifact_properties_to_many_chars: 'Maximum chars %d'
+  re_artifact_properties_updated: 'Artifact Properties updated'
 
   project: Project
   re_my_artifacts: 'My Artifacts'
