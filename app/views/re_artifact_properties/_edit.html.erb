@@ -1,3 +1,6 @@
+ <% issues  = @re_artifact_properties.issues  %>
+ <%= javascript_include_tag 're_artifacts_suggestible', :plugin => 'redmine_re' %>
+
   <div class="panes">
   <%= error_messages_for @re_artifact_properties %>
   <div class="box">
@@ -9,32 +12,24 @@
 
       <fieldset class="tabular">
         <legend><%= t(:re_associated_issues) %></legend>
-				<div class="splitcontent">
-	        <div class="splitcontentleft">
 		       <div id="issue_filter">
 		          <div class="inputs">
-		  					 <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'issue_filter_input', :class => 'direct_artifacts' %>
-		             <%= text_field_tag 'source[name]', nil, :id => 'issue_filter_input_nojs' %>
+    			<%= #f.select ':id', @re_artifact_properties.issues.map { |item| [item.send("subject"), item.id] },
+                     # { :selected => [1].flatten.compact.map(&:to_i) },
+                      #{ :multiple => true, :class => 'direct_artifacts' } 
+               %>
+
+		  			<%= #select_tag 'issue_id[]', "<option></option>".html_safe, :id => 'issue_filter_input', :class => 'direct_artifacts' 
+					select_tag 'issue_id[]', options_for_select(@re_artifact_properties.issues.collect{ |u| [u.subject, u.id] }), :id => 'issue_filter_input', :class => 'direct_artifacts', :multiple => true	  			
+		  			%>
+		            <%= text_field_tag 'issue_id[]', nil, :id => 'issue_filter_input_nojs' %>
 		          </div>
 		       </div>
 					  <p>
 	            <%= link_to image_tag('add.png')+' create related Issue', :controller=> 'issues', :action=>'new', :project_id => @project.identifier,
 	              :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank?%>
 						</p>
-        </div>
 
-	      <div class='splitcontentright'>
-	          <% unless @issues.nil? %>
-	              <% @issues.each do |issue| %>
-	                  <div id="issue_list_issue_<%= issue.id %>">
-	                  	<input id="issue_id" type="hidden" name="issue_id[]" value="<%= issue.id %>" />
-	                  	<%= (link_to issue.subject, issue_path(issue))+'&nbsp;'.to_s.html_safe %>
-	                    <a href="#" onclick="Javascript: jQuery('#issue_list_issue_<%= issue.id %>').remove()"><%= image_tag('delete.png') %></a>
-	                  </div>
-	              <% end %>
-	          <% end %>
-	      </div>
-			</div>
       </fieldset>
 
     <!-- Additional fields like subtasks for task which are described in an own partial -->
@@ -107,46 +102,36 @@
 		<%= javascript_tag do %>
 		
 		    (function($) {
+		    	
 		        $().ready(function() {
+		       	$('#issue_filter_input option').attr("selected","selected");
+		       	
 	            // hidden on init because of UJS
 	            $('#issue_filter_input_nojs').remove();
 	            $('#issue_filter .inputs').show();
-		
-	            $('#issue_filter_input').suggestible({
-	                ajax: {
-	                    suggestions: {
-	                        url: '<%= suggest_issues_re_queries_path(@project.id) %>',
-	                        dataType: 'json',
-	                        data: function(value, helpers) {
-	                            return { query: value };
-	                        },
-	                        loading: function(helpers) {
-	                            $('#ajax-indicator').show();
-	                            helpers.elements.textBox.attr('disabled', 'disabled');
-	                        },
-	                        loaded: function(helpers) {
-	                            $('#ajax-indicator').hide();
-	                            helpers.elements.textBox.removeAttr('disabled');
-	                        }
-	                    }
-	                },
-	                layout: {
-	                    containers: function(selectBox, options) {
-	                        return new SuggestBoxContainers(selectBox, options);
-	                    },
-	                    items: function(helpers) {
-	                        return new IssuesSuggestBoxItems(helpers);
-	                    }
-	                }
-	            });
-		
-	            //var issue_elements = $('#issue_filter_input_container').data('elements');
-	            //issue_elements.textBox.attr('name', issue_elements.inputName);
 
+              $('#issue_filter_input').suggestible(suggestibleOptions({
+                  suggestionsUrl: '<%= suggest_issues_re_queries_path(@project.id) %>',
+                  suggestionsLayout: function(helpers) {
+                      return new IssuesSuggestBoxItems(helpers);
+                  },
+                  bitsUrl: '<%= issues_bits_re_queries_path(@project.id) %>'
+              }));
 
 		            // hidden on init because of UJS
 		            $('#relation_filter_input_nojs').remove();
 		            $('#relation_filter .inputs').show();
+
+              $('#relation_filter_input').suggestible(suggestibleOptions({
+                  suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+                  suggestionsLayout: function(helpers) {
+                      return new DirectArtifactsSuggestBoxItemsForRelationsWithoutKeyEvents(helpers);
+                  },
+                  bitsUrl: null
+              }));
+
+				/*
+
 		
 		            $('#relation_filter_input').suggestible({
 		                ajax: {
@@ -175,10 +160,15 @@
 		                    }
 		                }
 		            });
-		
+				
+				*/
 		            var elements = $('#relation_filter_input_container').data('elements');
 		            elements.textBox.attr('name', elements.inputName);
+		       
+					       
 		        });
+		        
+		        
 		    })(jQuery);
 		
 		<% end %>   	
@@ -188,7 +178,7 @@
 		   	
 	           <% for relation_type in @re_relation_order %>
 	               <% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && relation_type != 'parentchild' %>
-	                   <%= radio_button :re_artifact_relationship, :relation_type, relation_type %><%= rendered_relation_type(relation_type) %>
+	                   <%= radio_button :re_artifact_relationship, :relation_type, relation_type, :data => {:description => rendered_relation_type(relation_type)} %><%= rendered_relation_type(relation_type) %>
 	                   <br/>
 	               <% end %>
 	           <% end %>

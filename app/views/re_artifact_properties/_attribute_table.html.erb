@@ -43,10 +43,12 @@
 			<th></th>
 			<td></td>
 			<th><%= t(:re_related_issues) -%></th>
-			<% i = issues.shift %>
+			<% i = issues.first %>
 			<td><%= link_to(i.subject,i) if i %></td>
+			
 		</tr>				
-		<% issues.each do |i| %>
+		<% issues.each_with_index do |i, index| %>
+		  <% next if index==0 %>
 		<tr>
 			<th></th>
 			<td></td>

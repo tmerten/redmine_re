@@ -18,10 +18,14 @@
      function createRelation (sink_record) {
 		// Get relation type by current selection
 		var relation_type = jQuery("[name='re_artifact_relationship[relation_type]']").filter(":checked").val();
+		
+		if (relation_type === null || typeof relation_type == 'undefined') return;
+		
+		var relation_description = jQuery("[name='re_artifact_relationship[relation_type]']").filter(":checked").data("description");
 		var element_id = "relation_"+sink_record.id+"_"+relation_type;
 		var link = "<%= re_artifact_properties_path %>";
-		var hidden_fields = '<input type="hidden" name="new_relation['+sink_record.id+'][relation_type]" value="'+relation_type+'" />';
-		jQuery("#outgoing_relations").append('<li id="'+element_id+'">[ <a class="icon icon-del" href="javascript: removeTmpRelation(\''+element_id+'\')"><%= t(:re_remove) %></a> ] '+relation_type+' to <a href="'+link+'/'+sink_record.id+'/edit" class="icon '+sink_record.icon+'">'+sink_record.name+'</a>'+hidden_fields+'</li>');
+		var hidden_fields = '<input type="hidden" name="new_relation['+sink_record.id+'][relation_type][]" value="'+relation_type+'" />';
+		jQuery("#outgoing_relations").append('<li id="'+element_id+'">[ <a class="icon icon-del" href="javascript: removeTmpRelation(\''+element_id+'\')"><%= t(:re_remove) %></a> ] '+relation_description+' to <a href="'+link+'/'+sink_record.id+'/edit" class="icon '+sink_record.icon+'">'+sink_record.name+'</a>'+hidden_fields+'</li>');
      }
   <% end %>
   <% unless @new_relation.nil? %>

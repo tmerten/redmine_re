@@ -101,7 +101,7 @@ class ReArtifactPropertiesController < RedmineReController
 
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
-
+    puts @issues.to_yaml
     retrieve_previous_and_next_sibling_ids
     initialize_tree_data
   end    
@@ -201,9 +201,13 @@ class ReArtifactPropertiesController < RedmineReController
         else
           # id is relation id, that should created,
           # content contains relation_type
-          unless content['relation_type'].blank?
-            new_relation = ReArtifactRelationship.new(:source_id => params[:id], :sink_id => id, :relation_type => content['relation_type'])
-            new_relation.save
+          unless content['relation_type'].blank?            
+            content['relation_type'].each do |relationtype| 
+              new_relation = ReArtifactRelationship.new(:source_id => params[:id], :sink_id => id, :relation_type => relationtype)
+              new_relation.save            
+            end
+            
+
           end 
         end
       end
@@ -219,8 +223,10 @@ class ReArtifactPropertiesController < RedmineReController
         # id is relation id, that should created,
         # content contains relation_type
         unless content['relation_type'].blank?
-          new_relation = ReArtifactRelationship.new(:source_id => new_source_artifact_id, :sink_id => id, :relation_type => content['relation_type'])
-          new_relation.save
+          content['relation_type'].each do |relationtype|
+            new_relation = ReArtifactRelationship.new(:source_id => new_source_artifact_id, :sink_id => id, :relation_type => relationtype)
+            new_relation.save
+          end
         end 
       end
     end
@@ -231,6 +237,8 @@ class ReArtifactPropertiesController < RedmineReController
   
   def update_related_issues params
     unless params[:issue_id].blank?
+      
+      params[:issue_id].delete_if {|v| v == ""}
       params[:issue_id].each do |iid|
         @re_artifact_properties.issues << Issue.find(iid)
       end

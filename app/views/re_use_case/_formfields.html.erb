@@ -45,6 +45,8 @@
 	      
 		  <div id="secondary_user_candidates" class="autocomplete"></div>
 		    <%= javascript_tag do %>
+		        //TODO: update to jQuery UI autocomplete
+		        /*
 		        new Ajax.Autocompleter('secondary_actor_autocomplete',
 		        'secondary_user_candidates',
 		        '<%= url_for :controller => 're_use_case', :action => 'autocomplete_sink', :project_id => @project.id %>',
@@ -61,7 +63,7 @@
 		            jQuery('#added_secondary_user').append(li.innerHTML + ', ');
 		            jQuery('#added_secondary_user').append('<input id="secondary_user_profile_id" type="hidden" name="secondary_user_profile_id[]" value=' + li.id + ' >');
 		            document.getElementById('secondary_actor_autocomplete').value ="";
-		        }
+		        }*/
 		     <% end %>
 		  </div>
 		  <div class='splitcontentright'>

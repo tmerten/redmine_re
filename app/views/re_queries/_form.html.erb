@@ -3,6 +3,8 @@
   <%= javascript_tag do %>
       (function($) {
           $().ready(function() {
+              
+              
               // Auto-assign collapse fieldset behavior
               $('fieldset.collapsible legend').click(function() { toggleFieldset(this); });
 
@@ -42,6 +44,9 @@
               $('fieldset.collapsible.filters, fieldset.collapsible.filter_settings')
                   .addClass('collapsed').children('div').hide();
               <% end %>
+              
+              
+              
           });
       })(jQuery);
     <% end %>

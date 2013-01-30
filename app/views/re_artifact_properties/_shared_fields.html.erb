@@ -15,17 +15,22 @@
       </p>
 
       <div id="parent_artifact_candidates" class="autocomplete"></div>
-      <%= javascript_tag do %>
-          new Ajax.Autocompleter('parent_autocomplete',
-          'parent_artifact_candidates',
-          '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
-          { minChars: 3,
-          paramName: 'parent_name',
-          parameters: 'project_id=<%= @project.id %><%= '&id=' + properties.id.to_s unless properties.id.blank? %>',
-          frequency: 0.5,
-          afterUpdateElement : function(text, li) { $('parent_artifact_id').setValue(li.id) }
-          });
-      <% end %>
+      
+      <%
+      
+      #TODO: update to jQuery UI
+      
+      # javascript_tag do 
+       #   new Ajax.Autocompleter('parent_autocomplete',
+        #  'parent_artifact_candidates',
+         # '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_parent' %>',
+         # { minChars: 3,
+        #  paramName: 'parent_name',
+        #  parameters: 'project_id=<%= @project.id %><%= '&id=' + properties.id.to_s unless properties.id.blank? %>',
+        #  frequency: 0.5,
+        #  afterUpdateElement : function(text, li) { $('parent_artifact_id').setValue(li.id) }
+        #  });
+      %>
       <p>
         <%= f.label :name, l(:re_artifact_name) %> <%= f.text_field :name %>
       </p>
@@ -96,24 +101,28 @@
   </p>
 
   <div id="issue_candidates" class="autocomplete"></div>
-  <% javascript_tag do %>
-      new Ajax.Autocompleter('issue_autocomplete',
-      'issue_candidates',
-      '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
-      {
-      paramName: 'issue_subject',
-      parameters:
-      'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
-      minChars: 1,
-      frequency: 0.5,
-      afterUpdateElement : getIssueId});
+  <% 
+  
+   	#TODO: update to jQuery UI
+  
+ 	#javascript_tag do %>
+   	#   new Ajax.Autocompleter('issue_autocomplete',
+    #  'issue_candidates',
+    #  '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
+    #  {
+    #  paramName: 'issue_subject',
+    #  parameters:
+    #  'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
+    #  minChars: 1,
+    #  frequency: 0.5,
+    #  afterUpdateElement : getIssueId});
 
-      function getIssueId(text, li){
+     # function getIssueId(text, li){
 
-          jQuery('#added_issues').append(li.innerHTML + ', ');
-          jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
-          document.getElementById('issue_autocomplete').value ="";
-      }
+     #     jQuery('#added_issues').append(li.innerHTML + ', ');
+     #     jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
+     #     document.getElementById('issue_autocomplete').value ="";
+     # }
 
     <% end %>
 
