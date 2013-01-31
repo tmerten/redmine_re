@@ -7,5 +7,4 @@ end
 
 group :test do
   gem 'flay'
-  gem 'heckle'
 end
