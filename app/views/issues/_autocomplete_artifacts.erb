@@ -1,5 +1,5 @@
 <% content_for :header_tags do %>
-  <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'jquery.blockUI-2.55.js', :plugin => 'redmine_re' %>
 
   <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
@@ -10,8 +10,7 @@
   <%= javascript_tag do %>
       (function($) {
           $().ready(function() {
-		       //	$('#artifacts_filter_input').attr("selected","selected");
-
+		      	$('#artifacts_filter_input').attr("selected","selected");
               // Make specific fields suggestible
               $('#artifacts_filter_input').suggestible(suggestibleOptions({
                   suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
@@ -20,9 +19,6 @@
                   },
                   bitsUrl: '<%= artifacts_bits_re_queries_path(@project.id) %>'
               }));
-            
-              
-              
           });
       })(jQuery);
     <% end %>
@@ -35,7 +31,8 @@
 		<%= label_tag :add_related_artifact %>
 		       <div id="artifacts_filter" style="margin: 3px 0 3px 180px;">
 		          <div class="inputs">
-					<% @re_artifact_properties = {} %>
+				
+					<% @issue.re_artifact_properties << ReArtifactProperties.find_by_id(params[:artifactid]) if params[:artifactid] %>
 					
 		  			<%= 
 					select_tag 'artifact_id[]', options_for_select(@issue.re_artifact_properties.collect{ |u| [u.name, u.id] },
