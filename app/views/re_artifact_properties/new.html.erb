@@ -40,7 +40,7 @@
 
           <div id="issue_candidates" class="autocomplete"></div>
           <%= javascript_tag do %>
-              new Ajax.Autocompleter('issue_autocomplete',
+              /*new Ajax.Autocompleter('issue_autocomplete',
               'issue_candidates',
               '<%= url_for :project_id => @project.identifier, :controller => 're_artifact_properties', :action => 'autocomplete_issue' %>',
               {
@@ -55,6 +55,7 @@
                   jQuery('#added_issues').append('<input id="issue_id" type="hidden" name="issue_id[]" value=' + li.id + ' >');
                   document.getElementById('issue_autocomplete').value ="";
               }
+              */
 		  		<% end %>
 
       </div>
@@ -103,6 +104,9 @@
 		
 		    (function($) {
 		        $().ready(function() {
+		        	
+		        	$('#re_artifact_properties_name').focus();
+		        	
 		            // hidden on init because of UJS
 		            $('#relation_filter_input_nojs').remove();
 		            $('#relation_filter .inputs').show();
@@ -136,7 +140,9 @@
 		            });
 		
 		            var elements = $('#ralation_filter_input_container').data('elements');
-		            elements.textBox.attr('name', elements.inputName);
+		            if (elements !== null && typeof elements!='undefined' && elements.textBox !== null && typeof elements.textBox !='undefined') {
+		            	elements.textBox.attr('name', elements.inputName);
+		            }
 		        });
 		    })(jQuery);
 		
