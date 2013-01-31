@@ -17,29 +17,7 @@ class ReArtifactPropertiesTest < ActiveSupport::TestCase
     rap2 = ReArtifactProperties.find(ActiveRecord::Fixtures.identify(:art_project))
     assert rap2.valid?
   end
-      
-  test "should be findable by name" do
-    # id: <%= ActiveRecord::Fixtures.identify(:art_goal_usability) %>
-    #     name: Usability
-    #     description: The system shall be operated easily.
-    #     created_by: 1
-    #     project_id: 4
-    #     artifact_id: <%= ActiveRecord::Fixtures.identify(:goal_usability) %>
-    #     artifact_type: ReGoal
-    #     <<: *DEFAULTS
-    
-    rap = ReArtifactProperties.create(
-      :name => "Some Artifact Name", 
-      :description => "A description", 
-      :artifact_type => Project, 
-      :project_id => 4, 
-      :created_by => 1, 
-      :updated_by  => 1,
-      :created_at => Time.now,
-      :updated_at => Time.now,
-      :rating_average => 0)
-    assert_equal rap, ReArtifactProperties.find_by_name("Some Artifact Name")
-  end
+     
 
   # def test_each_artifact_has_properties    
   #     Rails::logger.debug("Test")
