@@ -16,7 +16,7 @@ module IssuesControllerPatch
 
   module InstanceMethods
     def update_issue_from_params_with_artifacts
-
+      @issue.re_artifact_properties = []
       unless params[:artifact_id].blank?
         params[:artifact_id].each do |aid|
           @issue.re_artifact_properties << ReArtifactProperties.find(aid)
