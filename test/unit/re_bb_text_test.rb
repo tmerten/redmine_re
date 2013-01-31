@@ -1,8 +1,8 @@
-require File.expand_path('../../test_helper', __FILE__)
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ReBbTextTest < ActiveSupport::TestCase
-  
-  fixtures :re_building_blocks
+  ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
+    [:re_building_blocks])
 
   def setup
     @project = Project.find(:first)

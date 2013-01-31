@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ReBbArtifactSelectionTest < ActiveSupport::TestCase
-
-  fixtures :re_building_blocks, :re_goals, :re_tasks, :re_artifact_relationships
+  ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
+    [:re_building_blocks, :re_goals, :re_tasks, :re_artifact_relationships])
 
   def setup
     @project = Project.find(:first)

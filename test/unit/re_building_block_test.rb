@@ -1,10 +1,11 @@
 #require File.expand_path('../../test_helper', __FILE__)
 #require "#{RAILS_ROOT}/vendor/plugins/redmine_re/app/models/re_bb_data_text.rb" 
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 're_building_block'
 
 class ReBuildingBlockTest < ActiveSupport::TestCase
-  fixtures  :re_building_blocks, :re_bb_data_texts, :re_goals, :re_bb_option_selections, :re_bb_data_selections
+  ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
+    [:re_building_blocks, :re_bb_data_texts, :re_goals, :re_bb_option_selections, :re_bb_data_selections])
 
   def setup
     @project = Project.find(:first)
