@@ -4,7 +4,3 @@
 group :development do
   gem 'ZenTest', "4.8.3"
 end
-
-group :test do
-  gem 'flay'
-end
