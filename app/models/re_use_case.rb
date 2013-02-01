@@ -11,4 +11,16 @@ class ReUseCase < ActiveRecord::Base
     :reject_if => proc { |attributes| attributes['description'].blank? && attributes['step_type'].blank? }
     
 
+  def create_hook(params)
+    logger.debug("************************************* working?")
+    
+    if params
+      primary_id = params[:primary_actor_id]
+      params[:secondary_actors_ids]
+    end 
+    #relation_to_primary_actor = ReArtifactRelationship.new()
+    logger.debug "****************************** #{self.re_artifact_properties.inspect}"
+  end
+
+
 end

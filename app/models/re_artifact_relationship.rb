@@ -10,13 +10,20 @@ class ReArtifactRelationship < ActiveRecord::Base
     :pof => "part_of"
   }
   
+  SYSTEM_RELATION_TYPES = {
+    :pac => "primary actor",
+    :ac =>  "actors",
+  }
+  
   INITIAL_COLORS= {
     :pch => "#0000ff",
     :dep => "#00ff00",
     :con => "#ff0000",
     :rat => "#993300",
     :ref => "#33cccc",
-    :pof => "#ffcc00"
+    :pof => "#ffcc00",
+    :pac => "#ffcc00", # TODO
+    :ac =>  "#ffcc00"  # TODO
   }  
 
   # The relationship has ReArtifactProperties as source or sink 

@@ -16,7 +16,7 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.artifact = @artifact_type.camelcase.constantize.new
 
     @re_artifact_properties.project = @project
-
+    
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
 
     unless params[:sibling_artifact_id].blank?
@@ -70,6 +70,12 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.updated_at = Time.now
     @re_artifact_properties.created_by = User.current.id
     @re_artifact_properties.updated_by = User.current.id
+
+    begin
+      @re_artifact_properties.artifact.create_hook(params)
+    rescue NoMethodError
+      logger.debug("#{@re_artifact_properties.artifact.class} does not implement create hook")
+    end
 
     # relation related attributes
     unless params[:parent_artifact_id].blank? || params[:parent_relation_position].blank?
@@ -153,9 +159,16 @@ class ReArtifactPropertiesController < RedmineReController
     @bb_error_hash = {}
     @bb_error_hash = ReBuildingBlock.validate_building_blocks(@re_artifact_properties, @bb_error_hash, @project.id)
 
-    @issues = @re_artifact_properties.issues
 
     @re_artifact_properties.attributes = params[:re_artifact_properties]
+
+    logger.debug "*************************************************************"
+    logger.debug params
+    logger.debug @re_artifact_properties.to_yaml
+
+    @issues = @re_artifact_properties.issues
+    logger.debug @re_artifact_properties.to_yaml
+
     # attributes that cannot be set by the user
     @re_artifact_properties.updated_at = Time.now
     @re_artifact_properties.updated_by = User.current.id
