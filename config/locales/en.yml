@@ -410,6 +410,9 @@ en:
   re_expansion_type: 'Type'
   re_expansion_description: 'Description'
   re_delete_use_case_expansion: 'Delete'
+  re_primary_actor: 'Primary Actor' 
+  re_actors: 'Actors'
+  
   
   # re_scenario
   re_scenario: 'Scenario'

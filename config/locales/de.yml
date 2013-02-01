@@ -71,6 +71,11 @@ de:
   re_show_goals: 'Zeige Ziele'
   re_goal: 'Ziel'
 
+  #re_use_case
+  re_primary_actor: 'Primärer Akteur' 
+  re_actors: 'Akteure'
+  
+
   # filter
   re_enhanced_filter: 'Erweiterter Filter'
   re_apply_filter: 'Filter anwenden'
