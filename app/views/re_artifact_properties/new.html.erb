@@ -14,12 +14,6 @@
   <h2><%= t(:re_create_a_new) + ' ' + ( rendered_artifact_type(@artifact_type) ) %></h2>
 
  	<%= render :partial => 'form' %>
-  	
-	<% if params.has_key? :id %>
-      <div class="box">
-      	<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id %>
-    	</div><!-- end of tab two -->
-  <% end %>
 
 </div>
 
