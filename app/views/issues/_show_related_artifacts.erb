@@ -3,8 +3,7 @@
 	  <legend><%= t(:re_asscociated_requirements) %></legend>
 	  <% unless @issue.nil? %>
 	      <%= @issue.re_artifact_properties.collect {|properties|
-	          (link_to properties.name, :controller => :re_artifact_properties, :action => 'edit', :id =>properties.id)+
-	          (link_to '[X]', :controller => 're_artifact_properties', :action => 'remove_artifact_from_issue', :artifactid => properties.id, :issueid => @issue.id, :project_id=>@project.id )
+	          (link_to properties.name, :controller => :re_artifact_properties, :action => 'edit', :id =>properties.id)
 	      }.to_sentence.html_safe %>
 	  <% end %>
 	</fieldset>
