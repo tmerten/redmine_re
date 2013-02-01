@@ -10,7 +10,9 @@
   <%= javascript_tag do %>
       (function($) {
           $().ready(function() {
-		      	$('#artifacts_filter_input').attr("selected","selected");
+		     $('#artifacts_filter_input').attr("selected","selected");
+
+
               // Make specific fields suggestible
               $('#artifacts_filter_input').suggestible(suggestibleOptions({
                   suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
@@ -33,10 +35,10 @@
 		          <div class="inputs">
 				
 					<% @issue.re_artifact_properties << ReArtifactProperties.find_by_id(params[:artifactid]) if params[:artifactid] %>
-					
+
 		  			<%= 
 					select_tag 'artifact_id[]', options_for_select(@issue.re_artifact_properties.collect{ |u| [u.name, u.id] },
-					@issue.re_artifact_properties.collect{ |u| [u.id] }), :id => 'artifacts_filter_input', :class => 'artifact_filter_input', :multiple => true;
+					@issue.re_artifact_properties.collect{ |u| u.id }), :id => 'artifacts_filter_input', :class => 'artifact_filter_input', :multiple => true;
 
 		  			%>
 		          </div>

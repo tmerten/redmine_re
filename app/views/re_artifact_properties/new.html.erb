@@ -35,7 +35,8 @@
 		          <div class="inputs">
 
 		  			<%= 
-					select_tag 'issue_id[]', options_for_select(@re_artifact_properties.issues.collect{ |u| [u.subject, u.id] }), :id => 'issue_filter_input', :class => 'direct_artifacts', :multiple => true	  			
+					select_tag 'issue_id[]', options_for_select(@re_artifact_properties.issues.collect{ |u| [u.subject, u.id] },
+					@re_artifact_properties.issues.collect{ |u| u.id }), :id => 'issue_filter_input', :class => 'direct_artifacts', :multiple => true	  			
 		  			%>
 		            <%= text_field_tag 'issue_id[]', nil, :id => 'issue_filter_input_nojs' %>
 		          </div>
