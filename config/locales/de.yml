@@ -31,6 +31,7 @@ de:
   re_artifact_properties_validates_presence_of_created_by: 'Created by muss angegeben werden!'
   re_artifact_properties_validates_presence_of_project: 'Project muss angegeben werden!'
   re_artifact_properties_updated: 'Artefakt-Eigenschaften geändert'
+  re_artifact_properties_created: 'Artifakt erstellt' 
 
   project: Projekt
   re_my_artifacts: 'Meine Artefakte'

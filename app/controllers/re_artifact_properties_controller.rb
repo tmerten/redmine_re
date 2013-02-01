@@ -88,15 +88,13 @@ class ReArtifactPropertiesController < RedmineReController
     if @re_artifact_properties.save
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
-      update_related_issues params
-      r = :show
+      update_related_issues params      
+      redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_created)
     else
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
-      r = :new
+      initialize_tree_data
+      render :new
     end
-    initialize_tree_data
-    
-    render r
   end
   
   def show
