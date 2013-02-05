@@ -2,22 +2,44 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ReArtifactPropertiesTest < ActiveSupport::TestCase
   fixtures :projects
-  ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
-    [:re_artifact_properties, :re_goals])
+  ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', [:re_artifact_properties, :re_goals])
 
   def setup
     @rap = ReArtifactProperties.new
   end
-  
-  test "should not be valid without data" do
-    assert !@rap.valid?
-  end
-  
+
   test "should be valid with neccessary data" do
-    rap2 = ReArtifactProperties.find(ActiveRecord::Fixtures.identify(:art_project))
-    assert rap2.valid?
+    assert !@rap.valid?
+
+    @rap = ReArtifactProperties.find(ActiveRecord::Fixtures.identify(:art_project))
+    puts @rap.parent
+    assert @rap.valid?
   end
-     
+
+  test "should not be valid without parent" do
+    @rap.id = ActiveRecord::Fixtures.identify(:art_goal_usability)
+    @rap.name = "usability"
+    @rap.description = "the system shall be operated easily."
+    @rap.created_by = 1
+    @rap.project_id = 4
+    @rap.artifact_type = "ReGoal"
+    @rap.artifact_id = ActiveRecord::Fixtures.identify(:goal_usability)
+    @rap.created_at = Time.now
+    @rap.updated_at = Time.now
+
+    assert @rap.invalid?
+    assert_false @rap.errors[:name].any?
+    assert_false @rap.errors[:created_by].any?
+    assert_false @rap.errors[:created_at].any?
+    assert_false @rap.errors[:artifact_type].any?
+    assert_false @rap.errors[:artifact_id].any?
+    assert @rap.errors[:parent].any?
+    puts "errors through validation: "
+
+    @rap.errors.each do |error|
+      puts error
+    end
+  end
 
   # def test_each_artifact_has_properties    
   #     Rails::logger.debug("Test")
