@@ -54,11 +54,11 @@
 	
 	<% unless @added_relations.nil? %>
 		<% @added_relations.each do |cur_sink_id, cur_relationcontent|%>
-            <% sink = ReArtifactProperties.find_by_id(cur_sink_id) %>
-            <% relation_id = cur_sink_id+"_"+cur_relationcontent[:relation_type] %>
+            <% sink = ReArtifactProperties.find_by_id(cur_sink_id) %>                       
+            <% relation_id = cur_sink_id+"_"+cur_relationcontent[:relation_type].to_s %>
 		    <li id='relation_<%= relation_id %>'>
 		    	[ <a href="javascript: removeRelation('<%= relation_id %>')" class="icon icon-del"><%= t(:re_remove) %></a> ]
-		      <%= rendered_relation_type(cur_relationcontent[:relation_type]) %> <%= t(:re_to) %>		
+		      <%= rendered_relation_type(cur_relationcontent[:relation_type].to_s) %> <%= t(:re_to) %>		
 		      <%= link_to( sink.name, {
 		        :action => :edit,
 		        :controller => 're_artifact_properties',
