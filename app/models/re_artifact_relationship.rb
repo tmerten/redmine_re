@@ -1,8 +1,7 @@
 class ReArtifactRelationship < ActiveRecord::Base
   unloadable
 
-  RELATION_TYPES = {
-    :pch => "parentchild",
+  RELATION_TYPES = {    
     :dep => "dependency",
     :con => "conflict",
     :rat => "rationale",
@@ -11,7 +10,8 @@ class ReArtifactRelationship < ActiveRecord::Base
   }
   
   SYSTEM_RELATION_TYPES = {
-    :pac => "primary actor",
+    :pch => "parentchild",
+    :pac => "primary_actor",
     :ac =>  "actors",
   }
   

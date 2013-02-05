@@ -11,20 +11,20 @@ class ReArtifactRelationshipController < RedmineReController
   def delete
     @relation = ReArtifactRelationship.find(params[:id])
 
-    unless( @relation.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) )
+    unless(ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(@relation.relation_type))
       @relation.destroy
     end
 
     @artifact_properties = ReArtifactProperties.find(params[:re_artifact_properties_id])
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(params[:re_artifact_properties_id])
-    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+    @relationships_incoming.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
 
     unless params[:secondary_user_delete].blank?
       @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id_and_relation_type(params[:re_artifact_properties_id],ReArtifactRelationship::RELATION_TYPES[:dep])
       render :partial => "secondary_user", :project_id => params[:project_id]
     else
       @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(params[:re_artifact_properties_id])
-      @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+      @relationships_outgoing.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
       render :partial => "relationship_links", :project_id => params[:project_id]
     end
   end
@@ -51,7 +51,7 @@ class ReArtifactRelationshipController < RedmineReController
     artifact_properties_id = ReArtifactProperties.get_properties_id(params[:id])
     relation = params[:re_artifact_relationship]
 
-    if relation[:relation_type].eql?(ReArtifactRelationship::RELATION_TYPES[:pch])
+    if ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(relation[:relation_type]) 
       raise ArgumentError, "You are not allowed to create a parentchild relationship!"
     end
 
@@ -61,9 +61,9 @@ class ReArtifactRelationshipController < RedmineReController
 
     @artifact_properties = ReArtifactProperties.find(artifact_properties_id)
     @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(artifact_properties_id)
-    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+    @relationships_outgoing.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(artifact_properties_id)
-    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+    @relationships_incoming.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
 
     render :partial => "relationship_links", :layout => false, :project_id => params[:project_id]
   end

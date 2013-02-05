@@ -142,6 +142,8 @@ private
 
     all_relation_types = []
     ReArtifactRelationship::RELATION_TYPES.values.each { |k| all_relation_types << k.to_s }
+    ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.each { |k| all_relation_types << k.to_s }
+
     all_relation_types.delete_if { |v| configured_relation_types.include? v }
     configured_relation_types.concat(all_relation_types)
 

@@ -84,7 +84,6 @@ class ReArtifactPropertiesController < RedmineReController
       @parent_artifact_id = params[:parent_artifact_id]
       @parent_relation_position = params[:parent_relation_position]
     end
-    
     if @re_artifact_properties.save
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
@@ -293,8 +292,8 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
-    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_incoming.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
+    @relationships_outgoing.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
   end
   
   def how_to_delete
@@ -306,8 +305,8 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
-    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_incoming.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
+    @relationships_outgoing.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
 
     initialize_tree_data
     render :delete

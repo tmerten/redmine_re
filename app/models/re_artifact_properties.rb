@@ -31,28 +31,28 @@ class ReArtifactProperties < ActiveRecord::Base
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :conditions => [ "re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values ],
     :dependent => :destroy
 
   has_many :traces_as_sink,
     :order => "re_artifact_relationships.position",
     :foreign_key => "sink_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type != ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :conditions => [ "re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values ],
     :dependent => :destroy
 
   has_one :parent_relation,
     :order => "re_artifact_relationships.position",
     :foreign_key => "sink_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch] ],
     :dependent => :destroy
 
   has_many :child_relations,
     :order => "re_artifact_relationships.position",
     :foreign_key => "source_id",
     :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ],
+    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch] ],
     :dependent => :destroy
 
   has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
@@ -127,8 +127,10 @@ class ReArtifactProperties < ActiveRecord::Base
       'ReSection', 'ReRequirement', 'ReScenario', 'ReProcessword',
       'ReRational', 'ReUseCase', 'ReRationale', 'Project'] }
 
-  validates_associated :parent_relation
-
+  #TODO
+  #validates_associated :parent_relation
+  validates :parent_relation, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
+  
   # Finds all artifacts that are commonly used by the supplied issues
   def self.find_all_by_common_issues(issue_array, *args)
     artifact_ids = []

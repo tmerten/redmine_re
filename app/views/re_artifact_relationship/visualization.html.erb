@@ -51,6 +51,21 @@
         </td>
       </tr>
       <% end %>
+      <% for key, value in ReArtifactRelationship::SYSTEM_RELATION_TYPES do %>
+      <tr>
+        <% colors = ReSetting.get_serialized(value, @project.id)['color'] %>
+        <td>
+          <%= rendered_relation_type(value) %>
+        </td>
+        <td>
+          <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
+        </td>
+        <td>
+          <%= check_box_tag 'relation_filter[]', key.to_s, true %>
+        </td>
+      </tr>
+      <% end %>
+
       <tr>
       <td colspan="3">
         <h4><%= l(:re_visualization_type) %></h4>
