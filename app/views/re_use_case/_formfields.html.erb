@@ -21,11 +21,12 @@
 	    </p>
 	    
 		<%unless @user_profiles.nil?  
-			user_profiles_array = [l(:re_please_choose)]
+			user_profiles_array = [] << [l(:re_please_choose), -1]
 			user_profiles_array_2 = ['']
 			@user_profiles.each do |user_profile| 
-				user_profiles_array << [user_profile.re_artifact_properties.name, user_profile.id]
-				user_profiles_array_2 << [user_profile.re_artifact_properties.name, user_profile.id]
+								
+				user_profiles_array << [user_profile.name, user_profile.id]
+				user_profiles_array_2 << [user_profile.name, user_profile.id]
 			end
 			%>
 			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %> 
@@ -40,74 +41,44 @@
 	    <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
 	      <p>
 	      	<label><%= t(:re_secondary_actor) %></label>
-	      	<%#= text_field_tag :secondary_actor, '', {:size => 20, :class => 'autocomplete', :id => 'secondary_actor_autocomplete'} %>
+
+	        <div id="secondary_actor_filter">
+	          <div class="inputs">
+	            <%=
+	                select_tag 'secondary_actor_ids[]', options_for_select(@secondary_user_profiles.collect { |u| [u[:properties].name, u[:properties].id] }, @secondary_user_profiles.collect { |u| u[:properties].id }), :id => 'secondary_actor_filter_input', :class => 'input_container suggestible', :multiple => true
+	            %>
+	            <%= text_field_tag 'secondary_actor_ids[]', nil, :id => 'secondary_actor_filter_input_nojs' %>
+	          </div>
+	        </div>
 	      </p>
-	      
-		  <div id="secondary_user_candidates" class="autocomplete"></div>
-		    <%= javascript_tag do %>
-		        //TODO: update to jQuery UI autocomplete
-		        /*
-		        new Ajax.Autocompleter('secondary_actor_autocomplete',
-		        'secondary_user_candidates',
-		        '<%= url_for :controller => 're_use_case', :action => 'autocomplete_sink', :project_id => @project.id %>',
-		        {
-		        paramName: 'user_profile_subject',
-		        parameters:
-		        '<%= '&id=' + @re_artifact_properties.id.to_s unless @re_artifact_properties.new_record? %>',
-		        minChars: 1,
-		        frequency: 0.5,
-		        afterUpdateElement : getSecondaryUserProfileId});
-		  
-		        function getSecondaryUserProfileId(text, li){
-		  
-		            jQuery('#added_secondary_user').append(li.innerHTML + ', ');
-		            jQuery('#added_secondary_user').append('<input id="secondary_user_profile_id" type="hidden" name="secondary_user_profile_id[]" value=' + li.id + ' >');
-		            document.getElementById('secondary_actor_autocomplete').value ="";
-		        }*/
-		     <% end %>
-		  </div>
+	      <%= javascript_tag do %>
+
+              (function($) {
+
+              $().ready(function() {
+              $('#secondary_actor_filter_input option').attr("selected","selected");
+
+              // hidden on init because of UJS
+              $('#secondary_actor_filter_input_nojs').remove();
+              $('#secondary_actor_filter .inputs').show();
+
+              $('#secondary_actor_filter_input').suggestible(suggestibleOptions({
+              suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+              suggestionsLayout: function(helpers) {
+              return new ArtifactsSuggestBoxItems(helpers);
+              },
+              bitsUrl: '<%= artifacts_bits_re_queries_path(@project.id) %>',
+              only_types : 'ReUserProfile',
+              except_ids: null
+              }));
+
+              });
+              })(jQuery);
+          <% end %>
+
 		  <div class='splitcontentright'>
-		  	
-		  	<div id='added_secondary_user'>
-		  	  <%
-		  	  @secondary_user_profiles = []
-		  	  @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::RELATION_TYPES[:dep])
-		  	  
-		  	  unless @all_artifact_relations.blank?
-			  	  @all_artifact_relations.each do |relation|
-			  	  	tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id,'ReUserProfile') }
-			     	logger.debug(relation.to_yaml)
-			  	  	@secondary_user_profiles << tmp unless tmp.blank?
-			  	  end
-			  end
-		  	  %>
-		      <%# unless @secondary_user_profiles.blank? %>
-		      <% if false %>
-		          
-		          <% @secondary_user_profiles.each do |secondary_user| %>
-		          	  <%= secondary_user[:properties].name %>
-		              <%= link_to_remote(
-		                '',
-		                    {
-		                      :update => "added_secondary_user",
-		                      :url => {
-		                                :action => :delete,
-		                                :controller => :re_artifact_relationship,
-		                                :id => secondary_user[:relation].id,
-		                                :re_artifact_properties_id => @re_artifact_properties.id,
-		                                :secondary_user_delete => true,
-		                                :project_id => @project.id
-		
-		                              },
-		                      :confirm => t(:re_are_you_sure)
-		                    },
-		                    {
-		                      :class => 'icon icon-del'
-		                    })
-		              %>,
-		         <% end %>     
-		      <% end %>
-		      </div>
+		  	<%# TODO: User here one column design
+		  	%>
 		  </div>
 		
 	</fieldset>

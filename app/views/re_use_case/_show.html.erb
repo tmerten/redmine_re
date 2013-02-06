@@ -13,7 +13,24 @@
 <p><strong>Precondition</strong>: <%= @re_artifact_properties.artifact[:precondition] %></p>
 <p><strong>Postcondition</strong>: <%= @re_artifact_properties.artifact[:postcondition] %></p>
 
+<p><strong>Primary actor</strong>:
+<% unless @current_primary_user.blank? %>
+	<% p = ReArtifactProperties.find_by_id(@current_primary_user.sink_id)%>
+	<%= link_to(p.name,p,{:class => "icon #{p.artifact_type.underscore}"}) %>
+<%end%>
+</p>
+<p><strong>Secondary actor</strong>: 
+	
+	<% @secondary_user_profiles.each_with_index do |secondary_actor, index| %>
+		  
+	<% s = ReArtifactProperties.find_by_id(secondary_actor[:properties].id)%>
+	<%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}"}) %>
+	
+	
+	<%end%>
+</p>
 <hr />
+
 
 <fieldset>
 	<legend><strong><%= t(:re_use_case_steps)%></strong></legend>

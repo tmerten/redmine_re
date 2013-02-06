@@ -1,3 +1,5 @@
+<%= javascript_include_tag 're_artifacts_suggestible', :plugin => 'redmine_re' %>
+
 <%= error_messages_for @re_artifact_properties %>
 
 <div class="box">
@@ -125,7 +127,8 @@
               suggestionsLayout: function(helpers) {
               return new IssuesSuggestBoxItems(helpers);
               },
-              bitsUrl: '<%= issues_bits_re_queries_path(@project.id) %>'
+              bitsUrl: '<%= issues_bits_re_queries_path(@project.id) %>',
+              except_ids: null
               }));
 
               // hidden on init because of UJS

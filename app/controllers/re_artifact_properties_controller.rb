@@ -19,6 +19,10 @@ class ReArtifactPropertiesController < RedmineReController
     
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
 
+    
+    @secondary_user_profiles = []
+    @user_profiles = ReArtifactProperties.find_all_by_artifact_type('ReUserProfile')     
+
     unless params[:sibling_artifact_id].blank?
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
       begin
@@ -88,6 +92,16 @@ class ReArtifactPropertiesController < RedmineReController
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
       update_related_issues params      
+      
+      #set new artifact it to params array
+      my_params = params
+      my_params[:id] = @re_artifact_properties.id
+      
+      begin
+        @re_artifact_properties.artifact.create_hook(my_params)
+      rescue NoMethodError
+        logger.debug("#{@re_artifact_properties.artifact.class} does not implement create hook")
+      end
       redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_created)
     else
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
@@ -104,6 +118,21 @@ class ReArtifactPropertiesController < RedmineReController
 
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
+    
+    #load all related secondary actors
+    @secondary_user_profiles = []
+    @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
+          
+    @user_profiles = ReArtifactProperties.find_all_by_artifact_type('ReUserProfile')     
+    @current_primary_user = ReArtifactRelationship.where(:source_id => params[:id], :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).first
+          
+    unless @all_artifact_relations.blank?
+      @all_artifact_relations.each do |relation|
+        tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id,'ReUserProfile') }
+        logger.debug(relation.to_yaml)
+        @secondary_user_profiles << tmp unless tmp.blank?
+      end
+    end    
     retrieve_previous_and_next_sibling_ids
     initialize_tree_data
   end    
@@ -186,6 +215,14 @@ class ReArtifactPropertiesController < RedmineReController
     
     # Update related issues
     update_related_issues params
+ 
+    #add/update actors
+    begin
+      @re_artifact_properties.artifact.create_hook(params)
+    rescue NoMethodError
+      logger.debug("#{@re_artifact_properties.artifact.class} does not implement create hook")
+    end
+ 
         
     @artifact_type = @re_artifact_properties.artifact_type
     

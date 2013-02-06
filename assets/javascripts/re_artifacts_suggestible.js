@@ -9,17 +9,35 @@
                     data: function(value, helpers) {
                         var params = { query: value };
                         
-                        
                         var exceptIds = [];
-                        if (options.except_ids !== null && options.except_ids !== '' ) {
+                        if (options.except_ids !== null && options.except_ids != '' ) {
                         	exceptIds.push(options.except_ids);
-                        	
+                        	exceptIds.push(helpers.recordIdsInBits(helpers.elements.bitsBox));
                         } else {
                         	exceptIds = helpers.recordIdsInBits(helpers.elements.bitsBox);
                         }
                         if (exceptIds.length > 0) {
                             params.except_ids = exceptIds;
                         }
+
+                       var except_types = [];
+                        if (options.except_types !== null && options.except_types !== '' ) {
+                        	except_types.push(options.except_types);
+                        	
+                        } 
+                        if (except_types.length > 0) {
+                            params.except_types = except_types;
+                        }
+
+                       var only_types = [];
+                        if (options.only_types !== null && options.only_types !== '' ) {
+                        	only_types.push(options.only_types);
+                        	
+                        } 
+                        if (except_types.length > 0) {
+                            params.only_types = only_types;
+                        }
+
                         return params;
                     },
                     loading: function(helpers) {

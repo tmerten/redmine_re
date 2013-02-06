@@ -14,6 +14,8 @@ class ReArtifactRelationship < ActiveRecord::Base
     :pac => "primary_actor",
     :ac =>  "actors",
   }
+
+  ALL_RELATION_TYPES =  RELATION_TYPES.merge(SYSTEM_RELATION_TYPES)
   
   INITIAL_COLORS= {
     :pch => "#0000ff",
@@ -41,7 +43,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   validates :sink_id, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
   validates :sink, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
   validates :source_id, :presence => true
-  validates :relation_type, :inclusion => { :in => RELATION_TYPES.values }
+  validates :relation_type, :inclusion => { :in => ALL_RELATION_TYPES.values }
 
   scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
@@ -59,7 +61,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   end
 
   def self.relation_types
-    RELATION_TYPES.values
+    return [] << RELATION_TYPES.values << SYSTEM_RELATION_TYPES.values
   end
 
   acts_as_list # see special scope condition below
