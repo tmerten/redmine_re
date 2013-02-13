@@ -9,8 +9,7 @@
       <% url = {:action => :update} %>
   <% end %>
 
-  <%= form_for @re_artifact_properties, :url => url do |f| %>
-
+  <%= form_for(@re_artifact_properties, :url => url, :html => {:multipart => true}) do |f| %>
       <% if @re_artifact_properties.new_record? %>
           <%= hidden_field_tag :parent_artifact_id, @parent_artifact_id %>
           <%= hidden_field_tag :parent_relation_position, @parent_relation_position %>
@@ -95,16 +94,12 @@
       <!-- Related artifacts -->
       <fieldset>
         <legend><%= t(:re_artifact_relationships) %></legend>
-
         <div class="splitcontentleft">
           <div id="relationship_link_list">
-            
             <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@re_artifact_properties.id) %>
-            <% @relationships_outgoing.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
-
+            <% @relationships_outgoing.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
             <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@re_artifact_properties.id) %>
-            <% @relationships_incoming.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
-
+            <% @relationships_incoming.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
             <%= render "re_artifact_relationship/relationship_links" %>
           </div>
           <br/>
@@ -112,7 +107,6 @@
 
         <div class="splitcontentright">
           <%= javascript_tag do %>
-
               (function($) {
 
               $().ready(function() {
@@ -149,7 +143,7 @@
               })(jQuery);
           <% end %>
 
-          <b><%= t(:re_create_new_relation) %></b>
+          <b><%= t :re_create_new_relation %></b>
 
           <div id="relationhandling">
             <% for relation_type in @re_relation_order %>
@@ -170,11 +164,16 @@
         </div>
       </fieldset>
 
+      <div id="attachments" class="artifact_edit_box">
+        <h3><%= t :label_attachments %></h3>
+        <%= render 'attachments/form', :locals => {:container => @re_artifact_properties} %>
+      </div>
+
       <p>
         <%= submit_tag t(:re_save) %>
         &nbsp;
         <% unless @re_artifact_properties.new_record? %>
-            <%= link_to(t(:re_cancel), {:project_id => @project.id}, {:class => "icon icon-reload"}) %>
+            <%= link_to(t(:re_cancel), {:project_id => @project.id}, {:class => "icon icon-cancel"}) %>
         <% end %>
       </p>
 
