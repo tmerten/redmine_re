@@ -53,7 +53,7 @@
 			<td></td>
 			<th><%= t(:re_related_issues) -%></th>
 			<% i = issues.first %>
-			<td><%= link_to(i.subject,i) if i %></td>
+			<td><%= "#{i.tracker.name} ##{i.id}" if i -%> <%= link_to(i.subject,i) if i -%></td>
 			
 		</tr>				
 		<% issues.each_with_index do |i, index| %>
@@ -62,7 +62,7 @@
 			<th></th>
 			<td></td>
 			<th></th>
-			<td><%= link_to(i.subject,i) %></td>
+			<td><%= "#{i.tracker.name} ##{i.id}" -%> <%= link_to(i.subject,i) -%></td>
 		</tr>
 		<% end %>		
 	</tbody>
