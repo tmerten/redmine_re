@@ -309,8 +309,8 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-    @relationships_incoming.delete_if { |x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
-    @relationships_outgoing.delete_if { |x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
+    @relationships_incoming.delete_if { |x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_outgoing.delete_if { |x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
   end
 
   def how_to_delete
