@@ -619,3 +619,5 @@ en:
   re_apply_filter: 'Apply filter'
   
   re_artifact_attributes: 'Artifact attributes'
+  
+  label_attachments: 'Attachments'

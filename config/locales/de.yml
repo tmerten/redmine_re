@@ -172,3 +172,8 @@ de:
 
   #filter
   re_filter: 'Filter'
+  
+  #attachments
+  views:
+    defaults:
+      attachments: 'Dateianhänge'
