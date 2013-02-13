@@ -28,7 +28,6 @@ a:active {
 
 div.requirement_upper {
 	padding: 6px;
-	border: 1px solid #B8B8B8;
 }
 
 div.requirement_upper div.subject div div { padding-left: 16px; }
@@ -39,7 +38,6 @@ div.requirement_upper span.private { position:relative; bottom: 2px; text-transf
 div.requirement_upper .next-prev-links {color:#999;}
 /*div.requirement_upper table.attributes th {width:22%;}
 div.requirement_upper table.attributes td {width:28%;}*/
-
 
 div.requirement_lower {
 	background: #F4F4F4;

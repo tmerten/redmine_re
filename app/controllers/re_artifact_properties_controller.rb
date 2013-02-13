@@ -88,6 +88,7 @@ class ReArtifactPropertiesController < RedmineReController
       @parent_artifact_id = params[:parent_artifact_id]
       @parent_relation_position = params[:parent_relation_position]
     end
+    
     if @re_artifact_properties.save
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
@@ -108,13 +109,15 @@ class ReArtifactPropertiesController < RedmineReController
       initialize_tree_data
       render :new
     end
+
   end
   
   def show
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     artifact_type = @re_artifact_properties.artifact_type.underscore
-    @lighter_artifact_color = calculate_lighter_color(@re_artifact_settings[artifact_type]['color'])
+    @artifact_color = @re_artifact_settings[artifact_type]['color']
+    @lighter_artifact_color = calculate_lighter_color(@artifact_color)
 
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
@@ -136,20 +139,6 @@ class ReArtifactPropertiesController < RedmineReController
     retrieve_previous_and_next_sibling_ids
     initialize_tree_data
   end    
-
-  def calculate_lighter_color(hex_color_string)
-    factor = 150
-    r = hex_color_string[1,2].to_i(16)
-    g = hex_color_string[3,2].to_i(16)
-    b = hex_color_string[5,2].to_i(16)
-    r += factor
-    g += factor
-    b += factor
-    r = r > 255 ? 255 : r 
-    g = g > 255 ? 255 : g 
-    b = b > 255 ? 255 : b 
-    "##{r.to_s(16) + g.to_s(16) + b.to_s(16)}"
-  end
 
   def retrieve_previous_and_next_sibling_ids
     position_id = Hash[@re_artifact_properties.parent.child_relations.collect { |s| [s.position, s.sink_id] } ]
@@ -185,15 +174,9 @@ class ReArtifactPropertiesController < RedmineReController
     @bb_error_hash = {}
     @bb_error_hash = ReBuildingBlock.validate_building_blocks(@re_artifact_properties, @bb_error_hash, @project.id)
 
-
     @re_artifact_properties.attributes = params[:re_artifact_properties]
 
-    logger.debug "*************************************************************"
-    logger.debug params
-    logger.debug @re_artifact_properties.to_yaml
-
     @issues = @re_artifact_properties.issues
-    logger.debug @re_artifact_properties.to_yaml
 
     # attributes that cannot be set by the user
     @re_artifact_properties.updated_at = Time.now
@@ -329,8 +312,8 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-    @relationships_incoming.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
-    @relationships_outgoing.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
+    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
   end
   
   def how_to_delete
@@ -342,8 +325,8 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-    @relationships_incoming.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
-    @relationships_outgoing.delete_if {|x| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(x.relation_type) }
+    @relationships_incoming.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
+    @relationships_outgoing.delete_if {|x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
 
     initialize_tree_data
     render :delete
@@ -415,7 +398,25 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   private
+  
+  def calculate_lighter_color(hex_color_string)
+    factor = 150
+    r = hex_color_string[1,2].to_i(16)
+    g = hex_color_string[3,2].to_i(16)
+    b = hex_color_string[5,2].to_i(16)
 
+    rgb_spreading_and_a_bit = [r,g,b].max - [r,g,b].min + 20
+    factor = rgb_spreading_and_a_bit > factor ? factor : rgb_spreading_and_a_bit
+
+    r += factor
+    g += factor
+    b += factor
+    r = r > 255 ? 255 : r 
+    g = g > 255 ? 255 : g 
+    b = b > 255 ? 255 : b 
+    "##{r.to_s(16) + g.to_s(16) + b.to_s(16)}"
+  end
+  
   def gather_children(artifact)
     # recursively gathers all children for the given artifact
     #
