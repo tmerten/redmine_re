@@ -139,20 +139,6 @@ class ReArtifactPropertiesController < RedmineReController
     initialize_tree_data
   end
 
-  def calculate_lighter_color(hex_color_string)
-    factor = 150
-    r = hex_color_string[1, 2].to_i(16)
-    g = hex_color_string[3, 2].to_i(16)
-    b = hex_color_string[5, 2].to_i(16)
-    r += factor
-    g += factor
-    b += factor
-    r = r > 255 ? 255 : r
-    g = g > 255 ? 255 : g
-    b = b > 255 ? 255 : b
-    "##{r.to_s(16) + g.to_s(16) + b.to_s(16)}"
-  end
-
   def retrieve_previous_and_next_sibling_ids
     position_id = Hash[@re_artifact_properties.parent.child_relations.collect { |s| [s.position, s.sink_id] }]
     my_position = @re_artifact_properties.position
