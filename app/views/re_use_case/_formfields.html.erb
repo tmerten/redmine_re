@@ -99,10 +99,7 @@
 	      </tr>
 	    </thead>
 	    <tbody id="steps">
-          <% @re_artifact_properties.artifact.re_use_case_steps.each do |current_re_use_case_step| %>
-             <%= render(:partial => 're_use_case_step/formfields', :locals => { :f => artifact_form, :re_use_case_step => current_re_use_case_step }) %>
-          <% end %>
-	      </tbody>
+             <%= render(:partial => 're_use_case_step/formfields', :locals => { :f => artifact_form, :is_new => false } ) %>
 	    </tbody>
 	  </table>
 	</fieldset>
@@ -134,10 +131,10 @@
 	
 	    switch(type) {
 	      case 'user':
-	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :locals => { :f => artifact_form, :re_use_case_step => ReUseCaseStep.new(:step_type=>1)})) %>";
+	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :object => ReUseCaseStep.new(:step_type=>1), :locals => { :f => artifact_form })) %>";
 	      break;
 	      case 'system':
-	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :locals => { :f => artifact_form, :re_use_case_step => ReUseCaseStep.new(:step_type=>2)})) %>";
+	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :object => ReUseCaseStep.new(:step_type=>2), :locals => { :f => artifact_form })) %>";
 	    }
 	
 	    switch(add_pos) {
