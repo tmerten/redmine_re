@@ -1,7 +1,7 @@
 <% content_for :header_tags do %>
-  <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
-  <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
-  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+    <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
+    <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 <% end %>
 
 <div id="infobar" class="ui-layout-west ui-layout-content">
@@ -9,75 +9,83 @@
 </div>
 
 <div id='detail_view' class='ui-layout-center'>
-	<%= render :partial => 'action_menu' %>
-	<h2><%= artifact_heading(@re_artifact_properties) %></h2>
+  <%= render :partial => 'action_menu' %>
+  <h2><%= artifact_heading(@re_artifact_properties) %></h2>
 
   <%= errors_and_flash(@re_artifact_properties).html_safe %>
 
-	<div class="requirement_upper" style="background: <%= @lighter_artifact_color -%>; border: 1px solid <%= @artifact_color -%>; border-top: 10px solid <%= @artifact_color -%>">
-	  <%= avatar(@re_artifact_properties.author, :size => "50") %>
-	  <% if @previous_re_artifact_properties_id || @next_re_artifact_properties_id %>
-	    <div class="next-prev-links contextual">
-	      <%= link_to_if @previous_re_artifact_properties_id,
-	                     "\xc2\xab #{l(:label_previous)}",
-	                     (@previous_re_artifact_properties_id ? re_artifact_property_path(@previous_re_artifact_properties_id) : nil),
-	                     :title => "##{@previous_re_artifact_properties_id}" %> |
-	      <% if @issue_position && @issue_count %>
-	        <span class="position"><%= l(:label_item_position, :position => @issue_position, :count => @issue_count) %></span> |
-	      <% end %>
-	      <%= link_to_if @next_re_artifact_properties_id,
-	                     "#{l(:label_next)} \xc2\xbb",
-	                     (@next_re_artifact_properties_id ? re_artifact_property_path(@next_re_artifact_properties_id) : nil),
-	                     :title => "##{@next_re_artifact_properties_id}" %>
-	    </div><!-- next-prev-links -->
-	  <% end %>
+  <div class="requirement_upper" style="background: <%= @lighter_artifact_color -%>; border: 1px solid <%= @artifact_color -%>; border-top: 10px solid <%= @artifact_color -%>">
+    <%= avatar(@re_artifact_properties.author, :size => "50") %>
+    <% if @previous_re_artifact_properties_id || @next_re_artifact_properties_id %>
+        <div class="next-prev-links contextual">
+          <%= link_to_if @previous_re_artifact_properties_id,
+                         "\xc2\xab #{l(:label_previous)}",
+                         (@previous_re_artifact_properties_id ? re_artifact_property_path(@previous_re_artifact_properties_id) : nil),
+                         :title => "##{@previous_re_artifact_properties_id}" %> |
+          <% if @issue_position && @issue_count %>
+              <span class="position"><%= l(:label_item_position, :position => @issue_position, :count => @issue_count) %></span>
+              |
+          <% end %>
+          <%= link_to_if @next_re_artifact_properties_id,
+                         "#{l(:label_next)} \xc2\xbb",
+                         (@next_re_artifact_properties_id ? re_artifact_property_path(@next_re_artifact_properties_id) : nil),
+                         :title => "##{@next_re_artifact_properties_id}" %>
+        </div>
+        <!-- next-prev-links -->
+    <% end %>
 
-		<div class="subject">
-			<h3>
-				<ins class="subject_icon <%= @re_artifact_properties.artifact_type.underscore %>"></ins> <%= @re_artifact_properties.name %>
-			</h3>
-		</div>
-		<p class="author">
+    <div class="subject">
+      <h3>
+        <ins class="subject_icon <%= @re_artifact_properties.artifact_type.underscore %>"></ins> <%= @re_artifact_properties.name %>
+      </h3>
+    </div>
+    <p class="author">
       <%= authoring @re_artifact_properties.created_at, @re_artifact_properties.author %>.
       <% if @re_artifact_properties.created_at != @re_artifact_properties.updated_at %>
-			<% if @re_artifact_properties.author == @re_artifact_properties.user %>
-				<%= l(:label_updated_time, time_tag(@re_artifact_properties.updated_at)).html_safe %>
-				<% else %>
-				<%= l(:label_updated_time_by, :author => link_to_user(@re_artifact_properties.user), :age => time_tag(@re_artifact_properties.updated_at)).html_safe %>
-				<% end -%>. 
+          <% if @re_artifact_properties.author == @re_artifact_properties.user %>
+              <%= l(:label_updated_time, time_tag(@re_artifact_properties.updated_at)).html_safe %>
+          <% else %>
+              <%= l(:label_updated_time_by, :author => link_to_user(@re_artifact_properties.user), :age => time_tag(@re_artifact_properties.updated_at)).html_safe %>
+          <% end -%>.
       <% end %>
     </p>
-	</div>
-	<div class="requirement_lower">
-		<%= render :partial => 'attribute_table' %>
+  </div>
+  <div class="requirement_lower">
+    <%= render :partial => 'attribute_table' %>
 
-		<% if @re_artifact_properties.description? %>
-		<hr />
-		  <p><strong><%= t(:field_description) %></strong></p>
-		  <div class="wiki">
-				<%= textilizable @re_artifact_properties, :description %>
-		  </div>
-		<% end %>
-		
-		<% if File.exists?(
-			"#{Rails.root}/plugins/redmine_re/app/views/#{@artifact_type.underscore}/_show.html.erb"
-			) %>
-		<hr />
-		<fieldset>
-	       <legend><b><%= t(:re_artifact_attributes)%></b></legend>
-		      <%= render @artifact_type.underscore+"/show" %> 
-		</fieldset>
-		<% end %>
-	</div>
+    <% if @re_artifact_properties.description? %>
+        <hr/>
+        <p><strong><%= t(:field_description) %></strong></p>
 
-	<div style="clear: both;"> </div>
-	<%= render :partial => 'action_menu' %>
+        <div class="wiki">
+          <%= textilizable @re_artifact_properties, :description %>
+        </div>
+    <% end %>
 
-	<div style="clear: both;"> </div>
+    <% if File.exists?(
+            "#{Rails.root}/plugins/redmine_re/app/views/#{@artifact_type.underscore}/_show.html.erb"
+    ) %>
+        <hr/>
+        <fieldset>
+          <legend><b><%= t(:re_artifact_attributes) %></b></legend>
+          <%= render @artifact_type.underscore + "/show" %>
+        </fieldset>
+    <% end %>
+  </div>
+
+  <% if @re_artifact_properties.attachments.present? %>
+      <div id="artifact_attachments" class="requirement_lower">
+        <h3><%= t :label_attachments %></h3>
+        <%= link_to_attachments @re_artifact_properties, :thumbnails => true %>
+      </div>
+  <% end %>
+
+  <%= render :partial => 'action_menu' %>
+
+  <div style="clear: both;"></div>
 
   <div id="update" style="display:none;">
-	  <h3><%= l(:button_update) %></h3>
-		<%= render :partial => 'edit' %>
-	</div><!-- update -->
-
-</div><!-- detail-view -->
+    <h3><%= l(:button_update) %></h3>
+    <%= render :partial => 'edit' %>
+  </div>
+</div>
