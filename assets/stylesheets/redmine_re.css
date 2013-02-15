@@ -94,6 +94,11 @@ div.requirement_upper table.attributes td {
     background: #F4F4F4;
 }
 
+.artifact_edit_box {
+    margin-top: 10px;
+    border-bottom: 1px solid #bbbbbb;
+}
+
 /**
 * 	Left- and RightPane are used by splitcontent
 */
