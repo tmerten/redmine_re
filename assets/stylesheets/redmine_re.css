@@ -1,119 +1,3 @@
-body, html {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 11pt;
-}
-
-h1 {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.7em;
-    font-weight: normal;
-    text-shadow: 0px -1px 0px #000;
-}
-
-#header {
-    height: 60px;
-}
-
-#quick-search > form > label {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    text-shadow: 0px -1px 0px #000;
-}
-
-#quick-search > form > input {
-    width: auto;
-    border: 1px solid #3E5B76;
-    border-radius: 3px;
-}
-
-#quick-search > form > input:selection {
-    width: auto;
-    border: 1px solid #3E5B76;
-    border-radius: 3px;
-    box-shadow: 0px 0px 5px 0px #3E5B76;
-}
-
-#main-menu li:first-child a {
-    margin-left: -5px;
-}
-
-#main-menu li a {
-    font-weight: normal;
-    text-shadow: 0px -1px 0px #000;
-}
-
-#main-menu li a.selected {
-    text-shadow: none;
-    font-weight: bold;
-    -webkit-box-shadow: 0 0px 6px 2px rgba(255, 255, 255, 0.49);
-    -moz-box-shadow: 0 0px 6px 2px rgba(255, 255, 255, 0.49);
-    box-shadow: 0 0px 6px 2px rgba(255, 255, 255, 0.49);
-    border-radius: 3px 3px 0px 0px;
-    border: 1px 1px 1px 0px solid #eee;
-}
-
-#infobar, #re-index, #detail_view {
-    border: none !important;
-}
-
-body, html {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 11pt;
-}
-
-h1 {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.7em;
-    font-weight: normal;
-    text-shadow: 0px -1px 0px #000;
-}
-
-#header {
-    height: 60px;
-}
-
-#quick-search > form > label {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    text-shadow: 0px -1px 0px #000;
-}
-
-#quick-search > form > input {
-    width: auto;
-    border: 1px solid #3E5B76;
-    border-radius: 3px;
-}
-
-#quick-search > form > input:selection {
-    width: auto;
-    border: 1px solid #3E5B76;
-    border-radius: 3px;
-    box-shadow: 0px 0px 5px 0px #3E5B76;
-}
-
-#main-menu li:first-child a {
-    margin-left: -5px;
-}
-
-#main-menu li a {
-    font-weight: normal;
-    text-shadow: 0px -1px 0px #000;
-}
-
-#main-menu li a.selected {
-    text-shadow: none;
-    font-weight: bold;
-    -webkit-box-shadow: 0 0px 6px 2px rgba(255, 255, 255, 0.49);
-    -moz-box-shadow: 0 0px 6px 2px rgba(255, 255, 255, 0.49);
-    box-shadow: 0 0px 6px 2px rgba(255, 255, 255, 0.49);
-    border-radius: 3px 3px 0px 0px;
-    border: 1px 1px 1px 0px solid #eee;
-}
-
-#infobar, #re-index, #detail_view {
-    border: none !important;
-}
-
 a {
 	/* we need this to make javascript work properly,
 	otherwise there is a 1px movement, when clicking on links */
@@ -125,13 +9,12 @@ a:active {
 }
 
 #re-wrapper {
-    width: 100%;
-    height: 584px;
-    /* #content is 600 with padding 6px, 10px, 10px, 10px */
+	width: 100%;
+	height: 584px; /* #content is 600 with padding 6px, 10px, 10px, 10px */
 }
 
 #re-wrapper div {
-    overflow: auto;
+	overflow: auto;
 }
 
 .re-content {
@@ -139,13 +22,12 @@ a:active {
 }
 
 .vsplitbar {
-    width: 3px;
-    background: #eee;
+	width: 3px;
+	background: #eee;
 }
 
 div.requirement_upper {
-    < < < < < < < . mine padding : 6 px;
-    border: 1px solid #b8b8b8;
+	padding: 6px;
 }
 
 div.requirement_upper div.subject div div {
@@ -186,72 +68,42 @@ div.requirement_upper table.attributes td {
 	width: 28%;
 }
 */
-#detail_view .requirement_lower {
-    border: solid #b8b8b8;
-    border-width: 0px 1px 1px 1px;
-    padding: 6px;
-    background: #F4F4F4;
-}
 
-<<<<<<< .mine
-#detail_view #artifact_attachments {
-    border-color: #dadada;
-    background-color: #fafafa;
-    -webkit-box-shadow: inset 0 8px 6px -6px #999999;
-    -moz-box-shadow: inset 0 8px 6px -6px #999999;
-    box-shadow: inset 0 8px 6px -6px #999999;
-}
-
-=
-=
-=
-=
-=
-=
-=
->
->
->
->
->
->
->
-.r1262
-.artifact_edit_box {
-    margin-top: 10px;
-    border-bottom: 1px solid #bbbbbb;
+div.requirement_lower {
+	background: #F4F4F4;
+	padding: 6px;
+	border-left: 1px solid #B8B8B8;
+	border-right: 1px solid #B8B8B8;
+	border-bottom: 1px solid #B8B8B8;
+	margin-bottom: 6px;
 }
 
 /**
 * 	Left- and RightPane are used by splitcontent
 */
 #LeftPane {
-    background: #def;
-    overflow: hidden;
-    width: 240px;
-    /* optional, initial splitbar position */
-    min-width: 50px;
-    /* optional */
-    /* No margin or border allowed */
+	background: #def;
+	overflow: hidden;
+	width: 240px;		/* optional, initial splitbar position */
+	min-width: 50px;	/* optional */
+	/* No margin or border allowed */
 }
-
 /*
 * Right-side element of the splitter.
 */
 #RightPane {
-    background: #def;
-    overflow: auto;
-    width: 10px;
-    position: relative;
-    /* No margin or border allowed */
+	background: #def;
+	overflow: auto;
+	width: 10px;
+	position: relative;
+	/* No margin or border allowed */
 }
-
 .vsplitbar {
-    width: 10px !important;
+	width: 10px ! important;
 }
 
 .re_bb_form {
-    width: 500px;
+	width: 500px;
 }
 
 #treebar {
@@ -301,7 +153,7 @@ td.subtask {
 }
 
 td.one_line {
-    width: 20px;
+	width: 20px;
 }
 
 tr.variant {
@@ -325,13 +177,13 @@ textarea {
 }
 
 textarea.bb_config {
-    width: 50%;
-    height: 70px;
-    rows: 5;
+	width: 50%;
+	height: 70px;
+	rows: 5;
 }
 
 select.bb_config {
-    height: 70px;
+	height: 70px;
 }
 
 #context-menu li.header {
@@ -390,8 +242,9 @@ label.disabled_is_true {
 	color: #AAAAAA;
 }
 
+
 label.bb_config {
-    width: 130px;
+	width: 130px;
 }
 
 label.bb_options {
@@ -403,11 +256,11 @@ label.bb_options {
 }
 
 label.user_defined {
-    width: 150px;
+	width: 150px;
 }
 
 input.bb_checkbox {
-    margin-left: 105px;
+	margin-left: 105px;
 }
 
 .numberfield-slider {
@@ -451,17 +304,15 @@ input.bb_checkbox {
 }
 
 .subject_icon {
-    padding-left: 25px;
+	padding-left: 25px;
 }
 
 ins.new {
 	background: url(../../../images/add.png) no-repeat left top;
 }
-
 ins.edit {
 	background: url(../../../images/edit.png) no-repeat left top;
 }
-
 ins.delete {
 	background: url(../../../images/delete.png) no-repeat left top;
 }
@@ -469,123 +320,96 @@ ins.delete {
 ins.project {
 	background: url(../images/icons/group_gear.png) no-repeat left top;
 }
-
 a.project {
 	background: url(../images/icons/group_gear.png) no-repeat left top;
 }
-
 ins.re_workarea {
 	background: url(../images/icons/bricks.png) no-repeat left top;
 }
-
 a.re_workarea {
 	background: url(../images/icons/bricks.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_task {
 	background: url(../images/icons/report_user.png) no-repeat left top;
 }
-
 a.re_task {
 	background: url(../images/icons/report_user.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_subtask {
 	background: url(../images/icons/report.png) no-repeat left top;
 }
-
 a.re_subtask {
 	background: url(../images/icons/report.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_goal {
 	background: url(../images/icons/world.png) no-repeat left top;
 }
-
 a.re_goal {
 	background: url(../images/icons/world.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_user_profile {
 	background: url(../images/icons/user.png) no-repeat left top;
 }
-
 a.re_user_profile {
 	background: url(../images/icons/user.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_section {
 	background: url(../images/icons/text_padding_top.png) no-repeat left top;
 }
-
 a.re_section {
 	background: url(../images/icons/text_padding_top.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_attachment {
 	background: url(../images/icons/attach.png) no-repeat left top;
 }
-
 a.re_attachment {
 	background: url(../images/icons/attach.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_vision {
 	background: url(../images/icons/lightbulb.png) no-repeat left top;
 }
-
 a.re_vision {
 	background: url(../images/icons/lightbulb.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_requirement {
 	background: url(../images/icons/pencil.png) no-repeat left top;
 }
-
 a.re_requirement {
 	background: url(../images/icons/pencil.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_scenario {
 	background: url(../images/icons/newspaper.png) no-repeat left top;
 }
-
 a.re_scenario {
 	background: url(../images/icons/newspaper.png) no-repeat left top;
 	margin-left: 0px;
 }
-
 ins.re_processword {
 	background: url(../images/icons/cog.png) no-repeat left top;
 }
-
 a.re_processword {
 	background: url(../images/icons/cog.png) no-repeat left top;
-    margin-left: 0px;
+	margin-left: 0px;
 }
-
 ins.re_rationale {
 	background: url(../images/icons/anchor.png) no-repeat left top;
 }
-
 a.re_rationale {
 	background: url(../images/icons/anchor.png) no-repeat left top;
-    margin-left: 0px;
+	margin-left: 0px;
 }
-
 ins.re_use_case {
 	background: url(../images/icons/page_user.png) no-repeat left top;
 }
-
 a.re_use_case {
 	background: url(../images/icons/page_user.png) no-repeat left top;
 	margin-left: 0px;
@@ -598,62 +422,52 @@ ins.re_my_requirement_artifact {
 span.re_workarea {
 	background: url(../images/icons/bricks.png) no-repeat left top;
 }
-
 span.re_task {
 	background: url(../images/icons/report_user.png) no-repeat left top;
 }
-
 span.re_subtask {
 	background: url(../images/icons/report.png) no-repeat left top;
 }
-
 span.re_goal {
 	background: url(../images/icons/world.png) no-repeat left top;
 }
-
 span.re_user_profile {
 	background: url(../images/icons/user.png) no-repeat left top;
 }
-
 span.re_section {
 	background: url(../images/icons/text_padding_top.png) no-repeat left top;
 }
-
 span.re_attachment {
 	background: url(../images/icons/attach.png) no-repeat left top;
 }
-
 span.re_vision {
 	background: url(../images/icons/lightbulb.png) no-repeat left top;
 }
-
 span.re_requirement {
 	background: url(../images/icons/pencil.png) no-repeat left top;
 }
-
 span.re_scenario {
 	background: url(../images/icons/newspaper.png) no-repeat left top;
 }
-
 span.re_processword {
 	background: url(../images/icons/cog.png) no-repeat left top;
 }
-
 span.re_rationale {
 	background: url(../images/icons/anchor.png) no-repeat left top;
 }
-
 span.re_use_case {
 	background: url(../images/icons/page_user.png) no-repeat left top;
 }
 
 /***** custom tooltips visualization*****/
+
 /* if you define a tooltip use for the tip 2 css class: class="tip customtipname"
 for example: class="tip subtask_error_tip"
 
 look in apllication.css of redmine which styles are already set and overwrite or add
 the styles for your custom tooltip
 */
+
 div.tooltip:hover span.subtask_error_tip {
 	border: 1px solid #EC705B;
 	text-align: center;
@@ -682,15 +496,16 @@ div.tooltip:hover span.userdefined_fields_tip {
 }
 
 div.tooltip.userdefined_fields {
-    position: relative;
-    float: right;
+	position: relative;
+	float: right;
 }
 
 div.tooltip.placeholder {
-    position: relative;
-    width: 16px;
-    float: right;
+	position: relative;
+	width: 16px;
+	float: right;
 }
+
 
 div.bullet_add {
 	background: url("../images/icons/bullet_add.png") no-repeat scroll 5px 2px transparent;
@@ -759,15 +574,6 @@ ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
 }
 
 /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
-/* width 1 */
-ul.tabs a.s {
-    background-position: -553px 0;
-    width: 81px;
-}
-
-ul.tabs a.s:hover {
-    background-position: -553px -31px;
-}
 
 /* width 1 */
 ul.tabs a.s {
@@ -793,13 +599,6 @@ ul.tabs a.l.current {
 	background-position: -248px -62px;
 }
 
-ul.tabs a.l:hover {
-    background-position: -248px -31px;
-}
-
-ul.tabs a.l.current {
-    background-position: -248px -62px;
-}
 
 /* width 3 */
 ul.tabs a.xl {
@@ -813,21 +612,14 @@ ul.tabs a.xl.current {
 	background-position: 0 -62px;
 }
 
-ul.tabs a.xl:hover {
-    background-position: 0 -31px;
-}
 
-ul.tabs a.xl.current {
-    background-position: 0 -62px;
-}
-
-/* initially all panes are hidden */
+/* initially all panes are hidden */ 
 .panes .pane {
 	display: none;
 }
 
 a.lessmargin {
-    margin-left: -4px;
+	margin-left: -4px;
 }
 
 /* Visualization layout */
@@ -837,12 +629,12 @@ a.lessmargin {
 }
 
 #infovis {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 #visualization_filters {
-    float: left;
-    width: 250px;
+	float: left;
+	width: 250px;
 }
 
 div#visualization_filters div.text form label {
@@ -884,14 +676,12 @@ div#visualization_filters div.text form label {
 .rating_comments {
 	height: auto;
 }
-
 .rating_comments_left {
 	float: left;
 	height: 100%;
 	margin-right: 10px;
 	width: 265px;
 }
-
 .rating_comments_right {
 	height: 100%;
 }
@@ -935,25 +725,20 @@ fieldset.filter_actions > div {
 form.filters .group {
 	padding: 10px;
 }
-
 form.filters .group.header {
 	/*border: 1px #ccc solid !important;*/
 	border: none;
 	background-color: transparent !important;
 }
-
 form.filters .group:first-child {
 	border-top: none;
 }
-
 form.filters .group:nth-child(odd) {
 	background-color: #F7F7F7;
 }
-
 form.filters .group:nth-child(even) {
 	background-color: #efefef;
 }
-
 form.filters .group .label {
 	font-weight: bold;
 	display: block;
@@ -962,19 +747,16 @@ form.filters .group .label {
 	width: 80px;
 	padding-top: 4px;
 }
-
 form.filters .group.buttons {
 	margin-bottom: 0;
 	margin-top: 0;
 	border: none;
 	background-color: transparent;
 }
-
 form.filters .group .fields {
 	display: block;
 	margin-left: 80px;
 }
-
 form.filters .group .fields .field {
 	padding-bottom: 8px;
 	padding-top: 8px;
@@ -985,53 +767,42 @@ form.filters .group .fields .field {
 	background-color: transparent;
 	margin: 0;
 }
-
 form.filters .group .fields .field:first-child {
 	padding-top: 0;
 	border-top: none;
 }
-
 form.filters .group .fields .field:last-child {
 	padding-bottom: 0;
 }
-
 form.filters .group .fields .field .column {
 	vertical-align: top;
 	display: inline-block;
 }
-
 form.filters .group .fields .field .column.narrow {
 	padding-right: 5px;
 }
-
 form.filters .group .fields .field .column.actions {
 	padding-left: 8px;
 	padding-top: 15px;
 }
-
 form.filters .group .fields .field .column.mode select {
 	width: 140px;
 }
-
 form.filters .group .fields .field .column.value select {
 	width: 200px;
 }
-
 form.filters .group .fields .field label {
 	font-weight: normal;
 	width: 65px;
 }
-
 form.filters .group .field .input {
 	vertical-align: top;
 	margin-top: 0;
 }
-
 form.filters .group .field input[type="checkbox"] {
 	margin-top: 4px;
 	margin-bottom: 6px;
 }
-
 form.filters .group .field .column a.icon {
 	display: block;
 	padding-top: 2px;
@@ -1043,55 +814,45 @@ table.list.artifacts thead tr th:first-child,
 table.list.artifacts tbody tr td:first-child {
 	padding-left: 8px;
 }
-
 table.list.artifacts thead tr th,
 table.list.artifacts tbody tr td {
 	padding-top: 4px;
 	padding-right: 8px;
 	padding-bottom: 4px;
 }
-
 table.list.artifacts thead tr th.id
 table.list.artifacts tbody tr td.id {
 	text-align: right !important;
 }
-
 table.list.artifacts tbody tr td.name {
 	text-align: left;
 }
-
 table.list.artifacts tbody tr td.actions {
 	text-align: center;
 	word-wrap: normal;
 	word-break: keep-all;
 	line-break: strict;
 }
-
 table.list.artifacts tbody tr td.actions a.icon:first-child {
 	margin-left: 0;
 	border-left: 0;
 }
-
 table.list.artifacts tbody tr td.actions a.icon {
 	padding-left: 25px;
 	padding-right: 5px;
 	border-left: 1px solid #e4e4e4;
 	background-position: 5px 0;
 }
-
 table.list.artifacts tbody tr td {
 	text-align: center;
 }
-
 table.list.artifacts tbody tr td span.icon {
 	background-repeat: no-repeat !important;
 	background-position: 0 1px;
 }
-
 table.list.artifacts tbody tr:nth-child(odd) {
 	background-color: #F6F7F8;
 }
-
 table.list.artifacts tbody tr:nth-child(odd):hover {
 	background-color: #ffffdd;
 }
@@ -1104,7 +865,6 @@ input.artifact_name {
 #sidebar_filter_input_container {
 	width: 100%;
 }
-
 #sidebar_filter .inputs {
 	margin-top: 6px !important;
 	margin-left: 0 !important;
@@ -1116,12 +876,10 @@ input.artifact_name {
 	max-width: 250px;
 	display: none;
 }
-
 #sidebar_filter .inputs .input,
 #sidebar_filter .inputs .input input {
 	width: auto !important;
 }
-
 #sidebar_filter .buttons {
 	margin: 0 !important;
 	padding-left: 0 !important;
@@ -1130,18 +888,17 @@ input.artifact_name {
 	padding-bottom: 10px !important;
 	text-align: right !important;
 }
-
 #sidebar_filter_input_container {
 	position: absolute;
 	margin: 0;
 	padding: 0;
 }
-
 #sidebar_filter_input_container .input {
 	border: none !important;
 	background-color: transparent !important;
 }
-
+#sidebar_filter_input_container .input input {
+}
 #sidebar_filter_input_container .suggestions {
 	/*min-width: 300px !important;*/
 	position: absolute !important;
@@ -1155,21 +912,17 @@ input.artifact_name {
 div.query.details {
 	margin-right: 15px;
 }
-
 div.query.details table {
 	border-collapse: collapse;
 }
-
 div.query.details td.title {
 	vertical-align: top;
 	padding-right: 10px;
 	color: #666;
 }
-
 div.query.details td.content {
 	vertical-align: top;
 }
-
 div.query.details div.description {
 	margin-top: 13px;
 	font-size: 10px;
