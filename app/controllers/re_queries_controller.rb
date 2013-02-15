@@ -102,6 +102,7 @@ class ReQueriesController < RedmineReController
         artifact_to_json(artifact).merge({:highlighted_name => highlight_letters(artifact.name, params[:query])})
       end
     end
+    logger.debug("#############################CALLED1!!!!!")
     render :json => artifacts
   end
 

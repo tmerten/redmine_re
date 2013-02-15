@@ -151,6 +151,25 @@
 	    jQuery(element).append( rendered_expansion );
 	  }
 	  
+	  function addExpansion_new(element, rendered_expansion) {
+	    jQuery(element).prev().children().next().append( rendered_expansion );
+	  }
+	  
+	  function add_fields(where, type, content ) {
+	  	var now = new Date;
+		var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
+      						now.getHours(), now.getMinutes(), now.getSeconds(), 
+      						now.getMilliseconds());
+      	var ts = Math.round((new Date()).getTime() / 1000);
+	  	 switch(type) {
+	  	    case 're_use_case_step_expansion':
+	  	    	content = content.replace(/new_re_use_case_step_expansion/, utc_timestamp);
+	  	    	addExpansion_new(where, content);
+	  	    break;
+	  	 }
+	  }
+	  
+	  
 	  function replaceAll(txt, replace, with_this) {
 	  	return txt.replace(new RegExp(replace, 'g'),with_this);
 	  }

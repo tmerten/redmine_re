@@ -34,8 +34,8 @@
                <%= render(:partial => 're_use_case_step_expansion/formfields', :locals => { :f => uc_form, :re_use_case_step_id => re_use_case_step.id }).html_safe %>	    
 	    </tbody>
 	  </table>
-	  <% expansion_html = escape_javascript(render(:partial => "re_use_case_step_expansion/formfields", :object => ReUseCaseStepExpansion.new(), :locals => { :f => uc_form, :re_use_case_step_id => re_use_case_step.id })) %>
-  	  <%= link_to_function("addExpansion", "addExpansion(jQuery(this).prev().children().next(), '"+re_use_case_step.id.to_s+"', '"+expansion_html+"');", :class => "" ) %>
+	  
+	  <%= link_to_add_fields "Add Exp", uc_form, :re_use_case_step_expansion %>
 	</div>  	
   </fieldset>
   

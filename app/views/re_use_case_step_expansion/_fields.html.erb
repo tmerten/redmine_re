@@ -1,0 +1,10 @@
+  <tr id="use_case_step_expansion_<%= f.object.id %>" class="use_case_step_expansion_row">
+    <td>
+      <%= f.select(:re_expansion_type, [ ['Exception', 1], ['Data',2], ['Other',3] ], {:index => 'new_re_use_case_step_expansion'} ) %>
+    <td>
+      <%= f.text_area(:description, { :index => 'new_re_use_case_step_expansion', :size => "35x2", :class => "use_case_step_textarea" } ) %>
+    </td>
+    <td>
+       <%= link_to_function t(:re_delete_use_case_expansion), "$(this).up('.use_case_expansion_row').remove()", :class => "icon icon-del" %>
+    </td>
+  </tr>
