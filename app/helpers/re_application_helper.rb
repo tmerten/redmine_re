@@ -203,7 +203,6 @@ JAVASCRIPT
         result = false
       end
     end
-
     return result
   end
 
@@ -219,20 +218,21 @@ JAVASCRIPT
     plugin_name=(options[:plugin] ? options[:plugin] : PLUGIN_NAME)
     File.join(Redmine::Utils.relative_url_root,'plugin_assets',plugin_name.to_s,asset_name)
   end
-  
+
+  # renders a link to javascript-ish remove fields for nested object forms
   def link_to_remove_fields(name, f)
     f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)")
   end
   
+  # renders a link to javascrip-ish add an empty object into a nested forms 
   def link_to_add_fields(name, f, association)
-    #new_object = f.object.class.reflect_on_association(association).klass.new
-    new_object = ReUseCaseStepExpansion.new()
+    new_object = f.object.class.reflect_on_association(association).klass.new
     fields = f.fields_for("#{association}s_attributes", new_object, :child_index => "new_#{association}") do |builder|
-      #render(association.to_s.singularize + "_fields", :f => builder)
-      render("re_use_case_step_expansion/fields", :f => builder)
+      
+      logger.debug "********************************************** #{association.to_s.singularize}"
+      render(association.to_s.singularize + "_fields", :f => builder)
     end
     link_to_function(name, "add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")")
   end
-  
   
 end
