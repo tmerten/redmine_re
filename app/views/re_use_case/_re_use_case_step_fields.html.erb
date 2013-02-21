@@ -31,11 +31,13 @@
 	      </tr>
 	    </thead>
 	    <tbody id="expansions_<%=re_use_case_step.id.to_s%>">
-               <%= render(:partial => 're_use_case_step_expansion/formfields', :locals => { :f => uc_form, :re_use_case_step_id => re_use_case_step.id }).html_safe %>	    
+		  <%= uc_form.fields_for :re_use_case_step_expansions do |builder| %>
+		  	<%= render(:partial => 're_use_case/re_use_case_step_expansion_fields', :locals => { :f => builder } ) %>
+		  <% end %>
 	    </tbody>
 	  </table>
 	  
-	  <%= link_to_add_fields "Add Exp", uc_form, :re_use_case_step_expansions %>
+	  <%= link_to_add_fields "Add Exp", uc_form, :re_use_case_step_expansions, :re_use_case %>
 	</div>  	
   </fieldset>
   

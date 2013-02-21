@@ -99,7 +99,7 @@
 	      </tr>
 	    </thead>
 	    <tbody id="steps">
-             <%= render(:partial => 're_use_case_step/formfields', :locals => { :f => artifact_form, :is_new => false } ) %>
+             <%= render(:partial => 're_use_case/re_use_case_step_fields', :locals => { :f => artifact_form } ) %>
 	    </tbody>
 	  </table>
 	</fieldset>
@@ -131,10 +131,10 @@
 	
 	    switch(type) {
 	      case 'user':
-	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :object => ReUseCaseStep.new(:step_type=>1), :locals => { :f => artifact_form })) %>";
+	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case/re_use_case_step_fields", :object => ReUseCaseStep.new(:step_type=>1), :locals => { :f => artifact_form })) %>";
 	      break;
 	      case 'system':
-	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case_step/formfields", :object => ReUseCaseStep.new(:step_type=>2), :locals => { :f => artifact_form })) %>";
+	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case/re_use_case_step_fields", :object => ReUseCaseStep.new(:step_type=>2), :locals => { :f => artifact_form })) %>";
 	    }
 	
 	    switch(add_pos) {
@@ -163,7 +163,8 @@
       	var ts = Math.round((new Date()).getTime() / 1000);
 	  	 switch(type) {
 	  	    case 're_use_case_step_expansion':
-	  	    	content = replaceAll(content, "new_re_use_case_step_expansion", utc_timestamp.toString().substring(5,12));
+	  	    case 're_use_case_step_expansions':
+	  	    	content = replaceAll(content, "new_re_use_case_step_expansions", utc_timestamp.toString().substring(5,12));
 	  	    	addExpansion_new(where, content);
 	  	    break;
 	  	 }

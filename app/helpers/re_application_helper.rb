@@ -225,12 +225,16 @@ JAVASCRIPT
   end
   
   # renders a link to javascrip-ish add an empty object into a nested forms 
-  def link_to_add_fields(name, f, association)
+  def link_to_add_fields(name, f, association, templatedir = "")
     new_object = f.object.class.reflect_on_association(association).klass.new
-    fields = f.fields_for("#{association}s_attributes", new_object, :child_index => "new_#{association}") do |builder|
+    fields = f.fields_for("#{association}_attributes", new_object, :index => "new_#{association}") do |builder|
       
       logger.debug "********************************************** #{association.to_s.singularize}"
-      render(association.to_s.singularize + "_fields", :f => builder)
+      if templatedir.blank?
+        render(association.to_s.singularize + "_fields", :f => builder)
+      else
+        render("#{templatedir}/#{association.to_s.singularize}_fields", :f => builder)
+      end
     end
     link_to_function(name, "add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")")
   end
