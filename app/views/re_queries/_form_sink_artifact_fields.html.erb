@@ -30,7 +30,8 @@
                    :selected => values[:types_mode] %>
     </span>
     <span class="column value">
-      <%= f.select :types, @artifact_types.map { |type| [l(type), type] },
+     
+       <%= f.select :types, @artifact_types.map { |type| [l(type), type] },
                    { :selected => values[:types] }, { :multiple => true } %>
     </span>
     <span class="column actions">
@@ -49,6 +50,7 @@
                      :selected => values[:relation_types_mode] %>
     </span>
     <span class="column value">
+     
       <%= f.select :relation_types, @relation_types.map { |type| [l(type), type] }.sort { |a, b| a.first <=> b.first },
                      { :selected => values[:relation_types] }, { :multiple => true, :class => 'relations' } %>
     </span>
