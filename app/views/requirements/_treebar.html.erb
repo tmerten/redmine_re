@@ -123,7 +123,7 @@ var tree = jQuery("#tree")
     });
   })
   .bind("move_node.jstree", function (e, data) {
-    data.rslt.o.each(function (i) {
+    data.rslt.o.each(function (i) {            
       jQuery.ajax({
         async : false,
         type: 'POST',
@@ -136,16 +136,20 @@ var tree = jQuery("#tree")
           "authenticity_token" : <%= "#{form_authenticity_token.inspect.html_safe}".html_safe %>
         },
         success : function (r) {
-          if(!r.status) {
+          if(!r.status) {          	
             jQuery.jstree.rollback(data.rlbk);
           }
-          else {
+          else {            
             jQuery(data.rslt.oc).attr("id", "node_" + r.id);
             if(data.rslt.cy && jQuery(data.rslt.oc).children("UL").length) {
               data.inst.refresh(data.inst._get_parent(data.rslt.oc));
             }
           }
+        },
+        error : function (r) {			
+			jQuery.jstree.rollback(data.rlbk);       
         }
+        
       });
     });
   })

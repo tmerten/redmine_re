@@ -20,35 +20,41 @@ class RequirementsController < RedmineReController
     new_parent = nil
     sibling = ReArtifactProperties.find(sibling_id)
     position = 1
-
-    case insert_position
-    when 'before'
-      position = (sibling.position - 1) unless sibling.nil?
-      new_parent = sibling.parent
-    when 'after'
-      position = (sibling.position + 1) unless sibling.nil?
-      new_parent = sibling.parent
-    when 'inside'
-      position = 1
-      new_parent = sibling
-    else
+    
+    if sibling.parent_relation.nil? || sibling.artifact_type == "Project"      
       render :text => "insert position invalid", :status => 501
+    else
+    
+      case insert_position
+      when 'before'
+        position = (sibling.position - 1) unless sibling.nil?
+        new_parent = sibling.parent
+      when 'after'
+        position = (sibling.position + 1) unless sibling.nil?
+        new_parent = sibling.parent
+      when 'inside'
+        position = 1
+        new_parent = sibling
+      else
+        render :text => "insert position invalid", :status => 501
+      end
+      session[:expanded_nodes] << new_parent.id
+
+      building_block_data = ReBbDataArtifactSelection.find(:first, :conditions => {:re_artifact_relationship_id => moved_artifact.parent_relation.id})
+      building_block_data.delete unless building_block_data.nil?
+      moved_artifact.parent_relation.remove_from_list
+      moved_artifact.parent = new_parent
+      moved_artifact.parent_relation.insert_at(position)
+
+      result = {}
+      result['status'] = 1
+      result['insert_pos'] = position.to_s
+      result['sibling'] = position.to_s + ' ' + sibling.name.to_s unless sibling.nil?
+
+      render :json => result      
     end
-    session[:expanded_nodes] << new_parent.id
-
-    building_block_data = ReBbDataArtifactSelection.find(:first, :conditions => {:re_artifact_relationship_id => moved_artifact.parent_relation.id})
-    building_block_data.delete unless building_block_data.nil?
-    moved_artifact.parent_relation.remove_from_list
-    moved_artifact.parent = new_parent
-    moved_artifact.parent_relation.insert_at(position)
-
-    result = {}
-    result['status'] = 1
-    result['insert_pos'] = position.to_s
-    result['sibling'] = position.to_s + ' ' + sibling.name.to_s unless sibling.nil?
-
-    render :json => result
-  end
+    
+end
 
   # first tries to enable a contextmenu in artifact tree
   def context_menu
