@@ -243,7 +243,7 @@ JAVASCRIPT
   def get_escaped_setp_html(f, step_type)
     new_object = ReUseCaseStep.new()
     new_object = f.object.class.reflect_on_association(:re_use_case_steps).klass.new(:step_type => step_type)
-    fields = f.fields_for("re_use_case_steps", new_object, :index => "new_re_use_case_step") do |builder|
+    fields = f.fields_for("re_use_case_steps_attributes", new_object, :index => "new_re_use_case_step") do |builder|
         render("re_use_case/re_use_case_step_fields", :f => builder)
     end
     escape_javascript(fields)

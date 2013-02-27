@@ -48,7 +48,6 @@
       <%= link_to_function t(:re_delete_use_case_step), "jQuery(this).parent().parent().remove()", :class => "icon icon-del" %>
     <% else %>
       <%= link_to_function t(:re_delete_use_case_step), "markStepForDeletion(this)", :class => "icon icon-del" %>
-      <%= f.hidden_field(:id, :class => "current_use_case_step_id") %>
       <%= f.hidden_field(:_destroy, :class => "should_destroy") %>
     <% end %>
   </td>
