@@ -22,3 +22,4 @@ module NotifiablePatch
 end
 
 Issue.send(:include, NotifiablePatch)
+#
