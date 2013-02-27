@@ -99,7 +99,10 @@
 	      </tr>
 	    </thead>
 	    <tbody id="steps">
-             <%= render(:partial => 're_use_case/re_use_case_step_fields', :locals => { :f => artifact_form } ) %>
+		  <%= artifact_form.fields_for :re_use_case_steps do |builder| %>
+		  	<%= render('re_use_case/re_use_case_step_fields', :f => builder) %>
+		  <% end %>
+		  
 	    </tbody>
 	  </table>
 	</fieldset>
@@ -127,21 +130,36 @@
 	  }
 	
 	  function addStep(element, add_pos, type) {
+	  	
+	  	var now = new Date;
+	  	
+		var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
+					now.getHours(), now.getMinutes(), now.getSeconds(), 
+					now.getMilliseconds());
+					
 	    var rendered_step;
 	
 	    switch(type) {
 	      case 'user':
-	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case/re_use_case_step_fields", :object => ReUseCaseStep.new(:step_type=>1), :locals => { :f => artifact_form })) %>";
+	      	rendered_step = "<%= get_escaped_setp_html(artifact_form, 1) %>";
 	      break;
 	      case 'system':
-	      rendered_step = "<%= escape_javascript(render(:partial => "re_use_case/re_use_case_step_fields", :object => ReUseCaseStep.new(:step_type=>2), :locals => { :f => artifact_form })) %>";
+	      	rendered_step = "<%= get_escaped_setp_html(artifact_form, 2) %>";
 	    }
 	
 	    switch(add_pos) {
-	      case 'after':  jQuery(element).after( rendered_step ); break;
-	      case 'before': jQuery(element).before( rendered_ste ); break;
-	      case 'bottom': jQuery('#steps').append( rendered_step ); break;
-	      case 'top':    jQuery('#steps').prepend( rendered_step ); break;
+	      case 'after':  
+	        jQuery(element).after( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
+	      case 'before': 
+	         jQuery(element).before( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
+	      case 'bottom': 
+	         jQuery('#steps').append( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
+	      case 'top':    
+	         jQuery('#steps').prepend( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
 	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
 	    }
 	    updateStepPositionFields();

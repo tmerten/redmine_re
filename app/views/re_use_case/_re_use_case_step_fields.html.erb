@@ -1,25 +1,17 @@
-<%= f.fields_for :re_use_case_steps do |uc_form| %>
-
-  <% re_use_case_step = uc_form.object %>
-
-  <% type = re_use_case_step.step_type %>
-
-  <tr id="use_case_step_drag_<%= re_use_case_step.position %>" class="draggable use_case_step_row">
-
-
+<tr id="use_case_step_drag_<%= f.object.position %>" class="draggable use_case_step_row">
   <td style="cursor: pointer;padding-top: 20px; vertical-align: top;" >
-    <%= uc_form.hidden_field :position, :class => "position" %>
-  <% if type==1 %>
-      <%= image_tag('icons/user.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)) %><%= uc_form.hidden_field :step_type, :value => "1" %>
+    <%= f.hidden_field :position, :class => "position" %>
+  <% if f.object.step_type == 1 %>
+      <%= image_tag('icons/user.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)) %><%= f.hidden_field :step_type %>
     </td>
     <td colspan="2">
   <% else %>
-    <%= image_tag('icons/monitor.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)) %><%= uc_form.hidden_field :step_type, :value => re_use_case_step.step_type %>
+    <%= image_tag('icons/monitor.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)) %><%= f.hidden_field :step_type %>
     </td>
     <td>&nbsp;</td>
     <td colspan="2">
   <% end %>
-  <%= uc_form.text_area :description, { :size => "35x2", :value => re_use_case_step.description, :class => "use_case_step_textarea" } %>
+  <%= f.text_area :description, { :size => "35x2", :class => "use_case_step_textarea" } %>
   <fieldset class="collapsible collapsed">
   	<legend onclick="toggleFieldset(this);">Expansions</legend>
   	<div style="display: none;">
@@ -30,18 +22,18 @@
 	        <th><%= t(:re_expansion_description) %></th>
 	      </tr>
 	    </thead>
-	    <tbody id="expansions_<%=re_use_case_step.id.to_s%>">
-		  <%= uc_form.fields_for :re_use_case_step_expansions do |builder| %>
-		  	<%= render(:partial => 're_use_case/re_use_case_step_expansion_fields', :locals => { :f => builder } ) %>
+	    <tbody id="expansions_<%= f.object.id.to_s%>">
+		  <%= f.fields_for :re_use_case_step_expansions do |builder| %>
+		  	<%= render('re_use_case/re_use_case_step_expansion_fields', :f => builder ) %>
 		  <% end %>
 	    </tbody>
 	  </table>
 	  
-	  <%= link_to_add_fields "Add Exp", uc_form, :re_use_case_step_expansions, :re_use_case %>
+	  <%= link_to_add_fields "Add Exp", f, :re_use_case_step_expansions, :re_use_case %>
 	</div>  	
   </fieldset>
   
-  <% if type==1 %>
+  <% if f.object.step_type ==1 %>
     </td>
     <td>&nbsp;</td>
   <% else %>
@@ -52,13 +44,12 @@
     <%= t(:re_uc_add_below) %> <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery(this).parent().parent(), 'after', 'user')", :class => "" ) %>&nbsp;&nbsp;
     <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery(this).parent().parent(), 'after', 'system')", :class => "" ) %>&nbsp;&nbsp;
     <%= link_to_function( image_tag('icons/user_go.png', :plugin => 'redmine_re', :alt => t(:re_uc_user))+image_tag('icons/monitor_go_back.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addDialog(jQuery(this).parent().parent(), 'after')", :class => "" ) %><br />
-    <% if re_use_case_step.new_record? %>
+    <% if f.object.new_record? %>
       <%= link_to_function t(:re_delete_use_case_step), "jQuery(this).parent().parent().remove()", :class => "icon icon-del" %>
     <% else %>
       <%= link_to_function t(:re_delete_use_case_step), "markStepForDeletion(this)", :class => "icon icon-del" %>
-      <%= uc_form.hidden_field(:id, :value=> re_use_case_step.id, :class => "current_use_case_step_id") %>
-      <%= uc_form.hidden_field(:_destroy, :class => "should_destroy") %>
+      <%= f.hidden_field(:id, :class => "current_use_case_step_id") %>
+      <%= f.hidden_field(:_destroy, :class => "should_destroy") %>
     <% end %>
   </td>
-  </tr>
- <% end %>
+</tr>
