@@ -54,12 +54,12 @@ class ReArtifactProperties < ActiveRecord::Base
            :dependent => :destroy
 
 
-  has_many :sinks, :through => :traces_as_source, :order => "re_artifact_relationships.position"
-  has_many :children, :through => :child_relations, :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :sources, :through => :traces_as_sink, :order => "re_artifact_relationships.position"
-  has_one :parent, :through => :parent_relation, :source => "source"
-  has_many :re_bb_data_texts, :dependent => :delete_all
-  has_many :re_bb_data_selections, :dependent => :delete_all
+  has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
+  has_many :children, :through => :child_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :sources,  :through => :traces_as_sink,   :order => "re_artifact_relationships.position"
+  has_one  :parent,   :through => :parent_relation,  :source => "source"
+  has_many :re_bb_data_texts,       :dependent => :delete_all
+  has_many :re_bb_data_selections,  :dependent => :delete_all
   has_many :re_bb_data_artifact_selections, :dependent => :delete_all
 
   acts_as_watchable
@@ -77,6 +77,7 @@ class ReArtifactProperties < ActiveRecord::Base
         {:controller => 're_artifact_properties', :action => 'show', :id => o.id}
       }
   )
+  
   acts_as_activity_provider(
       :type => 're_artifact_properties',
       :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
@@ -84,6 +85,16 @@ class ReArtifactProperties < ActiveRecord::Base
       :find_options => {:include => [:project, :user]},
       :permission => :edit_requirements
   )
+  
+  # workaround such that the a project can be deleted flawlessly from Redmine
+  def destroy
+    if self.artifact_type == "Project"
+      relationships_as_source.each { |r| r.destroy }
+      delete
+    else
+      super
+    end
+  end
   
   def updated_on
     updated_at
@@ -129,7 +140,7 @@ class ReArtifactProperties < ActiveRecord::Base
   validates :parent, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
   validates :artifact_type, :presence => true, :inclusion => {
       :in => ['ReGoal', 'ReSection', 'ReVision', 'ReTask', 'ReSubtask',
-              'ReVision', 'reAttachment', 'ReWorkarea', 'ReUserProfile',
+              'ReVision', 'ReAttachment', 'ReWorkarea', 'ReUserProfile',
               'ReSection', 'ReRequirement', 'ReScenario', 'ReProcessword',
               'ReRational', 'ReUseCase', 'ReRationale', 'Project']}
 
