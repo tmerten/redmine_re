@@ -18,7 +18,7 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/filtered_json' => 're_artifact_relationship#build_json_according_to_user_choice'
 
   # ReArtifactProperties as "artifact"
-  resources :re_artifact_properties, :except => [:new, :index], :controller => "re_artifact_properties"
+  resources :re_artifact_properties, :except => [:new, :index]
   
   match 're_artifact_properties/:id/recursive_destroy' => 're_artifact_properties#recursive_destroy'
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'

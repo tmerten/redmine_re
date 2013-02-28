@@ -326,12 +326,12 @@ class ReArtifactPropertiesController < RedmineReController
 
   def how_to_delete
     method = params[:mode]
-    @artifact_properties = ReArtifactProperties.find(params[:id])
-    @relationships_incoming = @artifact_properties.relationships_as_sink
-    @relationships_outgoing = @artifact_properties.relationships_as_source
-    @parent = @artifact_properties.parent
+    @re_artifact_properties = ReArtifactProperties.find(params[:id])
+    @relationships_incoming = @re_artifact_properties.relationships_as_sink
+    @relationships_outgoing = @re_artifact_properties.relationships_as_source
+    @parent = @re_artifact_properties.parent
 
-    @children = gather_children(@artifact_properties)
+    @children = gather_children(@re_artifact_properties)
 
     @relationships_incoming.delete_if { |x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
     @relationships_outgoing.delete_if { |x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
@@ -339,15 +339,6 @@ class ReArtifactPropertiesController < RedmineReController
     initialize_tree_data
     render :delete
   end
-
-  # TODO: If required anywhere else, remove comment, otherwise delete if finishing 0.9 
-  #def remove_issue_from_artifact
-  #  issue_to_delete = Issue.find(params[:issueid])
-  #  artifact_type = self.controller_name
-  #  artifact_properties = artifact_type.camelcase.constantize.find_by_id(params[:id])
-  #  artifact_properties.issues.delete(issue_to_delete)
-  #  redirect_to(:back)
-  #end
 
   def autocomplete_artifact
     query = '%' + params[:artifact_name].gsub('%', '\%').gsub('_', '\_').downcase + '%'
@@ -393,6 +384,8 @@ class ReArtifactPropertiesController < RedmineReController
 
   private
 
+  # calculates a lighter color for the artifact headers show view
+  # such that the text (hopefully) remains readable
   def calculate_lighter_color(hex_color_string)
     factor = 150
     r = hex_color_string[1, 2].to_i(16)
@@ -411,9 +404,9 @@ class ReArtifactPropertiesController < RedmineReController
     "##{r.to_s(16) + g.to_s(16) + b.to_s(16)}"
   end
 
+  # recursively gathers all children for the given artifact
   def gather_children(artifact)
-    # recursively gathers all children for the given artifact
-    #
+
     children = Array.new
     children.concat artifact.children
     return children if artifact.changed? || artifact.children.empty?

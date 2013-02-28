@@ -26,11 +26,12 @@ class ReArtifactRelationship < ActiveRecord::Base
     :pof => "#ffcc00",
     :pac => "#ffcc00", # TODO
     :ac =>  "#ffcc00"  # TODO
-  }  
+  }
 
-  # The relationship has ReArtifactProperties as source or sink 
+  # The relationship has ReArtifactProperties as source and sink 
   belongs_to :source, :class_name => "ReArtifactProperties"
   belongs_to :sink,   :class_name => "ReArtifactProperties"
+  
   has_many :re_bb_data_artifact_selection, :dependent => :destroy
 
   validates :source_id, :uniqueness => { :scope => [:sink_id, :relation_type],
