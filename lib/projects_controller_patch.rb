@@ -17,8 +17,11 @@ module ProjectControllerPatch
     
     # Update project name
     artifact = ReArtifactProperties.find_by_artifact_type_and_project_id("Project", project.id)
-    artifact.name = params[:project][:name]
-    artifact.save
+    
+    if !artifact.nil?
+      artifact.name = project[:name]
+      artifact.save
+    end
     
   end
 end
