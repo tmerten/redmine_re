@@ -89,6 +89,11 @@ class ReArtifactPropertiesController < RedmineReController
     end
 
     if @re_artifact_properties.save
+      if Setting.notified_events.include?('issue_added')
+        # we cannot add custom notifications for artifacts
+        Mailer.artifact_add(@re_artifact_properties).deliver
+      end
+      
       render_attachment_warning_if_needed(@re_artifact_properties)
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
@@ -188,6 +193,7 @@ class ReArtifactPropertiesController < RedmineReController
     saved = @re_artifact_properties.save
 
     # Add Comment
+    comment = nil
     unless params[:comment].blank?
       comment = Comment.new
       comment.comments = params[:comment]
@@ -212,6 +218,11 @@ class ReArtifactPropertiesController < RedmineReController
     handle_relations params
 
     if saved
+      if Setting.notified_events.include?('issue_updated')
+        # we cannot add custom notifications for artifacts
+        Mailer.artifact_edit(@re_artifact_properties, comment).deliver
+      end
+      
       #flash[:notice] = :re_artifact_properties_updated
       redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_updated)
     else

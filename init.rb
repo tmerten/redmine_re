@@ -11,8 +11,8 @@ ActionDispatch::Callbacks.to_prepare do
   # redmine_re patches
   require_dependency 'issue_patch'
   require_dependency 'issue_controller_patch'
-  #require_dependency 'mailer_patch' #Ist not ready implemented yet (dominic)
-  #require_dependency 'notifiable_patch'  # Is not used
+  require_dependency 'mailer_patch' #Ist not ready implemented yet (dominic)
+  #require_dependency 'notifiable_patch' # remove me! unpatchable
   require_dependency 'query_patch'
   require_dependency 'role_patch'
   require_dependency 'project_patch'
@@ -116,9 +116,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   activity_provider :re_artifact_properties, :class_name => 'ReArtifactProperties', :default => true
 
   #Observers
-  #config.active_record.observers = :re_artifact_properties_observer
-  #active_record.observers = :re_artifact_properties_observer (nett to be fixed for redmine_2_0
-
+  #ActiveRecord::Base.observers << :re_artifact_properties_observer
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
 
   settings :default => {

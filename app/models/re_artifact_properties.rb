@@ -84,10 +84,18 @@ class ReArtifactProperties < ActiveRecord::Base
       :find_options => {:include => [:project, :user]},
       :permission => :edit_requirements
   )
+  
+  def updated_on
+    updated_at
+  end
+  
+  def created_on
+    created_at
+  end
 
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'created_by'
-  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+  #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
 
@@ -128,6 +136,12 @@ class ReArtifactProperties < ActiveRecord::Base
   #TODO
   #validates_associated :parent_relation
   validates :parent_relation, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
+
+
+  # Returns true if usr or current user is allowed to view the issue
+  def visible?(usr=nil)
+    true
+  end
 
   # Finds all artifacts that are commonly used by the supplied issues
   def self.find_all_by_common_issues(issue_array, *args)
