@@ -6,6 +6,14 @@ class ReSettingsController < RedmineReController
     initialize_artifact_order(@project.id)
     initialize_relation_order(@project.id)
 
+     name = @project.name      
+     if name.length < 3 
+      name = name+" Project" 
+     end
+     if name.length > 50
+      name = name[0..49]
+     end 
+     
     @project_artifact = ReArtifactProperties.where({
       :project_id => @project.id,
       :artifact_type => "Project"}
@@ -14,7 +22,7 @@ class ReSettingsController < RedmineReController
       :updated_by => User.current.id,
       :artifact_id => @project.id,     
       :description => @project.description,
-      :name => @project.name}
+      :name => name}
     )
     
     @plugin_description = ReSetting.get_plain("plugin_description", @project.id)
