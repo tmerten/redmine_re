@@ -24,8 +24,8 @@ class ReArtifactRelationship < ActiveRecord::Base
     :rat => "#993300",
     :ref => "#33cccc",
     :pof => "#ffcc00",
-    :pac => "#ffcc00", # TODO
-    :ac =>  "#ffcc00"  # TODO
+    :pac => "#999900", 
+    :ac =>  "#339966"  
   }
 
   # The relationship has ReArtifactProperties as source and sink 

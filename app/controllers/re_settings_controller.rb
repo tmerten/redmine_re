@@ -45,7 +45,8 @@ class ReSettingsController < RedmineReController
         configured_artifact = {}
         configured_artifact['in_use'] = true
         configured_artifact['alias'] = artifact_type.gsub(/^re_/, '').humanize
-        configured_artifact['color'] = "%06x" % (rand * 0xffffff)
+        configured_artifact['color'] = artifact_type.to_s.classify.constantize::INITIAL_COLOR #"%06x" % (rand * 0xffffff)
+                
         ReSetting.set_serialized(artifact_type, @project.id, configured_artifact)
       end
       @re_artifact_configs[artifact_type] = configured_artifact
@@ -59,7 +60,8 @@ class ReSettingsController < RedmineReController
         configured_relation = {}
         configured_relation['in_use'] = true
         configured_relation['alias'] = relation_type.humanize
-        configured_relation['color'] = "%06x" % (rand * 0xffffff)
+        
+        configured_relation['color'] = ReArtifactRelationship::INITIAL_COLORS[ReArtifactRelationship::ALL_RELATION_TYPES.index(relation_type)]
         configured_relation['show_in_visualization'] = true
         ReSetting.set_serialized(relation_type, @project.id, configured_relation)
       end
