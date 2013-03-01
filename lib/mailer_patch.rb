@@ -1,33 +1,29 @@
 require_dependency 'mailer'
 
-# Mixin for Issue Model
-# Connects a Redmine Issue with an RE-Plugin Artifact
 module MailerPatch
   def self.included(base)
-    #base.extend(ClassMethods)
     base.send(:include, InstanceMethods)
-
-    #typing in class
-    #base.class_eval do
-    #  unloadable
-    #end
   end
 
-  #module ClassMethods
-  #end
 
   module InstanceMethods
     def artifact_add(artifact)
       redmine_headers('Project' => artifact.project.identifier,
                       'Artifact-Id' => artifact.id,
                       'Artifact-Author' => artifact.author.login)
-      #redmine_headers('Artifact-Watcher' => ... if issue.assigned_to
-
+                      
       message_id artifact
-      @author = artifact.author
+
       @re_artifact_properties = artifact
-      recipients = artifact.watcher_recipients
-      mail :to => recipients,
+      @author = artifact.author
+      @artifact_url = url_for(:controller => 're_artifact_properties', :action => 'show', :id => artifact.id)
+
+      recipients = artifact.recipients    
+      cc =  artifact.watcher_recipients - recipients
+
+      @created_by_user = User.find(artifact.created_by)
+      
+      mail :to => recipients, :cc => cc,
         :subject => "[#{artifact.project.name} - ##{artifact.id}] #{artifact.name}"      
     end
     
@@ -35,14 +31,22 @@ module MailerPatch
       redmine_headers('Project' => artifact.project.identifier,
                       'Artifact-Id' => artifact.id,
                       'Artifact-Author' => artifact.author.login)
-      #redmine_headers('Artifact-Watcher' => ... if issue.assigned_to
 
       message_id artifact
-      @re_artifact_properties = artifact
-      @comment = newest_comment
+      
+      recipients = artifact.recipients    
+      cc =  artifact.watcher_recipients - recipients
 
-      recipients = artifact.watcher_recipients
-      mail :to => recipients,
+      @re_artifact_properties = artifact
+      @author = artifact.author
+      @comment = newest_comment
+      
+      @artifact_url = url_for(:controller => 're_artifact_properties', :action => 'show', :id => artifact.id)
+
+      @updated_by_user = User.find(artifact.updated_by)
+      
+           
+      mail :to => recipients, :cc => cc,
         :subject => "[#{artifact.project.name} - ##{artifact.id}] #{artifact.name}"    
     end    
   end

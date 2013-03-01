@@ -621,3 +621,8 @@ en:
   re_artifact_attributes: 'Artifact attributes'
   
   label_attachments: 'Attachments'
+  
+  #mail
+  re_text_artifact_added: "Artifact %{id} has been added by %{author}."
+  re_text_artifact_updated: "Artifact %{id} has been updated by %{author}."
+  re_text_artifact_updated_new_comment: "New comment added by %{author}:"

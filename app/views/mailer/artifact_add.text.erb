@@ -1,8 +1,3 @@
-text_re_artifact_properties_updated: 
+<%= l(:re_text_artifact_added, :id => "##{@re_artifact_properties.id}", :author => h(@created_by_user)) %>
 
-<%= @re_artifact_properties.inspect %>
-
-EDIT CALLED AS HTML
-
-
-<%#= textilizable(@re_artifact_properties, :description) %>
+<%= @re_artifact_properties.description %>

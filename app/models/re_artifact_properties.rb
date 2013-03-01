@@ -150,13 +150,39 @@ class ReArtifactProperties < ActiveRecord::Base
 
 
   # Returns true if usr or current user is allowed to view the artifact
-  def visible?(usr=nil)    
-    if (!usr.nil? && usr.allowed_to?(:view_requirements, @project)) || User.current.allowed_to?(:view_requirements, @project)
+  def visible?(usr=nil)
+    
+    if (!usr.nil? && usr.allowed_to?(:view_requirements, self.project)) || User.current.allowed_to?(:view_requirements, self.project)
       return true
     else 
       return false
     end 
   end
+
+  # Returns the users that should be notified
+  def notified_users
+    notified = []
+    # Author and assignee are always notified unless they have been
+    # locked or don't want to be notified
+    notified << author if author
+    
+    notified = notified.select {|u| u.active? && u.notify_about?(self)}
+
+    notified.uniq!
+    # Remove users that can not view the issue
+    notified.reject! {|user| !visible?(user)}
+    notified
+  end
+
+  # Returns the email addresses that should be notified
+  def recipients
+    notified_users.collect(&:mail)
+  end
+
+
+
+
+
 
   # Finds all artifacts that are commonly used by the supplied issues
   def self.find_all_by_common_issues(issue_array, *args)
