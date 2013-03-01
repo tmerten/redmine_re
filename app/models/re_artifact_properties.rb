@@ -149,9 +149,13 @@ class ReArtifactProperties < ActiveRecord::Base
   validates :parent_relation, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
 
 
-  # Returns true if usr or current user is allowed to view the issue
-  def visible?(usr=nil)
-    true
+  # Returns true if usr or current user is allowed to view the artifact
+  def visible?(usr=nil)    
+    if (!usr.nil? && usr.allowed_to?(:view_requirements, @project)) || User.current.allowed_to?(:view_requirements, @project)
+      return true
+    else 
+      return false
+    end 
   end
 
   # Finds all artifacts that are commonly used by the supplied issues
