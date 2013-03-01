@@ -231,7 +231,7 @@ label.large_content {
     clear: none;
 }
 
-label {
+.re_label {
     font-weight: bold;
     width: 100px;
     clear: left;
@@ -239,6 +239,7 @@ label {
     float: left;
     text-align: right;
     padding-right: 5px;
+    background-color:#FFFF77;
 }
 
 label.filter {
