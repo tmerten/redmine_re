@@ -110,6 +110,9 @@ class ReArtifactProperties < ActiveRecord::Base
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
 
+  belongs_to :responsible, :class_name => 'User', :foreign_key => 'responsible_id'
+
+
   # attributes= and artifact_attributes are overwritten to instantiate
   # the correct artifact_type and use nested attributes for re_artifact_properties
   accepts_nested_attributes_for :artifact
@@ -152,6 +155,7 @@ class ReArtifactProperties < ActiveRecord::Base
   # Returns true if usr or current user is allowed to view the artifact
   def visible?(usr=nil)
     
+
     if (!usr.nil? && usr.allowed_to?(:view_requirements, self.project)) || User.current.allowed_to?(:view_requirements, self.project)
       return true
     else 

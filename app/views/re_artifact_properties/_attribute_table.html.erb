@@ -15,7 +15,7 @@
 	<tbody>
 		<tr>
 			<th><%= l(:re_artifact_responsible) %></th>
-			<td><%= @re_artifact_properties.responsibles %></td>
+			<td><%= @re_artifact_properties.responsible %></td>
 			<th><%= t(:traces_to) -%></th>			
 			<% current_relation = traces_as_source.shift %>
 			<% s = ReArtifactProperties.find_by_id(current_relation.sink_id) if current_relation %> 

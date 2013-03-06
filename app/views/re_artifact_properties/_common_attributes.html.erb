@@ -18,10 +18,18 @@
      re_users.concat User.all.sort_by { |u| u.lastname }
      re_users.delete_if { |u| !u.allowed_to? :edit_requirements, @project }
      re_users.uniq!
+     
+     selectable_users =  re_users.collect { |u| [u.firstname+" "+ u.lastname, u.id] }       
+     if !@re_artifact_properties.nil? &&  !@re_artifact_properties.responsible.nil?
+     	select_user_id = @re_artifact_properties.responsible.id
+     else
+     	select_user_id = -1;
+     end 
   %>
   <p>
-  <%= f.label :responsibles, t(:re_artifact_responsible) %> <%= f.select :responsibles, re_users.collect { |u| [u.firstname+" "+ u.lastname] } %>
-  </p>
+        <%= f.label :responsible_id, t(:re_artifact_responsible) %> 
+        <%= f.select :responsible_id, options_for_select(selectable_users, select_user_id), :include_blank => true %>
+   </p>
 	<p>
 		<%= f.label :description %>
     <span id='update-description'>
