@@ -119,29 +119,36 @@ class ReArtifactPropertiesController < RedmineReController
   def show
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
-    artifact_type = @re_artifact_properties.artifact_type.underscore
-    @artifact_color = @re_artifact_settings[artifact_type]['color']
-    @lighter_artifact_color = calculate_lighter_color(@artifact_color)
+    
+    if @artifact_type == "Project" 
+      redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id 
+    else 
+     artifact_type = @re_artifact_properties.artifact_type.underscore
+     @artifact_color = @re_artifact_settings[artifact_type]['color']
+     @lighter_artifact_color = calculate_lighter_color(@artifact_color)
 
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
-    @issues = @re_artifact_properties.issues
+     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+     @issues = @re_artifact_properties.issues
 
-    #load all related secondary actors
-    @secondary_user_profiles = []
-    @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
+     #load all related secondary actors
+     @secondary_user_profiles = []
+     @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
 
-    @user_profiles = ReArtifactProperties.find_all_by_artifact_type('ReUserProfile')
-    @current_primary_user = ReArtifactRelationship.where(:source_id => params[:id], :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).first
+     @user_profiles = ReArtifactProperties.find_all_by_artifact_type('ReUserProfile')
+     @current_primary_user = ReArtifactRelationship.where(:source_id => params[:id], :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).first
 
-    unless @all_artifact_relations.blank?
-      @all_artifact_relations.each do |relation|
-        tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id, 'ReUserProfile')}
-        logger.debug(relation.to_yaml)
-        @secondary_user_profiles << tmp unless tmp.blank?
-      end
+     unless @all_artifact_relations.blank?
+       @all_artifact_relations.each do |relation|
+         tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id, 'ReUserProfile')}
+         logger.debug(relation.to_yaml)
+         @secondary_user_profiles << tmp unless tmp.blank?
+       end
+     end
+      retrieve_previous_and_next_sibling_ids
+      initialize_tree_data
+    
     end
-    retrieve_previous_and_next_sibling_ids
-    initialize_tree_data
+          
   end
 
   def retrieve_previous_and_next_sibling_ids
@@ -284,19 +291,24 @@ class ReArtifactPropertiesController < RedmineReController
 
   def destroy
     gather_artifact_and_relation_data_for_destroying
-
-    direct_children = @artifact_properties.children
-    position = @artifact_properties.position
-    for child in direct_children
-      logger.debug "################### #{child.to_yaml}"
-      child.parent_relation.remove_from_list
-      child.parent = @parent
-      child.parent_relation.insert_at(position)
-      position += 1
+        
+    if @artifact_properties.artifact_type == "Project"
+      flash[:error] = t(:re_delete_project_artifact_error)  
+    else    
+      direct_children = @artifact_properties.children
+      position = @artifact_properties.position
+      for child in direct_children
+        logger.debug "################### #{child.to_yaml}"
+        child.parent_relation.remove_from_list
+        child.parent = @parent
+        child.parent_relation.insert_at(position)
+        position += 1
+      end
+     
+      @artifact_properties.destroy
+      flash[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
     end
-    @artifact_properties.destroy
-
-    flash.now[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
+    
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
 
@@ -308,7 +320,7 @@ class ReArtifactPropertiesController < RedmineReController
     end
     @artifact_properties.destroy
 
-    flash.now[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
+    flash[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
   end
 

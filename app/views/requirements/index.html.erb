@@ -19,6 +19,13 @@
       <% elsif  User.current.allowed_to?(:view_requirements, @project) %>
           <h2>Requirements Artifact</h2>
       <% end %>
+       
+       <% s = "" %>       
+       <% flash.each do |k,v| %>       
+       <%   s << content_tag('div', v, :class => "flash #{k}") %>
+       <% end %> 
+       <%= s.html_safe%>
+       
       <p>
         Get started by creating a new requirements artifact. You may select from the artifacts below.<br/>
         You will find the artifacts you created in the tree to your left. You can drag and drop each artifact

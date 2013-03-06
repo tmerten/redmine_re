@@ -175,7 +175,7 @@ de:
   re_delete_project_artifact: 'Projekt Artefakt löschen'
   re_cannnot_delete_project_artifact: 'Dieses Artefact ist ein Projektartefakt, das nicht gelöscht werden darf. Um das Projekt zu löschen, verwenden Sie die '
   re_redmine_project_administration: 'Redmine Projekt Administration'
-  
+  re_delete_project_artifact_error: 'Das Projekt Artefakt darf nicht gelöscht werden.'
 
 
   #mail

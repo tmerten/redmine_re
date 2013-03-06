@@ -190,7 +190,7 @@ en:
   re_delete_project_artifact: 'Delete project artifact'
   re_cannnot_delete_project_artifact: 'This artifact is a project artifact which cannot be deleted. To delete the project, please use '
   re_redmine_project_administration: 'Redmine Project Administration'
-      
+  re_delete_project_artifact_error: 'The project artifact cannot be deleted.'    
 
   #re_requirement
   re_requirement: 'Requirement'
