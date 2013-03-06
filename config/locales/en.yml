@@ -396,9 +396,9 @@ en:
   re_use_case_precondition : 'Precondition'
   re_use_case_postcondition : 'Postcondition'
   re_delete_use_case_step: 'Delete'
-  re_user_steps: 'User Steps'
-  re_system_steps: 'System Steps'
-  re_use_case_steps: 'Use Case Steps'
+  re_user_steps: 'User steps'
+  re_system_steps: 'System steps'
+  re_use_case_steps: 'Use Case steps'
   re_uc_user: 'User'
   re_uc_system: 'System'
   re_uc_add: 'add'
@@ -415,8 +415,14 @@ en:
   re_expansion_type: 'Type'
   re_expansion_description: 'Description'
   re_delete_use_case_expansion: 'Delete'
-  re_primary_actor: 'Primary Actor' 
+  re_use_case_primary_actor: 'Primary Actor' 
+  re_use_case_secondary_actors: 'Secondary Actor(s)' 
   re_actors: 'Actors'
+  re_use_case_attributes: 'Use Case specific attributes'
+  re_use_case_expansions: 'Use Case expansions'
+  re_exception_expansion: 'Exception'
+  re_data_expansion: 'Data'
+  re_other_expansion: 'Other'
   
   
   # re_scenario
