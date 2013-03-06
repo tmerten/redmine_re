@@ -992,7 +992,7 @@ input.artifact_name {
 }
 
 #sidebar_filter_input_container {
-    position: absolute;
+   /* position: absolute;*/
     margin: 0;
     padding: 0;
 }
