@@ -19,8 +19,7 @@ class ReArtifactPropertiesController < RedmineReController
 
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @secondary_user_profiles = []
-    @user_profiles = ReArtifactProperties.find_all_by_artifact_type('ReUserProfile')
-
+@user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
     unless params[:sibling_artifact_id].blank?
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
       begin
@@ -134,7 +133,7 @@ class ReArtifactPropertiesController < RedmineReController
      @secondary_user_profiles = []
      @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
 
-     @user_profiles = ReArtifactProperties.find_all_by_artifact_type('ReUserProfile')
+     @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
      @current_primary_user = ReArtifactRelationship.where(:source_id => params[:id], :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).first
 
      unless @all_artifact_relations.blank?
