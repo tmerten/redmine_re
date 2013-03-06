@@ -187,6 +187,11 @@ en:
   re_deleted_artifact_and_children: 'Successfully deleted the artifact and all its children.'
   re_deleted_artifact_and_moved_children: 'Succesfully attached all child artifacts to the parent and deleted the artifact.'
 
+  re_delete_project_artifact: 'Delete project artifact'
+  re_cannnot_delete_project_artifact: 'This artifact is a project artifact which cannot be deleted. To delete the project, please use '
+  re_redmine_project_administration: 'Redmine Project Administration'
+      
+
   #re_requirement
   re_requirement: 'Requirement'
   re_new_re_requirement: 'Requirement'

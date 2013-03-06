@@ -337,7 +337,13 @@ class ReArtifactPropertiesController < RedmineReController
     @relationships_outgoing.delete_if { |x| x.relation_type.eql? ReArtifactRelationship::RELATION_TYPES[:pch] }
 
     initialize_tree_data
-    render :delete
+    
+    if @re_artifact_properties.artifact_type == 'Project'         
+      render :delete_project_artifact
+    else 
+      render :delete  
+    end
+    
   end
 
   def autocomplete_artifact
