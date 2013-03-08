@@ -48,3 +48,14 @@ function observeParentArtifactField(url) {
   });
 }
 
+function scrollContentPaneTo(target) {  
+
+	var $Pane = $('#detail_view');
+	var $Target = $('#'+target);
+	
+	var targetTop = $Target.offset().top;
+	var paneTop = $Pane.offset().top;
+	$Pane.animate({ scrollTop: '+='+ (targetTop - paneTop) +'px' }, 100); 
+	
+	  
+}
