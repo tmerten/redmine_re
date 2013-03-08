@@ -1,10 +1,16 @@
-  <tr id="use_case_step_expansion_<%= f.object.id %>" class="use_case_step_expansion_row">
+  <tr id="use_case_step_expansion_<%= f.object.id %>" class="use_case_step_expansion_row nested_field">
     <td>
       <%= f.select(:re_expansion_type, [ ['Exception', 1], ['Data',2], ['Other',3] ] ) %>
     <td>
       <%= f.text_area(:description, { :size => "35x2", :class => "use_case_step_textarea" } ) %>
     </td>
     <td>
-       <%= link_to_function t(:re_delete_use_case_expansion), "$(this).up('.use_case_expansion_row').remove()", :class => "icon icon-del" %>
+       <%= f.hidden_field(:_destroy, {:value => "0"} ) %>
+       <%= link_to_function t(:re_delete_use_case_expansion), "remove_field(this)".html_safe, :class => "icon icon-del" %>
+       
+       <%= link_to_remove_fields "remove", f %>
     </td>
   </tr>
+
+
+  

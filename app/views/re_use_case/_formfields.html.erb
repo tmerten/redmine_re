@@ -212,6 +212,11 @@
 	    });
 	  }
 	
+	  function remove_fields(link) {
+  		jQuery(link).prev("input[type=hidden]").val("1");
+  		jQuery(link).closest(".nested_field").hide();
+	  }
+	  
 	  function updateStepExpansionPositionFields() {
 	    /** Not implemented **/
 	  }
