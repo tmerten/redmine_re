@@ -1,5 +1,5 @@
 <%= f.fields_for :artifact do |artifact_form| %>
-	<fieldset><legend><%= l(:re_use_case_specific_attributes) %></legend>
+	<fieldset class="tabular"><legend><%= l(:re_use_case_specific_attributes) %></legend>
 	    <p>
 	    <%= artifact_form.label :goal_level, l(:re_use_case_level) %>
 	    <%#  image_tag('icons/use_case_cloud.png', :size => '40x40', :plugin => 'redmine_re', :alt => t(:re_use_case_abstract_overview)) => 5 %>
@@ -38,18 +38,17 @@
 			</p>
 		<%end%>
 		
-	    <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
 	      <p>
 	      	<label><%= t(:re_secondary_actor) %></label>
-
-	        <div id="secondary_actor_filter">
+			
+	        <div id="secondary_actor_filter" style="padding-left: 180px;">
 	          <div class="inputs">
 	            <%=
 	                select_tag 'secondary_actor_ids[]', options_for_select(@secondary_user_profiles.collect { |u| [u[:properties].name, u[:properties].id] }, @secondary_user_profiles.collect { |u| u[:properties].id }), :id => 'secondary_actor_filter_input', :class => 'input_container suggestible', :multiple => true
 	            %>
-	            <%= text_field_tag 'secondary_actor_ids[]', nil, :id => 'secondary_actor_filter_input_nojs' %>
 	          </div>
 	        </div>
+	        
 	      </p>
 	      <%= javascript_tag do %>
 
@@ -76,10 +75,7 @@
               })(jQuery);
           <% end %>
 
-		  <div class='splitcontentright'>
-		  	<%# TODO: User here one column design
-		  	%>
-		  </div>
+
 		
 	</fieldset>
 	

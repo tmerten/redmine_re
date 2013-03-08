@@ -616,7 +616,7 @@ en:
   
   re_please_choose: 'please choose'
   re_primary_actor: 'Primary actor'
-  re_secondary_actor: 'Secondary actor'
+  re_secondary_actor: 'Secondary actor(s)'
   re_add_secondary_actor: 'Add secondary actor'
   re_find_secondary_actor: 'Find secondary actor'
   re_changed_by: 'Changed by'

@@ -4,37 +4,28 @@
 
 <%= f.fields_for :artifact do |artifact_form|%>
 
-  <fieldset>
+  <fieldset class="tabular">
   	 <legend><%= l(:re_task_specific_attributes) %></legend>
-  	 <div class="splitcontentleft" style="border-right: 1px dotted #cccccc;">
 		 <p><%= artifact_form.label :start, l(:re_task_start) %> <%= artifact_form.text_field :start %></p>
 		 
 		 <p><%= artifact_form.label :end, l(:re_task_end) %> <%= artifact_form.text_field :end %></p>
 		 
 		 <p><%= artifact_form.label :frequency, l(:re_task_frequency) %> <%= artifact_form.text_field :frequency %></p>
-     </div>
-     <div class="splitcontentright">
-		  <fieldset>
-		     <legend><%= l(:re_task_difficulties) %></legend>
-		     <% unless @re_artifact_properties.artifact.id.nil? %>
-			    <div class="contextual">
-			       <a href="#" class="icon icon-edit" onclick="showAndScrollTo('update-difficult', 'artifact_difficult'); return false;"><%= l(:re_update_difficult) %></a>
-			    </div>
-			    <%= textilizable(@re_artifact_properties.artifact, :difficult, :only_path => false) %>
-			    <br />
-			 <% end %>
-			 
-			 <div id='update-difficult' <%= 'style="display:none;"'.html_safe unless @re_artifact_properties.artifact.new_record? %>>
-			   <%= artifact_form.text_area :difficult,
-			                    :cols => 60,
+
+		<p>
+	     <label><%= l(:re_task_difficulties) %></label>
+	 		
+		   <%= artifact_form.text_area :difficult,
+		                    :cols => 60,
 			                    :rows => (@re_artifact_properties.artifact.difficult.blank? ? 10 : [[10, @re_artifact_properties.artifact.difficult.length / 50].max, 100].min),
 			                    :class => 'wiki-edit' %>
-			   <%= wikitoolbar_for  'artifact_difficult' %>
-			 </div>
-		  </fieldset>
-	   </div>
-  </fieldset>
-	<fieldset>
+			   <%= wikitoolbar_for  're_artifact_properties_artifact_attributes_difficult' %>
+			   
+		 
+		 </p>
+    </fieldset>  
+  
+	<fieldset class="tabular">
 	   <legend><%= l(:re_subtasks) %></legend>
 	   <table class="subtasks ui-sortable">
 	      <thead>
