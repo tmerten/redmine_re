@@ -973,7 +973,7 @@ input.artifact_name {
     padding: 0 !important;
     height: 22px;
     border: 1px solid #BBB;
-    max-width: 250px;
+    /*max-width: 250px;*/
     display: none;
 }
 

@@ -395,7 +395,7 @@
             _this.unselectAllSuggestions();
             _this.elements.suggestionsBox.css({
                 top: _this.elements.inputWrapper.outerHeight(),
-                width: _this.elements.inputContainer.parent().width()                               
+                width: _this.elements.inputWrapper.parent().width()                               
             });
             
             _this.elements.suggestionsBox.fadeIn('fast', function() {
