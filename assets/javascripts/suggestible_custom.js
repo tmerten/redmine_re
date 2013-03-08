@@ -149,8 +149,7 @@
             var bit = this;
             this.addClass('diagram');
             this.attr('title', record.name);
-            $('<span />', { 'class': 'id' }).text('#' + record.id).appendTo(this);
-
+            $('<span />', { 'class': 'id' }).text('#' + record.id).appendTo(this);					
             var nameSpanTag = $('<span />', { 'class': 'name' });
             var nameAnchorTag = $('<a />', { 'href': record.url });
             nameAnchorTag.appendTo(nameSpanTag).text(record.name);

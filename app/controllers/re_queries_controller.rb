@@ -240,12 +240,15 @@ class ReQueriesController < RedmineReController
       :url => url_for(issue) }
   end
 
-  def diagram_to_json(diagram)
-    {
+  def diagram_to_json(diagram)    
+    project = Project.find(diagram.project_id)        
+    return {
       :id => diagram.id,
       :name => diagram.name,
       :url => url_for(:controller => "diagrameditor",
-                      :action => 'show', :id => diagram.id)
+                      :action => 'show', :diagram_id => diagram.id,
+                      :project_id => project.identifier
+                      )
     }
   end
 
