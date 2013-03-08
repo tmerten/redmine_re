@@ -46,6 +46,28 @@
                       :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank? %>
         </p>
       </fieldset>
+       
+      <!-- Related Diagrams  --> 
+      <% if (@project.enabled_module_names.include? 'diagrameditor') && (User.current.allowed_to?(:edit_diagrams, @project)) %>	   
+  		<fieldset class="tabular">
+        <legend><%= t(:re_related_diagrams) %></legend>
+        
+        <div id="diagram_filter">
+          <div class="inputs">
+            <%=
+                select_tag 'diagram_id[]', options_for_select(@re_artifact_properties.related_diagrams.collect { |u| [u.name, u.id] },
+                	@re_artifact_properties.related_diagrams.collect { |u| [u.id] }), :id => 'diagram_filter_input', :class => 'direct_artifacts', :multiple => true
+            %>
+            <%= text_field_tag 'diagram_id[]', nil, :id => 'diagram_filter_input_nojs' %>
+          </div>
+        </div>
+        <p>
+          <%= link_to image_tag('add.png')+' create related Diagram', :controller => 'diagrameditor', :action => 'show', :project_id => @project.identifier,
+                      :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank? %>
+        </p>
+        
+      </fieldset>
+	  <% end %>
 
       <!-- Comments render only when in edit mode -->
       <% unless @re_artifact_properties.new_record? %>
@@ -124,6 +146,19 @@
               bitsUrl: '<%= issues_bits_re_queries_path(@project.id) %>',
               except_ids: null
               }));
+	
+			  // hidden on init because of UJS
+              $('#diagram_filter_input_nojs').remove();
+              $('#diagram_filter .inputs').show();
+
+              $('#diagram_filter_input').suggestible(suggestibleOptions({
+              suggestionsUrl: '<%= suggest_diagrams_re_queries_path(@project.id) %>',
+              suggestionsLayout: function(helpers) {
+              return new DiagramsSuggestBoxItems(helpers);
+              },
+              bitsUrl: '<%= diagrams_bits_re_queries_path(@project.id) %>',
+              except_ids: null
+              }));	
 
               // hidden on init because of UJS
               $('#relation_filter_input_nojs').remove();

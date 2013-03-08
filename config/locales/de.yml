@@ -90,6 +90,12 @@ de:
   rating_average: 'Durchschnitt'
   own_rating: 'Ihre Bewertung'
   
+  
+  #diagrams
+  re_related_diagrams: 'Verknüpfte Diagramme'
+
+
+  
   # re_building_blocks
   re_building_blocks: 'Bausteine'
   re_bb_configuration_header: 'Konfiguration von %{builing_block} f&uuml;r den Artefakttyp %{artifact_type}' 

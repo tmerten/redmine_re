@@ -71,7 +71,6 @@ class ReUseCase < ActiveRecord::Base
     #delete
     to_delete_secondary_actor_ids.each do |delete_actor_id|
       delete_actor = ReArtifactRelationship.destroy_all(:sink_id => delete_actor_id, :source_id => source_id, :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
-
     end
     
     #add new secondary actors

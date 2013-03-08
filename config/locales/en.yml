@@ -553,6 +553,9 @@ en:
 
   implementation_of: 'Implementation of'
 
+  #diagrams
+  re_related_diagrams: 'Related diagrams'
+
   #my blocks
 
   relations: 'Relations'

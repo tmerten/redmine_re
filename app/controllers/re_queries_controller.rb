@@ -101,8 +101,7 @@ class ReQueriesController < RedmineReController
       artifacts.map! do |artifact|
         artifact_to_json(artifact).merge({:highlighted_name => highlight_letters(artifact.name, params[:query])})
       end
-    end
-    logger.debug("#############################CALLED1!!!!!")
+    end    
     render :json => artifacts
   end
 
@@ -121,6 +120,23 @@ class ReQueriesController < RedmineReController
       end
     end
     render :json => issues
+  end
+
+  def suggest_diagrams
+    diagrams = []
+    unless params[:query].blank?
+      sql = "project_id = ? AND name LIKE ?"
+      sql << " AND id NOT IN (?)" unless params[:except_ids].blank?
+
+      conditions = [sql, @project.id, "%#{params[:query]}%"]
+      conditions << params[:except_ids] unless params[:except_ids].blank?
+
+      diagrams = ConcreteDiagram.all(:conditions => conditions, :order => 'name ASC')
+      diagrams.map! do |diagram|
+        diagram_to_json(diagram).merge({:highlighted_name => highlight_letters(diagram.name, params[:query])})
+      end
+    end
+    render :json => diagrams
   end
 
   def suggest_users
@@ -154,6 +170,13 @@ class ReQueriesController < RedmineReController
     issues.map! { |issue| issue_to_json(issue) }
     render :json => issues
   end
+
+  def diagrams_bits
+    diagrams = ConcreteDiagram.find(params[:ids], :conditions => { :project_id => @project.id }, :order => 'name ASC')
+    diagrams.map! { |diagram| diagram_to_json(diagram) }
+    render :json => diagrams
+  end
+
 
   def users_bits
     users = User.find(params[:ids], :order => 'firstname ASC, lastname ASC, login ASC')
@@ -215,6 +238,15 @@ class ReQueriesController < RedmineReController
     { :id => issue.id,
       :subject => issue.subject,
       :url => url_for(issue) }
+  end
+
+  def diagram_to_json(diagram)
+    {
+      :id => diagram.id,
+      :name => diagram.name,
+      :url => url_for(:controller => "diagrameditor",
+                      :action => 'show', :id => diagram.id)
+    }
   end
 
   def user_to_json(user)

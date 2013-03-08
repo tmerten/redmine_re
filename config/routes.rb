@@ -52,9 +52,11 @@ RedmineApp::Application.routes.draw do
         post :apply
         get :suggest_artifacts
         get :suggest_issues
+        get :suggest_diagrams
         get :suggest_users
         get :artifacts_bits
         get :issues_bits
+        get :diagrams_bits
         get :users_bits
       end
    end

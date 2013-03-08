@@ -16,10 +16,10 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.artifact_type = @artifact_type.camelcase
     @re_artifact_properties.artifact = @artifact_type.camelcase.constantize.new
     @re_artifact_properties.project = @project
-
+        
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @secondary_user_profiles = []
-@user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
+    @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
     unless params[:sibling_artifact_id].blank?
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
       begin
@@ -97,7 +97,11 @@ class ReArtifactPropertiesController < RedmineReController
       @re_artifact_properties.parent_relation.insert_at(params[:parent_relation_position])
       handle_relations_for_new_artifact params, @re_artifact_properties.id
       update_related_issues params
-
+      
+      if @project.enabled_module_names.include? 'diagrameditor'
+        update_related_diagrams params, @re_artifact_properties
+      end
+    
       #set new artifact it to params array
       my_params = params
       my_params[:id] = @re_artifact_properties.id
@@ -128,7 +132,7 @@ class ReArtifactPropertiesController < RedmineReController
 
      @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
      @issues = @re_artifact_properties.issues
-
+     
      #load all related secondary actors
      @secondary_user_profiles = []
      @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
@@ -166,7 +170,12 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.save_attachments(params[:attachments] || (params[:re_artifact_properties] && params[:re_artifact_properties][:uploads]))
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
-
+        
+    if @project.enabled_module_names.include? 'diagrameditor'
+      @relation_to_diagrams = ReArtifactRelationship.find_by_source_id_and_relation_type(@re_artifact_properties.id, 'diagram') 
+      @related_diagrams = ConcreteDiagram.find_all_by_id(@relation_to_diagrams.sink_id)            
+    end
+    
     # Remove Comment (Initiated via GET)
     if User.current.allowed_to?(:administrate_requirements, @project)
       unless params[:deletecomment_id].blank?
@@ -210,6 +219,11 @@ class ReArtifactPropertiesController < RedmineReController
 
     # Update related issues
     update_related_issues params
+
+    # Update related diagrams if diagrameditor is enabled 
+    if @project.enabled_module_names.include? 'diagrameditor'
+      update_related_diagrams params, @re_artifact_properties
+    end
 
     #add/update actors
     begin
@@ -286,6 +300,40 @@ class ReArtifactPropertiesController < RedmineReController
         @re_artifact_properties.issues << Issue.find(iid)
       end
     end
+  end
+
+  def update_related_diagrams params, artifact_properties         
+
+      if params[:diagram_id].nil?
+        new_diagram_ids = []
+      else 
+        new_diagram_ids = params[:diagram_id].collect{|i| i.to_i}
+      end
+            
+      old_related_diagrams = artifact_properties.related_diagrams 
+            
+      old_diagram_ids = []
+                  
+      old_related_diagrams.each do |dia|
+        old_diagram_ids << dia[:id]
+      end
+
+      to_delete_diagrams = old_diagram_ids - new_diagram_ids     
+      to_add_diagrams = new_diagram_ids - old_diagram_ids
+      
+      #delete old relations
+      to_delete_diagrams.each do |delete_diagram_id|
+        delete_diagram = ReArtifactRelationship.destroy_all(:sink_id => delete_diagram_id, :source_id => artifact_properties.id, :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia])
+      end
+    
+      #add new related diagrams
+      to_add_diagrams.each do |diagram_id| 
+            
+        new_relation = ReArtifactRelationship.new(:sink_id => diagram_id, :source_id => artifact_properties.id, :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia])
+        if !new_relation.save
+            logger.debug("Error:#{new_relation.errors.inspect}")
+        end       
+      end #add each
   end
 
   def destroy

@@ -53,7 +53,17 @@ class ReArtifactProperties < ActiveRecord::Base
            :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]],
            :dependent => :destroy
 
+  has_many :diagram_relations,           
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia]],
+           :dependent => :destroy
 
+  #if defined?(ConcreteDiagram) == 'constant' 
+   
+  has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram",  :source => "sink"
+     
+    
   has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :child_relations,  :order => "re_artifact_relationships.position", :source => "sink"
   has_many :sources,  :through => :traces_as_sink,   :order => "re_artifact_relationships.position"

@@ -65,8 +65,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_building_block => [:re_building_block_referred_artifact_types,
           :react_to_change_in_data_field_artifact_type],        
         :re_queries => [:index, :show, :query, :apply,
-                        :suggest_artifacts, :suggest_issues, :suggest_users,
-                        :artifacts_bits, :issues_bits, :users_bits]
+                        :suggest_artifacts, :suggest_issues, :suggest_diagrams, :suggest_users,
+                        :artifacts_bits, :issues_bits, :diagrams_bits, :users_bits]
       }
     )
     
@@ -92,8 +92,8 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
         :re_rationale => [:edit, :new],
         :re_link_building_block => [:popup_close_and_update_link, :popup],
         :re_queries => [:index, :new, :edit, :show, :delete, :create, :update, :query, :apply,
-                        :suggest_artifacts, :suggest_issues, :suggest_users,
-                        :artifacts_bits, :issues_bits, :users_bits]
+                        :suggest_artifacts, :suggest_issues, :suggest_diagrams, :suggest_users,
+                        :artifacts_bits, :issues_bits, :diagrams_bits, :users_bits]
       }
     )
     permission( :administrate_requirements,

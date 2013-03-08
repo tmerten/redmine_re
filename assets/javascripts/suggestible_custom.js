@@ -133,6 +133,47 @@
         };
     };
 
+	// Encapsulates the creation functions for diagram items
+    window.DiagramsSuggestBoxItems = function(helpers) {
+        var _this = this;
+        this.helpers = helpers;
+
+        this.createSuggestion = function(record) {
+            this.addClass('diagram');
+            this.attr('title', record.name);
+            $('<span />', { 'class': 'id' }).appendTo(this).text('#' + record.id);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+        };
+
+        this.createBit = function(record) {
+            var bit = this;
+            this.addClass('diagram');
+            this.attr('title', record.name);
+            $('<span />', { 'class': 'id' }).text('#' + record.id).appendTo(this);
+
+            var nameSpanTag = $('<span />', { 'class': 'name' });
+            var nameAnchorTag = $('<a />', { 'href': record.url });
+            nameAnchorTag.appendTo(nameSpanTag).text(record.name);
+            nameAnchorTag
+                .mouseover(function() {
+                    bit.addClass('focus');
+                })
+                .mouseout(function() {
+                    bit.removeClass('focus');
+                });
+            nameSpanTag.appendTo(bit);
+
+            var closeSpanTag = $('<span />', { 'class': 'close' }).text('×');
+            closeSpanTag.appendTo(bit);
+            closeSpanTag.click(function() {
+                _this.helpers.removeItemFromBits(bit, function() { _this.helpers.elements.textBox.focus(); });
+                return false;
+            });
+
+            return true;
+        };
+    };
+
     // Encapsulates the creation functions for user items
     window.UsersSuggestBoxItems = function(helpers) {
         var _this = this;

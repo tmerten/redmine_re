@@ -13,6 +13,7 @@ class ReArtifactRelationship < ActiveRecord::Base
     :pch => "parentchild",
     :pac => "primary_actor",
     :ac =>  "actors",
+    :dia => "diagram"
   }
 
   ALL_RELATION_TYPES =  RELATION_TYPES.merge(SYSTEM_RELATION_TYPES)
