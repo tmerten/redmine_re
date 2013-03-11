@@ -165,6 +165,8 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def edit
+    
+    
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     @re_artifact_properties.save_attachments(params[:attachments] || (params[:re_artifact_properties] && params[:re_artifact_properties][:uploads]))
