@@ -555,7 +555,8 @@ en:
 
   #diagrams
   re_related_diagrams: 'Related diagrams'
-
+  re_diagrams: 'Diagrams'
+  
   #my blocks
 
   relations: 'Relations'

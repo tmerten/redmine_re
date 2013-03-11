@@ -66,4 +66,7 @@ RedmineApp::Application.routes.draw do
   #  get :delete
   #  end
   #end
+  
+  match "projects/:project_id/diagram_preview/:diagram_id" => 'requirements#sendDiagramPreviewImage'
+  
 end

@@ -93,7 +93,7 @@ de:
   
   #diagrams
   re_related_diagrams: 'Verknüpfte Diagramme'
-
+  re_diagrams: 'Diagramme'
 
   
   # re_building_blocks

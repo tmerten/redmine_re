@@ -96,6 +96,17 @@ end
     end
   end
 
+
+  def sendDiagramPreviewImage 
+    if @project.enabled_module_names.include? 'diagrameditor'            
+       path = File.join(Rails.root, "files")
+       filename = "diagram#{params[:diagram_id]}.png"
+       path = File.join(path, filename)
+       send_file path, :type => 'image/png', :filename => filename               
+    end         
+  end
+  
+  
 #######
 private
 #######

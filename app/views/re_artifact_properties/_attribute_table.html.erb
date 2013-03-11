@@ -4,6 +4,7 @@
 
 <% traces_as_source = @re_artifact_properties.traces_as_source %>
 <% traces_as_sink = @re_artifact_properties.traces_as_sink %>
+<% related_diagrams = @re_artifact_properties.related_diagrams %>
    
 <table class="attributes">
 	<colgroup>
@@ -64,6 +65,47 @@
 			<th></th>
 			<td><%= "#{i.tracker.name} ##{i.id}" -%> <%= link_to(i.subject,i) -%></td>
 		</tr>
-		<% end %>		
+		<% end %>	
+		
+	    <% if (@project.enabled_module_names.include? 'diagrameditor') && (User.current.allowed_to?(:edit_diagrams, @project)) %>	     				
+			<tr>
+			<th></th>
+			<td></td>
+			<th><%= t(:re_diagrams) %></th>	
+			<% current_diagram = related_diagrams.shift %>
+					
+			<td> <%= link_to(current_diagram.name, {:controller => "diagrameditor",
+                      :action => 'show', :diagram_id => current_diagram.id,
+                      :project_id => @project.identifier}, 
+                      {:onmouseover => "display_diagram_preview(#{current_diagram.id})", 
+                      :onmouseout => "$('#diagram_preview_container').hide();" }) if current_diagram %> </td>
+			</tr>
+			
+			<% related_diagrams.each do |current_diagram| %>
+				<tr>
+				<th></th>
+				<td></td>
+				<th></th>				
+				<td> <%= link_to(current_diagram.name, {:controller => "diagrameditor",
+                      :action => 'show', :diagram_id => current_diagram.id,
+                      :project_id => @project.identifier},
+                      {:onmouseover => "display_diagram_preview(#{current_diagram.id})",
+                      :onmouseout => "$('#diagram_preview_container').hide();" }) %></td>
+				</tr>
+			<% end %>
+		<% end %>
+			
 	</tbody>
 </table>
+
+<script type="text/javascript">
+   	function display_diagram_preview (diagram_id) {     	
+  		$("#diagram_preview_image").attr('src', "/projects/<%="#{@project.identifier}"%>/diagram_preview/"+diagram_id);
+  		$('#diagram_preview_container').show();
+    };
+</script>
+	
+<div id="diagram_preview_container" style="display:none;">
+	<img id="diagram_preview_image" src="" style="max-width: 500px; height: auto">  
+</div>
+
