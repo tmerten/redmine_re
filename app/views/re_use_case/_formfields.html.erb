@@ -185,19 +185,8 @@
 	  	 }
 	  }
 	  
-	  
 	  function replaceAll(txt, replace, with_this) {
 	  	return txt.replace(new RegExp(replace, 'g'),with_this);
-	  }
-	  
-	  function markExpansionForDeletion(element) {
-	    jQuery(element).next('.should_destroy').value = 1;
-	    jQuery(element).up('.use_case_step_expansion_row').hide();
-	  }
-	
-	  function markStepForDeletion(element) {
-	    jQuery(element).next('.should_destroy').value = 1;
-	    jQuery(element).parent().parent().hide();
 	  }
 	
 	  function updateStepPositionFields() {
