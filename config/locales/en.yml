@@ -424,7 +424,6 @@ en:
   re_data_expansion: 'Data'
   re_other_expansion: 'Other'
   
-  
   # re_scenario
   re_scenario: 'Scenario'
   ReScenario: 'Scenario'
