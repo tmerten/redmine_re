@@ -43,7 +43,7 @@ class ReArtifactRelationship < ActiveRecord::Base
   
   validates :relation_type, :presence => true
   validates :sink_id, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
-  validates :sink, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" }
+  validates :sink, :presence => true, :unless => Proc.new { |rel| rel.relation_type == "parentchild" || rel.relation_type == "diagram" }
   validates :source_id, :presence => true
   validates :relation_type, :inclusion => { :in => ALL_RELATION_TYPES.values }
 
