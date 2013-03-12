@@ -371,6 +371,7 @@ en:
 
   # re_settings
   re_settings_have_to_save: 'No configuration saved yet: You have to click on save before you leave this page!'
+  re_settings_have_to_save_again: 'The system has been updated! Please check the configuation. You have to click on save before you leave this page!'
 
   # re_requirement
   re_requirement: 'Requirement'

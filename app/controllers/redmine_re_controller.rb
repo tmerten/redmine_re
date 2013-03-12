@@ -28,6 +28,14 @@ class RedmineReController < ApplicationController
       redirect_to :controller => "re_settings", :action => "configure", :project_id => @project.id, :firstload => '1'    
     else
       @firstload = false
+      unconfirmed = ReSetting.get_plain("unconfirmed", @project.id)
+      
+      if unconfirmed.nil? || unconfirmed == "true"
+
+        flash[:notice] = t(:re_settings_have_to_save_again)
+        redirect_to :controller => "re_settings", :action => "configure", :project_id => @project.id    
+          
+      end
     end 
   end
 

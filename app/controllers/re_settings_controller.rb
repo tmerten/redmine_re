@@ -192,8 +192,13 @@ private
 
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)      
+    ReSetting.set_serialized("unconfirmed", @project.id, false)
+    
+    flash[:notice] = t(:re_configs_saved)
+    
+    redirect_to :controller => "requirements", :action => "index", :project_id => @project.id  
 
-    flash.now[:notice] = t(:re_configs_saved)
+
   end
 
 end
