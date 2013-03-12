@@ -84,7 +84,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
           :reduce_search_result_with_parameter ],
         :re_artifact_properties=> [:show, :new, :create, :update, :edit, :redirect, :destroy, :autocomplete_parent, :autocomplete_issue,
                                     :autocomplete_artifact, :remove_issue_from_artifact, :remove_artifact_from_issue,
-                                    :rate_artifact, :how_to_delete, :recursive_destroy],
+                                    :rate_artifact, :how_to_delete, :recursive_destroy, :new_comment],
         :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
           :visualization, :build_json_according_to_user_choice],
         :re_building_block => [:delete_data, :re_building_block_referred_artifact_types,
@@ -108,7 +108,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
     )
     
     permission( :comment_on_requirements, {
-      :re_artifact_properties => [:show]      
+      :re_artifact_properties => [:new_comment]      
     })
     
   end

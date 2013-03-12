@@ -22,7 +22,7 @@ $j(document).ready(function () {
     $j("#footer").height() -
     30 ); /* 30px is an "arbitraty" buffer which seems to work (tm) */
 
-  reLayout.layout({
+  reLayout = reLayout.layout({
     west__size: 200,
     applyDefaultStyles: true,
     stateManagement__enabled: true,

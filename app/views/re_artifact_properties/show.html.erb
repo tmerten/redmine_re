@@ -93,4 +93,7 @@
     <%= render :partial => 'edit' %>
   </div>
 </div>
+<% if User.current.allowed_to?(:comment_on_requirements, @project) %> 
+	<%= render :partial => 'infobar' %>
+<% end %>
 

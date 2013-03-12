@@ -83,8 +83,8 @@
                       <hr/>
                       <p>
                         <% if User.current.allowed_to?(:administrate_requirements, @project) %>
-                            [<%= link_to 'X', :controller => "re_artifact_properties", :action => 'edit', :deletecomment_id => comment.id, :id => @re_artifact_properties.id %>
-                            ]
+                            <%= link_to '', {:controller => "re_artifact_properties", :action => 'edit', :deletecomment_id => comment.id, :id => @re_artifact_properties.id} , :class => 'icon icon-del' %>
+                            
                         <% end %>
 
                         <b><%= comment.created_on.to_datetime.to_s[0, 10] %>

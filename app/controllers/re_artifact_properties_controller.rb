@@ -147,8 +147,17 @@ class ReArtifactPropertiesController < RedmineReController
          @secondary_user_profiles << tmp unless tmp.blank?
        end
      end
-      retrieve_previous_and_next_sibling_ids
-      initialize_tree_data
+     
+     # Remove Comment (Initiated via GET)
+     if User.current.allowed_to?(:administrate_requirements, @project)
+        unless params[:deletecomment_id].blank?
+          comment = Comment.find_by_id(params[:deletecomment_id])
+          comment.destroy unless comment.nil?
+        end
+     end
+     
+     retrieve_previous_and_next_sibling_ids
+     initialize_tree_data
     
     end
           
@@ -175,7 +184,7 @@ class ReArtifactPropertiesController < RedmineReController
         
     if @project.enabled_module_names.include? 'diagrameditor'
       @relation_to_diagrams = ReArtifactRelationship.find_by_source_id_and_relation_type(@re_artifact_properties.id, 'diagram') 
-      @related_diagrams = ConcreteDiagram.find_all_by_id(@relation_to_diagrams.sink_id)            
+      @related_diagrams = ConcreteDiagram.find_all_by_id(@relation_to_diagrams.sink_id) unless @relation_to_diagrams.nil?           
     end
     
     # Remove Comment (Initiated via GET)
@@ -187,6 +196,24 @@ class ReArtifactPropertiesController < RedmineReController
     end
 
     initialize_tree_data
+  end
+
+  def new_comment
+     @re_artifact_properties = ReArtifactProperties.find(params[:id])
+     
+         # Add Comment
+     comment = nil
+     unless params[:comment].blank? && params[:comment] != ""
+       comment = Comment.new
+       comment.comments = params[:comment]
+       comment.author = User.current
+       @re_artifact_properties.comments << comment
+       comment.save
+       
+       redirect_to @re_artifact_properties
+     end
+     
+     
   end
 
   def update
@@ -251,6 +278,7 @@ class ReArtifactPropertiesController < RedmineReController
       render :action => 'edit'
     end
   end
+
 
   def handle_relations params
     unless params[:new_relation].nil?

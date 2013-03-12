@@ -30,6 +30,8 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/autcomplete' => 're_artifact_properties#autocomplete_artifact'
   match 'projects/:project_id/requirements/artifact/autocomplete/issue' => 're_artifact_properties#autocomplete_issue'
   match 'projects/:project_id/requirements/artifact/autocomplete/artifact' => 're_artifact_properties#autocomplete_artifact'
+
+  match 'projects/:project_id/requirements/artifact/new_comment/:id' => 're_artifact_properties#new_comment'
   
   
   match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'

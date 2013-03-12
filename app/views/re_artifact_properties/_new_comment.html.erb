@@ -1,0 +1,17 @@
+<h3 class="title"><%= l(:new_comment) %></h3>
+  <p class="buttons">
+
+	<%= form_tag({:controller => 're_artifact_properties',
+              :action => 'new_comment',
+              :project_id =>  project.id, 
+              :id => artifact.id},
+             :remote => false,
+             :method => :post,
+             :id => 'new-comment-form') do %>
+
+  	<legend> <%= l(:new_comment_text) %></legend>
+    <textarea class="comment_input" name="comment" cols="20" rows="3"></textarea>
+    <%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+  </p>
+<% end %>

@@ -561,6 +561,8 @@ en:
   relations: 'Relations'
   main_tab: 'Main tab'
   comments: 'Comments'
+  new_comment: 'New Comment'
+  new_comment_text: 'Comment Text:'
   re_artifact_comments_count: 'Number of Comments'
   open_requirements: 'Open Requirements'
   artifactcount: 'Number of Artifacts'

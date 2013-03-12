@@ -1,5 +1,7 @@
 <div class="contextual">
-	<%= link_to_if_authorized(l(:button_update), {:controller => 're_artifact_properties', :action => 'edit', :id => @re_artifact_properties }, :onclick => 'showAndScrollTo("update", "re_artifact_properties_description");scrollContentPaneTo("update"); return false;', :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %>
+	<%= link_to_if_authorized(l(:button_update), 
+	{:controller => 're_artifact_properties', :action => 'edit', :id => @re_artifact_properties }, 
+	:onclick => 'showAndScrollTo("update", "re_artifact_properties_description");  scrollContentPaneTo("update"); reLayout.removePane("east"); return false;', :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %>
   <%= watcher_tag(@re_artifact_properties, User.current) %>
  
 <span class="icon icon-add"><%= link_to l(:connect_issue), :controller => 'issues', :action => 'new', :project_id => @project.identifier,
