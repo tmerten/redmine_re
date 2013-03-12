@@ -73,12 +73,16 @@
     <% end %>
   </div>
 
-  <% if @re_artifact_properties.attachments.present? %>
-      <div id="artifact_attachments" class="requirement_lower">
+  <div class="requirement_below">
+    <div id="watchers">
+      <%= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
+    </div>
+    <% if @re_artifact_properties.attachments.present? %>
         <h3><%= t :label_attachments %></h3>
         <%= link_to_attachments @re_artifact_properties, :thumbnails => true %>
-      </div>
-  <% end %>
+    <% end %>
+  </div>
+
 
   <%= render :partial => 'action_menu' %>
 
@@ -89,3 +93,4 @@
     <%= render :partial => 'edit' %>
   </div>
 </div>
+
