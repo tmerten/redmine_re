@@ -107,6 +107,10 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
       }
     )
     
+    permission( :comment_on_requirements, {
+      :re_artifact_properties => [:show]      
+    })
+    
   end
 
   # The Requirements item is added to the project menu after the Activity item
