@@ -55,8 +55,8 @@
         <div id="diagram_filter">
           <div class="inputs">
             <%=
-                select_tag 'diagram_id[]', options_for_select(@re_artifact_properties.related_diagrams.collect { |u| [u.name, u.id] },
-                	@re_artifact_properties.related_diagrams.collect { |u| [u.id] }), :id => 'diagram_filter_input', :class => 'direct_artifacts', :multiple => true
+                select_tag 'diagram_id[]', options_for_select(@re_artifact_properties.related_diagrams.all.collect { |u| [u.name, u.id] },
+                	@re_artifact_properties.related_diagrams.all.collect { |u| [u.id] }), :id => 'diagram_filter_input', :class => 'direct_artifacts', :multiple => true
             %>
             <%= text_field_tag 'diagram_id[]', nil, :id => 'diagram_filter_input_nojs' %>
           </div>
