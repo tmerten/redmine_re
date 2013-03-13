@@ -23,15 +23,33 @@ $j(document).ready(function () {
     30 ); /* 30px is an "arbitraty" buffer which seems to work (tm) */
 
   reLayout = reLayout.layout({
-    west__size: 200,
     applyDefaultStyles: true,
+    fxSpeed: "fast",
     stateManagement__enabled: true,
     stateManagement__cookie: {
       name:"redmine_re_plugin",
       path:"/"
     },
-    west__togglerTip_closed: "show tree",
-    west__togglerTip_open: "hide tree"
+    togglerAlign_closed:	"top",
+    togglerAlign_open:	"top",
+    togglerLength_closed: 80,
+    togglerLength_open: 80,
+    
+    west__size: 200,
+    west__spacing_closed:	15,
+    west__togglerTip_closed: "Show tree",
+    west__togglerTip_open: "Hide tree",
+    
+    east__size: 250,
+    east__spacing_closed:	35,
+    east__togglerContent_closed: "<img src='../images/comment.png'><br/><img src='../images/fav_off.png'>",
+    east__slideTrigger_open: "mouseover",
+    east__slideTrigger_close: "mouseout",
+    east__initClosed:	true,
+  });
+  
+  $j("#detail_view").click(function () {
+    reLayout.close("east");
   });
 });
 
@@ -49,13 +67,10 @@ function observeParentArtifactField(url) {
 }
 
 function scrollContentPaneTo(target) {  
-
 	var $Pane = $('#detail_view');
 	var $Target = $('#'+target);
 	
 	var targetTop = $Target.offset().top;
 	var paneTop = $Pane.offset().top;
 	$Pane.animate({ scrollTop: '+='+ (targetTop - paneTop) +'px' }, 100); 
-	
-	  
 }

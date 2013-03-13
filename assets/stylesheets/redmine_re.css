@@ -1039,3 +1039,11 @@ div.query.details div.description {
     border: 1px solid #ddd;
     background-color: #ffffdd;
 }
+
+.ui-layout-toggler .content-closed {
+    text-align: left;
+    line-height: 1.5;
+    margin-left: 4px;
+    margin-top: 11px;
+    font-size: 11em;
+}

@@ -74,9 +74,6 @@
   </div>
 
   <div class="requirement_below">
-    <div id="watchers">
-      <%= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
-    </div>
     <% if @re_artifact_properties.attachments.present? %>
         <h3><%= t :label_attachments %></h3>
         <%= link_to_attachments @re_artifact_properties, :thumbnails => true %>
@@ -93,7 +90,4 @@
     <%= render :partial => 'edit' %>
   </div>
 </div>
-<% if User.current.allowed_to?(:comment_on_requirements, @project) %> 
-	<%= render :partial => 'infobar' %>
-<% end %>
-
+<%= render :partial => 'infobar' %>
