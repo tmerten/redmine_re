@@ -111,6 +111,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
       :re_artifact_properties => [:new_comment]      
     })
     
+    permission(:delete_re_artifact_properties_watchers, {}
+    )
+    
   end
 
   # The Requirements item is added to the project menu after the Activity item
