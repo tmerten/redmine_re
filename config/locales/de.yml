@@ -95,6 +95,9 @@ de:
   re_related_diagrams: 'Verknüpfte Diagramme'
   re_diagrams: 'Diagramme'
 
+  re_traces_to: 'Traces zu'
+  re_traces_from: 'Traces von'
+
   
   # re_building_blocks
   re_building_blocks: 'Bausteine'
@@ -183,7 +186,9 @@ de:
   re_redmine_project_administration: 'Redmine Projekt Administration'
   re_delete_project_artifact_error: 'Das Projekt Artefakt darf nicht gelöscht werden.'
 
-
+  re_relation_saved: 'Beziehung erfolgreich gespeichert'
+  re_relation_saved_error: 'Beziehung wurde nicht gespeichert'
+  
   #mail
   re_text_artifact_added: "Artefakt %{id} wurde hinzugefügt von %{author}."
   re_text_artifact_updated: "Artefakt %{id} wurde aktualisiert von %{author}."

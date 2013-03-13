@@ -550,7 +550,6 @@ en:
   field_re_artifact: 'field artifact'
 
   #issues
-
   implementation_of: 'Implementation of'
 
   #diagrams
@@ -612,6 +611,9 @@ en:
   re_outgoing_relationship_count: 'Outgoing'
   re_related_issues: 'Issues'
   re_updated_at: 'Updated'
+  
+  re_traces_to: 'Traces to'
+  re_traces_from: 'Traces from'
 
   re_query_visibility_public: 'public'
   re_query_visibility_me: 'just me'
@@ -638,6 +640,10 @@ en:
   re_artifact_attributes: 'Artifact attributes'
   
   label_attachments: 'Attachments'
+  
+  re_relation_saved: 'Relation saved successfully'
+  re_relation_saved_error: 'Relation was not saved successfully'
+  
   
   #mail
   re_text_artifact_added: "Artifact %{id} has been added by %{author}."

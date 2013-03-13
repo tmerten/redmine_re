@@ -186,10 +186,41 @@ var tree = jQuery("#tree")
 
         var parent_id_field = jQuery('#sink_artifact_id');
         var parent_text_field = jQuery('#sink_autocomplete');
-
+		
+		var source_id;
+		var sink_id;
+		
         parent_id_field.val(id);
         parent_text_field.val(name);
-      }
+
+        if (drop.hasClass("traces_to")) {
+        	source_id = drop.data("artifactid");
+        	sink_id = id;        	         	        	        	
+        } else if (drop.hasClass("traces_from")) {
+    	    source_id = id;
+	       	sink_id = drop.data("artifactid");
+        }//endif
+        
+        if (drop.hasClass("traces_to") || drop.hasClass("traces_from"))
+        {        	
+    		$.ajax({
+        	type: "GET",
+        	url: "/addRelation",
+        	data: {'source_id': source_id,
+        		   'sink_id': sink_id,
+        		   'id': drop.data("artifactid")
+           	}
+    		})
+	        .success(function (message) {        	
+    	   		$('#ajax-modal').html(message);			
+				$('#ajax-modal').addClass('new-relation');        		
+				showModal('ajax-modal', '400px');	
+	        })
+	        .error(function(message) {
+	        })       
+	        ;        
+        }//endif                
+      }//end drop finish
     },
     "ui" : {
       <%= "\"initially_select\" : [ \"node_#{@re_artifact_properties.id}\" ],".html_safe unless @re_artifact_properties.nil? -%>
