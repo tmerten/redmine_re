@@ -18,8 +18,15 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.project = @project
         
     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
+    
+    begin
+      @re_artifact_properties.artifact.new_hook(params)
+    rescue NoMethodError
+      logger.debug("#{@re_artifact_properties.artifact.class} does not implement new hook")
+    end    
     @secondary_user_profiles = []
     @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
+
     unless params[:sibling_artifact_id].blank?
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
       begin
@@ -73,12 +80,6 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.created_by = User.current.id
     @re_artifact_properties.updated_by = User.current.id
 
-    begin
-      @re_artifact_properties.artifact.create_hook(params)
-    rescue NoMethodError
-      logger.debug("#{@re_artifact_properties.artifact.class} does not implement create hook")
-    end
-
     # relation related attributes
     unless params[:parent_artifact_id].blank? || params[:parent_relation_position].blank?
       @re_artifact_properties.parent = ReArtifactProperties.find(params[:parent_artifact_id])
@@ -107,13 +108,15 @@ class ReArtifactPropertiesController < RedmineReController
       my_params[:id] = @re_artifact_properties.id
 
       begin
-        @re_artifact_properties.artifact.create_hook(my_params)
+        @artifact_specific_variables = @re_artifact_properties.artifact.create_hook(my_params)
       rescue NoMethodError
         logger.debug("#{@re_artifact_properties.artifact.class} does not implement create hook")
       end
       redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_created)
     else
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
+      @secondary_user_profiles = []
+      @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
       initialize_tree_data
       render :new
     end
@@ -174,8 +177,6 @@ class ReArtifactPropertiesController < RedmineReController
   end
 
   def edit
-    
-    
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     @re_artifact_properties.save_attachments(params[:attachments] || (params[:re_artifact_properties] && params[:re_artifact_properties][:uploads]))
@@ -186,7 +187,13 @@ class ReArtifactPropertiesController < RedmineReController
       @relation_to_diagrams = ReArtifactRelationship.find_by_source_id_and_relation_type(@re_artifact_properties.id, 'diagram') 
       @related_diagrams = ConcreteDiagram.find_all_by_id(@relation_to_diagrams.sink_id) unless @relation_to_diagrams.nil?           
     end
-    
+
+    begin
+      @artifact_specific_variables = @re_artifact_properties.artifact.edit_hook(params)
+    rescue NoMethodError
+      logger.debug("#{@re_artifact_properties.artifact.class} does not implement edit hook")
+    end
+
     # Remove Comment (Initiated via GET)
     if User.current.allowed_to?(:administrate_requirements, @project)
       unless params[:deletecomment_id].blank?
