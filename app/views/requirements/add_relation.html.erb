@@ -14,15 +14,9 @@
              :method => :post,
              :id => 'add-relation-form') do %>
 
-	<% for relation_type in @re_relation_order %>
-    	<% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && !ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(relation_type) %>
-        	<%= radio_button :re_artifact_relationship, :relation_type, relation_type, :data => {:description => rendered_relation_type(relation_type)} %>
-        	<%= rendered_relation_type(relation_type) %>
-        	<br/>
-        <% end %>
-    <% end %>
+            <%= render :partial => "re_artifact_properties/relation_type_radio_buttons" %>
 
-    <%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
+	<%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
     <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
 <% end %>
 
