@@ -239,6 +239,10 @@ label.large_content {
     background-color:#FFFF77;
 }
 
+label.new-relation {
+	font-weight: bold;
+}
+
 label.filter {
     font-weight: bold;
     width: 100px;

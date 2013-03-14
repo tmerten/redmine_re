@@ -1,6 +1,9 @@
 <h3 class="title"><%= t(:re_create_new_relationship) %></h3>
 
-<%= t(:re_from).camelcase %> <%= @source.name %> <%= t(:re_to) %> <%= @sink.name %>
+<%= label_tag 'source', t(:re_from).camelcase, :class => 'new-relation' %> 
+<%= @source.name %> 
+<%= label_tag 'sink', t(:re_to),  :class => 'new-relation'%>
+<%= @sink.name %>
 
 <p class="buttons">
 
@@ -14,8 +17,9 @@
              :method => :post,
              :id => 'add-relation-form') do %>
 
-            <%= render :partial => "re_artifact_properties/relation_type_radio_buttons" %>
-
+	<p>	
+    	<%= render :partial => "re_artifact_properties/relation_type_radio_buttons" %>
+	</p>
 	<%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
     <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
 <% end %>
