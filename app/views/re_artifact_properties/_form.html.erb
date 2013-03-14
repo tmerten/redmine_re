@@ -172,13 +172,6 @@
       </p>
 
       <% end %><!-- form end tag -->
-
-  <!-- Watchers  -->
-  <% unless @re_artifact_properties.new_record? %>
-      <div id="watchers">
-        <%= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
-      </div>
-  <% end %>
 </div>
 <%= javascript_tag do %>
     $j(document).ready(function(){

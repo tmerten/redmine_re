@@ -16,7 +16,7 @@
 	<tbody>
 		<tr>
 			<th><%= l(:re_artifact_responsible) %></th>
-			<td><%= @re_artifact_properties.responsible %></td>
+			<td><%= @re_artifact_properties.responsible.nil? ? t(:re_no_responsible_user_defined) : @re_artifact_properties.responsible %></td>
 			<th class="jstree-drop traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= t(:re_traces_to) -%></th>			
 			<% current_relation = traces_as_source.shift %>
 			<% s = ReArtifactProperties.find_by_id(current_relation.sink_id) if current_relation %> 

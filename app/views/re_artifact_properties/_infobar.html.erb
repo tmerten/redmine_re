@@ -4,6 +4,8 @@
     <%= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
   </div>
 
+  <hr/>    
+
   <div id="comments">
   	<div class="contextual">
       <% if User.current.allowed_to?(:comment_on_requirements, @project) %> 
@@ -12,7 +14,7 @@
             :remote => true,
             :method => 'get' %>	
       <% end %>
-    </div>    
+    </div>
   	<h3><%=l(:comments)%> (<%=@re_artifact_properties.comments.length%>)</h3>    
       <% comments_asc =
          (User.current.preference[:others].nil? or User.current.preference[:others][:comments_sorting] == "asc") ? true : false %>
@@ -42,6 +44,6 @@
 $j(document).ready(function () {
   var easttoggler = $j("div.ui-layout-toggler-east-closed > span.content-closed");
   var eastspan = easttoggler.first()
-  eastspan.html('<%= comments %><%= image_tag('comments.png')%> <br/> <%= watchers %><%= image_tag(watcher_image) %>');
+  eastspan.html('<%= watchers %><%= image_tag(watcher_image) %><br/><%= comments %><%= image_tag('comments.png')%>');
 });
 <% end %>

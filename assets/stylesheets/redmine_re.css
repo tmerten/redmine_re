@@ -30,24 +30,20 @@ a:active {
     padding: 6px;
 }
 
-#detail_view div.requirement_upper div.subject div div {
-    padding-left: 16px;
-}
-
-#detail_view div.requirement_upper div.subject p {
-    margin: 0;
-    margin-bottom: 0.1em;
-    font-size: 90%;
-    color: #999;
-}
-
-#detail_view div.requirement_upper div.subject>div>p {
-    margin-top: 0.5em;
-}
-
 #detail_view div.requirement_upper div.subject h3 {
     margin: 0;
-    margin-bottom: 0.1em;
+    margin-bottom: 0.2em;
+}
+
+#detail_view div.requirement_upper div.subject p.author {
+    margin: 0;
+    margin-bottom: 0.2em;
+    font-size: 90%;
+}
+
+#detail_view div.requirement_upper .gravatar {
+    float:left;
+    margin-right: 16px;
 }
 
 #detail_view div.requirement_upper span.private {

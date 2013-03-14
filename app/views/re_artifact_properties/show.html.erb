@@ -16,7 +16,7 @@
   <%= errors_and_flash(@re_artifact_properties).html_safe %>
 
   <div class="requirement_upper" style="background: <%= @lighter_artifact_color -%>; border: 1px solid <%= @artifact_color -%>; border-top: 10px solid <%= @artifact_color -%>">
-    <%= avatar(@re_artifact_properties.author, :size => "50") %>
+    <%= @re_artifact_properties.responsible.nil? ? avatar(@re_artifact_properties.author, :size => "50") : avatar(@re_artifact_properties.responsible, :size => "50") %>
     <% if @previous_re_artifact_properties_id || @next_re_artifact_properties_id %>
         <div class="next-prev-links contextual">
           <%= link_to_if @previous_re_artifact_properties_id,
@@ -36,21 +36,20 @@
     <% end %>
 
     <div class="subject">
-      <h3>
-        <ins class="subject_icon <%= @re_artifact_properties.artifact_type.underscore %>"></ins> <%= @re_artifact_properties.name %>
-      </h3>
+      <h3><ins class="subject_icon <%= @re_artifact_properties.artifact_type.underscore %>"></ins> <%= @re_artifact_properties.name %></h3>
+      <p class="author">
+        <%= authoring @re_artifact_properties.created_at, @re_artifact_properties.author %>.
+        <% if @re_artifact_properties.created_at != @re_artifact_properties.updated_at %>
+            <% if @re_artifact_properties.author == @re_artifact_properties.user %>
+                <%= l(:label_updated_time, time_tag(@re_artifact_properties.updated_at)).html_safe %>
+            <% else %>
+                <%= l(:label_updated_time_by, :author => link_to_user(@re_artifact_properties.user), :age => time_tag(@re_artifact_properties.updated_at)).html_safe %>
+            <% end -%>.
+        <% end %>
+      </p>
     </div>
-    <p class="author">
-      <%= authoring @re_artifact_properties.created_at, @re_artifact_properties.author %>.
-      <% if @re_artifact_properties.created_at != @re_artifact_properties.updated_at %>
-          <% if @re_artifact_properties.author == @re_artifact_properties.user %>
-              <%= l(:label_updated_time, time_tag(@re_artifact_properties.updated_at)).html_safe %>
-          <% else %>
-              <%= l(:label_updated_time_by, :author => link_to_user(@re_artifact_properties.user), :age => time_tag(@re_artifact_properties.updated_at)).html_safe %>
-          <% end -%>.
-      <% end %>
-    </p>
-  </div>
+  </div><!-- ".requirements_upper" -->
+
   <div class="requirement_lower">
     <%= render :partial => 'attribute_table' %>
 

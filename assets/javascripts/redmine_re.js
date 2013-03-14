@@ -20,7 +20,7 @@ $j(document).ready(function () {
     $j("#top-menu").height() -
     $j("#header").height() -
     $j("#footer").height() -
-    30 ); /* 30px is an "arbitraty" buffer which seems to work (tm) */
+    40 ); /* 40px is an "arbitraty" buffer which removes the main scrollbar on most browsers (tm) */
 
   reLayout = reLayout.layout({
     applyDefaultStyles: true,
