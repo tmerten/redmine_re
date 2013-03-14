@@ -69,3 +69,9 @@
 	.requirement_lower {		
 		background:	transparent	!important;						
 	}
+	.flash {
+		display: 		none 		!important;
+	}
+	#vakata-contextmenu {
+		display: 		none 		!important;
+	}
