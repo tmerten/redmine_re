@@ -71,51 +71,45 @@
 	</fieldset>
 	
 	<fieldset><legend><%= l(:re_use_case_steps) %></legend>
-	  <table class="steps">
-	    <thead>
+	  <table>
 	      <tr>
-	        <th>&nbsp;</th>
-	        <th><%= t(:re_user_steps) %></th>
-	        <th width="120px" >&nbsp;</th>
-	        <th ><%= t(:re_system_steps) %></th>
-	        <th>&nbsp;</th>
-	        <th style="min-width: 300px;"><%= t(:re_uc_add_below) %> <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep('steps', 'top', 'user')", :class => "" ) %>&nbsp;&nbsp;
-	          <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery(this).parent().parent().parent(), 'top', 'system')", :class => "" ) %>&nbsp;&nbsp;
-	          <%= link_to_function( image_tag('icons/user_go.png', :plugin => 'redmine_re', :alt => t(:re_uc_user))+image_tag('icons/monitor_go_back.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addDialog('steps', 'top')", :class => "" ) %>
+	        <th style="width: 400px;">
+	        	<%= t(:re_user_steps) %>
+	            <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery('#steps'), 'top', 'user')", :class => "" ) %>
+	        </th>
+	        <th style="width: 400px;">
+	        	<%= t(:re_system_steps) %>
+	            <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery('#steps'), 'top', 'system')", :class => "" ) %>
 	        </th>
 	      </tr>
-	    </thead>
-	    <tbody id="steps">
+	  </table>
+	  <div id="steps" style="min-width: 800px;">
 		  <%= artifact_form.fields_for :re_use_case_steps do |builder| %>
 		  	<%= render('re_use_case/re_use_case_step_fields', :f => builder) %>
 		  <% end %>
-		  
-	    </tbody>
-	  </table>
+	  </div>
 	</fieldset>
 	
 	<%= javascript_tag do %>
 	  
 		
 		function jsInitScript() {
-		    jQuery(".steps tbody").sortable({
+		    jQuery("#steps").sortable({
 		      placeholder: 'ui-state-highlight',
 		      start: function(event, ui){
-		         jQuery(".ui-state-highlight").html("<td colspan='6' style='background:#4466AA'></td>");
+		         jQuery(".ui-state-highlight").html("<td div style='background:#4466AA; width: 800px; height: 5px; clear: both;'></div>");
 		      },
 		      update: function(event, ui){
 		         updateStepPositionFields();
 		      },  
 		    });
 		}
-		jsInitScript();
-		updateStepPositionFields();
-	  
-	  function addDialog(element, add_pos) {
-	    addStep(element, add_pos, 'system');
-	    sleep(1);
-	    addStep(element, add_pos, 'user');
-	  }
+
+		jQuery(document).ready(function() {
+			jsInitScript();
+			updateStepPositionFields();
+ 		});
+
 	
 	  function addStep(element, add_pos, type) {
 	  	
