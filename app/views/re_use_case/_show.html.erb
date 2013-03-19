@@ -32,19 +32,17 @@
 		</tr>
 		<tr>
 			<th><%= t(:re_use_case_primary_actor) -%></th>
-			<td>
-        <% unless @current_primary_user.blank? %>
-	        <% p = ReArtifactProperties.find_by_id(@current_primary_user.sink_id)%>
-	        <%= link_to(p.name,p,{:class => "icon #{p.artifact_type.underscore}"}) %>
+			<td>			
+        <% unless @re_artifact_properties.artifact.primary_actor.blank? %>
+	        <%= link_to(@re_artifact_properties.artifact.primary_actor.name,@re_artifact_properties.artifact.primary_actor,{:class => "icon #{@re_artifact_properties.artifact.primary_actor.artifact_type.underscore}"}) %>
         <%end%>
       </td>
 		</tr>
 		<tr>
 			<th><%= t(:re_use_case_secondary_actors) -%></th>
 			<td>
-      	<% @secondary_user_profiles.each_with_index do |secondary_actor, index| %>
-          <% s = ReArtifactProperties.find_by_id(secondary_actor[:properties].id)%>
-      	  <%= link_to(s.name, s, {:class => "icon #{s.artifact_type.underscore}"}) %>
+      	<% @re_artifact_properties.artifact.actors.each do |secondary_actor| %>
+      	  <%= link_to(secondary_actor.name, secondary_actor, {:class => "icon #{secondary_actor.artifact_type.underscore}"}) %>
       	<%end%>      
       </td>
 		</tr>

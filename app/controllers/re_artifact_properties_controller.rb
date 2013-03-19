@@ -115,8 +115,8 @@ class ReArtifactPropertiesController < RedmineReController
       redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_created)
     else
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
-      @secondary_user_profiles = []
-      @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
+      #@secondary_user_profiles = []
+      #@user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
       initialize_tree_data
       render :new
     end
@@ -137,19 +137,19 @@ class ReArtifactPropertiesController < RedmineReController
      @issues = @re_artifact_properties.issues
      
      #load all related secondary actors
-     @secondary_user_profiles = []
-     @all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
+     #@secondary_user_profiles = []
+     #@all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
 
-     @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
-     @current_primary_user = ReArtifactRelationship.where(:source_id => params[:id], :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).first
+     #@user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
+     #@current_primary_user = ReArtifactRelationship.where(:source_id => params[:id], :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).first
 
-     unless @all_artifact_relations.blank?
-       @all_artifact_relations.each do |relation|
-         tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id, 'ReUserProfile')}
-         logger.debug(relation.to_yaml)
-         @secondary_user_profiles << tmp unless tmp.blank?
-       end
-     end
+     #unless @all_artifact_relations.blank?
+     #  @all_artifact_relations.each do |relation|
+     #    tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id, 'ReUserProfile')}
+     #    logger.debug(relation.to_yaml)
+     #    @secondary_user_profiles << tmp unless tmp.blank?
+     #  end
+     #end
      
      # Remove Comment (Initiated via GET)
      if User.current.allowed_to?(:administrate_requirements, @project)

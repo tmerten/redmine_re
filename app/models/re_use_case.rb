@@ -7,6 +7,31 @@ class ReUseCase < ActiveRecord::Base
 
   has_many :re_use_case_steps, :inverse_of => :re_use_case, :dependent => :destroy, :order => :position
 
+  has_one :primary_actor_relation, 
+    :source => :relationships_as_source,
+    :through => :re_artifact_properties, 
+    :class_name => "ReArtifactRelationship", 
+    :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]]
+
+
+  has_one :primary_actor, 
+    :through => :primary_actor_relation, 
+    :class_name => "ReArtifactProperties",  
+    :source => "sink"
+
+
+  has_many :actor_relations, 
+    :source => :relationships_as_source,
+    :through => :re_artifact_properties, 
+    :class_name => "ReArtifactRelationship", 
+    :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac]]
+
+  has_many :actors, 
+    :through => :actor_relations, 
+    :class_name => "ReArtifactProperties",  
+    :source => "sink"
+
+
   accepts_nested_attributes_for :re_use_case_steps, :allow_destroy => true,
     :reject_if => proc { |attributes| attributes['description'].blank? && attributes['step_type'].blank? }
     
@@ -24,13 +49,28 @@ class ReUseCase < ActiveRecord::Base
 
     end 
   end
+
+  def new_hook(params)
+    
+  end
+
+  def edit_hook(params)
+    
+  end
+
+
+def self.getAllUserProfiles project_id
+  
+  user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', project_id)    
+end  
   
   private
 
   def update_primary_actor(actor_id, source_id)
        
+       puts "####################################fgdfgdfg##{actor_id.inspect}"
        
-       if actor_id.to_i == -1
+       if actor_id.blank?
         delete_actor = ReArtifactRelationship.destroy_all(:source_id => source_id, :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac])
         return 
        end

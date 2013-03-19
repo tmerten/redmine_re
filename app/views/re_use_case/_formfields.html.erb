@@ -20,31 +20,22 @@
 	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition, :size => 80 %>
 	    </p>
 	    
-		<%unless @user_profiles.nil?  
-			user_profiles_array = [] << [l(:re_please_choose), -1]
-			user_profiles_array_2 = ['']
-			@user_profiles.each do |user_profile| 
-								
-				user_profiles_array << [user_profile.name, user_profile.id]
-				user_profiles_array_2 << [user_profile.name, user_profile.id]
-			end
-			%>
+
 			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %> 
-				<% unless @current_primary_user.blank? %>
-					<%= select_tag("primary_user_profile", options_for_select(user_profiles_array, :selected => @current_primary_user.sink_id) ) %>
+				<% unless @re_artifact_properties.artifact.primary_actor.blank? %>
+					<%= select_tag("primary_user_profile", options_for_select(ReUseCase.getAllUserProfiles(@project.id).collect { |pa| [pa.name, pa.id] }, :selected => @re_artifact_properties.artifact.primary_actor.id), {:include_blank => true }) %>
 				<%else%>
-					<%= select_tag("primary_user_profile", options_for_select(user_profiles_array) ) %>
+					<%= select_tag("primary_user_profile", options_for_select(ReUseCase.getAllUserProfiles(@project.id).collect { |pa| [pa.name, pa.id] }), {:include_blank => true }) %>
 				<% end%>
 			</p>
-		<%end%>
+
 		
 	      <p>
-	      	<label><%= t(:re_secondary_actor) %></label>
-			
+	      	<label><%= t(:re_secondary_actor) %></label>		
 	        <div id="secondary_actor_filter" style="padding-left: 180px;">
 	          <div class="inputs">
 	            <%=
-	                select_tag 'secondary_actor_ids[]', options_for_select(@secondary_user_profiles.collect { |u| [u[:properties].name, u[:properties].id] }, @secondary_user_profiles.collect { |u| u[:properties].id }), :id => 'secondary_actor_filter_input', :class => 'input_container suggestible', :multiple => true
+	                select_tag 'secondary_actor_ids[]', options_for_select(@re_artifact_properties.artifact.actors.collect { |a| [a.name, a.id] }, @re_artifact_properties.artifact.actors.collect { |u| u.id }), :id => 'secondary_actor_filter_input', :class => 'input_container suggestible', :multiple => true
 	            %>
 	          </div>
 	        </div>
