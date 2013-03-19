@@ -173,7 +173,22 @@ end
     #docx requiers a real outputfile to be written
     #other formats like html can return a string directly        
     logger.debug "out #{output} "                
-               
+    
+    #Parse available output formats from pandoc helpfile    
+    formats = `pandoc --help`        
+    start = formats.index("Output formats: ")      
+    start = start + 16 unless start.nil? 
+    ende =  formats.index("Options:")
+    ende = ende - 2 unless ende.nil?        
+    outputformats = ""
+    outputformats = formats[start..ende] unless ende.nil?     
+    outputformats = outputformats.squish    
+    outputformatarray = []
+    outputformatarray = outputformats.split(', ')     
+
+    logger.debug(outputformatarray.inspect)
+        
+    
     if filetype == "html"
       #show html export in webbrowser
       render :text => output
