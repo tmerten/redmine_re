@@ -1,3 +1,6 @@
+include ReApplicationHelper
+#helper :re_application #undefined method
+
 class RequirementsController < RedmineReController
   unloadable
   menu_item :re
@@ -135,6 +138,58 @@ end
       redirect_to @re_artifact_properties                   
     end
   end
+  
+  def exportRequirements
+    #require 'pandoc-ruby'      
+    @artifact = ReArtifactProperties.find_by_id(params[:id])
+   
+    #TODO let user choose filetype
+    filetype = "docx"
+   
+    textilestring = ""
+    textilestring << "h1. #{@artifact.name} \n \n"       
+    
+    #TODO find a way to use rendered_artifact_type from the re_application_helper
+    #just calling does not work because @project is not passed to the helper and therefore is nil in the helper        
+    #logger.debug("#{ReApplicationHelper.rendered_artifact_type(@artifact.artifact_type)}")    
+    textilestring << "_#{@artifact.artifact_type}_ \n \n"
+ 
+    textilestring << "h3. #{t(:re_artifact_description) } \n \n#{@artifact.description} \n \n" unless @artifact.description.blank?
+
+    #@converter = PandocRuby.new(textilestring, :s, :from => :textile, :to => :html)   
+    #@converter = PandocRuby.new(textilestring, :s, :from => "textile", :to => "rtf") #works     
+    #@converter = PandocRuby.new(textilestring, :s, :from => "textile", :to => filetype)     
+    #output = @converter.convert
+    
+    #create Tempfile with textile string
+    file = Tempfile.new(['artifact', '.textile'])    
+    file.write("#{textilestring}" )
+    file.close;
+    
+    #create outputfile 
+    outputfilename = "tmp/artifact.#{filetype}"    
+    output = `pandoc -s -S #{file.path} -f textile -t #{filetype} -o #{outputfilename}`    
+            
+    #docx requiers a real outputfile to be written
+    #other formats like html can return a string directly        
+    logger.debug "out #{output} "                
+               
+    if filetype == "html"
+      #show html export in webbrowser
+      render :text => output
+    else 
+      #send all other filetypes as file
+      #send_data(output, :filename => "artifactexport.#{filetype}") #use this if output is a string
+      begin
+        send_file outputfilename #use this if output is a file
+      rescue        
+       flash[:error] = "no pandoc installed. please contact your redmine server admin."
+       redirect_to @artifact
+      end        
+    end  
+    
+  end
+    
   
 #######
 private

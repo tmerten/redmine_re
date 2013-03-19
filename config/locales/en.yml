@@ -652,3 +652,6 @@ en:
   re_text_artifact_updated_new_comment: "New comment added by %{author}:"
 
   connect_issue: "Connect issue"
+  
+  #export
+  re_export: 'Export'
