@@ -145,6 +145,7 @@ end
    
     #TODO let user choose filetype
     filetype = "docx"
+    filetype = params[:filetype] unless params[:filetype].nil? 
    
     textilestring = ""
     textilestring << "h1. #{@artifact.name} \n \n"       

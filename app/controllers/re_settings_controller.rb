@@ -71,6 +71,10 @@ class ReSettingsController < RedmineReController
     @re_settings = {}
     @re_settings["visualization_size"] = ReSetting.get_plain("visualization_size", @project.id)
     @re_settings["visualization_size"] ||= 800
+
+
+    @export_formats = get_available_export_formats
+    @current_export_format = ReSetting.get_plain("export_format", @project.id)   
   end
 
   def configure_fields
@@ -193,6 +197,8 @@ private
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)      
     ReSetting.set_serialized("unconfirmed", @project.id, false)
+      
+    ReSetting.set_plain("export_format", @project.id, params["export_format"]) unless params["export_format"].blank?
     
     flash[:notice] = t(:re_configs_saved)
     
@@ -201,4 +207,20 @@ private
 
   end
 
+  def get_available_export_formats 
+    #Parse available output formats from pandoc helpfile    
+    formats = `pandoc --help`        
+    start = formats.index("Output formats: ")      
+    start = start + 16 unless start.nil? 
+    ende =  formats.index("Options:")
+    ende = ende - 2 unless ende.nil?        
+    outputformats = ""
+    outputformats = formats[start..ende] unless ende.nil?     
+    outputformats = outputformats.squish    
+    outputformatarray = []
+    outputformatarray = outputformats.split(', ')         
+    return outputformatarray
+  end
+  
+  
 end

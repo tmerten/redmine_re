@@ -66,6 +66,13 @@ de:
   re_source_artifact: 'Quellartefakt'
   re_sink_artifact: 'Zielartifakt'
 
+  #re_settings
+  re_pandoc_error_first: 'Redmine_re nutzt '
+  re_pandoc_error_second: ', um Artefakte in unterschiedliche Ausgabeformate zu exportieren. Bitte stellen sie sicher, das pandoc installiert ist.'  
+  
+  
+  
+  
   # re_goals
   re_create_goal: 'Neues Ziel'
   re_show_goals: 'Zeige Ziele'
