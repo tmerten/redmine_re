@@ -204,6 +204,11 @@ end
     end  
     
   end
+  
+  def export_dialog
+    @re_artifact_properties = ReArtifactProperties.find(params[:id])
+  end
+  
     
   
 #######
