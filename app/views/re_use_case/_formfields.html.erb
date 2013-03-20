@@ -19,7 +19,6 @@
 	    <p>
 	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition, :size => 80 %>
 	    </p>
-	    
 
 			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %> 
 				<% unless @re_artifact_properties.artifact.primary_actor.blank? %>
@@ -28,7 +27,6 @@
 					<%= select_tag("primary_user_profile", options_for_select(ReUseCase.getAllUserProfiles(@project.id).collect { |pa| [pa.name, pa.id] }), {:include_blank => true }) %>
 				<% end%>
 			</p>
-
 		
 	      <p>
 	      	<label><%= t(:re_secondary_actor) %></label>		
