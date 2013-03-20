@@ -144,7 +144,7 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['author'] = artifact.author.to_s
     node_data['updated_at'] = artifact.updated_at.to_s(:short)
     node_data['user'] = artifact.user.to_s
-    node_data['responsibles'] = artifact.responsibles
+    node_data['responsibles'] = artifact.responsible.name unless artifact.responsible.nil?
     node_data['$color'] = node_settings['color']
     node_data['$height'] = 90
     node_data['$angularWidth'] = 13.00
@@ -164,7 +164,7 @@ class ReArtifactRelationshipController < RedmineReController
         relation_data['author'] = other_artifact.author.to_s
         relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
         relation_data['user'] = other_artifact.user.to_s
-        relation_data['responsibles'] = other_artifact.responsibles
+        relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
         relation_data['relation_type'] = relation.relation_type
         relation_data['direction'] = 'to'
         relationship_data << relation_data
