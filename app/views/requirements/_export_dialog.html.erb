@@ -1,0 +1,16 @@
+<h3 class="title"><%= l(:new_comment) %></h3>
+  <p class="buttons">
+
+	<%= form_tag({:controller => 'requirements',
+              :action => 'exportRequirements',
+              :project_id =>  project.id, 
+              :id => artifact.id},
+             :remote => false,
+             :method => :post,
+             :id => 'export-form') do |f|%>
+
+	
+    <%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+  </p>
+<% end %>

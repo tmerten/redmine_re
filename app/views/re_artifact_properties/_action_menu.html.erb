@@ -19,7 +19,9 @@
     <%= link_to l(:button_delete), "#{re_artifact_properties_path}/#{@re_artifact_properties.id}/how_to_delete", :class => 'icon icon-del', :accesskey => accesskey(:delete) %>
   <% end %>
   
-  	<%= link_to t(:re_export), { :controller => 'requirements', :action => 'exportRequirements',  
-  	:project_id => @project.id,  :id => @re_artifact_properties}, :class => 'icon icon-move' %> 
+  	<%= link_to t(:re_export), { :controller => 'requirements', :action => 'export_dialog',  
+  	:project_id => @project.id,  :id => @re_artifact_properties.id}, :class => 'icon icon-move',
+  	:remote => true,
+    :method => 'get' %>	
   
 </div>
