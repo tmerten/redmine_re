@@ -1047,3 +1047,29 @@ div.query.details div.description {
     margin-top: 11px;
     font-size: 11em;
 }
+
+.re_use_case_user_step {
+	width: 400px; 
+	border-right: 1px solid #000;
+}
+
+.re_use_case_system_step {
+	margin-left: 400px; 
+	width: 400px; 
+	border-left: 1px solid #000;
+}
+
+.re_use_case_button_bar {
+	background-color: #ccc; 
+	height: 24px;
+}
+
+.re_use_case_button_container {
+	padding: 2px; 
+	width: 20px; 
+	height: 20px; 
+	margin-right: 10px; 
+	text-align: center; 
+	vertical-align: middle; 
+	float: left;
+}

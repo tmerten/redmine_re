@@ -2,10 +2,10 @@
   <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
   <%= f.hidden_field :step_type %>
   <% if f.object.step_type ==1 %>
-  	<div style="width: 400px; border-right: 1px solid #000;">
+  	<div class="re_use_case_user_step">
   <% end %>
     <% if f.object.step_type ==2 %>
-  	<div style="margin-left: 400px; width: 400px; border-left: 1px solid #000;">
+  	<div class="re_use_case_system_step">
   <% end %>
 	
     <%= f.hidden_field :position, :class => "position" %>
@@ -31,16 +31,16 @@
 		</div>  	
 	  </fieldset>
 	
-	  <div style="background-color: #ccc; height: 24px;">
-	  	<div style="padding: 2px; width: 20px; height: 20px; margin-right: 10px; text-align: center; vertical-align: middle; float: left;">
+	  <div class="re_use_case_button_bar">
+	  	<div class="re_use_case_button_container">
     		<%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery(this).parent().parent().parent().parent(), 'after', 'user')", :class => "" ) %>&nbsp;&nbsp;
     	</div>
     	
-    	<div style="padding: 2px; width: 20px; height: 20px; margin-right: 10px; text-align: center; vertical-align: middle; float: left;">
+    	<div class="re_use_case_button_container">
     		<%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery(this).parent().parent().parent().parent(), 'after', 'system')", :class => "" ) %>
 	    </div>
 	    
-	    <div style="padding: 2px; width: 20px; height: 20px; margin-right: 10px; text-align: center; vertical-align: middle; float: left;">
+	    <div class="re_use_case_button_container">
 	    	<%= link_to_remove_fields "", f %>
 	    </div>
 	  </div>
