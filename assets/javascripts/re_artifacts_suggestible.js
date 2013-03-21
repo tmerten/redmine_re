@@ -1,5 +1,55 @@
-(function($) {
+function initIssueSuggestibles(suggestionsUrl, bitsUrl) {
+		
+              $('#issue_filter_input option').attr("selected","selected");
 
+              // hidden on init because of UJS
+              $('#issue_filter_input_nojs').remove();
+              $('#issue_filter .inputs').show();
+
+              $('#issue_filter_input').suggestible(suggestibleOptions({
+              suggestionsUrl: suggestionsUrl,
+              suggestionsLayout: function(helpers) {
+              return new IssuesSuggestBoxItems(helpers);
+              },
+              bitsUrl: bitsUrl,
+              except_ids: null
+              }));		
+		
+}
+
+function initDiagramSuggestibles(suggestionsUrl, bitsUrl) {
+		
+			  // hidden on init because of UJS
+              $('#diagram_filter_input_nojs').remove();
+              $('#diagram_filter .inputs').show();
+
+              $('#diagram_filter_input').suggestible(suggestibleOptions({
+              suggestionsUrl: suggestionsUrl,
+              suggestionsLayout: function(helpers) {
+              	return new DiagramsSuggestBoxItems(helpers);
+              },
+              bitsUrl: bitsUrl,
+              except_ids: null
+              }));
+}
+
+function initRelationSuggestibles(suggestionsUrl, exceptIds) {
+		
+              // hidden on init because of UJS
+              $('#relation_filter_input_nojs').remove();
+              $('#relation_filter .inputs').show();
+
+              $('#relation_filter_input').suggestible(suggestibleOptions({
+              suggestionsUrl: suggestionsUrl,
+              suggestionsLayout: function(helpers) {
+              	return new DirectArtifactsSuggestBoxItemsForRelationsWithoutKeyEvents(helpers);
+              },
+              except_ids: exceptIds
+              }));
+}
+
+(function($) {
+	
     window.suggestibleOptions = function(options) {
         return {
             ajax: {

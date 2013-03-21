@@ -102,56 +102,6 @@
         </div>
 
         <div class="splitcontentright">
-          <%= javascript_tag do %>
-              (function($) {
-
-              $().ready(function() {
-              $('#issue_filter_input option').attr("selected","selected");
-
-              // hidden on init because of UJS
-              $('#issue_filter_input_nojs').remove();
-              $('#issue_filter .inputs').show();
-
-              $('#issue_filter_input').suggestible(suggestibleOptions({
-              suggestionsUrl: '<%= suggest_issues_re_queries_path(@project.id) %>',
-              suggestionsLayout: function(helpers) {
-              return new IssuesSuggestBoxItems(helpers);
-              },
-              bitsUrl: '<%= issues_bits_re_queries_path(@project.id) %>',
-              except_ids: null
-              }));
-	
-			  // hidden on init because of UJS
-              $('#diagram_filter_input_nojs').remove();
-              $('#diagram_filter .inputs').show();
-
-              $('#diagram_filter_input').suggestible(suggestibleOptions({
-              suggestionsUrl: '<%= suggest_diagrams_re_queries_path(@project.id) %>',
-              suggestionsLayout: function(helpers) {
-              return new DiagramsSuggestBoxItems(helpers);
-              },
-              bitsUrl: '<%= diagrams_bits_re_queries_path(@project.id) %>',
-              except_ids: null
-              }));	
-
-              // hidden on init because of UJS
-              $('#relation_filter_input_nojs').remove();
-              $('#relation_filter .inputs').show();
-
-              $('#relation_filter_input').suggestible(suggestibleOptions({
-              suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
-              suggestionsLayout: function(helpers) {
-              return new DirectArtifactsSuggestBoxItemsForRelationsWithoutKeyEvents(helpers);
-              }
-              <% unless @re_artifact_properties.new_record? %>
-                  ,
-                  except_ids: <%= @re_artifact_properties.id %> //avoid suggestion of own artifact
-              <% end %>
-              }));
-              });
-              })(jQuery);
-          <% end %>
-
           <b><%= t :re_create_new_relation %></b>
 
           <div id="relationhandling">
@@ -182,8 +132,22 @@
 
       <% end %><!-- form end tag -->
 </div>
+
 <%= javascript_tag do %>
-    $j(document).ready(function(){
-    $j("#re_artifact_properties_name").focus();
-    });
-<% end %>
+	(function($) {
+
+       	$().ready(function() {
+					
+			initIssueSuggestibles('<%= suggest_issues_re_queries_path(@project.id) %>', '<%= issues_bits_re_queries_path(@project.id) %>');
+			initDiagramSuggestibles('<%= suggest_diagrams_re_queries_path(@project.id) %>','<%= diagrams_bits_re_queries_path(@project.id) %>');
+					
+			var exceptRelationIDs = null;
+	        <% if !@re_artifact_properties.new_record? %>
+	          	exceptRelationIDs = <%= @re_artifact_properties.id %> //avoid suggestion of own artifact	            
+		    <% end %>	
+					
+			initRelationSuggestibles('<%= suggest_artifacts_re_queries_path(@project.id) %>',exceptRelationIDs);
+
+        });
+	})(jQuery);
+          <% end %>
