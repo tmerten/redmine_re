@@ -73,13 +73,14 @@
     <% end %>
   </div>
 
-  <div class="requirement_below">
-    <% if @re_artifact_properties.attachments.present? %>
+  <% if @re_artifact_properties.attachments.present? %>
+      <div class="requirement_below">
         <h3><%= t :label_attachments %></h3>
         <%= link_to_attachments @re_artifact_properties, :thumbnails => true %>
-    <% end %>
-  </div>
+      </div>
+  <% end %>
 
+  <div id="gimmespace" style="height:15px"></div>
 
   <%= render :partial => 'action_menu' %>
 
