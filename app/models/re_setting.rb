@@ -66,6 +66,16 @@ class ReSetting < ActiveRecord::Base
       logger.info "Settings cache cleared." if logger
     end
   end
+  
+  def self.force_reconfig
+    
+    Project.all.each do |p|      
+      if (p.enabled_module_names.include? 'requirements')        
+        ReSetting.set_serialized("unconfirmed", p.id, true)  
+      end
+    end 
+    
+  end
 
   private
 
