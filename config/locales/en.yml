@@ -375,6 +375,7 @@ en:
   re_settings_have_to_save_again: 'The system has been updated! Please check the configuation. You have to click on save before you leave this page!'
   re_pandoc_error_first: 'Redmine_re uses '
   re_pandoc_error_second: ' to export artifact data to different formats. Please make sure pandoc is installed.'
+  re_export_error: "Error during export. Please make sure pandoc is installed and an output format is configured in the settings." 
   
   # re_requirement
   re_requirement: 'Requirement'

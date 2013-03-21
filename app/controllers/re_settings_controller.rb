@@ -72,7 +72,6 @@ class ReSettingsController < RedmineReController
     @re_settings["visualization_size"] = ReSetting.get_plain("visualization_size", @project.id)
     @re_settings["visualization_size"] ||= 800
 
-
     @export_formats = get_available_export_formats
     @current_export_format = ReSetting.get_plain("export_format", @project.id)   
   end
@@ -198,7 +197,12 @@ private
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)      
     ReSetting.set_serialized("unconfirmed", @project.id, false)
       
-    ReSetting.set_plain("export_format", @project.id, params["export_format"]) unless params["export_format"].blank?
+      
+    if params["export_format"].blank?
+      ReSetting.set_plain("export_format", @project.id, "disabled")
+    else
+      ReSetting.set_plain("export_format", @project.id, params["export_format"])
+    end
     
     flash[:notice] = t(:re_configs_saved)
     
