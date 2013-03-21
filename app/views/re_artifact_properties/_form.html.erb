@@ -30,6 +30,12 @@
       </div>
       <%# add_bb_configuration_link(params[:controller].camelcase)%>
 
+      <fieldset>
+        <legend><%= t(:re_artifact_related_content) %></legend>
+        <div class="splitcontentleft">
+
+
+
       <!-- Related Issus -->
       <fieldset class="tabular">
         <legend><%= t(:re_associated_issues) %></legend>
@@ -46,7 +52,9 @@
                       :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank? %>
         </p>
       </fieldset>
-       
+      </div>
+      
+      <div class="splitcontentright">
       <!-- Related Diagrams  --> 
       <% if (@project.enabled_module_names.include? 'diagrameditor') && (User.current.allowed_to?(:edit_diagrams, @project)) %>	   
   		<fieldset class="tabular">
@@ -65,10 +73,11 @@
           <%= link_to image_tag('add.png')+' create related Diagram', :controller => 'diagrameditor', :action => 'show', :project_id => @project.identifier,
                       :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank? %>
         </p>
-        
+      </div> 
       </fieldset>
 	  <% end %>
-
+	  
+	  </fieldset>	
       <!-- Comments render only when in edit mode -->
       <% unless @re_artifact_properties.new_record? %>
         <fieldset class="comment">

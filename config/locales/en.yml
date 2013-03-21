@@ -647,6 +647,7 @@ en:
   re_relation_saved: 'Relation saved successfully'
   re_relation_saved_error: 'Relation was not saved successfully'
   
+  re_artifact_related_content: 'Related content'
   
   #mail
   re_text_artifact_added: "Artifact %{id} has been added by %{author}."
