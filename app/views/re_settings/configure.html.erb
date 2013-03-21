@@ -43,7 +43,7 @@
     
     <% if @export_formats.blank? %>    	    	
    		<%= t(:re_pandoc_error_first) %>
-   		<%= link_to ("pandoc", "http://johnmacfarlane.net/pandoc/", :target => "_blank") %>
+   		<%= link_to("pandoc", "http://johnmacfarlane.net/pandoc/", :target => "_blank") %>
    		<%= t(:re_pandoc_error_second) %>   		
    	<% else %>
    		<% cnt = 0 %>
