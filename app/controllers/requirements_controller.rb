@@ -156,6 +156,12 @@ end
       textilestring << "_#{@artifact.artifact_type}_ \n \n" 
       textilestring << "h3. #{t(:re_artifact_description) } \n \n#{@artifact.description} \n \n" unless @artifact.description.blank?
     
+      #write artifact type specific attributes to input string
+      begin        
+        textilestring << @artifact.artifact.specific_attributes_as_string        
+      #rescue NoMethodError            
+      end
+    
       #create Tempfile with textile string for input
       file = Tempfile.new(['artifact', '.textile'])    
       file.write("#{textilestring}" )
@@ -193,5 +199,7 @@ end
 #######
 private
 #######
+
+
 
 end

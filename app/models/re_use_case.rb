@@ -59,10 +59,48 @@ class ReUseCase < ActiveRecord::Base
   end
 
 
+  def specific_attributes_as_string
+    
+    myattributes = ""
+  
+    goal_levels = {
+    5 => I18n.t(:re_use_case_abstract_overview),
+    4 => I18n.t(:re_use_case_overview),
+    3 => I18n.t(:re_use_case_user_goal),
+    2 => I18n.t(:re_use_case_function),
+    1 => I18n.t(:re_use_case_low)}
+    
+    myattributes << "h3. #{I18n.t(:re_use_case_specific_attributes)} \n \n"
+    myattributes << "*#{I18n.t(:re_use_case_level)}* #{goal_levels[self.goal_level]}  \n \n"
+    
+    logger.debug("#{self.goal_level} -- #{goal_levels[self.goal_level]} ++ #{goal_levels['5']}")
+      
+    myattributes << "*#{I18n.t(:re_use_case_trigger)}* #{self.trigger}  \n \n" unless self.trigger.blank?
+    myattributes << "*#{I18n.t(:re_use_case_precondition)}* #{self.precondition}  \n \n" unless self.precondition.blank?      
+    myattributes << "*#{I18n.t(:re_use_case_postcondition)}* #{self.precondition}  \n \n" unless self.postcondition.blank?
+   
+    myattributes << "*#{I18n.t(:re_use_case_primary_actor)}* #{self.primary_actor.name}  \n \n" unless self.primary_actor.blank?
+    
+      #primary actor
+      #secondary actors
+        
+    #logger.debug("myattributes #{myattributes}")
+    return myattributes
+  end 
+
+
+
+
+
 def self.getAllUserProfiles project_id
   
   user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', project_id)    
 end  
+  
+    
+
+
+  
   
   private
 
