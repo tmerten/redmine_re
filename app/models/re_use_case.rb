@@ -68,8 +68,6 @@ end
 
   def update_primary_actor(actor_id, source_id)
        
-       puts "####################################fgdfgdfg##{actor_id.inspect}"
-       
        if actor_id.blank?
         delete_actor = ReArtifactRelationship.destroy_all(:source_id => source_id, :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac])
         return 
