@@ -129,8 +129,7 @@ class ReArtifactPropertiesController < RedmineReController
     if @artifact_type == "Project" 
       redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id 
     else 
-     artifact_type = @re_artifact_properties.artifact_type.underscore
-     @artifact_color = @re_artifact_settings[artifact_type]['color']
+     @artifact_color = @re_artifact_settings[@artifact_type.underscore]['color']
      @lighter_artifact_color = calculate_lighter_color(@artifact_color)
 
      @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
@@ -158,11 +157,10 @@ class ReArtifactPropertiesController < RedmineReController
           comment.destroy unless comment.nil?
         end
      end
-     
+          
      retrieve_previous_and_next_sibling_ids
      initialize_tree_data
-    
-    end
+   end
           
   end
 

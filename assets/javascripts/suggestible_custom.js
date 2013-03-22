@@ -258,7 +258,6 @@
             });
             helpers.elements.textBox.keydown(function(event) {
                 if ((event.keyCode == 9 || event.keyCode == 13) && helpers.hasSelectedSuggestion()) {
-                    $.blockUI();
                     document.location = helpers.selectedSuggestion().data('record').url;
                 }
             })
@@ -270,7 +269,7 @@
     };
     
     // Encapsulates the creation functions for directly selectable artifact items
-    window.DirectArtifactsSuggestBoxItemsForRelationsWithoutKeyEvents = function(helpers) {
+    window.DirectArtifactsSuggestBoxItemsForAddingRelations = function(helpers) {
         this.helpers = helpers;
 
         this.createSuggestion = function(record) {
@@ -283,7 +282,16 @@
             	createRelation(record);
                 return false;
             });
-
+            helpers.elements.textBox.keydown(function(event) {
+                if ((event.keyCode == 9 || event.keyCode == 13) && helpers.hasSelectedSuggestion()) {
+                    var selected_suggestion = helpers.selectedSuggestion();
+                    if (selected_suggestion.hasClass('focus')) {
+                    	createRelation(selected_suggestion.data('record'));
+                        helpers.elements.suggestionsBox.clearAndHideSuggestionsBox();
+                    }
+                    return false;
+                }
+            });
         };
 
         this.createBit = function(record) {

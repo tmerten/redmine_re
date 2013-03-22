@@ -13,7 +13,7 @@
 		<tr>
 			<th class="status">&nbsp;</th>
 			<td class="status"><ins class="subject_icon <%= current_artifact.artifact_type.underscore %>"></ins>
-				<%= link_to current_artifact.name, :controller => :re_artifact_properties, :action => 'edit', :id =>current_artifact.id	%>  	
+				<%= link_to current_artifact.name, current_artifact	%>  	
 		 	</td>
 		 </tr>
 <% end%>		  

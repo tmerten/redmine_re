@@ -3,6 +3,7 @@
 (function($) {
 
     $.suggestible = function() {};
+    // jQuery object is extended with a suggestible function
     $.extend($.suggestible, {
         ajax: {
             bits: {

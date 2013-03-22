@@ -27,7 +27,7 @@
 <% end %>
 
 <% if @project.module_enabled?(:requirements) %>
-<% if User.current.allowed_to?(:edit_requirements, @project) %>
+<% if User.current.allowed_to?(:view_requirements, @project) %>
 
 	<p style="margin: 3px 0 3px 60px;">
 		<%= label_tag :add_related_artifact %>

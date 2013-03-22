@@ -310,7 +310,6 @@ en:
   re_goal_not_found: 'Could not find a Goal with id %{id} to delete'
 
   # re_tasks
-
   re_new_re_task: 'Task'
   re_create_re_task: 'Create a new Task'
   re_show_tasks: 'Show Tasks'
@@ -333,6 +332,11 @@ en:
   re_update_difficult: 'Update Difficulties'
   re_st_type_not_allowed: 'This subtask type is not allowed'
   re_st_position_not_allowed: 'This subtask position is not allowed'
+  re_subtask_type: 'Type'
+  re_subtask_name: 'Name'
+  re_subtask_solution: 'Solution'
+  re_task_attributes: 'Task specific attributes'
+  
 
   # re_subtasks
   re_new_re_subtask: 'Subtask'

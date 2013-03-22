@@ -56,14 +56,13 @@ class RequirementsController < RedmineReController
 
       render :json => result      
     end
-    
-end
+  end
 
   # first tries to enable a contextmenu in artifact tree
   def context_menu
     @artifact =  ReArtifactProperties.find_by_id(params[:id])
 
-    render :text => "Could not find artifact.", :status => 500 unless @artifact
+    render :text => "Could not find artifact.", :status => 400 unless @artifact
 
     @subartifact_controller = @artifact.artifact_type.to_s.underscore
     @back = params[:back_url] || request.env['HTTP_REFERER']
@@ -71,12 +70,11 @@ end
     render :layout => false
   end
 
+  # saves the state of a node i.e. when you open or close a node in
+  # the tree this state will be saved in the session
+  # whenever you render the tree the rendering function will ask the
+  # session for the nodes that are "opened" to render the children
   def treestate
-    # this method saves the state of a node
-    # i.e. when you open or close a node in the tree
-    # this state will be saved in the session
-    # whenever you render the tree the rendering function will ask the
-    # session for the nodes that are "opened" to render the children
     node_id = params[:id].to_i
     case params[:open]
       when 'data'
@@ -99,7 +97,6 @@ end
     end
   end
 
-
   def sendDiagramPreviewImage 
     if @project.enabled_module_names.include? 'diagrameditor'            
        path = File.join(Rails.root, "files")
@@ -110,7 +107,6 @@ end
   end
   
   def addRelation
-    
     @source = ReArtifactProperties.find_by_id(params[:source_id]);
     @sink = ReArtifactProperties.find_by_id(params[:sink_id]);
     @re_artifact_properties = ReArtifactProperties.find_by_id(params[:id])

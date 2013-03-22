@@ -37,13 +37,11 @@ class ReQueriesController < RedmineReController
   end
 
   def new
-
     @query = ReQuery.from_filter_params(params)
     @query.project = @project
 
     initialize_tree_data
     load_cropped_collections
-
   end
 
   def edit
@@ -83,6 +81,11 @@ class ReQueriesController < RedmineReController
   end
 
   # AJAX Helpers
+  
+  ##
+  ## These helpers create a list of artifacts/issues/diagrams/whatever
+  ##
+  
   def suggest_artifacts
     artifacts = []
     unless params[:query].blank?
@@ -158,6 +161,10 @@ class ReQueriesController < RedmineReController
     end
     render :json => users
   end
+  
+  ##
+  ## These helpers create bit representations for one or more artifacts/issues/diagrams/whatever
+  ##
 
   def artifacts_bits
     artifacts = ReArtifactProperties.of_project(@project).without_projects.find(params[:ids], :order => 'name ASC')
@@ -177,14 +184,15 @@ class ReQueriesController < RedmineReController
     render :json => diagrams
   end
 
-
   def users_bits
     users = User.find(params[:ids], :order => 'firstname ASC, lastname ASC, login ASC')
     users.map! { |user| user_to_json(user) }
     render :json => users
   end
 
+
   private
+
   def load_visible_queries
     @queries = ReQuery.visible.all(:order => 'name ASC')
   end
@@ -207,7 +215,6 @@ class ReQueriesController < RedmineReController
 
   def load_cropped_collections
     return unless @query
-    
       
     source_artifact_ids = [@query[:source][:ids]].flatten
     sink_artifact_ids = [@query[:sink][:ids]].flatten
@@ -223,6 +230,10 @@ class ReQueriesController < RedmineReController
     str.gsub /(#{query})/i, '<strong>\1</strong>'
   end
 
+  ##
+  ## These private functions create json representations for a artifact/issue/diagram/whatever
+  ##
+
   def artifact_to_json(artifact)
     underscored_artifact_type = artifact.artifact_type.underscore
     { :id => artifact.id,
@@ -230,8 +241,7 @@ class ReQueriesController < RedmineReController
       :type => artifact.artifact_type,
       :type_name => l(artifact.artifact_type),
       :icon => underscored_artifact_type,
-      :url => url_for(:controller => "re_artifact_properties",
-                      :action => 'edit', :id => artifact.id) }
+      :url => url_for(artifact) }
   end
 
   def issue_to_json(issue)

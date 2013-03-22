@@ -1,15 +1,13 @@
 function initIssueSuggestibles(suggestionsUrl, bitsUrl) {
 		
-              $('#issue_filter_input option').attr("selected","selected");
-
               // hidden on init because of UJS
               $('#issue_filter_input_nojs').remove();
               $('#issue_filter .inputs').show();
 
               $('#issue_filter_input').suggestible(suggestibleOptions({
-              suggestionsUrl: suggestionsUrl,
-              suggestionsLayout: function(helpers) {
-              return new IssuesSuggestBoxItems(helpers);
+                  suggestionsUrl: suggestionsUrl,
+                  suggestionsLayout: function(helpers) {
+                  return new IssuesSuggestBoxItems(helpers);
               },
               bitsUrl: bitsUrl,
               except_ids: null
@@ -24,12 +22,12 @@ function initDiagramSuggestibles(suggestionsUrl, bitsUrl) {
               $('#diagram_filter .inputs').show();
 
               $('#diagram_filter_input').suggestible(suggestibleOptions({
-              suggestionsUrl: suggestionsUrl,
-              suggestionsLayout: function(helpers) {
-              	return new DiagramsSuggestBoxItems(helpers);
-              },
-              bitsUrl: bitsUrl,
-              except_ids: null
+                  suggestionsUrl: suggestionsUrl,
+                  suggestionsLayout: function(helpers) {
+                  	return new DiagramsSuggestBoxItems(helpers);
+                  },
+                  bitsUrl: bitsUrl,
+                  except_ids: null
               }));
 }
 
@@ -40,11 +38,11 @@ function initRelationSuggestibles(suggestionsUrl, exceptIds) {
               $('#relation_filter .inputs').show();
 
               $('#relation_filter_input').suggestible(suggestibleOptions({
-              suggestionsUrl: suggestionsUrl,
-              suggestionsLayout: function(helpers) {
-              	return new DirectArtifactsSuggestBoxItemsForRelationsWithoutKeyEvents(helpers);
-              },
-              except_ids: exceptIds
+                  suggestionsUrl: suggestionsUrl,
+                  suggestionsLayout: function(helpers) {
+                  	return new DirectArtifactsSuggestBoxItemsForAddingRelations(helpers);
+                  },
+                  except_ids: exceptIds
               }));
 }
 
