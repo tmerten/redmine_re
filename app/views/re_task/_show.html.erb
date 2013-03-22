@@ -1,0 +1,68 @@
+<table class="attributes">
+	<colgroup>
+		<col style="width:150px"/>
+		<col style="min-width:300px width:60%" />
+	</colgroup>
+	<tbody>
+		<tr>
+			<th><%= t(:re_task_start) %></th>
+			<td><%= @re_artifact_properties.artifact[:start] %></td>
+		</tr>
+		<tr>
+			<th><%= t(:re_task_end) %></th>
+			<td><%= @re_artifact_properties.artifact[:end] %></td>
+		</tr>
+		<tr>
+			<th><%= t(:re_task_frequency) %></th>
+			<td><%= @re_artifact_properties.artifact[:frequency] %></td>
+		</tr>
+  </tbody>
+</table>
+
+<% unless @re_artifact_properties.artifact[:difficult].blank? %>
+  <hr/>
+  <p><strong><%= t(:re_task_difficulties) %></strong></p>
+  <div class="wiki">
+    <%= textilizable @re_artifact_properties.artifact, :difficult %>
+  </div>
+<% end %>
+
+<hr />
+
+<p>
+  <strong><%= t(:re_subtasks)%></strong>
+</p>
+<table class="list">
+	<colgroup>
+		<col style="width:150px"/>
+    <col />
+    <col />
+	</colgroup>
+    <thead>
+       <tr>
+          <th width="120px"><%= t(:re_subtask_type) -%></th>
+          <th><%= t(:re_subtask_name) -%></th>
+          <th><%= t(:re_subtask_solution) -%></th>
+       </tr>
+    </thead>
+    <tbody id="subtasks">
+       <% @re_artifact_properties.artifact.re_subtasks.each do |current_re_subtask| %>
+
+         <% type_class = "subtask" %>
+         <% type_class = "variant" if current_re_subtask.sub_type == 1 %>
+         <% type_class = "problem" if current_re_subtask.sub_type == 2 %>
+         
+         <tr class="<%= type_class %>">
+           <td class="<%= type_class %>" >
+             <%= t(type_class) %>
+           </td>
+           <td class="<%= type_class %>" >
+             <%= current_re_subtask.name %>
+           </td>
+           <td class="<%= type_class %>" >
+             <%= current_re_subtask.solution %>
+           </td>
+         </tr>
+       <% end %>
+    </tbody>
+</table>
