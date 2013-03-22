@@ -157,6 +157,7 @@ class RequirementsController < RedmineReController
         textilestring << @artifact.artifact.specific_attributes_as_string        
       #rescue NoMethodError            
       end
+      logger.debug(textilestring); 
     
       #create Tempfile with textile string for input
       file = Tempfile.new(['artifact', '.textile'])    

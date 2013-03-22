@@ -73,18 +73,54 @@ class ReUseCase < ActiveRecord::Base
     myattributes << "h3. #{I18n.t(:re_use_case_specific_attributes)} \n \n"
     myattributes << "*#{I18n.t(:re_use_case_level)}* #{goal_levels[self.goal_level]}  \n \n"
     
-    logger.debug("#{self.goal_level} -- #{goal_levels[self.goal_level]} ++ #{goal_levels['5']}")
-      
     myattributes << "*#{I18n.t(:re_use_case_trigger)}* #{self.trigger}  \n \n" unless self.trigger.blank?
     myattributes << "*#{I18n.t(:re_use_case_precondition)}* #{self.precondition}  \n \n" unless self.precondition.blank?      
-    myattributes << "*#{I18n.t(:re_use_case_postcondition)}* #{self.precondition}  \n \n" unless self.postcondition.blank?
-   
+    myattributes << "*#{I18n.t(:re_use_case_postcondition)}* #{self.precondition}  \n \n" unless self.postcondition.blank?  
     myattributes << "*#{I18n.t(:re_use_case_primary_actor)}* #{self.primary_actor.name}  \n \n" unless self.primary_actor.blank?
-    
-      #primary actor
-      #secondary actors
+      
+    #secondary actors    
+    if !self.actors.blank?      
+      #FIXME can't use text from localisation because braces from Actor(s) don't work with bold text
+      #myattributes << "*#{I18n.t(:re_use_case_secondary_actors)}* #{self.actors.first.name}"
+      myattributes << "*Secondary Actors* #{self.actors.first.name}"
+      self.actors.each do |secondary|        
+        myattributes << ", #{secondary.name}" unless secondary == self.actors.first
+      end
+      myattributes << " \n\n"
+    end
         
-    #logger.debug("myattributes #{myattributes}")
+    #use case steps as table needs pandoc >= 1.11     
+    if !self.re_use_case_steps.blank?
+      myattributes << "*#{I18n.t(:re_use_case_steps)}* \n\n"    
+      myattributes << "| | *#{I18n.t(:re_user_steps)}* |  *#{I18n.t(:re_system_steps)}* | \n\n"
+      
+      counter_steps = 1
+      self.re_use_case_steps.each do |current_re_use_case_step|            
+        #user steps  
+        if current_re_use_case_step.step_type == 1
+          myattributes << "| #{counter_steps} | #{current_re_use_case_step.description} | | \n\n"        
+        #system steps
+        elsif current_re_use_case_step.step_type == 2
+          myattributes << "| #{counter_steps} | | #{current_re_use_case_step.description} | \n\n"
+        end      
+        counter_steps = counter_steps + 1;              
+      end #each                
+    end #if blank
+    
+    #expansions
+    myattributes << "*#{I18n.t(:re_use_case_expansions)}* \n\n" unless self.re_use_case_steps.blank?
+    counter_steps = 1      
+    self.re_use_case_steps.each do |current_re_use_case_step| 
+      counter_expansions = 1 
+      unless current_re_use_case_step.re_use_case_step_expansions.blank? 
+        current_re_use_case_step.re_use_case_step_expansions.each do |current_re_use_case_step_expansion|
+          myattributes << "#{counter_steps}.#{counter_expansions} #{I18n.t( current_re_use_case_step_expansion.expansion_type_translation_key)} #{current_re_use_case_step_expansion.description} \n\n"  
+          counter_expansions = counter_expansions + 1
+       end #each expansion        
+       counter_steps = counter_steps + 1
+      end #unless
+    end #each step      
+    
     return myattributes
   end 
 
