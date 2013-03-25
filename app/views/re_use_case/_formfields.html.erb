@@ -22,7 +22,7 @@
 	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition %>
 	    </p>
 
-			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %> 
+			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %>
 				<% unless @re_artifact_properties.artifact.primary_actor.blank? %>
 					<%= select_tag("primary_user_profile", options_for_select(ReUseCase.getAllUserProfiles(@project.id).collect { |pa| [pa.name, pa.id] }, :selected => @re_artifact_properties.artifact.primary_actor.id), {:include_blank => true }) %>
 				<%else%>
@@ -31,15 +31,18 @@
 			</p>
 		
 	      <p>
-	      	<label><%= t(:re_secondary_actor) %></label>		
-	        <div id="secondary_actor_filter" style="padding-left: 180px;">
+	      	<label><%= t(:re_secondary_actor) %></label>
+	        <div id="secondary_actor_filter">
 	          <div class="inputs">
-	            <%=
-	                select_tag 'secondary_actor_ids[]', options_for_select(@re_artifact_properties.artifact.actors.collect { |a| [a.name, a.id] }, @re_artifact_properties.artifact.actors.collect { |u| u.id }), :id => 'secondary_actor_filter_input', :class => 'input_container suggestible', :multiple => true
-	            %>
+	            <%= select_tag 'secondary_actor_ids[]',
+	                            options_for_select(@re_artifact_properties.artifact.actors.collect { |a| [a.name,
+	                            a.id] }, @re_artifact_properties.artifact.actors.collect { |u| u.id }),
+	                            :id => 'secondary_actor_filter_input',
+	                            :class => 'input_container suggestible',
+	                            :multiple => true %>
 	          </div>
 	        </div>
-	        
+
 	      </p>
 	      <%= javascript_tag do %>
 

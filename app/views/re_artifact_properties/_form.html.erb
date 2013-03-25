@@ -30,13 +30,12 @@
       </div>
       <%# add_bb_configuration_link(params[:controller].camelcase)%>
 
-      <fieldset>
-        <legend><%= t(:re_artifact_related_content) %></legend>
+      <!--<fieldset>
+        <legend><%= t(:re_artifact_related_content) %></legend>-->
         <div class="splitcontent">
-        
         <div class="splitcontentleft">
           <!-- Related Issus -->
-          <fieldset class="tabular">
+          <fieldset>
             <legend><%= t(:re_associated_issues) %></legend>
             <div id="issue_filter">
               <div class="inputs">
@@ -77,7 +76,7 @@
       </div> 
     </div>	  
 
-	  </fieldset>	
+	  <!--</fieldset>-->
       <!-- Comments render only when in edit mode -->
       <% unless @re_artifact_properties.new_record? %>
         <fieldset class="comment">
@@ -115,7 +114,7 @@
             </div>
           </div>
         </div>
-        
+
       </fieldset>
 
       <div id="attachments" class="artifact_edit_box">
