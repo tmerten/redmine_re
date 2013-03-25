@@ -116,9 +116,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   activity_provider :re_artifact_properties, :class_name => 'ReArtifactProperties', :default => true
   #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
 
-  settings :default => {
-      're_artifact_types' => ''
-  }, :partial => 'settings/re_settings'
+  settings :default => {'re_artifact_types' => ''}, :partial => 'settings/re_settings'
 
   # add "acts_as_re_artifact" method to any ActiveRecord::Base class
   # as an alias to "include Artifact"
