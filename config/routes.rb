@@ -19,7 +19,7 @@ RedmineApp::Application.routes.draw do
 
   # ReArtifactProperties as "artifact"
   resources :re_artifact_properties, :except => [:new, :index]
-  
+
   match 're_artifact_properties/:id/recursive_destroy' => 're_artifact_properties#recursive_destroy'
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
   match 'projects/:project_id/requirements/remove/:artifactid/from_issue/:issueid' => 're_artifact_properties#remove_artifact_from_issue'
@@ -32,23 +32,19 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/artifact/autocomplete/artifact' => 're_artifact_properties#autocomplete_artifact'
 
   match 'projects/:project_id/requirements/artifact/new_comment/:id' => 're_artifact_properties#new_comment'
-  
-  
+
   match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'
   match 'projects/:project_id/ralation/prepare/:id' => 're_artifact_relationship_controller#prepare_relationships'
   match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink'
 
-  
   #match 're_queries.:project_id' => 're_queries#index'
+  #match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
+  #match '/re_queries/suggest_issues.:id' => 're_queries#suggest_issues'
 
   match 'projects/:project_id/re_queries' => 're_queries#index', :via => :get
   match 'projects/:project_id/re_queries/:id/delete' => 're_queries#delete', :via => :get
 
-
-  #match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
-  #match '/re_queries/suggest_issues.:id' => 're_queries#suggest_issues'
-
-   scope "(/projects/:project_id)" do
+  scope "(/projects/:project_id)" do
     resources :re_queries do
       collection do
         post :apply
@@ -61,17 +57,16 @@ RedmineApp::Application.routes.draw do
         get :diagrams_bits
         get :users_bits
       end
-   end
- 
+    end
+
   end
+
   #member do
   #  get :delete
   #  end
   #end
-  
+
   match "projects/:project_id/diagram_preview/:diagram_id" => 'requirements#sendDiagramPreviewImage'
   match "/addRelation" => 'requirements#addRelation'
   match 'projects/:project_id/requirements/artifact/:id/export' => 'requirements#exportRequirements'
-  
-  
 end
