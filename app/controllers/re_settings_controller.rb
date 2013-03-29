@@ -213,16 +213,20 @@ private
 
   def get_available_export_formats 
     #Parse available output formats from pandoc helpfile    
-    formats = `pandoc --help`        
-    start = formats.index("Output formats: ")      
-    start = start + 16 unless start.nil? 
-    ende =  formats.index("Options:")
-    ende = ende - 2 unless ende.nil?        
-    outputformats = ""
-    outputformats = formats[start..ende] unless ende.nil?     
-    outputformats = outputformats.squish    
+    formats = `pandoc --help`
     outputformatarray = []
-    outputformatarray = outputformats.split(', ')         
+    if formats.nil?
+      flash[:error] = t(:re_export_error)
+    else
+      start = formats.index("Output formats: ")      
+      start = start + 16 unless start.nil? 
+      ende =  formats.index("Options:")
+      ende = ende - 2 unless ende.nil?        
+      outputformats = ""
+      outputformats = formats[start..ende] unless ende.nil?     
+      outputformats = outputformats.squish    
+      outputformatarray = outputformats.split(', ')         
+    end
     return outputformatarray
   end
   

@@ -153,11 +153,9 @@ class RequirementsController < RedmineReController
       textilestring << "h3. #{t(:re_artifact_description) } \n \n#{@artifact.description} \n \n" unless @artifact.description.blank?
     
       #write artifact type specific attributes to input string
-      begin        
-        textilestring << @artifact.artifact.specific_attributes_as_string        
-      #rescue NoMethodError            
+      if @artifact.artifact.respond_to?(:specific_attributes_as_string)
+        textilestring << @artifact.artifact.specific_attributes_as_string
       end
-      logger.debug(textilestring); 
     
       #create Tempfile with textile string for input
       file = Tempfile.new(['artifact', '.textile'])    

@@ -146,7 +146,7 @@ class ReArtifactProperties < ActiveRecord::Base
     super
   end
 
-  validates :name, :length => {:minimum => 3, :maximum => 50}
+  validates :name, :length => {:minimum => 3, :maximum => 100}
   validates :project, :presence => true
   validates :created_by, :presence => true
   validates :updated_by, :presence => true
