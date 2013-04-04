@@ -22,6 +22,7 @@ ActionDispatch::Callbacks.to_prepare do
   require_dependency 'role_patch'
   require_dependency 'project_patch'
   require_dependency 'projects_controller_patch'
+  require_dependency 'user_patch'
 end
 
 require_dependency '../lib/re_wiki_macros'
