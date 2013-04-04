@@ -42,7 +42,7 @@ a:active {
 }
 
 #detail_view div.requirement_upper .gravatar {
-    float:left;
+    float: left;
     margin-right: 16px;
 }
 
@@ -97,28 +97,47 @@ div.requirement_upper .next-prev-links {
     margin-bottom: 5px;
 }
 
-#ratings {
-
+.ratings {
+    float: right;
 }
 
-#ratings ul {
-    list-style: none;
-    margin-left: 0;
-    padding-left: 0;
-    padding-bottom: 10px;
+form.rating {
 }
 
-#ratings ul li {
-    background-image: url(../images/icons/star_3_16.png);
-    background-repeat: no-repeat;
-    background-position: 0px 0px;
-    padding-left: 14px;
+form.rating input[type=submit] {
+    display: none;
+}
+
+form.rating input.rating_button {
+    display: none;
+}
+
+form.rating label.rating {
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
     float: left;
 }
 
+form.rating label.rating span {
+    display: none;
+}
 
-#ratings ul .star-active {
+form.rating label.rating {
+    background-image: url(../images/icons/star_3_16.png);
+}
+
+form.rating label.rating.bright {
     background-image: url(../images/icons/star_1_16.png);
+}
+
+form.rating label.rating.glow {
+    background-image: url(../images/icons/star_1_16.png);
+}
+
+.ratings .average_rating {
+    margin-left: 5px;
+    display: inline;
 }
 
 /**
@@ -261,11 +280,11 @@ label.large_content {
     float: left;
     text-align: right;
     padding-right: 5px;
-    background-color:#FFFF77;
+    background-color: #FFFF77;
 }
 
 label.new-relation {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 label.filter {
@@ -749,7 +768,7 @@ div#visualization_filters div.text form label {
     -o-box-shadow: #555 2px 2px 8px;
     box-shadow: #555 2px 2px 8px;
     opacity: 0.9;
-    filter: alpha(opacity = 90);
+    filter: alpha(opacity=90);
     font-size: 10px;
     padding: 7px;
 }
@@ -1018,7 +1037,7 @@ input.artifact_name {
 }
 
 #sidebar_filter_input_container {
-   /* position: absolute;*/
+    /* position: absolute;*/
     margin: 0;
     padding: 0;
 }
@@ -1078,27 +1097,27 @@ div.query.details div.description {
 }
 
 .re_use_case_user_step {
-	width: 400px; 
-	border-right: 1px solid #000;
+    width: 400px;
+    border-right: 1px solid #000;
 }
 
 .re_use_case_system_step {
-	margin-left: 400px; 
-	width: 400px; 
-	border-left: 1px solid #000;
+    margin-left: 400px;
+    width: 400px;
+    border-left: 1px solid #000;
 }
 
 .re_use_case_button_bar {
-	background-color: #ccc; 
-	height: 24px;
+    background-color: #ccc;
+    height: 24px;
 }
 
 .re_use_case_button_container {
-	padding: 2px; 
-	width: 20px; 
-	height: 20px; 
-	margin-right: 10px; 
-	text-align: center; 
-	vertical-align: middle; 
-	float: left;
+    padding: 2px;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: middle;
+    float: left;
 }
