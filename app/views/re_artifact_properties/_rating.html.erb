@@ -1,18 +1,18 @@
-
-  <%= ratings_for artifact,
-                  :url => {:action => :rate_artifact,
-                           :controller => :re_artifact_properties,
-                           :id => artifact.id}
-  %>
-  <span id="rating_average"><%= t(:rating_average) %>:</span>
-  <%= artifact.rating_average %>
-
-  <br /><span id="own_rating"><%= t(:own_rating) %>:</span>
-  <%= ratings_for artifact,
-                  :url => {:action => :rate_artifact,
-                           :controller => :re_artifact_properties,
-                           :id => artifact.id},
-                  :size => "small",
-                  :show_user_rating => true,
-                  :force_static => true
-  %>
+<div class="ratings">
+  <%= form_for(rate, :remote => true, :html => {:class => 'rating'}) do |f| %>
+      <%= f.label('value_1', content_tag(:span, '1'), {:class => 'rating', :id => '1'}) %>
+      <%= radio_button_tag('rating[value]', 1, current_user_rating == 1, :class => 'rating_button') %>
+      <%= f.label('value_2', content_tag(:span, '2'), {:class => 'rating', :id => '2'}) %>
+      <%= radio_button_tag('rating[value]', 2, current_user_rating == 2, :class => 'rating_button') %>
+      <%= f.label('value_3', content_tag(:span, '3'), {:class => 'rating', :id => '3'}) %>
+      <%= radio_button_tag('rating[value]', 3, current_user_rating == 3, :class => 'rating_button') %>
+      <%= f.label('value_4', content_tag(:span, '4'), {:class => 'rating', :id => '4'}) %>
+      <%= radio_button_tag('rating[value]', 4, current_user_rating == 4, :class => 'rating_button') %>
+      <%= f.label('value_5', content_tag(:span, '5'), {:class => 'rating', :id => '5'}) %>
+      <%= radio_button_tag('rating[value]', 5, current_user_rating == 5, :class => 'rating_button') %>
+      <%= hidden_field_tag('re_artifact_properties_id', @re_artifact_properties.id) %>
+      <%= f.submit :Submit %>
+  <% end %>
+  <div class="average_rating">&oslash;&nbsp;<%= @re_artifact_properties.average_rating %></div>
+</div>
+<%= javascript_include_tag 'ratings.js', :plugin => 'redmine_re', :cache => true %>
