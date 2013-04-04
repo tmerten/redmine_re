@@ -31,4 +31,19 @@ module ReArtifactPropertiesHelper
     field_html
   end
 
+  def rate
+    if @rating = User.current.ratings.find_by_re_artifact_properties_id(params[:id])
+      @rating
+    else
+      User.current.ratings.new
+    end
+  end
+
+  def current_user_rating
+    if @rating = User.current.ratings.find_by_re_artifact_properties_id(params[:id])
+      @rating.value
+    else
+      0
+    end
+  end
 end
