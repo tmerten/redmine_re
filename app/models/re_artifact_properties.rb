@@ -9,6 +9,8 @@ class ReArtifactProperties < ActiveRecord::Base
     {:conditions => {:project_id => project_id}}
   }
 
+  has_many :ratings, :dependent => :destroy
+  has_many :raters, :through => :ratings, :source => :users
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
   has_many :realizations, :dependent => :destroy
   has_many :issues, :through => :realizations, :uniq => true
@@ -53,23 +55,23 @@ class ReArtifactProperties < ActiveRecord::Base
            :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]],
            :dependent => :destroy
 
-  has_many :diagram_relations,           
+  has_many :diagram_relations,
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
            :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia]],
            :dependent => :destroy
 
   #if defined?(ConcreteDiagram) == 'constant' 
-   
-  has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram",  :source => "sink"
-     
-    
-  has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
-  has_many :children, :through => :child_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :sources,  :through => :traces_as_sink,   :order => "re_artifact_relationships.position"
-  has_one  :parent,   :through => :parent_relation,  :source => "source"
-  has_many :re_bb_data_texts,       :dependent => :delete_all
-  has_many :re_bb_data_selections,  :dependent => :delete_all
+
+  has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram", :source => "sink"
+
+
+  has_many :sinks, :through => :traces_as_source, :order => "re_artifact_relationships.position"
+  has_many :children, :through => :child_relations, :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :sources, :through => :traces_as_sink, :order => "re_artifact_relationships.position"
+  has_one :parent, :through => :parent_relation, :source => "source"
+  has_many :re_bb_data_texts, :dependent => :delete_all
+  has_many :re_bb_data_selections, :dependent => :delete_all
   has_many :re_bb_data_artifact_selections, :dependent => :delete_all
 
   acts_as_watchable
@@ -87,7 +89,7 @@ class ReArtifactProperties < ActiveRecord::Base
         {:controller => 're_artifact_properties', :action => 'show', :id => o.id}
       }
   )
-  
+
   acts_as_activity_provider(
       :type => 're_artifact_properties',
       :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
@@ -95,7 +97,7 @@ class ReArtifactProperties < ActiveRecord::Base
       :find_options => {:include => [:project, :user]},
       :permission => :edit_requirements
   )
-  
+
   # workaround such that the a project can be deleted flawlessly from Redmine
   def destroy
     if self.artifact_type == "Project"
@@ -105,11 +107,11 @@ class ReArtifactProperties < ActiveRecord::Base
       super
     end
   end
-  
+
   def updated_on
     updated_at
   end
-  
+
   def created_on
     created_at
   end
@@ -119,9 +121,7 @@ class ReArtifactProperties < ActiveRecord::Base
   #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
-
   belongs_to :responsible, :class_name => 'User', :foreign_key => 'responsible_id'
-
 
   # attributes= and artifact_attributes are overwritten to instantiate
   # the correct artifact_type and use nested attributes for re_artifact_properties
@@ -152,25 +152,19 @@ class ReArtifactProperties < ActiveRecord::Base
   validates :updated_by, :presence => true
   validates :parent, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
   validates :artifact_type, :presence => true, :inclusion => {
-      :in => ['ReGoal', 'ReSection', 'ReVision', 'ReTask', 'ReSubtask',
-              'ReVision', 'ReAttachment', 'ReWorkarea', 'ReUserProfile',
-              'ReSection', 'ReRequirement', 'ReScenario', 'ReProcessword',
-              'ReRational', 'ReUseCase', 'ReRationale', 'Project']}
+      :in => %w(ReGoal ReSection ReVision ReTask ReSubtask ReVision ReAttachment ReWorkarea ReUserProfile ReSection ReRequirement ReScenario ReProcessword ReRational ReUseCase ReRationale Project)}
 
   #TODO
   #validates_associated :parent_relation
   validates :parent_relation, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
 
-
   # Returns true if usr or current user is allowed to view the artifact
   def visible?(usr=nil)
-    
-
     if (!usr.nil? && usr.allowed_to?(:view_requirements, self.project)) || User.current.allowed_to?(:view_requirements, self.project)
       return true
-    else 
+    else
       return false
-    end 
+    end
   end
 
   # Returns the users that should be notified
@@ -179,12 +173,10 @@ class ReArtifactProperties < ActiveRecord::Base
     # Author and assignee are always notified unless they have been
     # locked or don't want to be notified
     notified << author if author
-    
-    notified = notified.select {|u| u.active? && u.notify_about?(self)}
-
+    notified = notified.select { |u| u.active? && u.notify_about?(self) }
     notified.uniq!
     # Remove users that can not view the issue
-    notified.reject! {|user| !visible?(user)}
+    notified.reject! { |user| !visible?(user) }
     notified
   end
 
@@ -192,11 +184,6 @@ class ReArtifactProperties < ActiveRecord::Base
   def recipients
     notified_users.collect(&:mail)
   end
-
-
-
-
-
 
   # Finds all artifacts that are commonly used by the supplied issues
   def self.find_all_by_common_issues(issue_array, *args)
@@ -235,4 +222,12 @@ class ReArtifactProperties < ActiveRecord::Base
     self.parent.children
   end
 
+  def average_rating
+    @value = 0
+    self.ratings.each do |rating|
+      @value = @value + rating.value
+    end
+    @total = self.ratings.size
+    @value.to_f / @total.to_f
+  end
 end
