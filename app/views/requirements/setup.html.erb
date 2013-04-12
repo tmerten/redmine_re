@@ -1,0 +1,15 @@
+<div id='detail_view' class='detail_view'>
+  <h1><%= t(:re_first_use) %></h1>
+
+  <p>
+    <%= t(:re_project_was_setup) %>
+  </p>
+
+  <p>
+    <%= t(:re_continue_here) %> <%= link_to t(:re_index), :action => "index", :project_id => @project.id %>
+  </p>
+
+  <p>
+    <%= link_to t(:re_link_to_configure), :action => "configure", :project_id => @project.id %>
+  </p>
+</div>

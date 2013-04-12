@@ -1,0 +1,49 @@
+<div id="infobar2" class="ui-layout-east ui-layout-content">
+  
+  <div id="watchers">
+    <%= render :partial => 'watchers/watchers', :locals => {:watched => @re_artifact_properties} %>
+  </div>
+
+  <hr/>    
+
+  <div id="comments">
+  	<div class="contextual">
+      <% if User.current.allowed_to?(:comment_on_requirements, @project) %> 
+      	<%= link_to l(:button_add),
+            {:controller => 're_artifact_properties', :action => 'new_comment', :project_id =>  @project.id, :id => @re_artifact_properties.id},
+            :remote => true,
+            :method => 'get' %>	
+      <% end %>
+    </div>
+  	<h3><%=l(:comments)%> (<%=@re_artifact_properties.comments.length%>)</h3>    
+      <% comments_asc =
+         (User.current.preference[:others].nil? or User.current.preference[:others][:comments_sorting] == "asc") ? true : false %>
+       
+      <% @re_artifact_properties.comments.each do |comment| %>
+        <p>
+          <h4><%= authoring(comment.created_on, comment.author) %></h4>
+          <div class="contextual">
+            <% if User.current.allowed_to?(:administrate_requirements, @project) %>
+              <%= link_to '', {:controller => "re_artifact_properties", :action => 'show', :deletecomment_id => comment.id, :id => @re_artifact_properties.id}, :class => 'icon icon-del' %>
+            <% end %>
+          </div>
+
+          <%= comment.comments %>
+
+        </p>
+      <% end %>
+  </div><!-- id="comments" -->
+
+</div><!-- id="infobar2" -->
+
+<%= javascript_tag do %>
+<% watchers = @re_artifact_properties.watchers.length %>
+<% comments = @re_artifact_properties.comments.length %>
+<% watcher_image = (watchers > 0) ? 'fav.png' : 'fav_off.png' %>
+
+$j(document).ready(function () {
+  var easttoggler = $j("div.ui-layout-toggler-east-closed > span.content-closed");
+  var eastspan = easttoggler.first()
+  eastspan.html('<%= watchers %><%= image_tag(watcher_image) %><br/><%= comments %><%= image_tag('comments.png')%>');
+});
+<% end %>

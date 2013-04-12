@@ -1,0 +1,34 @@
+<% content_for :header_tags do %>
+<%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
+<%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
+
+<div id='detail_view' class='detail_view'>
+
+  <%= form_tag @re_queries do %>
+    <%= hidden_field_tag :project_id, @project.id %>
+
+
+    <%= render "requirements/filter_artifact", :legend => "re_source_artifact", :activated => true %>
+
+    <%= render "requirements/filter_relationship", :legend => "re_relationship", :activated => false  %>
+
+    <%= render "requirements/filter_artifact", :legend => "re_sink_artifact", :activated => true  %>
+
+    <%= submit_tag l(:re_apply_filter) %>
+
+     <%= javascript_tag do %>
+          function toggleCheckbox(box)
+          {
+            if (box.checked) {
+                box.checked = false;
+            } else {
+                box.checked = true;
+            }
+          }
+     <% end %>
+
+<% end %>
+  
+</div>

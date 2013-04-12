@@ -1,0 +1,26 @@
+<div class="contextual">
+	<%= link_to_if_authorized(t(:button_update),  {
+    :controller => 're_artifact_properties', 
+    :action => 'edit', :id => @re_artifact_properties }, 
+	  :onclick => 'showAndScrollTo("update", "re_artifact_properties_description"); scrollContentPaneTo("update"); return false;',
+    :class => 'icon icon-edit', :accesskey => accesskey(:edit) ) %>
+  <%= watcher_tag(@re_artifact_properties, User.current) %>
+ 
+  <span class="icon icon-add">
+    <%= link_to(t(:connect_issue),
+      :controller => 'issues', 
+      :action => 'new',
+      :project_id => @project.identifier,
+      :artifacttype => @re_artifact_properties.artifact_type,
+      :artifactname => @re_artifact_properties.name,
+      :artifactid => @re_artifact_properties.id) %> 
+  </span>  
+  <% if User.current.allowed_to?(:edit_requirements, @project) %> 
+    <%= link_to l(:button_delete), "#{re_artifact_properties_path}/#{@re_artifact_properties.id}/how_to_delete", :class => 'icon icon-del', :accesskey => accesskey(:delete) %>
+  <% end %>
+    
+  <% if !ReSetting.get_plain("export_format", @project.id).blank? && ReSetting.get_plain("export_format", @project.id) != "disabled"  %>
+  	<%= link_to t(:re_export), { :controller => 'requirements', :action => 'exportRequirements',  
+  	:project_id => @project.id,  :id => @re_artifact_properties.id}, :class => 'icon icon-move' %>	
+  <% end %>
+</div>

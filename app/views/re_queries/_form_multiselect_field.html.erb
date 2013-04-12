@@ -8,6 +8,7 @@
                       :selected => values[:"#{field_name}_mode"] %>
   </span>
   <span class="column value">
+
     <%= fields.select field_name, items.map { |item| [item.send(option_label), item.id] },
                       { :selected => [values[field_name]].flatten.compact.map(&:to_i) },
                       { :multiple => true, :class => css_class } %>

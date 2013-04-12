@@ -1,0 +1,49 @@
+<div id="use_case_step_drag_<%= f.object.position %>" class="draggable use_case_step_row nested_field" style="clear: both; background-color: #eee; border-bottom: 1px dotted #fff; height: auto; margin-bottom: 5px;">
+  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+  <%= f.hidden_field :step_type %>
+  <% if f.object.step_type ==1 %>
+  	<div class="re_use_case_user_step">
+  <% end %>
+    <% if f.object.step_type ==2 %>
+  	<div class="re_use_case_system_step">
+  <% end %>
+	
+    <%= f.hidden_field :position, :class => "position" %>
+	  <%= f.text_area :description, { :size => "35x2", :class => "use_case_step_textarea" } %>
+	  <fieldset class="collapsible collapsed">
+	  	<legend onclick="toggleFieldset(this);">Expansions</legend>
+	  	<div style="display: none;">
+		  <table>
+		    <thead class="epansions">
+		      <tr>
+		        <th><%= t(:re_expansion_type) %></th>
+		        <th><%= t(:re_expansion_description) %></th>
+		      </tr>
+		    </thead>
+		    <tbody id="expansions_<%= f.object.id.to_s%>">
+			  <%= f.fields_for :re_use_case_step_expansions do |builder| %>
+			  	<%= render('re_use_case/re_use_case_step_expansion_fields', :f => builder ) %>
+			  <% end %>
+		    </tbody>
+		  </table>
+		  
+		  <%= link_to_add_fields "Add Exp", f, :re_use_case_step_expansions, :re_use_case %>
+		</div>  	
+	  </fieldset>
+	
+	  <div class="re_use_case_button_bar">
+	  	<div class="re_use_case_button_container">
+    		<%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery(this).parent().parent().parent().parent(), 'after', 'user')", :class => "" ) %>&nbsp;&nbsp;
+    	</div>
+    	
+    	<div class="re_use_case_button_container">
+    		<%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery(this).parent().parent().parent().parent(), 'after', 'system')", :class => "" ) %>
+	    </div>
+	    
+	    <div class="re_use_case_button_container">
+	    	<%= link_to_remove_fields "", f %>
+	    </div>
+	  </div>
+	
+	</div>
+</div>

@@ -4,65 +4,65 @@
 # ParentChildRelations for artifact properties except subtasks
 
 relationship_art_project_art_goal_usability_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_goal_usability_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_goal_usability) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_goal_usability_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_goal_usability) %>
   relation_type: parentchild
   position: 1
   
 relationship_art_project_art_goal_small_latency_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_goal_small_latency_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_goal_small_latency) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_goal_small_latency_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_goal_small_latency) %>
   relation_type: parentchild
   position: 2
   
 relationship_art_goal_small_latency_art_goal_keyboard_control_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_goal_small_latency_art_goal_keyboard_control_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_goal_small_latency) %>
-  sink_id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_goal_small_latency_art_goal_keyboard_control_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_goal_small_latency) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_goal_keyboard_control) %>
   relation_type: parentchild
   position: 1
   
 relationship_art_project_art_task_login_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_task_login_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_task_login) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_task_login_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_task_login) %>
   relation_type: parentchild
   position: 3
   
 relationship_art_project_art_task_test_vocabulary_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_task_test_vocabulary_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_task_test_vocabulary_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_task_test_vocabulary) %>
   relation_type: parentchild
   position: 4
   
 relationship_art_project_art_section_goals_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_section_goals_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_section_goals) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_section_goals_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_section_goals) %>
   relation_type: parentchild
   position: 5
   
 relationship_art_project_art_section_szenarios_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_section_szenarios_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_section_szenarios) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_section_szenarios_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_section_szenarios) %>
   relation_type: parentchild
   position: 6
   
 relationship_art_project_art_workarea_learning_at_home_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_workarea_learning_at_home_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_workarea_learning_at_home) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_workarea_learning_at_home_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_workarea_learning_at_home) %>
   relation_type: parentchild
   position: 7
   
 relationship_art_project_art_workarea_public_test_for_toefel_parentchild:
-  id: <%= Fixtures.identify(:relationship_art_project_art_workarea_public_test_for_toefel_parentchild) %>
-  source_id: <%= Fixtures.identify(:art_project) %>
-  sink_id: <%= Fixtures.identify(:art_workarea_public_test_for_toefel) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_art_project_art_workarea_public_test_for_toefel_parentchild) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_project) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_workarea_public_test_for_toefel) %>
   relation_type: parentchild
   position: 8
   
@@ -72,65 +72,65 @@ relationship_art_project_art_workarea_public_test_for_toefel_parentchild:
 # Relationships between tasks and subtasks of type parent child
 
 relationship_task_login_subtask_get_user_data_from_user:
-  id: <%= Fixtures.identify(:relationship_task_login_subtask_get_user_data_from_user) %>
-  source_id: <%= Fixtures.identify(:art_task_login) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_user) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_login_subtask_get_user_data_from_user) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_login) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_login_get_user_data_from_user) %>
   relation_type: parentchild
   position: 1
 
   
 relationship_task_login_subtask_get_user_data_from_cookie:
-  id: <%= Fixtures.identify(:relationship_task_login_subtask_get_user_data_from_cookie) %>
-  source_id: <%= Fixtures.identify(:art_task_login) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_login_get_user_data_from_cookie) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_login_subtask_get_user_data_from_cookie) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_login) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_login_get_user_data_from_cookie) %>
   relation_type: parentchild
   position: 2
 
   
 relationship_task_login_subtask_problem_with_forgotten_user_data:
-  id: <%= Fixtures.identify(:relationship_task_login_subtask_problem_with_forgotten_user_data) %>
-  source_id: <%= Fixtures.identify(:art_task_login) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_login_problem_with_forgotten_user_data) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_login_subtask_problem_with_forgotten_user_data) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_login) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_login_problem_with_forgotten_user_data) %>
   relation_type: parentchild
   position: 3
 
 
 relationship_task_login_subtask_hash_password:
-  id: <%= Fixtures.identify(:relationship_task_login_subtask_hash_password) %>
-  source_id: <%= Fixtures.identify(:art_task_login) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_login_hash_password) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_login_subtask_hash_password) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_login) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_login_hash_password) %>
   relation_type: parentchild
   position: 4
 
   
 relationship_task_login_subtask_data_check:
-  id: <%= Fixtures.identify(:relationship_task_login_subtask_data_check) %>
-  source_id: <%= Fixtures.identify(:art_task_login) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_login_data_check) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_login_subtask_data_check) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_login) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_login_data_check) %>
   relation_type: parentchild
   position: 5
 
   
 relationship_task_test_vocabulary_subtask_choose_lecture:
-  id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_choose_lecture) %>
-  source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_test_vocabulary_choose_lecture) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_test_vocabulary_subtask_choose_lecture) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_test_vocabulary) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_test_vocabulary_choose_lecture) %>
   relation_type: parentchild
   position: 1
 
   
 relationship_task_test_vocabulary_subtask_control_knowledge:
-  id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_control_knowledge) %>
-  source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_test_vocabulary_control_knowledge) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_test_vocabulary_subtask_control_knowledge) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_test_vocabulary) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_test_vocabulary_control_knowledge) %>
   relation_type: parentchild
   position: 2
 
   
 relationship_task_test_vocabulary_subtask_show_results:
-  id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_show_results) %>
-  source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
-  sink_id: <%= Fixtures.identify(:art_subtask_test_vocabulary_show_results) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_test_vocabulary_subtask_show_results) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_test_vocabulary) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_subtask_test_vocabulary_show_results) %>
   relation_type: parentchild
   position: 3
 
@@ -139,9 +139,9 @@ relationship_task_test_vocabulary_subtask_show_results:
 
 # Do not change this relation, otherwise test of re_artifact_selection will fail!
 relationship_task_test_vocabulary_subtask_show_results:
-  id: <%= Fixtures.identify(:relationship_task_test_vocabulary_subtask_show_results) %>
-  source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
-  sink_id: <%= Fixtures.identify(:art_goal_usability) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_test_vocabulary_subtask_show_results) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_test_vocabulary) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_goal_usability) %>
   relation_type: conflict
   position: 1
  
@@ -149,9 +149,9 @@ relationship_task_test_vocabulary_subtask_show_results:
 # Relationships between two goals 
   
 relationship_goal_usability_goal_keyboard_control:
-  id: <%= Fixtures.identify(:relationship_goal_usability_goal_keyboard_control) %>
-  source_id: <%= Fixtures.identify(:art_goal_usability) %>
-  sink_id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_goal_usability_goal_keyboard_control) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_goal_usability) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_goal_keyboard_control) %>
   relation_type: conflict
   position: 1
 
@@ -162,17 +162,17 @@ relationship_goal_usability_goal_keyboard_control:
 # Relationships between artifacts and sections  
   
 relationship_goal_usability_section_goals:
-  id: <%= Fixtures.identify(:relationship_section_goals_goal_usability) %>
-  source_id: <%= Fixtures.identify(:art_goal_usability) %>
-  sink_id: <%= Fixtures.identify(:art_section_goals) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_section_goals_goal_usability) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_goal_usability) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_section_goals) %>
   relation_type: part_of
   position: 1
 
   
 relationship_goal_keyboard_control_section_goals:
-  id: <%= Fixtures.identify(:relationship_section_goals_goal_keyboard_control) %>
-  source_id: <%= Fixtures.identify(:art_goal_keyboard_control) %>
-  sink_id: <%= Fixtures.identify(:art_section_goals) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_section_goals_goal_keyboard_control) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_goal_keyboard_control) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_section_goals) %>
   relation_type: part_of
   position: 2
 
@@ -183,9 +183,9 @@ relationship_goal_keyboard_control_section_goals:
 # Relationships between tasks and workareas  
   
 relationship_task_test_vocabulary_workarea_public_test_for_toefel:
-  id: <%= Fixtures.identify(:relationship_task_test_vocabulary_workarea_public_test_for_toefel) %>
-  source_id: <%= Fixtures.identify(:art_task_test_vocabulary) %>
-  sink_id: <%= Fixtures.identify(:art_workarea_public_test_for_toefel) %>
+  id: <%= ActiveRecord::Fixtures.identify(:relationship_task_test_vocabulary_workarea_public_test_for_toefel) %>
+  source_id: <%= ActiveRecord::Fixtures.identify(:art_task_test_vocabulary) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:art_workarea_public_test_for_toefel) %>
   relation_type: conflict
   position: 1
 

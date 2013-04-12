@@ -1,11 +1,11 @@
 # English strings go here for Rails i18n
-en:  
+en:
   datetime:
     formats:
       short: "%m/%d/%y, %H:%M"
 
   # general stuff
-  re_new: 'New'
+  re_create_a_new: 'Create a new'
   re_of_type: 'of type'
   re_requirements: 'Requirements'
   re_save: 'Save'
@@ -117,7 +117,9 @@ en:
   re_wiki_page_available_after_save: 'You can connect a Wiki Page after saving'
   re_artifact_properties_not_enought_chars: 'Minimum chars %d'
   re_artifact_properties_to_many_chars: 'Maximum chars %d'
-
+  re_artifact_properties_updated: 'Artifact Properties updated'
+  re_artifact_properties_created: 'Artifact created'
+  re_no_responsible_user_defined: 'No responsible user defined'
 
   project: Project
   re_my_artifacts: 'My Artifacts'
@@ -134,7 +136,7 @@ en:
   re_artifact_properties_validates_presence_of_created_by: 'Created by cannot be blank.'
   re_artifact_properties_validates_presence_of_project: 'There is no project associated to this artifact.'
   re_artifact_properties_validates_presence_of_artifact: 'No artifact has been associated with these artifact properties'
-  re_artifact_properties_validates_presence_of_parent: 'Every artifact needs a parent artifact, but no parent has been defined'
+  re_artifact_properties_validates_presence_of_parent: 'This artifact does not seem to have a parent artifact defined'
   re_artifact_properties_validates_uniqueness_of_artifact: 'The artifact associated with these artifact properties has to be unique '
 
   field_re_artifact_properties:
@@ -185,6 +187,11 @@ en:
 
   re_deleted_artifact_and_children: 'Successfully deleted the artifact and all its children.'
   re_deleted_artifact_and_moved_children: 'Succesfully attached all child artifacts to the parent and deleted the artifact.'
+
+  re_delete_project_artifact: 'Delete project artifact'
+  re_cannnot_delete_project_artifact: 'This artifact is a project artifact which cannot be deleted. To delete the project, please use '
+  re_redmine_project_administration: 'Redmine Project Administration'
+  re_delete_project_artifact_error: 'The project artifact cannot be deleted.'    
 
   #re_requirement
   re_requirement: 'Requirement'
@@ -303,7 +310,6 @@ en:
   re_goal_not_found: 'Could not find a Goal with id %{id} to delete'
 
   # re_tasks
-
   re_new_re_task: 'Task'
   re_create_re_task: 'Create a new Task'
   re_show_tasks: 'Show Tasks'
@@ -326,6 +332,11 @@ en:
   re_update_difficult: 'Update Difficulties'
   re_st_type_not_allowed: 'This subtask type is not allowed'
   re_st_position_not_allowed: 'This subtask position is not allowed'
+  re_subtask_type: 'Type'
+  re_subtask_name: 'Name'
+  re_subtask_solution: 'Solution'
+  re_task_attributes: 'Task specific attributes'
+  
 
   # re_subtasks
   re_new_re_subtask: 'Subtask'
@@ -365,7 +376,11 @@ en:
 
   # re_settings
   re_settings_have_to_save: 'No configuration saved yet: You have to click on save before you leave this page!'
-
+  re_settings_have_to_save_again: 'The system has been updated! Please check the configuation. You have to click on save before you leave this page!'
+  re_pandoc_error_first: 'Redmine_re uses '
+  re_pandoc_error_second: ' to export artifact data to different formats. Please make sure pandoc is installed.'
+  re_export_error: "Error during export. Please make sure pandoc is installed and an output format is configured in the settings." 
+  
   # re_requirement
   re_requirement: 'Requirement'
   ReRequirement: 'Requirement'
@@ -390,9 +405,9 @@ en:
   re_use_case_precondition : 'Precondition'
   re_use_case_postcondition : 'Postcondition'
   re_delete_use_case_step: 'Delete'
-  re_user_steps: 'User Steps'
-  re_system_steps: 'System Steps'
-  re_use_case_steps: 'Use Case Steps'
+  re_user_steps: 'User steps'
+  re_system_steps: 'System steps'
+  re_use_case_steps: 'Use Case steps'
   re_uc_user: 'User'
   re_uc_system: 'System'
   re_uc_add: 'add'
@@ -409,6 +424,14 @@ en:
   re_expansion_type: 'Type'
   re_expansion_description: 'Description'
   re_delete_use_case_expansion: 'Delete'
+  re_use_case_primary_actor: 'Primary Actor' 
+  re_use_case_secondary_actors: 'Secondary Actor(s)' 
+  re_actors: 'Actors'
+  re_use_case_attributes: 'Use Case specific attributes'
+  re_use_case_expansions: 'Use Case expansions'
+  re_exception_expansion: 'Exception'
+  re_data_expansion: 'Data'
+  re_other_expansion: 'Other'
   
   # re_scenario
   re_scenario: 'Scenario'
@@ -523,11 +546,9 @@ en:
   re_bb_file: 'File Building Block'
   re_bb_inline_view_allowed: 'Inline-View allowed'
   allowed_filetypes : 'Allowed filetypes'
-  
+
   # re_tree
-  re_tree_overview: 'Artifact Summary'
-  re_show_tree: 'Show Tree'
-  re_show_general_tree_view: 'Show Overall Tree'
+  re_specification_overview: 'Specification overview'
   re_treefilter: 'Filter'
   re_create_in: 'create artifact in...'
   re_create_below: 'create artifact below...'
@@ -537,14 +558,19 @@ en:
   field_re_artifact: 'field artifact'
 
   #issues
-
   implementation_of: 'Implementation of'
 
+  #diagrams
+  re_related_diagrams: 'Related diagrams'
+  re_diagrams: 'Diagrams'
+  
   #my blocks
 
   relations: 'Relations'
   main_tab: 'Main tab'
   comments: 'Comments'
+  new_comment: 'New Comment'
+  new_comment_text: 'Comment Text:'
   re_artifact_comments_count: 'Number of Comments'
   open_requirements: 'Open Requirements'
   artifactcount: 'Number of Artifacts'
@@ -593,6 +619,9 @@ en:
   re_outgoing_relationship_count: 'Outgoing'
   re_related_issues: 'Issues'
   re_updated_at: 'Updated'
+  
+  re_traces_to: 'Traces to'
+  re_traces_from: 'Traces from'
 
   re_query_visibility_public: 'public'
   re_query_visibility_me: 'just me'
@@ -600,9 +629,37 @@ en:
   
   re_please_choose: 'please choose'
   re_primary_actor: 'Primary actor'
-  re_secondary_actor: 'Secondary actor'
+  re_secondary_actor: 'Secondary actor(s)'
   re_add_secondary_actor: 'Add secondary actor'
   re_find_secondary_actor: 'Find secondary actor'
   re_changed_by: 'Changed by'
   
   re_delete_use_case_step_expansion: 'Delete'
+  
+  re_starts_with: 'Start with'
+  re_ends_with: 'Ends with'
+  re_contains: 'Contains'
+  re_equals: 'Equals'
+  re_lesser_than: 'Lesser than'
+  re_greater_than: 'Grater than'
+  re_none_specific: 'None specific'
+  re_apply_filter: 'Apply filter'
+  
+  re_artifact_attributes: 'Artifact attributes'
+  
+  label_attachments: 'Attachments'
+  
+  re_relation_saved: 'Relation saved successfully'
+  re_relation_saved_error: 'Relation was not saved successfully'
+  
+  re_artifact_related_content: 'Related content'
+  
+  #mail
+  re_text_artifact_added: "Artifact %{id} has been added by %{author}."
+  re_text_artifact_updated: "Artifact %{id} has been updated by %{author}."
+  re_text_artifact_updated_new_comment: "New comment added by %{author}:"
+
+  connect_issue: "Connect issue"
+  
+  #export
+  re_export: 'Export'

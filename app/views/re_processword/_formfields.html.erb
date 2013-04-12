@@ -1,0 +1,13 @@
+<br />
+<div class="box">
+  <fieldset><legend><%= l(:re_processword_specific_attributes) %></legend>
+
+	<p>		
+		<%= f.fields_for :artifact do |artifact_form|%>
+    	<%= artifact_form.label :synonyms, l(:re_processword_synonyms) %> <%= artifact_form.text_field :synonyms %>
+    	<% end %>
+    </p>
+
+  </fieldset>
+</div>
+

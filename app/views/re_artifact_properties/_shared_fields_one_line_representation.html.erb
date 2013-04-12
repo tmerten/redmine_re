@@ -1,0 +1,5 @@
+<% for column in ReArtifactProperties.content_columns %>
+    <% unless column.name == "created_at" || column.name == "updated_at"|| column.name == "artifact_type" || column.name == "rating_average" %>
+        <%= render :partial => "re_artifact_properties/table_data_for_shared_fields_one_line_representation", :locals => {:name => column.name, :artifact => artifact} %>
+    <% end %>
+<% end %>

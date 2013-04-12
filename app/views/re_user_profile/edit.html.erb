@@ -1,0 +1,28 @@
+<% @re_user_profile = @artifact %>
+
+<div id='detail_view' class='detail_view'>
+  <%= render 're_artifact_properties/action_menu', {:artifact => @re_user_profile} %>
+
+<h2><%= t(:re_artifact) + ' #' + @re_user_profile.artifact_id.to_s + ' - ' + t(:re_user_profile) unless @re_user_profile.nil? %></h2>
+
+<%= errors_and_flash :re_user_profile %>
+<%= form_for :re_user_profile, :update => :detail_view, :url => {:action => "edit"} do |f| %>
+
+    <%= render "re_artifact_properties/shared_fields", {:f => f, :properties => @re_user_profile.re_artifact_properties} %>
+	
+	<div id='re_bb_section'>
+		<%= add_bb_section(@re_user_profile, @bb_hash, @bb_error_hash)%>
+	</div>
+    <p>
+      <%= submit_tag l(:re_save) %>
+      &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
+    </p>
+
+<% end %>
+
+<%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
+
+<br />
+  <%= add_bb_configuration_link(:ReUserProfile)%>
+  
+</div>

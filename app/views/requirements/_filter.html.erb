@@ -1,18 +1,61 @@
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'query_form.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.blockUI-2.55.js', :plugin => 'redmine_re'  %>  
+  <%= stylesheet_link_tag 'suggestible', :plugin => 'redmine_re' %>
+<% end %>
+
+<%= javascript_tag do %>
+
+    (function($) {
+        $().ready(function() {
+            // hidden on init because of UJS
+            $('#sidebar_filter_input_nojs').remove();
+            $('#sidebar_filter .inputs').show();
+
+            $('#sidebar_filter_input').suggestible({
+                ajax: {
+                    suggestions: {
+                        url: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+                        dataType: 'json',
+                        data: function(value, helpers) {
+                            return { query: value };
+                        },
+                        loading: function(helpers) {
+                            $('#ajax-indicator').show();
+                            helpers.elements.textBox.attr('disabled', 'disabled');
+                        },
+                        loaded: function(helpers) {
+                            $('#ajax-indicator').hide();
+                            helpers.elements.textBox.removeAttr('disabled');
+                        }
+                    }
+                },
+                layout: {
+                    containers: function(selectBox, options) {
+                        return new SuggestBoxContainers(selectBox, options);
+                    },
+                    items: function(helpers) {
+                        return new DirectArtifactsSuggestBoxItems(helpers);
+                    }
+                }
+            });
+
+            var elements = $('#sidebar_filter_input_container').data('elements');
+            elements.textBox.attr('name', elements.inputName);
+        });
+    })(jQuery);
+
+<% end %>
 <fieldset id="treefilter" class="collapsible">
   <legend onclick="toggleFieldset(this);"><%= l(:re_treefilter) %></legend>
   <div>
-    <!-- Old Tree Filter Skeleton
-    <% remote_form_for :filter, :update => :detail_view,
-                       :url => {:controller => "requirements", :action => "treefilter"} do |f| %>
-      <%= f.text_field :query, :size => 25, :id => 'sidebar_filter' %>
-    <% end %>
-    -->
-
-    <% form_tag re_queries_path(@project.id), :method => :get do %>
+    <%= form_tag re_queries_path(@project.id), :method => :get do %>
       <%= hidden_field_tag 'source[name_mode]', 'contains' %>
       <div id="sidebar_filter">
         <div class="inputs">
-          <%= select_tag 'source[name]', {}, :id => 'sidebar_filter_input', :class => 'direct_artifacts' %>
+          <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'sidebar_filter_input', :class => 'direct_artifacts' %>
           <%= text_field_tag 'source[name]', nil, :id => 'sidebar_filter_input_nojs' %>
         </div>
         <div class="buttons">

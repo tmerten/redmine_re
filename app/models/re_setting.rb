@@ -2,7 +2,8 @@ class ReSetting < ActiveRecord::Base
   unloadable
 
   belongs_to :project
-  validates_uniqueness_of :name, :scope => :project_id
+  #validates_uniqueness_of :name, :scope => :project_id
+  validates :name , :uniqueness => { :scope => :project_id}
 
   # Hash used to cache setting values
   @cached_settings = {}
@@ -43,6 +44,16 @@ class ReSetting < ActiveRecord::Base
     ActiveSupport::JSON.decode(json_string) unless json_string.nil?
   end
   
+  def self.active_re_artifact_settings(project_id)
+    order = ReSetting.get_serialized("artifact_order", project_id)
+    generate_active_settings_hash(order, project_id)
+  end
+  
+  def self.active_re_relation_settings(project_id)
+    order = ReSetting.get_serialized("relation_order", project_id)
+    generate_active_settings_hash(order, project_id)
+  end  
+  
   def self.check_cache
     # Checks if settings have changed since the values were read
     # and clears the cache hash if it's the case
@@ -55,6 +66,16 @@ class ReSetting < ActiveRecord::Base
       logger.info "Settings cache cleared." if logger
     end
   end
+  
+  def self.force_reconfig
+    
+    Project.all.each do |p|      
+      if (p.enabled_module_names.include? 'requirements')        
+        ReSetting.set_serialized("unconfirmed", p.id, true)  
+      end
+    end 
+    
+  end
 
   private
 
@@ -62,4 +83,16 @@ class ReSetting < ActiveRecord::Base
     setting = find_by_name_and_project_id(name, project_id)
     setting.value unless setting.nil?
   end
+  
+  def self.generate_active_settings_hash(order, project_id)
+    active_settings = {}
+    unless order.nil?
+      order.each do |s|
+        setting = self.get_serialized(s, project_id)
+        active_settings[s] = setting if setting["in_use"]
+      end
+    end
+    active_settings
+  end
+    
 end

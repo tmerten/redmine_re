@@ -1,6 +1,5 @@
-<% values = @query.source || {} %>
-<% form.fields_for(:source, values) do |f| %>
-
+<% values = @query.source || {}%>
+<%= form.fields_for(:source, values) do |f| %>
   <!-- Source Artifact IDs -->
   <%= render 'form_multiselect_field', :fields => f, :field_name => :ids, :label => 'Artifact',
              :modes => source_artifact_modes, :items => @artifacts,

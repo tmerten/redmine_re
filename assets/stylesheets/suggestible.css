@@ -1,5 +1,4 @@
 div.input_container.suggestible {
-    display: inline-block;
     position: relative;
     margin-left: 2px;
     margin-right: 0;
@@ -13,7 +12,6 @@ div.input_container.suggestible .input {
     padding: 0;
     cursor: text;
     background-color: white;
-    width: 300px;
 }
 div.input_container.suggestible .input input[type="text"] {
     border: none;
@@ -162,3 +160,8 @@ div.input_container.suggestible ol.suggestions li.focus .count {
 div.input_container.suggestible ol.suggestions li:first-child {
     border-top: 0;
 }
+
+ol.suggestions {
+	/*width: 300px;*/
+}
+

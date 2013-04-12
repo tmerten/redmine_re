@@ -803,21 +803,21 @@ class ReQuery < ActiveRecord::Base
                                           :foreign_key => 'query_id', :association_foreign_key => 'role_id'
 
   # Scopes
-  named_scope :visible, lambda { visibility_condition(User.current) }
-  named_scope :visible_for, lambda { |user| visibility_condition(user) }
+  scope :visible, lambda { visibility_condition(User.current) }
+  scope :visible_for, lambda { |user| visibility_condition(user) }
 
   # Filter serialization
   @@available_filters.keys.each do |filter_group|
     serialize filter_group
   end
 
-  # Validation
-  validates_presence_of :name, :allow_nil => true
-  validates_uniqueness_of :name
+  # Validation  
+  validates :name, :presence => true, :allow_nil => true
+  validates :name, :uniqueness => true
 
   # Hooks
-  before_validation_on_create :assign_creator
-  before_validation_on_update :assign_maintainer
+  before_validation :assign_creator, :on => :create 
+  before_validation :assign_maintainer, :on => :create
   before_validation :repair_visibility
   before_save :clear_unassigned_visible_roles
 
@@ -843,9 +843,64 @@ class ReQuery < ActiveRecord::Base
   # Creates a new non-persistent query
   def self.from_filter_params(params)
     query = new
+
     @@available_filters.keys.each do |filter_group|
       query.send :"#{filter_group}=", params[filter_group]
     end
+    
+    unless query.source[:ids].nil?
+      query.source[:ids].delete_if {|v| v == ""} 
+    
+    end
+    
+    unless query.source[:builder].nil?
+        
+        query.source.delete(:builder)  
+    
+    end
+
+    unless query.source[:namespace].nil?
+        
+        query.source.delete(:namespace)  
+    
+    end
+
+    unless query.sink[:builder].nil?
+        
+        query.sink.delete(:builder)  
+    
+    end
+
+    unless query.sink[:namespace].nil?
+        
+        query.sink.delete(:namespace)  
+    
+    end
+
+    unless query.issue[:builder].nil?
+        
+        query.issue.delete(:builder)  
+    
+    end
+
+    unless query.issue[:namespace].nil?
+        
+        query.issue.delete(:namespace)  
+    
+    end
+
+    unless query.order[:builder].nil?
+        
+        query.order.delete(:builder)  
+    
+    end
+
+    unless query.order[:namespace].nil?
+        
+        query.order.delete(:namespace)  
+    
+    end
+
     query
   end
 
@@ -918,6 +973,7 @@ class ReQuery < ActiveRecord::Base
 
   # Builds the SQL string that can be passed as condition in a ReArtifactProperties finder method
   def conditions
+    
     conditions = []
     # Basic conditions
     conditions << ["#{ReArtifactProperties.table_name}.artifact_type != ?", 'Project']

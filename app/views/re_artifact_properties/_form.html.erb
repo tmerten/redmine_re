@@ -1,0 +1,153 @@
+<%= javascript_include_tag 're_artifacts_suggestible', :plugin => 'redmine_re' %>
+
+<%= error_messages_for @re_artifact_properties %>
+
+<div class="box">
+  <% if @re_artifact_properties.new_record? %>
+      <% url = {:action => :create} %>
+  <% else %>
+      <% url = {:action => :update} %>
+  <% end %>
+
+  <%= form_for(@re_artifact_properties, :url => url, :html => {:multipart => true}) do |f| %>
+      <% if @re_artifact_properties.new_record? %>
+          <%= hidden_field_tag :parent_artifact_id, @parent_artifact_id %>
+          <%= hidden_field_tag :parent_relation_position, @parent_relation_position %>
+          <%= f.hidden_field :artifact_type %>
+          <%= f.hidden_field :project_id %>
+      <% else %>
+          <%= hidden_field_tag(:id, @re_artifact_properties.id) %>
+      <% end %>
+
+      <%= render 'common_attributes', {:f => f} %>
+      <br/>
+
+      <!-- Additional fields like subtasks for task which are described in an own partial -->
+      <%= render(@artifact_type.underscore+"/formfields", {:f => f}) if File.exists?("#{Rails.root}/plugins/redmine_re/app/views/"+@artifact_type.underscore+"/_formfields.html.erb") %>
+      <!-- add building blocks if user obtains the rights needed for that -->
+      <div id='re_bb_section'>
+        <%= render :partial => "re_building_block/bb_section", :locals => {:bb_hash => @bb_hash, :bb_error_hash => @bb_error_hash} %>
+      </div>
+      <%# add_bb_configuration_link(params[:controller].camelcase)%>
+
+      <!--<fieldset>
+        <legend><%= t(:re_artifact_related_content) %></legend>-->
+        <div class="splitcontent">
+        <div class="splitcontentleft">
+          <!-- Related Issus -->
+          <fieldset>
+            <legend><%= t(:re_associated_issues) %></legend>
+            <div id="issue_filter">
+              <div class="inputs">
+                <%=
+                    select_tag 'issue_id[]', options_for_select(@re_artifact_properties.issues.collect { |u| [u.subject, u.id] }), :id => 'issue_filter_input', :multiple => true
+                %>
+                <%= text_field_tag 'issue_id[]', nil, :id => 'issue_filter_input_nojs' %>
+              </div>
+            </div>
+            <p>
+              <%= link_to image_tag('add.png')+' create related Issue', :controller => 'issues', :action => 'new', :project_id => @project.identifier,
+                          :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank? %>
+            </p>
+          </fieldset>
+        </div>
+      
+        <div class="splitcontentright">
+        <!-- Related Diagrams  --> 
+        <% if (@project.enabled_module_names.include? 'diagrameditor') && (User.current.allowed_to?(:edit_diagrams, @project)) %>	   
+    		<fieldset class="tabular">
+          <legend><%= t(:re_related_diagrams) %></legend>
+        
+          <div id="diagram_filter">
+            <div class="inputs">
+              <%=
+                  select_tag 'diagram_id[]', options_for_select(@re_artifact_properties.related_diagrams.all.collect { |u| [u.name, u.id] },
+                  	@re_artifact_properties.related_diagrams.all.collect { |u| [u.id] }), :id => 'diagram_filter_input', :multiple => true
+              %>
+              <%= text_field_tag 'diagram_id[]', nil, :id => 'diagram_filter_input_nojs' %>
+            </div>
+          </div>
+          <p>
+            <%= link_to image_tag('add.png')+' create related Diagram', :controller => 'diagrameditor', :action => 'show', :project_id => @project.identifier,
+                        :artifacttype => @re_artifact_properties.artifact_type, :artifactname => @re_artifact_properties.name, :artifactid => @re_artifact_properties.id unless @re_artifact_properties.id.blank? %>
+          </p>
+        </fieldset>
+    	  <% end %>
+      </div> 
+    </div>	  
+
+	  <!--</fieldset>-->
+      <!-- Comments render only when in edit mode -->
+      <% unless @re_artifact_properties.new_record? %>
+        <fieldset class="comment">
+          <legend> <%= t(:comments) %></legend>
+              <textarea class="comment_input" name="comment" cols="20" rows="3"></textarea>
+        </fieldset>
+      <% end %><!-- end render only when in edit mode -->
+
+
+      <!-- Related artifacts -->
+      <fieldset>
+        <legend><%= t(:re_artifact_relationships) %></legend>
+        <div class="splitcontentleft">
+          <div id="relationship_link_list">
+            <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@re_artifact_properties.id) %>
+            <% @relationships_outgoing.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
+            <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@re_artifact_properties.id) %>
+            <% @relationships_incoming.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
+            <%= render "re_artifact_relationship/relationship_links" %>
+          </div>
+          <br/>
+        </div>
+
+        <div class="splitcontentright">
+          <b><%= t :re_create_new_relation %></b>
+
+          <div id="relationhandling">
+            <%= render :partial => "relation_type_radio_buttons" %>
+            <%= hidden_field_tag 'source[name_mode]', 'contains' %>
+            <div id="relation_filter">
+              <div class="inputs">
+                <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'relation_filter_input' %>
+                <%= text_field_tag 'source[name]', nil, :id => 'relation_filter_input_nojs' %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </fieldset>
+
+      <div id="attachments" class="artifact_edit_box">
+        <h3><%= t :label_attachments %></h3>
+        <%= render 'attachments/form', :locals => {:container => @re_artifact_properties} %>
+      </div>
+
+      <p>
+        <%= submit_tag t(:re_save) %>
+        &nbsp;
+        <% unless @re_artifact_properties.new_record? %>
+            <%= link_to(t(:re_cancel), {:project_id => @project.id}, {:class => "icon icon-cancel"}) %>
+        <% end %>
+      </p>
+
+      <% end %><!-- form end tag -->
+</div>
+
+<%= javascript_tag do %>
+	(function($) {
+
+       	$().ready(function() {
+					
+			initIssueSuggestibles('<%= suggest_issues_re_queries_path(@project.id) %>', '<%= issues_bits_re_queries_path(@project.id) %>');
+			initDiagramSuggestibles('<%= suggest_diagrams_re_queries_path(@project.id) %>','<%= diagrams_bits_re_queries_path(@project.id) %>');
+					
+			var exceptRelationIDs = null;
+	        <% if !@re_artifact_properties.new_record? %>
+	          	exceptRelationIDs = <%= @re_artifact_properties.id %> //avoid suggestion of own artifact	            
+		    <% end %>	
+					
+			initRelationSuggestibles('<%= suggest_artifacts_re_queries_path(@project.id) %>',exceptRelationIDs);
+
+        });
+	})(jQuery);
+          <% end %>

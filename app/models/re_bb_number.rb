@@ -5,8 +5,10 @@ class ReBbNumber < ReBuildingBlock
   
   validate :min_max_values_must_be_possible
   validate :number_of_digits, :numericality => {:only_integer => true}
-  validates_numericality_of :minimal_value, :maximal_value
   
+  validates :minimal_value, :numericality => true
+  validates :maximal_value, :numericality => true
+   
   
   @@data_form_partial_strategy = 're_building_block/re_bb_number/data_form'
   @@multiple_data_form_partial_strategy = 're_building_block/re_bb_number/multiple_data_form' 

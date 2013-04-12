@@ -133,6 +133,46 @@
         };
     };
 
+	// Encapsulates the creation functions for diagram items
+    window.DiagramsSuggestBoxItems = function(helpers) {
+        var _this = this;
+        this.helpers = helpers;
+
+        this.createSuggestion = function(record) {
+            this.addClass('diagram');
+            this.attr('title', record.name);
+            $('<span />', { 'class': 'id' }).appendTo(this).text('#' + record.id);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+        };
+
+        this.createBit = function(record) {
+            var bit = this;
+            this.addClass('diagram');
+            this.attr('title', record.name);
+            $('<span />', { 'class': 'id' }).text('#' + record.id).appendTo(this);					
+            var nameSpanTag = $('<span />', { 'class': 'name' });
+            var nameAnchorTag = $('<a />', { 'href': record.url });
+            nameAnchorTag.appendTo(nameSpanTag).text(record.name);
+            nameAnchorTag
+                .mouseover(function() {
+                    bit.addClass('focus');
+                })
+                .mouseout(function() {
+                    bit.removeClass('focus');
+                });
+            nameSpanTag.appendTo(bit);
+
+            var closeSpanTag = $('<span />', { 'class': 'close' }).text('×');
+            closeSpanTag.appendTo(bit);
+            closeSpanTag.click(function() {
+                _this.helpers.removeItemFromBits(bit, function() { _this.helpers.elements.textBox.focus(); });
+                return false;
+            });
+
+            return true;
+        };
+    };
+
     // Encapsulates the creation functions for user items
     window.UsersSuggestBoxItems = function(helpers) {
         var _this = this;
@@ -201,4 +241,62 @@
             return false;
         };
     };
+
+    // Encapsulates the creation functions for directly selectable artifact items
+    window.DirectArtifactsSuggestBoxItemsForRelations = function(helpers) {
+        this.helpers = helpers;
+
+        this.createSuggestion = function(record) {
+            this.addClass('artifact');
+            this.attr('title', record.name);
+            $('<span />', { 'class': 'icon ' + record.icon }).appendTo(this);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
+            this.click(function() {
+            	createRelation(record);
+                return false;
+            });
+            helpers.elements.textBox.keydown(function(event) {
+                if ((event.keyCode == 9 || event.keyCode == 13) && helpers.hasSelectedSuggestion()) {
+                    document.location = helpers.selectedSuggestion().data('record').url;
+                }
+            })
+        };
+
+        this.createBit = function(record) {
+            return false;
+        };
+    };
+    
+    // Encapsulates the creation functions for directly selectable artifact items
+    window.DirectArtifactsSuggestBoxItemsForAddingRelations = function(helpers) {
+        this.helpers = helpers;
+
+        this.createSuggestion = function(record) {
+            this.addClass('artifact');
+            this.attr('title', record.name);
+            $('<span />', { 'class': 'icon ' + record.icon }).appendTo(this);
+            $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
+            $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
+            this.click(function() {
+            	createRelation(record);
+                return false;
+            });
+            helpers.elements.textBox.keydown(function(event) {
+                if ((event.keyCode == 9 || event.keyCode == 13) && helpers.hasSelectedSuggestion()) {
+                    var selected_suggestion = helpers.selectedSuggestion();
+                    if (selected_suggestion.hasClass('focus')) {
+                    	createRelation(selected_suggestion.data('record'));
+                        helpers.elements.suggestionsBox.clearAndHideSuggestionsBox();
+                    }
+                    return false;
+                }
+            });
+        };
+
+        this.createBit = function(record) {
+            return false;
+        };
+    };    
+    
 })(jQuery);

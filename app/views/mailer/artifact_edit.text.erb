@@ -1,0 +1,18 @@
+<%= l(:re_text_artifact_updated, :id => "##{@re_artifact_properties.id}", :author => h(@updated_by_user)) %>
+
+<% unless @re_artifact_properties.responsible.blank?%>
+Responsible: <%= @re_artifact_properties.responsible%>
+<% end%>
+
+<%= @re_artifact_properties.description %>
+
+
+<% unless @comment.nil? 
+	comment_user = User.find(@comment.author_id)
+%>
+<%= l(:re_text_artifact_updated_new_comment, :author => h(comment_user)) %>
+<%=@comment.comments%>
+
+
+
+<%end%>

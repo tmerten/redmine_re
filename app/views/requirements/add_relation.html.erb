@@ -1,0 +1,27 @@
+<h3 class="title"><%= t(:re_create_new_relationship) %></h3>
+
+<%= label_tag 'source', t(:re_from).camelcase, :class => 'new-relation' %> 
+<%= @source.name %> 
+<%= label_tag 'sink', t(:re_to),  :class => 'new-relation'%>
+<%= @sink.name %>
+
+<p class="buttons">
+
+<%= form_tag({:controller => 'requirements',
+              :action => 'addRelation',
+              :source_id => @source.id,
+              :sink_id => @sink.id,
+              :id => @re_artifact_properties.id,
+              :dialog_send => 'true'},           
+             :remote => false,
+             :method => :post,
+             :id => 'add-relation-form') do %>
+
+	<p>	
+    	<%= render :partial => "re_artifact_properties/relation_type_radio_buttons" %>
+	</p>
+	<%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+<% end %>
+
+</p>

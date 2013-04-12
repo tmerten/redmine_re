@@ -6,7 +6,7 @@ class ReBuildingBlock < ActiveRecord::Base
   belongs_to :project
   has_many :re_bb_project_positions, :dependent => :destroy 
   
-  validates_presence_of :name
+  validates :name, :presence => true
   before_save :prohibit_save_of_new_artifact_type
   before_destroy :delete_occurances_of_bb_from_some_attributes_representation
 

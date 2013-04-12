@@ -1,95 +1,188 @@
 class ReArtifactProperties < ActiveRecord::Base
   unloadable
 
-  cattr_accessor :artifact_types
-  ajaxful_rateable :stars => 10, :allow_update => true#, :dimensions => [:first]
-  has_many :realizations, :dependent => :destroy
+  #attr_accessible :artifact_type
+
+  scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
+  scope :of_project, lambda { |project|
+    project_id = (project.is_a? Project) ? project.id : project
+    {:conditions => {:project_id => project_id}}
+  }
+
+  has_many :ratings, :dependent => :destroy
+  has_many :raters, :through => :ratings, :source => :users
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
+  has_many :realizations, :dependent => :destroy
   has_many :issues, :through => :realizations, :uniq => true
 
-
-  has_many :user_profiles, 
-    :foreign_key => "source_id",
-    :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:dep] ]
-    # not need to put :dependent => :destroy, since it will be destroyed through relationships_as_source
-
   has_many :relationships_as_source,
-    :order => "re_artifact_relationships.position",
-    :foreign_key => "source_id",
-    :class_name => "ReArtifactRelationship",
-    :dependent => :destroy
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :dependent => :destroy
 
   has_many :relationships_as_sink,
-    :order => "re_artifact_relationships.position",
-    :foreign_key => "sink_id",
-    :class_name => "ReArtifactRelationship",
-    :dependent => :destroy
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "sink_id",
+           :class_name => "ReArtifactRelationship",
+           :dependent => :destroy
+
+  has_many :traces_as_source,
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values],
+           :dependent => :destroy
+
+  has_many :traces_as_sink,
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "sink_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values],
+           :dependent => :destroy
 
   has_one :parent_relation,
-    :order => "re_artifact_relationships.position",
-    :foreign_key => "sink_id",
-    :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
-    # not need to put :dependent => :destroy, since it will be destroyed through relationships_as_source
+          :order => "re_artifact_relationships.position",
+          :foreign_key => "sink_id",
+          :class_name => "ReArtifactRelationship",
+          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]],
+          :dependent => :destroy
 
   has_many :child_relations,
-    :order => "re_artifact_relationships.position",
-    :foreign_key => "source_id",
-    :class_name => "ReArtifactRelationship",
-    :conditions => [ "re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pch] ]
-    # not need to put :dependent => :destroy, since it will be destroyed through relationships_as_sink
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]],
+           :dependent => :destroy
 
-  has_many :sinks,    :through => :relationships_as_source, :order => "re_artifact_relationships.position"
+  has_many :diagram_relations,
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia]],
+           :dependent => :destroy
+
+  #if defined?(ConcreteDiagram) == 'constant' 
+
+  has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram", :source => "sink"
+
+
+  has_many :sinks, :through => :traces_as_source, :order => "re_artifact_relationships.position"
   has_many :children, :through => :child_relations, :order => "re_artifact_relationships.position", :source => "sink"
-
-  has_many :sources, :through => :relationships_as_sink,   :order => "re_artifact_relationships.position"
+  has_many :sources, :through => :traces_as_sink, :order => "re_artifact_relationships.position"
   has_one :parent, :through => :parent_relation, :source => "source"
-
   has_many :re_bb_data_texts, :dependent => :delete_all
   has_many :re_bb_data_selections, :dependent => :delete_all
   has_many :re_bb_data_artifact_selections, :dependent => :delete_all
 
-  acts_as_event :title => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
-  :description => Proc.new {|o| "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at)? l(:re_was_created) : l(:re_was_updated) }."},
-  :datetime => :updated_at,
-  :url => Proc.new {|o| {:controller => 're_artifact_properties', :action => 'edit', :id => o.id}}
+  acts_as_watchable
+  acts_as_attachable({:delete_permission => :edit_requirements, :view_permission => :view_requirements})
 
-  acts_as_activity_provider :type => 're_artifact_properties',
-  :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
-  :author_key => "#{ReArtifactProperties.table_name}.updated_by",
-  :find_options => {:include => [:project, :user] },
-  :permission => :edit_requirements
+  acts_as_event(
+      :title => Proc.new { |o|
+        "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at) ? l(:re_was_created) : l(:re_was_updated) }."
+      },
+      :description => Proc.new { |o|
+        "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at) ? l(:re_was_created) : l(:re_was_updated) }."
+      },
+      :datetime => :updated_at,
+      :url => Proc.new { |o|
+        {:controller => 're_artifact_properties', :action => 'show', :id => o.id}
+      }
+  )
+
+  acts_as_activity_provider(
+      :type => 're_artifact_properties',
+      :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
+      :author_key => "#{ReArtifactProperties.table_name}.updated_by",
+      :find_options => {:include => [:project, :user]},
+      :permission => :edit_requirements
+  )
+
+  # workaround such that the a project can be deleted flawlessly from Redmine
+  def destroy
+    if self.artifact_type == "Project"
+      relationships_as_source.each { |r| r.destroy }
+      delete
+    else
+      super
+    end
+  end
+
+  def updated_on
+    updated_at
+  end
+
+  def created_on
+    created_at
+  end
 
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'created_by'
+  #belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :artifact, :polymorphic => true, :dependent => :destroy
+  belongs_to :responsible, :class_name => 'User', :foreign_key => 'responsible_id'
 
-  named_scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
-  named_scope :of_project, lambda { |project|
-    project_id = (project.is_a? Project) ? project.id : project
-    { :conditions => { :project_id => project_id } }
-  }
+  # attributes= and artifact_attributes are overwritten to instantiate
+  # the correct artifact_type and use nested attributes for re_artifact_properties
+  accepts_nested_attributes_for :artifact
 
-  acts_as_watchable
+  def build_artifact properties, something_we_dont_know_yet
+    # is build_artifact only called when the re_artifact is new?
+    logger.debug properties.inspect
+    # properties.re_subtask => properties.re_subtask_attributes or properties_re_subtasks_attributes 
 
-  validates_presence_of :project,    :message => l(:re_artifact_properties_validates_presence_of_project)
-  validates_presence_of :created_by, :message => l(:re_artifact_properties_validates_presence_of_created_by)
-  validates_presence_of :updated_by, :message => l(:re_artifact_properties_validates_presence_of_updated_by)
-  validates_presence_of :name,       :message => l(:re_artifact_properties_validates_presence_of_name)
-  validates_presence_of :parent,     :message => l(:re_artifact_properties_validates_presence_of_parent), :unless => Proc.new { |a| a.artifact_type == "Project" }
-  validates_associated :parent_relation
+    if self.artifact_type
+      self.artifact = self.artifact_type.constantize.new(properties)
+    else
+      throw "ReArtifactProperties always need an ArtifactType"
+    end
+  end
 
-  validates_length_of :name, :minimum => 3, :message => l(:re_artifact_properties_not_enought_chars)
-  validates_length_of :name, :maximum =>50, :message => l(:re_artifact_properties_to_many_chars)
+  def attributes=(attributes = {})
+    unless attributes[:artifact_type].blank?
+      self.artifact_type = attributes[:artifact_type]
+    end
+    super
+  end
 
-  after_destroy :delete_wiki_page
+  validates :name, :length => {:minimum => 3, :maximum => 100}
+  validates :project, :presence => true
+  validates :created_by, :presence => true
+  validates :updated_by, :presence => true
+  validates :parent, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
+  validates :artifact_type, :presence => true, :inclusion => {
+      :in => %w(ReGoal ReSection ReVision ReTask ReSubtask ReVision ReAttachment ReWorkarea ReUserProfile ReSection ReRequirement ReScenario ReProcessword ReRational ReUseCase ReRationale Project)}
 
-  def self.get_properties_id(controllername, subartifact_id)
-    # delivers the ID of the re_artifact_properties when the name of the controller and id of sub-artifact is given
-    @re_artifact_properties = ReArtifactProperties.find_by_artifact_type_and_artifact_id(controllername.camelize, subartifact_id)
-    @re_artifact_properties.id
+  #TODO
+  #validates_associated :parent_relation
+  validates :parent_relation, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
+
+  # Returns true if usr or current user is allowed to view the artifact
+  def visible?(usr=nil)
+    if (!usr.nil? && usr.allowed_to?(:view_requirements, self.project)) || User.current.allowed_to?(:view_requirements, self.project)
+      return true
+    else
+      return false
+    end
+  end
+
+  # Returns the users that should be notified
+  def notified_users
+    notified = []
+    # Author and assignee are always notified unless they have been
+    # locked or don't want to be notified
+    notified << author if author
+    notified = notified.select { |u| u.active? && u.notify_about?(self) }
+    notified.uniq!
+    # Remove users that can not view the issue
+    notified.reject! { |user| !visible?(user) }
+    notified
+  end
+
+  # Returns the email addresses that should be notified
+  def recipients
+    notified_users.collect(&:mail)
   end
 
   # Finds all artifacts that are commonly used by the supplied issues
@@ -113,12 +206,6 @@ class ReArtifactProperties < ActiveRecord::Base
     return parent_relation.position
   end
 
-  def delete_wiki_page
-    wiki_page_name = "#{self.id}_#{self.artifact_type}"
-    wiki_page = WikiPage.find_by_title(wiki_page_name)
-    wiki_page.destroy if wiki_page
-  end
-
   def gather_children
     # recursively gathers all children for the given artifact
     #
@@ -131,17 +218,16 @@ class ReArtifactProperties < ActiveRecord::Base
     children
   end
 
-  private
+  def siblings
+    self.parent.children
+  end
 
-  # checks if o is of type re_artifact_properties or acts_as_artifact
-  # returns o or o's re_artifact_properties
-  def instance_checker(o)
-    if not o.instance_of? ReArtifactProperties
-      if not o.respond_to? :re_artifact_properties
-        raise ArgumentError, "You can relate ReArtifactProperties to other ReArtifactProperties or a class that acts_as_artifact, only."
-      end
-      o = o.re_artifact_properties
+  def average_rating
+    @value = 0
+    self.ratings.each do |rating|
+      @value = @value + rating.value
     end
-    o
+    @total = self.ratings.size
+    @value.to_f / @total.to_f
   end
 end

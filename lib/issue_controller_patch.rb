@@ -16,7 +16,7 @@ module IssuesControllerPatch
 
   module InstanceMethods
     def update_issue_from_params_with_artifacts
-
+      @issue.re_artifact_properties = []
       unless params[:artifact_id].blank?
         params[:artifact_id].each do |aid|
           @issue.re_artifact_properties << ReArtifactProperties.find(aid)
@@ -35,7 +35,7 @@ module IssuesControllerPatch
     end
 
     def new_with_artifacts
-      @insertvalues = {"artifacttype" => params[:artifacttype], "artifactname"=>params[:artifactname], "displayid"=>params[:displayid], "associationid"=> params[:associationid]}
+      @insertvalues = {"artifacttype" => params[:artifacttype], "artifactname"=>params[:artifactname], "artifactid"=>params[:artifactid]}
       new_without_artifacts
     end
 

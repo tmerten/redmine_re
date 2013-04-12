@@ -1,0 +1,36 @@
+<div id='detail_view' class='detail_view'>
+<h2><%= t(:re_artifact_type_description_configuration, :artifact_type => l(@artifact_type.underscore)) %></h1>
+
+<% flash.each do |k,v| %>
+  <%= content_tag('div', v, :class => "flash " + k.to_s) %>
+<% end %>
+<br/>
+
+<%= form_tag url_for(:action => "edit_artifact_type_description", :project_id => @project.id, :artifact_type => @artifact_type) do  %>
+    
+	<fieldset>
+      <legend><%= t(:re_artifact_type_description) %></legend>
+      <% unless @description.nil? or @description == ''  %>
+	          <div class="contextual">
+	            <a href="#" accesskey="<%= accesskey(:edit) -%>" class="icon icon-edit" onclick="showAndScrollTo('update-description', 'description'); return false;"><%= l(:re_update_description) %></a>
+	          </div>
+	          <%= textilizable(@description, :only_path => false) %>
+	          <br/>
+	      <% end %>
+	      <div id='update-description' <%= 'style="display:none;"' unless @description.nil? or @description == '' %>>
+	        <%= text_area_tag :description, @description,
+	                        :cols => 60,
+	                        :rows => (@description.blank? ? 10 : [[10, @description.length / 50].max, 100].min),
+	                        :accesskey => accesskey(:edit),
+	                        :class => 'wiki-edit' %>
+	        <%= wikitoolbar_for 'description' %>
+	      </div>
+    </fieldset>
+	
+	<%= submit_tag l(:re_save), :accesskey => "s" %>
+    &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>  
+	
+<% end %>
+  
+
+</div>

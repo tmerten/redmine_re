@@ -1,0 +1,128 @@
+<%= javascript_include_tag 're_use_case', :plugin => 'redmine_re' %>
+
+<%= f.fields_for :artifact do |artifact_form| %>
+	<fieldset class="tabular"><legend><%= l(:re_use_case_specific_attributes) %></legend>
+	    <p>
+	    <%= artifact_form.label :goal_level, l(:re_use_case_level) %>
+	    <%#  image_tag('icons/use_case_cloud.png', :size => '40x40', :plugin => 'redmine_re', :alt => t(:re_use_case_abstract_overview)) => 5 %>
+	    <%= artifact_form.select :goal_level, [
+	      [t(:re_use_case_abstract_overview), 5],
+	      [t(:re_use_case_overview) , 4 ],
+	      [t(:re_use_case_user_goal) , 3 ],
+	      [t(:re_use_case_function) , 2 ],
+	      [t(:re_use_case_low) , 1 ] ] %>
+	    </p>
+	    <p>
+	      <%= artifact_form.label :trigger, l(:re_use_case_trigger) %> <%= artifact_form.text_field :trigger %>
+	    </p>
+	    <p>
+	      <%= artifact_form.label :precondition, l(:re_use_case_precondition) %> <%= artifact_form.text_field :precondition %>
+	    </p>
+	    <p>
+	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition %>
+	    </p>
+
+			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %>
+				<% unless @re_artifact_properties.artifact.primary_actor.blank? %>
+					<%= select_tag("primary_user_profile", options_for_select(ReUseCase.getAllUserProfiles(@project.id).collect { |pa| [pa.name, pa.id] }, :selected => @re_artifact_properties.artifact.primary_actor.id), {:include_blank => true }) %>
+				<%else%>
+					<%= select_tag("primary_user_profile", options_for_select(ReUseCase.getAllUserProfiles(@project.id).collect { |pa| [pa.name, pa.id] }), {:include_blank => true }) %>
+				<% end%>
+			</p>
+		
+	      <p>
+	      	<label><%= t(:re_secondary_actor) %></label>
+	        <div id="secondary_actor_filter">
+	          <div class="inputs">
+	            <%= select_tag 'secondary_actor_ids[]',
+	                            options_for_select(@re_artifact_properties.artifact.actors.collect { |a| [a.name,
+	                            a.id] }, @re_artifact_properties.artifact.actors.collect { |u| u.id }),
+	                            :id => 'secondary_actor_filter_input',
+	                            :class => 'input_container suggestible',
+	                            :multiple => true %>
+	          </div>
+	        </div>
+
+	      </p>
+	      <%= javascript_tag do %>
+
+              (function($) {
+
+              $().ready(function() {
+              $('#secondary_actor_filter_input option').attr("selected","selected");
+
+              // hidden on init because of UJS
+              $('#secondary_actor_filter_input_nojs').remove();
+              $('#secondary_actor_filter .inputs').show();
+
+              $('#secondary_actor_filter_input').suggestible(suggestibleOptions({
+              suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+              suggestionsLayout: function(helpers) {
+              return new ArtifactsSuggestBoxItems(helpers);
+              },
+              bitsUrl: '<%= artifacts_bits_re_queries_path(@project.id) %>',
+              only_types : 'ReUserProfile',
+              except_ids: null
+              }));
+
+              });
+              })(jQuery);
+          <% end %>
+	</fieldset>
+	
+	<fieldset><legend><%= l(:re_use_case_steps) %></legend>
+	  <table>
+	      <tr>
+	        <th style="width: 400px;">
+	        	<%= t(:re_user_steps) %>
+	            <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery('#steps'), 'top', 'user')", :class => "" ) %>
+	        </th>
+	        <th style="width: 400px;">
+	        	<%= t(:re_system_steps) %>
+	            <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery('#steps'), 'top', 'system')", :class => "" ) %>
+	        </th>
+	      </tr>
+	  </table>
+	  <div id="steps" style="min-width: 800px;">
+		  <%= artifact_form.fields_for :re_use_case_steps do |builder| %>
+		  	<%= render('re_use_case/re_use_case_step_fields', :f => builder) %>
+		  <% end %>
+	  </div>
+	</fieldset>
+	
+	<%= javascript_tag do %>
+	  function addStep(element, add_pos, type) {
+	  	
+	  	var now = new Date;
+		var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
+					now.getHours(), now.getMinutes(), now.getSeconds(), 
+					now.getMilliseconds());
+	    var rendered_step;
+	
+	    switch(type) {
+	      case 'user':
+	      	rendered_step = "<%= get_escaped_setp_html(artifact_form, 1) %>";
+	      break;
+	      case 'system':
+	      	rendered_step = "<%= get_escaped_setp_html(artifact_form, 2) %>";
+	    }
+	
+	    switch(add_pos) {
+	      case 'after':  
+	        jQuery(element).after( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
+	      case 'before': 
+	         jQuery(element).before( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
+	      case 'bottom': 
+	         jQuery('#steps').append( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
+	      case 'top':    
+	         jQuery('#steps').prepend( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	      break;
+	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
+	    }
+	    updateStepPositionFields();
+	  }
+	<% end %>
+<% end %>

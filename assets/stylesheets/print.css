@@ -1,0 +1,77 @@
+/**
+	 *	PRINT Stylesheet
+	 * 
+	 *	First 'neutralize' all the positioning/overflow CSS added by Layout
+	 *	Then change or add cosmetic styles (borders, padding) for printing
+	 *
+	 *	MUST use "!important" for all size, position, margin & overflow rules,
+	 *	so these will 'override' styles applied to the elements by Layout
+	 */
+
+	html, body {
+		/* NEUTRALIZE 'layout container' styles */
+		overflow:	visible 	!important;
+		width:		auto		!important;
+		height:		auto		!important;
+		position:	static		!important;
+	}
+	.ui-layout-pane ,
+	.ui-layout-resizer ,
+	.ui-layout-toggler {
+		/* NEUTRALIZE 'layout element' styles */
+		display:	none		!important; /* hide ALL by default */
+		position:	relative	!important;
+		top:		auto		!important;
+		bottom:		auto		!important;
+		left:		auto		!important;
+		right:		auto		!important;
+		width:		auto		!important;
+		height:		auto		!important;
+		overflow:	visible		!important;
+	}
+	/* SHOW ONLY the panes you want */
+	.ui-layout-pane-north ,
+	.ui-layout-pane-south ,
+	.ui-layout-pane-center {
+		display:	block		!important;
+		/* OPTIONAL: change cosmetic styles as desired
+		border:		0			!important;
+		padding:	0			!important;
+		background:	transparent	!important;
+		border: 1px solid #000000 !important;
+		border-top: 1px solid #000000 !important;
+		*/
+		
+		
+	}
+	/* float the east pane to create a sidebar */
+	.ui-layout-pane-east {
+		display:	    none		!important;
+		float:			right;
+		width:			25%			!important;
+		margin-left:	1em			!important;
+		margin-bottom:	1ex			!important;
+	}
+	
+ 	.next-prev-links {
+ 		display: 		none 		!important; 
+ 	}
+	.contextual {
+ 		display: 		none 		!important; 
+ 	}
+	
+
+	.requirement_upper {		
+		background:	transparent	!important;		
+		border: 1px solid #B8B8B8 !important;		
+		border-top: 1px solid #B8B8B8 !important;
+	}
+	.requirement_lower {		
+		background:	transparent	!important;						
+	}
+	.flash {
+		display: 		none 		!important;
+	}
+	#vakata-contextmenu {
+		display: 		none 		!important;
+	}

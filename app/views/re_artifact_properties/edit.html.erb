@@ -1,0 +1,17 @@
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
+
+<div id="infobar" class="ui-layout-west ui-layout-content">
+  <%= render "requirements/treebar" %>
+</div>
+
+<div id='detail_view' class='ui-layout-center'>
+  <h2><%= t :re_edit %> <%= artifact_heading(@re_artifact_properties) %></h2>
+	<%= render :partial => 'edit' %>
+	<% content_for :header_tags do %>
+	    <%= robot_exclusion_tag %>
+	<% end %>
+</div>

@@ -1,0 +1,83 @@
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
+    <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+    <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
+    <%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
+    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+    <%= stylesheet_link_tag 'icons.css', :plugin => "redmine_re", :media => 'all' %>
+<% end %>
+
+<div id="infobar" class="ui-layout-west ui-layout-content">
+  <%= render "requirements/treebar" %>
+</div>
+
+<div id="re-index" class="ui-layout-center">
+  <% configured_description = ReSetting.get_plain('plugin_description', @project.id) %>
+  <% if configured_description.nil? or configured_description == '' %>
+      <% if User.current.allowed_to?(:edit_requirements, @project) %>
+          <h2>Create a new Requirements Artifact</h2>
+      <% elsif  User.current.allowed_to?(:view_requirements, @project) %>
+          <h2>Requirements Artifact</h2>
+      <% end %>
+       
+       <% s = "" %>       
+       <% flash.each do |k,v| %>       
+       <%   s << content_tag('div', v, :class => "flash #{k}") %>
+       <% end %> 
+       <%= s.html_safe%>
+       
+      <p>
+        Get started by creating a new requirements artifact. You may select from the artifacts below.<br/>
+        You will find the artifacts you created in the tree to your left. You can drag and drop each artifact
+        in the tree to reorder or restructure your RE artifacts.<br/>
+        The tree represents the structure of your requirements document.
+      </p>
+
+      <p>
+        Once you left this page you can always add a new artifact by right-click on an element of the tree below
+        the Artifact Summary. A context menu will open up, which provides all operations you need.
+      </p>
+  <% else %>
+      <%= textilizable(configured_description, :only_path => false) %>
+  <% end %>
+
+  <% @re_artifact_settings.each do |currentArtifact, currentArtifactSetting| %>
+      <h3><%= rendered_artifact_type(currentArtifact.underscore) %></h3>
+      <%= render :partial => "re_artifact_descriptions/#{currentArtifact.underscore}_description" %>
+      <ul>
+
+        <% if User.current.allowed_to?(:edit_requirements, @project) %>
+            <li>
+              <%= link_to(
+                          t(:re_create_new) + rendered_artifact_type(currentArtifact.underscore),
+                          {
+                                  :controller => "re_artifact_properties",
+                                  :action => "new",
+                                  :project_id => @project.identifier,
+                                  :artifact_type => currentArtifact,
+                                  :parent_artifact_id => @project_artifact.id},
+                          {
+                                  :class => "icon " + currentArtifact.underscore
+                          }) %>
+            </li>
+        <% end %>
+      </ul>
+  <% end %>
+
+  <h2>Trace your requirements</h2>
+
+  <p>
+    You also may like to visualize the traces for the requirements artifacts you created.
+  </p>
+
+  <ul>
+    <li>
+      <%= link_to l(:re_relationship_visualization), {
+              :controller => 're_artifact_relationship',
+              :action => 'visualization',
+              :project_id => @project.id}
+      %>
+    </li>
+  </ul>
+  <div style="clear:both;"></div>
+</div>

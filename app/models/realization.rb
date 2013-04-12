@@ -1,9 +1,9 @@
 class Realization < ActiveRecord::Base
 
-
   belongs_to :issue
   belongs_to :re_artifact_properties
 
+  INITIAL_COLOR="#99cc00"
 
     #an artifact is open iff one of the corresponding tickets is open
   def self.open_artifacts(project)

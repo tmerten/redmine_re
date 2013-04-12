@@ -11,6 +11,7 @@ class ReQueriesController < RedmineReController
     @query = ReQuery.from_filter_params(request.query_parameters)
     @query.project = @project
     load_cropped_collections
+    initialize_tree_data
     if @query.set_by_params?
       @found_artifacts = ReArtifactProperties.all(:conditions => @query.conditions, :order => @query.order_string)
     else
@@ -22,7 +23,9 @@ class ReQueriesController < RedmineReController
   def show
     @query = ReQuery.visible.find(params[:id])
     @query.order = params[:order] if params[:order]
+    initialize_tree_data
     load_cropped_collections
+
     @found_artifacts = ReArtifactProperties.all(:conditions => @query.conditions, :order => @query.order_string)
   end
 
@@ -36,11 +39,14 @@ class ReQueriesController < RedmineReController
   def new
     @query = ReQuery.from_filter_params(params)
     @query.project = @project
+
+    initialize_tree_data
     load_cropped_collections
   end
 
   def edit
     @query = ReQuery.visible.find(params[:id])
+    initialize_tree_data
     load_cropped_collections
   end
 
@@ -48,6 +54,7 @@ class ReQueriesController < RedmineReController
     @query = ReQuery.new(params[:re_query])
     @query.project = @project
     load_cropped_collections
+    initialize_tree_data
     if @query.save
       redirect_to re_query_path(@project.id, @query)
     else
@@ -58,6 +65,7 @@ class ReQueriesController < RedmineReController
   def update
     @query = ReQuery.visible.find(params[:id])
     @query.update_attributes(params[:re_query])
+    
     load_cropped_collections
     if @query.save
       redirect_to re_query_path(@project.id, @query)
@@ -67,13 +75,17 @@ class ReQueriesController < RedmineReController
   end
 
   def delete
-    # TODO: Not RESTful?
     @query = ReQuery.visible.find(params[:id])
     @query.destroy
     redirect_to re_queries_path(@project.id)
   end
 
   # AJAX Helpers
+  
+  ##
+  ## These helpers create a list of artifacts/issues/diagrams/whatever
+  ##
+  
   def suggest_artifacts
     artifacts = []
     unless params[:query].blank?
@@ -92,7 +104,7 @@ class ReQueriesController < RedmineReController
       artifacts.map! do |artifact|
         artifact_to_json(artifact).merge({:highlighted_name => highlight_letters(artifact.name, params[:query])})
       end
-    end
+    end    
     render :json => artifacts
   end
 
@@ -111,6 +123,23 @@ class ReQueriesController < RedmineReController
       end
     end
     render :json => issues
+  end
+
+  def suggest_diagrams
+    diagrams = []
+    unless params[:query].blank?
+      sql = "project_id = ? AND name LIKE ?"
+      sql << " AND id NOT IN (?)" unless params[:except_ids].blank?
+
+      conditions = [sql, @project.id, "%#{params[:query]}%"]
+      conditions << params[:except_ids] unless params[:except_ids].blank?
+
+      diagrams = ConcreteDiagram.all(:conditions => conditions, :order => 'name ASC')
+      diagrams.map! do |diagram|
+        diagram_to_json(diagram).merge({:highlighted_name => highlight_letters(diagram.name, params[:query])})
+      end
+    end
+    render :json => diagrams
   end
 
   def suggest_users
@@ -132,6 +161,10 @@ class ReQueriesController < RedmineReController
     end
     render :json => users
   end
+  
+  ##
+  ## These helpers create bit representations for one or more artifacts/issues/diagrams/whatever
+  ##
 
   def artifacts_bits
     artifacts = ReArtifactProperties.of_project(@project).without_projects.find(params[:ids], :order => 'name ASC')
@@ -145,13 +178,21 @@ class ReQueriesController < RedmineReController
     render :json => issues
   end
 
+  def diagrams_bits
+    diagrams = ConcreteDiagram.find(params[:ids], :conditions => { :project_id => @project.id }, :order => 'name ASC')
+    diagrams.map! { |diagram| diagram_to_json(diagram) }
+    render :json => diagrams
+  end
+
   def users_bits
     users = User.find(params[:ids], :order => 'firstname ASC, lastname ASC, login ASC')
     users.map! { |user| user_to_json(user) }
     render :json => users
   end
 
+
   private
+
   def load_visible_queries
     @queries = ReQuery.visible.all(:order => 'name ASC')
   end
@@ -160,7 +201,7 @@ class ReQueriesController < RedmineReController
     @project_artifacts = ReArtifactProperties.of_project(@project).without_projects
     @artifacts = []
     @artifact_types = @project_artifacts.available_artifact_types
-    @relation_types = ReArtifactRelationship.relation_types
+    @relation_types = ReArtifactRelationship::RELATION_TYPES.values
     @issues = []
     @users = User.all(:conditions => ['status = ?', User::STATUS_ACTIVE],
                       :order => 'firstname ASC, lastname ASC, login ASC')
@@ -174,10 +215,11 @@ class ReQueriesController < RedmineReController
 
   def load_cropped_collections
     return unless @query
-
+      
     source_artifact_ids = [@query[:source][:ids]].flatten
     sink_artifact_ids = [@query[:sink][:ids]].flatten
     artifact_ids = source_artifact_ids.concat(sink_artifact_ids).compact.uniq
+    artifact_ids.delete_if {|v| v == ""} 
     @artifacts = (artifact_ids.empty?) ? [] : @project_artifacts.find(artifact_ids)
 
     issue_ids = [@query[:issue][:ids]].concat([@query[:issue][:ids_include]]).concat([@query[:issue][:ids_exclude]]).flatten.compact
@@ -188,6 +230,10 @@ class ReQueriesController < RedmineReController
     str.gsub /(#{query})/i, '<strong>\1</strong>'
   end
 
+  ##
+  ## These private functions create json representations for a artifact/issue/diagram/whatever
+  ##
+
   def artifact_to_json(artifact)
     underscored_artifact_type = artifact.artifact_type.underscore
     { :id => artifact.id,
@@ -195,14 +241,25 @@ class ReQueriesController < RedmineReController
       :type => artifact.artifact_type,
       :type_name => l(artifact.artifact_type),
       :icon => underscored_artifact_type,
-      :url => url_for(:controller => underscored_artifact_type,
-                      :action => 'edit', :id => artifact.artifact_id) }
+      :url => url_for(artifact) }
   end
 
   def issue_to_json(issue)
     { :id => issue.id,
       :subject => issue.subject,
       :url => url_for(issue) }
+  end
+
+  def diagram_to_json(diagram)    
+    project = Project.find(diagram.project_id)        
+    return {
+      :id => diagram.id,
+      :name => diagram.name,
+      :url => url_for(:controller => "diagrameditor",
+                      :action => 'show', :diagram_id => diagram.id,
+                      :project_id => project.identifier
+                      )
+    }
   end
 
   def user_to_json(user)

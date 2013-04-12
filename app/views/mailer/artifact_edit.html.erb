@@ -1,0 +1,22 @@
+<%= l(:re_text_artifact_updated, :id => "##{@re_artifact_properties.id}", :author => h(@updated_by_user)) %>
+ 
+<h1><%= link_to(h("#{@re_artifact_properties.project.name} ##{@re_artifact_properties.id}: #{@re_artifact_properties.name}"), @artifact_url) %></h1>
+
+<% unless @re_artifact_properties.responsible.blank?%>
+Responsible: <%= @re_artifact_properties.responsible%>
+<% end%>
+
+<%= textilizable(@re_artifact_properties, :description, :only_path => false) %>
+
+
+<% unless @comment.nil? 
+	comment_user = User.find(@comment.author_id)
+%>
+
+<p>
+	<b><%= l(:re_text_artifact_updated_new_comment, :author => h(comment_user)) %></b>
+	<%=@comment.comments%>
+</p>
+
+
+<%end%>

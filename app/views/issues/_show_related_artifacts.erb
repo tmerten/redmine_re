@@ -1,9 +1,28 @@
-<fieldset>
-  <legend><%= t(:re_asscociated_requirements) %></legend>
-  <% unless @issue.nil? %>
-      <%= @issue.re_artifact_properties.collect {|properties|
-          (link_to properties.name, :controller => properties.artifact_type.underscore, :action => 'edit', :id =>properties.artifact_id)+'&nbsp'+
-          (link_to '[X]', :controller => 're_artifact_properties', :action => 'remove_artifact_from_issue', :artifactid => properties.id, :issueid => @issue.id, :project_id=>@project.id )
-      }.to_sentence %>
-  <% end %>
-</fieldset>
+<% if @project.module_enabled?(:requirements) %>
+
+	  <% unless @issue.nil? %>	  
+	  <table class="attributes">
+	  <tbody>
+		  <tr>
+		  	<th>
+		  		 	<%= t(:re_asscociated_requirements) %>
+		  	</th>
+		  		<td>&nbsp;</td>
+		  </tr>
+<% @issue.re_artifact_properties.each do |current_artifact| %>
+		<tr>
+			<th class="status">&nbsp;</th>
+			<td class="status"><ins class="subject_icon <%= current_artifact.artifact_type.underscore %>"></ins>
+				<%= link_to current_artifact.name, current_artifact	%>  	
+		 	</td>
+		 </tr>
+<% end%>		  
+	  </tbody>
+	  </table>
+	  
+	  
+
+<% end %>
+
+<% end %>
+

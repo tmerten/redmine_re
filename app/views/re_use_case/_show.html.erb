@@ -1,0 +1,110 @@
+<%	      
+  goal_levels = {
+  "5" => t(:re_use_case_abstract_overview),
+  "4" => t(:re_use_case_overview),
+  "3" => t(:re_use_case_user_goal),
+  "2" => t(:re_use_case_function),
+  "1" => t(:re_use_case_low)}
+		          
+%>
+
+<table class="attributes">
+	<colgroup>
+		<col />
+		<col style="min-width:300px width:60%" />
+	</colgroup>
+	<tbody>
+		<tr>
+			<th><%= t(:re_use_case_level) -%></th>
+			<td><%= goal_levels[@re_artifact_properties.artifact[:goal_level].to_s]  %></td>
+		</tr>
+		<tr>
+			<th><%= t(:re_use_case_trigger) -%></th>
+			<td><%= @re_artifact_properties.artifact[:trigger] %></td>
+		</tr>
+		<tr>
+			<th><%= t(:re_use_case_precondition) -%></th>
+			<td><%= @re_artifact_properties.artifact[:precondition] %></td>
+		</tr>
+		<tr>
+			<th><%= t(:re_use_case_postcondition) -%></th>
+			<td><%= @re_artifact_properties.artifact[:postcondition] %></td>
+		</tr>
+		<tr>
+			<th><%= t(:re_use_case_primary_actor) -%></th>
+			<td>			
+        <% unless @re_artifact_properties.artifact.primary_actor.blank? %>
+	        <%= link_to(@re_artifact_properties.artifact.primary_actor.name,@re_artifact_properties.artifact.primary_actor,{:class => "icon #{@re_artifact_properties.artifact.primary_actor.artifact_type.underscore}"}) %>
+        <%end%>
+      </td>
+		</tr>
+		<tr>
+			<th><%= t(:re_use_case_secondary_actors) -%></th>
+			<td>
+      	<% @re_artifact_properties.artifact.actors.each do |secondary_actor| %>
+      	  <%= link_to(secondary_actor.name, secondary_actor, {:class => "icon #{secondary_actor.artifact_type.underscore}"}) %>
+      	<%end%>      
+      </td>
+		</tr>
+  </tbody>
+</table>
+
+<hr />
+<p>
+  <strong><%= t(:re_use_case_steps)%></strong>
+</p>
+<table class="list">
+    <thead>
+      <tr>
+        <th style="width: 30px">&nbsp;</th>
+        <th style="width: 300px;"><%= t(:re_user_steps) %></th>
+        <th style="width: 300px;"><%= t(:re_system_steps) %></th>
+      </tr>
+    </thead>
+    <tbody>
+		<% counter_steps = 1 %>
+	    <% @re_artifact_properties.artifact.re_use_case_steps.each do |current_re_use_case_step| %>
+	    	<% if ( current_re_use_case_step.step_type == 2 ) %>
+	          <tr id="<%= "step#{counter_steps}" -%>">
+	          	<td><%= counter_steps.to_s %> <%= image_tag('icons/monitor.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)) %></td>
+	          	<td>&nbsp;</td>
+	          	<td><%= current_re_use_case_step.description %></td>
+	         </tr>
+	        <% else %>
+	          <tr id="<%= "step#{counter_steps}" -%>">
+	          	<td><%= counter_steps.to_s %> <%= image_tag('icons/user.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)) %></td>
+	          	<td>
+	          		<%= current_re_use_case_step.description %>
+	          	</td>	
+	          	<td>&nbsp;</td> 
+	         </tr>
+	        <% end %>
+	        <% counter_steps = counter_steps + 1 %>
+	    <% end %>
+    </tbody>
+</table>
+	
+<% unless @re_artifact_properties.artifact.re_use_case_steps.blank? %>
+	<hr />
+  
+  <p>
+    <strong><%= t(:re_use_case_expansions) -%></strong>
+  </p>
+	<table class="list">
+		<% counter_steps = 1 %>
+		<% @re_artifact_properties.artifact.re_use_case_steps.each do |current_re_use_case_step| %>
+			<% counter_expansions = 1 %>
+			<% unless current_re_use_case_step.re_use_case_step_expansions.blank? %>
+		    	<% current_re_use_case_step.re_use_case_step_expansions.each do |current_re_use_case_step_expansion| %>
+					<tr>
+						<td><%= link_to "#{counter_steps}.#{counter_expansions}", :anchor => "step#{counter_steps}" %></td>
+						<td><i><%= t( current_re_use_case_step_expansion.expansion_type_translation_key ) %></i></td>
+            <td><%= current_re_use_case_step_expansion.description %></td>
+					</tr>
+					<% counter_expansions = counter_expansions + 1 %>
+				<% end %>
+			<% end %>
+			<% counter_steps = counter_steps + 1 %>
+		<% end %>
+	</table>
+<% end %>

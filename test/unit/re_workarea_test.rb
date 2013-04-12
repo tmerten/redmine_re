@@ -1,7 +1,8 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ReWorkareaTest < ActiveSupport::TestCase
-  fixtures :re_workareas
+  ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
+    [:re_workareas])
 
   # Replace this with your real tests.
   def test_truth

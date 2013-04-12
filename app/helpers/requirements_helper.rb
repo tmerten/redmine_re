@@ -31,4 +31,5 @@ module RequirementsHelper
     end
     link_to_remote name, :url => url, :update => update, :method => options.delete(:method), :confirm => options.delete(:confirm), :html => options
   end
+
 end

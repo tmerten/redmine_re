@@ -1,5 +1,5 @@
 <% values = @query.issue || {} %>
-<% form.fields_for(:issue, values) do |f| %>
+<%= form.fields_for(:issue, values) do |f| %>
   <!-- Issue -->
   <%= render 'form_multiselect_field', :fields => f, :field_name => :ids,
                                        :label => 'Issue', :modes => issue_modes, :items => @issues,

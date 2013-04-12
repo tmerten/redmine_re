@@ -1,0 +1,95 @@
+<div>
+  <%= javascript_tag do %>
+    function removeRelation (relation) {
+  		var answer = confirm("<%= t(:re_are_you_sure) %>");
+  		if (answer) {
+       		jQuery("#relation_"+relation).after('<input type="hidden" name="new_relation['+relation+'][_destroy]" value="true">');
+       		jQuery("#relation_"+relation).remove()
+     	}
+    }
+     
+    function removeTmpRelation (relation) {
+  		var answer = confirm("<%= t(:re_are_you_sure) %>");
+  		if (answer) {
+  			jQuery("#"+relation).remove();
+  		}
+    }
+     
+    function createRelation (sink_record) {
+  		// Get relation type by current selection
+  		var relation_type = jQuery("[name='re_artifact_relationship[relation_type]']").filter(":checked").val();
+		
+  		if (relation_type === null || typeof relation_type == 'undefined') return;
+		
+  		var relation_description = jQuery("[name='re_artifact_relationship[relation_type]']").filter(":checked").data("description");
+  		var element_id = "relation_"+sink_record.id+"_"+relation_type;
+  		var link = "<%= re_artifact_properties_path %>";
+  		var hidden_fields = '<input type="hidden" name="new_relation['+sink_record.id+'][relation_type][]" value="'+relation_type+'" />';
+      
+  		jQuery("#outgoing_relations").append('<li id="'+element_id+'">[ <a class="icon icon-del" href="javascript: removeTmpRelation(\''+element_id+'\')"><%= t(:re_remove) %></a> ] '+relation_description+' to <a href="'+link+'/'+sink_record.id+'/edit" class="icon '+sink_record.icon+'">'+sink_record.name+'</a>'+hidden_fields+'</li>');
+    }
+
+  <% end %>
+  <% unless @new_relation.nil? %>
+    <br />
+    <b><%= t :re_relation_sucessfull_created,
+    :source_name => @new_relation.source.name,
+    :sink_name => @new_relation.sink.name,
+    :relation_type => @new_relation.relation_type %></b>
+    <br /><br />
+  <% end %>
+  <b><%= t(:re_artifact_relationships_outgoing) %></b>
+  <%= "<ul id='outgoing_relations'>".html_safe %>
+    <% for relationship in @relationships_outgoing %>
+    <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
+    <li id='relation_<%= relationship.id %>'>
+    	[ <a href="javascript: removeRelation('<%= relationship.id %>')" class="icon icon-del"><%= t(:re_remove) %></a> ]
+      <%= rendered_relation_type(relationship.relation_type) %> <%= t(:re_to) %>		
+      <%= link_to( sink.name, {
+        :action => :edit,
+        :controller => 're_artifact_properties',
+        :id => ReArtifactProperties.find_by_id(sink.id).id
+			}, :class => "icon #{sink.artifact_type.underscore}" ) %>
+		<input type="hidden" name="relation[][id]" value="<%= relationship.id %>">
+	</li>
+	<% end unless @relationships_outgoing.nil? %>
+	
+	<% unless @added_relations.nil? %>
+		<% @added_relations.each do |cur_sink_id, cur_relationcontent|%>
+            <% sink = ReArtifactProperties.find_by_id(cur_sink_id) %>                       
+            <% relation_id = cur_sink_id+"_"+cur_relationcontent[:relation_type].to_s %>
+		    <li id='relation_<%= relation_id %>'>
+		    	[ <a href="javascript: removeRelation('<%= relation_id %>')" class="icon icon-del"><%= t(:re_remove) %></a> ]
+		      <%= rendered_relation_type(cur_relationcontent[:relation_type].to_s) %> <%= t(:re_to) %>		
+		      <%= link_to( sink.name, {
+		        :action => :edit,
+		        :controller => 're_artifact_properties',
+		        :id => ReArtifactProperties.find_by_id(sink.id).id
+					}, :class => "icon #{sink.artifact_type.underscore}" ) %>
+				<input type="hidden" name="new_relation[<%= cur_sink_id %>][relation_type]" value="<%=cur_relationcontent[:relation_type] %>" />
+			</li>
+		<% end %>
+	<% end%>
+	
+	<%= "</ul>".html_safe %>
+</div>
+<br />
+<div>
+  <b><%= t(:re_artifact_relationships_incoming) %></b>
+	<%= "<ul>".html_safe unless @relationships_incoming.empty? -%>
+		<% for relationship in @relationships_incoming %>
+		<% source = ReArtifactProperties.find_by_id(relationship.source_id) %>
+		<li id='relation_<%= relationship.id %>'>
+
+    	[ <a href="javascript: removeRelation('<%= relationship.id %>')" class="icon icon-del"><%= t(:re_remove) %></a> ]
+      <%= rendered_relation_type(relationship.relation_type) %> <%= t(:re_from) %>
+			<%= link_to( source.name, {
+        :action => :edit,
+        :controller => 're_artifact_properties',
+        :id => ReArtifactProperties.find_by_id(source.id).id,
+        :project_id => params[:project_id]
+			}, :class => "icon #{source.artifact_type.underscore}" )%>
+		</li>
+		<% end unless @relationships_incoming.nil? %>
+		<%= "</ul>".html_safe unless @relationships_incoming.empty? -%>
+</div>

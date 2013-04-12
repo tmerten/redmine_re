@@ -1,0 +1,3 @@
+$('#ajax-modal').html('<%= escape_javascript(render :partial => 'new_comment', :locals => {:project => @project, :artifact => @re_artifact_properties}) %>');
+showModal('ajax-modal', '400px');
+$('#ajax-modal').addClass('new-comment');

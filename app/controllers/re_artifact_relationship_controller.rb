@@ -11,20 +11,20 @@ class ReArtifactRelationshipController < RedmineReController
   def delete
     @relation = ReArtifactRelationship.find(params[:id])
 
-    unless( @relation.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch]) )
+    unless(ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(@relation.relation_type))
       @relation.destroy
     end
 
     @artifact_properties = ReArtifactProperties.find(params[:re_artifact_properties_id])
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(params[:re_artifact_properties_id])
-    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+    @relationships_incoming.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
 
     unless params[:secondary_user_delete].blank?
       @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id_and_relation_type(params[:re_artifact_properties_id],ReArtifactRelationship::RELATION_TYPES[:dep])
       render :partial => "secondary_user", :project_id => params[:project_id]
     else
       @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(params[:re_artifact_properties_id])
-      @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+      @relationships_outgoing.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
       render :partial => "relationship_links", :project_id => params[:project_id]
     end
   end
@@ -48,10 +48,10 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
   def prepare_relationships
-    artifact_properties_id = ReArtifactProperties.get_properties_id(params[:original_controller], params[:id])
+    artifact_properties_id = ReArtifactProperties.get_properties_id(params[:id])
     relation = params[:re_artifact_relationship]
 
-    if relation[:relation_type].eql?(ReArtifactRelationship::RELATION_TYPES[:pch])
+    if ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(relation[:relation_type]) 
       raise ArgumentError, "You are not allowed to create a parentchild relationship!"
     end
 
@@ -61,15 +61,15 @@ class ReArtifactRelationshipController < RedmineReController
 
     @artifact_properties = ReArtifactProperties.find(artifact_properties_id)
     @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(artifact_properties_id)
-    @relationships_outgoing.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+    @relationships_outgoing.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
     @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(artifact_properties_id)
-    @relationships_incoming.delete_if { |rel| rel.relation_type.eql?(ReArtifactRelationship::RELATION_TYPES[:pch])}
+    @relationships_incoming.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
 
     render :partial => "relationship_links", :layout => false, :project_id => params[:project_id]
   end
 
   def visualization
-
+    # renders view
   end
 
   def build_json_for_netmap(artifacts, relations)
@@ -104,7 +104,7 @@ class ReArtifactRelationshipController < RedmineReController
         json << rootnode
 
         artifacts.each do |artifact|
-          outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact(artifact)
+          outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(artifact.id)
           drawable_relationships = ReArtifactRelationship.find_all_by_source_id_and_relation_type(artifact.id, relations)
           artifact_ids = @artifacts.collect { |a| a.id }
           drawable_relationships.delete_if { |r| ! artifact_ids.include? r.sink_id }
@@ -120,7 +120,7 @@ class ReArtifactRelationshipController < RedmineReController
     children = []
     for child in artifact.children
       next unless (@chosen_artifacts.include? child.artifact_type.to_s)
-      outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact(child.id)
+      outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(child.id)
       drawable_relationships = ReArtifactRelationship.find_all_by_source_id(child.id)
       json_artifact = add_artifact(child, drawable_relationships, outgoing_relationships)
       json_artifact['children'] = gather_children(child)
@@ -144,8 +144,8 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['author'] = artifact.author.to_s
     node_data['updated_at'] = artifact.updated_at.to_s(:short)
     node_data['user'] = artifact.user.to_s
-    node_data['responsibles'] = artifact.responsibles
-    node_data['$color'] = "#" + node_settings['color']
+    node_data['responsibles'] = artifact.responsible.name unless artifact.responsible.nil?
+    node_data['$color'] = node_settings['color']
     node_data['$height'] = 90
     node_data['$angularWidth'] = 13.00
 
@@ -164,7 +164,7 @@ class ReArtifactRelationshipController < RedmineReController
         relation_data['author'] = other_artifact.author.to_s
         relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
         relation_data['user'] = other_artifact.user.to_s
-        relation_data['responsibles'] = other_artifact.responsibles
+        relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
         relation_data['relation_type'] = relation.relation_type
         relation_data['direction'] = 'to'
         relationship_data << relation_data
@@ -184,7 +184,7 @@ class ReArtifactRelationshipController < RedmineReController
       #adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
 
       edge_data = {}
-      edge_data['$color'] = "#" + relation_settings['color'] if directed
+      edge_data['$color'] = relation_settings['color'] if directed
       edge_data['$color'] = "#111111" unless directed
       edge_data['$lineWidth'] = 2
       edge_data['$type'] = "arrow" if directed

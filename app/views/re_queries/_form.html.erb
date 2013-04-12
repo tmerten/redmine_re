@@ -1,8 +1,10 @@
 <% content_for :header_tags do %>
   <%= javascript_include_tag 'query_form', :plugin => 'redmine_re' %>
-  <% javascript_tag do %>
+  <%= javascript_tag do %>
       (function($) {
           $().ready(function() {
+              
+              
               // Auto-assign collapse fieldset behavior
               $('fieldset.collapsible legend').click(function() { toggleFieldset(this); });
 
@@ -42,14 +44,16 @@
               $('fieldset.collapsible.filters, fieldset.collapsible.filter_settings')
                   .addClass('collapsed').children('div').hide();
               <% end %>
+              
+              
+              
           });
       })(jQuery);
     <% end %>
 <% end %>
 
-<% form_for @query, :url => re_query_form_url(@query, mode), :html => { :class => 'filters' } do |f| %>
-  <%= f.error_messages %>
-
+<%= form_for @query, :url => re_query_form_url(@query, mode), :html => { :class => 'filters' } do |f| %>
+<%= hidden_field_tag(:id, @project.id) %>
   <% if mode == :persist %>
     <fieldset class="collapsible filter_settings">
       <legend>Settings</legend>

@@ -26,7 +26,7 @@
             <tr id="artifact-<%= artifact.id %>" class="artifact">
               <% @query.class.available_columns.each do |column| %>
                 <td class="<%= column.name %>">
-                  <%= column.value.call(artifact) %>
+                  <%= column.value.call(artifact).to_s.html_safe %>
                 </td>
               <% end %>
               <td class="actions">
@@ -34,7 +34,9 @@
                   <%= link_to artifact.realizations.count, issues_path(:project_id => @project.id, :set_filter => 1, :re_artifact_id => artifact.id),
                                                            :class => 'icon icon-report', :title => 'Issues' %>
                 <% end %>
-                <%= link_to '', edit_artifact_path(artifact), :class => 'icon icon-edit', :title => 'Edit' %>
+
+              	<%= link_to_if_authorized l(:button_update), {:controller => "re_artifact_properties", :action => "edit", :id => artifact.id}, :class => 'icon icon-edit' %>
+              
               </td>
             </tr>
           <% end %>

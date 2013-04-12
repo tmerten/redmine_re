@@ -1,50 +1,51 @@
-<fieldset>
-  <legend><%= t(:re_add_associated_requirements) %></legend>
+<% content_for :header_tags do %>
+<%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
+<%= javascript_include_tag 'jquery.blockUI-2.55.js', :plugin => 'redmine_re' %>
 
-  <div class="splitcontentleft">
+  <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+  <%= stylesheet_link_tag 'suggestible.css', :plugin => "redmine_re", :media => 'all' %>
+  <%= javascript_include_tag 'query_form', :plugin => 'redmine_re' %>
+  <%= javascript_tag do %>
+      (function($) {
+          $().ready(function() {
+		     $('#artifacts_filter_input').attr("selected","selected");
 
-    <p>
-      <%= text_field_tag :re_artifact_properties, '', {:size => 20, :class => 'autocomplete', :id => 'artifact_autocomplete'} %>
-    </p>
 
-    <div id="artifact_candidates" class="autocomplete"></div>
-      <% javascript_tag do %>
-      new Ajax.Autocompleter('artifact_autocomplete',
-      'artifact_candidates',
-      '<%= url_for :controller => 're_artifact_properties', :action => 'autocomplete_artifact' %>',
-      {
-      paramName: 'artifact_name',
-      parameters:
-      'project_id=<%= @project.id %><%= '&id=' + @artifact_properties_id.to_s unless @artifact_properties_id.blank? %>',
-      minChars: 2,
-      frequency: 0.5,
-      afterUpdateElement : getArtifactId});
-
-      function getArtifactId(text, li){
-          document.getElementById('artifact_autocomplete').value ="";
-          $('added_artifacts').appendChild(document.createTextNode(li.innerHTML + ', '));
-          $('added_artifacts').insert('<input id="artifact_id" type="hidden" name="artifact_id[]" value=' + li.id + ' >');
-
-      }
+              // Make specific fields suggestible
+              $('#artifacts_filter_input').suggestible(suggestibleOptions({
+                  suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+                  suggestionsLayout: function(helpers) {
+                      return new ArtifactsSuggestBoxItems(helpers);
+                  },
+                  bitsUrl: '<%= artifacts_bits_re_queries_path(@project.id) %>'
+              }));
+          });
+      })(jQuery);
     <% end %>
+<% end %>
 
-  </div>
+<% if @project.module_enabled?(:requirements) %>
+<% if User.current.allowed_to?(:view_requirements, @project) %>
 
-  <div class='splitcontentright'>
+	<p style="margin: 3px 0 3px 60px;">
+		<%= label_tag :add_related_artifact %>
+		       <div id="artifacts_filter" style="margin: 3px 0 3px 180px;">
+		          <div class="inputs">
+				
+					<% @issue.re_artifact_properties << ReArtifactProperties.find_by_id(params[:artifactid]) if params[:artifactid] %>
 
-    <div id='added_artifacts'/>
-  </div>
+		  			<%= 
+					select_tag 'artifact_id[]', options_for_select(@issue.re_artifact_properties.collect{ |u| [u.name, u.id] },
+					@issue.re_artifact_properties.collect{ |u| u.id }), :id => 'artifacts_filter_input', :class => 'artifact_filter_input', :multiple => true;
+
+		  			%>
+		          </div>
+		       </div>		
+	   
+	</p>
+<% end %>
 
 
-</fieldset>
-
-
-<% unless @insertvalues.blank?  %>
-    <% unless @insertvalues["displayid"].blank? && @insertvalues["artifacttype"].blank? && @insertvalues["artifactname"].blank? && @insertvalues["associationid"].blank? %>
-        <% javascript_tag do %>
-        $('issue_subject').value= "<%= t(:implementation_of)+" "+@insertvalues["artifacttype"] + " " +@insertvalues["artifactname"]%>";
-        $('added_artifacts').insert('<%=@insertvalues["artifactname"] + " (" + @insertvalues["displayid"] +"), "%>');
-        $('added_artifacts').insert('<input id="artifact_id" type="hidden" name="artifact_id[]" value="<%= @insertvalues["associationid"]%>"  > ');
-        <% end %>
-    <% end %>
 <% end %>

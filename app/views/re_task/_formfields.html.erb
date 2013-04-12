@@ -1,0 +1,125 @@
+<% content_for :header_tags do %>
+	<%= javascript_include_tag 'jquery.autogrowtextarea.js', :plugin => 'redmine_re' %>
+<% end %>
+
+<%= f.fields_for :artifact do |artifact_form|%>
+
+  <fieldset class="tabular">
+  	 <legend><%= l(:re_task_specific_attributes) %></legend>
+		 <p><%= artifact_form.label :start, l(:re_task_start) %> <%= artifact_form.text_field :start %></p>
+		 
+		 <p><%= artifact_form.label :end, l(:re_task_end) %> <%= artifact_form.text_field :end %></p>
+		 
+		 <p><%= artifact_form.label :frequency, l(:re_task_frequency) %> <%= artifact_form.text_field :frequency %></p>
+
+		<p>
+	     <label><%= l(:re_task_difficulties) %></label>
+	 		
+		   <%= artifact_form.text_area :difficult,
+		                    :cols => 60,
+			                    :rows => (@re_artifact_properties.artifact.difficult.blank? ? 10 : [[10, @re_artifact_properties.artifact.difficult.length / 50].max, 100].min),
+			                    :class => 'wiki-edit' %>
+			   <%= wikitoolbar_for  're_artifact_properties_artifact_attributes_difficult' %>
+			   
+		 
+		 </p>
+    </fieldset>  
+  
+	<fieldset class="tabular">
+	   <legend><%= t(:re_subtasks) %></legend>
+	   <table class="subtasks ui-sortable">
+	      <thead>
+	         <tr>
+	            <th>&nbsp;</th>
+	            <th><%= t(:re_subtask_type) -%></th>
+	            <th><%= t(:re_subtask_name) -%></th>
+	            <th>&nbsp;</th>
+	            <th><%= t(:re_subtask_solution) -%></th>
+	            <th>&nbsp;</th>
+	            <th><a class="icon icon-subtask-after" href="#" onclick="addSubtask(document.getElementById('subtasks'), 'top'); return false;"><%= t(:re_insert_st_after) %></a></th>
+	         </tr>
+	      </thead>
+	      <tbody id="subtasks">
+          <% @re_artifact_properties.artifact.re_subtasks.each do |current_re_subtask| %>
+             <%= render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask => current_re_subtask }) %>
+          <% end %>
+	      </tbody>
+	   </table>
+	</fieldset>
+	
+	
+	<%= javascript_tag do %>
+	
+		updateSubtaskPositionFields();
+		
+		function jsInitScript() {
+		    jQuery(".subtasks tbody").sortable({
+		      placeholder: 'ui-state-highlight',
+		      start: function(event, ui){
+		         jQuery(".ui-state-highlight").html("<td colspan='7' style='background:#4466AA'></td>");
+		      },
+		      update: function(event, ui){
+		         updateSubtaskPositionFields();
+		      },  
+		    });
+
+				jQuery("select.subtask-type").change(function() {
+					changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
+				});
+			
+		};
+		
+		jQuery(document).ready(function(){
+		    jsInitScript();
+				/* jQuery(".subtask_textarea").autoGrow();*/
+		});
+		
+	  function changeSubtaskRowColor(element, value) {
+	    jQuery(element).removeClass('subtask');
+	    jQuery(element).removeClass('variant');
+	    jQuery(element).removeClass('problem');
+	
+	    switch(value) {
+	      case '0': jQuery(element).addClass('subtask'); break;
+	      case '1': jQuery(element).addClass('variant'); break;
+	      case '2': jQuery(element).addClass('problem'); break;
+	      default: alert('<%= t(:re_st_type_not_allowed) %>' + value);
+	    }
+	
+	    element.childElements().each( function ( td ) {
+	       changeSubtaskRowColor(td, value)
+	    });
+	  }
+	
+	  function addSubtask(element, add_pos) {
+	    var rendered_subtask;
+	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
+	
+	    switch(add_pos) {
+	      case 'top':    jQuery(element).prepend(rendered_subtask); break;
+	      case 'after':  jQuery(element).after(rendered_subtask); break;
+	      case 'before': jQuery(element).before(rendered_subtask); break;
+	      case 'bottom': jQuery(element).append(rendered_subtask); break;
+	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
+	    }
+	    
+	    updateSubtaskPositionFields();
+		jsInitScript();
+	  }
+	
+	  function markSubtaskForDestroy(element) {
+	  	element.children('.should_destroy').val(1);
+	    element.parent().hide();
+	  }
+	
+	  function updateSubtaskPositionFields() {
+	    var pos = 1;
+	    jQuery('#subtasks').children().each( function(child) {
+	      jQuery(this).attr('id','subtask_drag_' + pos);
+	      jQuery(this).children().next().children('.position').attr('value', pos);
+	      pos++;
+	    });
+	  }
+	  
+	<%end%>
+<% end%>
