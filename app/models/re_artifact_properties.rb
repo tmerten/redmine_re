@@ -223,11 +223,14 @@ class ReArtifactProperties < ActiveRecord::Base
   end
 
   def average_rating
-    @value = 0
-    self.ratings.each do |rating|
-      @value = @value + rating.value
+    @value = 0.to_f
+    unless self.ratings.empty?
+      self.ratings.each do |rating|
+        @value = @value + rating.value
+      end
+      @total = self.ratings.size
+      @value = @value.to_f / @total.to_f
     end
-    @total = self.ratings.size
-    @value.to_f / @total.to_f
+    @value
   end
 end

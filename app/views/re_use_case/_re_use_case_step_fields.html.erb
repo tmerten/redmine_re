@@ -10,9 +10,9 @@
 	
     <%= f.hidden_field :position, :class => "position" %>
 	  <%= f.text_area :description, { :size => "35x2", :class => "use_case_step_textarea" } %>
-	  <fieldset class="collapsible collapsed">
-	  	<legend onclick="toggleFieldset(this);">Expansions</legend>
-	  	<div style="display: none;">
+	  <fieldset>
+	  	<legend>Expansions</legend>
+	  	<div>
 		  <table>
 		    <thead class="epansions">
 		      <tr>
@@ -20,14 +20,12 @@
 		        <th><%= t(:re_expansion_description) %></th>
 		      </tr>
 		    </thead>
-		    <tbody id="expansions_<%= f.object.id.to_s%>">
+		    <tbody class="expansiontable" id="expansions_<%= f.object.id.to_s%>">
 			  <%= f.fields_for :re_use_case_step_expansions do |builder| %>
 			  	<%= render('re_use_case/re_use_case_step_expansion_fields', :f => builder ) %>
 			  <% end %>
 		    </tbody>
 		  </table>
-		  
-		  <%= link_to_add_fields "Add Exp", f, :re_use_case_step_expansions, :re_use_case %>
 		</div>  	
 	  </fieldset>
 	
@@ -42,6 +40,10 @@
 	    
 	    <div class="re_use_case_button_container">
 	    	<%= link_to_remove_fields "", f %>
+	    </div>
+	    
+	    <div class="re_use_case_button_container">
+		  <%= link_to_add_fields image_tag('icons/error_add.png', :plugin => 'redmine_re'), f, :re_use_case_step_expansions, :re_use_case %>
 	    </div>
 	  </div>
 	

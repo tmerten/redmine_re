@@ -1,1 +1,1 @@
-$('.ratings').replaceWith("<%= escape_javascript(render :partial => 're_artifact_properties/rating') %>");
+$('.ratings').html("<%=j render @rating %>");
