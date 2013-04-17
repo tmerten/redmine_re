@@ -6,11 +6,11 @@
 
   <fieldset class="tabular">
   	 <legend><%= l(:re_task_specific_attributes) %></legend>
-		 <p><%= artifact_form.label :start, l(:re_task_start) %> <%= artifact_form.text_field :start %></p>
+		 <p><%= artifact_form.label :start, l(:re_task_start) %> <%= artifact_form.text_field :start, :class => "full_width" %></p>
 		 
-		 <p><%= artifact_form.label :end, l(:re_task_end) %> <%= artifact_form.text_field :end %></p>
+		 <p><%= artifact_form.label :end, l(:re_task_end) %> <%= artifact_form.text_field :end, :class => "full_width" %></p>
 		 
-		 <p><%= artifact_form.label :frequency, l(:re_task_frequency) %> <%= artifact_form.text_field :frequency %></p>
+		 <p><%= artifact_form.label :frequency, l(:re_task_frequency) %> <%= artifact_form.text_field :frequency, :class => "full_width" %></p>
 
 		<p>
 	     <label><%= l(:re_task_difficulties) %></label>

@@ -1001,7 +1001,7 @@ table.list.artifacts tbody tr:nth-child(odd):hover {
     background-color: #ffffdd;
 }
 
-input.artifact_name {
+input.full_width {
     width: 99%;
 }
 

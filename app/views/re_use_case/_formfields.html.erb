@@ -13,13 +13,13 @@
 	      [t(:re_use_case_low) , 1 ] ] %>
 	    </p>
 	    <p>
-	      <%= artifact_form.label :trigger, l(:re_use_case_trigger) %> <%= artifact_form.text_field :trigger %>
+	      <%= artifact_form.label :trigger, l(:re_use_case_trigger) %> <%= artifact_form.text_field :trigger, :class => "full_width" %>
 	    </p>
 	    <p>
-	      <%= artifact_form.label :precondition, l(:re_use_case_precondition) %> <%= artifact_form.text_field :precondition %>
+	      <%= artifact_form.label :precondition, l(:re_use_case_precondition) %> <%= artifact_form.text_field :precondition, :class => "full_width" %>
 	    </p>
 	    <p>
-	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition %>
+	      <%= artifact_form.label :postcondition, l(:re_use_case_postcondition) %> <%= artifact_form.text_field :postcondition, :class => "full_width" %>
 	    </p>
 
 			<p><%= artifact_form.label :precondition, l(:re_primary_actor) %>
