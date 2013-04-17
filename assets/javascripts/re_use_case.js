@@ -16,13 +16,10 @@
 		jsInitScript();
 		updateStepPositionFields();
 	});
-	
-  function addExpansion(element, use_case_step_id, rendered_expansion) {
-    jQuery(element).append( rendered_expansion );
-  }
   
-  function addExpansion_new(element, rendered_expansion) {
-    jQuery(element).prev().children().next().append( rendered_expansion );
+  function addExpansion(element, rendered_expansion) {
+  	// Hate me, but i works
+    jQuery(element).parent().parent().prev().children().next().children().children().next().append( rendered_expansion );
   }
   
   function add_fields(where, type, content ) {
@@ -35,7 +32,7 @@
   	    case 're_use_case_step_expansion':
   	    case 're_use_case_step_expansions':
   	    	content = replaceAll(content, "new_re_use_case_step_expansions", utc_timestamp.toString().substring(5,12));
-  	    	addExpansion_new(where, content);
+  	    	addExpansion(where, content);
   	    break;
   	 }
   }
