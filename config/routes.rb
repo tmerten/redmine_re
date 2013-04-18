@@ -13,8 +13,6 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/tree/treestate/:id' => 'requirements#treestate'
   match 'projects/:project_id/requirements/tree/treestate/:current_actifact_id/:id' => 'requirements#treestate'
   match 'projects/requirements/tree/drop' => 'requirements#delegate_tree_drop'
-  match 'projects/:project_id/relation/prepare/:id' => 're_artifact_relationship#prepare_relationships'
-  match 'projects/:project_id/relation/autocomplete/sink/:id' => 're_artifact_relationship#autocomplete_sink'
   match 'projects/:project_id/use_case/autocomplete/sink' => 're_use_case#autocomplete_sink'
   match 'projects/:project_id/issues/new/connected_to/:artifacttype/:associationid' => 'issues#new'
   match 'projects/:project_id/requirements/filtered_json' => 're_artifact_relationship#build_json_according_to_user_choice'
@@ -38,6 +36,8 @@ RedmineApp::Application.routes.draw do
   match ':project_id/:id/:re_artifact_properties_id/delete' => 're_artifact_relationship#delete'
   match 'projects/:project_id/ralation/prepare/:id' => 're_artifact_relationship_controller#prepare_relationships'
   match 'projects/:project_id/ralation/autocomplete/sink/:id' => 're_artifact_relationship_controller#autocomplete_sink'
+  match '/relation/add' => 'requirements#add_relation'
+  
 
   #match 're_queries.:project_id' => 're_queries#index'
   #match '/re_queries/suggest_artifacts.:id' => 're_queries#suggest_artifacts'
@@ -63,12 +63,6 @@ RedmineApp::Application.routes.draw do
 
   end
 
-  #member do
-  #  get :delete
-  #  end
-  #end
-
   match "projects/:project_id/diagram_preview/:diagram_id" => 'requirements#sendDiagramPreviewImage'
-  match "/addRelation" => 'requirements#addRelation'
   match 'projects/:project_id/requirements/artifact/:id/export' => 'requirements#exportRequirements'
 end

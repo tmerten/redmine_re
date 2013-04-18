@@ -1,42 +1,42 @@
 <div class="one_line_view">
-	<p><table>
-		<tbody>
-			<tr>
-				
-				<%= render :partial => "re_artifact_properties/shared_fields_one_line_representation", :locals => {:artifact => artifact}%>
+	<p>
+    <table>
+		  <tbody>
+  			<tr>
+  				<%= render :partial => "re_artifact_properties/shared_fields_one_line_representation", :locals => {:artifact => artifact}%>
 			
-				<% for column in ReTask.content_columns %>
-					<% value = artifact.artifact.send(column.name)%>
-					<% unless value.nil? or value == '' %>
-			        	<td>
-			              	<label class='filter'><%= l('re_task_' + column.name) + ": " %></label>
-							<%= value %>
-			            </td>  
-					<% end %>
-		        <% end %>
-				<!-- Add links to subtasks -->
-				<% subtasks = [] %>
-    			<% artifact.children.each {|c| subtasks << c.artifact if c.artifact_type == "ReSubtask"}%>
-				<% max = subtasks.count > 2 ? 2 : subtasks.count %>
-				<% unless subtasks.count == 0 %> 
-					<td colspan='2'>
-					  	<label class='filter'><%= l('re_subtasks') + "...: " %></label> 	
-						<% (0..max).each do |number| %>
+  				<% for column in ReTask.content_columns %>
+  					<% value = artifact.artifact.send(column.name)%>
+  					<% unless value.nil? or value == '' %>
+  			        	<td>
+  			              	<label class='filter'><%= l('re_task_' + column.name) + ": " %></label>
+  							<%= value %>
+  			            </td>  
+  					<% end %>
+  		        <% end %>
+  				<!-- Add links to subtasks -->
+  				<% subtasks = [] %>
+      			<% artifact.children.each {|c| subtasks << c.artifact if c.artifact_type == "ReSubtask"}%>
+  				<% max = subtasks.count > 2 ? 2 : subtasks.count %>
+  				<% unless subtasks.count == 0 %> 
+  					<td colspan='2'>
+  					  	<label class='filter'><%= l('re_subtasks') + "...: " %></label> 	
+  						<% (0..max).each do |number| %>
 					  
-							<%= link_to( subtasks[number].name.slice(0, 40), {	:action => :edit,
-			        					  	 									:controller => :re_task,
-			        					 	 									:id => subtasks[number].artifact_id},
-																			:class => "icon re_subtask" ) %>
-							<br>
+  							<%= link_to( subtasks[number].name.slice(0, 40), {	:action => :edit,
+  			        					  	 									:controller => :re_task,
+  			        					 	 									:id => subtasks[number].artifact_id},
+  																			:class => "icon re_subtask" ) %>
+  							<br>
 					  
-						<% end %>
-					</td>
-				<% end %>
+  						<% end %>
+  					</td>
+  				<% end %>
 				
-				<!-- Add Building Block One Line Representation --> 
-				<%= insert_building_blocks_one_line_representations(artifact) %>
-	          	
-			</tr>
-		</tbody>
-	</table></p>
+  				<!-- Add Building Block One Line Representation --> 
+  				<%= insert_building_blocks_one_line_representations(artifact) %>
+  			</tr>
+		  </tbody>
+	  </table>
+  </p>
 </div>

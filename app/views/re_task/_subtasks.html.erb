@@ -3,7 +3,7 @@
 <% type_class = "problem" if f.object.sub_type == 2 %>
 <tr id="subtask_drag_<%= f.object.position %>" class="draggable <%= type_class %> subtask_row nested_field">
 
-  <td style="cursor: pointer;" class="<%= type_class %>" ></td>
+  <td class="<%= type_class %>" ></td>
   <td class="<%= type_class -%> subtask-type">
     <%= f.hidden_field :position, :class => "position"  %>
     <%= f.select :sub_type, [['ST', 0],['V', 1],['P', 2]]%>

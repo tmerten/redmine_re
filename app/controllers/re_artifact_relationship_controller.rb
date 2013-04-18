@@ -7,7 +7,36 @@ class ReArtifactRelationshipController < RedmineReController
   TRUNCATE_OMISSION = "..."
 
   include ActionView::Helpers::JavaScriptHelper
-
+  
+  def create
+    @source = ReArtifactProperties.find_by_id(params[:source_id]);
+    @sink = ReArtifactProperties.find_by_id(params[:sink_id]);
+    @re_artifact_properties = ReArtifactProperties.find_by_id(params[:id])
+        
+    if (@source.blank? || @sink.blank? || @re_artifact_properties.blank? )              
+        render :text => t(:re_404_artifact_not_found), :status => 404
+    elsif (!params[:re_artifact_relationship].blank?)
+      
+      relation_type = params[:re_artifact_relationship][:relation_type]
+      new_relation = ReArtifactRelationship.new(:sink_id => @sink.id, :source_id => @source.id, :relation_type => relation_type)
+        
+      if new_relation.save        
+        flash[:notice] = t(:re_relation_saved)
+        redirect_to @re_artifact_properties        
+      else
+        flash[:error] = t(:re_relation_saved_error)
+        redirect_to @re_artifact_properties
+      end        
+    elsif params[:dialog_send].nil?
+      #display add relation dialog        
+      render :file => 'requirements/add_relation', :formats => [:html], :layout => false
+    else
+      #no relation type was selected
+      flash[:error] = t(:re_relation_saved_error)
+      redirect_to @re_artifact_properties                   
+    end
+  end
+  
   def delete
     @relation = ReArtifactRelationship.find(params[:id])
 

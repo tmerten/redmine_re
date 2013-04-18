@@ -106,7 +106,7 @@ class RequirementsController < RedmineReController
     end         
   end
   
-  def addRelation
+  def add_relation
     @source = ReArtifactProperties.find_by_id(params[:source_id]);
     @sink = ReArtifactProperties.find_by_id(params[:sink_id]);
     @re_artifact_properties = ReArtifactProperties.find_by_id(params[:id])

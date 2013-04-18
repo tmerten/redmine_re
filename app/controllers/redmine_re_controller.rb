@@ -5,8 +5,6 @@ class RedmineReController < ApplicationController
   unloadable
   menu_item :re
 
-  TRUNCATE_NAME_IN_TREE_AFTER_CHARS = 100
-  TRUNCATE_OMISSION = "..."
   NODE_CONTEXT_MENU_ICON = "bullet_toggle_plus.png"
 
   include ActionView::Helpers::AssetTagHelper
@@ -342,7 +340,7 @@ class RedmineReController < ApplicationController
     # until a certain tree depth (BFS)
     # the result is a hash in the form
     #
-    # tree['data'] = ARTIFACT_NAME (max TRUNCATE_NAME_IN_TREE_AFTER_CHARS chars long)...
+    # tree['data'] = ARTIFACT_NAME
     # tree['url']  = ARTIFACT_EDIT_URL ...
     # tree['state'] = ARTIFACT_OPEN/CLOSED ...
     # tree['rel'] = ARTIFACT_TYPE ...
@@ -357,12 +355,11 @@ class RedmineReController < ApplicationController
 
     artifact_type = re_artifact_properties.artifact_type.to_s.underscore
     artifact_name = re_artifact_properties.name.to_s
-    artifact_shortened_name = truncate(artifact_name, :length => TRUNCATE_NAME_IN_TREE_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
     artifact_id = re_artifact_properties.id.to_s
     has_children = !re_artifact_properties.children.empty?
 
     tree = {}
-    tree['data'] = artifact_shortened_name
+    tree['data'] = artifact_name
     if has_children
       tree ['state'] = 'open' if expanded
       tree ['state'] = 'closed' unless expanded

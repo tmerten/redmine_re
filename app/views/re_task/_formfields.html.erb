@@ -39,44 +39,43 @@
 	         </tr>
 	      </thead>
 	      <tbody id="subtasks">
-		  <%= artifact_form.fields_for :re_subtasks do |builder| %>
-		  	<%= render('re_task/subtasks', :f => builder) %>
-		  <% end %>
+    		  <%= artifact_form.fields_for :re_subtasks do |builder| %>
+    		  	<%= render('re_task/subtasks', :f => builder) %>
+    		  <% end %>
 	      </tbody>
 	   </table>
 	</fieldset>
-	
 	
 	<%= javascript_tag do %>
 	  function addSubtask(element, add_pos, type) {
 	    var rendered_subtask;
 	    rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 0) %>";
 	
-		switch(type) {
-		  case '1':
-		  	rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 1) %>";
-		  break;
-		  case '2':
-		  	rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 2) %>";
-		}
+  		switch(type) {
+  		  case '1':
+  		  	rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 1) %>";
+  		  break;
+  		  case '2':
+  		  	rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 2) %>";
+  		}
 		
-		var now = new Date;
-		var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
-							now.getHours(), now.getMinutes(), now.getSeconds(), 
-							now.getMilliseconds());
-		var ts = Math.round((new Date()).getTime() / 1000);
+  		var now = new Date;
+  		var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
+  							now.getHours(), now.getMinutes(), now.getSeconds(), 
+  							now.getMilliseconds());
+  		var ts = Math.round((new Date()).getTime() / 1000);
 		
-		rendered_subtask = replaceAll(rendered_subtask, "new_re_subtask", utc_timestamp.toString().substring(5,12));
+  		rendered_subtask = replaceAll(rendered_subtask, "new_re_subtask", utc_timestamp.toString().substring(5,12));
 		
-		switch(add_pos) {
-		  case 'top':    jQuery(element).prepend(rendered_subtask); break;
-		  case 'after':  jQuery(element).after(rendered_subtask); break;
-		  case 'before': jQuery(element).before(rendered_subtask); break;
-		  case 'bottom': jQuery(element).append(rendered_subtask); break;
-		    }
+  		switch(add_pos) {
+  		  case 'top':    jQuery(element).prepend(rendered_subtask); break;
+  		  case 'after':  jQuery(element).after(rendered_subtask); break;
+  		  case 'before': jQuery(element).before(rendered_subtask); break;
+  		  case 'bottom': jQuery(element).append(rendered_subtask); break;
+      }
 	    
-	    updateSubtaskPositionFields();
-		jsInitScript();
+  	  updateSubtaskPositionFields();
+  		jsInitScript();
 	  }
 	<%end%>
 <% end%>
