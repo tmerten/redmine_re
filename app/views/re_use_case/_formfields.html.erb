@@ -1,4 +1,6 @@
-<%= javascript_include_tag 're_use_case', :plugin => 'redmine_re' %>
+<% content_for :header_tags do %>
+	<%= javascript_include_tag 're_use_case', :plugin => 'redmine_re' %>
+<% end %>
 
 <%= f.fields_for :artifact do |artifact_form| %>
 	<fieldset class="tabular"><legend><%= l(:re_use_case_specific_attributes) %></legend>
