@@ -245,4 +245,14 @@ JAVASCRIPT
     end
     escape_javascript(fields)
   end
+
+  # renders a link to javascrip to add an empty object into a nested forms 
+  def get_escaped_subtask_html(f, sub_type)
+    new_object = ReSubtask.new()
+    new_object = f.object.class.reflect_on_association(:re_subtasks).klass.new(:sub_type => sub_type)
+    fields = f.fields_for("re_subtasks_attributes", new_object, :index => "new_re_subtask") do |builder|
+      render("re_task/subtasks", :f => builder)
+    end
+    escape_javascript(fields)
+  end
 end

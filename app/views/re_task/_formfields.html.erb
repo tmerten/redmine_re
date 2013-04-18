@@ -40,9 +40,9 @@
 	         </tr>
 	      </thead>
 	      <tbody id="subtasks">
-          <% @re_artifact_properties.artifact.re_subtasks.each do |current_re_subtask| %>
-             <%= render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask => current_re_subtask }) %>
-          <% end %>
+		  <%= artifact_form.fields_for :re_subtasks do |builder| %>
+		  	<%= render('re_task/subtasks', :f => builder) %>
+		  <% end %>
 	      </tbody>
 	   </table>
 	</fieldset>
@@ -50,8 +50,10 @@
 	
 	<%= javascript_tag do %>
 	
+		// TODO: Move to JS-File
 		updateSubtaskPositionFields();
 		
+		// TODO: Move to JS-File
 		function jsInitScript() {
 		    jQuery(".subtasks tbody").sortable({
 		      placeholder: 'ui-state-highlight',
@@ -63,12 +65,13 @@
 		      },  
 		    });
 
-				jQuery("select.subtask-type").change(function() {
-					changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
-				});
+			jQuery("td.subtask-type select").change(function() {
+				changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
+			});
 			
-		};
+	    };
 		
+		// TODO: Move to JS-File
 		jQuery(document).ready(function(){
 		    jsInitScript();
 				/* jQuery(".subtask_textarea").autoGrow();*/
@@ -91,9 +94,25 @@
 	    });
 	  }
 	
-	  function addSubtask(element, add_pos) {
+	  function addSubtask(element, add_pos, type) {
 	    var rendered_subtask;
-	    rendered_subtask = "<%= escape_javascript(render(:partial => 're_subtask/formfields', :locals => { :f => artifact_form, :re_subtask =>ReSubtask.new } )) %>";
+	    rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 0) %>";
+	    
+	    switch(type) {
+	      case '1':
+	      	rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 1) %>";
+	      break;
+	      case '2':
+	      	rendered_subtask = "<%= get_escaped_subtask_html(artifact_form, 2) %>";
+	    }
+	
+	  	var now = new Date;
+		var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
+	  						now.getHours(), now.getMinutes(), now.getSeconds(), 
+	  						now.getMilliseconds());
+	  	var ts = Math.round((new Date()).getTime() / 1000);
+
+	  	rendered_subtask = replaceAll(rendered_subtask, "new_re_subtask", utc_timestamp.toString().substring(5,12));
 	
 	    switch(add_pos) {
 	      case 'top':    jQuery(element).prepend(rendered_subtask); break;
@@ -107,11 +126,7 @@
 		jsInitScript();
 	  }
 	
-	  function markSubtaskForDestroy(element) {
-	  	element.children('.should_destroy').val(1);
-	    element.parent().hide();
-	  }
-	
+	  //TODO: Update selectors! AND Move to JS-File
 	  function updateSubtaskPositionFields() {
 	    var pos = 1;
 	    jQuery('#subtasks').children().each( function(child) {
@@ -121,5 +136,30 @@
 	    });
 	  }
 	  
+	  // TODO: Move to JS-File
+	  function add_fields(where, type, content ) {
+	  	var now = new Date;
+		var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() , 
+	  						now.getHours(), now.getMinutes(), now.getSeconds(), 
+	  						now.getMilliseconds());
+	  	var ts = Math.round((new Date()).getTime() / 1000);
+	  	 switch(type) {
+	  	    case 're_subtask':
+	  	    	content = replaceAll(content, "new_re_subtask", utc_timestamp.toString().substring(5,12));
+	  	    	addSubtask(where, content);
+	  	    break;
+	  	 }
+	  }
+  
+	  // TODO: Move to JS-File
+	  function remove_fields(link) {
+		jQuery(link).prev("input[type=hidden]").val("1");
+		jQuery(link).closest(".nested_field").hide();
+	  }
+
+  
+	  function replaceAll(txt, replace, with_this) {
+	  	return txt.replace(new RegExp(replace, 'g'),with_this);
+	  }
 	<%end%>
 <% end%>
