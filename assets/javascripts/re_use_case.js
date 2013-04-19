@@ -4,7 +4,7 @@
 	      placeholder: 'ui-state-highlight',
 	      containment: '#steps',
 	      start: function(event, ui){
-	         jQuery(".ui-state-highlight").html("<td div style='background:#4466AA; width: 800px; height: 5px; clear: both;'></div>");
+	         jQuery(".ui-state-highlight").html("<div style='background:#4466AA; width: 800px; height: 5px; clear: both;'></div>");
 	      },
 	      update: function(event, ui){
 	         updateStepPositionFields();
