@@ -135,7 +135,7 @@ class RequirementsController < RedmineReController
     end
   end
   
-  def exportRequirements     
+  def export_requirements     
     @artifact = ReArtifactProperties.find_by_id(params[:id])
    
     #use configured filetype for output    
