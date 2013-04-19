@@ -2,29 +2,29 @@
 updateSubtaskPositionFields();
 
 function jsInitScript() {
-    jQuery(".subtasks tbody").sortable({
+    jQuery("#subtasks").sortable({
       placeholder: 'ui-state-highlight',
+	  containment: '#subtasks',
       start: function(event, ui){
-         jQuery(".ui-state-highlight").html("<td colspan='7' style='background:#4466AA'></td>");
+         jQuery(".ui-state-highlight").html("<div style='background:#4466AA; width: 800px; height: 5px; clear: both;'></div>");
       },
       update: function(event, ui){
          updateSubtaskPositionFields();
       },  
     });
 
-	jQuery("td.subtask-type select").change(function() {
-		changeSubtaskRowColor(jQuery(this).parent().parent(), this.value);
+	jQuery("div.subtask_select_container select").change(function() {
+		changeSubtaskRowColor(jQuery(this).parent().parent().parent(), this.value);
 	});
 	
 };
 
-// TODO: Move to JS-File
 jQuery(document).ready(function(){
     jsInitScript();
 		/* jQuery(".subtask_textarea").autoGrow();*/
 	});
 	
-  function changeSubtaskRowColor(element, value) {
+function changeSubtaskRowColor(element, value) {
     jQuery(element).removeClass('subtask');
 	jQuery(element).removeClass('variant');
 	jQuery(element).removeClass('problem');
@@ -33,19 +33,15 @@ jQuery(document).ready(function(){
 	  case '0': jQuery(element).addClass('subtask'); break;
 	  case '1': jQuery(element).addClass('variant'); break;
 	  case '2': jQuery(element).addClass('problem'); break;
-	    }
-
-    element.childElements().each( function ( td ) {
-       changeSubtaskRowColor(td, value)
-    });
-  }
+	}
+}
 
   //TODO: Update selectors!
   function updateSubtaskPositionFields() {
     var pos = 1;
-    jQuery('#subtasks').children().each( function(child) {
+    jQuery('#subtasks').children('div').each( function(child) {
 	  jQuery(this).attr('id','subtask_drag_' + pos);
-	  jQuery(this).children().next().children('.position').attr('value', pos);
+	  jQuery(this).children('.position').attr('value', pos);
       pos++;
     });
   }

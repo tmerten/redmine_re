@@ -1,25 +1,32 @@
 <% type_class = "subtask" %>
 <% type_class = "variant" if f.object.sub_type == 1 %>
 <% type_class = "problem" if f.object.sub_type == 2 %>
-<tr id="subtask_drag_<%= f.object.position %>" class="draggable <%= type_class %> subtask_row nested_field">
-
-  <td class="<%= type_class %>" ></td>
-  <td class="<%= type_class -%> subtask-type">
-    <%= f.hidden_field :position, :class => "position"  %>
-    <%= f.select :sub_type, [['ST', 0],['V', 1],['P', 2]]%>
-  </td>
-  <td class="<%= type_class -%>">
-    <%= f.text_area :name, { :size => "12x2", :class => "subtask_textarea" } %>
-  </td>
-  <td class="<%= type_class -%>">
-  </td>
-  <td class="<%= type_class -%>">
-    <%= f.text_area :solution, :size => "12x2", :class => "subtask_textarea" %>
-  </td>
-  <td class="<%= type_class -%>">
-  </td>
-  <td class="<%= type_class -%>">
-    <%= link_to_remove_fields "", f %>
-    <%= link_to_function( t(:re_insert_st_after), "addSubtask(jQuery(this).parent().parent(), 'after')", :class => "icon icon-subtask-after" ) %>
-  </td>
-</tr>
+<div style="clear: both;" id="subtask_drag_<%= f.object.position %>" class="draggable <%= type_class %> subtask_row nested_field">
+	<%= f.hidden_field :position, :class => "position"  %>
+	<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+	<div class="subtask_main">
+		<div class="subtask_select_container">
+			<%= f.select :sub_type, [['ST', 0],['V', 1],['P', 2]]%>
+		</div>
+		<div class="subtask_textarea_container">
+			<%= f.text_area :name, { :size => "12x2", :class => "subtask_textarea" } %>
+		</div>
+		<div class="subtask_textarea_container">
+			<%= f.text_area :solution, :size => "12x2", :class => "subtask_textarea" %>
+		</div>
+	</div>
+	<div class="re_subtask_button_bar">
+		<div class="re_subtask_button_container">
+			<%= link_to_function( t(:re_insert_st_after), "addSubtask(jQuery(this).parent().parent().parent(), 'after', '0')".html_safe, :class => "icon icon-subtask-after" ) %>
+		</div>
+		<div class="re_subtask_button_container">
+			<%= link_to_function( t(:re_insert_va_after), "addSubtask(jQuery(this).parent().parent().parent(), 'after', '1')".html_safe, :class => "icon icon-subtask-after" ) %>
+		</div>
+		<div class="re_subtask_button_container">
+			<%= link_to_function( t(:re_insert_pr_after), "addSubtask(jQuery(this).parent().parent().parent(), 'after', '2')".html_safe, :class => "icon icon-subtask-after" ) %>
+		</div>
+		<div class="re_subtask_button_container">
+			<%= link_to_remove_fields "", f %>
+		</div>
+	</div>
+</div>

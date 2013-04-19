@@ -29,21 +29,20 @@
 	   <table class="subtasks ui-sortable">
 	      <thead>
 	         <tr>
-	            <th>&nbsp;</th>
-	            <th><%= t(:re_subtask_type) -%></th>
-	            <th><%= t(:re_subtask_name) -%></th>
-	            <th>&nbsp;</th>
-	            <th><%= t(:re_subtask_solution) -%></th>
+	            <th style="width: 60px;"><%= t(:re_subtask_type) -%></th>
+	            <th style="width: 300px;"><%= t(:re_subtask_name) -%></th>
+	            <th style="width: 300px;"><%= t(:re_subtask_solution) -%></th>
 	            <th>&nbsp;</th>
 	            <th><a class="icon icon-subtask-after" href="#" onclick="addSubtask(document.getElementById('subtasks'), 'top'); return false;"><%= t(:re_insert_st_after) %></a></th>
 	         </tr>
 	      </thead>
-	      <tbody id="subtasks">
+	    
+	   </table>
+	   <div id="subtasks">
     		  <%= artifact_form.fields_for :re_subtasks do |builder| %>
     		  	<%= render('re_task/subtasks', :f => builder) %>
     		  <% end %>
-	      </tbody>
-	   </table>
+	   </div>
 	</fieldset>
 	
 	<%= javascript_tag do %>

@@ -212,18 +212,23 @@ tr.subtask {
     border-color: gray;
 }
 
+div.subtask,
 td.subtask {
     border-top: 2px solid #505050;
+    margin-top: 5px;
+    background-color: #EEEEEE;
 }
 
 td.one_line {
     width: 20px;
 }
 
+div.variant,
 tr.variant {
     background-color: #FFE6BF;
 }
 
+div.problem,
 tr.problem {
     background-color: #F1938C;
 }
@@ -1120,4 +1125,36 @@ div.query.details div.description {
     text-align: center;
     vertical-align: middle;
     float: left;
+}
+
+.subtask_main {
+    clear: both;
+    min-height: 65px;
+    padding: 2px;
+}
+
+.re_subtask_button_bar {
+    background-color: #ccc;
+    height: 24px;
+}
+
+.re_subtask_button_container {
+    padding: 2px;
+    height: 20px;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: middle;
+    float: left;
+}
+
+.subtask_select_container {
+	float: left;
+    padding: 5px;
+	
+}
+
+.subtask_textarea_container {
+	float: left;
+    padding: 5px;
+    width: 300px;
 }
