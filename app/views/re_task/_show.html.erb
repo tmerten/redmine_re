@@ -32,7 +32,7 @@
 <p>
   <strong><%= t(:re_subtasks)%></strong>
 </p>
-<table cellspacing="0">
+<table cellspacing="0" style="border-bottom: 1px solid #ccc;">
 	<colgroup>
 		<col style="width:150px"/>
     <col />
@@ -40,9 +40,9 @@
 	</colgroup>
     <thead>
        <tr>
-          <th style="width: 60px; border-bottom: 2px solid #444;"><%= t(:re_subtask_type) -%></th>
-          <th style="width: 45%;  border-bottom: 2px solid #444;"><%= t(:re_subtask_name) -%></th>
-          <th style="width: 45%;  border-bottom: 2px solid #444;"><%= t(:re_subtask_solution) -%></th>
+          <th style="width: 60px; border-bottom: 2px solid #CCCCCC;"><%= t(:re_subtask_type) -%></th>
+          <th style="width: 45%;  border-bottom: 2px solid #CCCCCC;"><%= t(:re_subtask_name) -%></th>
+          <th style="width: 45%;  border-bottom: 2px solid #CCCCCC;"><%= t(:re_subtask_solution) -%></th>
        </tr>
     </thead>
     <tbody>
@@ -53,13 +53,13 @@
          <% type_class = "problem" if current_re_subtask.sub_type == 2 %>
          
          <tr class="<%= type_class %>">
-           <td class="<%= type_class %>_show" style="border-right: 1px solid #666;">
+           <td class="<%= type_class %>_show" style="border-right: 1px solid #ccc;border-left: 1px solid #ccc;">
              <%= t(type_class) %>
            </td>
-           <td class="<%= type_class %>_show" style="border-right: 1px solid #666;">
+           <td class="<%= type_class %>_show" style="border-right: 1px solid #ccc;">
              <%= current_re_subtask.name %>
            </td>
-           <td class="<%= type_class %>_show" style="border-right: 1px solid #666;">
+           <td class="<%= type_class %>_show" style="border-right: 1px solid #ccc;">
              <%= current_re_subtask.solution %>
            </td>
          </tr>
