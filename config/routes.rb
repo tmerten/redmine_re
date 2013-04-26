@@ -64,5 +64,5 @@ RedmineApp::Application.routes.draw do
   end
 
   match "projects/:project_id/diagram_preview/:diagram_id" => 'requirements#sendDiagramPreviewImage'
-  match 'projects/:project_id/requirements/artifact/:id/export' => 'requirements#exportRequirements'
+  match 'projects/:project_id/requirements/artifact/:id/export' => 'requirements#export_requirements'
 end
