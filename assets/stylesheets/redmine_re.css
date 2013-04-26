@@ -218,6 +218,11 @@ td.subtask {
     margin-top: 5px;
     background-color: #EEEEEE;
 }
+td.subtask_show {
+	padding: 2px;
+	border-top: 1px solid #444;"
+}
+
 
 td.one_line {
     width: 20px;
@@ -228,10 +233,19 @@ tr.variant {
     background-color: #FFE6BF;
 }
 
+td.variant_show {
+	padding: 2px;	
+}
+
 div.problem,
 tr.problem {
     background-color: #F1938C;
 }
+
+td.problem_show {
+	padding: 2px;	
+}
+
 
 tr.draggable {
     cursor: move;
