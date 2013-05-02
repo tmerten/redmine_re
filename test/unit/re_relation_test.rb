@@ -5,15 +5,17 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ReRelationTest < ActiveSupport::TestCase
   ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
-    [:re_use_cases])
+    [:re_relations])
 
   test "Test if all relations are deleted, if an source artifact was deleted" do
+    
+    assert_equal 3, ReRelations.count
     
     source = ReArtifactProperties.new(:name => "Test B", :description => "TESTEST")
     assert source.save(), "Source artifact was not saved"
     
     sink = ReArtifactProperties.new(:name => "Test A", :description => "TESTEST")
-    sink.save(), "Sink artifact was not saved"
+    assert sink.save(), "Sink artifact was not saved"
     
     # System relations
     new_pch_relation = ReArtifactRelationship.new(:sink_id => sink.id, :source_id => source.id, :relation_type => "parentchild" )
@@ -55,16 +57,16 @@ class ReRelationTest < ActiveSupport::TestCase
     
     source.destroy()
     
-    assert_nil ReArtifactRelationship.find_by_id(pch_id, "Parentchild relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(pac_id, "Primari actor relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(ac_id,  "Actor relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(dia_id, "Diagram relation was not deleted, when source artifact was deleted.")
+    assert_nil ReArtifactRelationship.find_by_id(pch_id), "Parentchild relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(pac_id), "Primari actor relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(ac_id),  "Actor relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(dia_id), "Diagram relation was not deleted, when source artifact was deleted."
        
-    assert_nil ReArtifactRelationship.find_by_id(dep_id, "Dependency relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(con_id, "Conflic relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(rat_id, "Rationale relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(ref_id, "Refinement relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(pof_id, "Part of relation was not deleted, when source artifact was deleted.")
+    assert_nil ReArtifactRelationship.find_by_id(dep_id), "Dependency relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(con_id), "Conflic relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(rat_id), "Rationale relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(ref_id), "Refinement relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(pof_id), "Part of relation was not deleted, when source artifact was deleted."
 
   end
 
@@ -116,16 +118,16 @@ class ReRelationTest < ActiveSupport::TestCase
     
     sink.destroy()
     
-    assert_nil ReArtifactRelationship.find_by_id(pch_id, "Parentchild relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(pac_id, "Primari actor relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(ac_id,  "Actor relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(dia_id, "Diagram relation was not deleted, when source artifact was deleted.")
+    assert_nil ReArtifactRelationship.find_by_id(pch_id), "Parentchild relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(pac_id), "Primari actor relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(ac_id),  "Actor relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(dia_id), "Diagram relation was not deleted, when source artifact was deleted."
        
-    assert_nil ReArtifactRelationship.find_by_id(dep_id, "Dependency relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(con_id, "Conflic relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(rat_id, "Rationale relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(ref_id, "Refinement relation was not deleted, when source artifact was deleted.")
-    assert_nil ReArtifactRelationship.find_by_id(pof_id, "Part of relation was not deleted, when source artifact was deleted.")
+    assert_nil ReArtifactRelationship.find_by_id(dep_id), "Dependency relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(con_id), "Conflic relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(rat_id), "Rationale relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(ref_id), "Refinement relation was not deleted, when source artifact was deleted."
+    assert_nil ReArtifactRelationship.find_by_id(pof_id), "Part of relation was not deleted, when source artifact was deleted."
 
   end
 
