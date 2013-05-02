@@ -11,11 +11,20 @@ class ReRelationTest < ActiveSupport::TestCase
     
     assert_equal 3, ReRelations.count
     
-    source = ReArtifactProperties.new(:name => "Test B", :description => "TESTEST")
-    assert source.save(), "Source artifact was not saved"
+    project = ReArtifactProperties.new(re_relations(:project))
+    assert project.save
     
-    sink = ReArtifactProperties.new(:name => "Test A", :description => "TESTEST")
-    assert sink.save(), "Sink artifact was not saved"
+    source = ReArtifactProperties.new(re_relations(:source))
+    assert source.save
+    
+    sink = ReArtifactProperties.new(re_relations(:sink))
+    assert sink.save
+    
+    #source = ReArtifactProperties.new(:name => "Test B", :description => "TESTEST")
+    #assert source.save(), "Source artifact was not saved"
+    
+    #sink = ReArtifactProperties.new(:name => "Test A", :description => "TESTEST")
+    #assert sink.save(), "Sink artifact was not saved"
     
     # System relations
     new_pch_relation = ReArtifactRelationship.new(:sink_id => sink.id, :source_id => source.id, :relation_type => "parentchild" )
