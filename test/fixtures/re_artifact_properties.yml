@@ -220,4 +220,28 @@ art_workarea_public_test_for_toefel:
   artifact_id: <%= ActiveRecord::Fixtures.identify(:workarea_public_test_for_toefel) %>
   artifact_type: ReWorkarea
   <<: *DEFAULTS
+  
+  
+source:
+  id: 2
+  name: sourceartifact
+  description: Source Artifact
+  project_id: 1
+  artifact_type: ReGoal
+  artifact_id: 2
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+  
+sink:
+  id: 3
+  name: sinkartifact
+  description: Sink Artifact
+  project_id: 1
+  artifact_type: ReGoal
+  artifact_id: 2  
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+  
  

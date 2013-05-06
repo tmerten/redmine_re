@@ -5,19 +5,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ReRelationTest < ActiveSupport::TestCase
   ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
-    [:re_relations])
+    [:re_artifact_properties])
 
   test "Test if all relations are deleted, if an source artifact was deleted" do
     
     assert_equal 3, ReRelations.count
     
-    project = ReArtifactProperties.new(re_relations(:project))
+    project = ReArtifactProperties.new(re_artifact_properties(:art_project))
     assert project.save
     
-    source = ReArtifactProperties.new(re_relations(:source))
+    source = ReArtifactProperties.new(re_artifact_properties(:source))
     assert source.save
     
-    sink = ReArtifactProperties.new(re_relations(:sink))
+    sink = ReArtifactProperties.new(re_artifact_properties(:sink))
     assert sink.save
     
     #source = ReArtifactProperties.new(:name => "Test B", :description => "TESTEST")
@@ -81,11 +81,14 @@ class ReRelationTest < ActiveSupport::TestCase
 
   test "Test if all relations are deleted, if an sink artifact was deleted" do
     
-    source = ReArtifactProperties.new(:name => "Test B", :description => "TESTEST")
-    assert source.save(), "Source artifact was not saved"
+    project = ReArtifactProperties.new(re_artifact_properties(:art_project))
+    assert project.save
     
-    sink = ReArtifactProperties.new(:name => "Test A", :description => "TESTEST")
-    sink.save(), "Sink artifact was not saved"
+    source = ReArtifactProperties.new(re_artifact_properties(:source))
+    assert source.save
+    
+    sink = ReArtifactProperties.new(re_artifact_properties(:sink))
+    assert sink.save
         
     # System relations
     new_pch_relation = ReArtifactRelationship.new(:sink_id => sink.id, :source_id => source.id, :relation_type => "parentchild" )
