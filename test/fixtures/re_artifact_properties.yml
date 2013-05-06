@@ -223,10 +223,10 @@ art_workarea_public_test_for_toefel:
   
   
 source:
-  id: 2
+  id: <%= ActiveRecord::Fixtures.identify(:source) %>
   name: sourceartifact
   description: Source Artifact
-  project_id: 1
+  project_id: 4
   artifact_type: ReGoal
   artifact_id: 2
   created_by: 1
@@ -234,10 +234,10 @@ source:
   <<: *DEFAULTS
   
 sink:
-  id: 3
+  id: <%= ActiveRecord::Fixtures.identify(:sink) %>
   name: sinkartifact
   description: Sink Artifact
-  project_id: 1
+  project_id: 4
   artifact_type: ReGoal
   artifact_id: 2  
   created_by: 1

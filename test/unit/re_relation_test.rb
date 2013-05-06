@@ -8,17 +8,8 @@ class ReRelationTest < ActiveSupport::TestCase
     [:re_artifact_properties])
 
   test "Test if all relations are deleted, if an source artifact was deleted" do
-    
-    assert_equal 3, ReRelations.count
-    
-    project = ReArtifactProperties.new(re_artifact_properties(:art_project))
-    assert project.save
-    
-    source = ReArtifactProperties.new(re_artifact_properties(:source))
-    assert source.save
-    
-    sink = ReArtifactProperties.new(re_artifact_properties(:sink))
-    assert sink.save
+    assert_not_nil source = ReArtifactProperties.find_by_name("sourceartifact"), "Error during loading of fixtures"
+    assert_not_nil sink = ReArtifactProperties.find_by_name("sinkartifact"), "Error during loading of fixtures"
     
     #source = ReArtifactProperties.new(:name => "Test B", :description => "TESTEST")
     #assert source.save(), "Source artifact was not saved"
@@ -80,15 +71,8 @@ class ReRelationTest < ActiveSupport::TestCase
   end
 
   test "Test if all relations are deleted, if an sink artifact was deleted" do
-    
-    project = ReArtifactProperties.new(re_artifact_properties(:art_project))
-    assert project.save
-    
-    source = ReArtifactProperties.new(re_artifact_properties(:source))
-    assert source.save
-    
-    sink = ReArtifactProperties.new(re_artifact_properties(:sink))
-    assert sink.save
+    assert_not_nil source = ReArtifactProperties.find_by_name("sourceartifact"), "Error during loading of fixtures"
+    assert_not_nil sink = ReArtifactProperties.find_by_name("sinkartifact"), "Error during loading of fixtures"
         
     # System relations
     new_pch_relation = ReArtifactRelationship.new(:sink_id => sink.id, :source_id => source.id, :relation_type => "parentchild" )
