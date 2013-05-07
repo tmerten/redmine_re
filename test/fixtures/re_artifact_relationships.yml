@@ -191,16 +191,39 @@ relationship_task_test_vocabulary_workarea_public_test_for_toefel:
 
 
 
+# Testing moving of relations
 
+testartifact_relation_move_l1_1_relation:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1_relation) %>
+  position: 1
+  relation_type: parentchild
+  source_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_root) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1) %>   
 
+testartifact_relation_move_l2_1_relation:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_1_relation) %>
+  position: 1
+  relation_type: parentchild
+  source_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1) %> 
+  sink_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_1) %>   
 
+testartifact_relation_move_l2_2_relation:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_2_relation) %>
+  position: 2
+  relation_type: parentchild
+  source_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1) %> 
+  sink_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_2) %>   
+  
+testartifact_relation_move_l2_3_relation:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_3_relation) %>
+  position: 3
+  relation_type: parentchild
+  source_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1) %> 
+  sink_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_3) %>  
 
-
-
-
-
-
-
-
-
-
+testartifact_relation_move_l1_2_relation:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_2_relation) %>
+  position: 2
+  relation_type: parentchild
+  source_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_root) %>
+  sink_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_2) %>

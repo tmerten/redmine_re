@@ -244,4 +244,70 @@ sink:
   updated_by: 1
   <<: *DEFAULTS
   
+testartifact_relation_move_root:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_root) %>
+  name: sinkartifact
+  description: Sink Artifact
+  project_id: 5
+  artifact_type: Project
+  artifact_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_root) %>  
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+
+testartifact_relation_move_l1_1:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1) %>
+  name: sinkartifact
+  description: Sink Artifact
+  project_id: 5
+  artifact_type: ReGoal
+  artifact_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1) %>   
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+
+testartifact_relation_move_l2_1:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_1) %>
+  name: sinkartifact
+  description: Sink Artifact
+  project_id: 5
+  artifact_type: ReGoal
+  artifact_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_1) %>   
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+
+testartifact_relation_move_l2_2:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_2) %>
+  name: sinkartifact
+  description: Sink Artifact
+  project_id: 5
+  artifact_type: ReGoal
+  artifact_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_2) %>   
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+  
+testartifact_relation_move_l2_3:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_3) %>
+  name: sinkartifact
+  description: Sink Artifact
+  project_id: 5
+  artifact_type: ReGoal
+  artifact_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_3) %>  
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+
+testartifact_relation_move_l1_2:
+  id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_2) %>
+  name: sinkartifact
+  description: Sink Artifact
+  project_id: 5
+  artifact_type: ReGoal
+  artifact_id: <%= ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_2) %>  
+  created_by: 1
+  updated_by: 1
+  <<: *DEFAULTS
+  
  
