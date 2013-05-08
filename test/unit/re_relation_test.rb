@@ -138,17 +138,17 @@ class ReRelationTest < ActiveSupport::TestCase
     assert_not_nil project, "Test project was not found"
     assert project.id > 0, "Project id is not correct"
     n = ReArtifactRelationship.where(:source_id => project.artifact_id.to_s).count
-    assert n == 2, "Project tree structure is not correct "+n.to_s+"/2"
+    assert_equal 2, n, "Project tree structure is not correct"
+    assert_equal ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1), project.children.first().id
+    assert_equal ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_2), project.children.last().id
     
     artifact_1_1 = ReArtifactProperties.find(ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1))
     assert_not_nil artifact_1_1, "Artifact 1_1 was not found"
     assert artifact_1_1.id > 0, "Artifact 1_1 id is not correct"
     n = ReArtifactRelationship.where(:source_id => artifact_1_1.artifact_id.to_s).count
-    assert n == 3, "Project tree structure is not correct "+n.to_s+"/3"
+    assert_equal 3, n, "Project tree structure is not correct"
     
     # Tree structure is valid
-    
-    
     
     
     # sibling_id = params[:sibling_id]
