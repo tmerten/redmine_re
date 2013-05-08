@@ -147,40 +147,6 @@ class ReRelationTest < ActiveSupport::TestCase
     assert artifact_1_1.id > 0, "Artifact 1_1 id is not correct"
     n = ReArtifactRelationship.where(:source_id => artifact_1_1.artifact_id.to_s).count
     assert_equal 3, n, "Project tree structure is not correct"
-    
-    # Tree structure is valid
-    
-    
-    # sibling_id = params[:sibling_id]
-    # moved_artifact_id = params[:id]
-    # insert_position = params[:position]
-# 
-    # moved_artifact = ReArtifactProperties.find(moved_artifact_id)
-# 
-    # new_parent = nil
-    # sibling = ReArtifactProperties.find(sibling_id)
-    # position = 1
-#     
-    # case insert_position
-      # when 'before'
-        # position = (sibling.position - 1) unless sibling.nil?
-        # new_parent = sibling.parent
-      # when 'after'
-        # position = (sibling.position + 1) unless sibling.nil?
-        # new_parent = sibling.parent
-      # when 'inside'
-        # position = 1
-        # new_parent = sibling
-      # else
-        # render :text => "insert position invalid", :status => 501
-    # end
-    # session[:expanded_nodes] << new_parent.id
-#  
-    # building_block_data = ReBbDataArtifactSelection.find(:first, :conditions => {:re_artifact_relationship_id => moved_artifact.parent_relation.id})
-    # building_block_data.delete unless building_block_data.nil?
-    # moved_artifact.parent_relation.remove_from_list
-    # moved_artifact.parent = new_parent
-    # moved_artifact.parent_relation.insert_at(position)
-      
+   
   end
 end
