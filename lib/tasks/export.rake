@@ -8,6 +8,15 @@ namespace :export do
       puts "Project.create(#{project.serializable_hash.delete_if {|key, value| ['lft','rgt','status','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
     end
     
+    Setting.order(:id).all.each do |setting|
+      puts "Setting.create(#{setting.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+    end
+    
+    User.order(:id).all.each do |user|
+      puts "# Make sure that the setting password_min_length is not to high (by default it is 8 and the admin:admin combo dose not work!)"
+      puts "User.create(#{user.serializable_hash.delete_if {|key, value| ['last_login_on','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+    end
+    
     EnabledModule.order(:id).all.each do |em|
       puts "EnabledModule.create(#{em.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
     end
@@ -16,12 +25,20 @@ namespace :export do
       puts "Role.create(#{role.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
     end
     
-    ReArtifactProperties.order(:id).all.each do |artifact|
-      puts "ReArtifactProperties.create(#{artifact.serializable_hash.delete_if {|key, value| ['rating_average','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
-    end
-    
     ReArtifactRelationship.order(:id).all.each do |relation|
       puts "ReArtifactRelationship.create(#{relation.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+    end
+    
+    ReArtifactProperties.order(:id).all.each do |artifact|
+      parentrelation = ReArtifactRelationship.find_by_sink_id(artifact.id)
+      unless parentrelation.nil?
+        parentartifact = ReArtifactProperties.find(parentrelation.source_id)
+        puts "ReArtifactProperties.create(#{artifact.serializable_hash.delete_if {|key, value| ['rating_average','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')},"
+        puts "\"parent\" => ReArtifactProperties.find(#{parentrelation.source_id}),"
+        puts "\"parent_relation\" => ReArtifactRelationship.find_by_sink_id(#{artifact.id}))"
+      else
+        puts "ReArtifactProperties.create(#{artifact.serializable_hash.delete_if {|key, value| ['rating_average','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+      end
     end
 
     ReGoal.order(:id).all.each do |artifact|
@@ -81,7 +98,8 @@ namespace :export do
     end
     
     ReSetting.order(:id).all.each do |setting|
-      puts "ReSetting.create(#{setting.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+      n   = "#{setting.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s}"
+      puts "ReSetting.create(#{setting.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s[1, n.length-2]})"
     end
   end
 end

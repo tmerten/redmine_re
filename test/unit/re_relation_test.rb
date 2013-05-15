@@ -119,5 +119,5 @@ class ReRelationTest < ActiveSupport::TestCase
     assert_nil ReArtifactRelationship.find_by_id(ref_id), "Refinement relation was not deleted, when source artifact was deleted."
     assert_nil ReArtifactRelationship.find_by_id(pof_id), "Part of relation was not deleted, when source artifact was deleted."
   end
-  
+    
 end

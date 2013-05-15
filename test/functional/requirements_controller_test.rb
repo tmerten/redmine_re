@@ -1,58 +1,84 @@
 require File.dirname(__FILE__) + '/../test_helper'
+load "#{Rails.root}/plugins/redmine_re/db/seeds.rb"
 
 class RequirementsControllerTest < ActionController::TestCase
   # Replace this with your real tests.
+
+  def setup
+    User.current = nil
+    @request.session[:user_id] = 1 # admin
+  end
+  
   def test_truth
     assert true
   end
   
   test "Check if relations during move functions a correct" do
     
-    # Fixtures provides the following tree (Project id 5)
-    #
-    # testartifact_relation_move_root
-    #   testartifact_relation_move_l1_1
-    #     testartifact_relation_move_l2_1
-    #     testartifact_relation_move_l2_2
-    #     testartifact_relation_move_l2_3
-    #   testartifact_relation_move_l1_2
+    user = User.find(1)
+    login_as(user)
+    get :show, :id => user
+    assert_response :success
     
-    # Validation tree structure
-    project = ReArtifactProperties.find(ActiveRecord::Fixtures.identify(:testartifact_relation_move_root))
-    assert_not_nil project, "Test project was not found"
-    assert project.id > 0, "Project id is not correct"
-    n = ReArtifactRelationship.where(:source_id => project.artifact_id.to_s).count
-    assert_equal 2, n, "Project tree structure is not correct"
-    assert_equal ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1), project.children.first().id
-    assert_equal ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_2), project.children.last().id
+    # seeds.rb provides the following tree (Project id 1)
+    # (Count of relations: 10)
+    # Testprojekt (ID 1; Project)
+    #    Chapter 1 (ID 2; Section)
+    #       Requirement 1.1 (ID 4; Requirement)
+    #       Requirement 1.2 (ID 5; Requirement)
+    #       Requirement 1.3 (ID 6; Requirement)
+    #    Chapter 2 (ID 3; Section)
+    #       Goal 2.1 (ID 7; Goal)
+    #       Goal 2.2 (ID 8; Goal)
+    #    Chapter 3 (ID 9; Section)
+    #       Userprofil 3.1 (ID 10; Userprofil)
+    #       Userprofil 3.2 (ID 11; Userprofil)
     
-    artifact_1_1 = ReArtifactProperties.find(ActiveRecord::Fixtures.identify(:testartifact_relation_move_l1_1))
-    assert_not_nil artifact_1_1, "Artifact 1_1 was not found"
-    assert artifact_1_1.id > 0, "Artifact 1_1 id is not correct"
-    n = ReArtifactRelationship.where(:source_id => artifact_1_1.artifact_id.to_s).count
-    assert_equal 3, n, "Project tree structure is not correct"
+    n = ReArtifactRelationship.where(:source_id => "1").count
+    assert_equal 3, n, "Project tree structure is not correct (1)"
     
-    # Simulate a POST response with the given HTTP parameters. delegate_tree_drop
-    post("requirements#delegate_tree_drop",  
-      { :sibling_id => ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_2), 
-        :moved_artifact_id => ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_3), 
-        :insert_position => "inside" 
+    n = ReArtifactRelationship.where(:source_id => "2").count
+    assert_equal 3, n, "Project tree structure is not correct (2)"
+    
+    n = ReArtifactRelationship.where(:source_id => "3").count
+    assert_equal 2, n, "Project tree structure is not correct (3)"
+    
+    n = ReArtifactRelationship.where(:source_id => "9").count
+    assert_equal 2, n, "Project tree structure is not correct (4)"
+    
+    n = ReArtifactRelationship.count
+    assert_equal 10, n, "Project tree structure is not correct (5)"
+
+    
+    # Simulate a POST response with the given HTTP parameters. 
+    post("delegate_tree_drop", 
+      { :sibling_id => 8, 
+        :id => 11, # Artifact_moved_id
+        :position => "inside" 
       }
     )
     
-    # New Tree:
-    # testartifact_relation_move_root
-    #   testartifact_relation_move_l1_1
-    #     testartifact_relation_move_l2_1
-    #     testartifact_relation_move_l2_2
-    #       testartifact_relation_move_l2_3
-    #   testartifact_relation_move_l1_2
-    n = ReArtifactRelationship.where(:source_id => artifact_1_1.artifact_id.to_s).count
-    assert_equal 2, n, "Project tree structure is not correct"
+    #New Tree:
+    # Testprojekt (ID 1; Project)
+    #    Chapter 1 (ID 2; Section)
+    #       Requirement 1.1 (ID 4; Requirement)
+    #       Requirement 1.2 (ID 5; Requirement)
+    #       Requirement 1.3 (ID 6; Requirement)
+    #    Chapter 2 (ID 3; Section)
+    #       Goal 2.1 (ID 7; Goal)
+    #       Goal 2.2 (ID 8; Goal)
+    #          Userprofil 3.2 (ID 11; Userprofil)
+    #    Chapter 3 (ID 9; Section)
+    #       Userprofil 3.1 (ID 10; Userprofil)
+    #       Userprofil 3.2 (ID 11; Userprofil)
     
-    n = ReArtifactRelationship.where(:source_id => ActiveRecord::Fixtures.identify(:testartifact_relation_move_l2_2).to_s).count
-    assert_equal 1, n, "Project tree structure is not correct"
     
+    n = ReArtifactRelationship.where(:source_id => "8").count
+    assert_equal 1, n, "Project tree structure is not correct (6)"
+    
+    n = ReArtifactRelationship.count
+    assert_equal 10, n, "Project tree structure is not correct (7)"
+
   end
   
 end

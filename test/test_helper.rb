@@ -14,7 +14,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 class ActiveSupport::TestCase
   # This should speedup testrunning although it does not create data. Instead it uses tranactions for temporarily
   # creating and rolling back test data
-  self.use_transactional_fixtures = true
+  self.use_transactional_fixtures = false
 end
 
 def re_fixtures *args
