@@ -23,11 +23,6 @@
     <legend onclick="toggleFieldset(this);"><%= l(:re_configure) %></legend>
     <div>
       <ul class="navigation">
-        <li><%= link_to t(:re_relationship_visualization), {
-              :controller => "re_artifact_relationship",
-              :action => "visualization",
-              :project_id => @project.id } %>
-        </li>
         <% if User.current.allowed_to?(:administrate_requirements, @project) %>
           <li><%= link_to l(:re_configure_plugin), {
             :controller => "re_settings",
@@ -105,6 +100,41 @@
           var link = '<%= re_artifact_properties_path %>';
           window.location.href = link+'/'+id+'/how_to_delete';
         }
+      },
+      "visualization" : {
+        "label" : "<%= t(:re_visualization_show) %>",
+        "separator_before" : true,
+        "separator_after"	: false,
+        "icon" : "re_visualization",
+        "submenu" : {
+	       "sunburst_below" : {
+	       	 	"label" : "<%= t(:re_visualization_show_sunburst) %>",
+	        	"action" : function (node) {
+		            var id = node[0].id.replace('node_','');
+		            var link = '/projects/<%= @project.id %>/requirements/relations/visualization';
+		            window.location.href = link+'?artefakt_id='+id+'&visualization_type=sunburst';
+		  		},
+	        	"icon" : "new"
+	       },
+		   "netmap_below" : {
+		   	 	"label" : "<%= t(:re_visualization_show_netmap) %>",
+		   	 	"action" : function (node) {
+		            var id = node[0].id.replace('node_','');
+		            var link = '/projects/<%= @project.id %>/requirements/relations/visualization';
+		            window.location.href = link+'?artefakt_id='+id+'&visualization_type=netmap';
+		   	 	},
+		   	 	"icon" : "new"
+		   	},
+ 		   "graph_below" : {
+ 		   	 	"label" : "<%= t(:re_visualization_show_graph) %>",
+ 		   	 	"action" : function (node) {
+ 		            var id = node[0].id.replace('node_','');
+ 		            var link = '/projects/<%= @project.id %>/requirements/relations/visualization';
+ 		            window.location.href = link+'?artefakt_id='+id+'&visualization_type=graph';
+ 		   	 	},
+ 		   	 	"icon" : "new"
+ 		   	}
+	      }
       }
     }
     return items;
@@ -300,6 +330,11 @@ var tree = jQuery("#tree")
         "re_use_case" : {
           "icon" : { 
             "image" :"<%= plugin_asset_link( 'images/icons/page_user.png', :plugin => 'redmine_re') %>"
+          }
+        },
+        "re_visualization" : {
+          "icon" : { 
+            "image" :"<%= plugin_asset_link( 'images/icons/visualization.png', :plugin => 'redmine_re') %>"
           }
         },
         "project" : {

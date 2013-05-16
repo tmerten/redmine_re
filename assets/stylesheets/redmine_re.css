@@ -518,6 +518,10 @@ ins.re_rationale {
     background: url(../images/icons/anchor.png) no-repeat left top;
 }
 
+ins.re_visualization {
+	background: url(../images/icons/visualization.png) no-repeat left top;
+}
+
 a.re_rationale {
     background: url(../images/icons/anchor.png) no-repeat left top;
     margin-left: 0px;
@@ -530,6 +534,9 @@ ins.re_use_case {
 a.re_use_case {
     background: url(../images/icons/page_user.png) no-repeat left top;
     margin-left: 0px;
+}
+a.re_visualization{
+	background: url(../images/icons/visualization.png) no-repeat left top;
 }
 
 ins.re_my_requirement_artifact {
@@ -586,6 +593,9 @@ span.re_rationale {
 
 span.re_use_case {
     background: url(../images/icons/page_user.png) no-repeat left top;
+}
+span.re_visualization {
+	background: url(../images/icons/visualization.png) no-repeat left top;
 }
 
 /***** custom tooltips visualization*****/
