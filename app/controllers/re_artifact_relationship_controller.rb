@@ -71,6 +71,9 @@ class ReArtifactRelationshipController < RedmineReController
   def visualization
     session[:visualization_type]=params[:visualization_type]
     session[:visualization_artefakt_id]=params[:artefakt_id]
+    @re_artifact_properties = ReArtifactProperties.find(params[:artefakt_id])
+    @artifact_name=@re_artifact_properties.name
+    
     
     @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
       "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
