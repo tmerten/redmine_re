@@ -22,6 +22,32 @@ $j(document).ready(function () {
     $j("#footer").height() -
     40 ); /* 40px is an "arbitraty" buffer which removes the main scrollbar on most browsers (tm) */
 
+	var param = getURLParam("visualization_type");
+	// output: 123
+ 
+	   function getURLParam(strParamName) {
+	      var strReturn = "";
+	      var strHref = window.location.href;
+	      if ( strHref.indexOf("?") > -1 ) {
+	         var strQueryString = strHref.substr(strHref.indexOf("?")).toLowerCase();
+	         var aQueryString = strQueryString.split("&");
+	         for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+	            if (aQueryString[iParam].indexOf(strParamName.toLowerCase() + "=") > -1 ) {
+	               var aParam = aQueryString[iParam].split("=");
+	               strReturn = aParam[1];
+	               break;
+	            }
+	         }
+	      }
+	      return unescape(strReturn);
+	   }
+   	if(param == "")
+   	{
+       	var image = "<img src='../images/comment.png'><br/><img src='../images/fav_off.png'>";
+   	}else
+   	{
+   		var image = "";
+   	}
   reLayout = reLayout.layout({
     applyDefaultStyles: true,
     fxSpeed: "fast",
@@ -42,7 +68,7 @@ $j(document).ready(function () {
     
     east__size: 250,
     east__spacing_closed:	35,
-    east__togglerContent_closed: "<img src='../images/comment.png'><br/><img src='../images/fav_off.png'>",
+	east__togglerContent_closed: image,
     east__slideTrigger_open: "mouseover",
     east__slideTrigger_close: "mouseout",
     east__initClosed:	true,

@@ -1,119 +1,51 @@
 <% content_for :header_tags do %>
     <%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
+
+    <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
+    <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
     <%= stylesheet_link_tag 'redmine_re.css', :plugin => 'redmine_re' %>
+    <%= stylesheet_link_tag 'print.css', :plugin => "redmine_re", :media => 'print' %>
 <% end%>
 
 <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
 
-<div id='detail_view' class='detail_view'>
-<h2><%= l(:re_relationship_visualization)%></h2>
+<div id="infobar" class="ui-layout-west ui-layout-content">
+   <%= render "requirements/treebar" %>
+</div>
 
+
+<div id='detail_view' class='ui-layout-center'>
+<h2><%= @artifact_name %> - <%= l(:re_relationship_visualization)%></h2>
+
+  
+
+  <% canvas_size = ReSetting.get_plain("visualization_size", @project.id) %>
+  <div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
   <div id="visualization_filters">
-      <%= form_tag({ :action => :build_json_according_to_user_choice}, {:id => "visualization", :remote => true }) do %>
-    <table>
-      <tr>
-        <td colspan="3">
-          <h4><%= l(:re_artifacts) %></h4>
-        </td>
-      </tr>
-      <% @re_artifact_order.each_with_index do |artifact_type, i| %>
-        <% if ReSetting.get_serialized(artifact_type, @project.id)['in_use'] %>
-        <tr>
-					<% colors = ReSetting.get_serialized(artifact_type, @project.id)['color'] %>
-        <td>
-            <%= rendered_artifact_type(artifact_type.underscore) %>
-          </td>
-          <td>
-            <span style="padding-left: 20px; alpha=0.2; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
-          </td>
-          <td>
-            <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, true %>
-          </td>
-        </tr>
-        <% end %>
-      <% end %>
-      <tr>
-        <td colspan="3">
-          <h4><%= l(:re_artifact_relationships) %></h4>
-        </td>
-      </tr>
-      <% for key, value in ReArtifactRelationship::RELATION_TYPES do %>
-      <tr>
-        <% colors = ReSetting.get_serialized(value, @project.id)['color'] %>
-        <td>
-          <%= rendered_relation_type(value) %>
-        </td>
-        <td>
-          <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
-        </td>
-        <td>
-          <%= check_box_tag 'relation_filter[]', key.to_s, true %>
-        </td>
-      </tr>
-      <% end %>
-      <% for key, value in ReArtifactRelationship::SYSTEM_RELATION_TYPES do %>
-      <tr>
-        <% colors = ReSetting.get_serialized(value, @project.id)['color'] %>
-        <td>
-          <%= rendered_relation_type(value) %>
-        </td>
-        <td>
-          <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
-        </td>
-        <td>
-          <%= check_box_tag 'relation_filter[]', key.to_s, true %>
-        </td>
-      </tr>
-      <% end %>
-
-      <tr>
-      <td colspan="3">
-        <h4><%= l(:re_visualization_type) %></h4>
-      </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <%= t('re_sunburst') %>
-        </td>
-        <td>
-          <%= radio_button_tag 'visualization_type', 'sunburst' %>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <%= t('re_netmap')%>
-        </td>
-        <td>
-          <%= radio_button_tag 'visualization_type', 'netmap', checked = true %>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3"><%= submit_tag l(:re_show), :id => "submitvisualization"%></td>
-      </tr>
-      
-    </table>
-    <% end %>
+ 
     <p>
      <h4><%= t(:re_artifact_details) %></h4>
      <div id="node-details"></div>
     </p>
   </div>
 
-  <% canvas_size = ReSetting.get_plain("visualization_size", @project.id) %>
-  <div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
-
 </div>
+<%= render :partial => 'infobar_visualization' %>
+
 
 <script type="text/javascript">
   //<![CDATA[
+$('#visualization').submit(function() {
+  clear_canvas();
+  });
+$(document).ready(function () {
+	$('#visualization').submit();
+});
 
 jQuery('#visualization').bind('ajax:success', function(evt, data, status, xhr){
 	init(data);
 });
 
-jQuery('#submitvisualization').click( function(){
-  clear_canvas();
-});
 
 var visualization = null;
 var form = null;
@@ -124,8 +56,7 @@ function clear_canvas() {
 
 function init(data) {
   
-	var visualization_type = jQuery('input[name=visualization_type]:checked', '#visualization').val();
-	
+	var visualization_type = "<%= params[:visualization_type]%>"
 	var visualization_config = {
 		
       //id container for the visualization
@@ -185,8 +116,16 @@ function init(data) {
           if (!node) return;
           var data = node.data
           var id = node.id.replace('node_','');
-          var link = "<%= re_artifact_properties_path %>";        
-          var html = "<b>Name: <a href=" + link + "/" + id + "/edit>" + data.full_name + "</a></b>"
+		  
+          
+          if(id.charAt(0)!='i'){
+		 	 var link = "<%= re_artifact_properties_path %>";        
+		  }else
+		  {
+		  	id = id.replace('issue_','');
+	 		var link = "/issues";        
+		  }  
+	      var html = "<b>Name: <a href=" + link + "/" + id + ">" + data.full_name + "</a></b>"
           if (data.description) {
             html += "<br/><br/><b><%= t(:re_artifact_description) %></b><br/>"
             html += data.description.replace("\n", "<br />")
@@ -196,7 +135,13 @@ function init(data) {
     
           var relationships = data.relationship_data;
           for (i=0; i<relationships.length; i++) {
-            ans.push(relationships[i].direction +  " <a href=" + link + "/" + relationships[i].id + "/edit>" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
+	          if(relationships[i].relation_type!='Issue'){
+			 	  link = "<%= re_artifact_properties_path %>";        
+			  }else{
+				 link = "/issues";        
+		      }  
+			  
+            ans.push(relationships[i].direction +  " <a href=" + link + "/" + relationships[i].id + ">" + relationships[i].full_name + "</a> as " + relationships[i].relation_type);
           }
           $jit.id('node-details').innerHTML = html + ans.join("</li><li>") + "</li></ul>";
         },
@@ -221,18 +166,23 @@ function init(data) {
   switch(visualization_type) {
 	  case "sunburst":
 			visualization_config.levelDistance=90;
+			visualization = new $jit.Sunburst(visualization_config);
 	    break;
 	  case "netmap":
 			var width = jQuery("#infovis").width();
 			var height = jQuery("#infovis").height();
 			var size = width > height ? width:height;
 			visualization_config.levelDistance=size/2-110;
+			visualization = new $jit.Sunburst(visualization_config);
 	    break;
+	  case "graph":
+	  	visualization = new $jit.ForceDirected(visualization_config);
+		  break;
 	  default :
 	  	alert ("<%= t(:re_please_select_visualization_type) %>");
 	    break;
   }
-  visualization = new $jit.Sunburst(visualization_config);
+//  visualization = new $jit.Sunburst(visualization_config);
   visualization.loadJSON(data);
   visualization.refresh();
 

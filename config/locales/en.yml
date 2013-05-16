@@ -257,7 +257,6 @@ en:
   re_show_relationships: 'Show Relationships'
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
   re_artifact_relationships_incoming: 'Incoming Relationships'
-  re_relationship_visualization: 'Artifact Traceability Visualization'
   re_connected_nodes: 'Connected Nodes'
   re_artifact_details: 'Artifact Details'
   re_relationship: 'Relationship'
@@ -553,12 +552,22 @@ en:
   re_create_in: 'create artifact in...'
   re_create_below: 'create artifact below...'
   re_create_relation: 'create relation to...'
-
+  
+  #Visualization
+  re_relationship_visualization: 'Visualization'
+  re_visualization_show_netmap: 'show as Netmap'
+  re_visualization_show_sunburst: 'show as Sunburst'
+  re_visualization_show_graph: 'show as Graph'
+  re_visualization_show: 'Visualization'
+  re_visualization_config: 'Configure'
+  re_visualitation_deep_graph_explain: 'max. iteration steps 0 = disabled'
+  
   # fields
   field_re_artifact: 'field artifact'
 
   #issues
   implementation_of: 'Implementation of'
+  issue_menue_visualization: 'Issues'
 
   #diagrams
   re_related_diagrams: 'Related diagrams'

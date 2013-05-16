@@ -55,23 +55,86 @@ class ReArtifactProperties < ActiveRecord::Base
            :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]],
            :dependent => :destroy
 
-  has_many :diagram_relations,
+           #######
+  has_many :primary_relations,
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]],
+           :dependent => :destroy
+           
+  has_many :actors_relations,
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac]],
+           :dependent => :destroy
+ 
+  has_many :dependency_relations,
+           :order => "re_artifact_relationships.position",   
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:dep]],
+           :dependent => :destroy
+           
+  has_many :conflict_relations,
+           :order => "re_artifact_relationships.position",
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:con]],
+           :dependent => :destroy
+          
+ has_many :rationale_relations, 
+          :order => "re_artifact_relationships.position",
+          :foreign_key => "source_id",
+          :class_name => "ReArtifactRelationship",
+          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:rat]],
+          :dependent => :destroy
+          
+ has_many :refinement_relations,
+          :order => "re_artifact_relationships.position",
+          :foreign_key => "source_id",
+          :class_name => "ReArtifactRelationship",
+          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:ref]],
+          :dependent => :destroy
+ 
+ has_many :part_of_relations,
+          :order => "re_artifact_relationships.position",
+          :foreign_key => "source_id",
+          :class_name => "ReArtifactRelationship",
+          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pof]],
+          :dependent => :destroy
+  
+                    #####
+                    
+  has_many :diagram_relations,           
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
            :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia]],
            :dependent => :destroy
 
   #if defined?(ConcreteDiagram) == 'constant' 
+   
+  has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram",  :source => "sink"
+     
+    
+  has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
+  has_many :children, :through => :child_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  ###
+  has_many :primary, :through => :primary_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :actors, :through => :actors_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :dependency, :through => :dependency_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :conflict, :through => :conflict_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :rationale, :through => :rationale_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :refinement, :through => :refinement_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :part_of, :through => :part_of_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :diagram, :through => :diagram_relations,  :order => "re_artifact_relationships.position", :source => "sink"
 
-  has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram", :source => "sink"
-
-
-  has_many :sinks, :through => :traces_as_source, :order => "re_artifact_relationships.position"
-  has_many :children, :through => :child_relations, :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :sources, :through => :traces_as_sink, :order => "re_artifact_relationships.position"
-  has_one :parent, :through => :parent_relation, :source => "source"
-  has_many :re_bb_data_texts, :dependent => :delete_all
-  has_many :re_bb_data_selections, :dependent => :delete_all
+  ###
+  has_many :sources,  :through => :traces_as_sink,   :order => "re_artifact_relationships.position"
+  has_one  :parent,   :through => :parent_relation,  :source => "source"
+  has_many :re_bb_data_texts,       :dependent => :delete_all
+  has_many :re_bb_data_selections,  :dependent => :delete_all
   has_many :re_bb_data_artifact_selections, :dependent => :delete_all
 
   acts_as_watchable

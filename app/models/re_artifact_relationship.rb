@@ -55,6 +55,14 @@ class ReArtifactRelationship < ActiveRecord::Base
     { :select => "#{self.table_name}.*", :joins => [first_join, second_join],
       :conditions => ["source_artifacts.project_id = ? AND sink_artifacts.project_id = ?", project_id, project_id] }
   }
+  def self.find_all_relation_type_by_source_id(source_id)
+    
+    
+    return self.find_by_sql("SELECT relation_type FROM re_artifact_relationships WHERE source_id =='source_id'")
+    
+    
+    
+  end
 
    def self.find_all_relations_for_artifact_id(artifact_id)
      relations = []

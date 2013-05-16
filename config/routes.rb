@@ -7,7 +7,7 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/settings/:artifact_type/description/edit' => 're_settings#edit_artifact_type_description'
   match 'projects/:project_id/requirements/settings/:artifact_type/fields/edit' => 're_settings#configure_fields'
   match 'projects/:project_id/requirements/treefilter' => 'requirements#treefilter'
-  match 'projects/:project_id/requirements/relations/visualization' => 're_artifact_relationship#visualization'
+  match 'projects/:project_id/requirements/relations/visualization/' => 're_artifact_relationship#visualization'
   match 'projects/:project_id/requirements/relations/visualization/show/:visualization_type' => 're_artifact_relationship#build_json_according_to_user_choice'
   match 'projects/:project_id/requirements/tree/treestate' => 'requirements#treestate'
   match 'projects/:project_id/requirements/tree/treestate/:id' => 'requirements#treestate'

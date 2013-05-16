@@ -126,6 +126,8 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     
+    session[:visualization_type]=params[:visualization_type]
+    
     if @artifact_type == "Project" 
       redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id 
     else 
@@ -482,6 +484,13 @@ class ReArtifactPropertiesController < RedmineReController
     render :text => list
   end
 
+#  def tooltip_visualization
+#    @re_artifact_properties = ReArtifactProperties.find(params[:artefakt_id])#
+#    @artifact_name=@re_artifact_properties.name
+#    @re_artifact_properties = ReArtifactProperties.find(params[:project_id])
+  
+ # end
+  
   private
 
   # calculates a lighter color for the artifact headers show view
