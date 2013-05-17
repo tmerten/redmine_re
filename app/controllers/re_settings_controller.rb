@@ -187,7 +187,7 @@ private
     ReSetting.set_plain("visualization_size", @project.id, new_settings["visualization_size"])
     deep=new_visualization['deep'].to_i.to_s
 
-    if(deep.to_s != new_visualization['deep'])
+    if(deep != new_visualization['deep'].to_s)
       deep = 4
     end
 
