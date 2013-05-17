@@ -72,6 +72,18 @@ class ReSettingsController < RedmineReController
     @re_settings["visualization_size"] = ReSetting.get_plain("visualization_size", @project.id)
     @re_settings["visualization_size"] ||= 800
 
+    @re_visualization_setting = {}
+    @re_visualization_setting["deep"] = ReSetting.get_plain("visualization_deep", @project.id)
+    issue = ReSetting.get_plain("issues", @project.id)
+    if (issue == "yes" || issue == true)
+        @re_visualization_setting["issue"] = true
+    else
+        @re_visualization_setting["issue"] = false
+    end
+  
+    
+  
+
     @export_formats = get_available_export_formats
     @current_export_format = ReSetting.get_plain("export_format", @project.id)   
   end
@@ -168,9 +180,19 @@ private
     new_settings = params[:re_settings]
     new_artifact_order = ActiveSupport::JSON.decode(params[:re_artifact_order])
     new_relation_order = ActiveSupport::JSON.decode(params[:re_relation_order])
-
+    new_visualization = params[:re_visualization_settings]
+    puts params[:re_visualization_settings]
+    
     ReSetting.set_plain("relation_management_pane", @project.id, new_settings.has_key?("relation_management_pane").to_s)
     ReSetting.set_plain("visualization_size", @project.id, new_settings["visualization_size"])
+    deep=new_visualization['deep'].to_i.to_s
+
+    if(deep != new_visualization['deep'].to_s)
+      deep = 4
+    end
+
+    ReSetting.set_plain("visualization_deep", @project.id, deep)
+    ReSetting.set_plain("issues",@project.id, new_visualization['issue'])
     ReSetting.set_plain("plugin_description", @project.id, params["plugin_description"])
     @plugin_description = params["plugin_description"]
 

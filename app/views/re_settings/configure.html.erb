@@ -11,14 +11,22 @@
 
   <%= form_for :config, :url => {:action => "configure", :project_id => @project.id}, :html => { :style => "margin:0;padding:0;display:inline" } do |f| %>
 
-    <h2>General Settings</h2>
+    <h2><%= t(:general_visualization_settings)%></h2>
+    <fieldset>
     <p>
     <%= label_tag :visualization_size, l(:re_visualization_size), :class => 'large_content' %> <%= text_field_tag 're_settings[visualization_size]', @re_settings['visualization_size'] %>
     </p>
+    <p>
+    <%= label_tag :visualization_deep, l(:re_visualitation_deep_graph_explain), :class => 'large_content' %>
+	<%= text_field_tag "re_visualization_settings[deep]", @re_visualization_setting['deep'] %><br/>
+    </p>
+    <p>
+	<%= label_tag :issue_menue_visualization, l(:issue_menue_visualization), :class => 'large_content' %>
+	<%= check_box_tag "re_visualization_settings[issue]", 'yes', @re_visualization_setting['issue'] %>    
+  </p>
+  </fieldset>
     
-    
-  <p>
-    <fieldset>
+  <fieldset>
       <legend><%= t(:re_plugin_description) %></legend>
       <% unless @plugin_description.nil? or @plugin_description == '' %>
             <div class="contextual">
@@ -36,11 +44,9 @@
           <%= wikitoolbar_for 'plugin_description' %>
         </div>
     </fieldset>
-    </p>
 
-	<p>
+    <p>    
     <h2>Export Format Configuration</h2>
-    
     <% if @export_formats.blank? %>    	    	
    		<%= t(:re_pandoc_error_first) %>
    		<%= link_to("pandoc", "http://johnmacfarlane.net/pandoc/", :target => "_blank") %>
@@ -55,8 +61,8 @@
 			</div>
 		<% end %>      
     <% end %>     
+    <br style="clear: left;"/>
     </p>	
-	<br style="clear: left;"/>
 
     <p>
     <h2>Artifact Configuration</h2>
@@ -69,6 +75,7 @@
           <th title="<%= t(:re_conf_alias_name) %>"><%= t(:re_alias_name) %></th>
           <th title="<%= t(:re_conf_color) %>"><%= t(:re_color) %></th>
           <th title="<%= t(:re_conf_fields) %>"><%= t(:re_fields) %></th>
+		  <th title="<%= t(:re_conf_show_in_visualization) %>"><%= t(:re_show_in_visualization) %></th>
         </tr>
       </thead>
       <tbody>
@@ -85,6 +92,7 @@
             <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[alias]]', @re_artifact_configs[artifact_type]['alias'], :size => 20 %></td>
 						<td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[color]]', @re_artifact_configs[artifact_type]['color'], :size => 6,  :class => 'colorpick' %></td>
             <td><%= link_to t(:re_edit), :action => "configure_fields", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
+			<td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[show_in_visualization]]', 'yes', @re_artifact_configs[artifact_type]['show_in_visualization'] %></td>
           </tr>
         <% end %>
       </tbody>
@@ -118,8 +126,7 @@
         <% end %>
       </tbody>
     </table>
-    </p>
-
+    </p>    
 
     <%= hidden_field_tag 're_artifact_order', ActiveSupport::JSON.encode(@re_artifact_order) %><br/>
     <%= hidden_field_tag 're_relation_order', ActiveSupport::JSON.encode(@re_relation_order) %><br/>
