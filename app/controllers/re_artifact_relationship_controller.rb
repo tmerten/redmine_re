@@ -979,7 +979,11 @@ class ReArtifactRelationshipController < RedmineReController
       deep=params[:deep].to_i.to_s
       
       if(deep != params[:deep].to_s)
-        deep = ReSetting.get_plain("visualization_deep", @project.id).to_i
+        if (session[:visualization_type]!= "netmap"
+          deep = ReSetting.get_plain("visualization_deep", @project.id).to_i
+        else
+          deep = 0
+        end
       end
       @visualization_filter.save_max_deep(@project.id, deep, session[:visualization_type], session[:visualization_artefakt_id])
     end
