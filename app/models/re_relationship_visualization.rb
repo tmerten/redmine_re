@@ -8,34 +8,154 @@ class ReRelationshipVisualization < ActiveRecord::Base
     insert_re_relationship_visualization.artefakt_id = visualization_artefakt_id
     insert_re_relationship_visualization.user_id = User.current.id
     
-    insert_re_relationship_visualization.re_attachment = 1
-    insert_re_relationship_visualization.re_goal = 1 
-    insert_re_relationship_visualization.re_processword = 1
-    insert_re_relationship_visualization.re_rationale = 1
-    insert_re_relationship_visualization.re_requirement = 1
-    insert_re_relationship_visualization.re_scenario = 1
-    insert_re_relationship_visualization.re_section = 1
-    insert_re_relationship_visualization.re_task = 1
-    insert_re_relationship_visualization.re_user_profile = 1
-    insert_re_relationship_visualization.re_use_case = 1
-    insert_re_relationship_visualization.re_vision = 1
-    insert_re_relationship_visualization.re_workarea = 1
+    relation_settings = ReSetting.get_serialized("re_attachment", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+      insert_re_relationship_visualization.re_attachment = 1
+    else
+       insert_re_relationship_visualization.re_attachment = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_goal", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_goal = 1 
+    else
+      insert_re_relationship_visualization.re_goal  = 0
+    end
+   
+    relation_settings = ReSetting.get_serialized("re_processword", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_processword = 1 
+    else
+      insert_re_relationship_visualization.re_processword  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_rationale", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_rationale = 1 
+    else
+      insert_re_relationship_visualization.re_rationale  = 0
+    end
+   
+    relation_settings = ReSetting.get_serialized("re_requirement", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_requirement = 1 
+    else
+      insert_re_relationship_visualization.re_requirement  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_scenario", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_scenario = 1 
+    else
+      insert_re_relationship_visualization.re_scenario  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_section", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_section = 1 
+    else
+      insert_re_relationship_visualization.re_section  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_task", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_task = 1 
+    else
+      insert_re_relationship_visualization.re_task  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_user_profile", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_user_profile = 1 
+    else
+      insert_re_relationship_visualization.re_user_profile  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_use_case", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_use_case = 1 
+    else
+      insert_re_relationship_visualization.re_use_case  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_vision", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_vision = 1 
+    else
+      insert_re_relationship_visualization.re_vision  = 0
+    end
+
+    relation_settings = ReSetting.get_serialized("re_workarea", projekt_id)
+    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+       insert_re_relationship_visualization.re_workarea = 1 
+    else
+      insert_re_relationship_visualization.re_workarea  = 0
+    end
+
     if(visualization_type.to_s!="sunburst")
-    #  re_relation_configs=ReSettingsController.self.for("dependency", projekt_id)
-     # if(re_relation_configs['show_in_visualization']== 0)
-     #   insert_re_relationship_visualization.dependency = 0
-      #else
-        insert_re_relationship_visualization.dependency = 1
-        #end
       
-      insert_re_relationship_visualization.conflict = 1
-      insert_re_relationship_visualization.rationale = 1
-      insert_re_relationship_visualization.refinement = 1
-      insert_re_relationship_visualization.part_of = 1
-      insert_re_relationship_visualization.parentchild = 1
-      insert_re_relationship_visualization.primary_actor = 1
-      insert_re_relationship_visualization.actors = 1
-      insert_re_relationship_visualization.diagram = 1
+      relation_settings = ReSetting.get_serialized("dependency", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.dependency = 1 
+      else
+        insert_re_relationship_visualization.dependency  = 0
+      end
+     
+      relation_settings = ReSetting.get_serialized("conflict", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.conflict = 1 
+      else
+        insert_re_relationship_visualization.conflict  = 0
+      end 
+     
+      relation_settings = ReSetting.get_serialized("rationale", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.rationale = 1 
+      else
+        insert_re_relationship_visualization.rationale  = 0
+      end  
+      
+      relation_settings = ReSetting.get_serialized("refinement", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.refinement = 1 
+      else
+        insert_re_relationship_visualization.refinement  = 0
+      end 
+     
+      relation_settings = ReSetting.get_serialized("part_of", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.part_of = 1 
+      else
+        insert_re_relationship_visualization.part_of  = 0
+      end 
+      
+      relation_settings = ReSetting.get_serialized("parentchild", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.parentchild = 1 
+      else
+        insert_re_relationship_visualization.parentchild  = 0
+      end 
+     
+      relation_settings = ReSetting.get_serialized("primary_actor", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.primary_actor = 1 
+      else
+        insert_re_relationship_visualization.primary_actor  = 0
+      end 
+      
+      relation_settings = ReSetting.get_serialized("actors", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.actors = 1 
+      else
+        insert_re_relationship_visualization.actors  = 0
+      end 
+
+      relation_settings = ReSetting.get_serialized("diagram", projekt_id)
+      if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
+         insert_re_relationship_visualization.diagram = 1 
+      else
+        insert_re_relationship_visualization.diagram  = 0
+      end 
     else
       insert_re_relationship_visualization.dependency = 0
       insert_re_relationship_visualization.conflict = 0
@@ -47,8 +167,17 @@ class ReRelationshipVisualization < ActiveRecord::Base
       insert_re_relationship_visualization.actors = 0
       insert_re_relationship_visualization.diagram = 0
     end
-    insert_re_relationship_visualization.issue = 1
-    insert_re_relationship_visualization.max_deep = 0
+    
+    issue = ReSetting.get_plain("issues", projekt_id)
+    if (issue == "yes" || issue == true)
+        insert_re_relationship_visualization.issue = 1
+    else
+        insert_re_relationship_visualization.issue = 0
+    end
+    insert_re_relationship_visualization.max_deep = ReSetting.get_plain("visualization_deep", projekt_id).to_i
+    if(visualization_type.to_s=="netmap")
+      insert_re_relationship_visualization.max_deep = 0
+    end
     
     insert_re_relationship_visualization.save
   end
