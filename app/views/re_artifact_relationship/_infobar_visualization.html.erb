@@ -1,5 +1,3 @@
-<div id="infobar2" class="ui-layout-east ui-layout-content">
-  
   <div id="watchers">
       <%= form_tag({ :action => :build_json_according_to_user_choice }, {:id => "visualization", :remote => true }) do %>
     <table>
@@ -21,8 +19,8 @@
           <td>
 			  <% @artifact_filter = ReRelationshipVisualization.new %> 
 			  <% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],artifact_type.to_s)%>
-			  <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, @filter, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
-	      </td>
+			  <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, @filter, :id => "artifact_filter_"+artifact_type.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
+		  </td>
         </tr>
         <% end %>
       <% end %>
@@ -39,8 +37,8 @@
 			  <% @artifact_filter = ReRelationshipVisualization.new %> 
 			  <% artifact_type = "issue"%>
 			  <% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],artifact_type)%>
-			  
-			  <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, @filter, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
+
+			  <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, @filter, :id => "artifact_filter_"+artifact_type.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
 	      </td>
 	  </tr>
       <tr>
@@ -62,7 +60,7 @@
 			<% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],value)%>
 		
 		<% if(session[:visualization_type]!= "sunburst")%>	
-          <%= check_box_tag 'relation_filter[]', key.to_s,  @filter, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
+          <%= check_box_tag 'relation_filter[]', key.to_s,  @filter, :id => "relation_filter_"+key.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
 		  <% else %>
 		   <%= radio_button_tag 'relation_filter[]', key.to_s, @filter, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
 		  <% end %>
@@ -82,7 +80,7 @@
 			<% @artifact_filter = ReRelationshipVisualization.new %>
 			<% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],value)%>
 			<% if(session[:visualization_type]!= "sunburst")%>	
-			<%= check_box_tag 'relation_filter[]', key.to_s,  @filter, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
+			<%= check_box_tag 'relation_filter[]', key.to_s,  @filter, :id => "relation_filter_"+key.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
   		  <% else %>
   		   <%= radio_button_tag 'relation_filter[]', key.to_s, @filter, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
   		  <% end %>
@@ -90,7 +88,7 @@
       </tr>
       <% end %>
       <tr>
-		  <td>
+		  <td colspan="3">
 			  <h4><%= l(:re_visualization_config)%></h4>
 		  </td>
 	  </tr>
@@ -111,13 +109,8 @@
   </div>
 
   
-</div><!-- id="infobar2" -->
 
 
-$j(document).ready(function () {
-  var easttoggler = $j("div.ui-layout-toggler-east-closed > span.content-closed");
-  var eastspan = easttoggler.first()
-  eastspan.html('');
 
-});
+
 

@@ -15,25 +15,26 @@
 
 
 <div id='detail_view' class='ui-layout-center'>
-<h2><%= @artifact_name %> - <%= l(:re_relationship_visualization)%></h2>
-
-  
-
-  <% canvas_size = ReSetting.get_plain("visualization_size", @project.id) %>
-  <div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
-  <div id="visualization_filters">
- 
-    <p>
-     <h4><%= t(:re_artifact_details) %></h4>
-     <div id="node-details"></div>
-    </p>
+	<h2><%= @artifact_name %> - <%= l(:re_relationship_visualization)%></h2>
+	<% canvas_size = ReSetting.get_plain("visualization_size", @project.id) %>
+  	<div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
+  	<div id="visualization_filters">
+ 	   <h4><%= t(:re_artifact_details) %></h4>
+    	<div id="node-details"></div>
   </div>
-
 </div>
-<%= render :partial => 'infobar_visualization' %>
+<div id="infobar2" class="ui-layout-east ui-layout-content" style="height:900px">
+	<%= render :partial => 'infobar_visualization' %>
+</div>
 
 
 <script type="text/javascript">
+$j(document).ready(function () {
+  var easttoggler = $j("div.ui-layout-toggler-east-closed > span.content-closed");
+  var eastspan = easttoggler.first()
+  eastspan.html('');
+
+});
   //<![CDATA[
 $('#visualization').submit(function() {
   clear_canvas();
@@ -45,7 +46,13 @@ $(document).ready(function () {
 jQuery('#visualization').bind('ajax:success', function(evt, data, status, xhr){
 	init(data);
 });
-
+$('#detail_view').scroll(function()
+{
+	if(visualization!=null)
+	{
+		visualization.canvas.getPos(true);
+	}	
+});
 
 var visualization = null;
 var form = null;
@@ -56,35 +63,40 @@ function clear_canvas() {
 
 function init(data) {
   
-	var visualization_type = "<%= params[:visualization_type]%>"
+	var visualization_type = "<%= params[:visualization_type]%>";
 	var visualization_config = {
 		
       //id container for the visualization
-      injectInto: 'infovis',
+   injectInto: 'infovis',
+   'width': jQuery("#infovis").width(),  
+   'height':jQuery("#infovis").height(),  
       //Change node and edge styles such as
       //color, width, lineWidth and edge types
 			
-		  NodeStyles: {  
-		    enable: true,  
-		    type: 'Native',  
-		    stylesClick: {  
-		      height: 105 
-		    },  
-		    stylesHover: {  
-		      height: 100  
-		    },  
-		    duration: 700  
-		  },
+	NodeStyles: {  
+		enable: true, 
+		alpha: 2, 
+		type: 'Native',  
+		stylesClick: {  
+	    	height: 105 
+		},  
+		stylesHover: {  
+		    height: 100  
+		},  
+		duration: 700  
+	},
 			
       Node: {
         overridable: true,
-        height: 90
+        height: 50
       },
       Edge: {
         overridable: true,
         type: 'line',
-        alpha: 1
-      },      
+        alpha: 1,
+		lineWidth: 2
+      },  
+    	
       //Draw canvas text. Can also be
       //'HTML' or 'SVG' to draw DOM labels
       Label: {
@@ -159,10 +171,11 @@ function init(data) {
               'transition': $jit.Trans.Quart.easeInOut
             });
           }
-        }      
+        }  
+		   
       }
-		};	
-	
+	};	
+
   switch(visualization_type) {
 	  case "sunburst":
 			visualization_config.levelDistance=90;
@@ -182,10 +195,12 @@ function init(data) {
 	  	alert ("<%= t(:re_please_select_visualization_type) %>");
 	    break;
   }
+//  visualization.canvas.getPos(true);
   visualization.loadJSON(data);
   visualization.refresh();
 
 };
+
 //]]>
 </script>
 
