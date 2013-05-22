@@ -40,7 +40,6 @@ class RedmineReController < ApplicationController
   def initialize_tree_data
     return if @firstload == true
     project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
-    session[:expanded_nodes] ||= Set.new
     session[:expanded_nodes] << project_artifact.id
     @json_tree_data = create_tree(project_artifact, 1).to_json
   end
