@@ -979,7 +979,7 @@ class ReArtifactRelationshipController < RedmineReController
       deep=params[:deep].to_i.to_s
       
       if(deep != params[:deep].to_s)
-        if (session[:visualization_type] != "netmap")
+        if (session[:visualization_type]!= "netmap")
           deep = ReSetting.get_plain("visualization_deep", @project.id).to_i
         else
           deep = 0
