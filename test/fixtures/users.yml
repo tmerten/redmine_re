@@ -1,0 +1,35 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+re_admin:
+  id: 1
+  login: admin
+  hashed_password: 1e56cb70d72db24a0de527ef6c18c7d6045d1b47
+  firstname: Redmine
+  lastname: Admin
+  mail: d.markowski@eyegoweb.de
+  admin: t
+  last_login_on: 2013-05-15 20:24:23.234810
+  language: en
+  created_on: 2013-05-14 17:35:31.039040
+  updated_on: 2013-05-15 20:24:23.237635
+  type: User
+  mail_notification: all
+  salt: 634291fb11a47e354ae2a50be8e50b4e
+
+re_anonymosuser:
+  id: 2
+  login: test
+  hashed_password: 1e56cb70d72db24a0de527ef6c18c7d6045d1b47
+  firstname: anno
+  lastname: Anonymous
+  mail: m
+  admin: t
+  status: 0
+  last_login_on: 
+  language: en
+  created_on: 2013-05-14 17:35:31.039040
+  updated_on: 2013-05-15 20:24:23.237635
+  type: AnonymousUser
+  mail_notification: only_my_events
+  salt: 
+  
