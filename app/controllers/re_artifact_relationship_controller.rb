@@ -87,7 +87,9 @@ class ReArtifactRelationshipController < RedmineReController
   end
 
   def build_json_for_visualization(artifacts, relations)
-    @re_artifact_properties = ReArtifactProperties.find_by_id(session[:visualization_artefakt_id])
+    if (@visualization_type != "graph_issue" )
+      @re_artifact_properties = ReArtifactProperties.find_by_id(session[:visualization_artefakt_id])
+    end
     json = []
 
     @done_artifakts_id = []
@@ -130,7 +132,6 @@ class ReArtifactRelationshipController < RedmineReController
            artifacts = @found_artifakts
         end
         json= netmap(artifacts,relations,rootnode)
-      
           
       when "graph"
         @first_run = 0
@@ -229,8 +230,8 @@ class ReArtifactRelationshipController < RedmineReController
     json
   end
 
-  def graph_issue(artifact_id,first_run)
-    json = get_issues_for_graph(artifact_id)
+  def graph_issue(issue_id,first_run)
+    json = get_issues_for_graph(issue_id,first_run)
     json
   end
 
@@ -338,7 +339,6 @@ class ReArtifactRelationshipController < RedmineReController
     if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
       @current_deep = @current_deep.to_i + 1
       if ( ! @done_artifakts_id.include? artifact.id.to_s)
-        
           ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
             next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
             next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
@@ -504,8 +504,14 @@ class ReArtifactRelationshipController < RedmineReController
       next unless ( ! @done_artifakts_id.include? source.sink_id.to_s)
 
       json_return = get_all_artifacts_for_graph(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.sink_id),0)  
-      if (json_return != nil)
-        json = json + "," + json_return
+      if (json != nil)
+        if (json_return != nil)
+          json = json + "," + json_return
+        end
+      else
+        if (json_return != nil)
+          json =  json_return
+        end
       end
     end 
     ReArtifactRelationship.find_all_by_sink_id(artifact.id).each do |source|
@@ -514,15 +520,29 @@ class ReArtifactRelationshipController < RedmineReController
       next unless ( ! @done_artifakts_id.include? source.source_id.to_s)
 
       json_return = get_all_artifacts_for_graph(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.source_id),0)  
-      if (json_return != nil)
-        json = json + "," + json_return
+      if (json != nil)
+        if (json_return != nil)
+          json = json + "," + json_return
+        end
+      else
+        if (json_return != nil)
+          json =  json_return
+        end
       end
+      
     end
     issues.each do |issue_id|
-      json_return=get_issues_for_graph(issue_id)
-      if (json_return != nil)
-        json = json + "," + json_return
+      json_return=get_issues_for_graph(issue_id,0)
+      if (json != nil)
+        if (json_return != nil)
+          json = json + "," + json_return
+        end
+      else
+        if (json_return != nil)
+          json =  json_return
+        end
       end
+      
     end
        
     @current_deep = @current_deep.to_i - 1
@@ -530,7 +550,7 @@ class ReArtifactRelationshipController < RedmineReController
     json
   end 
   
-  def get_issues_for_graph(issue_id)
+  def get_issues_for_graph(issue_id,first_run)
     issues = []
     artifact = []
     if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
@@ -577,6 +597,11 @@ class ReArtifactRelationshipController < RedmineReController
         end
         
         Realization.where("issue_id=?",issue_id).each do |relation|
+          if (@current_deep.to_i  == @max_deep.to_i)
+            if(! @done_artifakts_id.include? relation.re_artifact_properties_id.to_s)
+              next
+            end
+          end
           if ( ! @done_artifakts_id.include? relation.re_artifact_properties_id.to_s)
             adjacent_node = {}
             adjacent_node['nodeTo'] = "node_" + relation.re_artifact_properties_id.to_s
@@ -595,7 +620,13 @@ class ReArtifactRelationshipController < RedmineReController
       
       data_node = {}
       data_node["$color"] = "#123456"
-      data_node["$type"] = "square" #"triangle" #"square"
+      if (first_run == "1")
+        data_node["$type"] = "triangle" 
+        first_run = 1
+      else
+           data_node["$type"] = "square" #"triangle" #"square"
+      end
+     
       this_issue=Issue.find(issue_id)  
       data_node['full_name'] = this_issue.subject
       data_node['description'] = this_issue.description
@@ -674,18 +705,32 @@ class ReArtifactRelationshipController < RedmineReController
       end
     end
     issues.each do |issue_id|
-      json_return=get_issues_for_graph(issue_id)
-      if (json_return != nil)
-        json = json + "," + json_return
+      json_return=get_issues_for_graph(issue_id,0)
+      if (json != nil)
+        if (json_return != nil)
+          json = json + "," + json_return
+        end
+      else
+        if (json_return != nil)
+          json =  json_return
+        end
       end
+      
     end
     
     artifact.each do |artifact_id|
       re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, artifact_id)
       json_return = get_all_artifacts_for_graph(re_artifact_properties,"0")
-      if (json_return != nil)
-        json = json + "," + json_return
+      if (json != nil)
+        if (json_return != nil)
+          json = json + "," + json_return
+        end
+      else
+        if (json_return != nil)
+          json =  json_return
+        end
       end
+      
     
     end
     @current_deep = @current_deep.to_i - 1
@@ -966,7 +1011,7 @@ class ReArtifactRelationshipController < RedmineReController
       session[:visualization_type] = params[:visualization_type]
     end
     
-     @visualization_type  = session[:visualization_type]
+    @visualization_type  = session[:visualization_type]
     
     @visualization_filter = ReRelationshipVisualization.new
     if (params[:relation_filter].present?)
@@ -987,29 +1032,27 @@ class ReArtifactRelationshipController < RedmineReController
       end
       @visualization_filter.save_max_deep(@project.id, deep, session[:visualization_type], session[:visualization_artefakt_id])
     end
-   # end
-   @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
-     "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
-     {:project_id => @project.id, :visualization_type => session[:visualization_type], :artifact_id => session[:visualization_artefakt_id], :user_id => User.current.id }
-   ).first
-   if @check_if_filter_are_save_befor == nil
-     @create_visualization_save_filter = ReRelationshipVisualization.new
-     @create_visualization_save_filter.filter_table_add_row(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
-   end
    
+   puts "PARAMETER"+ params[:data].to_s
    if(params[:data].present?)
      #tooltip-graph
+     puts "TOOLTIPGRAPH"
+     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
+     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
      @re_artifact_order.each_with_index do |artifact_type, i|
         relation_settings = ReSetting.get_serialized(artifact_type, @project.id)
         if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
           lokal_artifact=artifact_type.gsub(/^re_/, '').humanize
           @chosen_artifacts << "Re"+lokal_artifact.to_s
+          puts lokal_artifact.to_s
         end
       end
       @re_relation_order.each_with_index do |relation_type, i|
          relation_settings = ReSetting.get_serialized(relation_type, @project.id)
          if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
            @chosen_relations << relation_type.to_s
+           puts relation_type.to_s
+           puts "ICH WAR HIER!!!!!"
          end
        end
        issue = ReSetting.get_plain("issues", @project.id)
@@ -1020,14 +1063,25 @@ class ReArtifactRelationshipController < RedmineReController
        end
        @max_deep = ReSetting.get_serialized("visualization_deep", @project.id).to_i
    else
-     @chosen_artifacts = @visualization_filter.get_artifact_filter_as_stringarray(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
-     @chosen_relations = @visualization_filter.get_relation_filter_as_stringarray(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
-     @chosen_issue = @visualization_filter.get_issue_filter(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
-     @max_deep = @visualization_filter.get_max_deep(@project.id, session[:visualization_type], session[:visualization_artefakt_id]).to_i
-  
-   end
+       @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
+       "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
+        {:project_id => @project.id, :visualization_type => session[:visualization_type], :artifact_id => session[:visualization_artefakt_id], :user_id => User.current.id }
+        ).first
+       if @check_if_filter_are_save_befor == nil
+         @create_visualization_save_filter = ReRelationshipVisualization.new
+         @create_visualization_save_filter.filter_table_add_row(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
+       end
     
-    @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, @chosen_artifacts, :order => "artifact_type, name")
+       @chosen_artifacts = @visualization_filter.get_artifact_filter_as_stringarray(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
+       @chosen_relations = @visualization_filter.get_relation_filter_as_stringarray(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
+       @chosen_issue = @visualization_filter.get_issue_filter(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
+       @max_deep = @visualization_filter.get_max_deep(@project.id, session[:visualization_type], session[:visualization_artefakt_id]).to_i
+   end
+   if(@visualization_type!= "graph_issue" )
+     @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, @chosen_artifacts, :order => "artifact_type, name")
+   else
+     @artifacts = ""
+   end
     @json_netmap = build_json_for_visualization(@artifacts, @chosen_relations)
 
     render :json => @json_netmap
