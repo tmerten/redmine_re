@@ -12,17 +12,12 @@ namespace :export do
       puts "Setting.create(#{setting.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
     end
     
-    User.order(:id).all.each do |user|
-      puts "# Make sure that the setting password_min_length is not to high (by default it is 8 and the admin:admin combo dose not work!)"
-      puts "User.create(#{user.serializable_hash.delete_if {|key, value| ['last_login_on','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+    Role.order(:id).all.each do |role|
+      puts "Role.create(#{role.serializable_hash.delete_if {|key, value| ['builtin','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
     end
-    
+
     EnabledModule.order(:id).all.each do |em|
       puts "EnabledModule.create(#{em.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
-    end
-    
-    Role.order(:id).all.each do |role|
-      puts "Role.create(#{role.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
     end
     
     ReArtifactRelationship.order(:id).all.each do |relation|

@@ -2,11 +2,13 @@ require File.dirname(__FILE__) + '/../test_helper'
 load "#{Rails.root}/plugins/redmine_re/db/seeds.rb"
 
 class RequirementsControllerTest < ActionController::TestCase
+    ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 
+    [:users])
   # Replace this with your real tests.
 
   def setup
-    User.current = nil
-    @request.session[:user_id] = 1 # admin
+    #User.current = nil
+    #@request.session[:user_id] = 2 # admin
   end
   
   def test_truth
@@ -15,10 +17,7 @@ class RequirementsControllerTest < ActionController::TestCase
   
   test "Check if relations during move functions a correct" do
     
-    user = User.find(1)
-    login_as(user)
-    get :show, :id => user
-    assert_response :success
+    @request.session[:user_id] = 1
     
     # seeds.rb provides the following tree (Project id 1)
     # (Count of relations: 10)
