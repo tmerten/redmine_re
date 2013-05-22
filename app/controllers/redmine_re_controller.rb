@@ -48,6 +48,7 @@ class RedmineReController < ApplicationController
   def load_settings
     # Check the settings cache for each request
     ReSetting.check_cache
+    session[:expanded_nodes] ||= Set.new
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
     @re_artifact_settings = ReSetting.active_re_artifact_settings(@project.id)

@@ -47,7 +47,6 @@ class RequirementsControllerTest < ActionController::TestCase
     
     n = ReArtifactRelationship.count
     assert_equal 10, n, "Project tree structure is not correct (5)"
-
     
     # Simulate a POST response with the given HTTP parameters. 
     post("delegate_tree_drop", 

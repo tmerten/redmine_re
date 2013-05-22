@@ -13,7 +13,14 @@ namespace :export do
     end
     
     Role.order(:id).all.each do |role|
-      puts "Role.create(#{role.serializable_hash.delete_if {|key, value| ['builtin','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+      puts "r=Role.create(#{role.serializable_hash.delete_if {|key, value| ['builtin','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
+      if role.name=="Non member"
+        puts "r.buildin=1"
+        puts "r.save"
+      elsif role.name=="Anonymous"
+        puts "r.buildin=2"
+        puts "r.save"
+      end
     end
 
     EnabledModule.order(:id).all.each do |em|
