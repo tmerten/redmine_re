@@ -342,11 +342,12 @@ class ReArtifactRelationshipController < RedmineReController
           ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
             next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
             next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
+            
             if (@current_deep.to_i  == @max_deep.to_i)
                if(! @done_artifakts_id.include? source.sink_id.to_s)
                  next
                end
-             end
+            end
             if (  @source_artifakts_id.include? source.source_id) 
               if(  @sink_artifakts_id.include? source.sink_id.to_s) 
                 next
@@ -367,46 +368,50 @@ class ReArtifactRelationshipController < RedmineReController
             end
           end
           ReArtifactRelationship.find_all_by_sink_id(artifact.id).each do |source|
-          next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
-          next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
-          if (@current_deep.to_i  == @max_deep.to_i)
-             if(! @done_artifakts_id.include? source.source_id.to_s)
-               next
-             end
-           end
-          if (  @source_artifakts_id.include? source.source_id) 
-            if(  @sink_artifakts_id.include? source.sink_id )
-              next
+            next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
+            next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
+            if (@current_deep.to_i  == @max_deep.to_i)
+              if(! @done_artifakts_id.include? source.source_id.to_s)
+                next
+              end
+            end
+            if (  @source_artifakts_id.include? source.source_id) 
+              if(  @sink_artifakts_id.include? source.sink_id )
+                next
+              end
+            end
+            adjacent_node = {}
+            adjacent_node['nodeTo'] = "node_" + source.source_id.to_s
+            adjacent_node['nodeFrom'] = "node_" + source.sink_id.to_s
+            edge_data = {}
+            relation_settings = ReSetting.get_serialized(source.relation_type, @project.id)
+            edge_data['$color'] = relation_settings['color']
+            adjacent_node['data'] = edge_data
+            adjacencies << adjacent_node  
+            if ( ! @sink_artifakts_id.include? source.sink_id) 
+              @sink_artifakts_id << source.sink_id
             end
           end
-          adjacent_node = {}
-          adjacent_node['nodeTo'] = "node_" + source.source_id.to_s
-          adjacent_node['nodeFrom'] = "node_" + source.sink_id.to_s
-          edge_data = {}
-          relation_settings = ReSetting.get_serialized(source.relation_type, @project.id)
-          edge_data['$color'] = relation_settings['color']
-          adjacent_node['data'] = edge_data
-          adjacencies << adjacent_node  
-          if ( ! @sink_artifakts_id.include? source.sink_id) 
-            @sink_artifakts_id << source.sink_id
-          end
-        end
           if @chosen_issue
-            if (@current_deep.to_i  != @max_deep.to_i)
-              Realization.where("re_artifact_properties_id = ?", artifact.id.to_s).each do |source|
-                adjacent_node = {}
-                adjacent_node['nodeTo'] = "node_issue_" + source.issue_id.to_s
-                adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
-                edge_data = {}
-                edge_data['$color'] = '#000000'
-                adjacent_node['data'] = edge_data
-                adjacencies << adjacent_node  
-                if ( !@done_issues.include? source.issue_id)
-                  issues << source.issue_id
+            Realization.where("re_artifact_properties_id = ?", artifact.id.to_s).each do |source|
+              if (@current_deep.to_i  == @max_deep.to_i)
+                if( ! @done_issues.include? source.issue_id)
+                  next
                 end
+              end
+              adjacent_node = {}
+              adjacent_node['nodeTo'] = "node_issue_" + source.issue_id.to_s
+              adjacent_node['nodeFrom'] = "node_" + artifact.id.to_s
+              edge_data = {}
+              edge_data['$color'] = '#000000'
+              adjacent_node['data'] = edge_data
+              adjacencies << adjacent_node  
+              if ( !@done_issues.include? source.issue_id)
+                issues << source.issue_id
               end
             end
           end
+
         type = artifact.artifact_type
         node_settings = ReSetting.get_serialized(type.underscore, @project.id)
         data_node = {}
@@ -448,23 +453,24 @@ class ReArtifactRelationshipController < RedmineReController
           relation_data['direction'] = 'to'
           relationship_data << relation_data
         end
-      end
       
-      ReArtifactRelationship.where("sink_id=?",artifact.id).each do |relation|
-        other_artifact = ReArtifactProperties.find(relation.source_id)
-        unless other_artifact.nil? # TODO: actually, this should not possible
-        relation_data = {}
-        relation_data['id'] = other_artifact.id
-        relation_data['full_name'] = other_artifact.name
-        relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-        relation_data['created_at'] = other_artifact.created_at.to_s(:short)
-        relation_data['author'] = other_artifact.author.to_s
-        relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
-        relation_data['user'] = other_artifact.user.to_s
-        relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
-        relation_data['relation_type'] = relation.relation_type
-        relation_data['direction'] = 'to'
-        relationship_data << relation_data
+      
+        ReArtifactRelationship.where("sink_id=?",artifact.id).each do |relation|
+          other_artifact = ReArtifactProperties.find(relation.source_id)
+          unless other_artifact.nil? # TODO: actually, this should not possible
+          relation_data = {}
+          relation_data['id'] = other_artifact.id
+          relation_data['full_name'] = other_artifact.name
+          relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+          relation_data['created_at'] = other_artifact.created_at.to_s(:short)
+          relation_data['author'] = other_artifact.author.to_s
+          relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
+          relation_data['user'] = other_artifact.user.to_s
+          relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
+          relation_data['relation_type'] = relation.relation_type
+          relation_data['direction'] = 'to'
+          relationship_data << relation_data
+        end
       end
     end
     Realization.where("re_artifact_properties_id=?",artifact.id).each do |relation|
@@ -602,7 +608,7 @@ class ReArtifactRelationshipController < RedmineReController
               next
             end
           end
-          if ( ! @done_artifakts_id.include? relation.re_artifact_properties_id.to_s)
+          if ( @done_artifakts_id.include? relation.re_artifact_properties_id.to_s)
             adjacent_node = {}
             adjacent_node['nodeTo'] = "node_" + relation.re_artifact_properties_id.to_s
             adjacent_node['nodeFrom'] = "node_issue_" + relation.issue_id.to_s
@@ -731,9 +737,9 @@ class ReArtifactRelationshipController < RedmineReController
         end
       end
       
-    
+    @current_deep = @current_deep.to_i - 1 
     end
-    @current_deep = @current_deep.to_i - 1
+   
     json
   end
   
