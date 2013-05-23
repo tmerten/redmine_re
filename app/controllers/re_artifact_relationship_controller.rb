@@ -585,7 +585,7 @@ class ReArtifactRelationshipController < RedmineReController
         end
         IssueRelation.where("issue_to_id = ?", issue_id.to_s).each do |source|
           if (@current_deep.to_i  == @max_deep.to_i)
-            if(! @done_issues.include? source.issue_to_id)
+            if(! @done_issues.include? source.issue_from_id)
               next
             end
           end
@@ -608,20 +608,17 @@ class ReArtifactRelationshipController < RedmineReController
               next
             end
           end
-          if ( @done_artifakts_id.include? relation.re_artifact_properties_id.to_s)
-            adjacent_node = {}
-            adjacent_node['nodeTo'] = "node_" + relation.re_artifact_properties_id.to_s
-            adjacent_node['nodeFrom'] = "node_issue_" + relation.issue_id.to_s
+          adjacent_node = {}
+          adjacent_node['nodeTo'] = "node_" + relation.re_artifact_properties_id.to_s
+          adjacent_node['nodeFrom'] = "node_issue_" + relation.issue_id.to_s
         
-            edge_data = {}
-            edge_data['$color'] = "#000000"
-            adjacent_node['data'] = edge_data
-            adjacencies << adjacent_node  
-            if ( ! artifact.include? relation.re_artifact_properties_id) 
-               artifact << relation.re_artifact_properties_id
-               puts relation.re_artifact_properties_id.to_s + "HALLO WELT"
-             end
-           end
+          edge_data = {}
+          edge_data['$color'] = "#000000"
+          adjacent_node['data'] = edge_data
+          adjacencies << adjacent_node  
+          if ( ! artifact.include? relation.re_artifact_properties_id) 
+            artifact << relation.re_artifact_properties_id
+          end
         end
       
       data_node = {}
