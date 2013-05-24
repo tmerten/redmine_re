@@ -105,6 +105,8 @@ class ReArtifactRelationshipController < RedmineReController
     
     @current_deep = 0
 
+    @min_dis_artifact_arr = []
+    @min_dis_issue_arr = []
     
     rootnode = {}
     
@@ -117,6 +119,7 @@ class ReArtifactRelationshipController < RedmineReController
 
     case @visualization_type
       when "sunburst"
+        min_dis_artifact(session[:visualization_artefakt_id].to_i)
         rootnode['name'] = @re_artifact_properties.name
         re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artefakt_id])
         children= sunburst(re_artifact_properties)
@@ -125,12 +128,9 @@ class ReArtifactRelationshipController < RedmineReController
         json.to_json
         
       when "netmap"
-        re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artefakt_id])
-        
-        if @re_artifact_properties.artifact_type.to_s != "Project"
-           find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artefakt_id]))
-           artifacts = @found_artifakts
-        end
+        min_dis_artifact(session[:visualization_artefakt_id].to_i)
+        find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artefakt_id]))
+        artifacts = @found_artifakts
         json= netmap(artifacts,relations,rootnode)
           
       when "graph"
@@ -141,7 +141,7 @@ class ReArtifactRelationshipController < RedmineReController
       when "graph_issue"
         @first_run = 0
         @artifact_connect = []
-        json = graph_issue(session[:visualization_artefakt_id],"1")
+        json = graph_issue(session[:visualization_artefakt_id].to_i,"1")
         json = "[" + json + "]"
         
     else
@@ -151,6 +151,7 @@ class ReArtifactRelationshipController < RedmineReController
   end
   
   def netmap(artifacts, relations, rootnode)
+    
     @adjacencies = []
     @artifacts_netmap_final = []
     json = []
@@ -195,9 +196,14 @@ class ReArtifactRelationshipController < RedmineReController
   end
   
   def netmap_issue(issue_id, artifacts)
-    if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
+    if (@max_deep== 0)
+      @current_deep = 1
+    else
+      @current_deep = @min_dis_issue_arr[issue_id]
+    end
+    if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
       if(! @issues.include? issue_id)
-        @current_deep = @current_deep +1
+     #   @current_deep = @current_deep +1
         @issues << issue_id
     
         adjacent_node = {}
@@ -218,19 +224,21 @@ class ReArtifactRelationshipController < RedmineReController
           if((! artifacts.include? new_artifact.re_artifact_properties_id.to_s) && (! @found_artifakts.include? new_artifact.re_artifact_properties_id))
             find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, new_artifact.re_artifact_properties_id.to_s))
           end
-          @current_deep = @current_deep - 1
+        #  @current_deep = @current_deep - 1
         end
       end
     end
   end
   
   def graph(artifact_id,first_run)
+    min_dis_artifact(artifact_id)
     re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, artifact_id)
     json = get_all_artifacts_for_graph(re_artifact_properties,first_run)
     json
   end
 
   def graph_issue(issue_id,first_run)
+    min_dis_issue(issue_id)
     json = get_issues_for_graph(issue_id,first_run)
     json
   end
@@ -238,8 +246,13 @@ class ReArtifactRelationshipController < RedmineReController
   def sunburst(artifact)
     children = []
     lokal_artifact= []
+    if (@max_deep == 0)
+      @current_deep = 1
+    else
+      @current_deep = @min_dis_artifact_arr[artifact.id]
+    end
+    puts "Current_deep"+@current_deep.to_s+"ARTIFACT_ID"+artifact.id.to_s
     if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
-      @current_deep = @current_deep.to_i + 1
       
       if @chosen_relations.include?("dependency")
         lokal_artifact = artifact.dependency
@@ -293,7 +306,6 @@ class ReArtifactRelationshipController < RedmineReController
         end
         children << json_artifact
       end
-    @current_deep = @current_deep.to_i - 1
     end
    
     children
@@ -303,8 +315,12 @@ class ReArtifactRelationshipController < RedmineReController
     children= []
     issue_artifact = {}
     json_artifact = {}
+    if (@max_deep== 0)
+      @current_deep = 1
+    else
+      @current_deep = @min_dis_issue_arr[issue_id.to_i]
+    end
     if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
-      @current_deep = @current_deep.to_i + 1
       @done_issues << issue_id.to_s
       
       IssueRelation.where("issue_from_id=?",issue_id).each do |issue|
@@ -324,7 +340,6 @@ class ReArtifactRelationshipController < RedmineReController
           children << json_artifact
         end
       end
-    @current_deep = @current_deep.to_i - 1
     end
     
     children
@@ -336,8 +351,13 @@ class ReArtifactRelationshipController < RedmineReController
     adjacencies = []
     master_build = {}
     rootnode = {}
-    if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
-      @current_deep = @current_deep.to_i + 1
+    if (@max_deep== 0)
+      @current_deep = 1
+    else
+      @current_deep = @min_dis_artifact_arr[artifact.id]
+    end
+    if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
+    #  @current_deep = @current_deep.to_i + 1
       if ( ! @done_artifakts_id.include? artifact.id.to_s)
           ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
             next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
@@ -551,7 +571,7 @@ class ReArtifactRelationshipController < RedmineReController
       
     end
        
-    @current_deep = @current_deep.to_i - 1
+ #   @current_deep = @current_deep.to_i - 1
   end
     json
   end 
@@ -559,8 +579,14 @@ class ReArtifactRelationshipController < RedmineReController
   def get_issues_for_graph(issue_id,first_run)
     issues = []
     artifact = []
-    if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
-      @current_deep = @current_deep.to_i + 1
+    if (@max_deep== 0)
+      @current_deep = 1
+    else
+      @current_deep = @min_dis_issue_arr[issue_id]
+    end
+  
+    if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
+     # @current_deep = @current_deep.to_i + 1
       adjacencies = []
       master_build = {}
       rootnode = {}
@@ -603,6 +629,7 @@ class ReArtifactRelationshipController < RedmineReController
         end
         
         Realization.where("issue_id=?",issue_id).each do |relation|
+          next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(relation.re_artifact_properties_id).artifact_type.to_s) 
           if (@current_deep.to_i  == @max_deep.to_i)
             if(! @done_artifakts_id.include? relation.re_artifact_properties_id.to_s)
               next
@@ -734,18 +761,25 @@ class ReArtifactRelationshipController < RedmineReController
         end
       end
       
-    @current_deep = @current_deep.to_i - 1 
+ #   @current_deep = @current_deep.to_i - 1 
     end
    
     json
   end
   
   def find_all_artifacts_for_netmap(artifact)
-    if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
-      @current_deep = @current_deep.to_i + 1
-      @found_artifakts << artifact
-      @done_artifakts_id << artifact.id.to_s
-    
+    if (@max_deep== 0)
+      @current_deep = 1
+    else
+      @current_deep = @min_dis_artifact_arr[artifact.id]
+    end
+    if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
+      
+      re_artifact_properties = ReArtifactProperties.find_by_id(artifact.id)
+      if re_artifact_properties.artifact_type.to_s != "Project"
+        @found_artifakts << artifact
+        @done_artifakts_id << artifact.id.to_s
+      end
       ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
         next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
         next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
@@ -758,7 +792,6 @@ class ReArtifactRelationshipController < RedmineReController
         next unless ( ! @done_artifakts_id.include? source.source_id.to_s)
         find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.source_id))  
       end 
-      @current_deep = @current_deep.to_i - 1
     end
   end
 
@@ -778,6 +811,7 @@ class ReArtifactRelationshipController < RedmineReController
     node_data['updated_at'] = artifact.updated_at.to_s(:short)
     node_data['user'] = artifact.user.to_s
     node_data['responsibles'] = artifact.responsible.name unless artifact.responsible.nil?
+    
     node_data['$color'] = node_settings['color']
     node_data['$height'] = 90
     node_data['$angularWidth'] = 13.00
@@ -820,6 +854,11 @@ class ReArtifactRelationshipController < RedmineReController
 
     node_data['relationship_data'] = relationship_data 
     node['data'] = node_data
+    if (@max_deep== 0)
+      @current_deep = 1
+    else
+      @current_deep = @min_dis_artifact_arr[artifact.id]
+    end
     if (@current_deep != @max_deep || @max_deep == 0)
       
       drawable_relationships.each do |relation|
@@ -1036,10 +1075,8 @@ class ReArtifactRelationshipController < RedmineReController
       @visualization_filter.save_max_deep(@project.id, deep, session[:visualization_type], session[:visualization_artefakt_id])
     end
    
-   puts "PARAMETER"+ params[:data].to_s
    if(params[:data].present?)
      #tooltip-graph
-     puts "TOOLTIPGRAPH"
      @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
      @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
      @re_artifact_order.each_with_index do |artifact_type, i|
@@ -1047,15 +1084,12 @@ class ReArtifactRelationshipController < RedmineReController
         if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
           lokal_artifact=artifact_type.gsub(/^re_/, '').humanize
           @chosen_artifacts << "Re"+lokal_artifact.to_s
-          puts lokal_artifact.to_s
         end
       end
       @re_relation_order.each_with_index do |relation_type, i|
          relation_settings = ReSetting.get_serialized(relation_type, @project.id)
          if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
            @chosen_relations << relation_type.to_s
-           puts relation_type.to_s
-           puts "ICH WAR HIER!!!!!"
          end
        end
        issue = ReSetting.get_plain("issues", @project.id)
@@ -1090,5 +1124,63 @@ class ReArtifactRelationshipController < RedmineReController
     render :json => @json_netmap
   end
   
+  def min_dis_artifact(artifact_id)
+    @current_deep = @current_deep + 1
+    ReArtifactRelationship.find_all_by_source_id(artifact_id).each do |source|
+      next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
+      next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
+     
+      if (@min_dis_artifact_arr[source.sink_id] == nil || @min_dis_artifact_arr[source.sink_id] > @current_deep)
+        @min_dis_artifact_arr[source.sink_id] = @current_deep  
+        min_dis_artifact(source.sink_id)
+      end
+    end 
+    if(@visualization_type != "sunburst")
+      ReArtifactRelationship.find_all_by_sink_id(artifact_id).each do |source|
+        next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
+        next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
+        if (@min_dis_artifact_arr[source.source_id] == nil || @min_dis_artifact_arr[source.source_id] > @current_deep)
+          @min_dis_artifact_arr[source.source_id] = @current_deep  
+          min_dis_artifact(source.source_id)
+        end
+      end
+    end
+    if @chosen_issue
+      Realization.where("re_artifact_properties_id = ?", artifact_id.to_s).each do |source|
+        if (@min_dis_issue_arr[source.issue_id] == nil || @min_dis_issue_arr[source.issue_id] > @current_deep)
+          @min_dis_issue_arr[source.issue_id] = @current_deep  
+          min_dis_issue(source.issue_id)
+        end
+      end
+      @current_deep = @current_deep - 1
+    end
+  end
+  
+  def min_dis_issue(issue_id)
+    @current_deep = @current_deep + 1
+    Realization.where("issue_id=?",issue_id).each do |relation|
+    next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(relation.re_artifact_properties_id).artifact_type.to_s)
+      if (@min_dis_artifact_arr[relation.re_artifact_properties_id] == nil || @min_dis_artifact_arr[relation.re_artifact_properties_id] > @current_deep)
+        @min_dis_artifact_arr[relation.re_artifact_properties_id] = @current_deep  
+        min_dis_artifact(relation.re_artifact_properties_id)
+      end
+    end
+  
+    IssueRelation.where("issue_from_id=?",issue_id).each do |relation|
+      if (@min_dis_issue_arr[relation.issue_to_id] == nil || @min_dis_issue_arr[relation.issue_to_id] > @current_deep)
+        @min_dis_issue_arr[relation.issue_to_id] = @current_deep  
+        min_dis_issue(relation.issue_to_id)
+      end
+    end
+  
+    IssueRelation.where("issue_to_id=?",issue_id).each do |relation|
+      if (@min_dis_issue_arr[relation.issue_from_id] == nil || @min_dis_issue_arr[relation.issue_from_id] > @current_deep)
+        @min_dis_issue_arr[relation.issue_from_id] = @current_deep  
+        min_dis_issue(relation.issue_from_id)
+      end
+    end
+    @current_deep = @current_deep - 1
+  end
+ 
  
 end

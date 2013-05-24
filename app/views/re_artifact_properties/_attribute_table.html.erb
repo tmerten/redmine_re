@@ -119,11 +119,8 @@
 						cache: false,
 						success: function(data, status){
 								init(data);
-							
 						}
 					},
-				
-					
 				},
 				position: {
 					at: 'bottom center', // Position the tooltip above the link
@@ -154,7 +151,13 @@
 	});
 </script>
 <script type="text/javascript">
- 
+$('#detail_view').scroll(function()
+{
+	if(visualization!=null)
+	{
+		visualization.canvas.getPos(true);
+	}	
+}); 
 
 var visualization = null;
 var form = null;
