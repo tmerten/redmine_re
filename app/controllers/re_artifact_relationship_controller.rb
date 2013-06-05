@@ -104,7 +104,7 @@ class ReArtifactRelationshipController < RedmineReController
     @artifacts_netmap_final = []
     
     @current_deep = 0
-
+    @max_deep_over_all = 0
     @min_dis_artifact_arr = []
     @min_dis_issue_arr = []
     
@@ -112,7 +112,6 @@ class ReArtifactRelationshipController < RedmineReController
     
     rootnode['id'] = "node0"
     rootnode['name'] = ""
-
     root_node_data = {}
     root_node_data['$type'] = "none"
     rootnode['data'] = root_node_data
@@ -124,6 +123,7 @@ class ReArtifactRelationshipController < RedmineReController
         re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artefakt_id])
         children= sunburst(re_artifact_properties)
         rootnode['children'] = children
+        rootnode['max_deep'] = @max_deep_over_all
         json = rootnode
         json.to_json
         
@@ -251,7 +251,6 @@ class ReArtifactRelationshipController < RedmineReController
     else
       @current_deep = @min_dis_artifact_arr[artifact.id]
     end
-    puts "Current_deep"+@current_deep.to_s+"ARTIFACT_ID"+artifact.id.to_s
     if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
       
       if @chosen_relations.include?("dependency")
@@ -814,7 +813,7 @@ class ReArtifactRelationshipController < RedmineReController
     
     node_data['$color'] = node_settings['color']
     node_data['$height'] = 90
-    node_data['$angularWidth'] = 13.00
+    node_data['$angularWidth'] = 13
 
 
     adjacencies= []
@@ -1133,6 +1132,9 @@ class ReArtifactRelationshipController < RedmineReController
       if (@min_dis_artifact_arr[source.sink_id] == nil || @min_dis_artifact_arr[source.sink_id] > @current_deep)
         @min_dis_artifact_arr[source.sink_id] = @current_deep  
         min_dis_artifact(source.sink_id)
+        if (@current_deep > @max_deep_over_all)
+          @max_deep_over_all = @current_deep
+        end
       end
     end 
     if(@visualization_type != "sunburst")
@@ -1142,6 +1144,9 @@ class ReArtifactRelationshipController < RedmineReController
         if (@min_dis_artifact_arr[source.source_id] == nil || @min_dis_artifact_arr[source.source_id] > @current_deep)
           @min_dis_artifact_arr[source.source_id] = @current_deep  
           min_dis_artifact(source.source_id)
+          if (@current_deep>@max_deep_over_all)
+            @max_deep_over_all = @current_deep
+          end
         end
       end
     end
@@ -1150,6 +1155,9 @@ class ReArtifactRelationshipController < RedmineReController
         if (@min_dis_issue_arr[source.issue_id] == nil || @min_dis_issue_arr[source.issue_id] > @current_deep)
           @min_dis_issue_arr[source.issue_id] = @current_deep  
           min_dis_issue(source.issue_id)
+          if (@current_deep>@max_deep_over_all)
+            @max_deep_over_all = @current_deep
+          end
         end
       end
       @current_deep = @current_deep - 1
@@ -1163,6 +1171,9 @@ class ReArtifactRelationshipController < RedmineReController
       if (@min_dis_artifact_arr[relation.re_artifact_properties_id] == nil || @min_dis_artifact_arr[relation.re_artifact_properties_id] > @current_deep)
         @min_dis_artifact_arr[relation.re_artifact_properties_id] = @current_deep  
         min_dis_artifact(relation.re_artifact_properties_id)
+        if (@current_deep>@max_deep_over_all)
+          @max_deep_over_all = @current_deep
+        end
       end
     end
   
@@ -1170,6 +1181,9 @@ class ReArtifactRelationshipController < RedmineReController
       if (@min_dis_issue_arr[relation.issue_to_id] == nil || @min_dis_issue_arr[relation.issue_to_id] > @current_deep)
         @min_dis_issue_arr[relation.issue_to_id] = @current_deep  
         min_dis_issue(relation.issue_to_id)
+        if (@current_deep>@max_deep_over_all)
+          @max_deep_over_all = @current_deep
+        end
       end
     end
   
@@ -1177,6 +1191,9 @@ class ReArtifactRelationshipController < RedmineReController
       if (@min_dis_issue_arr[relation.issue_from_id] == nil || @min_dis_issue_arr[relation.issue_from_id] > @current_deep)
         @min_dis_issue_arr[relation.issue_from_id] = @current_deep  
         min_dis_issue(relation.issue_from_id)
+        if (@current_deep>@max_deep_over_all)
+          @max_deep_over_all = @current_deep
+        end
       end
     end
     @current_deep = @current_deep - 1

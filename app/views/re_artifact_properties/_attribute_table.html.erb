@@ -112,7 +112,7 @@
 			$(this).qtip(
 			{
 				content: {
-					text: ' <div id="infovis" class="infovis" style="width: 400px; height: 300px"></div>',
+					text: ' <div id="infovis" class="infovis" style="min-width: 400px; height: 400px"></div>',
 					ajax: {
 						url: $(this).attr('rel'),// Use the rel attribute of each element for the url to load
 						once: false,
@@ -138,7 +138,7 @@
 				events: {
 						show: function(event, api) {
 							$(this).find('#test').attr('id',"infovis");
-							
+							clear_canvas();
 									//$('.hideMe').hide();
 								},
 						hidden: function(event, api) {
@@ -172,8 +172,8 @@ function init(data) {
 	var visualization_config = {
 		//id container for the visualization
       	injectInto: 'infovis',
-   		width: 300,  
-    	height: 300,  
+   		width: 370,  
+    	height: 370,  
 	  
       	//Change node and edge styles such as
       	//color, width, lineWidth and edge types

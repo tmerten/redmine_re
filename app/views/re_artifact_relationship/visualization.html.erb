@@ -17,8 +17,8 @@
 <div id='detail_view' class='ui-layout-center'>
 	<h2><%= @artifact_name %> - <%= l(:re_relationship_visualization)%></h2>
 	<% canvas_size = ReSetting.get_plain("visualization_size", @project.id) %>
-  	<div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
-  	<div id="visualization_filters">
+	<div id="infovis" style="<%="width: #{canvas_size}px; height: #{canvas_size}px" %>" ></div>
+	<div id="visualization_filters">
  	   <h4><%= t(:re_artifact_details) %></h4>
     	<div id="node-details"></div>
   </div>
@@ -43,7 +43,7 @@ $(document).ready(function () {
 	$('#visualization').submit();
 });
 
-jQuery('#visualization').bind('ajax:success', function(evt, data, status, xhr){
+jQuery('#visualization').bind('ajax:success', function(evt, data, status, xhr){		
 	init(data);
 });
 $('#detail_view').scroll(function()
@@ -64,6 +64,20 @@ function clear_canvas() {
 function init(data) {
   
 	var visualization_type = "<%= params[:visualization_type]%>";
+	if (visualization_type == "sunburst")
+	{
+		size = $('#deep').val();
+		size = parseInt(size)
+		if(size != 0 && size < data.max_deep)
+		{
+			size = 180*(parseInt(size)+1)+40;
+		}else
+		{
+			size = 180*(data.max_deep)+40;
+		}
+		$('#infovis').css( "width", size );
+		$('#infovis').css( "height", size );
+	}
 	var visualization_config = {
 		
       //id container for the visualization
@@ -88,7 +102,7 @@ function init(data) {
 			
       Node: {
         overridable: true,
-        height: 50
+		height: 50
       },
       Edge: {
         overridable: true,
