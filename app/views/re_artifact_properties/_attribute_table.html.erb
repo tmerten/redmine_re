@@ -125,7 +125,6 @@
 				position: {
 					at: 'bottom center', // Position the tooltip above the link
 					my: 'top center',
-					//viewport: $(window), // Keep the tooltip on-screen at all times
 					effect: false // Disable positioning animation
 				},
 				show: {
@@ -137,9 +136,14 @@
 				hide: 'unfocus',
 				events: {
 						show: function(event, api) {
-							$(this).find('#test').attr('id',"infovis");
-							clear_canvas();
-									//$('.hideMe').hide();
+									$(this).find('#test').attr('id',"infovis");
+									clear_canvas();
+										
+
+								},
+						visible: function(event,api)
+								{
+								$('#ajax-indicator').css( "display", "none" );	
 								},
 						hidden: function(event, api) {
 								}
