@@ -181,7 +181,6 @@ private
     new_artifact_order = ActiveSupport::JSON.decode(params[:re_artifact_order])
     new_relation_order = ActiveSupport::JSON.decode(params[:re_relation_order])
     new_visualization = params[:re_visualization_settings]
-    puts params[:re_visualization_settings]
     
     ReSetting.set_plain("relation_management_pane", @project.id, new_settings.has_key?("relation_management_pane").to_s)
     ReSetting.set_plain("visualization_size", @project.id, new_settings["visualization_size"])

@@ -112,23 +112,19 @@
 			$(this).qtip(
 			{
 				content: {
-					text: ' <div id="infovis" class="infovis" style="width: 300px; height: 300px"></div>',
+					text: ' <div id="infovis" class="infovis" style="min-width: 400px; height: 400px"></div>',
 					ajax: {
 						url: $(this).attr('rel'),// Use the rel attribute of each element for the url to load
 						once: false,
 						cache: false,
 						success: function(data, status){
 								init(data);
-							
 						}
 					},
-				
-					
 				},
 				position: {
 					at: 'bottom center', // Position the tooltip above the link
 					my: 'top center',
-					//viewport: $(window), // Keep the tooltip on-screen at all times
 					effect: false // Disable positioning animation
 				},
 				show: {
@@ -140,9 +136,14 @@
 				hide: 'unfocus',
 				events: {
 						show: function(event, api) {
-							$(this).find('#test').attr('id',"infovis");
-							
-									//$('.hideMe').hide();
+									$(this).find('#test').attr('id',"infovis");
+									clear_canvas();
+										
+
+								},
+						visible: function(event,api)
+								{
+								$('#ajax-indicator').css( "display", "none" );	
 								},
 						hidden: function(event, api) {
 								}
@@ -154,7 +155,13 @@
 	});
 </script>
 <script type="text/javascript">
- 
+$('#detail_view').scroll(function()
+{
+	if(visualization!=null)
+	{
+		visualization.canvas.getPos(true);
+	}	
+}); 
 
 var visualization = null;
 var form = null;
@@ -167,14 +174,15 @@ function init(data) {
 	
 	var visualization_type = "graph"//"<%= params[:visualization_type]%>"
 	var visualization_config = {
-		
-      //id container for the visualization
-      injectInto: 'infovis',
+		//id container for the visualization
+      	injectInto: 'infovis',
+   		width: 370,  
+    	height: 370,  
 	  
-      //Change node and edge styles such as
-      //color, width, lineWidth and edge types
+      	//Change node and edge styles such as
+      	//color, width, lineWidth and edge types
 			
-	  NodeStyles: {  
+	  	NodeStyles: {  
 		    enable: true,  
 		    type: 'Native',  
 		    stylesClick: {  
@@ -184,70 +192,47 @@ function init(data) {
 		      height: 100  
 		    },  
 		    duration: 700  
-	  },
+	  	},
 			
-      Node: {
-        overridable: true,
-        height: 90
-      },
-      Edge: {
-        overridable: true,
-        type: 'line',
-        alpha: 1
-      },      
-      //Draw canvas text. Can also be
-      //'HTML' or 'SVG' to draw DOM labels
-      Label: {
-        type: 'Native',
-        color: '#000000'
-      },
-      Events: {
-        enable: true,
-        type: 'Native',
-        //List node connections onClick
-        onClick: function(node, eventInfo, e) {
-          if (!node) return;
+      	Node: {
+      		overridable: true,
+        	height: 50
+      	},
+      	Edge: {
+        	overridable: true,
+        	type: 'line',
+        	alpha: 1
+      	},      
+      	//Draw canvas text. Can also be
+      	//'HTML' or 'SVG' to draw DOM labels
+      	Label: {
+        	type: 'Native',
+        	color: '#000000'
+      	},
+      	Events: {
+        	enable: true,
+        	type: 'Native',
+        	//List node connections onClick
+        	onClick: function(node, eventInfo, e) {
+         	   if (!node) return;
 
-          var id = node.id.replace('node_','');
-          if(id.charAt(0)!='i'){
-		 	 var link = "<%= re_artifact_properties_path %>";        
-			 link = link + "/" + id ;
-          	 window.location.href = link;
-		  }else
-		  {
-		  	var id = id.replace('issue_','');
-	 		var link = "/issues";        
-		    link = link + "/" + id ;
-         	 window.location.href = link;
-		  }
-        }
-	}      
-      
-		
- };	
-// console.log($('#infovis'));
- 
- 	switch(visualization_type) {
-		case "sunburst":
-				visualization_config.levelDistance=90;
-				visualization = new $jit.Sunburst(visualization_config);
-				break;
-	  	case "netmap":
-			var width = jQuery("#infovis").width();
-			var height = jQuery("#infovis").height();
-			var size = width > height ? width:height;
-			visualization_config.levelDistance=size/2-110;
-		  	
-				visualization = new $jit.Sunburst(visualization_config);
-			
-	    	break;
-	  	case "graph":
-	  		visualization = new $jit.ForceDirected(visualization_config);
-		 	break;
-	  	default :
-	  		alert ("<%= t(:re_please_select_visualization_type) %>");
-	    	break;
-  	}
+          		var id = node.id.replace('node_','');
+          	  	if(id.charAt(0)!='i'){
+		 	 	   var link = "<%= re_artifact_properties_path %>";        
+			 	   link = link + "/" + id ;
+          	 	   window.location.href = link;
+		  	 	}else
+		  	  	{
+		  			var id = id.replace('issue_','');
+	 				var link = "/issues";        
+		    		link = link + "/" + id ;
+         	 	    window.location.href = link;
+		  	  	}
+        	}
+		}      
+    };	
+ 	
+	visualization = new $jit.ForceDirected(visualization_config);
     visualization.loadJSON(data);
     visualization.refresh();
 	 $('div.infovis').attr('id',"test");

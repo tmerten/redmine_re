@@ -8,8 +8,10 @@ class ReArtifactProperties < ActiveRecord::Base
     project_id = (project.is_a? Project) ? project.id : project
     {:conditions => {:project_id => project_id}}
   }
-
+  
   has_many :ratings, :dependent => :destroy
+  
+  quatsch
   has_many :raters, :through => :ratings, :source => :users
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
   has_many :realizations, :dependent => :destroy
