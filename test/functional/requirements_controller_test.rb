@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../test_helper'
-load "#{Rails.root}/plugins/redmine_re/db/seeds.rb"
+load "#{Rails.root}/plugins/redmine_re/db/seeds_requirements_controller_functional.rb"
 
 class RequirementsControllerTest < ActionController::TestCase
     ActiveRecord::Fixtures.create_fixtures(File.dirname(__FILE__) + '/../fixtures/', 

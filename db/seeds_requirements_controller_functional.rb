@@ -1,35 +1,4 @@
 Project.create("description"=>"", "homepage"=>"", "identifier"=>"test", "is_public"=>true, "name"=>"Testproject", "parent_id"=>nil)
-Setting.create("name"=>"login_required", "value"=>"0")
-Setting.create("name"=>"autologin", "value"=>"0")
-Setting.create("name"=>"self_registration", "value"=>"2")
-Setting.create("name"=>"unsubscribe", "value"=>"1")
-Setting.create("name"=>"password_min_length", "value"=>"4")
-Setting.create("name"=>"lost_password", "value"=>"1")
-Setting.create("name"=>"openid", "value"=>"0")
-Setting.create("name"=>"rest_api_enabled", "value"=>"0")
-Setting.create("name"=>"session_lifetime", "value"=>"0")
-Setting.create("name"=>"session_timeout", "value"=>"0")
-r=Role.create("assignable"=>true, "issues_visibility"=>"default", "name"=>"Non member", "permissions"=>[:view_issues, :add_issues, :add_issue_notes, :save_queries, :view_gantt, :view_calendar, :view_time_entries, :comment_news, :view_documents, :view_wiki_pages, :view_wiki_edits, :add_messages, :view_files, :browse_repository, :view_changesets], "position"=>1)
-r.builtin=1
-r.save
-r=Role.create("assignable"=>true, "issues_visibility"=>"default", "name"=>"Anonymous", "permissions"=>[:view_issues, :view_gantt, :view_calendar, :view_time_entries, :view_documents, :view_wiki_pages, :view_wiki_edits, :view_files, :browse_repository, :view_changesets], "position"=>2)
-r.builtin=2
-r.save
-Role.create("assignable"=>true, "issues_visibility"=>"all", "name"=>"Manager", "permissions"=>[:add_project, :edit_project, :close_project, :select_project_modules, :manage_members, :manage_versions, :add_subprojects, :manage_categories, :view_issues, :add_issues, :edit_issues, :manage_issue_relations, :manage_subtasks, :set_issues_private, :set_own_issues_private, :add_issue_notes, :edit_issue_notes, :edit_own_issue_notes, :view_private_notes, :set_notes_private, :move_issues, :delete_issues, :manage_public_queries, :save_queries, :view_issue_watchers, :add_issue_watchers, :delete_issue_watchers, :log_time, :view_time_entries, :edit_time_entries, :edit_own_time_entries, :manage_project_activities, :manage_news, :comment_news, :manage_documents, :view_documents, :manage_files, :view_files, :manage_wiki, :rename_wiki_pages, :delete_wiki_pages, :view_wiki_pages, :export_wiki_pages, :view_wiki_edits, :edit_wiki_pages, :delete_wiki_pages_attachments, :protect_wiki_pages, :manage_repository, :browse_repository, :view_changesets, :commit_access, :manage_related_issues, :manage_boards, :add_messages, :edit_messages, :edit_own_messages, :delete_messages, :delete_own_messages, :view_calendar, :view_gantt, :view_requirements, :edit_requirements, :administrate_requirements, :comment_on_requirements, :delete_re_artifact_properties_watchers], "position"=>3)
-Role.create("assignable"=>true, "issues_visibility"=>"default", "name"=>"Developer", "permissions"=>[:manage_versions, :manage_categories, :view_issues, :add_issues, :edit_issues, :view_private_notes, :set_notes_private, :manage_issue_relations, :manage_subtasks, :add_issue_notes, :save_queries, :view_gantt, :view_calendar, :log_time, :view_time_entries, :comment_news, :view_documents, :view_wiki_pages, :view_wiki_edits, :edit_wiki_pages, :delete_wiki_pages, :add_messages, :edit_own_messages, :view_files, :manage_files, :browse_repository, :view_changesets, :commit_access, :manage_related_issues], "position"=>4)
-Role.create("assignable"=>true, "issues_visibility"=>"default", "name"=>"Reporter", "permissions"=>[:view_issues, :add_issues, :add_issue_notes, :save_queries, :view_gantt, :view_calendar, :log_time, :view_time_entries, :comment_news, :view_documents, :view_wiki_pages, :view_wiki_edits, :add_messages, :edit_own_messages, :view_files, :browse_repository, :view_changesets], "position"=>5)
-#Can't mass-assign protected attributes: admin, hashed_password, login
-# Make sure that the setting password_min_length is not to high (by default it is 8 and the admin:admin combo dose not work!)
-currentuser = User.new("auth_source_id"=>nil, "firstname"=>"Redmine", "identity_url"=>nil, "language"=>"en", "lastname"=>"Admin", "mail"=>"d.markowski@eyegoweb.de", "mail_notification"=>"all", "salt"=>"634291fb11a47e354ae2a50be8e50b4e", "status"=>1)
-currentuser.login = "admin" if currentuser.lastname == "admin"
-currentuser.admin = "true" if currentuser.lastname == "admin"
-currentuser.save
-#Can't mass-assign protected attributes: admin, hashed_password, login
-# Make sure that the setting password_min_length is not to high (by default it is 8 and the admin:admin combo dose not work!)
-currentuser = User.new("auth_source_id"=>nil, "firstname"=>"", "identity_url"=>nil, "language"=>"", "lastname"=>"Anonymous", "mail"=>nil, "mail_notification"=>"only_my_events", "salt"=>nil, "status"=>0)
-currentuser.login = "admin" if currentuser.lastname == "admin"
-currentuser.admin = "true" if currentuser.lastname == "admin"
-currentuser.save
 EnabledModule.create("name"=>"issue_tracking", "project_id"=>1)
 EnabledModule.create("name"=>"time_tracking", "project_id"=>1)
 EnabledModule.create("name"=>"news", "project_id"=>1)
@@ -41,16 +10,6 @@ EnabledModule.create("name"=>"boards", "project_id"=>1)
 EnabledModule.create("name"=>"calendar", "project_id"=>1)
 EnabledModule.create("name"=>"gantt", "project_id"=>1)
 EnabledModule.create("name"=>"requirements", "project_id"=>1)
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>2, "source_id"=>1)
-ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>3, "source_id"=>1)
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>4, "source_id"=>2)
-ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>5, "source_id"=>2)
-ReArtifactRelationship.create("position"=>4, "relation_type"=>"parentchild", "sink_id"=>6, "source_id"=>2)
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>7, "source_id"=>3)
-ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>8, "source_id"=>3)
-ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>9, "source_id"=>1)
-ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>10, "source_id"=>9)
-ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>11, "source_id"=>9)
 ReArtifactProperties.create("artifact_id"=>1, "artifact_type"=>"Project", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Testproject", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1)
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReSection", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Chapter 1", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(1),
@@ -110,3 +69,13 @@ ReSetting.create("name"=>"plugin_description", "project_id"=>1, "value"=>"")
 ReSetting.create("name"=>"relation_order", "project_id"=>1, "value"=>"[\"dependency\",\"conflict\",\"rationale\",\"refinement\",\"part_of\",\"parentchild\",\"primary_actor\",\"actors\",\"diagram\"]")
 ReSetting.create("name"=>"unconfirmed", "project_id"=>1, "value"=>"false")
 ReSetting.create("name"=>"export_format", "project_id"=>1, "value"=>"disabled")
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>2, "source_id"=>1)
+ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>3, "source_id"=>1)
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>4, "source_id"=>2)
+ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>5, "source_id"=>2)
+ReArtifactRelationship.create("position"=>4, "relation_type"=>"parentchild", "sink_id"=>6, "source_id"=>2)
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>7, "source_id"=>3)
+ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>8, "source_id"=>3)
+ReArtifactRelationship.create("position"=>3, "relation_type"=>"parentchild", "sink_id"=>9, "source_id"=>1)
+ReArtifactRelationship.create("position"=>1, "relation_type"=>"parentchild", "sink_id"=>10, "source_id"=>9)
+ReArtifactRelationship.create("position"=>2, "relation_type"=>"parentchild", "sink_id"=>11, "source_id"=>9)
