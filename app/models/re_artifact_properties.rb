@@ -11,7 +11,6 @@ class ReArtifactProperties < ActiveRecord::Base
   
   has_many :ratings, :dependent => :destroy
   
-  quatsch
   has_many :raters, :through => :ratings, :source => :users
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
   has_many :realizations, :dependent => :destroy
