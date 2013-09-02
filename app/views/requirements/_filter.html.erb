@@ -55,7 +55,7 @@
       <%= hidden_field_tag 'source[name_mode]', 'contains' %>
       <div id="sidebar_filter">
         <div class="inputs">
-          <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'sidebar_filter_input', :class => 'direct_artifacts' %>
+          <%= select_tag 'source[name]', "<option> </option>".html_safe, :id => 'sidebar_filter_input', :class => 'direct_artifacts' %>
           <%= text_field_tag 'source[name]', nil, :id => 'sidebar_filter_input_nojs' %>
         </div>
         <div class="buttons">
