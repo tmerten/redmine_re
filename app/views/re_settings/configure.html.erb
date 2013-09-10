@@ -62,7 +62,7 @@
     <% end %>     
     <br style="clear: left;"/>
 
-    <h2>Artifact Configuration</h2>
+    <h2><%= t(:re_artifact_configuration) %></h2>
 
     <table id="artifact_types_list" class="list">
       <thead>
@@ -71,7 +71,6 @@
           <th title="<%= t(:re_conf_artifact_in_use) %>"><%= t(:re_use) %></th>
           <th title="<%= t(:re_conf_alias_name) %>"><%= t(:re_alias_name) %></th>
           <th title="<%= t(:re_conf_color) %>"><%= t(:re_color) %></th>
-          <th title="<%= t(:re_conf_fields) %>"><%= t(:re_fields) %></th>
 		  <th title="<%= t(:re_conf_show_in_visualization) %>"><%= t(:re_show_in_visualization) %></th>
         </tr>
       </thead>
@@ -87,8 +86,7 @@
             </td>
             <td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[in_use]]', 'yes', @re_artifact_configs[artifact_type]['in_use'] %></td>
             <td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[alias]]', @re_artifact_configs[artifact_type]['alias'], :size => 20 %></td>
-						<td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[color]]', @re_artifact_configs[artifact_type]['color'], :size => 6,  :class => 'colorpick' %></td>
-            <td><%= link_to t(:re_edit), :action => "configure_fields", :artifact_type => artifact_type.underscore, :project_id => @project.id %>
+			<td><%= text_field_tag "re_artifact_configs[" + artifact_type.underscore + '[color]]', @re_artifact_configs[artifact_type]['color'], :size => 6,  :class => 'colorpick' %></td>
 			<td><%= check_box_tag "re_artifact_configs[" + artifact_type.underscore + '[show_in_visualization]]', 'yes', @re_artifact_configs[artifact_type]['show_in_visualization'] %></td>
           </tr>
         <% end %>

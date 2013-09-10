@@ -65,8 +65,6 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
                                    :reduce_search_result_with_parameter],
                    :re_artifact_properties => [:show, :redirect],
                    :re_artifact_relationship => [:prepare_relationships, :visualization, :build_json_according_to_user_choice],
-                   :re_building_block => [:re_building_block_referred_artifact_types,
-                                          :react_to_change_in_data_field_artifact_type],
                    :re_queries => [:index, :show, :query, :apply,
                                    :suggest_artifacts, :suggest_issues, :suggest_diagrams, :suggest_users,
                                    :artifacts_bits, :issues_bits, :diagrams_bits, :users_bits]
@@ -90,10 +88,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
                                                :rate_artifact, :how_to_delete, :recursive_destroy, :new_comment],
                    :re_artifact_relationship => [:delete, :autocomplete_sink, :prepare_relationships,
                                                  :visualization, :build_json_according_to_user_choice],
-                   :re_building_block => [:delete_data, :re_building_block_referred_artifact_types,
-                                          :react_to_change_in_data_field_artifact_type],
                    :re_rationale => [:edit, :new],
-                   :re_link_building_block => [:popup_close_and_update_link, :popup],
                    :re_queries => [:index, :new, :edit, :show, :delete, :create, :update, :query, :apply,
                                    :suggest_artifacts, :suggest_issues, :suggest_diagrams, :suggest_users,
                                    :artifacts_bits, :issues_bits, :diagrams_bits, :users_bits]
@@ -102,11 +97,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
     permission(:administrate_requirements,
                {
                    :requirements => [:setup],
-                   :re_settings => [:configure, :configure_fields, :edit_artifact_type_description],
-                   :re_building_block => [:edit, :new, :delete, :update_config_form, :delete_data,
-                                          :react_to_change_in_field_multiple_values, :re_building_block_referred_artifact_types,
-                                          :react_to_check_of_embedding_type_attributes, :react_to_change_in_data_field_artifact_type,
-                                          :react_to_change_in_field_referred_artifact_types, :react_to_change_in_fields_minimal_maximal_value]
+                   :re_settings => [:configure, :configure_fields, :edit_artifact_type_description]
                }
     )
 

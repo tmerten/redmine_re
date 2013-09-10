@@ -75,12 +75,11 @@ class RedmineReController < ApplicationController
   end
 
   def new
-    @artifact_type = self.controller_name # needed for ajax request (artifact selection building block)
+    @artifact_type = self.controller_name # needed for ajax request
     logger.debug("############ CALLED NEW FOR ARTIFACT OF TYPE: " + @artifact_type) if logger
 
     @artifact = @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
 
     if params[:parent_artifact_id]
       @parent = ReArtifactProperties.find(params[:parent_artifact_id])
@@ -103,9 +102,6 @@ class RedmineReController < ApplicationController
     @artifact_properties = @artifact.re_artifact_properties
     
     @parent = nil
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
-    @bb_error_hash = {}
-    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
 
     @issues = @artifact_properties.issues
 
@@ -158,12 +154,6 @@ class RedmineReController < ApplicationController
           comment.save
         end
 
-        # Saving of user defined Fields (Building Blocks)
-        ReBuildingBlock.save_data(@artifact.re_artifact_properties.id, params[:re_bb])
-        @bb_error_hash = {}
-        @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
-        @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
-
         # If sibling is not blank, then the option "create new artifact below" was called
         # and the artifact should beplaced below its sibling
         initialize_tree_data
@@ -189,9 +179,6 @@ class RedmineReController < ApplicationController
     @artifact_properties = @artifact.re_artifact_properties
 
     @parent = nil
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@artifact_properties, @project.id)
-    @bb_error_hash = {}
-    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@artifact.re_artifact_properties, @bb_error_hash, @project.id)
 
     @issues = @artifact_properties.issues
 

@@ -34,8 +34,6 @@ class ReArtifactRelationship < ActiveRecord::Base
   belongs_to :source, :class_name => "ReArtifactProperties"
   belongs_to :sink,   :class_name => "ReArtifactProperties"
   
-  has_many :re_bb_data_artifact_selection, :dependent => :destroy
-
   validates :source_id, :uniqueness => { :scope => [:sink_id, :relation_type],
     :message => :re_the_specified_relation_already_exists }
 

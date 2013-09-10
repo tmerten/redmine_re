@@ -12,10 +12,6 @@
     <%= f.label :synonyms, l(:re_processword_synonyms) %> <%= f.text_field :synonyms %>
     </p>
 
-    <div id='re_bb_section'>
-      <%= add_bb_section(@re_processword, @bb_hash, @bb_error_hash)%>
-    </div>
-
     <p>
     <%= submit_tag l(:re_save) %>
     &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
@@ -25,6 +21,4 @@
 <% end %>
 <%= render "re_artifact_properties/manage_relationships", :id => params[:id], :project_id => @project.id if params.has_key? :id %>
 
-<br>
-<%= add_bb_configuration_link(:ReProcessword)%>
 </div>

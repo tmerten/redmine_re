@@ -16,8 +16,6 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties.artifact_type = @artifact_type.camelcase
     @re_artifact_properties.artifact = @artifact_type.camelcase.constantize.new
     @re_artifact_properties.project = @project
-        
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     
     begin
       @re_artifact_properties.artifact.new_hook(params)
@@ -66,10 +64,6 @@ class ReArtifactPropertiesController < RedmineReController
 
     @added_issue_ids = params[:issue_id]
     @added_relations = params[:new_relation]
-
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
-    @bb_error_hash = {}
-    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@re_artifact_properties, @bb_error_hash, @project.id)
 
     @issues = @re_artifact_properties.issues
 
@@ -134,7 +128,6 @@ class ReArtifactPropertiesController < RedmineReController
      @artifact_color = @re_artifact_settings[@artifact_type.underscore]['color']
      @lighter_artifact_color = calculate_lighter_color(@artifact_color)
 
-     @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
      @issues = @re_artifact_properties.issues
      
      #load all related secondary actors
@@ -180,7 +173,6 @@ class ReArtifactPropertiesController < RedmineReController
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
     @re_artifact_properties.save_attachments(params[:attachments] || (params[:re_artifact_properties] && params[:re_artifact_properties][:uploads]))
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
     @issues = @re_artifact_properties.issues
         
     if @project.enabled_module_names.include? 'diagrameditor'
@@ -226,9 +218,6 @@ class ReArtifactPropertiesController < RedmineReController
   def update
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @re_artifact_properties.save_attachments(params[:attachments] || (params[:re_artifact_properties] && params[:re_artifact_properties][:uploads]))
-    @bb_hash = ReBuildingBlock.find_all_bbs_and_data(@re_artifact_properties, @project.id)
-    @bb_error_hash = {}
-    @bb_error_hash = ReBuildingBlock.validate_building_blocks(@re_artifact_properties, @bb_error_hash, @project.id)
 
     @re_artifact_properties.attributes = params[:re_artifact_properties]
 
