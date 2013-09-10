@@ -1,7 +1,7 @@
 require 'redmine'
 require 'redmine_re/hooks'
 require 'rubygems'
-#require 're_artifact_properties_observer' #Ist not ready implemented yet (dominic)
+
 require_dependency '../app/models/re_artifact_relationship'
 require_dependency '../app/models/re_artifact_properties'
 require_dependency '../app/helpers/re_application_helper'
@@ -26,11 +26,6 @@ ActionDispatch::Callbacks.to_prepare do
 end
 
 require_dependency '../lib/re_wiki_macros'
-
-#require_dependency 'query_patch'
-#require_dependency 'role_patch'
-#require_dependency 'project_patch'
-#require_dependency 'projects_controller_patch'
 
 ActionView::Base.class_eval do
   include ReApplicationHelper
