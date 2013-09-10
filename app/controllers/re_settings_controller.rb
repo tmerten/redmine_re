@@ -81,9 +81,6 @@ class ReSettingsController < RedmineReController
         @re_visualization_setting["issue"] = false
     end
   
-    
-  
-
     @export_formats = get_available_export_formats
     @current_export_format = ReSetting.get_plain("export_format", @project.id)   
   end
@@ -198,7 +195,6 @@ private
     
     redirect_to :controller => "requirements", :action => "index", :project_id => @project.id  
 
-
   end
 
   def get_available_export_formats 
@@ -219,6 +215,5 @@ private
     end
     return outputformatarray
   end
-  
   
 end

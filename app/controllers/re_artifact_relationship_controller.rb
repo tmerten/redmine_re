@@ -176,7 +176,6 @@ class ReArtifactRelationshipController < RedmineReController
     rootnode['adjacencies'] = @adjacencies
     json << rootnode
     
-    
     artifacts.each do |artifact|
       outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(artifact.id)
       drawable_relationships = ReArtifactRelationship.find_all_by_source_id_and_relation_type(artifact.id, relations)
@@ -1043,7 +1042,6 @@ class ReArtifactRelationshipController < RedmineReController
     @chosen_issue = false
     @max_deep = 0
     
-      
     if (params[:artefakt_id].present?)
       session[:visualization_artefakt_id] = params[:artefakt_id]
     end
@@ -1197,6 +1195,5 @@ class ReArtifactRelationshipController < RedmineReController
     end
     @current_deep = @current_deep - 1
   end
- 
  
 end

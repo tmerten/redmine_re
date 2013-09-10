@@ -200,7 +200,7 @@ class ReArtifactPropertiesController < RedmineReController
   def new_comment
      @re_artifact_properties = ReArtifactProperties.find(params[:id])
      
-         # Add Comment
+     # Add Comment
      comment = nil
      unless params[:comment].blank? && params[:comment] != ""
        comment = Comment.new
@@ -211,7 +211,6 @@ class ReArtifactPropertiesController < RedmineReController
        
        redirect_to @re_artifact_properties
      end
-     
      
   end
 
@@ -274,7 +273,6 @@ class ReArtifactPropertiesController < RedmineReController
       render :action => 'edit'
     end
   end
-
 
   def handle_relations params
     unless params[:new_relation].nil?
@@ -477,8 +475,7 @@ class ReArtifactPropertiesController < RedmineReController
 #    @re_artifact_properties = ReArtifactProperties.find(params[:artefakt_id])#
 #    @artifact_name=@re_artifact_properties.name
 #    @re_artifact_properties = ReArtifactProperties.find(params[:project_id])
-  
- # end
+# end
   
   private
 

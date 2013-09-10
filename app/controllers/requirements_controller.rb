@@ -1,5 +1,4 @@
 include ReApplicationHelper
-#helper :re_application #undefined method
 
 class RequirementsController < RedmineReController
   unloadable
@@ -142,11 +141,7 @@ class RequirementsController < RedmineReController
     if !filetype.blank? || filetype == "disabled"     
    
       textilestring = ""
-      textilestring << "h1. #{@artifact.name} \n \n"       
-    
-      #TODO find a way to use rendered_artifact_type from the re_application_helper
-      #just calling does not work because @project is not passed to the helper and therefore is nil in the helper        
-      #logger.debug("#{ReApplicationHelper.rendered_artifact_type(@artifact.artifact_type)}")    
+      textilestring << "h1. #{@artifact.name} \n \n"
       textilestring << "_#{@artifact.artifact_type}_ \n \n" 
       textilestring << "h3. #{t(:re_artifact_description) } \n \n#{@artifact.description} \n \n" unless @artifact.description.blank?
     
@@ -184,15 +179,11 @@ class RequirementsController < RedmineReController
       flash[:error] = t(:re_export_error)
       redirect_to @artifact
     end
-     
        
   end
 
-  
 #######
 private
 #######
-
-
 
 end

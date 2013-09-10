@@ -137,10 +137,6 @@ class RedmineReController < ApplicationController
         flash.now[:notice] = t( @artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
         edit_hook_valid_artifact_after_save params
 
-        # Send Notification to watchers
-        #Mailer.deliver_artifact_edited(@artifact) #if Setting.notified_events.include?('issue_added')
-        logger.debug('!!!!!!!!!!!!!!!!!!!Notified!!!!!!!!!!!!!!!!!!!!')
-        
         unless @sibling.nil?
           @artifact_properties.parent_relation.insert_at(@sibling.parent_relation.position + 1)
         end
@@ -227,7 +223,6 @@ class RedmineReController < ApplicationController
     tree.to_json
   end
 
-
     # filtering of re_artifacts. If request is post, filter was used already
     # and result should be displayed
   def enhanced_filter
@@ -250,7 +245,6 @@ class RedmineReController < ApplicationController
         for key in source.keys do
           @source_artifacts = reduce_search_result_with_parameter(@source_artifacts, key, source[key], source_searching[key])
         end
-
       end
         # search was only about artifacts, not about relationships
         # therefore just display artifacts without taking relationships into account
