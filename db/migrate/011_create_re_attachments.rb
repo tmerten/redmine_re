@@ -1,3 +1,6 @@
+class ReAttachment < ActiveRecord::Base
+end
+
 class CreateReAttachments < ActiveRecord::Migration
   def self.up
     create_table :re_attachments do |t|
