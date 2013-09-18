@@ -23,8 +23,12 @@ class MoveToRequirementAndRemoveReAttachment < ActiveRecord::Migration
       artifact.save
     end
     
-    # At last, we can drop the re_attachments table
+    # Now we can drop the old re_attachments table
     drop_table :re_attachments
+    
+    # Now we need to reate the new re_attachments table
+    create_table :re_attachments do |t|
+    end
   end
 
   def self.down
