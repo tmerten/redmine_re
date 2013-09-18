@@ -108,9 +108,18 @@ private
 
   def initialize_artifact_order(project_id)
     configured_artifact_types = Array.new
+    
+    # Get Serialized order array artifact types:
+    # 
+    # ["re_vision","re_workarea","re_processword","re_rationale","re_requirement","re_scenario",
+    #"re_task","re_goal","re_section","re_use_case","re_user_profile"]
+    #
     stored_settings = ReSetting.get_serialized("artifact_order", project_id)
+    
+    # Put it into the empty configured_artifact_types array
     configured_artifact_types.concat(stored_settings) if stored_settings
 
+    # Search for artifact types (all models containing "acts_as_re_artifact" are used)
     all_artifact_types = Dir["#{Rails.root}/plugins/redmine_re/app/models/re_*.rb"].map do |f|
       fd = File.open(f, 'r')
       File.basename(f, '.rb') if fd.read.include? "acts_as_re_artifact"
@@ -123,6 +132,7 @@ private
     configured_artifact_types.concat(all_artifact_types)
 
     ReSetting.set_serialized("artifact_order", project_id, configured_artifact_types)
+    logger.debug(configured_artifact_types.to_yaml)
     @re_artifact_order = configured_artifact_types
   end
 

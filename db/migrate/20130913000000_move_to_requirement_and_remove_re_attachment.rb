@@ -26,8 +26,22 @@ class MoveToRequirementAndRemoveReAttachment < ActiveRecord::Migration
     # Now we can drop the old re_attachments table
     drop_table :re_attachments
     
+    # Remove re_attachments from re_settings
+    attachment_setting = ReSetting.find_by_name("re_attachment")
+    unless attachment_setting.nil?
+      attachment_setting.destroy
+    end
+    
+    # Remove Setting from array
+    ReSetting.find_by_name("artifact_order").each do |artifact_order_setting|
+      stored_settings = ReSetting.get_serialized("artifact_order", artifact_order_setting.project_id)
+      stored_settings.delete(:ReAttachments)
+      ReSetting.set_serialized("artifact_order", artifact_order_setting.project_id, stored_settings)
+    end
+    
     # Now we need to reate the new re_attachments table
     create_table :re_attachments do |t|
+      
     end
   end
 
