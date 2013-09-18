@@ -26,6 +26,10 @@ a.icon {
   background: url(../images/icons/world.png);
 }
 
+.icon.re_use_case {
+  background: url(../images/icons/page_user.png);
+}
+
 .icon.re_user_profile {
   background: url(../images/icons/user.png);
 }
