@@ -107,7 +107,7 @@
             <%= hidden_field_tag 'source[name_mode]', 'contains' %>
             <div id="relation_filter">
               <div class="inputs">
-                <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'relation_filter_input' %>
+                <%= select_tag 'source[name]', "<option></option>".html_safe, :id => 'relation_filter_input', :multiple => true %>
                 <%= text_field_tag 'source[name]', nil, :id => 'relation_filter_input_nojs' %>
               </div>
             </div>

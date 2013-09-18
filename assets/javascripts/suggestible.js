@@ -85,7 +85,7 @@
         var resultElements = [];
 
         // Find fields and substitute
-        this.filter('select[multiple=~"multiple"]').each(function(index) {
+        this.filter('select[multiple]').each(function(index) {
             var selectBox = $(this);
 
             var elements = createHtmlElements(selectBox, options);

@@ -40,8 +40,7 @@
             return $('<input />', {
                 'class': _this.options.classes.textBox,
                 type: 'text',
-                id: _this.selectBox.attr('id'),
-                autocomplete: 'off'
+                id: _this.selectBox.attr('id')
             });
         };
 
