@@ -39,10 +39,6 @@ class MoveToRequirementAndRemoveReAttachment < ActiveRecord::Migration
       ReSetting.set_serialized("artifact_order", artifact_order_setting.project_id, stored_settings)
     end
     
-    # Now we need to reate the new re_attachments table
-    create_table :re_attachments do |t|
-      
-    end
   end
 
   def self.down
