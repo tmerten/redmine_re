@@ -1,6 +1,10 @@
 <% configured_description = ReSetting.get_serialized('re_user_profile', @project.id)['description']%>
-<% if configured_description.nil? %> 
-	You can use user profiles to describe your users.
+<% if configured_description.blank? %> 
+	<p>You can use user profiles to describe your users.</p>
+	<p>Describing the stakeholder with user profiles is are very
+        important because all requirements come from people. Thus you should
+        discover and document all stakeholder which are involved in your project.'
+        <!--#  Taken from: [Alexander 2009, S 28]--></p>
 <% else %> 
 	<%= textilizable(configured_description, :only_path => false) %> 
 <% end %> 

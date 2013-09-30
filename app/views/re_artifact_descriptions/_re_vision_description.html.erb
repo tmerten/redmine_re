@@ -1,6 +1,10 @@
 <% configured_description = ReSetting.get_serialized('re_vision', @project.id)['description']%>
-<% if configured_description.nil? %> 
-	A vision statement for your project. Describe ideas in Wiki style syntax with this artifact.
+<% if configured_description.blank? %> 
+	<p>A vision statement for your project. Describe ideas in Wiki style syntax with this artifact.</p>
+	<p>You should use vision statement to describe the basic purpose
+        of your project. A vision should be clear and simple so that everbody is
+        able to understand the basic purpose the project.
+          <!--#  Taken from: [Alexander 2009, S 53]--></p>
 <% else %> 
 	<%= textilizable(configured_description, :only_path => false) %> 
 <% end %> 

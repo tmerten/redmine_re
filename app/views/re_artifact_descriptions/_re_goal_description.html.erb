@@ -1,7 +1,14 @@
 <% configured_description = ReSetting.get_serialized('re_goal', @project.id)['description']%>
-<% if configured_description.nil? %> 
-	You may want to use goals as high level requirements or to structure your requirements.
-	There are also approaches using goals for the whole RE, especially for understanding the requirements.
+<% if configured_description.blank? %> 
+	<p>You may want to use goals as high level requirements or to structure your requirements.
+	There are also approaches using goals for the whole RE, especially for understanding the requirements.</p>
+	<p>Goals are a good starting point to record the intentions
+        of your stakeholders. Goals do not have to be fully achieveable nor
+        measureable. Goals can be regarded as a first sketch of the requirements.
+        You can use goals to discover conflicts between the intentions of your
+        stakeholders and solve this conflicts. This may helps you to establish an
+        overall agreement between your stakeholders. You should take care about
+        that a goal refines a vision statements. <!-- [Alexander 2009, S. 51] --></p>
 <% else %> 
 	<%= textilizable(configured_description, :only_path => false) %> 
 <% end %>

@@ -27,42 +27,28 @@
        <%= s.html_safe%>
        
       <p>
-        Get started by creating a new requirements artifact. You may select from the artifacts below.<br/>
-        You will find the artifacts you created in the tree to your left. You can drag and drop each artifact
-        in the tree to reorder or restructure your RE artifacts.<br/>
-        The tree represents the structure of your requirements document.
+        Get started by creating a new requirements artifact by doing a right-click 
+        on the project artifact in the left tree. All available artifacts (see below) 
+        can be added by the provided context menu. You will find the artifacts you 
+        created in the tree to your left. You can drag and drop each artifact
+        in the tree to reorder or restructure your RE artifacts. The tree represents 
+        the structure of your requirements document.
       </p>
 
-      <p>
-        Once you left this page you can always add a new artifact by right-click on an element of the tree below
-        the Artifact Summary. A context menu will open up, which provides all operations you need.
-      </p>
   <% else %>
       <%= textilizable(configured_description, :only_path => false) %>
   <% end %>
 
-  <% @re_artifact_settings.each do |currentArtifact, currentArtifactSetting| %>
-      <h3><%= rendered_artifact_type(currentArtifact.underscore) %></h3>
-      <%= render :partial => "re_artifact_descriptions/#{currentArtifact.underscore}_description" %>
-      <ul>
+<fieldset class="collapsible">
+<legend onclick="toggleFieldset(this);"><%= t(:re_artifacts)%></legend>
 
-        <% if User.current.allowed_to?(:edit_requirements, @project) %>
-            <li>
-              <%= link_to(
-                          t(:re_create_new) + rendered_artifact_type(currentArtifact.underscore),
-                          {
-                                  :controller => "re_artifact_properties",
-                                  :action => "new",
-                                  :project_id => @project.identifier,
-                                  :artifact_type => currentArtifact,
-                                  :parent_artifact_id => @project_artifact.id},
-                          {
-                                  :class => "icon " + currentArtifact.underscore
-                          }) %>
-            </li>
-        <% end %>
-      </ul>
+  <% @re_artifact_settings.each do |currentArtifact, currentArtifactSetting| %>
+      <div class="artifact_description" style="margin-bottom: 10px;">
+	      <h3 style="padding: 0px 0px 0px 20px;" class="<%= "icon " + currentArtifact.underscore %>"><%= rendered_artifact_type(currentArtifact.underscore) %></h3>
+	      <%= render :partial => "re_artifact_descriptions/#{currentArtifact.underscore}_description" %>
+      </div>
   <% end %>
+</fieldset>
 
   <h2>Trace your requirements</h2>
 

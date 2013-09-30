@@ -1,5 +1,5 @@
 <% configured_description = ReSetting.get_serialized('re_workarea', @project.id)['description']%>
-<% if configured_description.nil? %> 
+<% if configured_description.blank? %> 
 	Workareas are used to structure a couple of tasks.
 <% else %> 
 	<%= textilizable(configured_description, :only_path => false) %> 

@@ -1,3 +1,16 @@
-If you are unfamiliar with using Lauesens Task-Based aproach for RE - it is very similiar to the famouse Use-Cases by Cockburn - 
-simply <a href="http://www.itu.dk/~slauesen/SorenReqs.html">check his website</a>.<br />
-Most important is that you recognize the demand solution prinziple coming with the two columns of the approach.
+<% configured_description = ReSetting.get_serialized('re_task', @project.id)['description']%>
+<% if configured_description.blank? %> 
+	<p>If you are unfamiliar with using Lauesens Task-Based aproach for RE - it is very similiar to the famouse Use-Cases by Cockburn - 
+	simply <a href="http://www.itu.dk/~slauesen/SorenReqs.html">check his website</a>.<br />
+	Most important is that you recognize the demand solution prinziple coming with the two columns of the approach.</p>
+	
+	<p>Tasks do not distinguish between who does what. Task closure
+	        means that your task has a well defined start and end point. A good
+	        starting point is something that happens in the user''s world, for
+	        instance that a client calls. A good end point is that nothing more can
+	        be done about the case right now - the user deserves a "coffee break".'
+	        <!--#  Taken from: [Lauesen 2011, S. 34]--></p>
+
+<% else %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %> 
