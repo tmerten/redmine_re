@@ -7,6 +7,6 @@
 	<%=default_description.html_safe %>
 <% end %>
 
-<% if configured_description.blank? %> 
+<% unless configured_description.blank? %> 
 	<%= textilizable(configured_description, :only_path => false) %> 
 <% end %>
