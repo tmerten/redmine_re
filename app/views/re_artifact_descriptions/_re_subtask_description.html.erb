@@ -1,7 +1,0 @@
-<% configured_description = ReSetting.get_serialized('re_subtask', @project.id)['description']%>
-<% if configured_description.blank? %> 
-	Though you can create a subtask with this tool it is more convenient if you create a Task and add subtasks from the task view.
-<% else %> 
-	<%= textilizable(configured_description, :only_path => false) %> 
-<% end %> 
-
