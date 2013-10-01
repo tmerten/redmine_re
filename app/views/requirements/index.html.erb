@@ -45,7 +45,7 @@
   <% @re_artifact_settings.each do |currentArtifact, currentArtifactSetting| %>
       <div class="artifact_description" style="margin-bottom: 10px;">
 	      <h3 style="padding: 0px 0px 0px 20px;" class="<%= "icon " + currentArtifact.underscore %>"><%= rendered_artifact_type(currentArtifact.underscore) %></h3>
-	      <%= render :partial => "re_artifact_descriptions/#{currentArtifact.underscore}_description" %>
+	      <%= render :partial => "re_artifact_description", :locals => {:current_artifact_type => currentArtifact.underscore} %>
       </div>
   <% end %>
 </fieldset>

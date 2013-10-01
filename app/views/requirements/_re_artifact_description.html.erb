@@ -1,0 +1,12 @@
+<% configured_description = ReSetting.get_serialized(current_artifact_type, @project.id)['description']%>
+<% hide_default_description = ReSetting.get_serialized(current_artifact_type, @project.id)['hide_default_description']%>
+
+<% default_description = t(current_artifact_type+'_default_description') %>
+
+<% unless hide_default_description == 1 %> 
+	<%=default_description.html_safe %>
+<% end %>
+
+<% if configured_description.blank? %> 
+	<%= textilizable(configured_description, :only_path => false) %> 
+<% end %>
