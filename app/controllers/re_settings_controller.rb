@@ -94,12 +94,19 @@ class ReSettingsController < RedmineReController
     @artifact_type = params[:artifact_type]
     configured_artifact = ReSetting.get_serialized(@artifact_type, @project.id)
     @description = configured_artifact['description']
+    @hide_default_description = configured_artifact['hide_default_description']
     # Needed to use the form for helper and fill the textfield properly
     if request.post?
       configured_artifact['description'] = params[:description] unless params[:description].nil? 
+      if params[:hide_default_description].blank? 
+        configured_artifact['hide_default_description'] = 0
+      else 
+        configured_artifact['hide_default_description'] = 1
+      end 
       ReSetting.set_serialized(@artifact_type, @project.id, configured_artifact)
       flash.now[:notice] = l(:re_description_updated_successfully)
       @description = configured_artifact['description']
+      @hide_default_description = configured_artifact['hide_default_description']
     end
     
   end
