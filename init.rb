@@ -107,7 +107,6 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
   # The Requirements item is added to the project menu after the Activity item
   menu :project_menu, :re, {:controller => 'requirements', :action => 'index'}, :caption => 'Requirements', :after => :activity, :param => :project_id
   activity_provider :re_artifact_properties, :class_name => 'ReArtifactProperties', :default => true
-  #ActiveSupport::Dependencies.load_once_paths.delete(File.expand_path(File.dirname(__FILE__))+'/lib')
 
   #settings :default => {'re_artifact_types' => ''}, :partial => 'settings/redmine_re'
 

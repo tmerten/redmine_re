@@ -80,8 +80,6 @@ class ReUseCase < ActiveRecord::Base
       
     #secondary actors    
     if !self.actors.blank?      
-      #FIXME can't use text from localisation because braces from Actor(s) don't work with bold text
-      #myattributes << "*#{I18n.t(:re_use_case_secondary_actors)}* #{self.actors.first.name}"
       myattributes << "*Secondary Actors* #{self.actors.first.name}"
       self.actors.each do |secondary|        
         myattributes << ", #{secondary.name}" unless secondary == self.actors.first
@@ -124,20 +122,11 @@ class ReUseCase < ActiveRecord::Base
     return myattributes
   end 
 
-
-
-
-
-def self.getAllUserProfiles project_id
-  
-  user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', project_id)    
-end  
+ def self.getAllUserProfiles project_id
+   user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', project_id)    
+ end  
   
     
-
-
-  
-  
   private
 
   def update_primary_actor(actor_id, source_id)
@@ -211,7 +200,5 @@ end
       return actors
   end 
  
- 
-  
 
 end

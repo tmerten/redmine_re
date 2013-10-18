@@ -368,13 +368,10 @@ class RedmineReController < ApplicationController
     comma = false
 
     for child in re_artifact_properties.children
-    #logger.debug "####### " + child.artifact_type + " ##### "  + @re_artifact_settings[child.artifact_type].inspect
-    #if child.artifact_type == 'Project' || (@re_artifact_settings[child.artifact_type] && @re_artifact_settings[child.artifact_type]['in_use']) 
       if (depth > 0 || expanded)
           children << create_tree(child, depth)
         end
       end
-    #end
     children
   end
 

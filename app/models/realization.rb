@@ -25,7 +25,6 @@ class Realization < ActiveRecord::Base
     end
     openartifacts
 
-
   end
 
   def self.openartifacts_by_due_date(project)
@@ -41,8 +40,6 @@ class Realization < ActiveRecord::Base
     rescue
     end
   end
-
-
   
   def self.openartifacts_todo(project)
     artifacts = open_artifacts(project)
@@ -61,7 +58,6 @@ class Realization < ActiveRecord::Base
     artifacts
 
   end
-
 
   def self.artifacts_without_issues
      ReArtifactProperties.find(:all, :conditions => 'id not in (select distinct re_artifact_properties_id from realizations)')
@@ -88,7 +84,5 @@ class Realization < ActiveRecord::Base
     end
     progress/artifact.issues.count
   end
-
-
 
 end

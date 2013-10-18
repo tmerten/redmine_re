@@ -109,8 +109,6 @@ class ReArtifactPropertiesController < RedmineReController
       redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_created)
     else
       logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
-      #@secondary_user_profiles = []
-      #@user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
       initialize_tree_data
       render :new
     end
@@ -129,21 +127,6 @@ class ReArtifactPropertiesController < RedmineReController
      @lighter_artifact_color = calculate_lighter_color(@artifact_color)
 
      @issues = @re_artifact_properties.issues
-     
-     #load all related secondary actors
-     #@secondary_user_profiles = []
-     #@all_artifact_relations = ReArtifactRelationship.find_all_by_source_id_and_relation_type(@re_artifact_properties.id, ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac])
-
-     #@user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
-     #@current_primary_user = ReArtifactRelationship.where(:source_id => params[:id], :relation_type => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).first
-
-     #unless @all_artifact_relations.blank?
-     #  @all_artifact_relations.each do |relation|
-     #    tmp = {:relation => relation, :properties => ReArtifactProperties.find_by_id_and_artifact_type(relation.sink_id, 'ReUserProfile')}
-     #    logger.debug(relation.to_yaml)
-     #    @secondary_user_profiles << tmp unless tmp.blank?
-     #  end
-     #end
      
      # Remove Comment (Initiated via GET)
      if User.current.allowed_to?(:administrate_requirements, @project)
@@ -267,7 +250,6 @@ class ReArtifactPropertiesController < RedmineReController
         Mailer.artifact_edit(@re_artifact_properties, comment).deliver
       end
       
-      #flash[:notice] = :re_artifact_properties_updated
       redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_updated)
     else
       render :action => 'edit'
@@ -470,12 +452,6 @@ class ReArtifactPropertiesController < RedmineReController
     list << '</ul>'
     render :text => list
   end
-
-#  def tooltip_visualization
-#    @re_artifact_properties = ReArtifactProperties.find(params[:artefakt_id])#
-#    @artifact_name=@re_artifact_properties.name
-#    @re_artifact_properties = ReArtifactProperties.find(params[:project_id])
-# end
   
   private
 

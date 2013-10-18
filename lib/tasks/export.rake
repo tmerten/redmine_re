@@ -7,21 +7,6 @@ namespace :export do
     Project.order(:id).all.each do |project|
       puts "Project.create(#{project.serializable_hash.delete_if {|key, value| ['lft','rgt','status','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
     end
-    
-    #Setting.order(:id).all.each do |setting|
-    #  puts "Setting.create(#{setting.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
-    #end
-    
-    #Role.order(:id).all.each do |role|
-    #  puts "r=Role.create(#{role.serializable_hash.delete_if {|key, value| ['builtin','created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"
-    #  if role.name=="Non member"
-    #    puts "r.buildin=1"
-    #    puts "r.save"
-    #  elsif role.name=="Anonymous"
-    #    puts "r.buildin=2"
-    #    puts "r.save"
-    #  end
-    #end
 
     EnabledModule.order(:id).all.each do |em|
       puts "EnabledModule.create(#{em.serializable_hash.delete_if {|key, value| ['created_on','updated_on','created_at','updated_at','id'].include?(key)}.to_s.gsub(/[{}]/,'')})"

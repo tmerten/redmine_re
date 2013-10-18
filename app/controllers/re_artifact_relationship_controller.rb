@@ -202,7 +202,6 @@ class ReArtifactRelationshipController < RedmineReController
     end
     if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
       if(! @issues.include? issue_id)
-     #   @current_deep = @current_deep +1
         @issues << issue_id
     
         adjacent_node = {}
@@ -223,7 +222,6 @@ class ReArtifactRelationshipController < RedmineReController
           if((! artifacts.include? new_artifact.re_artifact_properties_id.to_s) && (! @found_artifakts.include? new_artifact.re_artifact_properties_id))
             find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, new_artifact.re_artifact_properties_id.to_s))
           end
-        #  @current_deep = @current_deep - 1
         end
       end
     end
@@ -355,7 +353,6 @@ class ReArtifactRelationshipController < RedmineReController
       @current_deep = @min_dis_artifact_arr[artifact.id]
     end
     if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
-    #  @current_deep = @current_deep.to_i + 1
       if ( ! @done_artifakts_id.include? artifact.id.to_s)
           ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
             next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
@@ -569,7 +566,6 @@ class ReArtifactRelationshipController < RedmineReController
       
     end
        
- #   @current_deep = @current_deep.to_i - 1
   end
     json
   end 
@@ -584,7 +580,6 @@ class ReArtifactRelationshipController < RedmineReController
     end
   
     if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
-     # @current_deep = @current_deep.to_i + 1
       adjacencies = []
       master_build = {}
       rootnode = {}
@@ -759,7 +754,6 @@ class ReArtifactRelationshipController < RedmineReController
         end
       end
       
- #   @current_deep = @current_deep.to_i - 1 
     end
    
     json
