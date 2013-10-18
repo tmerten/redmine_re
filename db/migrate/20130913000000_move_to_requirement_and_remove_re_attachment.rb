@@ -31,14 +31,17 @@ class MoveToRequirementAndRemoveReAttachment < ActiveRecord::Migration
     unless attachment_setting.nil?
       attachment_setting.destroy
     end
-    
+
     # Remove Setting from array
-    ReSetting.find_by_name("artifact_order").each do |artifact_order_setting|
-      stored_settings = ReSetting.get_serialized("artifact_order", artifact_order_setting.project_id)
-      stored_settings.delete(:ReAttachments)
-      ReSetting.set_serialized("artifact_order", artifact_order_setting.project_id, stored_settings)
+    artifact_order = ReSetting.find_by_name("artifact_order")
+    unless artifact_order.nil? 
+      artifact_order.each do |artifact_order_setting|
+        stored_settings = ReSetting.get_serialized("artifact_order", artifact_order_setting.project_id)
+        stored_settings.delete(:ReAttachments)
+        ReSetting.set_serialized("artifact_order", artifact_order_setting.project_id, stored_settings)
+      end
     end
-    
+
   end
 
   def self.down
