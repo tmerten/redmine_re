@@ -114,8 +114,6 @@ class ReArtifactProperties < ActiveRecord::Base
            :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia]],
            :dependent => :destroy
 
-  #if defined?(ConcreteDiagram) == 'constant' 
-   
   has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram",  :source => "sink"
      
     
