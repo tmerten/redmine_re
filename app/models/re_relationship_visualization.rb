@@ -7,13 +7,6 @@ class ReRelationshipVisualization < ActiveRecord::Base
     insert_re_relationship_visualization.visualization_typ = visualization_type
     insert_re_relationship_visualization.artefakt_id = visualization_artefakt_id
     insert_re_relationship_visualization.user_id = User.current.id
-    
-    relation_settings = ReSetting.get_serialized("re_attachment", projekt_id)
-    if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )
-      insert_re_relationship_visualization.re_attachment = 1
-    else
-       insert_re_relationship_visualization.re_attachment = 0
-    end
 
     relation_settings = ReSetting.get_serialized("re_goal", projekt_id)
     if(relation_settings['show_in_visualization'] == true || relation_settings['show_in_visualization'] == "yes" )

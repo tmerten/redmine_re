@@ -753,7 +753,7 @@ class ReArtifactRelationshipController < RedmineReController
           json =  json_return
         end
       end
-      
+      y
     end
    
     json
