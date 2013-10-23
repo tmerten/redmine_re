@@ -36,7 +36,7 @@ Redmine::Plugin.register :redmine_re do
   author 'Bonn-Rhine-Sieg University of Applied Sciences (thorsten.merten@h-brs.de)'
   description 'This is a plugin to handle requirements engineering artifacts within redmine. The plugin has been developed
 within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Applied Sciences (http://h-brs.de)'
-  version '0.0.1'
+  version 'development version'
   url 'http://redmine.korem.de'
   author_url 'http://korem.de'
 
