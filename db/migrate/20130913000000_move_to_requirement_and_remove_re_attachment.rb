@@ -33,7 +33,7 @@ class MoveToRequirementAndRemoveReAttachment < ActiveRecord::Migration
     end
 
     # Remove Setting from array
-    artifact_order = ReSetting.find_by_name("artifact_order")
+    artifact_order = ReSetting.find_all_by_name("artifact_order")
     unless artifact_order.nil? 
       artifact_order.each do |artifact_order_setting|
         stored_settings = ReSetting.get_serialized("artifact_order", artifact_order_setting.project_id)
