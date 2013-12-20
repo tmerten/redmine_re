@@ -1,12 +1,12 @@
-<% content_for :header_tags do %>
 <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
 <%= javascript_include_tag 'jquery.blockUI-2.55.js', :plugin => 'redmine_re' %>
 
-  <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
-  <%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
   <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
   <%= stylesheet_link_tag 'suggestible.css', :plugin => "redmine_re", :media => 'all' %>
+
   <%= javascript_include_tag 'query_form', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
   <%= javascript_tag do %>
       (function($) {
           $().ready(function() {
@@ -24,7 +24,6 @@
           });
       })(jQuery);
     <% end %>
-<% end %>
 
 <% if @project.module_enabled?(:requirements) %>
 <% if User.current.allowed_to?(:view_requirements, @project) %>
