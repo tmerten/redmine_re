@@ -1,6 +1,6 @@
 = Redmine RE
 
-The Redmine RE plugin ([http://redmine-re.korem.de]) is a requirements engineering and requirements management plugin for the Redmine ([http://redmine.org]) project management software. The Redmine RE plugin's goal is to enable its users to create a requirements specification directly in Redmine. Users can create requirement artifacts view, store, edit and discuss these artifacts directly in Redmine.
+The Redmine RE plugin (http://redmine-re.korem.de) is a requirements engineering and requirements management plugin for the Redmine (http://redmine.org) project management software. The Redmine RE plugin's goal is to enable its users to create a requirements specification directly in Redmine. Users can create requirement artifacts view, store, edit and discuss these artifacts directly in Redmine.
 
 A per project Requirements Tab gives users access to their specification. They can interconnect (trace) requirement artifacts to other artifacts as well as issues. Try the plugin here http://redmine-re.korem.de and discover more features like commenting on requirements or visualizing traces.
 
@@ -8,13 +8,13 @@ Redmine RE is compatible to Redmine Versions 2.3 and higher (maybe some lower on
 
 == Demo
 
-You can find an online demo of Redmine RE here: [http://redmine-re.korem.de:8080].
+You can find an online demo of Redmine RE here: http://redmine-re.korem.de:8080.
 * User: re-admin
 * Password: redmine-re
 
 == Installation
 
-You can find information about how to install the Redmine RE here: [http://redmine-re.korem.de/projects/redmine-re/wiki/Installing_Redmine_RE].
+You can find information about how to install the Redmine RE here: http://redmine-re.korem.de/projects/redmine-re/wiki/Installing_Redmine_RE.
 
 == Acknowledgments
 
