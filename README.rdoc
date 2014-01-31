@@ -6,9 +6,15 @@ A per project Requirements Tab gives users access to their specification. They c
 
 Redmine RE is compatible to Redmine Versions 2.3 and higher (maybe some lower ones down to 2.0, but we don't know for sure).
 
+== Demo
+
+Here you can find an online demo of [Redmine RE](http://redmine-re.korem.de:8080)
+* User: re-admin
+* Password: redmine-re
+
 == Installation
 
-TODO, link to the Redmine RE Project page when Github is set up.
+Here you can find information about [how to install the Redmine RE(http://redmine-re.korem.de/projects/redmine-re/wiki/Installing_Redmine_RE)
 
 == Acknowledgments
 
