@@ -45,21 +45,6 @@
         </div>
     </fieldset>
 
-    <h2><%= t(:re_xport_format_configuration) %></h2>
-    <% if @export_formats.blank? %>    	    	
-   		<%= t(:re_pandoc_error_first) %>
-   		<%= link_to("pandoc", "http://johnmacfarlane.net/pandoc/", :target => "_blank") %>
-   		<%= t(:re_pandoc_error_second) %>   		
-   	<% else %>
-   		<% cnt = 0 %>
-   		<% @export_formats.each do |format| %>    	
-			<% sel = (format == @current_export_format) %>
-			<div style="float : left; min-width: 150px;">
-				<%= radio_button_tag 'export_format', format, sel %>
-				<%= "#{format}" %>
-			</div>
-		<% end %>      
-    <% end %>     
     <br style="clear: left;"/>
 
     <h2><%= t(:re_artifact_configuration) %></h2>

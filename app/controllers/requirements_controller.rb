@@ -131,56 +131,6 @@ class RequirementsController < RedmineReController
       redirect_to @re_artifact_properties                   
     end
   end
-  
-  def export_requirements     
-    @artifact = ReArtifactProperties.find_by_id(params[:id])
-   
-    #use configured filetype for output    
-    filetype = ReSetting.get_plain("export_format", @project.id)
-    
-    if !filetype.blank? || filetype == "disabled"     
-   
-      textilestring = ""
-      textilestring << "h1. #{@artifact.name} \n \n"
-      textilestring << "_#{@artifact.artifact_type}_ \n \n" 
-      textilestring << "h3. #{t(:re_artifact_description) } \n \n#{@artifact.description} \n \n" unless @artifact.description.blank?
-    
-      #write artifact type specific attributes to input string
-      if @artifact.artifact.respond_to?(:specific_attributes_as_string)
-        textilestring << @artifact.artifact.specific_attributes_as_string
-      end
-    
-      #create Tempfile with textile string for input
-      file = Tempfile.new(['artifact', '.textile'])    
-      file.write("#{textilestring}" )
-      file.close;
-    
-      #create output filename 
-      outputfilename = "tmp/artifact.#{filetype}"    
-
-      #docx requiers a real outputfile to be written
-      #other formats like html can return a string directly           
-      if filetype == "html" || filetype == "html5"
-        output = `pandoc -s -S #{file.path} -f textile -t #{filetype}`       
-        #show html export in webbrowser      
-        render :text => output
-      else 
-        output = `pandoc -s -S #{file.path} -f textile -t #{filetype} -o #{outputfilename}`               
-        begin
-          send_file outputfilename #use this if output is a file
-        rescue        
-         flash[:error] = t(:re_export_error)
-         redirect_to @artifact
-        end        
-      end
-    
-    else
-      #if export is disabled or no format is set
-      flash[:error] = t(:re_export_error)
-      redirect_to @artifact
-    end
-       
-  end
 
 #######
 private

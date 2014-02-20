@@ -81,8 +81,6 @@ class ReSettingsController < RedmineReController
         @re_visualization_setting["issue"] = false
     end
   
-    @export_formats = get_available_export_formats
-    @current_export_format = ReSetting.get_plain("export_format", @project.id)   
   end
 
   def self.for(artifact_type, project_id)
@@ -201,36 +199,11 @@ private
     @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)      
     ReSetting.set_serialized("unconfirmed", @project.id, false)
       
-      
-    if params["export_format"].blank?
-      ReSetting.set_plain("export_format", @project.id, "disabled")
-    else
-      ReSetting.set_plain("export_format", @project.id, params["export_format"])
-    end
     
     flash[:notice] = t(:re_configs_saved)
     
     redirect_to :controller => "requirements", :action => "index", :project_id => @project.id  
 
-  end
-
-  def get_available_export_formats 
-    #Parse available output formats from pandoc helpfile    
-    formats = `pandoc --help`
-    outputformatarray = []
-    if formats.nil?
-      flash[:error] = t(:re_export_error)
-    else
-      start = formats.index("Output formats: ")      
-      start = start + 16 unless start.nil? 
-      ende =  formats.index("Options:")
-      ende = ende - 2 unless ende.nil?        
-      outputformats = ""
-      outputformats = formats[start..ende] unless ende.nil?     
-      outputformats = outputformats.squish    
-      outputformatarray = outputformats.split(', ')         
-    end
-    return outputformatarray
   end
   
 end
