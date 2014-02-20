@@ -138,10 +138,10 @@ class ReArtifactProperties < ActiveRecord::Base
 
   acts_as_event(
       :title => Proc.new { |o|
-        "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at) ? l(:re_was_created) : l(:re_was_updated) }."
+        "#{l(:re_artifact)}: #{o.name}"
       },
       :description => Proc.new { |o|
-        "#{l(:re_artifact)} \"#{o.name}\" #{ (o.updated_at == o.created_at) ? l(:re_was_created) : l(:re_was_updated) }."
+        "#{o.description}"
       },
       :datetime => :updated_at,
       :url => Proc.new { |o|

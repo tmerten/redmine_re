@@ -111,7 +111,8 @@ class RedmineReController < ApplicationController
        @artifact.attributes = params[:artifact]
       # attributes that cannot be set by the user
       @artifact.project_id = @project.id
-      @artifact.updated_at = Time.now
+      @artifact.created_at = Time.now
+      @artifact.updated_at = @artifact.created_at
       @artifact.updated_by = User.current.id
       @artifact.created_by = User.current.id if @artifact.new_record?
 
