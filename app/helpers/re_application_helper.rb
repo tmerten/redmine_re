@@ -130,7 +130,7 @@ module ReApplicationHelper
     f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => "icon icon-del")
   end
 
-  # renders a link to javascrip to add an empty object into a nested forms 
+  # renders a link to javascript to add an empty object into a nested forms 
   def link_to_add_fields(name, f, association, templatedir = "")
     new_object = f.object.class.reflect_on_association(association).klass.new
     fields = f.fields_for("#{association}_attributes", new_object, :index => "new_#{association}") do |builder|
@@ -145,7 +145,7 @@ module ReApplicationHelper
     link_to_function(name, "add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")")
   end
 
-  # renders a link to javascrip to add an empty object into a nested forms 
+  # renders a link to javascript to add an empty object into a nested forms 
   def get_escaped_setp_html(f, step_type)
     new_object = ReUseCaseStep.new()
     new_object = f.object.class.reflect_on_association(:re_use_case_steps).klass.new(:step_type => step_type)

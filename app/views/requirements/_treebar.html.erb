@@ -57,7 +57,7 @@
 	        "action" : function (node) {
 						var reference_id = node[0].id.replace('node_','');
 	          var json_data = this.data.json_data.toString();
-			  window.location.pathname  = re_config['base_url'].substr(1) + '/projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/inside_of/' + reference_id;
+			  window.location.pathname  = re_config['base_url'] + 'projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/inside_of/' + reference_id;
 	        },
 	        "icon" : "<%= currentArtifact %>"
 	       },
@@ -76,7 +76,7 @@
 	        "action" : function (node) {
 	          var reference_id = node[0].id.replace('node_','');
 	          var json_data = this.data.json_data.toString();
-			  window.location.pathname  = re_config['base_url'].substr(1) + '/projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/below_of/' + reference_id;
+			  window.location.pathname  = re_config['base_url'] + 'projects/<%= @project.identifier %>/requirements/artifact/new/<%= currentArtifact %>/below_of/' + reference_id;
 	        },
 	        "icon" : "<%= currentArtifact %>"
 	       },
@@ -111,7 +111,7 @@
 	       	 	"label" : "<%= t(:re_visualization_show_sunburst) %>",
 	        	"action" : function (node) {
 		            var id = node[0].id.replace('node_','');
-		            var link = '/projects/<%= @project.id %>/requirements/relations/visualization';
+		            var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/relations/visualization';
 		            window.location.href = link+'?artefakt_id='+id+'&visualization_type=sunburst';
 		  		},
 	        	"icon" : "new"
@@ -120,7 +120,7 @@
 		   	 	"label" : "<%= t(:re_visualization_show_netmap) %>",
 		   	 	"action" : function (node) {
 		            var id = node[0].id.replace('node_','');
-		            var link = '/projects/<%= @project.id %>/requirements/relations/visualization';
+		            var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/relations/visualization';
 		            window.location.href = link+'?artefakt_id='+id+'&visualization_type=netmap';
 		   	 	},
 		   	 	"icon" : "new"
@@ -129,7 +129,7 @@
  		   	 	"label" : "<%= t(:re_visualization_show_graph) %>",
  		   	 	"action" : function (node) {
  		            var id = node[0].id.replace('node_','');
- 		            var link = '/projects/<%= @project.id %>/requirements/relations/visualization';
+ 		            var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/relations/visualization';
  		            window.location.href = link+'?artefakt_id='+id+'&visualization_type=graph';
  		   	 	},
  		   	 	"icon" : "new"

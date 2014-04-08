@@ -18,7 +18,7 @@
           </td>
           <td>
 			  <% @artifact_filter = ReRelationshipVisualization.new %> 
-			  <% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],artifact_type.to_s)%>
+			  <% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],artifact_type.to_s)%>
 			  <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, @filter, :id => "artifact_filter_"+artifact_type.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
 		  </td>
         </tr>
@@ -36,7 +36,7 @@
           <td>
 			  <% @artifact_filter = ReRelationshipVisualization.new %> 
 			  <% artifact_type = "issue"%>
-			  <% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],artifact_type)%>
+			  <% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],artifact_type)%>
 
 			  <%= check_box_tag 'artifact_filter[]', artifact_type.to_s, @filter, :id => "artifact_filter_"+artifact_type.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
 	      </td>
@@ -57,7 +57,7 @@
         </td>
         <td>
 			<% @artifact_filter = ReRelationshipVisualization.new %>
-			<% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],value)%>
+			<% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],value)%>
 		
 		<% if(session[:visualization_type]!= "sunburst")%>	
           <%= check_box_tag 'relation_filter[]', key.to_s,  @filter, :id => "relation_filter_"+key.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
@@ -78,7 +78,7 @@
         </td>
         <td>
 			<% @artifact_filter = ReRelationshipVisualization.new %>
-			<% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],session[:visualization_artefakt_id],value)%>
+			<% @filter = @artifact_filter.set_filter_for_visualization(@project.id,session[:visualization_type],value)%>
 			<% if(session[:visualization_type]!= "sunburst")%>	
 			<%= check_box_tag 'relation_filter[]', key.to_s,  @filter, :id => "relation_filter_"+key.to_s, :onclick=>  "clear_canvas(); $('#visualization').submit();" %>
   		  <% else %>
@@ -94,7 +94,7 @@
 	  </tr>
 	  <tr>
 		  <td colspan="3">
-			  <%= number_field_tag 'deep', @artifact_filter.get_max_deep(@project.id,session[:visualization_type],session[:visualization_artefakt_id])%>
+			  <%= number_field_tag 'deep', @artifact_filter.get_max_deep(@project.id,session[:visualization_type])%>
 		  </td>
 	  </tr>
 	  <tr>

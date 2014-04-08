@@ -1,11 +1,10 @@
 class ReRelationshipVisualization < ActiveRecord::Base
  
-  def filter_table_add_row(projekt_id, visualization_type, visualization_artefakt_id)
+  def filter_table_add_row(projekt_id, visualization_type)
     insert_re_relationship_visualization = ReRelationshipVisualization.new
     
     insert_re_relationship_visualization.project_id = projekt_id
     insert_re_relationship_visualization.visualization_typ = visualization_type
-    insert_re_relationship_visualization.artefakt_id = visualization_artefakt_id
     insert_re_relationship_visualization.user_id = User.current.id
 
     relation_settings = ReSetting.get_serialized("re_goal", projekt_id)
@@ -175,10 +174,10 @@ class ReRelationshipVisualization < ActiveRecord::Base
     insert_re_relationship_visualization.save
   end
  
-  def relationship_save(project_id,artifact_array,visualization_type,visualization_artefakt_id)
+  def relationship_save(project_id,artifact_array,visualization_type)
     @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
-        "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
-        {:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}
+        "project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",
+        {:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}
       ).first
   
     @update_re_relationship_visualization=ReRelationshipVisualization.find_by_id(@check_if_filter_are_save_befor.id)
@@ -266,10 +265,10 @@ class ReRelationshipVisualization < ActiveRecord::Base
     @update_re_relationship_visualization.save
   end
   
-  def artifact_save(project_id,artifact_array,visualization_type,visualization_artefakt_id)
+  def artifact_save(project_id,artifact_array,visualization_type)
     @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
-        "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
-        {:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}
+        "project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",
+        {:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}
       ).first
   
     @update_re_relationship_visualization=ReRelationshipVisualization.find_by_id(@check_if_filter_are_save_befor.id)
@@ -382,8 +381,8 @@ class ReRelationshipVisualization < ActiveRecord::Base
     @update_re_relationship_visualization.save
   end
   
-  def get_artifact_filter_as_stringarray(project_id,visualization_type,visualization_artefakt_id)
-    @saved_filter = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}).first
+  def get_artifact_filter_as_stringarray(project_id,visualization_type)
+    @saved_filter = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}).first
       @choosen_artifacts = []
       
       if @saved_filter.re_attachment == 1 
@@ -428,8 +427,8 @@ class ReRelationshipVisualization < ActiveRecord::Base
     
   end
    
-  def get_relation_filter_as_stringarray(project_id,visualization_type,visualization_artefakt_id)
-    @saved_filter = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}).first
+  def get_relation_filter_as_stringarray(project_id,visualization_type)
+    @saved_filter = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}).first
     
     @choosen_relation = []
    
@@ -465,9 +464,9 @@ class ReRelationshipVisualization < ActiveRecord::Base
     return @choosen_relation
   end
   
-  def set_filter_for_visualization(project_id,visualization_type,visualization_artefakt_id,artefakt_name)
+  def set_filter_for_visualization(project_id,visualization_type,artefakt_name)
     
-    @get_row_re_relationship_visualization = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}).first
+    @get_row_re_relationship_visualization = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}).first
 
       if artefakt_name == "re_attachment" && @get_row_re_relationship_visualization.re_attachment == 1
          return true 
@@ -541,23 +540,23 @@ class ReRelationshipVisualization < ActiveRecord::Base
       return false 
   end
   
-  def get_issue_filter(project_id, visualization_type, visualization_artefakt_id)
-    saved_filter = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}).first
+  def get_issue_filter(project_id, visualization_type)
+    saved_filter = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}).first
     if saved_filter.issue == 1
       return true
     end
     return false
   end
   
-  def get_max_deep(project_id, visualization_type, visualization_artefakt_id)
-    saved = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}).first
+  def get_max_deep(project_id, visualization_type)
+    saved = ReRelationshipVisualization.where("project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",{:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}).first
     return saved.max_deep
   end
   
-  def save_max_deep(project_id,max_deep,visualization_type,visualization_artefakt_id)
+  def save_max_deep(project_id,max_deep,visualization_type)
     @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
-        "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
-        {:project_id => project_id, :visualization_type => visualization_type, :artifact_id => visualization_artefakt_id, :user_id =>User.current.id}
+        "project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",
+        {:project_id => project_id, :visualization_type => visualization_type, :user_id =>User.current.id}
       ).first
   
     @update_re_relationship_visualization=ReRelationshipVisualization.find_by_id(@check_if_filter_are_save_befor.id)

@@ -70,25 +70,24 @@ class ReArtifactRelationshipController < RedmineReController
 
   def visualization
     session[:visualization_type]=params[:visualization_type]
-    session[:visualization_artefakt_id]=params[:artefakt_id]
     @re_artifact_properties = ReArtifactProperties.find(params[:artefakt_id])
     @artifact_name=@re_artifact_properties.name
     
     
     @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
-      "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
-      {:project_id => @project.id, :visualization_type => session[:visualization_type], :artifact_id => session[:visualization_artefakt_id], :user_id => User.current.id }
+      "project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",
+      {:project_id => @project.id, :visualization_type => session[:visualization_type], :user_id => User.current.id }
     ).first
     if @check_if_filter_are_save_befor == nil
       @create_visualization_save_filter = ReRelationshipVisualization.new
-      @create_visualization_save_filter.filter_table_add_row(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
+      @create_visualization_save_filter.filter_table_add_row(@project.id, session[:visualization_type])
     end
     initialize_tree_data
   end
 
   def build_json_for_visualization(artifacts, relations)
     if (@visualization_type != "graph_issue" )
-      @re_artifact_properties = ReArtifactProperties.find_by_id(session[:visualization_artefakt_id])
+      @re_artifact_properties = ReArtifactProperties.find_by_id(params[:artefakt_id])
     end
     json = []
 
@@ -1048,10 +1047,10 @@ class ReArtifactRelationshipController < RedmineReController
     
     @visualization_filter = ReRelationshipVisualization.new
     if (params[:relation_filter].present?)
-      @visualization_filter.relationship_save(@project.id, params[:relation_filter], session[:visualization_type], session[:visualization_artefakt_id])
+      @visualization_filter.relationship_save(@project.id, params[:relation_filter], session[:visualization_type])
     end
     if (params[:artifact_filter].present?)
-      @visualization_filter.artifact_save(@project.id, params[:artifact_filter], session[:visualization_type], session[:visualization_artefakt_id])
+      @visualization_filter.artifact_save(@project.id, params[:artifact_filter], session[:visualization_type])
     end
     if(params[:deep].present?)
       deep=params[:deep].to_i.to_s
@@ -1063,7 +1062,7 @@ class ReArtifactRelationshipController < RedmineReController
           deep = 0
         end
       end
-      @visualization_filter.save_max_deep(@project.id, deep, session[:visualization_type], session[:visualization_artefakt_id])
+      @visualization_filter.save_max_deep(@project.id, deep, session[:visualization_type])
     end
    
    if(params[:data].present?)
@@ -1092,18 +1091,18 @@ class ReArtifactRelationshipController < RedmineReController
        @max_deep = ReSetting.get_serialized("visualization_deep", @project.id).to_i
    else
        @check_if_filter_are_save_befor = ReRelationshipVisualization.where(
-       "project_id = :project_id AND visualization_typ = :visualization_type AND artefakt_id = :artifact_id AND user_id = :user_id",
-        {:project_id => @project.id, :visualization_type => session[:visualization_type], :artifact_id => session[:visualization_artefakt_id], :user_id => User.current.id }
+       "project_id = :project_id AND visualization_typ = :visualization_type AND user_id = :user_id",
+        {:project_id => @project.id, :visualization_type => session[:visualization_type], :user_id => User.current.id }
         ).first
        if @check_if_filter_are_save_befor == nil
          @create_visualization_save_filter = ReRelationshipVisualization.new
-         @create_visualization_save_filter.filter_table_add_row(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
+         @create_visualization_save_filter.filter_table_add_row(@project.id, session[:visualization_type])
        end
     
-       @chosen_artifacts = @visualization_filter.get_artifact_filter_as_stringarray(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
-       @chosen_relations = @visualization_filter.get_relation_filter_as_stringarray(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
-       @chosen_issue = @visualization_filter.get_issue_filter(@project.id, session[:visualization_type], session[:visualization_artefakt_id])
-       @max_deep = @visualization_filter.get_max_deep(@project.id, session[:visualization_type], session[:visualization_artefakt_id]).to_i
+       @chosen_artifacts = @visualization_filter.get_artifact_filter_as_stringarray(@project.id, session[:visualization_type])
+       @chosen_relations = @visualization_filter.get_relation_filter_as_stringarray(@project.id, session[:visualization_type])
+       @chosen_issue = @visualization_filter.get_issue_filter(@project.id, session[:visualization_type])
+       @max_deep = @visualization_filter.get_max_deep(@project.id, session[:visualization_type]).to_i
    end
    if(@visualization_type!= "graph_issue" )
      @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, @chosen_artifacts, :order => "artifact_type, name")
