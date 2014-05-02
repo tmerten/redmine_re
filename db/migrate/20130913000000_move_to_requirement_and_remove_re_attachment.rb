@@ -45,7 +45,8 @@ class MoveToRequirementAndRemoveReAttachment < ActiveRecord::Migration
   end
 
   def self.down
-    raise ActiveRecord::IrreversibleMigration, "There is no down Migration for Attachments. Attachment Artifacts are not recovered!" 
+    # It is not possible to down-migrate if we raise an error. We need to inform the user in an other way, that attachments are not recovered in case of downmigration
+    # raise ActiveRecord::IrreversibleMigration, "There is no down Migration for Attachments. Attachment Artifacts are not recovered!" 
   end
 
 end
