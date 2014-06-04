@@ -1,4 +1,4 @@
-<% if @project.module_enabled?(:requirements) %>
+<% if @project && @project.module_enabled?(:requirements) %>
 
 	  <% unless @issue.nil? %>	  
 	  <table class="attributes">

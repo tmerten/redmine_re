@@ -17,7 +17,7 @@
 
               // Make specific fields suggestible
               $('select.artifacts').suggestible(suggestibleOptions({
-                  suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+                  suggestionsUrl: '<%= @project ? suggest_artifacts_re_queries_path(@project.id) : '' %>',
                   suggestionsLayout: function(helpers) {
                       return new ArtifactsSuggestBoxItems(helpers);
                   },
