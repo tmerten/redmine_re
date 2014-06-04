@@ -10,22 +10,20 @@
   <%= javascript_tag do %>
       (function($) {
           $().ready(function() {
-		     $('#artifacts_filter_input').attr("selected","selected");
-
-
-              // Make specific fields suggestible
-              $('#artifacts_filter_input').suggestible(suggestibleOptions({
-                  suggestionsUrl: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
-                  suggestionsLayout: function(helpers) {
-                      return new ArtifactsSuggestBoxItems(helpers);
-                  },
-                  bitsUrl: '<%= artifacts_bits_re_queries_path(@project.id) %>'
-              }));
+    		      $('#artifacts_filter_input').attr("selected","selected");
+                  // Make specific fields suggestible
+                  $('#artifacts_filter_input').suggestible(suggestibleOptions({
+                      suggestionsUrl: '<%= @project ? suggest_artifacts_re_queries_path(@project.id) : '' %>',
+                      suggestionsLayout: function(helpers) {
+                          return new ArtifactsSuggestBoxItems(helpers);
+                      },
+                      bitsUrl: '<%= @project ? artifacts_bits_re_queries_path(@project.id) : '' %>'
+                  }));
           });
       })(jQuery);
     <% end %>
 
-<% if @project.module_enabled?(:requirements) %>
+<% if @project && @project.module_enabled?(:requirements) %>
 <% if User.current.allowed_to?(:view_requirements, @project) %>
 
 	<p style="margin: 3px 0 3px 60px;">

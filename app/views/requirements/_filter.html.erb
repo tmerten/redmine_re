@@ -17,7 +17,7 @@
             $('#sidebar_filter_input').suggestible({
                 ajax: {
                     suggestions: {
-                        url: '<%= suggest_artifacts_re_queries_path(@project.id) %>',
+                        url: '<%= @project ? suggest_artifacts_re_queries_path(@project.id) : '' %>',
                         dataType: 'json',
                         data: function(value, helpers) {
                             return { query: value };
