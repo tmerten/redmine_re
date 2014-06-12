@@ -1,4 +1,4 @@
-<% if @project.module_enabled?(:requirements) %>
+<% if @project && @project.module_enabled?(:requirements) %>
 	<% unless @issue.nil? or @issue.re_artifact_properties.length == 0 %>
 	  <li class="folder">
 	    <a href="#" class="submenu" onclick="return false;"><%= "#{l(:re_linked_artifacts)} (#{@issue.re_artifact_properties.length})" %></a>
