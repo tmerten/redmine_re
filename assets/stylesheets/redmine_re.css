@@ -1182,3 +1182,12 @@ div.query.details div.description {
     padding: 5px;
     width: 300px;
 }
+.feature_file {
+  font-family: Consolas;
+  text-decoration:none;
+  color:#000;
+  background:#fff;
+  border: 1px solid #000;
+  display:block;
+  padding:1em;
+}

@@ -211,7 +211,7 @@ class ReArtifactProperties < ActiveRecord::Base
   validates :updated_by, :presence => true
   validates :parent, :presence => true, :unless => Proc.new { |a| a.artifact_type == "Project" }
   validates :artifact_type, :presence => true, :inclusion => {
-      :in => %w(ReGoal ReSection ReVision ReTask ReSubtask ReVision ReWorkarea ReUserProfile ReSection ReRequirement ReScenario ReProcessword ReRational ReUseCase ReRationale Project)}
+      :in => %w(ReGoal ReSection ReVision ReTask ReSubtask ReVision ReWorkarea ReUserProfile ReSection ReRequirement ReScenario ReProcessword ReRational ReUseCase ReRationale ReFeature Project)}
 
   #TODO
   #validates_associated :parent_relation

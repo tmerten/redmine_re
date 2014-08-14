@@ -65,9 +65,16 @@
         <hr/>
         <p><strong><%= t(:field_description) %></strong></p>
 
-        <div class="wiki">
-          <%= textilizable @re_artifact_properties, :description %>
-        </div>
+		<% if @re_artifact_properties.artifact_type == 'ReFeature' %>
+			<div class="feature_file">
+	          <%= textilizable @re_artifact_properties, :description %>
+	        </div>
+		<% else %>
+	        <div class="wiki">
+	          <%= textilizable @re_artifact_properties, :description %>
+	        </div>
+        <% end %>
+        
     <% end %>
 
     <% if File.exists?(

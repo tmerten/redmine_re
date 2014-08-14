@@ -201,7 +201,16 @@ en:
   re_create_re_scenario: 'Create Scenario'
   re_scenario_priority: 'Priority'
   re_scenario_saved: 'Scenario saved successfully'
-
+  
+  
+  #re_feature
+  re_feature: '(BDD) Feature'
+  re_new_re_feature: 'Feature'
+  re_create_re_feature: 'Create Feature'
+  re_feature_priority: 'Priority'
+  re_feature_saved: 'Feature saved successfully'
+  ReFeature: 'Feature'
+  
   # re_section
   re_new_re_section: 'Section'
   re_create_re_section: 'Create a new Section'
