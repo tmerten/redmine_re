@@ -117,7 +117,7 @@ class ReArtifactPropertiesController < RedmineReController
   def show
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
-    
+     
     session[:visualization_type]=params[:visualization_type]
     
     if @artifact_type == "Project" 

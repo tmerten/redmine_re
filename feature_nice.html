@@ -1,11 +1,6 @@
-
-
-        
-
-<html>
+<!doctype html>
 <head>
-<meta charset="utf-8" />
-<title>Sticky notes using CSS3 and Google Fonts (Step 1)</title>
+<title>Feature File Editor Template</title>
 <style type="text/css">
 .feature_file {
   font-family: Consolas;
@@ -15,20 +10,187 @@
   border: 1px solid #000;
   display:block;
   padding:1em;
+  font-size: 12px;
 }
+
+input {
+	height: 20px;
+	border: none;
+	border-bottom: 1px dotted #000;
+	width: 250px;
+	font-family: Consolas;
+	font-style: italic;
+	color: #808080;
+}
+
+select {
+	height: 20px;
+	font-family: Consolas;
+	border: none;
+	margin-left: 1.2em;
+	font-weight: bold;
+}
+
+p {
+	margin-top: 0em;
+	margin-bottom: 0em;
+}
+
+.feature_outline {
+	margin-left: 1.8em;	
+	margin-top: 0em;
+}
+
+.feature_input {
+	width: 290px;
+}
+
+.scenario_input {
+	width: 370px;
+}
+
+.scenario {
+	margin-left: 1.8em;
+}
+
+.scenario_box {
+	margin-left: 1.8em;
+}
+
+.keyword {
+	color: #007020;
+}
+
+input:focus {
+	font-style: normal;
+	color: #000;
+}
+
 </style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ 
+<script type="text/javascript">
+
+	
+	
+</script>
+
 </head>
 <body>
-  
-<p><strong>Description</strong></p>
 
-        <div class="wiki">
-        	<div class="feature_file">
-          <p><strong>Feature:</strong> Studies should be comparable<br />  To increase productivity when preparing TeVA results <br />  As a user<br />  I want to be able to compare different study versions.
+<button onclick="clickButton(event)">Click Me</button>  
 
-	<p><strong>Scenario:</strong> Any user wants to compare two studies<br />     <strong>Given</strong> the user has created at least two different studies with one or more versions<br />     <strong>When</strong> the user is logged into the application and opens the Manage My Studies Module<br />     *Then * it should be possible to select two study versions and compare them in one chart</p>
-</p>
-        </div>
-        </div>
+<div class="feature_file">
+		<strong class="keyword">Feature:</strong> 
+		<input id="feature_name" type="text" value="Feature Description" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+	<br/>
+	<input class="feature_outline feature_input" type="text" value="To achieve..." data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> 
+	<p class="feature_outline"><input class="feature_input" type="text" value="As a user..." data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/></p> 
+	<p class="feature_outline"><input class="feature_input" type="text" value="I want to do..." data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/></p> 
+	<p class="feature_outline"><input class="feature_input" type="text" value="And to do..." data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/></p>
+	<br />
+	
+	
+	
+	<div class="scenario_container">
+	
+	<p class="scenario"><strong class="keyword">Scenario:</strong> <input class="scenario_input" style="width: 385px;" type="text" value="First scenario of new feature" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />  
+	
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option>When</option>
+			<option>Then</option>
+			<option>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="First step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+	</p>
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option selected>When</option>
+			<option>Then</option>
+			<option>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="Second step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+	</p>
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option>When</option>
+			<option selected=>Then</option>
+			<option>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="Third step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>   
+	</p>
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option>When</option>
+			<option>Then</option>
+			<option selected>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="Fourth step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>   
+	</p>	
+	
+	</div>
+	<br/>
+	
+	<p class="scenario"><strong class="keyword">Scenario:</strong> <input class="scenario_input" style="width: 385px;" type="text" value="Second scenario of new feature" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />  
+	
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option>When</option>
+			<option>Then</option>
+			<option>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="First step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+	</p>
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option selected>When</option>
+			<option>Then</option>
+			<option>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="Second step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+	</p>
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option>When</option>
+			<option selected=>Then</option>
+			<option>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="Third step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>   
+	</p>
+	
+	<p class="scenario_box">
+		<select class="keyword">
+			<option>Given</option>
+			<option>When</option>
+			<option>Then</option>
+			<option selected>And</option>
+		</select>	   
+		
+		<input class="scenario_input" type="text" value="Fourth step of scenario" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>   
+	</p>	
+	   
+</div>
 </body>
 </html>

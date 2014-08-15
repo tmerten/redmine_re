@@ -3,12 +3,12 @@
     <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
 	<%= javascript_include_tag 'jquery.qtip.js', :plugin => 'redmine_re' %>
 	<%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
-
-
+	<%= javascript_include_tag 'bdd.js', :plugin => 'redmine_re' %>
+	
     <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 	<%= stylesheet_link_tag 'jquery.qtip.css', :plugin => "redmine_re", :media => 'all' %>
     <%= stylesheet_link_tag 'print.css', :plugin => "redmine_re", :media => 'print' %>
-
+	<%= stylesheet_link_tag 'bdd.css', :plugin => "redmine_re", :media => 'all' %>
 	
 <% end %>
 
@@ -66,8 +66,8 @@
         <p><strong><%= t(:field_description) %></strong></p>
 
 		<% if @re_artifact_properties.artifact_type == 'ReFeature' %>
-			<div class="feature_file">
-	          <%= textilizable @re_artifact_properties, :description %>
+			<div class="wiki bdd_feature_card">
+			  <%= (textilizable @re_artifact_properties, :description) %>
 	        </div>
 		<% else %>
 	        <div class="wiki">

@@ -146,7 +146,8 @@
 		    <% end %>	
 					
 			initRelationSuggestibles('<%= suggest_artifacts_re_queries_path(@project.id) %>',exceptRelationIDs);
-
+			// Add pre-send hook for proper serialization
+			addHookToForm();
         });
 	})(jQuery);
           <% end %>
