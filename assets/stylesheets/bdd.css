@@ -80,3 +80,7 @@ ins.re_feature {
     background: url("/plugin_assets/redmine_re/images/icons/report_user.png") no-repeat left top;
 }
 
+.icon-download {
+    background: url("/plugin_assets/redmine_re/images/icons/download.png") no-repeat left top;
+}
+

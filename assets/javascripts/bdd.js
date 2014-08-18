@@ -1,14 +1,20 @@
 /**
  * Add hook to form to serialize form data before sending to server
  */ 
-function addHookToForm() {
-	$("#new_re_artifact_properties").submit(function(event){
+function addHookToForm(hook_type) {
+	console.log("adding hook to form...");
+	if(hook_type == "new") {
+		form_id = "#new_re_artifact_properties";
+	} else {
+		form_id = "#edit_re_artifact_properties_*";
+	}
+	
+	$(form_id).submit(function(event){
 		try {
 			serializeFormToJSON();
 		} catch (e) {
 			console.log("Could not serialize data"+e.toString());
 		}
-		//event.preventDefault(); // todo remove for production
 	});
 }
 
@@ -111,18 +117,22 @@ function addScenario(event) {
 }
 
 function createFeatureViewFromJSON(feature_json) {
-	feature = JSON.parse(feature_json);
 	
-	view = getKeywordElement('Feature',feature.name);
-	view = view + '<br/>';
-	view = view + getFeatureOutlineElement(feature.description);
-	view = view + '<br/>';
+	if(feature_json.length > 0) {
 	
-	for(var i = 0; i < feature.scenarios.length; i++) {
-		view = view + getScenarioElement(feature.scenarios[i], i);
+		feature = JSON.parse(feature_json);
+		
+		view = getKeywordElement('Feature',feature.name);
+		view = view + '<br/>';
+		view = view + getFeatureOutlineElement(feature.description);
+		view = view + '<br/>';
+		
+		for(var i = 0; i < feature.scenarios.length; i++) {
+			view = view + getScenarioElement(feature.scenarios[i], i);
+		}
+		
+		$('.bdd_feature_card').append(view);
 	}
-	
-	$('.bdd_feature_card').append(view);
 }
 
 function getKeywordElement(keyword_label,string) {
@@ -171,5 +181,63 @@ function getScenarioElement(scenario, i) {
 	return view;
 }
 
+function createFeatureViewFormFromJSON(feature_json) {
+	
+	// Set styles on all inputs to display solid text
+	$('#bdd_feature_form input').css("color","#000")
+								.css("fontStyle","normal")
+								.attr("data-touched","1");
+	
+	// Parse JSON to Object and fill form accordingly
+	feature = JSON.parse(feature_json);
+	$('#bdd_feature_name').val(feature.name);
+	
+	outline_chunks = feature.description.split(";");
+	
+	// @todo: currently not stable when outline has not == 4 entries
+	for(var i = 0; i < outline_chunks.length; i++) {
+		outline_name = "bdd_feature_outline_"+(i+1).toString();
+		$('input[name='+outline_name+']').val(outline_chunks[i]);	
+	}
+	
+	// Dynamically generate Scenario boxes
+	scenario_tpl = $("#bdd_scenario_box").clone();
+	scenario_tpl.attr("id","");
+	$("#bdd_scenario_box").remove();
+	
+	for(var j = 0; j < feature.scenarios.length; j++) {
+		
+		scenario = feature.scenarios[j];
+		scenario_view = scenario_tpl.clone();
+		
+		scenario_view.find("input:nth(0)").val(scenario.name);
+		
+		for(var k = 0; k < scenario.steps.length; k++) {
+			step = scenario.steps[k];
+			step_chunks = step.split("#");
+			step_keyword = step_chunks[0];
+			step_text = step_chunks[1];
+			
+			// Set selected option for current keyword
+			scenario_view.find("select:nth("+k.toString()+")")
+						 .find("option:nth("+scenarioStepKeywordToIndex(step_keyword)+")")
+						 .prop('selected',true);
+			
+			// Set input text for steps
+			scenario_view.find("input:nth("+(k+1).toString()+")").val(step_text);
+		}
+		
+		// Add populated view to form
+		scenario_view.appendTo("#bdd_feature_form");
+		$('<br/>').appendTo("#bdd_feature_form");
+		scenario_view.show();
+	}
+	
+}
+
+function scenarioStepKeywordToIndex(word) {
+	keywords = ["Given","When","Then","And"];
+	return keywords.indexOf(word);
+}
 
 

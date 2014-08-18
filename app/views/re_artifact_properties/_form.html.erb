@@ -146,8 +146,24 @@
 		    <% end %>	
 					
 			initRelationSuggestibles('<%= suggest_artifacts_re_queries_path(@project.id) %>',exceptRelationIDs);
-			// Add pre-send hook for proper serialization
-			addHookToForm();
+			
+			
+			<% if @re_artifact_properties.artifact_type == 'ReFeature' and !@re_artifact_properties.new_record? %>	
+        	// Add pre-send hook for proper serialization
+			addHookToForm('edit');
+        	
+        	// Code for generation of BDD Feature View upon page load
+		    var feature_data = '<%= (textilizable @re_artifact_properties, :description) %>';
+		  
+		    // Strip unwanted html tags from rails sanitization
+		    feature_data = feature_data.replace('<p>','');
+		    feature_data = feature_data.replace('</p>','');
+		  
+		    // Create View
+		    createFeatureViewFormFromJSON(feature_data);
+        	<% else %>
+        	addHookToForm('new'); 	
+        	<% end %>
         });
 	})(jQuery);
           <% end %>
