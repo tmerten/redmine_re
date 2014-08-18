@@ -22,6 +22,7 @@ RedmineApp::Application.routes.draw do
 
   match 're_artifact_properties/:id/recursive_destroy' => 're_artifact_properties#recursive_destroy'
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
+  
   match 'projects/:project_id/requirements/remove/:artifactid/from_issue/:issueid' => 're_artifact_properties#remove_artifact_from_issue'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type' => 're_artifact_properties#new'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type/inside_of/:parent_artifact_id', :to => 're_artifact_properties#new', :as => 're_artifact_properti'
@@ -59,4 +60,6 @@ RedmineApp::Application.routes.draw do
   end
 
   match "projects/:project_id/diagram_preview/:diagram_id" => 'requirements#sendDiagramPreviewImage'
+  match 're_artifact_properties/download/:id' => 're_artifact_properties#download'
+  
 end

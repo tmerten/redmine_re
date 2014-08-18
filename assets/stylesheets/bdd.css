@@ -60,6 +60,10 @@
 	margin-bottom: 1em;		
 }
 
+.bdd_scenario_subcontainer {
+	margin-left: 2em;
+}
+
 .bbd_scenario_name_input {
 	width: 370px;
 }
@@ -70,5 +74,9 @@
 
 .bdd_keyword {
 	color: #007020;
+}
+
+ins.re_feature {
+    background: url("/plugin_assets/redmine_re/images/icons/report_user.png") no-repeat left top;
 }
 

@@ -452,6 +452,38 @@ class ReArtifactPropertiesController < RedmineReController
     list << '</ul>'
     render :text => list
   end
+   
+  def download
+  
+    @re_artifact_properties = ReArtifactProperties.find(params[:id]) 
+    feature = ActiveSupport::JSON.decode(@re_artifact_properties.description)
+    
+    file_content = 'Feature: '  + feature['name'] + "\n"
+    chunks = feature['description'].split(';')
+    
+    chunks.each do |line|
+      file_content = file_content + "\s\s"+ line + "\n"
+    end
+    
+    file_content = file_content + "\n"
+     
+    feature['scenarios'].each do |scenario|
+      file_content = file_content + '  Scenario: ' + scenario['name'] + "\n"
+      
+      scenario['steps'].each do |step|
+        
+        step_chunks = step.split('#')
+        
+        spaces = 11 - step_chunks[0].length
+        
+        file_content = file_content + (' '*spaces) + step_chunks[0] + ' ' + step_chunks[1] + "\n"
+        
+      end
+      
+    end
+    
+    send_data file_content,  :filename => "test.feature"   
+  end
   
   private
 

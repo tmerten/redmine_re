@@ -41,7 +41,7 @@ ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReUserProfile"
 ReArtifactProperties.create("artifact_id"=>nil, "artifact_type"=>"ReUserProfile", "comments_count"=>nil, "created_by"=>1, "description"=>"", "name"=>"Userprofil 3.2", "project_id"=>1, "responsible_id"=>nil, "updated_by"=>1,
 "parent" => ReArtifactProperties.find(9),
 "parent_relation" => ReArtifactRelationship.find_by_sink_id(11))
-ReSetting.create("name"=>"artifact_order", "project_id"=>1, "value"=>"[\"re_vision\",\"re_workarea\",\"re_processword\",\"re_rationale\",\"re_requirement\",\"re_scenario\",\"re_task\",\"re_goal\",\"re_attachment\",\"re_section\",\"re_use_case\",\"re_user_profile\"]")
+ReSetting.create("name"=>"artifact_order", "project_id"=>1, "value"=>"[\"re_vision\",\"re_workarea\",\"re_processword\",\"re_rationale\",\"re_requirement\",\"re_scenario\",\"re_task\",\"re_goal\",\"re_attachment\",\"re_section\",\"re_use_case\",\"re_user_profile\",\"re_feature\"]")
 ReSetting.create("name"=>"re_vision", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Vision\",\"color\":\"#00ff00\",\"printable\":false}")
 ReSetting.create("name"=>"re_workarea", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Workarea\",\"color\":\"#993300\",\"printable\":false}")
 ReSetting.create("name"=>"re_processword", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Processword\",\"color\":\"#808000\",\"printable\":false}")
@@ -50,6 +50,7 @@ ReSetting.create("name"=>"re_requirement", "project_id"=>1, "value"=>"{\"in_use\
 ReSetting.create("name"=>"re_scenario", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Scenario\",\"color\":\"#00ccff\",\"printable\":false}")
 ReSetting.create("name"=>"re_task", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Task\",\"color\":\"#ff0000\",\"printable\":false}")
 ReSetting.create("name"=>"re_goal", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Goal\",\"color\":\"#339966\",\"printable\":false}")
+ReSetting.create("name"=>"re_feature", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Feature\",\"color\":\"#339966\",\"printable\":false}")
 ReSetting.create("name"=>"re_attachment", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Attachment\",\"color\":\"#000000\",\"printable\":false}")
 ReSetting.create("name"=>"re_section", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Section\",\"color\":\"#c0c0c0\",\"printable\":false}")
 ReSetting.create("name"=>"re_use_case", "project_id"=>1, "value"=>"{\"in_use\":true,\"alias\":\"Use case\",\"color\":\"#0000ff\",\"printable\":false}")

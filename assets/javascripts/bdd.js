@@ -109,3 +109,67 @@ function addScenario(event) {
 	new_scenario.show();
 	event.preventDefault();
 }
+
+function createFeatureViewFromJSON(feature_json) {
+	feature = JSON.parse(feature_json);
+	
+	view = getKeywordElement('Feature',feature.name);
+	view = view + '<br/>';
+	view = view + getFeatureOutlineElement(feature.description);
+	view = view + '<br/>';
+	
+	for(var i = 0; i < feature.scenarios.length; i++) {
+		view = view + getScenarioElement(feature.scenarios[i], i);
+	}
+	
+	$('.bdd_feature_card').append(view);
+}
+
+function getKeywordElement(keyword_label,string) {
+	return '<strong class="bdd_keyword">'+keyword_label+'</strong>: '+string;
+}
+
+function getKeyWordElementNoDeco(keyword_label,string) {
+	
+	align_spaces = "";
+	
+	max = "Given".length - keyword_label.length;
+	
+	for(var i = 0; i < max; i++) {
+		align_spaces = align_spaces + "&nbsp";
+	}
+	
+	return '<strong class="bdd_keyword">'+align_spaces+keyword_label+'</strong> '+string;	
+}
+
+function getFeatureOutlineElement(string) {
+	lines = string.split(";");
+	view = '';
+	
+	for(var i = 0; i < lines.length; i++) {
+		view = view + '<div class="bdd_feature_outline">'+lines[i]+'</div>';	
+	}
+	
+	return view;
+}
+
+function getScenarioElement(scenario, i) {
+	
+	view = '<div class="bdd_cenario_container">';
+	
+	view = view + getKeywordElement('Scenario #'+(i+1).toString(), scenario.name);
+	view = view + '<br/>';
+	
+	for(var j = 0; j < scenario.steps.length; j++) {
+		
+		chunks = scenario.steps[j].split('#');
+		view = view + '<div class="bdd_scenario_subcontainer">' + getKeyWordElementNoDeco(chunks[0], chunks[1], "") + '</div>';
+	}
+	
+	view = view + '</div>';
+	
+	return view;
+}
+
+
+

@@ -58,7 +58,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
                                    :render_to_html_tree, :render_children_to_html_tree,
                                    :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
                                    :reduce_search_result_with_parameter],
-                   :re_artifact_properties => [:show, :redirect],
+                   :re_artifact_properties => [:show, :redirect, :download],
                    :re_artifact_relationship => [:prepare_relationships, :visualization, :build_json_according_to_user_choice],
                    :re_queries => [:index, :show, :query, :apply,
                                    :suggest_artifacts, :suggest_issues, :suggest_diagrams, :suggest_users,

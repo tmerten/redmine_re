@@ -1,5 +1,10 @@
 <div class="contextual">
-	<%= link_to_if_authorized(t(:button_update),  {
+  
+  <% if @re_artifact_properties.artifact_type == 'ReFeature' %>
+  	<%= link_to 'Download', :controller => 're_artifact_properties', :action => 'download', :id => @re_artifact_properties.id %>
+  <% end %>
+  
+  <%= link_to_if_authorized(t(:button_update),  {
     :controller => 're_artifact_properties', 
     :action => 'edit', :id => @re_artifact_properties }, 
 	  :onclick => 'showAndScrollTo("update", "re_artifact_properties_description"); scrollContentPaneTo("update"); return false;',
