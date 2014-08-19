@@ -4,19 +4,29 @@
 	
 	<strong class="bdd_keyword">Feature:</strong> 
 	<input id="bdd_feature_name" class="bbd_feature_name_input" type="text" value="<%=t :bdd_feature_description %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
-	<%= image_tag 'icons/information.png', :plugin => 'redmine_re' %>
-	<br/>
-	<input class="bdd_feature_outline" name="bdd_feature_outline_1" type="text" value="<%=t :bdd_feature_outline_hint_1 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
-	<input class="bdd_feature_outline" name="bdd_feature_outline_2" type="text" value="<%=t :bdd_feature_outline_hint_2 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
-	<input class="bdd_feature_outline" name="bdd_feature_outline_3" type="text" value="<%=t :bdd_feature_outline_hint_3 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
-	<input class="bdd_feature_outline" name="bdd_feature_outline_4" type="text" value="<%=t :bdd_feature_outline_hint_4 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
-	<br/>
 	
+	<%= image_tag 'icons/add.png', :onclick => 'addFeatureOutline()', :class => 'bdd_click_image', :plugin => 'redmine_re' %>
+	<%= image_tag 'icons/delete.png', :onclick => 'removeFeatureOutline()', :class => 'bdd_click_image', :plugin => 'redmine_re' %>
+	
+	<!--
+	<%= image_tag 'icons/information.png', :plugin => 'redmine_re' %>
+	-->
+	<br/>
+	<div id="bdd_feature_outline">
+		<input class="bdd_feature_outline" name="bdd_feature_outline_1" type="text" value="<%=t :bdd_feature_outline_hint_1 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
+		<input class="bdd_feature_outline" name="bdd_feature_outline_2" type="text" value="<%=t :bdd_feature_outline_hint_2 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
+		<input class="bdd_feature_outline" name="bdd_feature_outline_3" type="text" value="<%=t :bdd_feature_outline_hint_3 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
+		<input class="bdd_feature_outline" name="bdd_feature_outline_4" type="text" value="<%=t :bdd_feature_outline_hint_4 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> <br />
+		<br/>
+	</div>
 	<button onclick="addScenario(event)"><%=t :bdd_feature_add_scenario_btn %></button>
+	<button onclick="removeScenario(event)"><%=t :bdd_feature_remove_scenario_btn %></button>
 	
 	<div id="bdd_scenario_box" class="bdd_scenario_container">
 	
 		<strong class="bdd_keyword">Scenario:</strong> <input class="bbd_scenario_name_input" type="text" value="<%=t :bdd_feature_scenario_description %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/> 
+		<%= image_tag 'icons/add.png', :onclick => 'addScenarioStep(this)', :class => 'bdd_click_image', :plugin => 'redmine_re' %>
+		<%= image_tag 'icons/delete.png', :onclick => 'removeScenarioStep(this)', :class => 'bdd_click_image', :plugin => 'redmine_re' %>
 		<br />  
 		
 		<div class="bdd_scenario_outline_step">

@@ -61,7 +61,7 @@
 }
 
 .bdd_scenario_subcontainer {
-	margin-left: 2em;
+	margin-left: 4em;
 }
 
 .bbd_scenario_name_input {
@@ -84,3 +84,6 @@ ins.re_feature {
     background: url("/plugin_assets/redmine_re/images/icons/download.png") no-repeat left top;
 }
 
+.bdd_click_image {
+	cursor: pointer;
+}

@@ -2,11 +2,11 @@
  * Add hook to form to serialize form data before sending to server
  */ 
 function addHookToForm(hook_type) {
-	console.log("adding hook to form...");
+	console.log("adding hook to form with type"+hook_type);
 	if(hook_type == "new") {
 		form_id = "#new_re_artifact_properties";
 	} else {
-		form_id = "#edit_re_artifact_properties_*";
+		form_id = "[id*=edit_re_artifact_properties]";
 	}
 	
 	$(form_id).submit(function(event){
@@ -41,7 +41,16 @@ function handleInputBlurEvent(e) {
  * steps. 
  */
 function validateFeature() {
-	return true;	
+	var validated = true;
+	
+	$('.bdd_feature_outline').each(function(i, obj) {
+		if($(this).attr("data-touched") == "0") {
+			validated = false;
+		}
+	});
+			
+	
+	return validated;	
 }
 
 /**
@@ -56,10 +65,10 @@ function serializeFormToJSON() {
 		var feature = new Object();
 		feature.name = $("#bdd_feature_name").val();
 		
-		feature_description = "";
+		feature_description = new Array();
 		
 		$('.bdd_feature_outline').each(function(i, obj) {
-			feature_description = feature_description + $(this).val() + ";";
+			feature_description.push($(this).val());
 		});
 				
 		feature.description = feature_description;
@@ -152,12 +161,11 @@ function getKeyWordElementNoDeco(keyword_label,string) {
 	return '<strong class="bdd_keyword">'+align_spaces+keyword_label+'</strong> '+string;	
 }
 
-function getFeatureOutlineElement(string) {
-	lines = string.split(";");
+function getFeatureOutlineElement(description_array) {
 	view = '';
 	
-	for(var i = 0; i < lines.length; i++) {
-		view = view + '<div class="bdd_feature_outline">'+lines[i]+'</div>';	
+	for(var i = 0; i < description_array.length; i++) {
+		view = view + '<div class="bdd_feature_outline">'+description_array[i]+'</div>';	
 	}
 	
 	return view;
@@ -183,6 +191,8 @@ function getScenarioElement(scenario, i) {
 
 function createFeatureViewFormFromJSON(feature_json) {
 	
+	console.log(feature_json);
+	
 	// Set styles on all inputs to display solid text
 	$('#bdd_feature_form input').css("color","#000")
 								.css("fontStyle","normal")
@@ -192,12 +202,24 @@ function createFeatureViewFormFromJSON(feature_json) {
 	feature = JSON.parse(feature_json);
 	$('#bdd_feature_name').val(feature.name);
 	
-	outline_chunks = feature.description.split(";");
+	// Before setting the feature outline text remove or add required inputs
+	if(feature.description.length < 4) {
+		
+		max = 4 - feature.description.length;
+		for(var c = 0; c < max; c++) {
+			$(".bdd_feature_outline").last().remove();	
+		}
+		
+	} else if(feature.description.length > 4) {
+		max = feature.description.length - 4;
+		for(var c = 0; c < max; c++) {
+			addFeatureOutline();
+		}
+	}
 	
-	// @todo: currently not stable when outline has not == 4 entries
-	for(var i = 0; i < outline_chunks.length; i++) {
+	for(var i = 0; i < feature.description.length; i++) {
 		outline_name = "bdd_feature_outline_"+(i+1).toString();
-		$('input[name='+outline_name+']').val(outline_chunks[i]);	
+		$('input[name='+outline_name+']').val(feature.description[i]);	
 	}
 	
 	// Dynamically generate Scenario boxes
@@ -205,10 +227,29 @@ function createFeatureViewFormFromJSON(feature_json) {
 	scenario_tpl.attr("id","");
 	$("#bdd_scenario_box").remove();
 	
+	bdd_scenario_box_id_set = false;
+	
 	for(var j = 0; j < feature.scenarios.length; j++) {
 		
 		scenario = feature.scenarios[j];
 		scenario_view = scenario_tpl.clone();
+		
+		// Before setting the step data remove or add step inputs
+		if(scenario.steps.length < 4) {
+			
+			max = 4 - scenario.steps.length;
+			
+			for(var c = 0; c < max; c++) {
+				scenario_view.find(".bdd_scenario_outline_step").last().remove();
+			}
+			
+		} else if(scenario.steps.length > 4) {
+			
+			max = scenario.steps.length - 4;
+			for(var c = 0; c < max; c++) {
+				scenario_view.find(".bdd_scenario_outline_step").last().clone().appendTo(scenario_view);
+			} 
+		}
 		
 		scenario_view.find("input:nth(0)").val(scenario.name);
 		
@@ -227,6 +268,11 @@ function createFeatureViewFormFromJSON(feature_json) {
 			scenario_view.find("input:nth("+(k+1).toString()+")").val(step_text);
 		}
 		
+		if(bdd_scenario_box_id_set == false) {
+			scenario_view.attr("id","bdd_scenario_box");
+			bdd_scenario_box_id_set = true;
+		}
+		
 		// Add populated view to form
 		scenario_view.appendTo("#bdd_feature_form");
 		$('<br/>').appendTo("#bdd_feature_form");
@@ -241,3 +287,41 @@ function scenarioStepKeywordToIndex(word) {
 }
 
 
+function addFeatureOutline(){
+	
+	var clone = $(".bdd_feature_outline:nth(0)").clone();
+	clone.val("...");
+	
+	var last = $(".bdd_feature_outline").last();
+	
+	clone.insertAfter(last);
+	
+	last = $(".bdd_feature_outline").last();
+	$("<br/>").insertBefore(last);
+		
+	clone.show();
+
+}
+
+function removeFeatureOutline() {
+	$(".bdd_feature_outline").last().remove();
+	$("#bdd_feature_outline").find("br").last().remove();
+}
+
+function removeScenario(event) {
+	if($(".bdd_scenario_container").length > 1) {
+		// One Scenario should remain
+		$(".bdd_scenario_container").last().remove();
+	}
+	event.preventDefault();
+}
+
+function addScenarioStep(button) {
+	var clone = $(button).parent().find(".bdd_scenario_outline_step").last().clone();	
+	clone.find("input").last().val("...");
+	clone.appendTo($(button).parent());
+}
+
+function removeScenarioStep(button) {
+	$(button).parent().find(".bdd_scenario_outline_step").last().remove();	
+}
