@@ -21,6 +21,64 @@
 	</div>
 	<button onclick="addScenario(event)"><%=t :bdd_feature_add_scenario_btn %></button>
 	<button onclick="removeScenario(event)"><%=t :bdd_feature_remove_scenario_btn %></button>
+	<button id="toggleBackgroundBoxBtn" onclick="toggleScenarioBackgroundBox(event)"><%=t :bdd_background_toggle_btn %></button>
+	<br/>
+	<br/>
+	<!-- Optional Background Form for Scenario(s) -->
+	<div id="bdd_scenario_background_box" class="bdd_scenario_background_container" data-toggle="0">
+	
+		<strong class="bdd_keyword">Background:</strong>
+		<%= image_tag 'icons/add.png', :onclick => 'addScenarioStep(this)', :class => 'bdd_click_image_dis', :plugin => 'redmine_re' %>
+		<%= image_tag 'icons/delete.png', :onclick => 'removeScenarioStep(this)', :class => 'bdd_click_image_dis', :plugin => 'redmine_re' %>
+		<br />  
+		
+		<div class="bdd_scenario_outline_step">
+			<select disabled class="bdd_keyword">
+				<option>Given</option>
+				<option>When</option>
+				<option>Then</option>
+				<option>And</option>
+			</select>	   
+			
+			<input disabled class="bdd_scenario_outline" type="text" value="<%=t :bdd_feature_scenario_outline_hint_1 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+		</div>
+		
+		<div class="bdd_scenario_outline_step">
+			<select disabled class="bdd_keyword">
+				<option>Given</option>
+				<option selected>When</option>
+				<option>Then</option>
+				<option>And</option>
+			</select>	   
+			
+			<input disabled class="bdd_scenario_outline" type="text" value="<%=t :bdd_feature_scenario_outline_hint_2 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+		</div>
+		
+		<div class="bdd_scenario_outline_step">
+			<select disabled class="bdd_keyword">
+				<option>Given</option>
+				<option>When</option>
+				<option selected>Then</option>
+				<option>And</option>
+			</select>	   
+			
+			<input disabled class="bdd_scenario_outline" type="text" value="<%=t :bdd_feature_scenario_outline_hint_3 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+		</div>
+		
+		<div class="bdd_scenario_outline_step">
+			<select disabled class="bdd_keyword">
+				<option>Given</option>
+				<option>When</option>
+				<option>Then</option>
+				<option selected>And</option>
+			</select>	   
+			
+			<input disabled class="bdd_scenario_outline" type="text" value="<%=t :bdd_feature_scenario_outline_hint_4 %>" data-touched="0" onblur="handleInputBlurEvent(this)" onfocus="handleInputFocusEvent(this)"/>
+		</div>
+		
+	</div>
+	
+	
 	
 	<div id="bdd_scenario_box" class="bdd_scenario_container">
 	

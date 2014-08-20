@@ -43,11 +43,12 @@ function handleInputBlurEvent(e) {
 function validateFeature() {
 	var validated = true;
 	
+	/*
 	$('.bdd_feature_outline').each(function(i, obj) {
 		if($(this).attr("data-touched") == "0") {
 			validated = false;
 		}
-	});
+	});*/
 			
 	
 	return validated;	
@@ -72,7 +73,25 @@ function serializeFormToJSON() {
 		});
 				
 		feature.description = feature_description;
+		feature_background = new Object();
+		feature_background_steps = Array();
+		if($('#bdd_scenario_background_box').attr('data-toggle')=='1') {
+			
+			steps = $("#bdd_scenario_background_box").find('.bdd_scenario_outline_step').each(function(i,obj){
+				step = "";
+				
+				$(this).find("select option:selected").each(function(i,obj){			
+					step = step + $(this).text() + "#";	
+				});
+				
+				
+				step = step + $(this).find(".bdd_scenario_outline").val();
+				feature_background_steps.push(step);
+			});
+			feature_background.steps = feature_background_steps;
+		} 
 		
+		feature.background = feature_background;
 		feature_scenarios = new Array();
 		
 		// iterate over the scenario containers
@@ -136,6 +155,11 @@ function createFeatureViewFromJSON(feature_json) {
 		view = view + getFeatureOutlineElement(feature.description);
 		view = view + '<br/>';
 		
+		// Add Background only if available
+		if(feature.background.steps.length > 0) {
+			view = view + getBackgroundElement(feature.background);	
+		}
+		
 		for(var i = 0; i < feature.scenarios.length; i++) {
 			view = view + getScenarioElement(feature.scenarios[i], i);
 		}
@@ -189,6 +213,25 @@ function getScenarioElement(scenario, i) {
 	return view;
 }
 
+function getBackgroundElement(background) {
+	
+	view = '<div class="bdd_cenario_container">';
+	
+	view = view + getKeywordElement('Background', "");
+	view = view + '<br/>';
+	
+	for(var j = 0; j < background.steps.length; j++) {
+		
+		chunks = background.steps[j].split('#');
+		view = view + '<div class="bdd_scenario_subcontainer">' + getKeyWordElementNoDeco(chunks[0], chunks[1], "") + '</div>';
+	}
+	
+	view = view + '</div><br/>';
+	
+	return view;
+}
+
+
 function createFeatureViewFormFromJSON(feature_json) {
 	
 	console.log(feature_json);
@@ -201,6 +244,46 @@ function createFeatureViewFormFromJSON(feature_json) {
 	// Parse JSON to Object and fill form accordingly
 	feature = JSON.parse(feature_json);
 	$('#bdd_feature_name').val(feature.name);
+	
+	if(feature.background.steps.length > 0) {
+		
+		// Enable Background Box
+		$('#toggleBackgroundBoxBtn').click();	
+		
+		// Before setting the background step data remove or add step inputs
+		if(feature.background.steps.length < 4) {
+			
+			max = 4 - feature.background.steps.length;
+			
+			for(var c = 0; c < max; c++) {
+				$('#bdd_scenario_background_box').find(".bdd_scenario_outline_step").last().remove();
+			}
+			
+		} else if(feature.background.steps.length > 4) {
+			
+			max = feature.background.steps.length - 4;
+			for(var c = 0; c < max; c++) {
+				$('#bdd_scenario_background_box').find(".bdd_scenario_outline_step").last().clone().appendTo($('#bdd_scenario_background_box'));
+			} 
+		}
+		
+		for(var h = 0; h < feature.background.steps.length; h++) {
+			step = feature.background.steps[h];
+			step_chunks = step.split("#");
+			step_keyword = step_chunks[0];
+			step_text = step_chunks[1];
+			
+			// Set selected option for current keyword
+			$('#bdd_scenario_background_box')
+						 .find("select:nth("+h.toString()+")")
+						 .find("option:nth("+scenarioStepKeywordToIndex(step_keyword)+")")
+						 .prop('selected',true);
+			
+			// Set input text for steps
+			$('#bdd_scenario_background_box').find("input:nth("+h.toString()+")").val(step_text);
+		}
+			
+	}
 	
 	// Before setting the feature outline text remove or add required inputs
 	if(feature.description.length < 4) {
@@ -324,4 +407,57 @@ function addScenarioStep(button) {
 
 function removeScenarioStep(button) {
 	$(button).parent().find(".bdd_scenario_outline_step").last().remove();	
+}
+
+
+/**
+ * 
+ * @param onClick event
+ */
+function toggleScenarioBackgroundBox(event) {
+	console.log("Toggling Background");
+	var value = '';
+	
+	if($('.bdd_scenario_background_container').attr('data-toggle')=='0') {
+		// Enable Box
+		value = '1';
+		data = '1';
+		
+		$('#bdd_scenario_background_box img').each(function(obj,i){
+			$(this).removeClass('bdd_click_image_dis');
+			$(this).addClass('bdd_click_image');
+		});
+		
+		$('#bdd_scenario_background_box input').each(function(obj,i){
+			$(this).attr('disabled',false);
+		});
+		
+		$('#bdd_scenario_background_box select').each(function(obj,i){
+			$(this).attr('disabled',false);
+		});
+		
+		
+		
+	} else {
+		// Disable Box
+		value = '0.4';
+		data = '0';
+		
+		$('#bdd_scenario_background_box img').each(function(obj,i){
+			$(this).removeClass('bdd_click_image');
+			$(this).addClass('bdd_click_image_dis');
+		});
+		
+		$('#bdd_scenario_background_box input').each(function(obj,i){
+			$(obj).attr('disabled',true);
+		});
+		
+		$('#bdd_scenario_background_box select').each(function(obj,i){
+			$(obj).attr('disabled',true);
+		});
+	}
+	$('.bdd_scenario_background_container').css('opacity',value);
+	$('.bdd_scenario_background_container').attr('data-toggle',data);
+	console.log("New Value "+value.toString());
+	event.preventDefault();
 }

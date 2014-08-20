@@ -627,3 +627,4 @@ en:
   bdd_feature_scenario_outline_hint_X: "Next step of scenario"
   bdd_feature_add_scenario_btn: "Add Scenario"
   bdd_feature_remove_scenario_btn: "Remove Scenario"
+  bdd_background_toggle_btn: "Toggle Background"
