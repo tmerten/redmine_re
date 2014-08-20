@@ -459,13 +459,27 @@ class ReArtifactPropertiesController < RedmineReController
     feature = ActiveSupport::JSON.decode(@re_artifact_properties.description)
     
     file_content = 'Feature: '  + feature['name'] + "\n"
-    chunks = feature['description'].split(';')
     
-    chunks.each do |line|
+    feature['description'].each do |line|
       file_content = file_content + "\s\s"+ line + "\n"
     end
     
     file_content = file_content + "\n"
+    
+    if feature['background']['steps'].length > 0
+      file_content = file_content + '  Background:' + "\n"
+      
+      feature['background']['steps'].each do |step|
+        step_chunks = step.split('#')
+        
+        spaces = 11 - step_chunks[0].length
+        
+        file_content = file_content + (' '*spaces) + step_chunks[0] + ' ' + step_chunks[1] + "\n" 
+      end
+      
+      file_content = file_content + "\n"
+      
+    end
      
     feature['scenarios'].each do |scenario|
       file_content = file_content + '  Scenario: ' + scenario['name'] + "\n"

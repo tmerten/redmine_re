@@ -411,6 +411,8 @@ function removeScenarioStep(button) {
 
 
 /**
+ * Toggles the Background Box to allow
+ * editing of the text or not
  * 
  * @param onClick event
  */
@@ -435,9 +437,7 @@ function toggleScenarioBackgroundBox(event) {
 		$('#bdd_scenario_background_box select').each(function(obj,i){
 			$(this).attr('disabled',false);
 		});
-		
-		
-		
+			
 	} else {
 		// Disable Box
 		value = '0.4';
