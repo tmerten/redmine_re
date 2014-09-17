@@ -454,7 +454,7 @@ class ReArtifactPropertiesController < RedmineReController
   end
    
   def download
-  
+    #@todo only allow for BDD Features, not for all other artifacts
     @re_artifact_properties = ReArtifactProperties.find(params[:id]) 
     feature = ActiveSupport::JSON.decode(@re_artifact_properties.description)
     
@@ -466,19 +466,22 @@ class ReArtifactPropertiesController < RedmineReController
     
     file_content = file_content + "\n"
     
-    if feature['background']['steps'].length > 0
-      file_content = file_content + '  Background:' + "\n"
-      
-      feature['background']['steps'].each do |step|
-        step_chunks = step.split('#')
+    if feature['background'] != nil
+    
+      if feature['background']['steps'].length > 0
+        file_content = file_content + '  Background:' + "\n"
         
-        spaces = 11 - step_chunks[0].length
+        feature['background']['steps'].each do |step|
+          step_chunks = step.split('#')
+          
+          spaces = 11 - step_chunks[0].length
+          
+          file_content = file_content + (' '*spaces) + step_chunks[0] + ' ' + step_chunks[1] + "\n" 
+        end
         
-        file_content = file_content + (' '*spaces) + step_chunks[0] + ' ' + step_chunks[1] + "\n" 
+        file_content = file_content + "\n"
+        
       end
-      
-      file_content = file_content + "\n"
-      
     end
      
     feature['scenarios'].each do |scenario|

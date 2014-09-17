@@ -103,7 +103,9 @@
 
   <div id="update" style="display:none;">
     <h3><%= l(:button_update) %></h3>
-    <%= render :partial => 'edit' %>
-  </div>
+    <%if @re_artifact_properties.artifact_type != "ReFeature" %>
+    	<%= render :partial => 'edit' %>
+  	<% end %>
+  	</div>
 </div>
 <%= render :partial => 'infobar' %>

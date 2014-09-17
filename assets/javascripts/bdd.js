@@ -22,8 +22,9 @@ function addHookToForm(hook_type) {
  * Event handler for focus event of the inputs
  */
 function handleInputFocusEvent(e) {
-	if(e.getAttribute('data-touched') == '0') {
-		e.value = '';
+	e = $(e);
+	if(e.attr('data-touched') == '0') {
+		e.val('');
 	}	
 }
 
@@ -31,10 +32,38 @@ function handleInputFocusEvent(e) {
  * Event handler for blur event of the inputs
  */
 function handleInputBlurEvent(e) {
-	e.style.color = "#000";
-	e.style.fontStyle = "normal";
-	e.setAttribute("data-touched", "1");	
+	e = $(e);
+	e.css('color','#000');
+	e.css('fontStyle','normal');
+	e.attr('data-touched', "1");	
+	
+	generateExampleTable(e.parent().parent());
 }
+
+
+
+/**
+ * Checks all inputs for the given scenario for <placeholders>
+ * and generates, updates or removes the according example table.
+ * 
+ * @param jQuery-Object scenario  
+ */
+function generateExampleTable(scenario) {
+	console.log('generateExampleTable()');
+	console.log(scenario.attr('class'));
+}
+
+
+function checkScenarioInputsForOutlines(e) {
+	pattern = /(\<[a-z]+\>)/gi;
+	if(e.match(pattern).length > 0) {
+		// We found at least <placeholder>
+	} else {
+		// No placeholder found, rebuild example table
+	}
+		
+}
+
 
 /**
  * Validates the entered data, basic logic checks of the scenario
@@ -156,8 +185,10 @@ function createFeatureViewFromJSON(feature_json) {
 		view = view + '<br/>';
 		
 		// Add Background only if available
-		if(feature.background.steps.length > 0) {
-			view = view + getBackgroundElement(feature.background);	
+		if(feature.background.steps != null) {
+			if(feature.background.steps.length > 0) {
+				view = view + getBackgroundElement(feature.background);	
+			}
 		}
 		
 		for(var i = 0; i < feature.scenarios.length; i++) {
@@ -245,46 +276,48 @@ function createFeatureViewFormFromJSON(feature_json) {
 	feature = JSON.parse(feature_json);
 	$('#bdd_feature_name').val(feature.name);
 	
-	if(feature.background.steps.length > 0) {
-		
-		// Enable Background Box
-		$('#toggleBackgroundBoxBtn').click();	
-		
-		// Before setting the background step data remove or add step inputs
-		if(feature.background.steps.length < 4) {
+	if(feature.background.steps != null) {
+	
+		if(feature.background.steps.length > 0) {
 			
-			max = 4 - feature.background.steps.length;
+			// Enable Background Box
+			$('#toggleBackgroundBoxBtn').click();	
 			
-			for(var c = 0; c < max; c++) {
-				$('#bdd_scenario_background_box').find(".bdd_scenario_outline_step").last().remove();
+			// Before setting the background step data remove or add step inputs
+			if(feature.background.steps.length < 4) {
+				
+				max = 4 - feature.background.steps.length;
+				
+				for(var c = 0; c < max; c++) {
+					$('#bdd_scenario_background_box').find(".bdd_scenario_outline_step").last().remove();
+				}
+				
+			} else if(feature.background.steps.length > 4) {
+				
+				max = feature.background.steps.length - 4;
+				for(var c = 0; c < max; c++) {
+					$('#bdd_scenario_background_box').find(".bdd_scenario_outline_step").last().clone().appendTo($('#bdd_scenario_background_box'));
+				} 
 			}
 			
-		} else if(feature.background.steps.length > 4) {
-			
-			max = feature.background.steps.length - 4;
-			for(var c = 0; c < max; c++) {
-				$('#bdd_scenario_background_box').find(".bdd_scenario_outline_step").last().clone().appendTo($('#bdd_scenario_background_box'));
-			} 
+			for(var h = 0; h < feature.background.steps.length; h++) {
+				step = feature.background.steps[h];
+				step_chunks = step.split("#");
+				step_keyword = step_chunks[0];
+				step_text = step_chunks[1];
+				
+				// Set selected option for current keyword
+				$('#bdd_scenario_background_box')
+							 .find("select:nth("+h.toString()+")")
+							 .find("option:nth("+scenarioStepKeywordToIndex(step_keyword)+")")
+							 .prop('selected',true);
+				
+				// Set input text for steps
+				$('#bdd_scenario_background_box').find("input:nth("+h.toString()+")").val(step_text);
+			}
+				
 		}
-		
-		for(var h = 0; h < feature.background.steps.length; h++) {
-			step = feature.background.steps[h];
-			step_chunks = step.split("#");
-			step_keyword = step_chunks[0];
-			step_text = step_chunks[1];
-			
-			// Set selected option for current keyword
-			$('#bdd_scenario_background_box')
-						 .find("select:nth("+h.toString()+")")
-						 .find("option:nth("+scenarioStepKeywordToIndex(step_keyword)+")")
-						 .prop('selected',true);
-			
-			// Set input text for steps
-			$('#bdd_scenario_background_box').find("input:nth("+h.toString()+")").val(step_text);
-		}
-			
 	}
-	
 	// Before setting the feature outline text remove or add required inputs
 	if(feature.description.length < 4) {
 		
@@ -365,7 +398,7 @@ function createFeatureViewFormFromJSON(feature_json) {
 }
 
 function scenarioStepKeywordToIndex(word) {
-	keywords = ["Given","When","Then","And"];
+	keywords = ["Given","When","Then","And","But"];
 	return keywords.indexOf(word);
 }
 
@@ -436,8 +469,7 @@ function toggleScenarioBackgroundBox(event) {
 		
 		$('#bdd_scenario_background_box select').each(function(obj,i){
 			$(this).attr('disabled',false);
-		});
-			
+		});	
 	} else {
 		// Disable Box
 		value = '0.4';

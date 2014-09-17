@@ -16,7 +16,8 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/use_case/autocomplete/sink' => 're_use_case#autocomplete_sink'
   match 'projects/:project_id/issues/new/connected_to/:artifacttype/:associationid' => 'issues#new'
   match 'projects/:project_id/requirements/filtered_json' => 're_artifact_relationship#build_json_according_to_user_choice'
-
+  match 'projects/:project_id/requirements/export/:node_id' => 'requirements#export'
+  
   # ReArtifactProperties as "artifact"
   resources :re_artifact_properties, :except => [:new, :index]
 

@@ -628,3 +628,6 @@ en:
   bdd_feature_add_scenario_btn: "Add Scenario"
   bdd_feature_remove_scenario_btn: "Remove Scenario"
   bdd_background_toggle_btn: "Toggle Background"
+
+  # Export Specific Terms
+  export_str_not_available: "Not Available"

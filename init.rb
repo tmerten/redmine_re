@@ -52,7 +52,7 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
                                      :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree,
                                      :render_to_html_tree, :render_children_to_html_tree,
                                      :enhanced_filter, :build_conditions_hash, :find_first_artifacts_with_first_parameter,
-                                     :reduce_search_result_with_parameter, :sendDiagramPreviewImage],
+                                     :reduce_search_result_with_parameter, :sendDiagramPreviewImage, :export],
                    :redmine_re => [:enhanced_filter, :index, :treeview, :treestate, :load_settings,
                                    :find_project, :add_hidden_re_artifact_properties_attributes, :create_tree,
                                    :render_to_html_tree, :render_children_to_html_tree,

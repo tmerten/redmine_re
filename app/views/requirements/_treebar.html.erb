@@ -101,6 +101,15 @@
           window.location.href = link+'/'+id+'/how_to_delete';
         }
       },
+      "export" : {
+        "label" : "<%= t(:re_export) %>",
+        "icon" : "export",
+        "action" : function (node) {
+          var id = node[0].id.replace('node_','');
+          var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/export/'+id;
+          window.location.href = link;
+        }
+      },
       "visualization" : {
         "label" : "<%= t(:re_visualization_show) %>",
         "separator_before" : true,
