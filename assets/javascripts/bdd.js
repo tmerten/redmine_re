@@ -398,8 +398,7 @@ function createFeatureViewFormFromJSON(feature_json) {
 }
 
 function scenarioStepKeywordToIndex(word) {
-	keywords = ["Given","When","Then","And","But"];
-	return keywords.indexOf(word);
+	return $.inArray(word, ["Given","When","Then","And","But"]);
 }
 
 
