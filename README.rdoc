@@ -21,6 +21,8 @@ You can find information about how to install the Redmine RE here: http://redmin
 The export functionality relies on the {pdfkit}[https://github.com/pdfkit/pdfkit] library which uses {wkhtmltopdf}[https://github.com/wkhtmltopdf/wkhtmltopdf] to generate PDF files from pure HTML. 
 Currently the export function is very basic. The following things could be added in the future: Revision Table, Meta Information, Table of Contents, Page Numbers.
 
+It is recommended to install wkhtmltopdf from a package distributed via the {project page}[http://wkhtmltopdf.org/downloads.html] instead of using your OS package manager, because the distributed packages are newer and should work without big configuration effort out of the box. 
+
 == Acknowledgments
 
 * This project relies heavily on Redmine.
