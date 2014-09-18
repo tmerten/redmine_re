@@ -3,12 +3,12 @@
     <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
 	<%= javascript_include_tag 'jquery.qtip.js', :plugin => 'redmine_re' %>
 	<%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
-
-
+	<%= javascript_include_tag 'bdd.js', :plugin => 'redmine_re' %>
+	
     <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
 	<%= stylesheet_link_tag 'jquery.qtip.css', :plugin => "redmine_re", :media => 'all' %>
     <%= stylesheet_link_tag 'print.css', :plugin => "redmine_re", :media => 'print' %>
-
+	<%= stylesheet_link_tag 'bdd.css', :plugin => "redmine_re", :media => 'all' %>
 	
 <% end %>
 
@@ -65,9 +65,16 @@
         <hr/>
         <p><strong><%= t(:field_description) %></strong></p>
 
-        <div class="wiki">
-          <%= textilizable @re_artifact_properties, :description %>
-        </div>
+		<% if @re_artifact_properties.artifact_type == 'ReFeature' %>
+			<div class="wiki bdd_feature_card">
+			  <!-- Empty box will be filled via JS function upon ready() call -->
+	        </div>
+		<% else %>
+	        <div class="wiki">
+	          <%= textilizable @re_artifact_properties, :description %>
+	        </div>
+        <% end %>
+        
     <% end %>
 
     <% if File.exists?(
@@ -96,7 +103,9 @@
 
   <div id="update" style="display:none;">
     <h3><%= l(:button_update) %></h3>
-    <%= render :partial => 'edit' %>
-  </div>
+    <%if @re_artifact_properties.artifact_type != "ReFeature" %>
+    	<%= render :partial => 'edit' %>
+  	<% end %>
+  	</div>
 </div>
 <%= render :partial => 'infobar' %>

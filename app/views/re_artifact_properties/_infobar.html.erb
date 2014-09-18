@@ -45,5 +45,15 @@ $j(document).ready(function () {
   var easttoggler = $j("div.ui-layout-toggler-east-closed > span.content-closed");
   var eastspan = easttoggler.first()
   eastspan.html('<%= watchers %><%= image_tag(watcher_image) %><br/><%= comments %><%= image_tag('comments.png')%>');
+  
+  // Code for generation of BDD Feature View upon page load
+  var feature_data = '<%= (textilizable @re_artifact_properties, :description) %>';
+  
+  // Strip unwanted html tags from rails sanitization
+  feature_data = feature_data.replace('<p>','');
+  feature_data = feature_data.replace('</p>','');
+  
+  // Create View
+  createFeatureViewFromJSON(feature_data);
 });
 <% end %>

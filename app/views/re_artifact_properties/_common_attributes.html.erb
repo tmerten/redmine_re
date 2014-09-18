@@ -30,20 +30,25 @@
         <%= f.label :responsible_id, t(:re_artifact_responsible) %> 
         <%= f.select :responsible_id, options_for_select(selectable_users, select_user_id), :include_blank => true %>
    </p>
-	<p>
-		<%= f.label :description %>
-    <span id='update-description'>
-      <%= f.text_area :description,
-                      :cols => 60,
-                      :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
-                      :accesskey => accesskey(:edit),
-                      :class => 'wiki-edit' %>
-    <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
-		<%= javascript_tag do %>
-		$j(document).ready(function() {
-			$j("textarea.wiki-edit").autoGrow();
-		});
-		<% end %>
-    </span>
-  </p>
+	
+	<% if @re_artifact_properties.artifact_type == 'ReFeature' %>		
+		<%= render :partial => 'bdd_feature' %>	
+	<% else %>
+		<p>
+			<%= f.label :description %>
+	    <span id='update-description'>
+	      <%= f.text_area :description,
+	                      :cols => 60,
+	                      :rows => (@re_artifact_properties.description.blank? ? 10 : [[10, @re_artifact_properties.description.length / 50].max, 100].min),
+	                      :accesskey => accesskey(:edit),
+	                      :class => 'wiki-edit' %>
+	    <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
+			<%= javascript_tag do %>
+			$j(document).ready(function() {
+				$j("textarea.wiki-edit").autoGrow();
+			});
+			<% end %>
+	    </span>
+	  </p>
+  <% end %>
 </fieldset>

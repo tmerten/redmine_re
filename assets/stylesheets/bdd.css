@@ -1,0 +1,99 @@
+.bdd_feature_card {
+  font-family: Consolas;
+  text-decoration:none;
+  color:#000;
+  background:#fff;
+  border: 1px solid #000;
+  display:block;
+  padding:1em;
+  font-size: 12px;
+}
+
+#bdd_feature_form {
+  font-family: Consolas;
+  text-decoration:none;
+  color:#000;
+  background:#fff;
+  border: 1px solid #ccc;
+  display:block;
+  padding:1em;
+  font-size: 12px;
+}
+
+#bdd_feature_form input:focus {
+	font-style: normal;
+	color: #000;
+	height: 20px;
+	border: none;
+	border-bottom: 1px dotted #000;
+}
+
+#bdd_feature_form input {
+	height: 20px;
+	border: none;
+	border-bottom: 1px dotted #000;
+	font-family: Consolas;
+	font-style: italic;
+	color: #808080;
+}
+
+.bbd_feature_name_input {
+	width: 250px;
+}
+
+#bdd_feature_form select {
+	height: 20px;
+	font-family: Consolas;
+	border: none;
+	margin-left: 1.2em;
+	font-weight: bold;
+}
+
+.bdd_feature_outline {
+	margin-left: 1.8em;	
+	margin-top: 0em;
+	width: 290px;
+}
+
+.bdd_scenario_container {
+	margin-left: 2em;
+	margin-bottom: 1em;		
+}
+
+.bdd_scenario_background_container {
+	margin-left: 2em;
+	margin-bottom: 1em;		
+	opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+.bdd_scenario_subcontainer {
+	margin-left: 4em;
+}
+
+.bbd_scenario_name_input {
+	width: 370px;
+}
+
+.bdd_scenario_outline {
+	width: 355px;
+}
+
+.bdd_keyword {
+	color: #007020;
+}
+
+ins.re_feature {
+    background: url("/plugin_assets/redmine_re/images/icons/report_user.png") no-repeat left top;
+}
+
+.icon-download {
+    background: url("/plugin_assets/redmine_re/images/icons/download.png") no-repeat left top;
+}
+
+.bdd_click_image {
+	cursor: pointer;
+}
+.bdd_click_image_dis {
+	cursor: default;
+}

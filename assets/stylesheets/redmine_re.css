@@ -407,6 +407,10 @@ ins.delete {
     background: url(../../../images/delete.png) no-repeat left top;
 }
 
+ins.export {
+	background: url(../images/icons/export.png) no-repeat left top;
+}
+
 ins.project {
     background: url(../images/icons/group_gear.png) no-repeat left top;
 }

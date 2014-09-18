@@ -117,7 +117,7 @@ class ReArtifactPropertiesController < RedmineReController
   def show
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
     @artifact_type = @re_artifact_properties.artifact_type
-    
+     
     session[:visualization_type]=params[:visualization_type]
     
     if @artifact_type == "Project" 
@@ -451,6 +451,55 @@ class ReArtifactPropertiesController < RedmineReController
     end
     list << '</ul>'
     render :text => list
+  end
+   
+  def download
+    #@todo only allow for BDD Features, not for all other artifacts
+    @re_artifact_properties = ReArtifactProperties.find(params[:id]) 
+    feature = ActiveSupport::JSON.decode(@re_artifact_properties.description)
+    
+    file_content = 'Feature: '  + feature['name'] + "\n"
+    
+    feature['description'].each do |line|
+      file_content = file_content + "\s\s"+ line + "\n"
+    end
+    
+    file_content = file_content + "\n"
+    
+    if feature['background'] != nil
+    
+      if feature['background']['steps'].length > 0
+        file_content = file_content + '  Background:' + "\n"
+        
+        feature['background']['steps'].each do |step|
+          step_chunks = step.split('#')
+          
+          spaces = 11 - step_chunks[0].length
+          
+          file_content = file_content + (' '*spaces) + step_chunks[0] + ' ' + step_chunks[1] + "\n" 
+        end
+        
+        file_content = file_content + "\n"
+        
+      end
+    end
+     
+    feature['scenarios'].each do |scenario|
+      file_content = file_content + '  Scenario: ' + scenario['name'] + "\n"
+      
+      scenario['steps'].each do |step|
+        
+        step_chunks = step.split('#')
+        
+        spaces = 11 - step_chunks[0].length
+        
+        file_content = file_content + (' '*spaces) + step_chunks[0] + ' ' + step_chunks[1] + "\n"
+        
+      end
+      
+    end
+    
+    send_data file_content,  :filename => "test.feature"   
   end
   
   private

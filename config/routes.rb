@@ -16,12 +16,14 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/use_case/autocomplete/sink' => 're_use_case#autocomplete_sink'
   match 'projects/:project_id/issues/new/connected_to/:artifacttype/:associationid' => 'issues#new'
   match 'projects/:project_id/requirements/filtered_json' => 're_artifact_relationship#build_json_according_to_user_choice'
-
+  match 'projects/:project_id/requirements/export/:node_id' => 'requirements#export'
+  
   # ReArtifactProperties as "artifact"
   resources :re_artifact_properties, :except => [:new, :index]
 
   match 're_artifact_properties/:id/recursive_destroy' => 're_artifact_properties#recursive_destroy'
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete'
+  
   match 'projects/:project_id/requirements/remove/:artifactid/from_issue/:issueid' => 're_artifact_properties#remove_artifact_from_issue'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type' => 're_artifact_properties#new'
   match 'projects/:project_id/requirements/artifact/new/:artifact_type/inside_of/:parent_artifact_id', :to => 're_artifact_properties#new', :as => 're_artifact_properti'
@@ -59,4 +61,6 @@ RedmineApp::Application.routes.draw do
   end
 
   match "projects/:project_id/diagram_preview/:diagram_id" => 'requirements#sendDiagramPreviewImage'
+  match 're_artifact_properties/download/:id' => 're_artifact_properties#download'
+  
 end

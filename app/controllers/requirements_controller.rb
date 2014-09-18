@@ -1,5 +1,5 @@
 include ReApplicationHelper
-
+require 'exporter'
 class RequirementsController < RedmineReController
   unloadable
   menu_item :re
@@ -131,7 +131,19 @@ class RequirementsController < RedmineReController
       redirect_to @re_artifact_properties                   
     end
   end
-
+  
+  def export
+      # For testing purposes ignore from which node the export attempt was started.
+      # Allow flexible export later, e.g. only sub-tree or re-arrange on the fly (visual editor)
+      root_node = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+      
+      u = url_for(:controller => 're_artifact_properties', :action => 'show', :id => "XX")
+      
+      exporter = Exporter.new(root_node, u)
+      
+      send_data exporter.get_pdf,  :filename => "export.pdf"  
+  end 
+  
 #######
 private
 #######
