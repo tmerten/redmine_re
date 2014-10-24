@@ -13,46 +13,29 @@ class RequirementsController < RedmineReController
     # It transmits the drops done in the tree to the database in order to last
     # longer than the next refresh of the browser.
 
-    sibling_id = params[:sibling_id]
     moved_artifact_id = params[:id]
     insert_position = params[:position]
-
+    parent_id = params[:parent_id]
+    
     moved_artifact = ReArtifactProperties.find(moved_artifact_id)
+    new_parent = ReArtifactProperties.find(parent_id)
 
-    new_parent = nil
-    sibling = ReArtifactProperties.find(sibling_id)
-    position = 1
-    
-    if sibling.parent_relation.nil? || sibling.artifact_type == "Project"      
-      render :text => "insert position invalid", :status => 501
-    else
-    
-      case insert_position
-      when 'before'
-        position = (sibling.position - 1) unless sibling.nil?
-        new_parent = sibling.parent
-      when 'after'
-        position = (sibling.position + 1) unless sibling.nil?
-        new_parent = sibling.parent
-      when 'inside'
-        position = 1
-        new_parent = sibling
-      else
-        render :text => "insert position invalid", :status => 501
-      end
-      session[:expanded_nodes] << new_parent.id
+    result = {}
 
-      moved_artifact.parent_relation.remove_from_list
-      moved_artifact.parent = new_parent
-      moved_artifact.parent_relation.insert_at(position)
+    moved_artifact.parent_relation.remove_from_list
+    moved_artifact.parent = new_parent
 
-      result = {}
+    if insert_position == 0 # insert inside
+      moved_artifact.parent_relation.insert_at(1)
       result['status'] = 1
-      result['insert_pos'] = position.to_s
-      result['sibling'] = position.to_s + ' ' + sibling.name.to_s unless sibling.nil?
-
-      render :json => result      
+      result['insert_pos'] = 1
+    else
+      moved_artifact.parent_relation.insert_at(insert_position.to_i + 1)
+      result['status'] = 1
+      result['insert_pos'] = 1
     end
+
+    render :json => result
   end
 
   # first tries to enable a contextmenu in artifact tree

@@ -1181,3 +1181,7 @@ div.query.details div.description {
 .jstree-contextmenu {
     z-index: 10;
 }
+
+#jstree-marker {
+    z-index: 10;
+}

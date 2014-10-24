@@ -167,50 +167,8 @@ $(document).ready(function() {
       },
       "themes" : {
         "stripes" : false,
-        'variant' : 'small',
         "dots" : true,
       },
-    },
-    "dnd" : {
-      "drop_finish" : function (data) {
-        var drag = data.o;
-        var drop = data.r;
-        var id = drag.attr("id").replace('node_','');
-        var name = jQuery("a:first", drag.first()).text();
-        var name = jQuery.trim(name);
-
-        var parent_id_field = jQuery('#sink_artifact_id');
-        var parent_text_field = jQuery('#sink_autocomplete');
-
-        var source_id;
-        var sink_id;
-
-        parent_id_field.val(id);
-        parent_text_field.val(name);
-
-        if (drop.hasClass("traces_to")) {
-        	source_id = drop.data("artifactid");
-        	sink_id = id;
-        } else if (drop.hasClass("traces_from")) {
-    	    source_id = id;
-	       	sink_id = drop.data("artifactid");
-        }//endif
-        
-        if (drop.hasClass("traces_to") || drop.hasClass("traces_from")) {
-          $.ajax({
-            type: "GET",
-            url: "<%= url_for :controller => 'requirements', :action => 'add_relation' %>",
-            data: { 'source_id': source_id, 'sink_id': sink_id, 'id': drop.data("artifactid") }
-          })
-          .success(function (message) {        	
-            $('#ajax-modal').html(message);			
-            $('#ajax-modal').addClass('new-relation');        		
-            showModal('ajax-modal', '400px');	
-          })
-          .error(function(message) {
-          });
-        } // endif drop classes
-      } // end drop finish
     },    
     "types" : {
       "#" : {
@@ -268,7 +226,7 @@ $(document).ready(function() {
       "items" : createJSTreeContextmenuItems()
     },
     <% if User.current.allowed_to?(:edit_requirements, @project) %>
-  		plugins : [ "dnd", "ui", "contextmenu", "types", "wholerow" ]  
+  		plugins : [ "dnd", "ui", "contextmenu", "types"]  
     <% elsif  User.current.allowed_to?(:view_requirements, @project) %>	
       plugins : [ "ui", "contextmenu", "types", "wholerow" ]
     <% end %>
@@ -284,33 +242,20 @@ $(document).ready(function() {
     });
   })
   .bind("move_node.jstree", function (e, data) {
-    data.rslt.o.each(function (i) {            
-      jQuery.ajax({
-        async : false,
-        type: 'POST',
-        url: "<%= url_for :controller => 'requirements', :action => 'delegate_tree_drop' %>/",
-        data : { 
-          "id" : $(this).attr("id").replace("node_",""), 
-          "new_parent_id" : data.rslt.np.attr("id").replace("node_",""),
-          "sibling_id" : data.rslt.r.attr("id").replace("node_",""),
-          "position" : data.rslt.p,
-          "authenticity_token" : <%= "#{form_authenticity_token.inspect}".html_safe %>
-        },
-        success : function (r) {
-          if(!r.status) {
-            jQuery.jstree.rollback(data.rlbk);
-          }
-          else {
-            jQuery(data.rslt.oc).attr("id", "node_" + r.id);
-            if(data.rslt.cy && jQuery(data.rslt.oc).children("UL").length) {
-              data.inst.refresh(data.inst._get_parent(data.rslt.oc));
-            }
-          }
-        },
-        error : function (r) {
-          jQuery.jstree.rollback(data.rlbk);
-        }
-      });
+    var parent_id = data.parent.replace("node_","");
+    var id = data.node.id.replace("node_","");
+    var position = data.position;
+    
+    jQuery.ajax({
+      async : false,
+      type: 'POST',
+      url: "<%= url_for :controller => 'requirements', :action => 'delegate_tree_drop' %>/",
+      data : {
+        "id" : id,
+        "parent_id" : parent_id,
+        "position" : position,
+        "authenticity_token" : <%= "#{form_authenticity_token.inspect}".html_safe %>
+      }
     });
   })
 
