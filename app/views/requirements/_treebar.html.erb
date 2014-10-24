@@ -320,7 +320,7 @@ $(document).ready(function() {
 /*
  * Watch click event on tree items to edit artifacts
  */
-$("#tree a").live("click", function(e) {
+$("#tree").delegate("a", "click", function(e) {
   var artifact = $(this);
   var link = artifact.attr("data-href");
   if (link !== undefined) window.location.href = link;
