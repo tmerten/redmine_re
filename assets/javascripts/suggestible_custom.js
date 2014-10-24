@@ -224,13 +224,11 @@
             $('<span />', { 'class': 'name' }).appendTo(this).html(record.highlighted_name);
             $('<span />', { 'class': 'type' }).appendTo(this).text(record.type_name);
             this.click(function() {
-                $.blockUI();
                 document.location = record.url;
                 return false;
             });
             helpers.elements.textBox.keydown(function(event) {
                 if ((event.keyCode == 9 || event.keyCode == 13) && helpers.hasSelectedSuggestion()) {
-                    $.blockUI();
                     document.location = helpers.selectedSuggestion().data('record').url;
                 }
             })

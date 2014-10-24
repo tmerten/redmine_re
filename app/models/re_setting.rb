@@ -63,7 +63,7 @@ class ReSetting < ActiveRecord::Base
     if settings_updated_on && @cached_cleared_on <= settings_updated_on
       @cached_settings.clear
       @cached_cleared_on = Time.now
-      logger.info "Settings cache cleared." if logger
+      logger.info "Settings cache cleared."
     end
   end
   

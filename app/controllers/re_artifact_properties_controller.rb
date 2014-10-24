@@ -77,9 +77,10 @@ class ReArtifactPropertiesController < RedmineReController
     # relation related attributes
     unless params[:parent_artifact_id].blank? || params[:parent_relation_position].blank?
       @re_artifact_properties.parent = ReArtifactProperties.find(params[:parent_artifact_id])
-      logger.debug("ReArtifactProperties.create => parent_relation: #{@re_artifact_properties.parent_relation.inspect}") if logger
+      logger.debug("ReArtifactProperties.create => parent_relation: #{@re_artifact_properties.parent_relation.inspect}")
       @parent_artifact_id = params[:parent_artifact_id]
       @parent_relation_position = params[:parent_relation_position]
+      session[:expanded_nodes] << params[:parent_artifact_id].to_i
     end
 
     if @re_artifact_properties.save
@@ -108,7 +109,7 @@ class ReArtifactPropertiesController < RedmineReController
       end
       redirect_to @re_artifact_properties, :notice => t(:re_artifact_properties_created)
     else
-      logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}") if logger
+      logger.debug("ReArtifactProperties.create => Errors: #{@re_artifact_properties.errors.inspect}")
       initialize_tree_data
       render :new
     end

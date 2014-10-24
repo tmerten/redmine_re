@@ -18,7 +18,7 @@ a:active {
 }
 
 .re-content {
-    padding: 6px, 10px, 10px, 10px;
+    padding: 6px;
 }
 
 .vsplitbar {
@@ -220,7 +220,7 @@ td.subtask {
 }
 td.subtask_show {
 	padding: 2px;
-	border-top: 1px solid #CCCCCC;"
+	border-top: 1px solid #CCCCCC;
 }
 
 
@@ -262,7 +262,6 @@ textarea {
 textarea.bb_config {
     width: 50%;
     height: 70px;
-    rows: 5;
 }
 
 select.bb_config {
@@ -792,12 +791,8 @@ div#visualization_filters div.text form label {
     width: 180px;
     background-color: white;
     border: 1px solid #ccc;
-    -moz-box-shadow: #555 2px 2px 8px;
-    -webkit-box-shadow: #555 2px 2px 8px;
-    -o-box-shadow: #555 2px 2px 8px;
     box-shadow: #555 2px 2px 8px;
     opacity: 0.9;
-    filter: alpha(opacity=90);
     font-size: 10px;
     padding: 7px;
 }
@@ -1181,4 +1176,8 @@ div.query.details div.description {
 	float: left;
     padding: 5px;
     width: 300px;
+}
+
+.jstree-contextmenu {
+    z-index: 10;
 }

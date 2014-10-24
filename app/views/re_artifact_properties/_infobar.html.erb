@@ -41,8 +41,8 @@
 <% comments = @re_artifact_properties.comments.length %>
 <% watcher_image = (watchers > 0) ? 'fav.png' : 'fav_off.png' %>
 
-$j(document).ready(function () {
-  var easttoggler = $j("div.ui-layout-toggler-east-closed > span.content-closed");
+$(document).ready(function () {
+  var easttoggler = $("div.ui-layout-toggler-east-closed > span.content-closed");
   var eastspan = easttoggler.first()
   eastspan.html('<%= watchers %><%= image_tag(watcher_image) %><br/><%= comments %><%= image_tag('comments.png')%>');
 });

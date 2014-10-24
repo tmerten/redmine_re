@@ -128,13 +128,11 @@
                         return { ids: selectBox.val() };
                     },
                     loading: function(helpers) {
-                        $.blockUI();
                     },
                     loaded: function(helpers) {
                         helpers.elements.bitsBox.hide().fadeIn('fast');
                     },
                     allLoaded: function(helpers) {
-                        $.unblockUI();
                     }
                 }
             },

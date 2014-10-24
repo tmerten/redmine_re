@@ -1,10 +1,9 @@
 <% content_for :header_tags do %>
-    <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
-    <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
-    <%= javascript_include_tag 'suggestible.js', :plugin => 'redmine_re' %>
-    <%= javascript_include_tag 'suggestible_custom.js', :plugin => 'redmine_re' %>
-    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
-    <%= stylesheet_link_tag 'icons.css', :plugin => "redmine_re", :media => 'all' %>
+  <%= javascript_include_tag 'jquery.layout.min.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.layout.state.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'redmine_re.js',    :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+  <%= stylesheet_link_tag 'icons.css',      :plugin => "redmine_re", :media => 'all' %>
 <% end %>
 
 <div id="infobar" class="ui-layout-west ui-layout-content">
@@ -12,6 +11,7 @@
 </div>
 
 <div id="re-index" class="ui-layout-center">
+
   <% configured_description = ReSetting.get_plain('plugin_description', @project.id) %>
   <% if configured_description.nil? or configured_description == '' %>
       <% if User.current.allowed_to?(:edit_requirements, @project) %>

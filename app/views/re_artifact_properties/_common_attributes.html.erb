@@ -40,8 +40,8 @@
                       :class => 'wiki-edit' %>
     <%= wikitoolbar_for ('re_artifact_properties_description').html_safe %>
 		<%= javascript_tag do %>
-		$j(document).ready(function() {
-			$j("textarea.wiki-edit").autoGrow();
+		$(document).ready(function() {
+			$("textarea.wiki-edit").autoGrow();
 		});
 		<% end %>
     </span>

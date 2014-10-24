@@ -1,15 +1,13 @@
 <% content_for :header_tags do %>
-    <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
-    <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.layout.min.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.layout.state.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
 	<%= javascript_include_tag 'jquery.qtip.js', :plugin => 'redmine_re' %>
 	<%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
 
-
-    <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
-	<%= stylesheet_link_tag 'jquery.qtip.css', :plugin => "redmine_re", :media => 'all' %>
-    <%= stylesheet_link_tag 'print.css', :plugin => "redmine_re", :media => 'print' %>
-
-	
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => "redmine_re", :media => 'all' %>
+  <%= stylesheet_link_tag 'jquery.qtip.css', :plugin => "redmine_re", :media => 'all' %>
+  <%= stylesheet_link_tag 'print.css', :plugin => "redmine_re", :media => 'print' %>
 <% end %>
 
 <div id="infobar" class="ui-layout-west ui-layout-content">
@@ -44,7 +42,7 @@
     <% end %>
 
     <div class="subject">
-      <h3><ins class="subject_icon <%= @re_artifact_properties.artifact_type.underscore %>"></ins> <%= @re_artifact_properties.name %><%= render rate %></h3>
+      <h3><ins class="<%= @re_artifact_properties.artifact_type.underscore + "-icon" %>"></ins> <%= @re_artifact_properties.name %><%= render rate %></h3>
       <p class="author">
         <%= authoring @re_artifact_properties.created_at, @re_artifact_properties.author %>.
         <% if @re_artifact_properties.created_at != @re_artifact_properties.updated_at %>

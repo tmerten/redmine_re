@@ -1,10 +1,10 @@
 <% content_for :header_tags do %>
-    <%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
-
-    <%= javascript_include_tag 'jquery.layout-1.3.0.rc30.79-min.js', :plugin => 'redmine_re' %>
-    <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
-    <%= stylesheet_link_tag 'redmine_re.css', :plugin => 'redmine_re' %>
-    <%= stylesheet_link_tag 'print.css', :plugin => "redmine_re", :media => 'print' %>
+  <%= javascript_include_tag 'jquery.layout.min.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jquery.layout.state.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'jit.js', :plugin => 'redmine_re' %>
+  <%= javascript_include_tag 'redmine_re.js', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'redmine_re.css', :plugin => 'redmine_re' %>
+  <%= stylesheet_link_tag 'print.css', :plugin => "redmine_re", :media => 'print' %>
 <% end%>
 
 <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
@@ -27,10 +27,9 @@
 	<%= render :partial => 'infobar_visualization' %>
 </div>
 
-
 <script type="text/javascript">
-$j(document).ready(function () {
-  var easttoggler = $j("div.ui-layout-toggler-east-closed > span.content-closed");
+$(document).ready(function () {
+  var easttoggler = $("div.ui-layout-toggler-east-closed > span.content-closed");
   var eastspan = easttoggler.first()
   eastspan.html('');
 
@@ -43,7 +42,7 @@ $(document).ready(function () {
 	$('#visualization').submit();
 });
 
-jQuery('#visualization').bind('ajax:success', function(evt, data, status, xhr){		
+$('#visualization').bind('ajax:success', function(evt, data, status, xhr){		
 	init(data);
 });
 $('#detail_view').scroll(function()
@@ -82,8 +81,8 @@ function init(data) {
 		
       //id container for the visualization
    injectInto: 'infovis',
-   width: jQuery("#infovis").width(),  
-   height:jQuery("#infovis").height(),  
+   width: $("#infovis").width(),  
+   height: $("#infovis").height(),  
       //Change node and edge styles such as
       //color, width, lineWidth and edge types
 			
@@ -196,8 +195,8 @@ function init(data) {
 			visualization = new $jit.Sunburst(visualization_config);
 	    break;
 	  case "netmap":
-			var width = jQuery("#infovis").width();
-			var height = jQuery("#infovis").height();
+			var width = $("#infovis").width();
+			var height = $("#infovis").height();
 			var size = width > height ? width:height;
 			visualization_config.levelDistance=size/2-110;
 			visualization = new $jit.Sunburst(visualization_config);

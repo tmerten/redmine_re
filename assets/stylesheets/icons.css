@@ -1,66 +1,144 @@
 .icon {
-  background-repeat: no-repeat !important;
-  background-position: left top;
+    background-repeat: no-repeat !important;
+    background-position: left top;
 }
+
 a.icon {
-  background-repeat: no-repeat !important;
+    background-repeat: no-repeat !important;
 }
 
-.icon.project {
-  background: url(../images/icons/group_gear.png);
+.project {
+    background: url(../images/icons/group_gear.png);
 }
 
-.icon.re_workarea {
-  background: url(../images/icons/bricks.png);
+.re_workarea {
+    background: url(../images/icons/bricks.png);
 }
 
-.icon.re_task {
-  background: url(../images/icons/report_user.png);
+.re_task {
+    background: url(../images/icons/report_user.png);
 }
 
-.icon.re_subtask {
-  background: url(../images/icons/report.png);
+.re_subtask {
+    background: url(../images/icons/report.png);
 }
 
-.icon.re_goal {
-  background: url(../images/icons/world.png);
+.re_goal {
+    background: url(../images/icons/world.png);
 }
 
-.icon.re_use_case {
-  background: url(../images/icons/page_user.png);
+.re_use_case {
+    background: url(../images/icons/page_user.png);
 }
 
-.icon.re_user_profile {
-  background: url(../images/icons/user.png);
+.re_user_profile {
+    background: url(../images/icons/user.png);
 }
 
-.icon.re_section {
-  background: url(../images/icons/text_padding_top.png);
+.re_section {
+    background: url(../images/icons/text_padding_top.png);
 }
 
-.icon.re_attachment {
-  background: url(../images/icons/attach.png);
+.re_attachment {
+    background: url(../images/icons/attach.png);
 }
 
-.icon.re_vision {
-  background: url(../images/icons/lightbulb.png);
+.re_vision {
+    background: url(../images/icons/lightbulb.png);
 }
 
-.icon.re_requirement {
-  background: url(../images/icons/pencil.png);
+.re_requirement {
+    background: url(../images/icons/pencil.png);
 }
 
-.icon.re_scenario {
-  background: url(../images/icons/newspaper.png);
+.re_scenario {
+    background: url(../images/icons/newspaper.png);
 }
 
-.icon.re_processword {
-  background: url(../images/icons/cog.png);
+.re_processword {
+    background: url(../images/icons/cog.png);
 }
 
-.icon.re_rationale {
-  background: url(../images/icons/anchor.png);
+.re_rationale {
+    background: url(../images/icons/anchor.png);
 }
-.icon.re_visualization{
-  background: url(../images/icons/visualization.png);
+
+.re_visualization {
+    background: url(../images/icons/visualization.png);
+}
+
+.new-icon:before {
+    content: url("../../../images/add.png");
+}
+
+.edit-icon:before {
+    content: url("../../../images/edit.png");
+}
+
+.delete-icon:before {
+    content: url("../../../images/delete.png");
+}
+
+.re_project-icon:before {
+    content: url("../images/icons/group_gear.png");
+}
+
+.re_goal-icon:before {
+    content: url("../images/icons/world.png");
+}
+
+.re_workarea-icon:before {
+    content: url("../images/icons/bricks.png");
+}
+
+.re_task-icon:before {
+    content: url("../images/icons/report_user.png");
+}
+
+.re_subtask-icon:before {
+    content: url("../images/icons/report.png");
+}
+
+.re_goal-icon:before {
+    content: url("../images/icons/world.png");
+}
+
+.re_use_case-icon:before {
+    content: url("../images/icons/page_user.png");
+}
+
+.re_user_profile-icon:before {
+    content: url("../images/icons/user.png");
+}
+
+.re_section-icon:before {
+    content: url("../images/icons/text_padding_top.png");
+}
+
+.re_attachment-icon:before {
+    content: url("../images/icons/attach.png");
+}
+
+.re_vision-icon:before {
+    content: url("../images/icons/lightbulb.png");
+}
+
+.re_requirement-icon:before {
+    content: url("../images/icons/pencil.png");
+}
+
+.re_scenario-icon:before {
+    content: url("../images/icons/newspaper.png");
+}
+
+.re_processword-icon:before {
+    content: url("../images/icons/cog.png");
+}
+
+.re_rationale-icon:before {
+    content: url("../images/icons/anchor.png");
+}
+
+.re_visualization-icon:before {
+    content: url("../images/icons/visualization.png");
 }

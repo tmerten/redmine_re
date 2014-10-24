@@ -29,19 +29,19 @@ class RedmineReController < ApplicationController
       unconfirmed = ReSetting.get_plain("unconfirmed", @project.id)
       
       if unconfirmed.nil? || unconfirmed == "true"
-
         flash[:notice] = t(:re_settings_have_to_save_again)
         redirect_to :controller => "re_settings", :action => "configure", :project_id => @project.id    
-          
       end
     end 
   end
 
   def initialize_tree_data
     return if @firstload == true
-    project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
-    session[:expanded_nodes] << project_artifact.id
-    @json_tree_data = create_tree(project_artifact, 1).to_json
+    @project_artifact = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
+    session[:expanded_nodes] << @project_artifact.id
+    tree = []
+    tree << create_tree(@project_artifact)
+    @json_tree_data = tree.to_json
   end
 
   def load_settings
@@ -192,7 +192,6 @@ class RedmineReController < ApplicationController
     render 're_artifact_properties/edit'  
   end
 
-
   def new_hook(paramsparams)
     logger.debug("#############: new_hook not called") if logger
   end
@@ -214,18 +213,8 @@ class RedmineReController < ApplicationController
     logger.debug("#############: edit_invalid_artifact_cleanup_hook not called") if logger
   end
 
-  def render_json_tree(re_artifact_properties, depth)
-    # creates a tree of all children of re_artifact_properties
-    # as json data
-    tree = []
-    for child in re_artifact_properties.children
-      tree << create_tree(child, depth)
-    end
-    tree.to_json
-  end
-
-    # filtering of re_artifacts. If request is post, filter was used already
-    # and result should be displayed
+  # filtering of re_artifacts. If request is post, filter was used already
+  # and result should be displayed
   def enhanced_filter
     @project_id = params[:project_id]
 
@@ -317,20 +306,19 @@ class RedmineReController < ApplicationController
     li
   end
 
-  def create_tree(re_artifact_properties, depth = 0)
+  def create_tree(re_artifact_properties)
     # creates a hash containing re_artifact_properties and all its children
-    # until a certain tree depth (BFS)
     # the result is a hash in the form
     #
-    # tree['data'] = ARTIFACT_NAME
-    # tree['url']  = ARTIFACT_EDIT_URL ...
-    # tree['state'] = ARTIFACT_OPEN/CLOSED ...
-    # tree['rel'] = ARTIFACT_TYPE ...
-    # tree['attr]['id'] = ARTIFACT_ID...
-    # tree['attr]['rel'] = ARTIFACT_TYPE ...
-    # tree['attr]['title'] = ARTIFACT_FULL_NAME ...
-    # tree['children] = ARRAY OF MORE ARTIFACTS IN THE SAME STRUCTURE
-    #
+    # example format
+    # 'data' : [
+    #     {
+    #         'id' : 'node_2',
+    #         'text' : 'Root node with options',
+    #         'state' : { 'opened' : true, 'selected' : true },
+    #         'children' : [ { 'text' : 'Child 1' }, .........]
+    #     }
+    # ]
     # to be rendered as json or xml. Used together with JStree right now 
     session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
     expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
@@ -339,40 +327,45 @@ class RedmineReController < ApplicationController
     artifact_name = re_artifact_properties.name.to_s
     artifact_id = re_artifact_properties.id.to_s
     has_children = !re_artifact_properties.children.empty?
+  
+    node = {}
+    node['id'] = "node_" + artifact_id.to_s
+    node['text'] = artifact_name
+    node['type'] = artifact_type
+    
+    state = {}
+    if expanded
+      state['opened'] = true
+    end
+    node['state'] = state
+    
+    a_attr = {}
+    a_attr['data-id'] = artifact_id.to_s
+    unless artifact_type.eql?('project')
+      a_attr['data-href'] = url_for(:controller => 're_artifact_properties', :action => 'show', :id => artifact_id) 
+      a_attr['data-delete-href'] = url_for(:controller => 're_artifact_properties', :action => 'destroy', :id => artifact_id)
+    end
+    node['a_attr'] = a_attr
 
-    tree = {}
-    tree['data'] = artifact_name
+    node_state = {}
     if has_children
-      tree ['state'] = 'open' if expanded
-      tree ['state'] = 'closed' unless expanded
+      node_state ['opened'] = 'true' if expanded
     end
 
-    attr = {}
-    attr['id'] = "node_" + artifact_id.to_s
-    attr['rel'] = artifact_type
-    attr['title'] = artifact_name
-    attr['url'] = url_for(:controller => 're_artifact_properties', :action => 'show', :id => artifact_id) unless artifact_type.eql?('project')
-    attr['delete_url'] = url_for(:controller => 're_artifact_properties', :action => 'destroy', :id => artifact_id) unless artifact_type.eql?('project')
-
-    tree['attr'] = attr
+    node['state'] = node_state
 
     if has_children
-      tree['children'] = get_children(re_artifact_properties, depth-1)
+      node['children'] = get_children(re_artifact_properties)
     end
 
-    tree
+    node
   end
 
-  def get_children(re_artifact_properties, depth)
+  def get_children(re_artifact_properties)
     children = []
-    expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
-    comma = false
-
     for child in re_artifact_properties.children
-      if (depth > 0 || expanded)
-          children << create_tree(child, depth)
-        end
-      end
+      children << create_tree(child)
+    end
     children
   end
 

@@ -71,35 +71,37 @@ class RequirementsController < RedmineReController
   # the tree this state will be saved in the session
   # whenever you render the tree the rendering function will ask the
   # session for the nodes that are "opened" to render the children
-  def treestate
+  def tree
     node_id = params[:id].to_i
-    case params[:open]
+    case params[:mode]
       when 'data'
-        ret = ''
-        if node_id.eql? -1
-          re_artifact_properties = ReArtifactProperties.find_by_project_id_and_artifact_type(@project.id, "Project")
-          ret = create_tree(re_artifact_properties, 1)
-        else
-          session[:expanded_nodes] << node_id
-          re_artifact_properties =  ReArtifactProperties.find(node_id)
-          ret = render_json_tree(re_artifact_properties, 1)
+        session[:expanded_nodes] << node_id
+        re_artifact_properties = ReArtifactProperties.find(node_id)
+        tree = []
+        for child in re_artifact_properties.children
+          tree << create_tree(child)
         end
-        render :json => ret
-      when 'true'
+        render :json => tree.to_json
+      when 'root'
+        tree = []
+        tree << create_tree(@project_artifact)
+        render :json => tree.to_json
+      when 'open'
         session[:expanded_nodes] << node_id
         render :text => "node #{node_id} opened"
       else
         session[:expanded_nodes].delete(node_id)
         render :text => "node #{node_id} closed"
     end
+    logger.debug("Expended nodes: #{session[:expanded_nodes].inspect}") if logger
   end
 
   def sendDiagramPreviewImage 
-    if @project.enabled_module_names.include? 'diagrameditor'            
+    if @project.enabled_module_names.include? 'diagrameditor'
        path = File.join(Rails.root, "files")
        filename = "diagram#{params[:diagram_id]}.png"
        path = File.join(path, filename)
-       send_file path, :type => 'image/png', :filename => filename               
+       send_file path, :type => 'image/png', :filename => filename
     end         
   end
   
@@ -108,7 +110,7 @@ class RequirementsController < RedmineReController
     @sink = ReArtifactProperties.find_by_id(params[:sink_id]);
     @re_artifact_properties = ReArtifactProperties.find_by_id(params[:id])
         
-    if (@source.blank? || @sink.blank? || @re_artifact_properties.blank? )              
+    if (@source.blank? || @sink.blank? || @re_artifact_properties.blank? )
         render :text => t(:re_404_artifact_not_found), :status => 404
     elsif (!params[:re_artifact_relationship].blank?)
       
