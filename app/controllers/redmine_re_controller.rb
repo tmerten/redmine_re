@@ -76,7 +76,7 @@ class RedmineReController < ApplicationController
 
   def new
     @artifact_type = self.controller_name # needed for ajax request
-    logger.debug("############ CALLED NEW FOR ARTIFACT OF TYPE: " + @artifact_type) if logger
+    logger.debug("############ CALLED NEW FOR ARTIFACT OF TYPE: " + @artifact_type)
 
     @artifact = @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
@@ -96,7 +96,7 @@ class RedmineReController < ApplicationController
 
   def create
     @artifact_type = self.controller_name
-    logger.debug("############ Called edit for artifact of type: " + @artifact_type) if logger
+    logger.debug("############ Called edit for artifact of type: " + @artifact_type)
 
     @artifact = @artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
@@ -132,7 +132,7 @@ class RedmineReController < ApplicationController
 
       valid = @artifact.valid?
 
-      logger.debug("############ errors after validating #{@artifact_type} ##{@artifact.id}: #{@artifact.errors.inspect}") if logger
+      logger.debug("############ errors after validating #{@artifact_type} ##{@artifact.id}: #{@artifact.errors.inspect}")
 
       if valid && @artifact_properties.valid?
         flash.now[:notice] = t( @artifact_type + '_saved', :name => @artifact.name ) if @artifact.save
@@ -170,7 +170,7 @@ class RedmineReController < ApplicationController
   def edit
 
     @artifact_type = self.controller_name
-    logger.debug("############ Called edit for artifact of type: " + @artifact_type) if logger
+    logger.debug("############ Called edit for artifact of type: " + @artifact_type)
 
     @artifact = @artifact_type.camelcase.constantize.find_by_id(params[:id], :include => :re_artifact_properties) || @artifact_type.camelcase.constantize.new
     @artifact_properties = @artifact.re_artifact_properties
@@ -193,24 +193,24 @@ class RedmineReController < ApplicationController
   end
 
   def new_hook(paramsparams)
-    logger.debug("#############: new_hook not called") if logger
+    logger.debug("#############: new_hook not called")
   end
 
   def edit_hook_after_artifact_initialized(params)
-    logger.debug("#############: edit_hook_after_artifact_initialized not called") if logger
+    logger.debug("#############: edit_hook_after_artifact_initialized not called")
   end
 
   def edit_hook_validate_before_save(params, artifact_valid)
-    logger.debug("#############: edit_validate_before_save_hook not called") if logger
+    logger.debug("#############: edit_validate_before_save_hook not called")
     return true
   end
 
   def edit_hook_valid_artifact_after_save(params)
-    logger.debug("#############: edit_valid_artifact_after_save_hook not called") if logger
+    logger.debug("#############: edit_valid_artifact_after_save_hook not called")
   end
 
   def edit_hook_invalid_artifact_cleanup(params)
-    logger.debug("#############: edit_invalid_artifact_cleanup_hook not called") if logger
+    logger.debug("#############: edit_invalid_artifact_cleanup_hook not called")
   end
 
   # filtering of re_artifacts. If request is post, filter was used already
