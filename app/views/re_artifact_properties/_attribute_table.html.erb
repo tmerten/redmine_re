@@ -7,242 +7,236 @@
 <% related_diagrams = @re_artifact_properties.related_diagrams %>
    
 <table class="attributes">
-	<colgroup>
-		<col />
-		<col />
-		<col />
-		<col style="min-width:300px width:60%" />
-	</colgroup>
-	<tbody>
-		<tr>
-			<th><%= l(:re_artifact_responsible) %></th>
-			<td><%= @re_artifact_properties.responsible.nil? ? t(:re_no_responsible_user_defined) : @re_artifact_properties.responsible %></td>
-			<th class="jstree-drop traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= t(:re_traces_to) -%></th>			
-			<% current_relation = traces_as_source.shift %>
-			<% s = ReArtifactProperties.find_by_id(current_relation.sink_id) if current_relation %> 
-			<td class="jstree-drop traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_to) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
-		</tr>
-		<% traces_as_source.each do |current_relation| %>
-		<tr>
-			<th></th>
-			<td></td>
-			<th class="jstree-drop traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> </th>
-			<% s = ReArtifactProperties.find_by_id(current_relation.sink) %>			
-			<td class="jstree-drop traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_to) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
-		</tr>
-		<% end %>
-		<tr>
-			<th></th>
-			<td></td>
-			<th class="jstree-drop traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= t(:re_traces_from) -%></th>			
-			<% current_relation = traces_as_sink.shift %>
-			<% s = nil %>			
-			<% s = ReArtifactProperties.find_by_id(current_relation.source_id) if current_relation %> 
-			<td class="jstree-drop traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_from) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
-		</tr>				
-		<% traces_as_sink.each do |current_relation| %>
-		<tr>
-			<th></th>
-			<td></td>
-			<th class="jstree-drop traces_from" data-artifactid="<%=@re_artifact_properties.id%>"></th>
-			<% s = ReArtifactProperties.find_by_id(current_relation.source_id)%> 
-			<td class="jstree-drop traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_from) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
-		</tr>
-		<% end %>
-		<tr>
-			<th></th>
-			<td></td>
-			<th><%= t(:re_related_issues) -%></th>
-			<% i = issues.first %>
-			<td><%= "#{i.tracker.name} ##{i.id}" if i -%> <%= link_to(i.subject,i,{:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{i.id.to_s}&visualization_type=graph_issue&data=default"}) if i -%></td>
-			
-		</tr>				
-		<% issues.each_with_index do |i, index| %>
-		  <% next if index==0 %>
-		<tr>
-			<th></th>
-			<td></td>
-			<th></th>
-			<td><%= "#{i.tracker.name} ##{i.id}" -%> <%= link_to(i.subject,i,{:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{i.id.to_s}&visualization_type=graph_issue&data=default"}) -%></td>
-		</tr>
-		<% end %>	
-		
-	    <% if (@project.enabled_module_names.include? 'diagrameditor') && (User.current.allowed_to?(:edit_diagrams, @project)) %>	     				
-			<tr>
-			<th></th>
-			<td></td>
-			<th><%= t(:re_diagrams) %></th>	
-			<% current_diagram = related_diagrams.shift %>
-					
-			<td> <%= link_to(current_diagram.name, {:controller => "diagrameditor",
+  <colgroup>
+    <col />
+    <col />
+    <col />
+    <col style="min-width:300px width:60%" />
+  </colgroup>
+  <tbody>
+    <tr>
+      <th><%= l(:re_artifact_responsible) %></th>
+      <td><%= @re_artifact_properties.responsible.nil? ? t(:re_no_responsible_user_defined) : @re_artifact_properties.responsible %></td>
+      <th class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= t(:re_traces_to) -%></th>      
+      <% current_relation = traces_as_source.shift %>
+      <% s = ReArtifactProperties.find_by_id(current_relation.sink_id) if current_relation %> 
+      <td class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_to) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
+    </tr>
+    <% traces_as_source.each do |current_relation| %>
+    <tr>
+      <th></th>
+      <td></td>
+      <th class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> </th>
+      <% s = ReArtifactProperties.find_by_id(current_relation.sink) %>      
+      <td class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_to) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <th></th>
+      <td></td>
+      <th class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= t(:re_traces_from) -%></th>     
+      <% current_relation = traces_as_sink.shift %>
+      <% s = nil %>     
+      <% s = ReArtifactProperties.find_by_id(current_relation.source_id) if current_relation %> 
+      <td class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_from) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
+    </tr>       
+    <% traces_as_sink.each do |current_relation| %>
+    <tr>
+      <th></th>
+      <td></td>
+      <th class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"></th>
+      <% s = ReArtifactProperties.find_by_id(current_relation.source_id)%> 
+      <td class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_from) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <th></th>
+      <td></td>
+      <th><%= t(:re_related_issues) -%></th>
+      <% i = issues.first %>
+      <td><%= "#{i.tracker.name} ##{i.id}" if i -%> <%= link_to(i.subject,i,{:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{i.id.to_s}&visualization_type=graph_issue&data=default"}) if i -%></td>
+      
+    </tr>       
+    <% issues.each_with_index do |i, index| %>
+      <% next if index==0 %>
+    <tr>
+      <th></th>
+      <td></td>
+      <th></th>
+      <td><%= "#{i.tracker.name} ##{i.id}" -%> <%= link_to(i.subject,i,{:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{i.id.to_s}&visualization_type=graph_issue&data=default"}) -%></td>
+    </tr>
+    <% end %> 
+    
+      <% if (@project.enabled_module_names.include? 'diagrameditor') && (User.current.allowed_to?(:edit_diagrams, @project)) %>             
+      <tr>
+      <th></th>
+      <td></td>
+      <th><%= t(:re_diagrams) %></th> 
+      <% current_diagram = related_diagrams.shift %>
+          
+      <td> <%= link_to(current_diagram.name, {:controller => "diagrameditor",
                       :action => 'show', :diagram_id => current_diagram.id,
                       :project_id => @project.identifier}, 
                       {:onmouseover => "display_diagram_preview(#{current_diagram.id})", 
                       :onmouseout => "$('#diagram_preview_container').hide();" }) if current_diagram %> </td>
-			</tr>
-			
-			<% related_diagrams.each do |current_diagram| %>
-				<tr>
-				<th></th>
-				<td></td>
-				<th></th>				
-				<td> <%= link_to(current_diagram.name, {:controller => "diagrameditor",
+      </tr>
+      
+      <% related_diagrams.each do |current_diagram| %>
+        <tr>
+        <th></th>
+        <td></td>
+        <th></th>       
+        <td> <%= link_to(current_diagram.name, {:controller => "diagrameditor",
                       :action => 'show', :diagram_id => current_diagram.id,
                       :project_id => @project.identifier},
                       {:onmouseover => "display_diagram_preview(#{current_diagram.id})",
                       :onmouseout => "$('#diagram_preview_container').hide();" }) %></td>
-				</tr>
-			<% end %>
-		<% end %>
-			
-	</tbody>
+        </tr>
+      <% end %>
+    <% end %>
+      
+  </tbody>
 </table>
 
 <script type="text/javascript">
-   	function display_diagram_preview (diagram_id) {     	
-  		$("#diagram_preview_image").attr('src', "/projects/<%="#{@project.identifier}"%>/diagram_preview/"+diagram_id);
-  		$('#diagram_preview_container').show();
-    };
-	</script>
-<script type="text/javascript" class ="jstree-drop traces_to">	
-	$(document).ready(function()
-	{
-		$('table.attributes a').each(function()
-		{
-			$(this).qtip(
-			{
-				content: {
-					text: ' <div id="infovis" class="infovis" style="min-width: 400px; height: 400px"></div>',
-					ajax: {
-						url: $(this).attr('rel'),// Use the rel attribute of each element for the url to load
-						once: false,
-						cache: false,
-						success: function(data, status){
-								init(data);
-						}
-					},
-				},
-				position: {
-					at: 'bottom center', // Position the tooltip above the link
-					my: 'top center',
-					effect: false // Disable positioning animation
-				},
-				show: {
-					solo: true // Only show one tooltip at a time
-				},
-				style: {
-					classes: 'qtip-wiki qtip-light qtip-shadow'
-				},
-				hide: 'unfocus',
-				events: {
-						show: function(event, api) {
-									$(this).find('#test').attr('id',"infovis");
-									clear_canvas();
-										
+//<![CDATA[
+  function display_diagram_preview (diagram_id) {       
+    $("#diagram_preview_image").attr('src', "/projects/<%="#{@project.identifier}"%>/diagram_preview/"+diagram_id);
+    $('#diagram_preview_container').show();
+  };
 
-								},
-						visible: function(event,api)
-								{
-								$('#ajax-indicator').css( "display", "none" );	
-								},
-						hidden: function(event, api) {
-								}
-	
-				}
-			})
-				
-		})
-	});
-</script>
-<script type="text/javascript">
-$('#detail_view').scroll(function()
-{
-	if(visualization!=null)
-	{
-		visualization.canvas.getPos(true);
-	}	
-}); 
+  $(document).ready(function()
+  {
+    $('table.attributes a').each(function()
+    {
+      $(this).qtip(
+      {
+        content: {
+          text: ' <div id="infovis" class="infovis" style="min-width: 400px; height: 400px"></div>',
+          ajax: {
+            url: $(this).attr('rel'),// Use the rel attribute of each element for the url to load
+            once: false,
+            cache: false,
+            success: function(data, status){
+                init(data);
+            }
+          },
+        },
+        position: {
+          at: 'bottom center', // Position the tooltip above the link
+          my: 'top center',
+          effect: false // Disable positioning animation
+        },
+        show: {
+          solo: true // Only show one tooltip at a time
+        },
+        style: {
+          classes: 'qtip-wiki qtip-light qtip-shadow'
+        },
+        hide: 'unfocus',
+        events: {
+            show: function(event, api) {
+                  $(this).find('#test').attr('id',"infovis");
+                  clear_canvas();
+                },
+            visible: function(event,api)
+                {
+                $('#ajax-indicator').css( "display", "none" );  
+                },
+            hidden: function(event, api) {
+                }
+        }
+      })
+        
+    })
+  });
 
-var visualization = null;
-var form = null;
+  $('#detail_view').scroll(function()
+  {
+    if(visualization!=null)
+    {
+      visualization.canvas.getPos(true);
+    } 
+  });
 
-function clear_canvas() {
-  $jit.id('infovis').innerHTML = '';
-};
+  var visualization = null;
+  var form = null;
 
-function init(data) {
-	
-	var visualization_type = "graph"//"<%= params[:visualization_type]%>"
-	var visualization_config = {
-		//id container for the visualization
-      	injectInto: 'infovis',
-   		width: 370,  
-    	height: 370,  
-	  
-      	//Change node and edge styles such as
-      	//color, width, lineWidth and edge types
-			
-	  	NodeStyles: {  
-		    enable: true,  
-		    type: 'Native',  
-		    stylesClick: {  
-		      height: 105 
-		    },  
-		    stylesHover: {  
-		      height: 100  
-		    },  
-		    duration: 700  
-	  	},
-			
-      	Node: {
-      		overridable: true,
-        	height: 50
-      	},
-      	Edge: {
-        	overridable: true,
-        	type: 'line',
-        	alpha: 1
-      	},      
-      	//Draw canvas text. Can also be
-      	//'HTML' or 'SVG' to draw DOM labels
-      	Label: {
-        	type: 'Native',
-        	color: '#000000'
-      	},
-      	Events: {
-        	enable: true,
-        	type: 'Native',
-        	//List node connections onClick
-        	onClick: function(node, eventInfo, e) {
-         	   if (!node) return;
+  function clear_canvas() {
+    $jit.id('infovis').innerHTML = '';
+  };
 
-          		var id = node.id.replace('node_','');
-          	  	if(id.charAt(0)!='i'){
-		 	 	   var link = "<%= re_artifact_properties_path %>";        
-			 	   link = link + "/" + id ;
-          	 	   window.location.href = link;
-		  	 	}else
-		  	  	{
-		  			var id = id.replace('issue_','');
-	 				var link = "/issues";        
-		    		link = link + "/" + id ;
-         	 	    window.location.href = link;
-		  	  	}
-        	}
-		}      
-    };	
- 	
-	visualization = new $jit.ForceDirected(visualization_config);
-    visualization.loadJSON(data);
-    visualization.refresh();
-	 $('div.infovis').attr('id',"test");
-};
+  function init(data) {
+  
+    var visualization_type = "graph"//"<%= params[:visualization_type]%>"
+    var visualization_config = {
+      //id container for the visualization
+          injectInto: 'infovis',
+        width: 370,  
+        height: 370,  
+    
+          //Change node and edge styles such as
+          //color, width, lineWidth and edge types
+      
+        NodeStyles: {  
+          enable: true,  
+          type: 'Native',  
+          stylesClick: {  
+            height: 105 
+          },  
+          stylesHover: {  
+            height: 100  
+          },  
+          duration: 700  
+        },
+      
+          Node: {
+            overridable: true,
+            height: 50
+          },
+          Edge: {
+            overridable: true,
+            type: 'line',
+            alpha: 1
+          },      
+          //Draw canvas text. Can also be
+          //'HTML' or 'SVG' to draw DOM labels
+          Label: {
+            type: 'Native',
+            color: '#000000'
+          },
+          Events: {
+            enable: true,
+            type: 'Native',
+            //List node connections onClick
+            onClick: function(node, eventInfo, e) {
+               if (!node) return;
+                var id = node.id.replace('node_','');
+                  if(id.charAt(0)!='i'){
+             var link = "<%= re_artifact_properties_path %>";        
+             link = link + "/" + id ;
+                   window.location.href = link;
+            }else
+              {
+              var id = id.replace('issue_','');
+            var link = "/issues";        
+              link = link + "/" + id ;
+                  window.location.href = link;
+              }
+            }
+      }      
+      };  
+    visualization = new $jit.ForceDirected(visualization_config);
+      visualization.loadJSON(data);
+      visualization.refresh();
+     $('div.infovis').attr('id',"test");
+  };
 
+//]]>
 </script>
 
-
-	
+  
 <div id="diagram_preview_container" style="display:none;">
-	<img id="diagram_preview_image" src="" style="max-width: 500px; height: auto" alt="">  
+  <img id="diagram_preview_image" src="" style="max-width: 500px; height: auto" alt="">  
 </div>
 
