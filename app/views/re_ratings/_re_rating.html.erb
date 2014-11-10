@@ -1,0 +1,18 @@
+<div class="ratings">
+  <%= form_for(re_rating, :remote => true, :html => {:class => 'rating'}) do |f| %>
+  <%= f.label('value_1', content_tag(:span, '1'), {:class => 'rating', :id => '1'}) %>
+  <%= radio_button_tag('re_rating[value]', 1, re_rating.value == 1, :class => 'rating_button') %>
+  <%= f.label('value_2', content_tag(:span, '2'), {:class => 'rating', :id => '2'}) %>
+  <%= radio_button_tag('re_rating[value]', 2, re_rating.value == 2, :class => 'rating_button') %>
+  <%= f.label('value_3', content_tag(:span, '3'), {:class => 'rating', :id => '3'}) %>
+  <%= radio_button_tag('re_rating[value]', 3, re_rating.value == 3, :class => 'rating_button') %>
+  <%= f.label('value_4', content_tag(:span, '4'), {:class => 'rating', :id => '4'}) %>
+  <%= radio_button_tag('re_rating[value]', 4, re_rating.value == 4, :class => 'rating_button') %>
+  <%= f.label('value_5', content_tag(:span, '5'), {:class => 'rating', :id => '5'}) %>
+  <%= radio_button_tag('re_rating[value]', 5, re_rating.value == 5, :class => 'rating_button') %>
+  <%= hidden_field_tag('re_artifact_properties_id', re_rating.re_artifact_properties_id) %>
+  <%= f.submit :Submit %>
+  <% end %>
+  <div class="average_rating">&oslash;&nbsp;<%= re_rating.re_artifact_properties.average_rating %></div>
+</div>
+<%= javascript_include_tag 'ratings.js', :plugin => 'redmine_re', :cache => true %>

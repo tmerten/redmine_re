@@ -1,5 +1,5 @@
 RedmineApp::Application.routes.draw do
-  resources :ratings
+  resources :re_ratings
 
   match 'projects/:project_id/requirements' => 'requirements#index', :via => :get
   match 'projects/:project_id/requirements/settings/firstload' => 're_settings#configure', :firstload => '1'

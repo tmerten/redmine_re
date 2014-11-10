@@ -9,9 +9,9 @@ class ReArtifactProperties < ActiveRecord::Base
     {:conditions => {:project_id => project_id}}
   }
   
-  has_many :ratings, :dependent => :destroy
+  has_many :re_ratings, :dependent => :destroy
   
-  has_many :raters, :through => :ratings, :source => :users
+  has_many :raters, :through => :re_ratings, :source => :users
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
   has_many :realizations, :dependent => :destroy
   has_many :issues, :through => :realizations, :uniq => true
@@ -283,11 +283,11 @@ class ReArtifactProperties < ActiveRecord::Base
 
   def average_rating
     @value = 0.to_f
-    unless self.ratings.empty?
-      self.ratings.each do |rating|
+    unless self.re_ratings.empty?
+      self.re_ratings.each do |rating|
         @value = @value + rating.value
       end
-      @total = self.ratings.size
+      @total = self.re_ratings.size
       @value = @value.to_f / @total.to_f
     end
     @value

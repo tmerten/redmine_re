@@ -20,7 +20,7 @@ class ReconfigurePluginAfterRemovingReAttachments < ActiveRecord::Migration
   end
 
   def self.down
-    raise ActiveRecord::IrreversibleMigration, "There is no down Migration for configaration of Attachments. Open Configuration page and click on save to make Attachments work!" 
+    say ActiveRecord::IrreversibleMigration, "There is no down Migration for configaration of Attachments. Open Configuration page and click on save to make Attachments work!" 
   end
 
 end

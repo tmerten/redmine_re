@@ -1,4 +1,4 @@
-class Rating < ActiveRecord::Base
+class ReRating < ActiveRecord::Base
   unloadable
   attr_accessible :value
 

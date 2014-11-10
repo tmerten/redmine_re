@@ -70,7 +70,7 @@ de:
   re_pandoc_error_first: 'Redmine_re nutzt '
   re_pandoc_error_second: ', um Artefakte in unterschiedliche Ausgabeformate zu exportieren. Bitte stellen sie sicher, das pandoc installiert ist.'  
   re_export_error: "Beim Exportieren trat ein Fehler auf. Bitte stellen Sie sicher, das pandoc installiert und ein Ausgabeformat in den Einstellungen konfiguriert ist." 
-
+  re_conf_add_relation: "Relation hinzufügen"
   
   
   

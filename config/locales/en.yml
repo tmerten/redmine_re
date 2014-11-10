@@ -61,6 +61,7 @@ en:
   re_last_update: 'last update'
   re_by: 'by'
   re_at: 'at'
+  re_directed: 'directed'
 
   # Configuration
   re_administrate: 'Administration'
@@ -76,6 +77,7 @@ en:
   re_fields: 'Fields'
   re_configs_saved: 'Configurations saved sucessfully'
   re_display_order: 'Display order'
+  re_conf_internal_name: 'Internal Name'
   re_conf_artifact_display_order: 'Use Drag and Drop to change the display order (e.g. in the side menu or the index page)'
   re_use: 'Use'
   re_conf_artifact_in_use: 'Do you want do use (show) this artifact type in this project (existing artifacts will not be deleted)?'
@@ -91,6 +93,7 @@ en:
   re_artifact_type_description_configuration: 'Configuration of description of artifact type %{artifact_type}'
   re_artifact_type_description: 'Artifact type description'
   re_description_updated_successfully: 'Description was updated successfully'
+  re_conf_add_relation: "Add relation"
 
   # re_artifact_properties
   re_artifact_name: 'Name'

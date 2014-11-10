@@ -1,10 +1,10 @@
-class RatingsController < ApplicationController
+class ReRatingsController < ApplicationController
   unloadable
 
   def create
     @rap = ReArtifactProperties.find_by_id(params[:re_artifact_properties_id])
-    @rating = Rating.find_or_create_by_re_artifact_properties_id(params[:re_artifact_properties_id])
-    @rating.value = params[:rating][:value]
+    @rating = ReRating.find_or_create_by_re_artifact_properties_id(params[:re_artifact_properties_id])
+    @rating.value = params[:re_rating][:value]
     @rating.user_id = User.current.id
 
     respond_to do |format|
@@ -19,8 +19,8 @@ class RatingsController < ApplicationController
 
   def update
     @rap = ReArtifactProperties.find_by_id(params[:re_artifact_properties_id])
-    @rating = User.current.ratings.find_by_re_artifact_properties_id(@rap.id)
-    if @rating.update_attributes(params[:rating])
+    @rating = User.current.re_ratings.find_by_re_artifact_properties_id(@rap.id)
+    if @rating.update_attributes(params[:re_rating])
       respond_to do |format|
         format.html { redirect_to @rap, :notice => "Your rating has been updated" }
         format.js
