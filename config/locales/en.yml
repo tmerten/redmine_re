@@ -24,7 +24,7 @@ en:
   re_structuring_elements: 'Structuring Elements'
   re_stakeholders: 'Stakeholders'
   re_more: 'more'
-  re_drag_list_items_to_reorder_artifacts: 'Drag the list items to reorder the RE Artefacts. The configured order will be used everywhere in the RE Plugin'
+  re_drag_list_items_to_reorder_artifacts: 'Drag the list items to reorder the RE Artifacts. The configured order will be used everywhere in the RE Plugin'
   re_artifact_order: 'Artifact Display Order'
   re_create: 'Create'
   re_create_new: 'Create a new '
@@ -75,7 +75,7 @@ en:
   re_update_plugin_description: 'Update plugin description'
   re_child_artifacts: 'Child artifacts'
   re_fields: 'Fields'
-  re_configs_saved: 'Configurations saved sucessfully'
+  re_configs_saved: 'Configurations saved successfully'
   re_display_order: 'Display order'
   re_conf_internal_name: 'Internal Name'
   re_conf_artifact_display_order: 'Use Drag and Drop to change the display order (e.g. in the side menu or the index page)'
@@ -173,18 +173,18 @@ en:
   # re_artifact_properties_deletion
   re_preparing_deletion: 'Preparing deletion'
   re_you_asked_for_deleting_the_following_artifact: 'You asked for deleting the following artifact'
-  re_what_will_be_deleted: 'If you delete this artifact, the relationships listet below will also be deleted.'
+  re_what_will_be_deleted: 'If you delete this artifact, the relationships listed below will also be deleted.'
   re_confirm_deletion_by_choosing: 'Please confirm the deletion by choosing an option below'
 
   re_delete_and_move_children: 'Delete artifact and move children'
-  re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listet above) to the parent of this artifact (%{parent}). Afterwards this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
+  re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listed above) to the parent of this artifact (%{parent}). Afterwards this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
   re_delete_recursively: 'Delete recursively'
-  re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listet above). Additionally all its children and their children (listed above) as well as each childs relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
+  re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listed above). Additionally, all its children and their children (listed above) as well as each child''s relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
   re_delete_artifact: 'Delete artifact'
-  re_will_delete_artifact_and_relations: 'Choosing this option will delete this artifact (%{name}) and its relationships (listet above).'
+  re_will_delete_artifact_and_relations: 'Choosing this option will delete this artifact (%{name}) and its relationships (listed above).'
 
   re_deleted_artifact_and_children: 'Successfully deleted the artifact and all its children.'
-  re_deleted_artifact_and_moved_children: 'Succesfully attached all child artifacts to the parent and deleted the artifact.'
+  re_deleted_artifact_and_moved_children: 'Successfully attached all child artifacts to the parent and deleted the artifact.'
 
   re_delete_project_artifact: 'Delete project artifact'
   re_cannnot_delete_project_artifact: 'This artifact is a project artifact which cannot be deleted. To delete the project, please use '
@@ -211,7 +211,7 @@ en:
   re_section: 'Section'
   ReSection: 'Section'
   re_section_not_found: 'Could not find section with id %{id}.'
-  re_section_deleted: 'The Section %{name} has been sucessfully deleted.'
+  re_section_deleted: 'The Section %{name} has been successfully deleted.'
   re_section_not_deleted: 'The Section %{name} could not be deleted.'
   re_section_saved: 'Section successfully saved'
   re_section_priority: 'Priority'
@@ -224,7 +224,7 @@ en:
   re_create_re_vision: 'Create a new Vision Statement'
   re_vision_saved: 'Vision successfully saved'
   re_vision_not_found: 'Could not find ReVision with id %{id}.'
-  re_vision_deleted: 'The ReVision %{name} has been sucessfully deleted.'
+  re_vision_deleted: 'The ReVision %{name} has been successfully deleted.'
   re_vision_not_deleted: 'The ReVision %{name} could not be deleted.'
 
   # re_workarea
@@ -235,7 +235,7 @@ en:
   re_workarea_priority: 'Priority'
   re_workarea_saved: 'Workarea successfully saved'
   re_workarea_not_found: 'Could not find ReWorkarea with id %{id}.'
-  re_workarea_deleted: 'The ReWorkarea %{name} has been sucessfully deleted.'
+  re_workarea_deleted: 'The ReWorkarea %{name} has been successfully deleted.'
   re_workarea_not_deleted: 'The ReWorkarea %{name} could not be deleted.'
 
   # re_user_profile
@@ -244,13 +244,13 @@ en:
   ReUserProfile: 'User Profile'
   re_new_re_user_profile: 'User Profile'
   re_user_profile_priority: 'Priority'
-  re_user_profile_saved: 'User Profile Sucessfully Saved'
+  re_user_profile_saved: 'User Profile Successfully Saved'
   re_user_profile_deleted: 'The User Profile %{name} has been deleted'
   re_user_profile_not_deleted: 'The User Profile %{name} could not be deleted'
   re_user_profile_not_found: 'Could not find a User Profile with id %{id} to delete'
 
   # re_artifact_relationships
-  re_relation_sucessfull_created: '"%{relation_type}"-relation sucessfully created from %{source_name} to %{sink_name}'
+  re_relation_sucessfull_created: '"%{relation_type}"-relation successfully created from %{source_name} to %{sink_name}'
   re_artifact_relationships: 'Relationships'
   re_show_relationships: 'Show Relationships'
   re_artifact_relationships_outgoing: 'Outgoing Relationships'
@@ -288,7 +288,7 @@ en:
   Requirements: 'Requirements'
 
   re_please_select_visualization_type: 'Please select how to visualize your data by choosing the visualization type.'
-  re_visualization_type: 'Visualiztation Type'
+  re_visualization_type: 'Visualization Type'
   re_space_tree: 'Space Tree'
   re_sunburst: 'Sunburst'
   re_netmap: 'Netmap'
@@ -375,7 +375,7 @@ en:
 
   # re_settings
   re_settings_have_to_save: 'No configuration saved yet: You have to click on save before you leave this page!'
-  re_settings_have_to_save_again: 'The system has been updated! Please check the configuation. You have to click on save before you leave this page!'
+  re_settings_have_to_save_again: 'The system has been updated! Please check the configuration. You have to click on save before you leave this page!'
   re_pandoc_error_first: 'Redmine_re uses '
   re_pandoc_error_second: ' to export artifact data to different formats. Please make sure pandoc is installed.'
   re_export_error: 'Error during export. Please make sure pandoc is installed and an output format is configured in the settings.' 
@@ -391,7 +391,7 @@ en:
   re_new_re_use_case: 'New Use Case'
   re_create_re_use_case: 'Create a new Use Case'
   re_use_case_specific_attributes: 'Use Case specific attributes'
-  re_use_case_saved: 'Use Case sucessfully saved'
+  re_use_case_saved: 'Use Case successfully saved'
   re_use_case_deleted: 'Use Case %{name} has been deleted'
   re_use_case_not_deleted: 'Use Case %{name} could not be deleted'
   re_use_case_not_found: 'Could not find a Use Case with id %{id} to delete'
@@ -456,7 +456,7 @@ en:
   re_new_re_rationale: 'New Rationale'
   re_create_re_rationale: 'Create a new Rationale'
   re_rationale_specific_attributes: 'Rationale specific attributes'
-  re_rationale_saved: 'Rationale Sucessfully Saved'
+  re_rationale_saved: 'Rationale Successfully Saved'
   re_rationale_deleted: 'The Rationale %{name} has been deleted'
   re_rationale_not_deleted: 'The Rationale %{name} could not be deleted'
   re_rationale_not_found: 'Could not find a Rationale with id %{id} to delete'
@@ -591,17 +591,17 @@ en:
   re_edit_default_description: 'Edit default description'
   
   #default artifact descriptions
-  re_goal_default_description: '<p>You may want to use goals as high level requirements or to structure your requirements. There are also approaches using goals for the whole RE, especially for understanding the requirements.</p> <p>Goals are a good starting point to record the intentions of your stakeholders. Goals do not have to be fully achieveable nor measureable. Goals can be regarded as a first sketch of the requirements. You can use goals to discover conflicts between the intentions of your stakeholders and solve this conflicts. This may helps you to establish an overall agreement between your stakeholders. You should take care about that a goal refines a vision statements. [Alexander 2009, S. 51]</p>'  
+  re_goal_default_description: '<p>You may want to use goals as high level requirements or to structure your requirements. There are also approaches using goals for the whole RE, especially for understanding the requirements.</p> <p>Goals are a good starting point to record the intentions of your stakeholders. Goals do not have to be fully achievable nor measureable. Goals can be regarded as a first sketch of the requirements. You can use goals to discover conflicts between the intentions of your stakeholders and solve this conflicts. This may helps you to establish an overall agreement between your stakeholders. You should take care about that a goal refines a vision statements. [Alexander 2009, S. 51]</p>'
   re_processword_default_description: "<p>Processwords are needed for the use of a syntactic requirements template. You can define synonyms for the word here and deliver a proper definition of the term.</p>"  
-  re_vision_default_description: "<p>A vision statement for your project. Describe ideas in Wiki style syntax with this artifact.</p> <p>You should use vision statement to describe the basic purpose of your project. A vision should be clear and simple so that everbody is able to understand the basic purpose the project. [Alexander 2009, S 53]</p>"
-  re_task_default_description: "<p>If you are unfamiliar with using Lauesens Task-Based aproach for RE - it is very similiar to the famouse Use-Cases by Cockburn - simply <a href='http://www.itu.dk/~slauesen/SorenReqs.html'>check his website</a>.<br /> Most important is that you recognize the demand solution prinziple coming with the two columns of the approach.</p> <p>Tasks do not distinguish between who does what. Task closure means that your task has a well defined start and end point. A good starting point is something that happens in the user''s world, for instance that a client calls. A good end point is that nothing more can be done about the case right now - the user deserves a \"coffee break\". [Lauesen 2011, S. 34]</p>"
-  re_use_case_default_description: "<p>Use Case template as found in Cockburns Book Writing effective Use-Cases.</p>"
-  re_section_default_description: "<p>Use sections to structure your requirements in the tree to the left.</p> <p>You should structure your requirements in sections because this helps you to keep all your artefacts and their context-information manageable. There exist a lot of reference structures for requirements. For example you can use the IEEE Standard 1233-1998 which defines a structure for a system requirement specification (SyRS) or the IEEE Standard 830-1998 which defines a structure for a software requirements specification (SRS). <!-- Taken from: [Pohl 2008, S. 251 - 253] --></p>"
-  re_scenario_default_description: "<p>Managing scenarios to show processes in your system, identidy rationales and provide context to tasks and subtaks.</p>"
-  re_requirement_default_description: "<p>For managing the most important RE artifact.</p> <p>Deriving requirements from scenarios helps to prevent you from inventing requirements because these artefacts should be the basis for all requirements. You can obtain new requirements from individual stakeholders with the help of interviews and observation. Workshops are the best options for discovering requirements from groups. [Pohl 2008, S. 183], [Alexander 2009, S.260 S. 315]</p>"
-  re_rationale_default_description: "<p>Use rationals to justify your requirements or other artifacts.</p> <p>Descisions on requirements and design are often based on hidden assumptions. Making assumptions explicit through a rationale enables decisions to be revised. Rationales also help to prioritize requirements and protect them from being removed.</p>"
+  re_vision_default_description: "<p>A vision statement for your project. Describe ideas in Wiki style syntax with this artifact.</p> <p>You should use vision statement to describe the basic purpose of your project. A vision should be clear and simple so that everybody is able to understand the basic purpose the project. [Alexander 2009, S 53]</p>"
+  re_task_default_description: "<p>If you are unfamiliar with using Lauesen''s Task-Based approach for RE - it is very similar to the famous Use-Cases by Cockburn - simply <a href='http://www.itu.dk/~slauesen/SorenReqs.html'>check his website</a>.<br /> Most important is that you recognize the demand solution principle coming with the two columns of the approach.</p> <p>Tasks do not distinguish between who does what. Task closure means that your task has a well defined start and end point. A good starting point is something that happens in the user''s world, for instance that a client calls. A good end point is that nothing more can be done about the case right now - the user deserves a \"coffee break\". [Lauesen 2011, S. 34]</p>"
+  re_use_case_default_description: "<p>Use Case template as found in Cockburn''s Book Writing effective Use-Cases.</p>"
+  re_section_default_description: "<p>Use sections to structure your requirements in the tree to the left.</p> <p>You should structure your requirements in sections because this helps you to keep all your artifacts and their context-information manageable. There exist a lot of reference structures for requirements. For example you can use the IEEE Standard 1233-1998 which defines a structure for a system requirement specification (SyRS) or the IEEE Standard 830-1998 which defines a structure for a software requirements specification (SRS). <!-- Taken from: [Pohl 2008, S. 251 - 253] --></p>"
+  re_scenario_default_description: "<p>Managing scenarios to show processes in your system, identify rationales and provide context to tasks and subtasks.</p>"
+  re_requirement_default_description: "<p>For managing the most important RE artifact.</p> <p>Deriving requirements from scenarios helps to prevent you from inventing requirements because these artifacts should be the basis for all requirements. You can obtain new requirements from individual stakeholders with the help of interviews and observation. Workshops are the best options for discovering requirements from groups. [Pohl 2008, S. 183], [Alexander 2009, S.260 S. 315]</p>"
+  re_rationale_default_description: "<p>Use rationales to justify your requirements or other artifacts.</p> <p>Decisions on requirements and design are often based on hidden assumptions. Making assumptions explicit through a rationale enables decisions to be revised. Rationales also help to prioritize requirements and protect them from being removed.</p>"
   re_subtask_default_description: "<p>Though you can create a subtask with this tool it is more convenient if you create a Task and add subtasks from the task view.</p>"
   re_user_profile_default_description: "<p>You can use user profiles to describe your users.</p><p>Describing the stakeholder with user profiles is are very important because all requirements come from people. Thus you should discover and document all stakeholder which are involved in your project. [Alexander 2009, S 28]</p>"
-  re_workarea_default_description: "<p>A workareas can be used to structure a couple of tasks. It provides an ability to keep artifacts together, which take place in the same area (e.g. a room, a company or a department).</p>"
+  re_workarea_default_description: "<p>A workarea can be used to structure a couple of tasks. It provides an ability to keep artifacts together, which take place in the same area (e.g. a room, a company or a department).</p>"
 
   re_description_of_plugin_usage: "<h2>Artifact Creation</h2><ul><li>Get started by creating requirements artifacts. You may select from the artifacts shown below. After saving, you will find the artifacts you created in the tree to your left.</li><li>You can also right click on any artifact on the tree to add new artifacts. Use \"create artifact in\" to create an artifact in the next level of the tree or \"create artifact below\" to create an artifact on the same level.</li></ul><h2>Structure</h2><ul><li>You can drag and drop each artifact in the tree to reorder or restructure your RE artifacts. The tree represents the structure of your requirements document.</li><li>You can create traces between artifact by<ul><li>Editing an artifact and use the \"relationships\" section. Select the trace type with the radio butting and start typing a name. The artifacts will show up and a link can be created. You find all traces in the top-right section.</li><li>You can also create traces by dragging and dropping an artifact from the tree in the traces from/traces to sections. After dropping you can choose the relation type.</li></ul></li></ul><h2>Connecting Issues</h2><ul><li>You can use the Connect Issue link to create an issue which gets automatically linked to the selected artifact</li><li>You can also edit issues and artifacts to create links manually</li></ul><h2>Visualization</h2><ul><li>Use traceability visualizations by right-clicking an artifact. The visualization will apply to the selected sub-tree</li><li>Please note, that the artifact types and trace types need to be enabled in the side bar on the right side. Slide over the bar with the mouse to open it.</li></ul><!--<h2>Diagrameditor</h2><ul><li>The diagrameditor is a early alpha version and is right now abandoned in development. It is distributed in a seperate plugin and the RE plugin works without it. However if both plugins are installed they integrate with each other.</li><li>If you want to update/extend/use the editor feel free to contact us: <a class='external' href='http://korem.de/team.16.html'>http://korem.de/team.16.html</a></li></ul>--><h2>Other things</h2><ul><li>Usability<ul><li>The bars to the left and right are slid open on mouse over. You can close/open them permanently by clicking on the dark gray area.</li><li>The bar on the right shows all watcher and comments for the requirement artifact. Please note, that you need to reload the page to update the number of watchers and comments (there is no ajax-ish implementation, yet)</li></ul></li><li> Configurability<ul><li>This demo lets you export to opendocument ony. We use an open source conversion tool to export, which supports other types, like html, latex, mediawiki, rtf, etc. and is configurable by administrators. This may or may not work superb.</li><li>We enabled all types of requirement artifacts in this demo. If you prefer use-cases or other techniques administrators can disable certain artifact types.</li><li>The same for relationships</li><li>Artifact and relationship types can be renamed for your convenience.</li><li>Artifact and relationship colors can be choosen as you like</li><li>The visualization uses 4 recursive steps as the standard and is set to a size of 800x800 pixels. This can be configured.</li><li>Issues are included in visualization. This can be disabled.</li></ul></li></ul><p>Enjoy trying the plugin. Please contact us at <a class='external' href='http://korem.de/team.16.html'>http://korem.de/team.16.html</a> if you need more information.</p>"
