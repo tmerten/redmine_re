@@ -6,8 +6,8 @@ end
 class DeleteRatingsAndCreateReRatings < ActiveRecord::Migration
   def self.up
     create_table :re_ratings do |t|
-      t.string :user_id
-      t.string :re_artifact_properties_id
+      t.integer :user_id
+      t.integer :re_artifact_properties_id
       t.integer :value
     end
 
