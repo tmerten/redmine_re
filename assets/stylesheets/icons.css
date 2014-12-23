@@ -99,10 +99,6 @@ a.icon {
     content: url("../images/icons/report.png");
 }
 
-.re_goal-icon:before {
-    content: url("../images/icons/world.png");
-}
-
 .re_use_case-icon:before {
     content: url("../images/icons/page_user.png");
 }
