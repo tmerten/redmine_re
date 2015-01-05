@@ -76,7 +76,6 @@ en:
   re_child_artifacts: 'Child artifacts'
   re_fields: 'Fields'
   re_configs_saved: 'Configurations saved sucessfully'
-  re_display_order: 'Display order'
   re_conf_internal_name: 'Internal Name'
   re_conf_artifact_display_order: 'Use Drag and Drop to change the display order (e.g. in the side menu or the index page)'
   re_use: 'Use'

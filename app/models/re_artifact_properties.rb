@@ -32,16 +32,23 @@ class ReArtifactProperties < ActiveRecord::Base
            :order => "re_artifact_relationships.position",
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values],
+           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES],
            :dependent => :destroy
 
   has_many :traces_as_sink,
            :order => "re_artifact_relationships.position",
            :foreign_key => "sink_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values],
+           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES],
            :dependent => :destroy
-
+ 
+  has_many :user_defined_relations,
+           :order => "re_artifact_relationships.position",   
+           :foreign_key => "source_id",
+           :class_name => "ReArtifactRelationship",
+           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES],
+           :dependent => :destroy
+           
   has_one :parent_relation,
           :order => "re_artifact_relationships.position",
           :foreign_key => "sink_id",
@@ -70,43 +77,7 @@ class ReArtifactProperties < ActiveRecord::Base
            :class_name => "ReArtifactRelationship",
            :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac]],
            :dependent => :destroy
- 
-  has_many :dependency_relations,
-           :order => "re_artifact_relationships.position",   
-           :foreign_key => "source_id",
-           :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:dep]],
-           :dependent => :destroy
-           
-  has_many :conflict_relations,
-           :order => "re_artifact_relationships.position",
-           :foreign_key => "source_id",
-           :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:con]],
-           :dependent => :destroy
-          
- has_many :rationale_relations, 
-          :order => "re_artifact_relationships.position",
-          :foreign_key => "source_id",
-          :class_name => "ReArtifactRelationship",
-          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:rat]],
-          :dependent => :destroy
-          
- has_many :refinement_relations,
-          :order => "re_artifact_relationships.position",
-          :foreign_key => "source_id",
-          :class_name => "ReArtifactRelationship",
-          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:ref]],
-          :dependent => :destroy
- 
- has_many :part_of_relations,
-          :order => "re_artifact_relationships.position",
-          :foreign_key => "source_id",
-          :class_name => "ReArtifactRelationship",
-          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::RELATION_TYPES[:pof]],
-          :dependent => :destroy
-  
-                    #####
+
                     
   has_many :diagram_relations,           
            :foreign_key => "source_id",
@@ -292,4 +263,25 @@ class ReArtifactProperties < ActiveRecord::Base
     end
     @value
   end
+  
+  def get_traces_as_sink
+    traces = []
+    self.traces_as_sink.each do |trace| 
+      if trace.relation_type != "parentchild"
+         traces << trace
+      end
+    end
+    traces
+  end
+  
+  def get_traces_as_source
+    traces = []
+    self.traces_as_source.each do |trace| 
+      if trace.relation_type != "parentchild"
+         traces << trace
+      end
+    end
+    traces
+  end
+  
 end

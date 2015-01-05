@@ -8,6 +8,8 @@ class ReSetting < ActiveRecord::Base
   # Hash used to cache setting values
   @cached_settings = {}
   @cached_cleared_on = Time.now
+  
+  ARTIFACT_TYPES = ["re_vision","re_goal","re_section","re_requirement","re_scenario","re_task","re_use_case","re_user_profile","re_rationale","re_workarea","re_processword"]
 
   def self.get_plain(name, project_id)
     # reads a project specific setting (if available from cache)

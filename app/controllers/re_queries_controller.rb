@@ -201,7 +201,7 @@ class ReQueriesController < RedmineReController
     @project_artifacts = ReArtifactProperties.of_project(@project).without_projects
     @artifacts = []
     @artifact_types = @project_artifacts.available_artifact_types
-    @relation_types = ReArtifactRelationship::RELATION_TYPES.values
+    @relation_types = ReRelationtype.relation_types(@project.id, false)
     @issues = []
     @users = User.all(:conditions => ['status = ?', User::STATUS_ACTIVE],
                       :order => 'firstname ASC, lastname ASC, login ASC')

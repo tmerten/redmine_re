@@ -103,7 +103,14 @@
           <b><%= t :re_create_new_relation %></b>
 
           <div id="relationhandling">
-            <%= render :partial => "relation_type_radio_buttons" %>
+			<% for relation_type in @re_used_relation_types %>
+				<% if ReRelationtype.in_use(relation_type, @project.id) && !ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(relation_type) %>	 
+			    	<%= radio_button :re_artifact_relationship, :relation_type, relation_type, :data => {:description => rendered_relation_type(relation_type), :alias_name => ReRelationtype.get_alias_name(relation_type, @project.id) } %>
+			        <%= rendered_relation_type(ReRelationtype.get_alias_name(relation_type, @project.id)) %>
+			        <br/>
+			    <% end %>
+			<% end %>
+            
             <%= hidden_field_tag 'source[name_mode]', 'contains' %>
             <div id="relation_filter">
               <div class="inputs">
@@ -149,4 +156,4 @@
 
         });
 	})(jQuery);
-          <% end %>
+<% end %>

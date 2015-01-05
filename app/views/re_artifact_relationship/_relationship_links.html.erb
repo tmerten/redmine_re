@@ -21,7 +21,7 @@
 		
   		if (relation_type === null || typeof relation_type == 'undefined') return;
 		
-  		var relation_description = jQuery("[name='re_artifact_relationship[relation_type]']").filter(":checked").data("description");
+  		var relation_description = jQuery("[name='re_artifact_relationship[relation_type]']").filter(":checked").data("alias-name");
   		var element_id = "relation_"+sink_record.id+"_"+relation_type;
   		var link = "<%= re_artifact_properties_path %>";
   		var hidden_fields = '<input type="hidden" name="new_relation['+sink_record.id+'][relation_type][]" value="'+relation_type+'" />';
@@ -44,7 +44,7 @@
     <% sink = ReArtifactProperties.find_by_id(relationship.sink_id) %>
     <li id='relation_<%= relationship.id %>'>
     	[ <a href="javascript: removeRelation('<%= relationship.id %>')" class="icon icon-del"><%= t(:re_remove) %></a> ]
-      <%= rendered_relation_type(relationship.relation_type) %> <%= t(:re_to) %>		
+      <%= rendered_relation_type(ReRelationtype.get_alias_name(relationship.relation_type, @project.id)) %> <%= t(:re_to) %>		
       <%= link_to( sink.name, {
         :action => :edit,
         :controller => 're_artifact_properties',
@@ -82,7 +82,7 @@
 		<li id='relation_<%= relationship.id %>'>
 
     	[ <a href="javascript: removeRelation('<%= relationship.id %>')" class="icon icon-del"><%= t(:re_remove) %></a> ]
-      <%= rendered_relation_type(relationship.relation_type) %> <%= t(:re_from) %>
+      <%= rendered_relation_type(ReRelationtype.get_alias_name(relationship.relation_type, @project.id)) %> <%= t(:re_from) %>
 			<%= link_to( source.name, {
         :action => :edit,
         :controller => 're_artifact_properties',
