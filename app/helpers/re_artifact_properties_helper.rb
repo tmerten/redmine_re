@@ -24,7 +24,7 @@ module ReArtifactPropertiesHelper
       field_html["re_artifact_properties[artifact_attributes][re_use_case_steps_attributes][re_use_case_step_expansions_attributes]"] = "re_artifact_properties[artifact_attributes][re_use_case_steps_attributes][][re_use_case_step_expansions_attributes]["+use_case_step_id.to_s+"]"
       field_html["["+use_case_step_id.to_s+"][]"] = "["+use_case_step_id.to_s+"]"
     rescue
-      logger.debug("The re Use Case Expansion name replace method (re_application_helper) somtimes fails !!!!!!!!!!!!")
+      logger.debug("The re Use Case Expansion name replace method (re_application_helper) sometimes fails !!!!!!!!!!!!")
       logger.debug(field_html)
     end
 

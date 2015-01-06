@@ -155,7 +155,7 @@ $(document).ready(function() {
   $('#tree').jstree({
     "core" : {
       "data" : {
-        "url" : '<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :mode => "root" %>',
+        "url" : '<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'tree', :mode => "root" %>',
         "data" : function (node) {
           return { "id" : node.id };
         }
@@ -226,26 +226,26 @@ $(document).ready(function() {
       "items" : createJSTreeContextmenuItems()
     },
     <% if User.current.allowed_to?(:edit_requirements, @project) %>
-  		plugins : [ "dnd", "ui", "contextmenu", "types"]  
+  		plugins : [ "dnd", "ui", "contextmenu", "types" ]  
     <% elsif  User.current.allowed_to?(:view_requirements, @project) %>	
       plugins : [ "ui", "contextmenu", "types", "wholerow" ]
     <% end %>
   }) /* jsTree */
   .bind("close_node.jstree", function (event, data) {
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :mode => "close", :id => nil %>/" + data.node.id.replace('node_','')
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'tree', :mode => "close", :id => nil %>/" + data.node.id.replace('node_','')
     });
   })
   .bind("open_node.jstree", function (event, data) {
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :mode => "open", :id => nil %>/" + data.node.id.replace('node_','')
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'tree', :mode => "open", :id => nil %>/" + data.node.id.replace('node_','')
     });
   })
   .bind("move_node.jstree", function (e, data) {
     var parent_id = data.parent.replace("node_","");
     var id = data.node.id.replace("node_","");
     var position = data.position;
-    
+
     jQuery.ajax({
       async : false,
       type: 'POST',

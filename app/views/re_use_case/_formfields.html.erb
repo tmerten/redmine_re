@@ -68,7 +68,7 @@
               }));
 
               });
-              })(jQuery);
+              })($);
           <% end %>
 	</fieldset>
 	
@@ -77,11 +77,11 @@
 	      <tr>
 	        <th style="width: 400px;">
 	        	<%= t(:re_user_steps) %>
-	            <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery('#steps'), 'top', 'user')", :class => "" ) %>
+	            <%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep($('#steps'), 'top', 'user')", :class => "" ) %>
 	        </th>
 	        <th style="width: 400px;">
 	        	<%= t(:re_system_steps) %>
-	            <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery('#steps'), 'top', 'system')", :class => "" ) %>
+	            <%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep($('#steps'), 'top', 'system')", :class => "" ) %>
 	        </th>
 	      </tr>
 	  </table>
@@ -111,16 +111,16 @@
 	
 	    switch(add_pos) {
 	      case 'after':  
-	        jQuery(element).after( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	        $(element).after( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
 	      break;
 	      case 'before': 
-	         jQuery(element).before( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	         $(element).before( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
 	      break;
 	      case 'bottom': 
-	         jQuery('#steps').append( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	         $('#steps').append( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
 	      break;
 	      case 'top':    
-	         jQuery('#steps').prepend( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
+	         $('#steps').prepend( replaceAll(rendered_step, "new_re_use_case_step", utc_timestamp.toString().substring(5,12) )); 
 	      break;
 	      default: alert('<%= t(:re_st_position_not_allowed) %> ' + add_pos);
 	    }

@@ -67,10 +67,10 @@
   		rendered_subtask = replaceAll(rendered_subtask, "new_re_subtask", utc_timestamp.toString().substring(5,12));
 		
   		switch(add_pos) {
-  		  case 'top':    jQuery(element).prepend(rendered_subtask); break;
-  		  case 'after':  jQuery(element).after(rendered_subtask); break;
-  		  case 'before': jQuery(element).before(rendered_subtask); break;
-  		  case 'bottom': jQuery(element).append(rendered_subtask); break;
+  		  case 'top':    $(element).prepend(rendered_subtask); break;
+  		  case 'after':  $(element).after(rendered_subtask); break;
+  		  case 'before': $(element).before(rendered_subtask); break;
+  		  case 'bottom': $(element).append(rendered_subtask); break;
       }
 	    
   	  updateSubtaskPositionFields();

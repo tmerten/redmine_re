@@ -18,7 +18,7 @@
                   bitsUrl: '<%= artifacts_bits_re_queries_path(@project.id) %>'
               }));
           });
-      })(jQuery);
+      })($);
     <% end %>
 
 <% if @project && @project.module_enabled?(:requirements) %>

@@ -117,7 +117,7 @@
 
 <script type="text/javascript">
 //<![CDATA[
-jQuery(document).ready(function() {
+$(document).ready(function() {
   $("#artifact_types_list").tableDnD({
     onDrop: function(table, row) { tableArtifactIdsToJson(table, row, "#re_artifact_order") }
   });
@@ -155,16 +155,16 @@ jQuery(document).ready(function() {
 function tableArtifactIdsToJson(table, row, field_id) {
   var rows = table.tBodies[0].rows;
   var types = new Array();
-  jQuery(rows).each(function(i, r) {
+  $(rows).each(function(i, r) {
     types.push('"' + this.id.gsub(/_[0-9]*$/,'') + '"');
   });
-  jQuery(field_id).val("[" + types + "]");
+  $(field_id).val("[" + types + "]");
 };
 
 function removeRelationFields (field) {
 	var answer = confirm("Are you sure?");
   	if (answer) {
-       	jQuery(field).parent().parent().remove();
+       	$(field).parent().parent().remove();
      }
 }
 

@@ -54,7 +54,7 @@ class RequirementsController < RedmineReController
   # the tree this state will be saved in the session
   # whenever you render the tree the rendering function will ask the
   # session for the nodes that are "opened" to render the children
-  def treestate
+  def tree
     node_id = params[:id].to_i
     case params[:mode]
       when 'data'
@@ -76,7 +76,7 @@ class RequirementsController < RedmineReController
         session[:expanded_nodes].delete(node_id)
         render :text => "node #{node_id} closed"
     end
-    logger.debug("Expended nodes: #{session[:expanded_nodes].inspect}")
+    logger.debug("Expended nodes: #{session[:expanded_nodes].inspect}") 
   end
 
   def sendDiagramPreviewImage 
