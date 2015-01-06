@@ -54,7 +54,7 @@ class RequirementsController < RedmineReController
   # the tree this state will be saved in the session
   # whenever you render the tree the rendering function will ask the
   # session for the nodes that are "opened" to render the children
-  def tree
+  def treestate
     node_id = params[:id].to_i
     case params[:mode]
       when 'data'

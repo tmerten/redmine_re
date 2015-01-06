@@ -155,7 +155,7 @@ $(document).ready(function() {
   $('#tree').jstree({
     "core" : {
       "data" : {
-        "url" : '<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'tree', :mode => "root" %>',
+        "url" : '<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :mode => "root" %>',
         "data" : function (node) {
           return { "id" : node.id };
         }
@@ -233,12 +233,12 @@ $(document).ready(function() {
   }) /* jsTree */
   .bind("close_node.jstree", function (event, data) {
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'tree', :mode => "close", :id => nil %>/" + data.node.id.replace('node_','')
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :mode => "close", :id => nil %>/" + data.node.id.replace('node_','')
     });
   })
   .bind("open_node.jstree", function (event, data) {
     jQuery.ajax({
-      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'tree', :mode => "open", :id => nil %>/" + data.node.id.replace('node_','')
+      "url" : "<%= url_for :project_id => @project.identifier, :controller => 'requirements', :action => 'treestate', :mode => "open", :id => nil %>/" + data.node.id.replace('node_','')
     });
   })
   .bind("move_node.jstree", function (e, data) {

@@ -9,8 +9,8 @@ RedmineApp::Application.routes.draw do
   match 'projects/:project_id/requirements/treefilter' => 'requirements#treefilter'
   match 'projects/:project_id/requirements/relations/visualization/' => 're_artifact_relationship#visualization'
   match 'projects/:project_id/requirements/relations/visualization/show/:visualization_type' => 're_artifact_relationship#build_json_according_to_user_choice'
-  match 'projects/:project_id/requirements/tree/:mode' => 'requirements#tree'
-  match 'projects/:project_id/requirements/tree/:mode/:id' => 'requirements#tree'
+  match 'projects/:project_id/requirements/treestate/:mode' => 'requirements#treestate'
+  match 'projects/:project_id/requirements/treestate/:mode/:id' => 'requirements#treestate'
 
   match 'projects/requirements/tree/drop' => 'requirements#delegate_tree_drop'
   match 'projects/:project_id/use_case/autocomplete/sink' => 're_use_case#autocomplete_sink'
