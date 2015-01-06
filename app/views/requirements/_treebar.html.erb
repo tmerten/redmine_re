@@ -120,7 +120,7 @@ function createJSTreeContextmenuItems(node) {
           "action" : function (node) {
             var id = $(node.reference).attr("data-id");
             var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/relations/visualization';
-            window.location.href = link+'?artefakt_id='+id+'&visualization_type=sunburst';
+            window.location.href = link+'_get/'+id+'/sunburst';
           },
           "icon" : "re_visualization-icon"
         },
@@ -129,7 +129,7 @@ function createJSTreeContextmenuItems(node) {
           "action" : function (node) {
             var id = $(node.reference).attr("data-id");
             var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/relations/visualization';
-            window.location.href = link+'?artefakt_id='+id+'&visualization_type=netmap';
+            window.location.href = link+'_get/'+id+'/netmap';
           },
           "icon" : "re_visualization-icon"
         },
@@ -137,8 +137,9 @@ function createJSTreeContextmenuItems(node) {
           "label" : "<%= t(:re_visualization_show_graph) %>",
           "action" : function (node) {
             var id = $(node.reference).attr("data-id");
+            alert(id);
             var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/relations/visualization';
-            window.location.href = link+'?artefakt_id='+id+'&visualization_type=graph';
+            window.location.href = link+'_get/'+id+'/graph';
           },
           "icon" : "re_visualization-icon"
         }

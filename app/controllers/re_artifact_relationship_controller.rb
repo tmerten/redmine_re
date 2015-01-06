@@ -70,7 +70,7 @@ class ReArtifactRelationshipController < RedmineReController
 
   def visualization
     session[:visualization_type]=params[:visualization_type]
-    @re_artifact_properties = ReArtifactProperties.find(params[:artefakt_id])
+    @re_artifact_properties = ReArtifactProperties.find(params[:artifact_id])
     @artifact_name=@re_artifact_properties.name
     
     initialize_tree_data
@@ -78,8 +78,9 @@ class ReArtifactRelationshipController < RedmineReController
 
   def build_json_for_visualization(artifacts, relations)
     if (@visualization_type != "graph_issue" )
-      @re_artifact_properties = ReArtifactProperties.find_by_id(params[:artefakt_id])
+      @re_artifact_properties = ReArtifactProperties.find_by_id(params[:artifact_id])
     end
+    
     json = []
 
     @done_artifakts_id = []
@@ -108,9 +109,9 @@ class ReArtifactRelationshipController < RedmineReController
 
     case @visualization_type
       when "sunburst"
-        min_dis_artifact(session[:visualization_artefakt_id].to_i)
+        min_dis_artifact(session[:visualization_artifakt_id].to_i)
         rootnode['name'] = @re_artifact_properties.name
-        re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artefakt_id])
+        re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artifakt_id])
         children= sunburst(re_artifact_properties)
         rootnode['children'] = children
         rootnode['max_deep'] = @max_deep_over_all
@@ -118,20 +119,20 @@ class ReArtifactRelationshipController < RedmineReController
         json.to_json
         
       when "netmap"
-        min_dis_artifact(session[:visualization_artefakt_id].to_i)
-        find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artefakt_id]))
+        min_dis_artifact(session[:visualization_artifakt_id].to_i)
+        find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artifakt_id]))
         artifacts = @found_artifakts
         json= netmap(artifacts,relations,rootnode)
           
       when "graph"
         @first_run = 0
-        json = graph(session[:visualization_artefakt_id],"1")
+        json = graph(session[:visualization_artifakt_id],"1")
         json = "[" + json + "]"
       
       when "graph_issue"
         @first_run = 0
         @artifact_connect = []
-        json = graph_issue(session[:visualization_artefakt_id].to_i,"1")
+        json = graph_issue(session[:visualization_artifakt_id].to_i,"1")
         json = "[" + json + "]"
         
     else
@@ -342,6 +343,7 @@ class ReArtifactRelationshipController < RedmineReController
     else
       @current_deep = @min_dis_artifact_arr[artifact.id]
     end
+    
     if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
       if ( ! @done_artifakts_id.include? artifact.id.to_s)
           ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
@@ -362,10 +364,10 @@ class ReArtifactRelationshipController < RedmineReController
             adjacent_node['nodeTo'] = "node_" + source.sink_id.to_s
             adjacent_node['nodeFrom'] = "node_" + source.source_id.to_s
             
-            relation_settings = ReSetting.get_serialized(source.relation_type, @project.id)
+            relation_settings = ReRelationtype.find_by_project_id_and_relation_type(@project.id, source.relation_type)
             
             edge_data = {}
-            edge_data['$color'] = relation_settings['color']
+            edge_data['$color'] = relation_settings.color
             adjacent_node['data'] = edge_data
             adjacencies << adjacent_node  
             if ( ! @source_artifakts_id.include? source.source_id) 
@@ -389,8 +391,8 @@ class ReArtifactRelationshipController < RedmineReController
             adjacent_node['nodeTo'] = "node_" + source.source_id.to_s
             adjacent_node['nodeFrom'] = "node_" + source.sink_id.to_s
             edge_data = {}
-            relation_settings = ReSetting.get_serialized(source.relation_type, @project.id)
-            edge_data['$color'] = relation_settings['color']
+            relation_settings = ReRelationtype.find_by_project_id_and_relation_type(@project.id, source.relation_type)
+            edge_data['$color'] = relation_settings.color
             adjacent_node['data'] = edge_data
             adjacencies << adjacent_node  
             if ( ! @sink_artifakts_id.include? source.sink_id) 
@@ -418,7 +420,7 @@ class ReArtifactRelationshipController < RedmineReController
           end
 
         type = artifact.artifact_type
-        node_settings = ReSetting.get_serialized(type.underscore, @project.id)
+        node_settings = ReRelationtype.find_by_project_id_and_relation_type(@project.id, type.underscore)
         data_node = {}
    
         if (node_settings != nil)
@@ -445,118 +447,120 @@ class ReArtifactRelationshipController < RedmineReController
         ReArtifactRelationship.where("source_id=?",artifact.id).each do |relation| 
           other_artifact = ReArtifactProperties.find(relation.sink_id)
           unless other_artifact.nil? # TODO: actually, this should not possible
-          relation_data = {}
-          relation_data['id'] = other_artifact.id
-          relation_data['full_name'] = other_artifact.name
-          relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-          relation_data['created_at'] = other_artifact.created_at.to_s(:short)
-          relation_data['author'] = other_artifact.author.to_s
-          relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
-          relation_data['user'] = other_artifact.user.to_s
-          relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
-          relation_data['relation_type'] = relation.relation_type
-          relation_data['direction'] = 'to'
-          relationship_data << relation_data
+            relation_data = {}
+            relation_data['id'] = other_artifact.id
+            relation_data['full_name'] = other_artifact.name
+            relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+            relation_data['created_at'] = other_artifact.created_at.to_s(:short)
+            relation_data['author'] = other_artifact.author.to_s
+            relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
+            relation_data['user'] = other_artifact.user.to_s
+            relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
+            relation_data['relation_type'] = relation.relation_type
+            relation_data['direction'] = 'to'
+            relationship_data << relation_data
+          end
+      
+      
+          ReArtifactRelationship.where("sink_id=?",artifact.id).each do |relation|
+            other_artifact = ReArtifactProperties.find(relation.source_id)
+            unless other_artifact.nil? # TODO: actually, this should not possible
+              relation_data = {}
+              relation_data['id'] = other_artifact.id
+              relation_data['full_name'] = other_artifact.name
+              relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+              relation_data['created_at'] = other_artifact.created_at.to_s(:short)
+              relation_data['author'] = other_artifact.author.to_s
+              relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
+              relation_data['user'] = other_artifact.user.to_s
+              relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
+              relation_data['relation_type'] = relation.relation_type
+              relation_data['direction'] = 'to'
+              relationship_data << relation_data
+            end
+          end
         end
-      
-      
-        ReArtifactRelationship.where("sink_id=?",artifact.id).each do |relation|
-          other_artifact = ReArtifactProperties.find(relation.source_id)
+        
+        Realization.where("re_artifact_properties_id=?",artifact.id).each do |relation|
+          other_artifact = Issue.find(relation.issue_id)
           unless other_artifact.nil? # TODO: actually, this should not possible
-          relation_data = {}
-          relation_data['id'] = other_artifact.id
-          relation_data['full_name'] = other_artifact.name
-          relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-          relation_data['created_at'] = other_artifact.created_at.to_s(:short)
-          relation_data['author'] = other_artifact.author.to_s
-          relation_data['updated_at'] = other_artifact.updated_at.to_s(:short)
-          relation_data['user'] = other_artifact.user.to_s
-          relation_data['responsibles'] = other_artifact.responsible.name unless other_artifact.responsible.nil? 
-          relation_data['relation_type'] = relation.relation_type
-          relation_data['direction'] = 'to'
-          relationship_data << relation_data
+            relation_data = {}
+            relation_data['id'] = other_artifact.id
+            relation_data['full_name'] = other_artifact.subject
+            relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
+            relation_data['created_at'] = other_artifact.created_on.to_s(:short)
+            relation_data['updated_at'] = other_artifact.updated_on.to_s(:short)
+            relation_data['relation_type'] = "Issue_to_Artifact"
+            relation_data['direction'] = 'to'
+            relationship_data << relation_data
+          end
         end
-      end
-    end
-    Realization.where("re_artifact_properties_id=?",artifact.id).each do |relation|
-      other_artifact = Issue.find(relation.issue_id)
-      unless other_artifact.nil? # TODO: actually, this should not possible
-      relation_data = {}
-      relation_data['id'] = other_artifact.id
-      relation_data['full_name'] = other_artifact.subject
-      relation_data['description'] = truncate(other_artifact.description, :length => TRUNCATE_DESCRIPTION_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
-      relation_data['created_at'] = other_artifact.created_on.to_s(:short)
-      relation_data['updated_at'] = other_artifact.updated_on.to_s(:short)
-      relation_data['relation_type'] = "Issue_to_Artifact"
-      relation_data['direction'] = 'to'
-      relationship_data << relation_data
-    end
-    end
 
-      data_node['relationship_data'] = relationship_data  
-      master_build["data"] = data_node 
-      master_build["id"] = 'node_' + artifact.id.to_s
-      master_build["name"] = ReArtifactProperties.find_by_id(artifact.id).name.to_s
+        data_node['relationship_data'] = relationship_data  
+        master_build["data"] = data_node 
+        master_build["id"] = 'node_' + artifact.id.to_s
+        master_build["name"] = ReArtifactProperties.find_by_id(artifact.id).name.to_s
       
-      rootnode['adjacencies'] = adjacencies 
-      short_save = rootnode.to_json
-      short_save = short_save.chop
-      short_save2=master_build.to_json
-      short_save2 = short_save2[1,short_save2.length]
+        rootnode['adjacencies'] = adjacencies 
+        short_save = rootnode.to_json
+        short_save = short_save.chop
+        short_save2=master_build.to_json
+        short_save2 = short_save2[1,short_save2.length]
       
-      json = short_save + "," + short_save2  
+        json = short_save + "," + short_save2  
       
-      @done_artifakts_id << artifact.id.to_s  
-    end
-
-    ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
-      next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
-      next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
-      next unless ( ! @done_artifakts_id.include? source.sink_id.to_s)
-
-      json_return = get_all_artifacts_for_graph(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.sink_id),0)  
-      if (json != nil)
-        if (json_return != nil)
-          json = json + "," + json_return
-        end
-      else
-        if (json_return != nil)
-          json =  json_return
-        end
+        @done_artifakts_id << artifact.id.to_s  
       end
-    end 
-    ReArtifactRelationship.find_all_by_sink_id(artifact.id).each do |source|
-      next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
-      next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
-      next unless ( ! @done_artifakts_id.include? source.source_id.to_s)
 
-      json_return = get_all_artifacts_for_graph(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.source_id),0)  
-      if (json != nil)
-        if (json_return != nil)
-          json = json + "," + json_return
+      ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
+        next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
+        next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
+        next unless ( ! @done_artifakts_id.include? source.sink_id.to_s)
+
+        json_return = get_all_artifacts_for_graph(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.sink_id),0)  
+        if (json != nil)
+          if (json_return != nil)
+            json = json + "," + json_return
+          end
+        else
+          if (json_return != nil)
+            json =  json_return
+          end
         end
-      else
-        if (json_return != nil)
-          json =  json_return
+      end 
+    
+      ReArtifactRelationship.find_all_by_sink_id(artifact.id).each do |source|
+        next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
+        next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
+        next unless ( ! @done_artifakts_id.include? source.source_id.to_s)
+
+        json_return = get_all_artifacts_for_graph(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.source_id),0)  
+        if (json != nil)
+          if (json_return != nil)
+            json = json + "," + json_return
+          end
+        else
+          if (json_return != nil)
+            json =  json_return
+          end
         end
-      end
       
-    end
-    issues.each do |issue_id|
-      json_return=get_issues_for_graph(issue_id,0)
-      if (json != nil)
-        if (json_return != nil)
-          json = json + "," + json_return
-        end
-      else
-        if (json_return != nil)
-          json =  json_return
-        end
       end
+      issues.each do |issue_id|
+        json_return=get_issues_for_graph(issue_id,0)
+        if (json != nil)
+          if (json_return != nil)
+            json = json + "," + json_return
+          end
+        else
+          if (json_return != nil)
+            json =  json_return
+          end
+        end
       
-    end
+      end
        
-  end
+    end
     json
   end 
   
@@ -750,10 +754,6 @@ class ReArtifactRelationshipController < RedmineReController
   end
   
   def find_all_artifacts_for_netmap(artifact)
-    
-    logger.debug @min_dis_artifact_arr.to_yaml
-    logger.debug @max_deep.to_yaml
-    logger.debug "###################"
     
     #if (@max_deep== 0)
       @current_deep = 1
@@ -1031,8 +1031,8 @@ class ReArtifactRelationshipController < RedmineReController
     @chosen_issue = false
     @max_deep = 0
     
-    if (params[:artefakt_id].present?)
-      session[:visualization_artefakt_id] = params[:artefakt_id]
+    if (params[:artifact_id].present?)
+      session[:visualization_artifakt_id] = params[:artifact_id]
     end
     
     if (params[:visualization_type].present?)
@@ -1059,7 +1059,12 @@ class ReArtifactRelationshipController < RedmineReController
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
 
     @chosen_artifacts = ReVisualizationConfig.get_artifact_filter_as_stringarray(@project.id, session[:visualization_type])
-    @chosen_relations = ReVisualizationConfig.get_relation_filter_as_stringarray(@project.id, session[:visualization_type])
+    @chosen_relations_tmp = ReVisualizationConfig.get_relation_filter_as_stringarray(@project.id, session[:visualization_type])
+    @chosen_relations = []
+    @chosen_relations_tmp.each do |rel|
+      @chosen_relations << rel.to_s.downcase
+    end
+      
     @chosen_issue = ReVisualizationConfig.get_issue_filter(@project.id, session[:visualization_type])
     @max_deep = ReVisualizationConfig.get_max_deep(@project.id, session[:visualization_type]).to_i
 

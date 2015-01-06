@@ -71,7 +71,7 @@ function setLayoutHeight() {
 function getRightPaneImage() {
     var param = getURLParam("visualization_type");
     if ( param == "" ) {
-        return "<img src='../images/comment.png'><br/><img src='../images/fav_off.png'>";
+        return "<img src='/images/comment.png'><br/><img src='/images/fav_off.png'>";
     } else {
         return "";
     }
