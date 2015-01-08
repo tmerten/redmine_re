@@ -241,6 +241,13 @@ class ReArtifactRelationshipController < RedmineReController
     end
     if (@max_deep.to_i == 0 || @current_deep.to_i < @max_deep.to_i)
       
+      # ToDo: Refacture the re_artifact_properties model, that the following code is usable
+      #ReRelationtype.relation_types(@project.id).each do |rel_type|
+      #  if @chosen_relations.include?(rel_type)
+      #    lokal_artifact = artifact.rel_type  # this line need to be refactured
+      #  end
+      #end
+
       if @chosen_relations.include?("dependency")
         lokal_artifact = artifact.dependency
       end
