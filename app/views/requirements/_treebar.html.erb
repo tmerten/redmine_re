@@ -31,7 +31,7 @@
         <% if User.current.allowed_to?(:administrate_requirements, @project) %>
           <li><%= link_to l(:re_configure_plugin), {
             :controller => "re_settings",
-            :action => "configure", 
+            :action => "configure",
             :project_id => @project.identifier } %>
           </li>
         <% end %>
@@ -169,7 +169,7 @@ $(document).ready(function() {
         "stripes" : false,
         "dots" : true,
       },
-    },    
+    },
     "types" : {
       "#" : {
         "max_children" : 1,
@@ -259,7 +259,7 @@ $(document).ready(function() {
     });
   })
 
-  
+
 }); /* document.ready*/
 
 /*
