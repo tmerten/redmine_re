@@ -31,7 +31,7 @@
         <% if User.current.allowed_to?(:administrate_requirements, @project) %>
           <li><%= link_to l(:re_configure_plugin), {
             :controller => "re_settings",
-            :action => "configure", 
+            :action => "configure",
             :project_id => @project.identifier } %>
           </li>
         <% end %>
@@ -169,7 +169,7 @@ $(document).ready(function() {
         "stripes" : false,
         "dots" : true,
       },
-    },    
+    },
     "types" : {
       "#" : {
         "max_children" : 1,
@@ -187,7 +187,7 @@ $(document).ready(function() {
         "icon" : "re_subtask-icon"
       },
       "re_vision" : {
-        "icon" : "re_vision-icon%>"
+        "icon" : "re_vision-icon"
       },
       "re_attachment" : {
         "icon" : "re_attachment-icon"
@@ -226,8 +226,8 @@ $(document).ready(function() {
       "items" : createJSTreeContextmenuItems()
     },
     <% if User.current.allowed_to?(:edit_requirements, @project) %>
-  		plugins : [ "dnd", "ui", "contextmenu", "types"]  
-    <% elsif  User.current.allowed_to?(:view_requirements, @project) %>	
+  		plugins : [ "dnd", "ui", "contextmenu", "types"]
+    <% elsif  User.current.allowed_to?(:view_requirements, @project) %>
       plugins : [ "ui", "contextmenu", "types", "wholerow" ]
     <% end %>
   }) /* jsTree */
@@ -245,7 +245,7 @@ $(document).ready(function() {
     var parent_id = data.parent.replace("node_","");
     var id = data.node.id.replace("node_","");
     var position = data.position;
-    
+
     jQuery.ajax({
       async : false,
       type: 'POST',
@@ -259,7 +259,7 @@ $(document).ready(function() {
     });
   })
 
-  
+
 }); /* document.ready*/
 
 /*

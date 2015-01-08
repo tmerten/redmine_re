@@ -172,12 +172,12 @@ en:
 
   # re_artifact_properties_deletion
   re_preparing_deletion: 'Preparing deletion'
-  re_you_asked_for_deleting_the_following_artifact: 'You asked for deleting the following artifact'
+  re_you_asked_for_deleting_the_following_artifact: 'You asked to delete the following artifact'
   re_what_will_be_deleted: 'If you delete this artifact, the relationships listed below will also be deleted.'
   re_confirm_deletion_by_choosing: 'Please confirm the deletion by choosing an option below'
 
   re_delete_and_move_children: 'Delete artifact and move children'
-  re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listed above) to the parent of this artifact (%{parent}). Afterwards this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
+  re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listed above) to the parent of this artifact (%{parent}). Afterwards, this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
   re_delete_recursively: 'Delete recursively'
   re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listed above). Additionally, all its children and their children (listed above) as well as each child''s relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
   re_delete_artifact: 'Delete artifact'
@@ -189,7 +189,7 @@ en:
   re_delete_project_artifact: 'Delete project artifact'
   re_cannnot_delete_project_artifact: 'This artifact is a project artifact which cannot be deleted. To delete the project, please use '
   re_redmine_project_administration: 'Redmine Project Administration'
-  re_delete_project_artifact_error: 'The project artifact cannot be deleted.'    
+  re_delete_project_artifact_error: 'The project artifact cannot be deleted.'
 
   #re_requirement
   re_requirement: 'Requirement'
@@ -333,7 +333,7 @@ en:
   re_subtask_name: 'Name'
   re_subtask_solution: 'Solution'
   re_task_attributes: 'Task specific attributes'
-  
+
 
   # re_subtasks
   re_new_re_subtask: 'Subtask'
@@ -378,7 +378,7 @@ en:
   re_settings_have_to_save_again: 'The system has been updated! Please check the configuration. You have to click on save before you leave this page!'
   re_pandoc_error_first: 'Redmine_re uses '
   re_pandoc_error_second: ' to export artifact data to different formats. Please make sure pandoc is installed.'
-  re_export_error: 'Error during export. Please make sure pandoc is installed and an output format is configured in the settings.' 
+  re_export_error: 'Error during export. Please make sure pandoc is installed and an output format is configured in the settings.'
   re_export_format_configuration: 'Export Format Configuration'
   # re_requirement
   re_requirement: 'Requirement'
@@ -424,15 +424,15 @@ en:
   re_expansion_type: 'Type'
   re_expansion_description: 'Description'
   re_delete_use_case_expansion: 'Delete'
-  re_use_case_primary_actor: 'Primary Actor' 
-  re_use_case_secondary_actors: 'Secondary Actor(s)' 
+  re_use_case_primary_actor: 'Primary Actor'
+  re_use_case_secondary_actors: 'Secondary Actor(s)'
   re_actors: 'Actors'
   re_use_case_attributes: 'Use Case specific attributes'
   re_use_case_expansions: 'Use Case expansions'
   re_exception_expansion: 'Exception'
   re_data_expansion: 'Data'
   re_other_expansion: 'Other'
-  
+
   # re_scenario
   re_scenario: 'Scenario'
   ReScenario: 'Scenario'
@@ -449,7 +449,7 @@ en:
   re_processword_deleted: 'The Processword %{name} has been deleted'
   re_processword_not_deleted: 'The Processword %{name} could not be deleted'
   re_processword_validation_error: 'Processword error: %{msg}'
-  
+
   # re_rationale
   re_rationale: 'Rationale'
   ReRationale: 'Rationale'
@@ -467,7 +467,7 @@ en:
   re_create_in: 'create artifact in...'
   re_create_below: 'create artifact below...'
   re_create_relation: 'create relation to...'
-  
+
   #Visualization
   re_relationship_visualization: 'Visualization'
   re_visualization_show_netmap: 'show as Netmap'
@@ -476,7 +476,7 @@ en:
   re_visualization_show: 'Visualization'
   re_visualization_config: 'Configure'
   re_visualitation_deep_graph_explain: 'max. iteration steps 0 = disabled'
-  
+
   # fields
   field_re_artifact: 'field artifact'
 
@@ -487,7 +487,7 @@ en:
   #diagrams
   re_related_diagrams: 'Related diagrams'
   re_diagrams: 'Diagrams'
-  
+
   #my blocks
 
   relations: 'Relations'
@@ -543,23 +543,23 @@ en:
   re_outgoing_relationship_count: 'Outgoing'
   re_related_issues: 'Issues'
   re_updated_at: 'Updated'
-  
+
   re_traces_to: 'Traces to'
   re_traces_from: 'Traces from'
 
   re_query_visibility_public: 'public'
   re_query_visibility_me: 'just me'
   re_query_visibility_roles: 'for'
-  
+
   re_please_choose: 'please choose'
   re_primary_actor: 'Primary actor'
   re_secondary_actor: 'Secondary actor(s)'
   re_add_secondary_actor: 'Add secondary actor'
   re_find_secondary_actor: 'Find secondary actor'
   re_changed_by: 'Changed by'
-  
+
   re_delete_use_case_step_expansion: 'Delete'
-  
+
   re_starts_with: 'Start with'
   re_ends_with: 'Ends with'
   re_contains: 'Contains'
@@ -568,31 +568,31 @@ en:
   re_greater_than: 'Grater than'
   re_none_specific: 'None specific'
   re_apply_filter: 'Apply filter'
-  
+
   re_artifact_attributes: 'Artifact attributes'
-  
+
   label_attachments: 'Attachments'
-  
+
   re_relation_saved: 'Relation saved successfully'
   re_relation_saved_error: 'Relation was not saved successfully'
-  
+
   re_artifact_related_content: 'Related content'
-  
+
   #mail
   re_text_artifact_added: "Artifact %{id} has been added by %{author}."
   re_text_artifact_updated: "Artifact %{id} has been updated by %{author}."
   re_text_artifact_updated_new_comment: "New comment added by %{author}:"
 
   connect_issue: "Connect issue"
-  
+
   #export
   re_export: 'Export'
-  
+
   re_edit_default_description: 'Edit default description'
-  
+
   #default artifact descriptions
   re_goal_default_description: '<p>You may want to use goals as high level requirements or to structure your requirements. There are also approaches using goals for the whole RE, especially for understanding the requirements.</p> <p>Goals are a good starting point to record the intentions of your stakeholders. Goals do not have to be fully achievable nor measureable. Goals can be regarded as a first sketch of the requirements. You can use goals to discover conflicts between the intentions of your stakeholders and solve this conflicts. This may helps you to establish an overall agreement between your stakeholders. You should take care about that a goal refines a vision statements. [Alexander 2009, S. 51]</p>'
-  re_processword_default_description: "<p>Processwords are needed for the use of a syntactic requirements template. You can define synonyms for the word here and deliver a proper definition of the term.</p>"  
+  re_processword_default_description: "<p>Processwords are needed for the use of a syntactic requirements template. You can define synonyms for the word here and deliver a proper definition of the term.</p>"
   re_vision_default_description: "<p>A vision statement for your project. Describe ideas in Wiki style syntax with this artifact.</p> <p>You should use vision statement to describe the basic purpose of your project. A vision should be clear and simple so that everybody is able to understand the basic purpose the project. [Alexander 2009, S 53]</p>"
   re_task_default_description: "<p>If you are unfamiliar with using Lauesen''s Task-Based approach for RE - it is very similar to the famous Use-Cases by Cockburn - simply <a href='http://www.itu.dk/~slauesen/SorenReqs.html'>check his website</a>.<br /> Most important is that you recognize the demand solution principle coming with the two columns of the approach.</p> <p>Tasks do not distinguish between who does what. Task closure means that your task has a well defined start and end point. A good starting point is something that happens in the user''s world, for instance that a client calls. A good end point is that nothing more can be done about the case right now - the user deserves a \"coffee break\". [Lauesen 2011, S. 34]</p>"
   re_use_case_default_description: "<p>Use Case template as found in Cockburn''s Book Writing effective Use-Cases.</p>"
