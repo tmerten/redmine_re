@@ -4,7 +4,7 @@ The Redmine RE plugin (http://redmine-re.korem.de) is a requirements engineering
 
 A per project Requirements Tab gives users access to their specification. They can interconnect (trace) requirement artifacts to other artifacts as well as issues. Try the plugin here http://redmine-re.korem.de and discover more features like commenting on requirements or visualizing traces.
 
-Redmine RE is compatible to Redmine Versions 2.3 and higher (maybe some lower ones down to 2.0, but we don't know for sure).
+Redmine RE is compatible with Redmine Versions 2.4 and higher.
 
 == Demo
 
