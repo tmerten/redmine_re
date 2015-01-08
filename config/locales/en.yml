@@ -76,10 +76,8 @@ en:
   re_child_artifacts: 'Child artifacts'
   re_fields: 'Fields'
   re_configs_saved: 'Configurations saved successfully'
-<<<<<<< HEAD
-=======
+
   re_display_order: 'Display order'
->>>>>>> master
   re_conf_internal_name: 'Internal Name'
   re_relationship_configuration: 'Relationship Configuration'
   re_conf_artifact_display_order: 'Use Drag and Drop to change the display order (e.g. in the side menu or the index page)'
@@ -178,24 +176,14 @@ en:
 
   # re_artifact_properties_deletion
   re_preparing_deletion: 'Preparing deletion'
-<<<<<<< HEAD
   re_you_asked_for_deleting_the_following_artifact: 'You asked for deleting the following artifact'
-=======
-  re_you_asked_for_deleting_the_following_artifact: 'You asked to delete the following artifact'
->>>>>>> master
   re_what_will_be_deleted: 'If you delete this artifact, the relationships listed below will also be deleted.'
   re_confirm_deletion_by_choosing: 'Please confirm the deletion by choosing an option below'
 
   re_delete_and_move_children: 'Delete artifact and move children'
-<<<<<<< HEAD
   re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listed above) to the parent of this artifact (%{parent}). Afterwards this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
   re_delete_recursively: 'Delete recursively'
   re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listed above). Additionally all its children and their children (listed above) as well as each childs relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
-=======
-  re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listed above) to the parent of this artifact (%{parent}). Afterwards, this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
-  re_delete_recursively: 'Delete recursively'
-  re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listed above). Additionally, all its children and their children (listed above) as well as each child''s relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
->>>>>>> master
   re_delete_artifact: 'Delete artifact'
   re_will_delete_artifact_and_relations: 'Choosing this option will delete this artifact (%{name}) and its relationships (listed above).'
 
