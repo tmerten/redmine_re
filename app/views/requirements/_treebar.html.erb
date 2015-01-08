@@ -137,7 +137,6 @@ function createJSTreeContextmenuItems(node) {
           "label" : "<%= t(:re_visualization_show_graph) %>",
           "action" : function (node) {
             var id = $(node.reference).attr("data-id");
-            alert(id);
             var link = re_config['base_url'] + 'projects/<%= @project.id %>/requirements/relations/visualization';
             window.location.href = link+'_get/'+id+'/graph';
           },

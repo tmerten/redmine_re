@@ -65,7 +65,7 @@ module QueryPatch
     conditions = ["#{Project.table_name}.id = ? AND #{ReArtifactProperties.table_name}.artifact_type NOT IN (?)",
                   project_id, @@locked_artifact_types]
 
-    artifacts = ReArtifactProperties.all(:joins => [:realizations, :issues, :project],
+    artifacts = ReArtifactProperties.all(:joins => [:re_realizations, :issues, :project],
                                          :conditions => conditions, :group => :id)
     artifacts.collect { |a| [ "[#{localized_artifact_type(a)}] #{a.name}", a.id.to_s ] }.sort! { |a, b| a.first <=> b.first }
   end
@@ -75,16 +75,16 @@ module QueryPatch
     conditions = ["#{Project.table_name}.id = ? AND #{ReArtifactProperties.table_name}.artifact_type NOT IN (?)",
                   project_id, @@locked_artifact_types]
 
-    artifacts = ReArtifactProperties.all(:joins => [:realizations, :issues, :project],
+    artifacts = ReArtifactProperties.all(:joins => [:re_realizations, :issues, :project],
                                          :conditions => conditions, :group => :artifact_type)
     artifacts.collect { |a| [ localized_artifact_type(a), a.artifact_type ] }.sort! { |a, b| a.first <=> b.first }
   end
 
   # Builds a SQL condition to filter for artifact properties
   def sql_for_artifact_field(db_table, db_field, value, is_numeric_value, invert)
-    inner_sql = %{SELECT DISTINCT(#{db_table}.id) FROM #{Realization.table_name}
-                  INNER JOIN #{db_table} ON #{db_table}.id = #{Realization.table_name}.issue_id
-                  INNER JOIN #{ReArtifactProperties.table_name} ON #{ReArtifactProperties.table_name}.id = #{Realization.table_name}.re_artifact_properties_id
+    inner_sql = %{SELECT DISTINCT(#{db_table}.id) FROM #{ReRealization.table_name}
+                  INNER JOIN #{db_table} ON #{db_table}.id = #{ReRealization.table_name}.issue_id
+                  INNER JOIN #{ReArtifactProperties.table_name} ON #{ReArtifactProperties.table_name}.id = #{ReRealization.table_name}.re_artifact_properties_id
                   WHERE #{ReArtifactProperties.table_name}.#{db_field}
                   IN (#{(is_numeric_value ? value : value.collect { |v| "'#{connection.quote_string(v)}'" }).join(",")})}
     "#{db_table}.id #{invert ? "NOT " : ""}IN (#{inner_sql})"
@@ -92,9 +92,9 @@ module QueryPatch
 
   # Builds a SQL condition to filter for artifact names
   def sql_for_artifact_name_search_field(db_table, value, invert)
-    inner_sql = %{SELECT DISTINCT(#{db_table}.id) FROM #{Realization.table_name}
-                  INNER JOIN #{db_table} ON #{db_table}.id = #{Realization.table_name}.issue_id
-                  INNER JOIN #{ReArtifactProperties.table_name} ON #{ReArtifactProperties.table_name}.id = #{Realization.table_name}.re_artifact_properties_id
+    inner_sql = %{SELECT DISTINCT(#{db_table}.id) FROM #{ReRealization.table_name}
+                  INNER JOIN #{db_table} ON #{db_table}.id = #{ReRealization.table_name}.issue_id
+                  INNER JOIN #{ReArtifactProperties.table_name} ON #{ReArtifactProperties.table_name}.id = #{ReRealization.table_name}.re_artifact_properties_id
                   WHERE #{ReArtifactProperties.table_name}.name LIKE '%#{connection.quote_string(value.first)}%'}
     "#{db_table}.id #{invert ? "NOT " : ""}IN (#{inner_sql})"
   end

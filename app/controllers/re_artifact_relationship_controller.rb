@@ -154,7 +154,7 @@ class ReArtifactRelationshipController < RedmineReController
       adjacent_node['data'] = edge_data
       @adjacencies << adjacent_node   
       if @chosen_issue
-        Realization.where("re_artifact_properties_id = ?", artifact.id.to_s).each do |source|
+        ReRealization.where("re_artifact_properties_id = ?", artifact.id.to_s).each do |source|
           @found_artifakts = []
           netmap_issue(source.issue_id,artifacts)
           @found_artifakts.each do |add|
@@ -208,7 +208,7 @@ class ReArtifactRelationshipController < RedmineReController
             netmap_issue(issue.issue_to_id, artifacts)
           end
         end
-        Realization.where("issue_id = ?", issue_id.to_s).each do |new_artifact|
+        ReRealization.where("issue_id = ?", issue_id.to_s).each do |new_artifact|
           next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(new_artifact.re_artifact_properties_id).artifact_type.to_s)
           if((! artifacts.include? new_artifact.re_artifact_properties_id.to_s) && (! @found_artifakts.include? new_artifact.re_artifact_properties_id))
             find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, new_artifact.re_artifact_properties_id.to_s))
@@ -269,7 +269,7 @@ class ReArtifactRelationshipController < RedmineReController
         lokal_artifact = artifact.diagram
       end
       if (@chosen_issue)
-        Realization.where("re_artifact_properties_id=?",artifact.id.to_s).each do |issue|
+        ReRealization.where("re_artifact_properties_id=?",artifact.id.to_s).each do |issue|
           next unless ( ! @done_issues.include? issue.issue_id.to_s)
             json_issue = add_issues_netmap(issue.issue_id.to_s)
             issue_return = add_issues_sunburst(issue.issue_id.to_s)
@@ -315,7 +315,7 @@ class ReArtifactRelationshipController < RedmineReController
         issue_artifact['children'] = add_issues_sunburst(issue.issue_to_id.to_s)
         children << issue_artifact
       end
-      Realization.where("issue_id=?", issue_id.to_s).each do |artifact| 
+      ReRealization.where("issue_id=?", issue_id.to_s).each do |artifact| 
         if( ! @done_artifakts_id.include? artifact.re_artifact_properties_id.to_s)
           outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(artifact.re_artifact_properties_id)
           drawable_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.re_artifact_properties_id)
@@ -400,7 +400,7 @@ class ReArtifactRelationshipController < RedmineReController
             end
           end
           if @chosen_issue
-            Realization.where("re_artifact_properties_id = ?", artifact.id.to_s).each do |source|
+            ReRealization.where("re_artifact_properties_id = ?", artifact.id.to_s).each do |source|
               if (@current_deep.to_i  == @max_deep.to_i)
                 if( ! @done_issues.include? source.issue_id)
                   next
@@ -481,7 +481,7 @@ class ReArtifactRelationshipController < RedmineReController
           end
         end
         
-        Realization.where("re_artifact_properties_id=?",artifact.id).each do |relation|
+        ReRealization.where("re_artifact_properties_id=?",artifact.id).each do |relation|
           other_artifact = Issue.find(relation.issue_id)
           unless other_artifact.nil? # TODO: actually, this should not possible
             relation_data = {}
@@ -615,7 +615,7 @@ class ReArtifactRelationshipController < RedmineReController
           end
         end
         
-        Realization.where("issue_id=?",issue_id).each do |relation|
+        ReRealization.where("issue_id=?",issue_id).each do |relation|
           next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(relation.re_artifact_properties_id).artifact_type.to_s) 
           if (@current_deep.to_i  == @max_deep.to_i)
             if(! @done_artifakts_id.include? relation.re_artifact_properties_id.to_s)
@@ -655,7 +655,7 @@ class ReArtifactRelationshipController < RedmineReController
       data_node["$dim"] = 10
       relationship_data = []
    
-      Realization.where("issue_id=?",issue_id).each do |relation|
+      ReRealization.where("issue_id=?",issue_id).each do |relation|
         other_artifact = ReArtifactProperties.find(relation.re_artifact_properties_id)
         unless other_artifact.nil? # TODO: actually, this should not possible
         relation_data = {}
@@ -824,7 +824,7 @@ class ReArtifactRelationshipController < RedmineReController
         relationship_data << relation_data
       end
     end
-    Realization.where("re_artifact_properties_id=?",artifact.id).each do |relation|
+    ReRealization.where("re_artifact_properties_id=?",artifact.id).each do |relation|
       other_artifact = Issue.find(relation.issue_id)
       unless other_artifact.nil? # TODO: actually, this should not possible
         relation_data = {}
@@ -880,7 +880,7 @@ class ReArtifactRelationshipController < RedmineReController
     
     #Add Connection to Issues
       if @chosen_issue
-        Realization.where("re_artifact_properties_id == ?", artifact.id.to_s).each do |source|
+        ReRealization.where("re_artifact_properties_id == ?", artifact.id.to_s).each do |source|
           if(@visualization_typ=="netmap")
             if(@issues.include? source.issue_id )
               doit=true
@@ -933,7 +933,7 @@ class ReArtifactRelationshipController < RedmineReController
     adjacencies= []
 
     relationship_data = []
-    Realization.where("issue_id = ?", issue_id.to_s).each do |source|
+    ReRealization.where("issue_id = ?", issue_id.to_s).each do |source|
       ReArtifactProperties.where("id = ?",source.re_artifact_properties_id).each do |other_artifact|
         relation_data = {}
         relation_data['id'] = other_artifact.id
@@ -998,7 +998,7 @@ class ReArtifactRelationshipController < RedmineReController
       end
     end
     
-    Realization.where("issue_id=?", issue_id.to_s).each do |source|
+    ReRealization.where("issue_id=?", issue_id.to_s).each do |source|
       next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.re_artifact_properties_id).artifact_type.to_s)
       if(@done_artifakts_netmap.include? source.re_artifact_properties_id)
         adjacent_node = {}
@@ -1106,7 +1106,7 @@ class ReArtifactRelationshipController < RedmineReController
       end
     end
     if @chosen_issue
-      Realization.where("re_artifact_properties_id = ?", artifact_id.to_s).each do |source|
+      ReRealization.where("re_artifact_properties_id = ?", artifact_id.to_s).each do |source|
         if (@min_dis_issue_arr[source.issue_id] == nil || @min_dis_issue_arr[source.issue_id] > @current_deep)
           @min_dis_issue_arr[source.issue_id] = @current_deep  
           min_dis_issue(source.issue_id)

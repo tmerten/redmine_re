@@ -505,9 +505,9 @@ end
 class ReIssueFilter < ReFilter
   protected
   def issue_scoped_sql(inner_sql = nil)
-    %{SELECT #{Realization.table_name}.re_artifact_properties_id
-      FROM #{Realization.table_name}
-      WHERE #{Realization.table_name}.issue_id IN (#{inner_sql || '?'})}
+    %{SELECT #{ReRealization.table_name}.re_artifact_properties_id
+      FROM #{ReRealization.table_name}
+      WHERE #{ReRealization.table_name}.issue_id IN (#{inner_sql || '?'})}
   end
 end
 
@@ -541,9 +541,9 @@ class ReIssueIdsFilter < ReIssueFilter
 
   private
   def exists_sql(invert)
-    inner_sql = %{SELECT #{Realization.table_name}.*
-                  FROM #{Realization.table_name}
-                  WHERE #{Realization.table_name}.re_artifact_properties_id = #{ReArtifactProperties.table_name}.id}
+    inner_sql = %{SELECT #{ReRealization.table_name}.*
+                  FROM #{ReRealization.table_name}
+                  WHERE #{ReRealization.table_name}.re_artifact_properties_id = #{ReArtifactProperties.table_name}.id}
     sql = "EXISTS (#{inner_sql})"
     sql = "NOT " + sql if invert
     [sql]
@@ -654,9 +654,9 @@ class ReIssueAssigneeIdsFilter < ReIssueUserIdsFilter
 
   private
   def exists_sql(invert)
-    inner_sql = %{SELECT #{Realization.table_name}.re_artifact_properties_id
-                  FROM #{Realization.table_name}
-                  INNER JOIN #{Issue.table_name} ON #{Issue.table_name}.id = #{Realization.table_name}.issue_id
+    inner_sql = %{SELECT #{ReRealization.table_name}.re_artifact_properties_id
+                  FROM #{ReRealization.table_name}
+                  INNER JOIN #{Issue.table_name} ON #{Issue.table_name}.id = #{ReRealization.table_name}.issue_id
                   WHERE #{Issue.table_name}.assigned_to_id IS #{invert ? '' : 'NOT '}NULL}
     [wrap_container_sql(inner_sql)]
   end

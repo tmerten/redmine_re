@@ -13,8 +13,8 @@ class ReArtifactProperties < ActiveRecord::Base
   
   has_many :raters, :through => :re_ratings, :source => :users
   has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
-  has_many :realizations, :dependent => :destroy
-  has_many :issues, :through => :realizations, :uniq => true
+  has_many :re_realizations, :dependent => :destroy
+  has_many :issues, :through => :re_realizations, :uniq => true
 
   has_many :relationships_as_source,
            :order => "re_artifact_relationships.position",
@@ -220,9 +220,9 @@ class ReArtifactProperties < ActiveRecord::Base
     artifact_ids = []
     issue_array.each do |issue|
       if artifact_ids.empty?
-        artifact_ids = issue.realizations.collect { |r| r.re_artifact_properties_id }
+        artifact_ids = issue.re_realizations.collect { |r| r.re_artifact_properties_id }
       else
-        artifact_ids = artifact_ids & (issue.realizations.collect { |r| r.re_artifact_properties_id })
+        artifact_ids = artifact_ids & (issue.re_realizations.collect { |r| r.re_artifact_properties_id })
       end
     end
     ReArtifactProperties.find(artifact_ids, *args)

@@ -30,8 +30,8 @@
                 </td>
               <% end %>
               <td class="actions">
-                <% if artifact.realizations.count > 0 %>
-                  <%= link_to artifact.realizations.count, issues_path(:project_id => @project.id, :set_filter => 1, :re_artifact_id => artifact.id),
+                <% if artifact.re_realizations.count > 0 %>
+                  <%= link_to artifact.re_realizations.count, issues_path(:project_id => @project.id, :set_filter => 1, :re_artifact_id => artifact.id),
                                                            :class => 'icon icon-report', :title => 'Issues' %>
                 <% end %>
 
