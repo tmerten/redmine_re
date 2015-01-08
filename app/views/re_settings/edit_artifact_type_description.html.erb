@@ -38,7 +38,7 @@
              function set_default_description () {
                 var desc = "<%= escape_javascript(sanitize(t(@artifact_type+'_default_description'), :tags=>[])) %>";
                 var perform = 0;
-                if ( jQuery('#description').val() != "" ) {
+                if ( $('#description').val() != "" ) {
                 	if ( confirm("Do you want to replace you description by default description") ) {
                 		perform = 1;
                 	}
@@ -46,8 +46,8 @@
                 	perform = 1;
                 }
                 if ( perform == 1 ) {
-                	jQuery('#description').val(desc);
-                	jQuery('#hide_default_description').attr("checked", true);
+                	$('#description').val(desc);
+                	$('#hide_default_description').attr("checked", true);
                 }
              }
           <% end -%> 

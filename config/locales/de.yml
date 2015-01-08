@@ -70,6 +70,7 @@ de:
   re_pandoc_error_first: 'Redmine_re nutzt '
   re_pandoc_error_second: ', um Artefakte in unterschiedliche Ausgabeformate zu exportieren. Bitte stellen sie sicher, das pandoc installiert ist.'  
   re_export_error: "Beim Exportieren trat ein Fehler auf. Bitte stellen Sie sicher, das pandoc installiert und ein Ausgabeformat in den Einstellungen konfiguriert ist." 
+
   re_conf_add_relation: "Relation hinzufügen"
   
   
@@ -108,7 +109,7 @@ de:
 
   #deleting
   re_delete_project_artifact: 'Projekt Artefakt löschen'
-  re_cannnot_delete_project_artifact: 'Dieses Artefact ist ein Projektartefakt, das nicht gelöscht werden darf. Um das Projekt zu löschen, verwenden Sie die '
+  re_cannnot_delete_project_artifact: 'Dieses Artefakt ist ein Projektartefakt, das nicht gelöscht werden darf. Um das Projekt zu löschen, verwenden Sie die '
   re_redmine_project_administration: 'Redmine Projekt Administration'
   re_delete_project_artifact_error: 'Das Projekt Artefakt darf nicht gelöscht werden.'
 
@@ -134,4 +135,3 @@ de:
 
   #export
   re_export: 'Export'
-

@@ -76,7 +76,7 @@ class RequirementsController < RedmineReController
         session[:expanded_nodes].delete(node_id)
         render :text => "node #{node_id} closed"
     end
-    logger.debug("Expended nodes: #{session[:expanded_nodes].inspect}")
+    logger.debug("Expended nodes: #{session[:expanded_nodes].inspect}") 
   end
 
   def sendDiagramPreviewImage 

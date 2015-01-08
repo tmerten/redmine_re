@@ -4,6 +4,7 @@ require 'rubygems'
 
 require_dependency '../app/models/re_artifact_relationship'
 require_dependency '../app/models/re_artifact_properties'
+require_dependency '../app/models/re_relationtype'
 require_dependency '../app/helpers/re_application_helper'
 
 # Make singular and plural for RE_Artifact_Properties the same

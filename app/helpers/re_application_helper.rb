@@ -1,10 +1,11 @@
 module ReApplicationHelper
   def rendered_relation_type(relation_type)
-    relation_type_alias = @re_relation_settings[relation_type]['alias']
+    #relation_type_alias = @re_relation_settings[relation_type]['alias']
+    relation_type_alias = relation_type
     relation_type_humanized = relation_type.humanize
 
     if relation_type_alias.blank? or relation_type_humanized.eql?(relation_type_alias)
-      return t('re_' + relation_type)
+      return relation_type_humanized
     else
       return relation_type_alias
     end
@@ -161,6 +162,16 @@ module ReApplicationHelper
     new_object = f.object.class.reflect_on_association(:re_subtasks).klass.new(:sub_type => sub_type)
     fields = f.fields_for("re_subtasks_attributes", new_object, :index => "new_re_subtask") do |builder|
       render("re_task/subtasks", :f => builder)
+    end
+    escape_javascript(fields)
+  end
+  
+  
+  # renders a link to javascript to add an empty object into a forms 
+  def get_escaped_relationtype_html(f)
+    new_object = ReRelationtype.new(:is_system_relation => 0, :is_directed => 1, :in_use => 1, :color => "#000000")
+    fields = f.fields_for("re_relationtypes", new_object, :index => "new_re_relationtype") do |builder|
+      render("re_settings/add_relation", :f => builder)
     end
     escape_javascript(fields)
   end

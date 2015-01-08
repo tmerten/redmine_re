@@ -4,15 +4,10 @@ class ReSettingsController < RedmineReController
 
   def configure
     initialize_artifact_order(@project.id)
-    initialize_relation_order(@project.id)
 
      name = @project.name      
-     if name.length < 3 
-      name = name+" Project" 
-     end
-     if name.length > 50
-      name = name[0..49]
-     end 
+     name = "#{name} Project" if name.length < 3
+     name = name[0..49]       if name.length > 50
      
     @project_artifact = ReArtifactProperties.where({
       :project_id => @project.id,
@@ -45,29 +40,15 @@ class ReSettingsController < RedmineReController
         configured_artifact = {}
         configured_artifact['in_use'] = true
         configured_artifact['alias'] = artifact_type.gsub(/^re_/, '').humanize
-        configured_artifact['color'] = artifact_type.to_s.classify.constantize::INITIAL_COLOR #"%06x" % (rand * 0xffffff)
-                
+        configured_artifact['color'] = artifact_type.to_s.classify.constantize::INITIAL_COLOR
         ReSetting.set_serialized(artifact_type, @project.id, configured_artifact)
       end
       @re_artifact_configs[artifact_type] = configured_artifact
     end
 
     @re_relation_configs = {}
-    @re_relation_order.each do |relation_type|
-      configured_relation = ReSetting.get_serialized(relation_type, @project.id)
-      if configured_relation.nil?
-        logger.debug("##### found an unconfigured relation of type '" + relation_type.to_s + "', creating an initial configuration")
-        configured_relation = {}
-        configured_relation['in_use'] = true
-        configured_relation['alias'] = relation_type.humanize
-        
-        configured_relation['color'] = ReArtifactRelationship::INITIAL_COLORS[ReArtifactRelationship::ALL_RELATION_TYPES.index(relation_type)]
-        configured_relation['show_in_visualization'] = true
-        ReSetting.set_serialized(relation_type, @project.id, configured_relation)
-      end
-      @re_relation_configs[relation_type] = configured_relation
-    end
-
+    @re_relation_types = ReRelationtype.find_all_by_project_id(@project.id)
+    logger.debug @re_relation_types.inspect
     @re_settings = {}
     @re_settings["visualization_size"] = ReSetting.get_plain("visualization_size", @project.id)
     @re_settings["visualization_size"] ||= 800
@@ -80,7 +61,6 @@ class ReSettingsController < RedmineReController
     else
         @re_visualization_setting["issue"] = false
     end
-  
   end
 
   def self.for(artifact_type, project_id)
@@ -106,7 +86,6 @@ class ReSettingsController < RedmineReController
       @description = configured_artifact['description']
       @hide_default_description = configured_artifact['hide_default_description']
     end
-    
   end
 
 private
@@ -124,36 +103,13 @@ private
     # Put it into the empty configured_artifact_types array
     configured_artifact_types.concat(stored_settings) if stored_settings
 
-    # Search for artifact types (all models containing "acts_as_re_artifact" are used)
-    all_artifact_types = Dir["#{Rails.root}/plugins/redmine_re/app/models/re_*.rb"].map do |f|
-      fd = File.open(f, 'r')
-      File.basename(f, '.rb') if fd.read.include? "acts_as_re_artifact"
-    end
-
-    all_artifact_types.delete_if { |x| x.nil? }
-    all_artifact_types.delete(:ReArtifactProperties)
-    all_artifact_types.delete(:ReArtifactsConfig)
+    all_artifact_types = ReSetting::ARTIFACT_TYPES
     all_artifact_types.delete_if { |v| configured_artifact_types.include? v }
     configured_artifact_types.concat(all_artifact_types)
 
     ReSetting.set_serialized("artifact_order", project_id, configured_artifact_types)
     logger.debug(configured_artifact_types.to_yaml)
     @re_artifact_order = configured_artifact_types
-  end
-
-  def initialize_relation_order(project_id)
-    configured_relation_types = Array.new
-    stored_settings = ReSetting.get_serialized("relation_order", project_id)
-    configured_relation_types.concat(stored_settings) if stored_settings
-
-    all_relation_types = []
-    ReArtifactRelationship::RELATION_TYPES.values.each { |k| all_relation_types << k.to_s }
-    ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.each { |k| all_relation_types << k.to_s }
-
-    all_relation_types.delete_if { |v| configured_relation_types.include? v }
-    configured_relation_types.concat(all_relation_types)
-
-    @re_relation_order = configured_relation_types
   end
 
   def save_user_config
@@ -188,21 +144,64 @@ private
       ReSetting.set_serialized(k, @project.id, v)
     end
 
+    # Get existing
     new_relation_configs = params[:re_relation_configs]
+    
+    # Add new relations
+    unless params[:config].nil?
+      params[:config][:re_relationtypes].each_pair do |k, new_relation|
+        new_relation_configs = new_relation_configs.merge({ k => new_relation })
+      end
+    end
+    
     new_relation_configs.each_pair do |k, v|
-      v['in_use'] = v.has_key? 'in_use'
-      v['show_in_visualization'] = v.has_key? 'show_in_visualization'
-      ReSetting.set_serialized(k, @project.id, v)
+      logger.debug v.to_yaml
+      if v['id'].blank?
+        r = ReRelationtype.new
+        r.relation_type = v[:alias_name] # on i the type was created the alias name will be set
+        r.is_system_relation = 0
+      else
+        r = ReRelationtype.find_or_create_by_id(v['id'])
+      end
+      
+      logger.debug "before: #{r.inspect}"
+      if r.is_system_relation == 0
+        r.in_use = (v[:in_use] == "1" || v[:in_use] == "yes")
+        r.is_directed = (v[:is_directed] == "1" || v[:is_directed] == "yes")
+      end
+      r.alias_name = v[:alias_name]
+      r.color = v[:color]
+      r.project_id = @project.id
+      
+      logger.debug "after: #{r.inspect}"
+
+      if r.is_system_relation == "1"
+        r.save
+      else
+        if v[:destroy] == "1"
+          
+          n = ReArtifactRelationship.find_all_by_relation_type(r.relation_type)
+          n.each do |relation|
+            artifact = ReArtifactProperties.find(relation.source_id)
+            if (artifact.project_id == r.project_id)
+              ReArtifactRelationship.destroy(relation.id)
+            end
+          end
+
+          ReRelationtype.destroy(r.id)
+        else
+          r.save
+        end
+      end
     end
 
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
-    @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)      
     ReSetting.set_serialized("unconfirmed", @project.id, false)
       
     
     flash[:notice] = t(:re_configs_saved)
     
-    redirect_to :controller => "requirements", :action => "index", :project_id => @project.id  
+    #redirect_to :controller => "requirements", :action => "index", :project_id => @project.id  
 
   end
   

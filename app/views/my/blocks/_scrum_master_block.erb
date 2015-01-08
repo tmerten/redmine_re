@@ -3,7 +3,7 @@
 <div id="cov_stat">
 <h4>Overall Coverage</h4>
 <% issuecount = Issue.find(:all).count %>
-<% issues_wo_artifacts = Realization.issues_without_artifacts.count %>
+<% issues_wo_artifacts = ReRealization.issues_without_artifacts.count %>
 <% coverage = (issuecount != 0 ? (100 - (issues_wo_artifacts.to_f/issuecount.to_f) * 100).round(2) : "-") %>
 <table class="list">
   <tr class="<%= case coverage; when 0..50 then "coverage_critical" when 51..80 then "coverage_normal" when 81..100 then "coverage_good"  end;  %>">
@@ -14,7 +14,7 @@
 </table>
 
 <% Project.find(:all).each do |project| %>
-    <% issues_wo_artifacts = Realization.issues_without_artifacts_by_project(project).count %>
+    <% issues_wo_artifacts = ReRealization.issues_without_artifacts_by_project(project).count %>
     <% issuecount = Issue.find(:all, :conditions=>['project_id = ?', project.id]).count %>
     <% coverage = (issuecount != 0 ? (100 - (issues_wo_artifacts.to_f/issuecount.to_f) * 100).round(2): "-") %>
     <h4><%= project.name %></h4>

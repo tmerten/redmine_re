@@ -76,9 +76,14 @@ en:
   re_child_artifacts: 'Child artifacts'
   re_fields: 'Fields'
   re_configs_saved: 'Configurations saved successfully'
+<<<<<<< HEAD
+=======
   re_display_order: 'Display order'
+>>>>>>> master
   re_conf_internal_name: 'Internal Name'
+  re_relationship_configuration: 'Relationship Configuration'
   re_conf_artifact_display_order: 'Use Drag and Drop to change the display order (e.g. in the side menu or the index page)'
+  re_conf_artifact_directed: 'Directed'
   re_use: 'Use'
   re_conf_artifact_in_use: 'Do you want do use (show) this artifact type in this project (existing artifacts will not be deleted)?'
   re_alias_name: 'Alias Name'
@@ -86,6 +91,7 @@ en:
   re_color: 'Color'
   re_conf_color: 'The color code of this artifact throughout the application. This is especially useful in the visualization'
   re_show_in_visualization: 'Show in visualization'
+  re_conf_directed: 'Directed'
   re_conf_show_in_visualization: 'Define if this relation type is shown in visualization by default'
   re_conf_display_order: 'Display order'
   re_field_configuration: 'Configuration of fields for artifact type %{artifact_type}'
@@ -172,14 +178,24 @@ en:
 
   # re_artifact_properties_deletion
   re_preparing_deletion: 'Preparing deletion'
+<<<<<<< HEAD
+  re_you_asked_for_deleting_the_following_artifact: 'You asked for deleting the following artifact'
+=======
   re_you_asked_for_deleting_the_following_artifact: 'You asked to delete the following artifact'
+>>>>>>> master
   re_what_will_be_deleted: 'If you delete this artifact, the relationships listed below will also be deleted.'
   re_confirm_deletion_by_choosing: 'Please confirm the deletion by choosing an option below'
 
   re_delete_and_move_children: 'Delete artifact and move children'
+<<<<<<< HEAD
+  re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listed above) to the parent of this artifact (%{parent}). Afterwards this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
+  re_delete_recursively: 'Delete recursively'
+  re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listed above). Additionally all its children and their children (listed above) as well as each childs relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
+=======
   re_will_delete_artifact_and_move_children: 'Choosing this option will attach all children of this artifact (listed above) to the parent of this artifact (%{parent}). Afterwards, this artifact (%{name}) and all its relationships to other artifacts will be deleted.'
   re_delete_recursively: 'Delete recursively'
   re_will_delete_artifact_and_all_children: 'Choosing this option will delete this artifact (%{name}) and the relationships (listed above). Additionally, all its children and their children (listed above) as well as each child''s relationships to other artifacts will be deleted. You may want to double check, before choosing this option.'
+>>>>>>> master
   re_delete_artifact: 'Delete artifact'
   re_will_delete_artifact_and_relations: 'Choosing this option will delete this artifact (%{name}) and its relationships (listed above).'
 
@@ -591,8 +607,8 @@ en:
   re_edit_default_description: 'Edit default description'
 
   #default artifact descriptions
-  re_goal_default_description: '<p>You may want to use goals as high level requirements or to structure your requirements. There are also approaches using goals for the whole RE, especially for understanding the requirements.</p> <p>Goals are a good starting point to record the intentions of your stakeholders. Goals do not have to be fully achievable nor measureable. Goals can be regarded as a first sketch of the requirements. You can use goals to discover conflicts between the intentions of your stakeholders and solve this conflicts. This may helps you to establish an overall agreement between your stakeholders. You should take care about that a goal refines a vision statements. [Alexander 2009, S. 51]</p>'
-  re_processword_default_description: "<p>Processwords are needed for the use of a syntactic requirements template. You can define synonyms for the word here and deliver a proper definition of the term.</p>"
+  re_goal_default_description: '<p>You may want to use goals as high level requirements or to structure your requirements. There are also approaches using goals for the whole RE, especially for understanding the requirements.</p> <p>Goals are a good starting point to record the intentions of your stakeholders. Goals do not have to be fully achieveable nor measureable. Goals can be regarded as a first sketch of the requirements. You can use goals to discover conflicts between the intentions of your stakeholders and solve this conflicts. This may helps you to establish an overall agreement between your stakeholders. You should take care about that a goal refines a vision statements. [Alexander 2009, S. 51]</p>'  
+  re_processword_default_description: "<p>Processwords are needed for the use of a syntactic requirements template. You can define synonyms for the word here and deliver a proper definition of the term.</p>"  
   re_vision_default_description: "<p>A vision statement for your project. Describe ideas in Wiki style syntax with this artifact.</p> <p>You should use vision statement to describe the basic purpose of your project. A vision should be clear and simple so that everybody is able to understand the basic purpose the project. [Alexander 2009, S 53]</p>"
   re_task_default_description: "<p>If you are unfamiliar with using Lauesen''s Task-Based approach for RE - it is very similar to the famous Use-Cases by Cockburn - simply <a href='http://www.itu.dk/~slauesen/SorenReqs.html'>check his website</a>.<br /> Most important is that you recognize the demand solution principle coming with the two columns of the approach.</p> <p>Tasks do not distinguish between who does what. Task closure means that your task has a well defined start and end point. A good starting point is something that happens in the user''s world, for instance that a client calls. A good end point is that nothing more can be done about the case right now - the user deserves a \"coffee break\". [Lauesen 2011, S. 34]</p>"
   re_use_case_default_description: "<p>Use Case template as found in Cockburn''s Book Writing effective Use-Cases.</p>"

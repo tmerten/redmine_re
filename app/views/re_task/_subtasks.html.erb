@@ -17,13 +17,13 @@
 	</div>
 	<div class="re_subtask_button_bar">
 		<div class="re_subtask_button_container">
-			<%= link_to_function( t(:re_insert_st_after), "addSubtask(jQuery(this).parent().parent().parent(), 'after', '0')".html_safe, :class => "icon icon-subtask-after" ) %>
+			<%= link_to_function( t(:re_insert_st_after), "addSubtask($(this).parent().parent().parent(), 'after', '0')".html_safe, :class => "icon icon-subtask-after" ) %>
 		</div>
 		<div class="re_subtask_button_container">
-			<%= link_to_function( t(:re_insert_va_after), "addSubtask(jQuery(this).parent().parent().parent(), 'after', '1')".html_safe, :class => "icon icon-subtask-after" ) %>
+			<%= link_to_function( t(:re_insert_va_after), "addSubtask($(this).parent().parent().parent(), 'after', '1')".html_safe, :class => "icon icon-subtask-after" ) %>
 		</div>
 		<div class="re_subtask_button_container">
-			<%= link_to_function( t(:re_insert_pr_after), "addSubtask(jQuery(this).parent().parent().parent(), 'after', '2')".html_safe, :class => "icon icon-subtask-after" ) %>
+			<%= link_to_function( t(:re_insert_pr_after), "addSubtask($(this).parent().parent().parent(), 'after', '2')".html_safe, :class => "icon icon-subtask-after" ) %>
 		</div>
 		<div class="re_subtask_button_container">
 			<%= link_to_remove_fields "", f %>

@@ -52,7 +52,7 @@
     <table id="artifact_types_list" class="list">
       <thead>
         <tr>
-          <th title="<%= t(:re_conf_artifact_display_order) %>"><%= t(:re_display_order) %></th>
+          <th title="<%= t(:re_conf_internal_name) %>"><%= t(:re_conf_internal_name) %></th>
           <th title="<%= t(:re_conf_artifact_in_use) %>"><%= t(:re_use) %></th>
           <th title="<%= t(:re_conf_alias_name) %>"><%= t(:re_alias_name) %></th>
           <th title="<%= t(:re_conf_color) %>"><%= t(:re_color) %></th>
@@ -78,83 +78,99 @@
       </tbody>
     </table>
 
-    <h2>Relationship Configuration</h2>
+    <h2><%= t(:re_relationship_configuration) %></h2>
     <table id="relation_types_list" class="list">
       <thead>
         <tr>
-          <th title="<%= t(:re_conf_artifact_display_order) %>"><%= t(:re_display_order) %></th>
+          <th title="<%= t(:re_conf_internal_name) %>"><%= t(:re_conf_internal_name) %></th>
+          <th title="<%= t(:re_conf_artifact_directed) %>"><%= t(:re_conf_directed) %></th>
           <th title="<%= t(:re_conf_artifact_in_use) %>"><%= t(:re_use) %></th>
           <th title="<%= t(:re_conf_alias_name) %>"><%= t(:re_alias_name) %></th>
           <th title="<%= t(:re_conf_color) %>"><%= t(:re_color) %></th>
-          <th title="<%= t(:re_conf_show_in_visualization) %>"><%= t(:re_show_in_visualization) %></th>
+          <th title="<%= t(:re_delete) %>"><%= t(:re_delete) %></th>
         </tr>
       </thead>
       <tbody>
-        <% @re_relation_order.each_with_index do |relation_type, i| %>
-          <tr id="<%=relation_type + '_' + i.to_s %>">
+        <% @re_relation_types.each do |r| %>
+          <tr id="<%= "#{r.relation_type}_#{r.id}" %>">
             <td class="dnd">
-              <label><%= relation_type.gsub(/^re_/, '').humanize %></label>
+              <%= hidden_field_tag "re_relation_configs[" + r.relation_type.underscore + '[id]]', r.id %>
+              <label><%= r.relation_type.humanize %></label>
             </td>
-            <td><%= check_box_tag "re_relation_configs[" + relation_type.underscore + '[in_use]]', 'yes', @re_relation_configs[relation_type]['in_use'] %></td>
-            <td><%= text_field_tag "re_relation_configs[" + relation_type.underscore + '[alias]]', @re_relation_configs[relation_type]['alias'], :size => 20 %></td>
-            <td><%= text_field_tag "re_relation_configs[" + relation_type.underscore + '[color]]', @re_relation_configs[relation_type]['color'], :size => 6,  :class => "colorpick", :style => "background-color:#" + @re_relation_configs[relation_type]['color'] + ";color:#" + @re_relation_configs[relation_type]['color'], :onload => "getccolor(this)"  %>
+            <td><%= check_box_tag "re_relation_configs[" + r.relation_type.underscore + '[is_directed]]', 'yes', (r.is_directed==1), { :disabled => (r.is_system_relation==1) } %></td>
+            <td><%= check_box_tag "re_relation_configs[" + r.relation_type.underscore + '[in_use]]', 'yes', (r.in_use==1), { :disabled => (r.is_system_relation==1) } %></td>
+            <td><%= text_field_tag "re_relation_configs[" + r.relation_type.underscore + '[alias_name]]', r.alias_name, :size => 20 %></td>
+            <td><%= text_field_tag "re_relation_configs[" + r.relation_type.underscore + '[color]]', r.color, :size => 6,  :class => "colorpick", :style => "background-color:#" + r.color + ";color:#" + r.color, :onload => "getccolor(this)"  %>
             </td>
-            <td><%= check_box_tag "re_relation_configs[" + relation_type.underscore + '[show_in_visualization]]', 'yes', @re_relation_configs[relation_type]['show_in_visualization'] %></td>
+            <td><%= check_box_tag "re_relation_configs[" + r.relation_type.underscore + '[destroy]]', '1', false, { :disabled => (r.is_system_relation==1) } %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
-
-    <%= hidden_field_tag 're_artifact_order', ActiveSupport::JSON.encode(@re_artifact_order) %><br/>
-    <%= hidden_field_tag 're_relation_order', ActiveSupport::JSON.encode(@re_relation_order) %><br/>
+    <%= link_to l(:re_conf_add_relation), "#relation_types_list", { :id => "add-relation"} %> <br/><br/>
+    <%= hidden_field_tag 're_artifact_order', ActiveSupport::JSON.encode(@re_artifact_order) %>
+    <%= hidden_field_tag 're_relation_order', ActiveSupport::JSON.encode(@re_relation_order) %>
 
 
     <%= submit_tag l(:re_save), :accesskey => "s" %>
     &nbsp;<%= link_to(t(:re_cancel), { :project_id => @project.id }, { :class => "icon icon-reload" }) %>
 
-<% end %>
-
 <script type="text/javascript">
 //<![CDATA[
-jQuery(document).ready(function() {
-	$("#artifact_types_list").tableDnD({
+$(document).ready(function() {
+  $("#artifact_types_list").tableDnD({
     onDrop: function(table, row) { tableArtifactIdsToJson(table, row, "#re_artifact_order") }
-	});
-	$("#relation_types_list").tableDnD({
+  });
+
+  $("#relation_types_list").tableDnD({
     onDrop: function(table, row) { tableArtifactIdsToJson(table, row, "#re_relation_order") }
-	});
+  });
 
-	jQuery(document).ready(function($) {
-		$('.colorpick').colorPicker();
-	});
+  $('.colorpick').colorPicker();
+  
+  $('#add-relation').click(function() {
+    var relation = "<%= get_escaped_relationtype_html(f) %>";
+    var now = new Date();
+    var utc_timestamp = Date.UTC(now.getFullYear(),now.getMonth(), now.getDate() ,
+      now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+    relation = relation.replace(/new_re_relationtype/g, utc_timestamp.toString());
+    $('#relation_types_list > tbody:last').append(relation);
+    /* prepending this to following line does not seem to work: "#relation_types_list > " */
+    $('.colorpick:last').colorPicker();
+    
+    $('#' + utc_timestamp + '> .colorpick').keypress(function( event ){
+      event.target.val();
+      $('#' + utc_timestamp + '> .colorpick')
+      /* val needs to be copied to the internal name and moved to lowercase and spaces should be removed... */
+      /* I am not so sure if I like this */
+    });
+  });
 
-	/*
-	jQuery('.colorpick').ColorPicker({
-	  onSubmit: function(hsb, hex, rgb, el) {
-	    jQuery(el).val(hex);
-	    jQuery(el).css('background-color', '#'+hex)
-	    jQuery(el).css('color', '#'+hex)
-	    jQuery(el).ColorPickerHide();
-	  },
-	  onBeforeShow: function () {
-	  	jQuery(this).ColorPickerSetColor(this.value);
-	  }
-	}).bind('keyup', function(){
-	  jQuery(this).ColorPickerSetColor(this.value);
-	});
-	*/
+    $(".relationdel").click(function () {
+    	alert("t");
+      $(this).parent().parent().remove();
+    });
 });
 
 function tableArtifactIdsToJson(table, row, field_id) {
-	var rows = table.tBodies[0].rows;
-	var types = new Array();
-	jQuery(rows).each(function(i, r) {
-		types.push('"' + this.id.gsub(/_[0-9]*$/,'') + '"');
-	});
-	jQuery(field_id).val("[" + types + "]");
+  var rows = table.tBodies[0].rows;
+  var types = new Array();
+  $(rows).each(function(i, r) {
+    types.push('"' + this.id.gsub(/_[0-9]*$/,'') + '"');
+  });
+  $(field_id).val("[" + types + "]");
 };
+
+function removeRelationFields (field) {
+	var answer = confirm("Are you sure?");
+  	if (answer) {
+       	$(field).parent().parent().remove();
+     }
+}
 
 //]]
 </script>
+
+<% end %>
 
 </div>

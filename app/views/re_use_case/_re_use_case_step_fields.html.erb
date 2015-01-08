@@ -31,11 +31,11 @@
 	
 	  <div class="re_use_case_button_bar">
 	  	<div class="re_use_case_button_container">
-    		<%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep(jQuery(this).parent().parent().parent().parent(), 'after', 'user')", :class => "" ) %>&nbsp;&nbsp;
+    		<%= link_to_function( image_tag('icons/user_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_user)), "addStep($(this).parent().parent().parent().parent(), 'after', 'user')", :class => "" ) %>&nbsp;&nbsp;
     	</div>
     	
     	<div class="re_use_case_button_container">
-    		<%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep(jQuery(this).parent().parent().parent().parent(), 'after', 'system')", :class => "" ) %>
+    		<%= link_to_function( image_tag('icons/monitor_add.png', :plugin => 'redmine_re', :alt => t(:re_uc_system)), "addStep($(this).parent().parent().parent().parent(), 'after', 'system')", :class => "" ) %>
 	    </div>
 	    
 	    <div class="re_use_case_button_container">

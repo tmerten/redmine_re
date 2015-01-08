@@ -49,7 +49,8 @@ class RedmineReController < ApplicationController
     ReSetting.check_cache
     session[:expanded_nodes] ||= Set.new
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
-    @re_relation_order = ReSetting.get_serialized("relation_order", @project.id)
+    @re_relation_types = ReRelationtype.relation_types(@project.id, false)
+    @re_used_relation_types = ReRelationtype.relation_types(@project.id, false, true)
     @re_artifact_settings = ReSetting.active_re_artifact_settings(@project.id)
     @re_relation_settings = ReSetting.active_re_relation_settings(@project.id)
   end
@@ -116,7 +117,7 @@ class RedmineReController < ApplicationController
       @artifact.updated_by = User.current.id
       @artifact.created_by = User.current.id if @artifact.new_record?
 
-      # realtion related attributes
+      # relation related attributes
       unless params[:sibling_id].blank?
         @sibling = ReArtifactProperties.find(params[:sibling_id])
         @parent = @sibling.parent
@@ -193,24 +194,24 @@ class RedmineReController < ApplicationController
   end
 
   def new_hook(paramsparams)
-    logger.debug("#############: new_hook not called")
+    logger.debug("#############: new_hook not called") 
   end
 
   def edit_hook_after_artifact_initialized(params)
-    logger.debug("#############: edit_hook_after_artifact_initialized not called")
+    logger.debug("#############: edit_hook_after_artifact_initialized not called") 
   end
 
   def edit_hook_validate_before_save(params, artifact_valid)
-    logger.debug("#############: edit_validate_before_save_hook not called")
+    logger.debug("#############: edit_validate_before_save_hook not called") 
     return true
   end
 
   def edit_hook_valid_artifact_after_save(params)
-    logger.debug("#############: edit_valid_artifact_after_save_hook not called")
+    logger.debug("#############: edit_valid_artifact_after_save_hook not called") 
   end
 
   def edit_hook_invalid_artifact_cleanup(params)
-    logger.debug("#############: edit_invalid_artifact_cleanup_hook not called")
+    logger.debug("#############: edit_invalid_artifact_cleanup_hook not called") 
   end
 
   # filtering of re_artifacts. If request is post, filter was used already
@@ -308,17 +309,18 @@ class RedmineReController < ApplicationController
 
   def create_tree(re_artifact_properties)
     # creates a hash containing re_artifact_properties and all its children
+    # until a certain tree depth (BFS)
     # the result is a hash in the form
-    #
     # example format
     # 'data' : [
-    #     {
-    #         'id' : 'node_2',
-    #         'text' : 'Root node with options',
-    #         'state' : { 'opened' : true, 'selected' : true },
-    #         'children' : [ { 'text' : 'Child 1' }, .........]
-    #     }
+    # {
+    # 'id' : 'node_2',
+    # 'text' : 'Root node with options',
+    # 'state' : { 'opened' : true, 'selected' : true },
+    # 'children' : [ { 'text' : 'Child 1' }, .........]
+    # }
     # ]
+    #
     # to be rendered as json or xml. Used together with JStree right now 
     session[:expanded_nodes].delete(re_artifact_properties.id) if re_artifact_properties.children.empty?
     expanded = session[:expanded_nodes].include?(re_artifact_properties.id)
@@ -327,22 +329,21 @@ class RedmineReController < ApplicationController
     artifact_name = re_artifact_properties.name.to_s
     artifact_id = re_artifact_properties.id.to_s
     has_children = !re_artifact_properties.children.empty?
-  
     node = {}
     node['id'] = "node_" + artifact_id.to_s
     node['text'] = artifact_name
     node['type'] = artifact_type
-    
+
     state = {}
     if expanded
       state['opened'] = true
     end
     node['state'] = state
-    
+
     a_attr = {}
     a_attr['data-id'] = artifact_id.to_s
     unless artifact_type.eql?('project')
-      a_attr['data-href'] = url_for(:controller => 're_artifact_properties', :action => 'show', :id => artifact_id) 
+      a_attr['data-href'] = url_for(:controller => 're_artifact_properties', :action => 'show', :id => artifact_id)
       a_attr['data-delete-href'] = url_for(:controller => 're_artifact_properties', :action => 'destroy', :id => artifact_id)
     end
     node['a_attr'] = a_attr
@@ -363,6 +364,7 @@ class RedmineReController < ApplicationController
 
   def get_children(re_artifact_properties)
     children = []
+    
     for child in re_artifact_properties.children
       children << create_tree(child)
     end

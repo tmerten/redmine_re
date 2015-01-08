@@ -1,7 +1,7 @@
-<% for relation_type in @re_relation_order %>
-	<% if ReSetting.get_serialized(relation_type, @project.id)['in_use'] && !ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(relation_type) %>
-    	<%= radio_button :re_artifact_relationship, :relation_type, relation_type, :data => {:description => rendered_relation_type(relation_type)} %>
-        <%= rendered_relation_type(relation_type) %>
-        <br/>
-    <% end %>
+<% for relation_type in @re_used_relation_types %>
+  <% if ReRelationtype.in_use(relation_type, @project.id) && !ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(relation_type) %>	 
+    <%= radio_button :re_artifact_relationship, :relation_type, relation_type, :data => {:description => rendered_relation_type(relation_type), :alias_name => ReRelationtype.get_alias_name(relation_type, @project.id) } %>
+	<%= rendered_relation_type(ReRelationtype.get_alias_name(relation_type, @project.id)) %>
+	<br/>
+  <% end %>
 <% end %>
