@@ -48,18 +48,18 @@
       <% tmp = ReRelationtype.relation_types(@project.id, false) %>
       <% tmp.each do |relation_type| %>
       <tr>
-        <% settings = ReSetting.get_serialized(relation_type, @project.id) %>
+        <% settings = ReRelationtype.find_by_relation_type_and_project_id(relation_type, @project.id) %>
         
         <% if settings == nil %>
            <% color = "#fff" %>
         <% else%>
-           <% color = settings['color'] %>
+           <% color = settings.color %>
         <% end%>
         <td>
           <%= rendered_relation_type(relation_type) %>
         </td>
         <td>
-          <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
+          <span style="padding-left: 20px; background-color:<%= color %>; color:<%= color %>;">&nbsp;</span>
         </td>
         <td>
 			<% @filter = ReVisualizationConfig.is_filter_set_for_visualization(@project.id,session[:visualization_type],relation_type)%>
@@ -74,18 +74,18 @@
       <% end %>
       <% ReRelationtype::relation_types(@project.id, true).each do |relation_type| %>
       <tr>
-        <% settings = ReSetting.get_serialized(relation_type, @project.id) %>
+        <% settings = ReRelationtype.find_by_relation_type_and_project_id(relation_type.underscore, @project.id) %>
         
         <% if settings == nil %>
            <% color = "#fff" %>
         <% else%>
-           <% color = settings['color'] %>
+           <% color = settings.color %>
         <% end%>
         <td>
           <%= rendered_relation_type(relation_type) %>
         </td>
         <td>
-          <span style="padding-left: 20px; background-color:<%= colors %>; color:<%= colors %>;">&nbsp;</span>
+          <span style="padding-left: 20px; background-color:<%= color %>; color:<%= color %>;">&nbsp;</span>
         </td>
         <td>
 			<% @filter = ReVisualizationConfig.is_filter_set_for_visualization(@project.id,session[:visualization_type],relation_type)%>
