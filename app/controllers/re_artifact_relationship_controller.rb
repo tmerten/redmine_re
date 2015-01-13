@@ -428,7 +428,7 @@ class ReArtifactRelationshipController < RedmineReController
           end
 
         type = artifact.artifact_type
-        node_settings = ReRelationtype.find_by_project_id_and_relation_type(@project.id, type.underscore)
+        node_settings = ReSetting.get_serialized(type.underscore, @project.id)
         data_node = {}
    
         if (node_settings != nil)
