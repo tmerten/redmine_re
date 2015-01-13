@@ -112,6 +112,7 @@ class ReArtifactRelationshipController < RedmineReController
         min_dis_artifact(session[:visualization_artifakt_id].to_i)
         rootnode['name'] = @re_artifact_properties.name
         re_artifact_properties = ReArtifactProperties.find_by_project_id_and_id(@project.id, session[:visualization_artifakt_id])
+        
         children= sunburst(re_artifact_properties)
         rootnode['children'] = children
         rootnode['max_deep'] = @max_deep_over_all
@@ -286,7 +287,7 @@ class ReArtifactRelationshipController < RedmineReController
           children << json_issue
         end
       end
-    
+      
       for child in lokal_artifact
         next unless (@chosen_artifacts.include? child.artifact_type.to_s)
         next unless ( ! @done_artifakts_id.include? child.id.to_s)
@@ -792,7 +793,6 @@ class ReArtifactRelationshipController < RedmineReController
   def add_artifact(artifact, drawable_relationships, outgoing_relationships)
     type = artifact.artifact_type
     node_settings = ReSetting.get_serialized(type.underscore, @project.id)
-
     node = {}
     node['id'] = "node_" + artifact.id.to_s
     node['name'] = truncate(artifact.name, :length => TRUNCATE_NAME_IN_VISUALIZATION_AFTER_CHARS, :omission => TRUNCATE_OMISSION)
@@ -858,7 +858,7 @@ class ReArtifactRelationshipController < RedmineReController
       drawable_relationships.each do |relation|
         sink = ReArtifactProperties.find_by_id(relation.sink_id)
         directed = ReArtifactRelationship.find_by_source_id_and_sink_id(relation.sink_id, relation.source.id).nil?
-        relation_settings = ReSetting.get_serialized(relation.relation_type, @project.id)
+        relation_settings = ReRelationtype.find_by_relation_type_and_project_id(relation.relation_type, @project.id)
         if(@visualization_type == "netmap")
           if(@artifacts_netmap_final.include? sink.id)
             doit=true
@@ -873,7 +873,7 @@ class ReArtifactRelationshipController < RedmineReController
           adjacent_node['nodeTo'] = "node_" + sink.id.to_s
       
           edge_data = {}
-          edge_data['$color'] = relation_settings['color'] if directed
+          edge_data['$color'] = relation_settings.color if directed
           edge_data['$color'] = "#111111" unless directed
           edge_data['$lineWidth'] = 2
           edge_data['$type'] = "arrow" if directed
