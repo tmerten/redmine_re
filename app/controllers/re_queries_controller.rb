@@ -206,11 +206,19 @@ class ReQueriesController < RedmineReController
     @users = User.all(:conditions => ['status = ?', User::STATUS_ACTIVE],
                       :order => 'firstname ASC, lastname ASC, login ASC')
     @roles = Role.builtin(false).all(:order => 'name ASC')
-    @visible_roles = if User.current.admin?
-                       @roles
-                     else
-                       User.current.roles_for_project(@project).builtin(false).all(:order => 'name ASC')
-                     end
+    
+    if User.current.admin?
+      @visible_roles = @roles
+    else
+      @visible_roles = []
+      @visible_roles_tmp = User.current.roles_for_project(@project)
+      @visible_roles_tmp.each do |role|
+        if role.builtin == 0 
+          @visible_roles << role
+        end
+      end
+    end    
+    @visible_roles
   end
 
   def load_cropped_collections

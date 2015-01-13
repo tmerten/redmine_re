@@ -1017,19 +1017,20 @@ class ReQuery < ActiveRecord::Base
 
   # Creates the user visibility SQL condition for named scopes 'visible' and 'visible_for'
   def self.visibility_condition(user)
-    unless user.admin?
-      inner_sql = %{SELECT inner.*
-                    FROM #{ReQuery.table_name} AS inner
-                    INNER JOIN re_queries_roles ON re_queries_roles.query_id = inner.id
-                    INNER JOIN #{MemberRole.table_name} ON #{MemberRole.table_name}.role_id = re_queries_roles.role_id
-                    INNER JOIN #{Member.table_name} ON #{Member.table_name}.id = #{MemberRole.table_name}.member_id
-                    WHERE #{Member.table_name}.user_id = ?}
-      sql = %{(#{ReQuery.table_name}.visibility = ?) OR
-              (#{ReQuery.table_name}.visibility = ? AND (#{ReQuery.table_name}.created_by = ? OR
-                                                         #{ReQuery.table_name}.updated_by = ?)) OR
-              (#{ReQuery.table_name}.visibility = ? AND EXISTS(#{inner_sql}))}
-      { :conditions => [sql, VISIBILITY[:public], VISIBILITY[:me], user.id, user.id, VISIBILITY[:roles], user.id] }
-    end
+    #unless user.admin?
+    #  inner_sql = %{SELECT inner.*
+    #                FROM #{ReQuery.table_name} AS inner
+    #                INNER JOIN re_queries_roles ON re_queries_roles.query_id = inner.id
+    #                INNER JOIN #{MemberRole.table_name} ON #{MemberRole.table_name}.role_id = re_queries_roles.role_id
+    #                INNER JOIN #{Member.table_name} ON #{Member.table_name}.id = #{MemberRole.table_name}.member_id
+    #                WHERE #{Member.table_name}.user_id = ?}
+    #  sql = %{(#{ReQuery.table_name}.visibility = ?) OR
+    #          (#{ReQuery.table_name}.visibility = ? AND (#{ReQuery.table_name}.created_by = ? OR
+    #                                                     #{ReQuery.table_name}.updated_by = ?)) OR
+    #          (#{ReQuery.table_name}.visibility = ? AND EXISTS(#{inner_sql}))}
+    #  { :conditions => [sql, VISIBILITY[:public], VISIBILITY[:me], user.id, user.id, VISIBILITY[:roles], user.id] }
+    #end
+    
   end
 
   # Merges multiple SQL condition Arrays into a single one that eventually will be sanitized Rails-internally
