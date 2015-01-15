@@ -4,7 +4,7 @@
     :action => 'edit', :id => @re_artifact_properties }, 
 	  :onclick => 'showAndScrollTo("update", "re_artifact_properties_description"); scrollContentPaneTo("update"); return false;',
     :class => 'icon icon-edit', :accesskey => accesskey(:edit) ) %>
-  <%= watcher_tag(@re_artifact_properties, User.current) %>
+  <%= watcher_link(@re_artifact_properties, User.current) %>
  
   <span class="icon icon-add">
     <%= link_to(t(:connect_issue),
