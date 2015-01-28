@@ -46,7 +46,7 @@
           Created
         </td>
         <td class="content">
-          <%= @query.created_at %>
+          <%= time_tag(@query.created_at) %>
           <% if @query.created_by %>
             by <%= link_to(@query.created_by.to_s, @query.created_by) %>
           <% end %>
@@ -57,7 +57,7 @@
           Updated
         </td>
         <td class="content">
-          <%= @query.updated_at %>
+          <%= time_tag(@query.updated_at) %>
           <% if @query.updated_by %>
             by <%= link_to(@query.updated_by.to_s, @query.updated_by) %>
           <% end %>

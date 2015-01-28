@@ -26,7 +26,11 @@
             <tr id="artifact-<%= artifact.id %>" class="artifact">
               <% @query.class.available_columns.each do |column| %>
                 <td class="<%= column.name %>">
-                  <%= column.value.call(artifact).to_s.html_safe %>
+                  <%if column.name == "updated_at"%>
+                    <%= time_tag(column.value.call(artifact)) %>
+                  <%else%>  
+                    <%= column.value.call(artifact).to_s.html_safe %>
+                  <%end%>
                 </td>
               <% end %>
               <td class="actions">

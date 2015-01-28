@@ -8,6 +8,5 @@ class CreateRatings < ActiveRecord::Migration
   end
   
   def down 
-    drop_table(:ratings) if table_exists?
   end
 end

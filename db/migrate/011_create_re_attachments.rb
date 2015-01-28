@@ -9,6 +9,9 @@ class CreateReAttachments < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :re_attachments
+    if table_exists?(:re_attachments)
+      drop_table :re_attachments 
+    end
   end
+  
 end

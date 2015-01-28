@@ -36,8 +36,14 @@ class CreateReSettings < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :re_settings
-    add_column :re_artifact_relationships, "directed", :boolean
+    
+    if table_exists?(:re_settings)
+      drop_table :re_settings 
+    end
+    
+    unless column_exists?(:re_artifact_relationships, :directed)
+      add_column :re_artifact_relationships, "directed", :boolean
+    end
 
     relations_types = {
       'parentchild' => 1,
@@ -52,7 +58,7 @@ class CreateReSettings < ActiveRecord::Migration
     ReArtifactRelationship.all.each do |rel|
       stored_relations[rel.id] = rel.relation_type
     end
-    change_column :re_artifact_relationships, :relation_type, :integer
+    change_column :re_artifact_relationships, :relation_type, :integer,  {:null => false, :default => 0}
     ReArtifactRelationship.reset_column_information
 
     ReArtifactRelationship.all.each do |rel|
