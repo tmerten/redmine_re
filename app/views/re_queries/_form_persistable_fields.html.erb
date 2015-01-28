@@ -25,9 +25,6 @@
   <span class="column mode">
     <%= form.select :visibility, query_visibility_modes %>
   </span>
-  <span class="column value">
-    <%= form.select :visible_role_ids, @visible_roles.map { |role| [role.name, role.id] }, {}, { :multiple => true } %>
-  </span>
   <span class="column actions">
     <a href="#" class="icon icon-checked select_all"><%= l(:re_select_all) %></a>
     <a href="#" class="icon icon-del unselect_all"><%= l(:re_unselect_all) %></a>

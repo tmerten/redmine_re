@@ -757,8 +757,7 @@ class ReQuery < ActiveRecord::Base
 
   VISIBILITY = {
     :public => 'is_public',
-    :me => 'for_me',
-    :roles => 'for_roles'
+    :me => 'for_me'
   }
 
   # Columns for results
@@ -819,7 +818,6 @@ class ReQuery < ActiveRecord::Base
   before_validation :assign_creator, :on => :create 
   before_validation :assign_maintainer, :on => :create
   before_validation :repair_visibility
-  before_save :clear_unassigned_visible_roles
 
   def initialize(attributes = nil)
     super(attributes)
@@ -997,12 +995,6 @@ class ReQuery < ActiveRecord::Base
   def repair_visibility
     if visibility == VISIBILITY[:roles] and visible_role_ids.blank?
       self.visibility = VISIBILITY[:me]
-    end
-  end
-
-  def clear_unassigned_visible_roles
-    if visibility != VISIBILITY[:roles]
-      self.visible_roles.delete_all
     end
   end
 
