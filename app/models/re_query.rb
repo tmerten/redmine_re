@@ -802,8 +802,8 @@ class ReQuery < ActiveRecord::Base
                                           :foreign_key => 'query_id', :association_foreign_key => 'role_id'
 
   # Scopes
-  scope :visible, lambda { visibility_condition(User.current) }
-  scope :visible_for, lambda { |user| visibility_condition(user) }
+  scope :visible, lambda { where("visibility = 'is_public' or created_by = ?", User.current.id) }
+  scope :visible_for, lambda { |user| where("visibility = 'is_public' or created_by = ?", user.id) }
 
   # Filter serialization
   @@available_filters.keys.each do |filter_group|
@@ -1005,24 +1005,6 @@ class ReQuery < ActiveRecord::Base
     unless @set_by_params
       @set_by_params = true unless value.blank?
     end
-  end
-
-  # Creates the user visibility SQL condition for named scopes 'visible' and 'visible_for'
-  def self.visibility_condition(user)
-    #unless user.admin?
-    #  inner_sql = %{SELECT inner.*
-    #                FROM #{ReQuery.table_name} AS inner
-    #                INNER JOIN re_queries_roles ON re_queries_roles.query_id = inner.id
-    #                INNER JOIN #{MemberRole.table_name} ON #{MemberRole.table_name}.role_id = re_queries_roles.role_id
-    #                INNER JOIN #{Member.table_name} ON #{Member.table_name}.id = #{MemberRole.table_name}.member_id
-    #                WHERE #{Member.table_name}.user_id = ?}
-    #  sql = %{(#{ReQuery.table_name}.visibility = ?) OR
-    #          (#{ReQuery.table_name}.visibility = ? AND (#{ReQuery.table_name}.created_by = ? OR
-    #                                                     #{ReQuery.table_name}.updated_by = ?)) OR
-    #          (#{ReQuery.table_name}.visibility = ? AND EXISTS(#{inner_sql}))}
-    #  { :conditions => [sql, VISIBILITY[:public], VISIBILITY[:me], user.id, user.id, VISIBILITY[:roles], user.id] }
-    #end
-    
   end
 
   # Merges multiple SQL condition Arrays into a single one that eventually will be sanitized Rails-internally
