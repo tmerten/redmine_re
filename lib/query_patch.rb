@@ -66,7 +66,7 @@ module QueryPatch
                   project_id, @@locked_artifact_types]
 
     artifacts = ReArtifactProperties.all(:joins => [:re_realizations, :issues, :project],
-                                         :conditions => conditions, :group => :id)
+                                         :conditions => conditions, :group => "#{ReArtifactProperties.table_name}.id")
     artifacts.collect { |a| [ "[#{localized_artifact_type(a)}] #{a.name}", a.id.to_s ] }.sort! { |a, b| a.first <=> b.first }
   end
 
