@@ -229,8 +229,7 @@ class RedmineReController < ApplicationController
         # search for artifacts matching the source_artifact_filter_criteria
       if params[:activated_searches].key?(:re_source_artifact)
         first_param = source.each.first
-        condition_hash = build_conditions_hash(filter_param, searching_forms, artifact_type)
-        @source_artifacts = find_first_artifacts_with_first_parameter(first_param, condition_hash, params[:re_source_artifact][:type])
+        @source_artifacts = find_first_artifacts_with_first_parameter(first_param, params[:re_source_artifact][:type])
         source.delete(first_param[0])
           # run through all given parameters and reduce the set of artifacts matching with each step
         for key in source.keys do
@@ -245,16 +244,13 @@ class RedmineReController < ApplicationController
     render 'requirements/enhanced_filter'
   end
 
-    # This method evaluates the parameters from the filter and builds up the parts to form a
-  def build_conditions_hash(filter_param, searching_forms, artifact_type) # Todo: Muss erledigt werden!
-  end
 
     # This method takes a 2 value array with the name of the attribute to search for and its value;
     # it takes the hash with the searching forms like start with, greater_than and so on;
     # finally it takes the chosen artifact type to reduce the search.
     # The method evaluates the given parameter to find artifacts matching these first two
     # criteria (type and the first_param).
-  def find_first_artifacts_with_first_parameter(filter_param, condition_hash, artifact_type)
+  def find_first_artifacts_with_first_parameter(filter_param, artifact_type)
     artifacts = []
     artifact_properties_attribute = false
     for column in ReArtifactProperties.content_columns do
