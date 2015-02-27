@@ -13,8 +13,7 @@ module ReQueriesHelper
 
   def query_visibility_modes
     [[l(:re_query_visibility_public), ReQuery::VISIBILITY[:public]],
-     [l(:re_query_visibility_me), ReQuery::VISIBILITY[:me]],
-     [l(:re_query_visibility_roles), ReQuery::VISIBILITY[:roles]]]
+     [l(:re_query_visibility_me), ReQuery::VISIBILITY[:me]]]
   end
 
   def source_artifact_modes

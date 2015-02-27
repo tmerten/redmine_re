@@ -20,7 +20,6 @@ ActionDispatch::Callbacks.to_prepare do
   require_dependency 'issue_controller_patch'
   require_dependency 'mailer_patch'
   require_dependency 'query_patch'
-  require_dependency 'role_patch'
   require_dependency 'project_patch'
   require_dependency 'projects_controller_patch'
   require_dependency 'user_patch'

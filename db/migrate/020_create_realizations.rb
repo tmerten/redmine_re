@@ -7,6 +7,8 @@ class CreateRealizations < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :realizations
+    if table_exists?(:realizations)
+      drop_table :realizations 
+    end
   end
 end

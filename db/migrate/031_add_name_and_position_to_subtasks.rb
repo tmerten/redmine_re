@@ -17,7 +17,7 @@ class AddNameAndPositionToSubtasks < ActiveRecord::Migration
         st.re_task_id = parent_task.id
 
         st.valid?
-        throw "there might be some inconsistencies in your DB since the subtask could not be saved: #{st.errors.inspect}" unless st.save
+        say "there might be some inconsistencies in your DB since the subtask could not be saved: #{st.errors.inspect}" unless st.save
 
         ReArtifactRelationship.find_all_by_source_id(properties.id).each do |r|
           unless r.relation_type == "parentchild"
@@ -50,6 +50,6 @@ class AddNameAndPositionToSubtasks < ActiveRecord::Migration
   end
 
   def self.down
-    raise ActiveRecord::IrreversibleMigration
+    say ActiveRecord::IrreversibleMigration
   end
 end

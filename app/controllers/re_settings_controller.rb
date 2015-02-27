@@ -154,46 +154,51 @@ private
       end
     end
     
-    new_relation_configs.each_pair do |k, v|
-      logger.debug v.to_yaml
-      if v['id'].blank?
-        r = ReRelationtype.new
-        r.relation_type = v[:alias_name] # on i the type was created the alias name will be set
-        r.is_system_relation = 0
-      else
-        r = ReRelationtype.find_or_create_by_id(v['id'])
-      end
+    unless new_relation_configs.nil?
       
-      logger.debug "before: #{r.inspect}"
-      if r.is_system_relation == 0
-        r.in_use = (v[:in_use] == "1" || v[:in_use] == "yes")
-        r.is_directed = (v[:is_directed] == "1" || v[:is_directed] == "yes")
-      end
-      r.alias_name = v[:alias_name]
-      r.color = v[:color]
-      r.project_id = @project.id
-      
-      logger.debug "after: #{r.inspect}"
-
-      if r.is_system_relation == "1"
-        r.save
-      else
-        if v[:destroy] == "1"
-          
-          n = ReArtifactRelationship.find_all_by_relation_type(r.relation_type)
-          n.each do |relation|
-            artifact = ReArtifactProperties.find(relation.source_id)
-            if (artifact.project_id == r.project_id)
-              ReArtifactRelationship.destroy(relation.id)
-            end
+      new_relation_configs.each_pair do |k, v|
+        logger.debug v.to_yaml
+        if v['id'].blank?
+          r = ReRelationtype.new
+          if v[:alias_name].empty?
+            v[:alias_name] = "NewRelation"
           end
-
-          ReRelationtype.destroy(r.id)
+          r.relation_type = v[:alias_name] # on i the type was created the alias name will be set
+          r.is_system_relation = 0
         else
+          r = ReRelationtype.find_or_create_by_id(v['id'])
+        end
+        
+        if r.is_system_relation == 0
+          r.in_use = (v[:in_use] == "1" || v[:in_use] == "yes")
+          r.is_directed = (v[:is_directed] == "1" || v[:is_directed] == "yes")
+        end
+        r.alias_name = v[:alias_name]
+        r.color = v[:color]
+        r.project_id = @project.id
+        
+        logger.debug "after: #{r.inspect}"
+  
+        if r.is_system_relation == "1"
           r.save
+        else
+          if v[:destroy] == "1"
+            
+            n = ReArtifactRelationship.find_all_by_relation_type(r.relation_type)
+            n.each do |relation|
+              artifact = ReArtifactProperties.find(relation.source_id)
+              if (artifact.project_id == r.project_id)
+                ReArtifactRelationship.destroy(relation.id)
+              end
+            end
+  
+            ReRelationtype.destroy(r.id)
+          else
+            r.save
+          end
         end
       end
-    end
+    end #unless
 
     @re_artifact_order = ReSetting.get_serialized("artifact_order", @project.id)
     ReSetting.set_serialized("unconfirmed", @project.id, false)
