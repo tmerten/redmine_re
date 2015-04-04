@@ -18,7 +18,7 @@ class CreateReRelationtypes < ActiveRecord::Migration
       t.integer :in_use
     end
     
-    ReArtifactProperties.where(artifact_type: 'Project').each do |project|
+    ReArtifactProperties.where({:artifact_type => 'Project'}).each do |project|
       ReRelationtype.new(:project_id => project.project_id, :relation_type => "parentchild",   :alias_name => "parentchild", :color => "#0000ff", :is_system_relation => "1", :is_directed => "1", :in_use => "1").save
       ReRelationtype.new(:project_id => project.project_id, :relation_type => "primary_actor", :alias_name => "primary_actor", :color => "#ff99cc", :is_system_relation => "1", :is_directed => "1", :in_use => "1").save
       ReRelationtype.new(:project_id => project.project_id, :relation_type => "actors",        :alias_name => "actors",  :color => "#ff00ff", :is_system_relation => "1", :is_directed => "1", :in_use => "1").save
