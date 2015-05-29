@@ -263,7 +263,7 @@ class ReArtifactProperties < ActiveRecord::Base
     end
     @value
   end
-  
+
   def get_traces_as_sink
     traces = []
     self.traces_as_sink.each do |trace| 
@@ -273,7 +273,7 @@ class ReArtifactProperties < ActiveRecord::Base
     end
     traces
   end
-  
+
   def get_traces_as_source
     traces = []
     self.traces_as_source.each do |trace| 
@@ -283,5 +283,5 @@ class ReArtifactProperties < ActiveRecord::Base
     end
     traces
   end
-  
+
 end
