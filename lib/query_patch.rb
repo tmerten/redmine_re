@@ -55,29 +55,18 @@ module QueryPatch
   # All artifact types that shall not be displayed in the filter select boxes can be specified here (comma-separated)
   @@locked_artifact_types = "Project"
 
-  # Returns the localized name of the supplied artifact
-  def localized_artifact_type(artifact_property)
-    l artifact_property.artifact_type.underscore
-  end
-
   # Outputs all artifacts' names prefixed by the particular artifact type (formatted for select box compatibility)
   def selectable_artifact_types_and_names
-    conditions = ["#{Project.table_name}.id = ? AND #{ReArtifactProperties.table_name}.artifact_type NOT IN (?)",
-                  project_id, @@locked_artifact_types]
-
-    artifacts = ReArtifactProperties.all(:joins => [:re_realizations, :issues, :project],
-                                         :conditions => conditions, :group => "#{ReArtifactProperties.table_name}.id")
-    artifacts.collect { |a| [ "[#{localized_artifact_type(a)}] #{a.name}", a.id.to_s ] }.sort! { |a, b| a.first <=> b.first }
+    artifacts = ReArtifactProperties.where("project_id = ? AND artifact_type  NOT IN (?)", project_id, @@locked_artifact_types)
+    artifacts.collect { |a| [ "[#{l(a.artifact_type.underscore)}] #{a.name}", a.id.to_s ] }.sort! { |a, b| a.first <=> b.first }
   end
 
   # Outputs all artifact types (formatted for select box compatibility)
   def selectable_artifact_types
-    conditions = ["#{Project.table_name}.id = ? AND #{ReArtifactProperties.table_name}.artifact_type NOT IN (?)",
-                  project_id, @@locked_artifact_types]
-
-    artifacts = ReArtifactProperties.all(:joins => [:re_realizations, :issues, :project],
-                                         :conditions => conditions, :group => :artifact_type)
-    artifacts.collect { |a| [ localized_artifact_type(a), a.artifact_type ] }.sort! { |a, b| a.first <=> b.first }
+    types_only = ReArtifactProperties.uniq.pluck(:artifact_type)
+    types_only.delete(@@locked_artifact_types)
+    types_only = types_only.collect{ |a| l(a) } # localize it
+    types_only.sort!
   end
 
   # Builds a SQL condition to filter for artifact properties
