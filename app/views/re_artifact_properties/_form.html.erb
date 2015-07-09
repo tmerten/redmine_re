@@ -90,9 +90,9 @@
         <legend><%= t(:re_artifact_relationships) %></legend>
         <div class="splitcontentleft">
           <div id="relationship_link_list">
-            <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@re_artifact_properties.id) %>
+            <% @relationships_outgoing = ReArtifactRelationship.where(source_id: @re_artifact_properties.id) %>
             <% @relationships_outgoing.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
-            <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@re_artifact_properties.id) %>
+            <% @relationships_incoming = ReArtifactRelationship.where(sink_id: @re_artifact_properties.id) %>
             <% @relationships_incoming.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
             <%= render "re_artifact_relationship/relationship_links" %>
           </div>

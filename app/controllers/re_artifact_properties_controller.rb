@@ -23,7 +23,7 @@ class ReArtifactPropertiesController < RedmineReController
       logger.debug("#{@re_artifact_properties.artifact.class} does not implement new hook")
     end    
     @secondary_user_profiles = []
-    @user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', @project.id)
+    @user_profiles = ReArtifactProperties.where(project_id: @project.id, artifact_type: 'ReUserProfile')
 
     unless params[:sibling_artifact_id].blank?
       sibling = ReArtifactProperties.find(params[:sibling_artifact_id])
@@ -161,7 +161,7 @@ class ReArtifactPropertiesController < RedmineReController
         
     if @project.enabled_module_names.include? 'diagrameditor'
       @relation_to_diagrams = ReArtifactRelationship.find_by_source_id_and_relation_type(@re_artifact_properties.id, 'diagram') 
-      @related_diagrams = ConcreteDiagram.find_all_by_id(@relation_to_diagrams.sink_id) unless @relation_to_diagrams.nil?           
+      @related_diagrams = ConcreteDiagram.where(id: @relation_to_diagrams.sink_id) unless @relation_to_diagrams.nil?           
     end
 
     begin

@@ -123,7 +123,7 @@ class ReUseCase < ActiveRecord::Base
   end 
 
  def self.getAllUserProfiles project_id
-   user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', project_id)    
+   user_profiles = ReArtifactProperties.where(artifact_type: 'ReUserProfile', project_id: project_id)    
  end  
   
     

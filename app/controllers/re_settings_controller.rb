@@ -47,7 +47,7 @@ class ReSettingsController < RedmineReController
     end
 
     @re_relation_configs = {}
-    @re_relation_types = ReRelationtype.find_all_by_project_id(@project.id)
+    @re_relation_types = ReRelationtype.where(project_id: @project.id)
     logger.debug @re_relation_types.inspect
     @re_settings = {}
     @re_settings["visualization_size"] = ReSetting.get_plain("visualization_size", @project.id)
@@ -184,7 +184,7 @@ private
         else
           if v[:destroy] == "1"
             
-            n = ReArtifactRelationship.find_all_by_relation_type(r.relation_type)
+            n = ReArtifactRelationship.where(relation_type: r.relation_type)
             n.each do |relation|
               artifact = ReArtifactProperties.find(relation.source_id)
               if (artifact.project_id == r.project_id)

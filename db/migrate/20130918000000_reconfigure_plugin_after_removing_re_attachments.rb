@@ -11,7 +11,7 @@ class ReconfigurePluginAfterRemovingReAttachments < ActiveRecord::Migration
     end
     
     # Remove Setting from array
-    ReSetting.find_all_by_name("artifact_order").each do |artifact_order_setting|
+    ReSetting.where(name: "artifact_order").each do |artifact_order_setting|
       stored_settings = ReSetting.get_serialized("artifact_order", artifact_order_setting.project_id)
       stored_settings.delete("re_attachment")
       ReSetting.set_serialized("artifact_order", artifact_order_setting.project_id, stored_settings)

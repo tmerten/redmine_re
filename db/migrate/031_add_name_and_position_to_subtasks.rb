@@ -19,14 +19,14 @@ class AddNameAndPositionToSubtasks < ActiveRecord::Migration
         st.valid?
         say "there might be some inconsistencies in your DB since the subtask could not be saved: #{st.errors.inspect}" unless st.save
 
-        ReArtifactRelationship.find_all_by_source_id(properties.id).each do |r|
+        ReArtifactRelationship.where( source_id: properties.id ).each do |r|
           unless r.relation_type == "parentchild"
             say "moving incoming subtask relation #{r.inspect} to parent task #{parent_task_properties.inspect}"
             r.source_id = parent_task_properties.id
             r.save
           end
         end
-        ReArtifactRelationship.find_all_by_sink_id(properties.id).each do |r|
+        ReArtifactRelationship.where( sink_id: properties.id ).each do |r|
           unless r.relation_type == "parentchild"
             say "moving incoming subtask relation #{r.inspect} to parent task #{parent_task_properties.inspect}"
             r.sink_id = parent_task_properties.id
@@ -45,7 +45,7 @@ class AddNameAndPositionToSubtasks < ActiveRecord::Migration
       parent_relation = ReArtifactRelationship.find_by_sink_id_and_relation_type(properties.id, "parentchild")
       parent_relation.destroy
     end
-    ReArtifactProperties.find_all_by_artifact_type("ReSubtask").each{ |p| ReArtifactProperties.delete(p.id) }
+    ReArtifactProperties.where( artifact_type: "ReSubtask" ).each{ |p| ReArtifactProperties.delete(p.id) }
 
   end
 

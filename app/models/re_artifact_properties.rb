@@ -3,7 +3,7 @@ class ReArtifactProperties < ActiveRecord::Base
 
   #attr_accessible :artifact_type
 
-  scope :without_projects, :conditions => ["artifact_type != ?", 'Project']
+  scope :without_projects, lambda {where("artifact_type != ?", 'Project')}
   scope :of_project, lambda { |project|
     project_id = (project.is_a? Project) ? project.id : project
     {:conditions => {:project_id => project_id}}
@@ -12,96 +12,111 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :re_ratings, :dependent => :destroy
   
   has_many :raters, :through => :re_ratings, :source => :users
-  has_many :comments, :as => :commented, :dependent => :destroy, :order => "created_on asc"
+  has_many :comments, -> {order("created_on ASC")}, :as => :commented, :dependent => :destroy
   has_many :re_realizations, :dependent => :destroy
-  has_many :issues, :through => :re_realizations, :uniq => true
+  has_many :issues, -> {uniq(true)}, :through => :re_realizations
 
   has_many :relationships_as_source,
-           :order => "re_artifact_relationships.position",
+    -> {order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
            :dependent => :destroy
 
   has_many :relationships_as_sink,
-           :order => "re_artifact_relationships.position",
+    -> {order("re_artifact_relationships.position")},
            :foreign_key => "sink_id",
            :class_name => "ReArtifactRelationship",
            :dependent => :destroy
 
   has_many :traces_as_source,
-           :order => "re_artifact_relationships.position",
+    -> {where.not(re_artifact_relationships[:relation_type].in(ReArtifactRelationship::SYSTEM_RELATION_TYPES)).order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES],
            :dependent => :destroy
 
   has_many :traces_as_sink,
-           :order => "re_artifact_relationships.position",
+    -> {where.not(re_artifact_relationships[:relation_type].in(ReArtifactRelationship::SYSTEM_RELATION_TYPES)).order("re_artifact_relationships.position")},
            :foreign_key => "sink_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES],
            :dependent => :destroy
  
   has_many :user_defined_relations,
-           :order => "re_artifact_relationships.position",   
+    -> {where.not(re_artifact_relationships[:relation_type].in(ReArtifactRelationship::SYSTEM_RELATION_TYPES)).order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES],
            :dependent => :destroy
            
   has_one :parent_relation,
-          :order => "re_artifact_relationships.position",
+    -> {where(re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]).order("re_artifact_relationships.position")},
           :foreign_key => "sink_id",
           :class_name => "ReArtifactRelationship",
-          :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]],
           :dependent => :destroy
 
   has_many :child_relations,
-           :order => "re_artifact_relationships.position",
+    -> {where(re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]).order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]],
            :dependent => :destroy
 
            #######
   has_many :primary_relations,
-           :order => "re_artifact_relationships.position",
+    -> {where(re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]],
            :dependent => :destroy
            
   has_many :actors_relations,
-           :order => "re_artifact_relationships.position",
+    -> {where(re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac]).order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac]],
            :dependent => :destroy
 
                     
-  has_many :diagram_relations,           
+  has_many :diagram_relations,  
+    -> {where( re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia])},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
-           :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:dia]],
            :dependent => :destroy
 
   has_many :related_diagrams, :through => :diagram_relations, :class_name => "ConcreteDiagram",  :source => "sink"
      
     
-  has_many :sinks,    :through => :traces_as_source, :order => "re_artifact_relationships.position"
-  has_many :children, :through => :child_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :sinks,    
+    -> {order("re_artifact_relationships.position")},
+           :through => :traces_as_source 
+  has_many :children,    
+    -> {order("re_artifact_relationships.position")},
+         :through => :child_relations,  :source => "sink"
   ###
-  has_many :primary, :through => :primary_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :actors, :through => :actors_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :dependency, :through => :dependency_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :conflict, :through => :conflict_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :rationale, :through => :rationale_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :refinement, :through => :refinement_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :part_of, :through => :part_of_relations,  :order => "re_artifact_relationships.position", :source => "sink"
-  has_many :diagram, :through => :diagram_relations,  :order => "re_artifact_relationships.position", :source => "sink"
+  has_many :primary,
+    -> {order("re_artifact_relationships.position")},
+         :through => :primary_relations,  :source => "sink"
+  has_many :actors,    
+    -> {order("re_artifact_relationships.position")},
+         :through => :actors_relations,  :source => "sink"
+  has_many :dependency,    
+    -> {order("re_artifact_relationships.position")},
+         :through => :dependency_relations,  :source => "sink"
+  has_many :conflict,    
+    -> {order("re_artifact_relationships.position")},
+         :through => :conflict_relations,  :source => "sink"
+  has_many :rationale,    
+    -> {order("re_artifact_relationships.position")},
+         :through => :rationale_relations,  :source => "sink"
+  has_many :refinement,    
+    -> {order("re_artifact_relationships.position")},
+         :through => :refinement_relations,  :source => "sink"
+  has_many :part_of,    
+    -> {order("re_artifact_relationships.position")},
+         :through => :part_of_relations,  :source => "sink"
+  has_many :diagram,    
+    -> { order("re_artifact_relationships.position")},
+         :through => :diagram_relations,  :source => "sink"
 
   ###
-  has_many :sources,  :through => :traces_as_sink,   :order => "re_artifact_relationships.position"
+  has_many :sources,     
+    -> {order("re_artifact_relationships.position")},
+         :through => :traces_as_sink
   has_one  :parent,   :through => :parent_relation,  :source => "source"
 
   acts_as_watchable
