@@ -139,7 +139,7 @@ class ReArtifactProperties < ActiveRecord::Base
       :type => 're_artifact_properties',
       :timestamp => "#{ReArtifactProperties.table_name}.updated_at",
       :author_key => "#{ReArtifactProperties.table_name}.updated_by",
-      :find_options => {:include => [:project, :user]},
+      :scope => includes(:project, :user),
       :permission => :edit_requirements
   )
 
