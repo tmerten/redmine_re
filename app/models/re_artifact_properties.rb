@@ -47,20 +47,20 @@ class ReArtifactProperties < ActiveRecord::Base
            :dependent => :destroy
            
   has_one :parent_relation,
-    -> {where(re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]).order("re_artifact_relationships.position")},
+    -> {where("re_artifact_relationships.relation_type" => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]).order("re_artifact_relationships.position")},
           :foreign_key => "sink_id",
           :class_name => "ReArtifactRelationship",
           :dependent => :destroy
 
   has_many :child_relations,
-    -> {where(re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]).order("re_artifact_relationships.position")},
+    -> {where("re_artifact_relationships.relation_type" => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pch]).order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
            :dependent => :destroy
 
            #######
   has_many :primary_relations,
-    -> {where(re_artifact_relationships[:relation_type] => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).order("re_artifact_relationships.position")},
+    -> {where("re_artifact_relationships.relation_type" => ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]).order("re_artifact_relationships.position")},
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
            :dependent => :destroy

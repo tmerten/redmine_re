@@ -2,6 +2,8 @@ class ReArtifactRelationship < ActiveRecord::Base
   unloadable
   acts_as_list # see special scope condition below
 
+  attr_accessible :source, :sink
+
    SYSTEM_RELATION_TYPES = {
      :pch => "parentchild",
      :pac => "primary_actor",

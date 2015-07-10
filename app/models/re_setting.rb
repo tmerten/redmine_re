@@ -5,6 +5,8 @@ class ReSetting < ActiveRecord::Base
   #validates_uniqueness_of :name, :scope => :project_id
   validates :name , :uniqueness => { :scope => :project_id}
 
+  attr_accessible :name, :value, :project_id
+
   # Hash used to cache setting values
   @cached_settings = {}
   @cached_cleared_on = Time.now

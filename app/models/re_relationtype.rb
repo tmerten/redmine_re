@@ -1,6 +1,8 @@
 class ReRelationtype < ActiveRecord::Base
   unloadable
-  
+
+  attr_accessible :is_system_relation, :is_directed, :in_use, :color
+    
   #validates :id, :presence => true, :numericality => true
   #validates :project_id, :presence => true, :numericality => true
   #validates :relation_type, :presence => true
