@@ -104,6 +104,9 @@ class ReArtifactProperties < ActiveRecord::Base
   has_many :sources,  :through => :traces_as_sink,   :order => "re_artifact_relationships.position"
   has_one  :parent,   :through => :parent_relation,  :source => "source"
 
+  
+  acts_as_customizable
+  
   acts_as_watchable
   acts_as_attachable({:delete_permission => :edit_requirements, :view_permission => :view_requirements})
 

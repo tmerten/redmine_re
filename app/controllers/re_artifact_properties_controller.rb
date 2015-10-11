@@ -7,6 +7,9 @@ class ReArtifactPropertiesController < RedmineReController
   helper :watchers
   helper :attachments
   include AttachmentsHelper
+  
+  helper :custom_fields
+  include CustomFieldsHelper
 
   def new
     @re_artifact_properties = ReArtifactProperties.new

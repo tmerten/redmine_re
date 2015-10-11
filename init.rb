@@ -4,8 +4,10 @@ require 'rubygems'
 
 require_dependency '../app/models/re_artifact_relationship'
 require_dependency '../app/models/re_artifact_properties'
+require_dependency '../app/models/re_artifact_properties_custom_field'
 require_dependency '../app/models/re_relationtype'
 require_dependency '../app/helpers/re_application_helper'
+require_dependency '../app/helpers/custom_fields_helper'
 
 # Make singular and plural for RE_Artifact_Properties the same
 ActiveSupport::Inflector.inflections do |inflect|
@@ -23,6 +25,7 @@ ActionDispatch::Callbacks.to_prepare do
   require_dependency 'project_patch'
   require_dependency 'projects_controller_patch'
   require_dependency 'user_patch'
+  require_dependency 'custom_fileds_helper_patch'
 end
 
 require_dependency '../lib/re_wiki_macros'
