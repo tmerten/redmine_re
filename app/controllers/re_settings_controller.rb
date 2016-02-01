@@ -103,7 +103,7 @@ private
     # Put it into the empty configured_artifact_types array
     configured_artifact_types.concat(stored_settings) if stored_settings
 
-    all_artifact_types = ReSetting::ARTIFACT_TYPES
+    all_artifact_types = ReSetting::ARTIFACT_TYPES.clone
     all_artifact_types.delete_if { |v| configured_artifact_types.include? v }
     configured_artifact_types.concat(all_artifact_types)
 
