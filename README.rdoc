@@ -4,17 +4,11 @@ The Redmine RE plugin (http://redmine-re.korem.de) is a requirements engineering
 
 A per project Requirements Tab gives users access to their specification. They can interconnect (trace) requirement artifacts to other artifacts as well as issues. Try the plugin here http://redmine-re.korem.de and discover more features like commenting on requirements or visualizing traces.
 
-Redmine RE is compatible with Redmine Versions 2.4 and higher.
-
-== Demo
-
-You can find an online demo of Redmine RE here: http://redmine-re.korem.de:8080.
-* User: re-admin
-* Password: redmine-re
+Redmine RE is compatible with Redmine Versions >= 2.4 and < 3.0.
 
 == Installation
 
-You can find information about how to install the Redmine RE here: http://redmine-re.korem.de/projects/redmine-re/wiki/Installing_Redmine_RE.
+You can find information about how to install the Redmine RE in the wiki: https://github.com/tmerten/redmine_re/wiki/installation.
 
 == Acknowledgments
 
@@ -22,4 +16,4 @@ You can find information about how to install the Redmine RE here: http://redmin
 
 * The visualization in this project utilizes the JavaScript InfoVis Toolkit.
 
-* The Redmine RE Plugin has initially been developed in the research project KoREM a project of the University of Applied Sciences Bonn-Rhein-Sieg which was funded by the German Federal Ministry of Education and Research. Luckily we are now able to contribute this plugin to the Open Source Community.
+* The Redmine RE Plugin has initially been developed in the research project KoREM a project of the University of Applied Sciences Bonn-Rhein-Sieg. KoREM was funded by the German Federal Ministry of Education and Research.
