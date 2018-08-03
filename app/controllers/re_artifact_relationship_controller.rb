@@ -16,14 +16,14 @@ class ReArtifactRelationshipController < RedmineReController
     end
 
     @artifact_properties = ReArtifactProperties.find(params[:re_artifact_properties_id])
-    @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(params[:re_artifact_properties_id])
+    @relationships_incoming = ReArtifactRelationship.where(sink_id: params[:re_artifact_properties_id])
     @relationships_incoming.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
 
     unless params[:secondary_user_delete].blank?
-      @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id_and_relation_type(params[:re_artifact_properties_id],ReArtifactRelationship::RELATION_TYPES[:dep])
+      @relationships_outgoing = ReArtifactRelationship.where(source_id: params[:re_artifact_properties_id], relation_type: ReArtifactRelationship::RELATION_TYPES[:dep])
       render :partial => "secondary_user", :project_id => params[:project_id]
     else
-      @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(params[:re_artifact_properties_id])
+      @relationships_outgoing = ReArtifactRelationship.where(source_id: params[:re_artifact_properties_id])
       @relationships_outgoing.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
       render :partial => "relationship_links", :project_id => params[:project_id]
     end
@@ -60,9 +60,9 @@ class ReArtifactRelationshipController < RedmineReController
     logger.debug("tried saving the following relation (errors: #{@new_relation.errors.size}): " + @new_relation.to_yaml) 
 
     @artifact_properties = ReArtifactProperties.find(artifact_properties_id)
-    @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(artifact_properties_id)
+    @relationships_outgoing = ReArtifactRelationship.where(source_id: artifact_properties_id)
     @relationships_outgoing.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
-    @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(artifact_properties_id)
+    @relationships_incoming = ReArtifactRelationship.where(sink_id: artifact_properties_id)
     @relationships_incoming.delete_if {|rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) }
 
     render :partial => "relationship_links", :layout => false, :project_id => params[:project_id]
@@ -169,8 +169,9 @@ class ReArtifactRelationshipController < RedmineReController
     json << rootnode
     
     artifacts.each do |artifact|
+	
       outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(artifact.id)
-      drawable_relationships = ReArtifactRelationship.find_all_by_source_id_and_relation_type(artifact.id, relations)
+      drawable_relationships = ReArtifactRelationship.where(source_id: artifact.id, relation_type: relations)
       artifact_ids = @artifacts.collect { |a| a.id }
       drawable_relationships.delete_if { |r| ! artifact_ids.include? r.sink_id }
       json << add_artifact(artifact, drawable_relationships, outgoing_relationships)
@@ -293,7 +294,7 @@ class ReArtifactRelationshipController < RedmineReController
         next unless ( ! @done_artifakts_id.include? child.id.to_s)
         @done_artifakts_id << artifact.id.to_s
         outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(child.id)
-        drawable_relationships = ReArtifactRelationship.find_all_by_source_id(child.id)
+        drawable_relationships = ReArtifactRelationship.where(source_id: child.id)
         json_artifact = add_artifact(child, drawable_relationships, outgoing_relationships)
         json_return = sunburst(child)
         if (json_return != [])
@@ -326,7 +327,7 @@ class ReArtifactRelationshipController < RedmineReController
       ReRealization.where("issue_id=?", issue_id.to_s).each do |artifact| 
         if( ! @done_artifakts_id.include? artifact.re_artifact_properties_id.to_s)
           outgoing_relationships = ReArtifactRelationship.find_all_relations_for_artifact_id(artifact.re_artifact_properties_id)
-          drawable_relationships = ReArtifactRelationship.find_all_by_source_id(artifact.re_artifact_properties_id)
+          drawable_relationships = ReArtifactRelationship.where(source_id: artifact.re_artifact_properties_id)
           child = ReArtifactProperties.find_by_project_id_and_id(@project.id,artifact.re_artifact_properties_id) 
        
           json_artifact = add_artifact(child, drawable_relationships, outgoing_relationships)
@@ -354,7 +355,7 @@ class ReArtifactRelationshipController < RedmineReController
     
     if (@max_deep.to_i == 0 || @current_deep.to_i <= @max_deep.to_i)
       if ( ! @done_artifakts_id.include? artifact.id.to_s)
-          ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
+          ReArtifactRelationship.where(source_id: artifact.id).each do |source|
             next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
             next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
             
@@ -382,7 +383,7 @@ class ReArtifactRelationshipController < RedmineReController
               @source_artifakts_id << source.source_id
             end
           end
-          ReArtifactRelationship.find_all_by_sink_id(artifact.id).each do |source|
+          ReArtifactRelationship.where(sink_id: artifact.id).each do |source|
             next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
             next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
             if (@current_deep.to_i  == @max_deep.to_i)
@@ -520,7 +521,7 @@ class ReArtifactRelationshipController < RedmineReController
         @done_artifakts_id << artifact.id.to_s  
       end
 
-      ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
+      ReArtifactRelationship.where(source_id: artifact.id).each do |source|
         next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
         next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
         next unless ( ! @done_artifakts_id.include? source.sink_id.to_s)
@@ -537,7 +538,7 @@ class ReArtifactRelationshipController < RedmineReController
         end
       end 
     
-      ReArtifactRelationship.find_all_by_sink_id(artifact.id).each do |source|
+      ReArtifactRelationship.where(sink_id: artifact.id).each do |source|
         next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
         next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
         next unless ( ! @done_artifakts_id.include? source.source_id.to_s)
@@ -775,13 +776,13 @@ class ReArtifactRelationshipController < RedmineReController
         @found_artifakts << artifact
         @done_artifakts_id << artifact.id.to_s
       end
-      ReArtifactRelationship.find_all_by_source_id(artifact.id).each do |source|
+      ReArtifactRelationship.where(source_id: artifact.id).each do |source|
         next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
         next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
         next unless ( ! @done_artifakts_id.include? source.sink_id.to_s)
         find_all_artifacts_for_netmap(ReArtifactProperties.find_by_project_id_and_id(@project.id, source.sink_id))  
       end 
-      ReArtifactRelationship.find_all_by_sink_id(artifact.id).each do |source|
+      ReArtifactRelationship.where(sink_id: artifact.id).each do |source|
         next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
         next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
         next unless ( ! @done_artifakts_id.include? source.source_id.to_s)
@@ -1076,7 +1077,7 @@ class ReArtifactRelationshipController < RedmineReController
     @max_deep = ReVisualizationConfig.get_max_deep(@project.id, session[:visualization_type]).to_i
 
     if(@visualization_type!= "graph_issue" )
-      @artifacts = ReArtifactProperties.find_all_by_project_id_and_artifact_type(@project.id, @chosen_artifacts, :order => "artifact_type, name")
+      @artifacts = ReArtifactProperties.where(project_id: @project.id, artifact_type: @chosen_artifacts).order("artifact_type, name")
     else
       @artifacts = ""
     end
@@ -1087,7 +1088,7 @@ class ReArtifactRelationshipController < RedmineReController
   
   def min_dis_artifact(artifact_id)
     @current_deep = @current_deep + 1
-    ReArtifactRelationship.find_all_by_source_id(artifact_id).each do |source|
+    ReArtifactRelationship.where(source_id: artifact_id).each do |source|
       next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.sink_id).artifact_type.to_s)
       next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
      
@@ -1100,7 +1101,7 @@ class ReArtifactRelationshipController < RedmineReController
       end
     end 
     if(@visualization_type != "sunburst")
-      ReArtifactRelationship.find_all_by_sink_id(artifact_id).each do |source|
+      ReArtifactRelationship.where(sink_id: artifact_id).each do |source|
         next unless (@chosen_artifacts.include? ReArtifactProperties.find_by_id(source.source_id).artifact_type.to_s)
         next unless (@chosen_relations.include? ReArtifactRelationship.find_by_id(source.id).relation_type.to_s)
         if (@min_dis_artifact_arr[source.source_id] == nil || @min_dis_artifact_arr[source.source_id] > @current_deep)

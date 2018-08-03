@@ -91,7 +91,9 @@ class ReSetting < ActiveRecord::Base
     unless order.nil?
       order.each do |s|
         setting = self.get_serialized(s, project_id)
-        active_settings[s] = setting if setting["in_use"]
+		unless s.nil?
+          active_settings[s] = setting if setting["in_use"] 
+		end
       end
     end
     active_settings

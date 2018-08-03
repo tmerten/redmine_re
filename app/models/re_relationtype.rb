@@ -15,15 +15,15 @@ class ReRelationtype < ActiveRecord::Base
     tmp = nil
     if is_system_relation == nil
       if is_used_relation == nil
-         tmp = ReRelationtype.find_all_by_project_id(project_id)
+         tmp = ReRelationtype.where(project_id: project_id)
       else
-        tmp = ReRelationtype.find_all_by_project_id_and_in_use(project_id, is_used_relation)
+        tmp = ReRelationtype.where(project_id: project_id, in_use: is_used_relation)
       end  
     else
       if is_used_relation == nil
-        tmp = ReRelationtype.find_all_by_project_id_and_is_system_relation(project_id, is_system_relation)
+        tmp = ReRelationtype.where(project_id: project_id, is_system_relation: is_system_relation)
       else 
-        tmp = ReRelationtype.find_all_by_project_id_and_is_system_relation_and_in_use(project_id, is_system_relation, is_used_relation)
+        tmp = ReRelationtype.where(project_id: project_id, is_system_relation: is_system_relation, in_use: is_used_relation)
       end
     end
     tmp.each do |relationtype|
@@ -36,7 +36,7 @@ class ReRelationtype < ActiveRecord::Base
   def self.in_use (relation_type, project_id)
 
     ret = false
-    tmp = ReRelationtype.find_by_project_id_and_relation_type_and_in_use(project_id, relation_type, 1)
+    tmp = ReRelationtype.where(project_id: project_id, relation_type: relation_type, in_use: 1)
     unless tmp.blank?
       ret = true
     end
@@ -46,10 +46,9 @@ class ReRelationtype < ActiveRecord::Base
   def self.get_alias_name (relation_type, project_id)
 
     ret = ""
-    tmp = ReRelationtype.find_by_project_id_and_relation_type(project_id, relation_type)
-
+    tmp = ReRelationtype.where(project_id: project_id, relation_type: relation_type).first
     unless tmp.blank?
-      ret = tmp.alias_name
+      ret = tmp.read_attribute(:alias_name)
     end
     ret
   end

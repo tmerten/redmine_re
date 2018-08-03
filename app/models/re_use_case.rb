@@ -5,13 +5,13 @@ class ReUseCase < ActiveRecord::Base
   
   acts_as_re_artifact
 
-  has_many :re_use_case_steps, :inverse_of => :re_use_case, :dependent => :destroy, :order => :position
+  has_many :re_use_case_steps, -> { order(:position) }, :inverse_of => :re_use_case, :dependent => :destroy
 
   has_one :primary_actor_relation, 
+    -> { where("re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]) },
     :source => :relationships_as_source,
     :through => :re_artifact_properties, 
-    :class_name => "ReArtifactRelationship", 
-    :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:pac]]
+    :class_name => "ReArtifactRelationship"
 
 
   has_one :primary_actor, 
@@ -19,12 +19,11 @@ class ReUseCase < ActiveRecord::Base
     :class_name => "ReArtifactProperties",  
     :source => "sink"
 
-
   has_many :actor_relations, 
+    -> { where("re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac]) },
     :source => :relationships_as_source,
     :through => :re_artifact_properties, 
-    :class_name => "ReArtifactRelationship", 
-    :conditions => ["re_artifact_relationships.relation_type = ?", ReArtifactRelationship::SYSTEM_RELATION_TYPES[:ac]]
+    :class_name => "ReArtifactRelationship"
 
   has_many :actors, 
     :through => :actor_relations, 
@@ -123,7 +122,7 @@ class ReUseCase < ActiveRecord::Base
   end 
 
  def self.getAllUserProfiles project_id
-   user_profiles = ReArtifactProperties.find_all_by_artifact_type_and_project_id('ReUserProfile', project_id)    
+   user_profiles = ReArtifactProperties.where(artifact_type: 'ReUserProfile', project_id: project_id)    
  end  
   
     

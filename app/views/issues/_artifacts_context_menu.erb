@@ -15,7 +15,7 @@
 
 	<% unless @issues.nil? or @issues.length <= 1 %>
 	  <%
-	    re_artifact_properties = ReArtifactProperties.find_all_by_common_issues(@issues, :order => 'name ASC')
+	    re_artifact_properties = ReArtifactProperties.where(common_issues: @issues).order('name')
 	    if re_artifact_properties.length > 0
 	  %>
 	  <li class="folder">

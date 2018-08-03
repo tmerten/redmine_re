@@ -13,7 +13,7 @@ module IssuePatch
 
       #puts base.methods
       has_many :re_realizations, :dependent => :destroy
-      has_many :re_artifact_properties,  :through => :re_realizations, :uniq => true
+      has_many :re_artifact_properties, -> { uniq },  :through => :re_realizations
     end
   end
 

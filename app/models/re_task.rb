@@ -5,7 +5,7 @@ class ReTask < ActiveRecord::Base
 
   acts_as_re_artifact
 
-  has_many :re_subtasks, :inverse_of => :re_task, :dependent => :destroy, :order => :position, :autosave => true
+  has_many :re_subtasks, -> {order(:position) }, :inverse_of => :re_task, :dependent => :destroy, :autosave => true
 
   accepts_nested_attributes_for :re_subtasks, :allow_destroy => true,
     :reject_if => proc { |attributes| attributes['name'].blank? && attributes['solution'].blank? }

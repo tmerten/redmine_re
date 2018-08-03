@@ -6,6 +6,8 @@ A per project requirements tab gives users access to their specification. Users 
 
 Redmine RE is compatible with Redmine Versions >= 2.4 and < 3.0.
 
+With the commit From 03.08.2018 the Redmine 3.4 is supportet. The changes are initially tested. The major functions are working now. Still some minor Bugs left. Visualization is currently not working.
+
 == Installation
 
 You can find information about how to install the Redmine RE in the wiki: https://github.com/tmerten/redmine_re/wiki/installation.

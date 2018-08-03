@@ -102,7 +102,9 @@ within the KoREM project (http://korem.de) at Bonn-Rhine-Sieg University of Appl
 
   # The Requirements item is added to the project menu after the Activity item
   menu :project_menu, :re, {:controller => 'requirements', :action => 'index'}, :caption => 'Requirements', :after => :activity, :param => :project_id
-  activity_provider :re_artifact_properties, :class_name => 'ReArtifactProperties', :default => true
+  
+  # Activity-Provider does not work. May be fixed later. Deactivated for Rails 4 compatibly on 03.08.2018
+  #activity_provider :re_artifact_properties, :class_name => 'ReArtifactProperties', :default => true
 
   #settings :default => {'re_artifact_types' => ''}, :partial => 'settings/redmine_re'
 

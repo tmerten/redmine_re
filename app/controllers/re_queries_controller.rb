@@ -100,12 +100,12 @@ class ReQueriesController < RedmineReController
       conditions << params[:except_types] unless params[:except_types].blank?
 
       artifacts = ReArtifactProperties.of_project(@project).without_projects
-      artifacts = artifacts.all(:conditions => conditions, :order => 'name ASC')
-      artifacts.map! do |artifact|
+      artifacts = artifacts.where(conditions).order('name ASC')
+      artifacts_information = artifacts.map do |artifact|
         artifact_to_json(artifact).merge({:highlighted_name => highlight_letters(artifact.name, params[:query])})
       end
     end    
-    render :json => artifacts
+    render :json => artifacts_information
   end
 
   def suggest_issues
@@ -117,12 +117,12 @@ class ReQueriesController < RedmineReController
       conditions = [sql, @project.id, "%#{params[:query]}%"]
       conditions << params[:except_ids] unless params[:except_ids].blank?
 
-      issues = Issue.all(:conditions => conditions, :order => 'subject ASC')
-      issues.map! do |issue|
+      issues = Issue.where(conditions).order('subject ASC')
+      issues_information = issues.map do |issue|
         issue_to_json(issue).merge({:highlighted_name => highlight_letters(issue.subject, params[:query])})
       end
     end
-    render :json => issues
+    render :json => issues_information
   end
 
   def suggest_diagrams
@@ -134,12 +134,12 @@ class ReQueriesController < RedmineReController
       conditions = [sql, @project.id, "%#{params[:query]}%"]
       conditions << params[:except_ids] unless params[:except_ids].blank?
 
-      diagrams = ConcreteDiagram.all(:conditions => conditions, :order => 'name ASC')
-      diagrams.map! do |diagram|
+      diagrams = ConcreteDiagram.where(conditions).order('name ASC')
+      diagrams_information = diagrams.map do |diagram|
         diagram_to_json(diagram).merge({:highlighted_name => highlight_letters(diagram.name, params[:query])})
       end
     end
-    render :json => diagrams
+    render :json => diagrams_information
   end
 
   def suggest_users
@@ -152,14 +152,14 @@ class ReQueriesController < RedmineReController
       conditions = [sql, User::STATUS_ACTIVE, preformatted_query, preformatted_query, preformatted_query]
       conditions << params[:except_ids] unless params[:except_ids].blank?
 
-      users = User.all(:conditions => conditions, :order => 'lastname ASC, firstname ASC, login ASC')
-      users.map! do |user|
+      users = User.where(conditions).order('lastname ASC, firstname ASC, login ASC')
+      users_information = users.map do |user|
         full_name = "#{user.firstname} #{user.lastname}"
         user_to_json(user).merge({:highlighted_full_name => highlight_letters(full_name, params[:query]),
                                   :highlighted_login => highlight_letters(user.login, params[:query])})
       end
     end
-    render :json => users
+    render :json => users_information
   end
   
   ##

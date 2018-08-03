@@ -89,4 +89,5 @@ module QueryPatch
   end
 end
 
-Query.send(:include, QueryPatch)
+# Was deactivated to realize Rails4 Comatibility. Need to be checked
+#Query.send(:include, QueryPatch)

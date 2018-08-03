@@ -90,10 +90,8 @@
         <legend><%= t(:re_artifact_relationships) %></legend>
         <div class="splitcontentleft">
           <div id="relationship_link_list">
-            <% @relationships_outgoing = ReArtifactRelationship.find_all_by_source_id(@re_artifact_properties.id) %>
-            <% @relationships_outgoing.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
-            <% @relationships_incoming = ReArtifactRelationship.find_all_by_sink_id(@re_artifact_properties.id) %>
-            <% @relationships_incoming.delete_if { |rel| ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(rel.relation_type) } %>
+            <% @relationships_outgoing = ReArtifactRelationship.where(source_id: @re_artifact_properties.id, relation_type: ReArtifactRelationship::SYSTEM_RELATION_TYPES.values) %>
+            <% @relationships_incoming = ReArtifactRelationship.where(sink_id: @re_artifact_properties.id, relation_type: ReArtifactRelationship::SYSTEM_RELATION_TYPES.values) %>
             <%= render "re_artifact_relationship/relationship_links" %>
           </div>
           <br/>
@@ -106,7 +104,7 @@
 			<% for relation_type in @re_used_relation_types %>
 				<% if ReRelationtype.in_use(relation_type, @project.id) && !ReArtifactRelationship::SYSTEM_RELATION_TYPES.values.include?(relation_type) %>	 
 			    	<%= radio_button :re_artifact_relationship, :relation_type, relation_type, :data => {:description => rendered_relation_type(relation_type), :alias_name => ReRelationtype.get_alias_name(relation_type, @project.id) } %>
-			        <%= rendered_relation_type(ReRelationtype.get_alias_name(relation_type, @project.id)) %>
+			        <%= rendered_relation_type(ReRelationtype.get_alias_name(relation_type, @project.id) ) %>
 			        <br/>
 			    <% end %>
 			<% end %>

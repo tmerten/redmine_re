@@ -4,7 +4,6 @@
 
 <% traces_as_source = @re_artifact_properties.traces_as_source %>
 <% traces_as_sink = @re_artifact_properties.traces_as_sink %>
-<% related_diagrams = @re_artifact_properties.related_diagrams %>
    
 <table class="attributes">
   <colgroup>
@@ -18,11 +17,11 @@
       <th><%= l(:re_artifact_responsible) %></th>
       <td><%= @re_artifact_properties.responsible.nil? ? t(:re_no_responsible_user_defined) : @re_artifact_properties.responsible %></td>
       <th class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= t(:re_traces_to) -%></th>      
-      <% current_relation = traces_as_source.shift %>
+      <% current_relation = traces_as_source.first %>
       <% s = ReArtifactProperties.find_by_id(current_relation.sink_id) if current_relation %> 
       <td class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_to) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
     </tr>
-    <% traces_as_source.each do |current_relation| %>
+    <% traces_as_source.drop(1).each do |current_relation| %>
     <tr>
       <th></th>
       <td></td>
@@ -35,12 +34,13 @@
       <th></th>
       <td></td>
       <th class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= t(:re_traces_from) -%></th>     
-      <% current_relation = traces_as_sink.shift %>
+      <% current_relation = traces_as_sink.first %>
       <% s = nil %>     
       <% s = ReArtifactProperties.find_by_id(current_relation.source_id) if current_relation %> 
       <td class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_from) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
     </tr>       
-    <% traces_as_sink.each do |current_relation| %>
+    <% traces_as_sink.drop(1).each do |current_relation| %>
+	<-- ToDo: Implement, Skip first element ! -->
     <tr>
       <th></th>
       <td></td>
