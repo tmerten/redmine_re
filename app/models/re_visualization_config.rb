@@ -58,7 +58,7 @@ class ReVisualizationConfig < ActiveRecord::Base
 
   def self.get_artifact_filter_as_stringarray(project_id, visualization_type)
     
-    config = ReVisualizationConfig.where(project_id_: project_id, user_id: User.current.id, visualization_type: visualization_type, configuration_type: "artifact", onfiguration_value: 1)
+    config = ReVisualizationConfig.where(project_id: project_id, user_id: User.current.id, visualization_type: visualization_type, configuration_type: "artifact", configuration_value: 1)
     @choosen_artifacts = []
     config.each do |item|
       @choosen_artifacts << item.configuration_name.camelize
@@ -70,7 +70,7 @@ class ReVisualizationConfig < ActiveRecord::Base
    
   def self.get_relation_filter_as_stringarray(project_id,visualization_type)
     
-    config = ReVisualizationConfig.where(project_id_: project_id, user_id: User.current.id, visualization_type: visualization_type, configuration_type: "relation", onfiguration_value: 1)
+    config = ReVisualizationConfig.where(project_id: project_id, user_id: User.current.id, visualization_type: visualization_type, configuration_type: "relation", configuration_value: 1)
     @choosen_relation = []
     config.each do |item|
       @choosen_relation << item.configuration_name.camelize
