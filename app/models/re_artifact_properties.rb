@@ -22,19 +22,19 @@ class ReArtifactProperties < ActiveRecord::Base
            :dependent => :destroy
 
   has_many :traces_as_source,
-           -> { where("re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES).order('re_artifact_relationships.position asc') },
+           -> { where("re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values).order('re_artifact_relationships.position asc') },
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
            :dependent => :destroy
 
   has_many :traces_as_sink,
-           -> { where("re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES).order('re_artifact_relationships.position asc') },
+           -> { where("re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values).order('re_artifact_relationships.position asc') },
            :foreign_key => "sink_id",
            :class_name => "ReArtifactRelationship",
            :dependent => :destroy
  
   has_many :user_defined_relations,
-           -> { where("re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES).order('re_artifact_relationships.position asc') },
+           -> { where("re_artifact_relationships.relation_type NOT IN (?)", ReArtifactRelationship::SYSTEM_RELATION_TYPES.values).order('re_artifact_relationships.position asc') },
            :foreign_key => "source_id",
            :class_name => "ReArtifactRelationship",
            :dependent => :destroy

@@ -22,13 +22,13 @@
       <td class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_to) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
     </tr>
     <% traces_as_source.drop(1).each do |current_relation| %>
-    <tr>
-      <th></th>
-      <td></td>
-      <th class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> </th>
-      <% s = ReArtifactProperties.find_by_id(current_relation.sink) %>      
-      <td class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_to) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
-    </tr>
+		<tr>
+		  <th></th>
+		  <td></td>
+		  <th class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> </th>
+		  <% s = ReArtifactProperties.find_by_id(current_relation.sink) %>      
+		  <td class="traces_to" data-artifactid="<%=@re_artifact_properties.id%>"> <%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_to) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}", :rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
+		</tr>
     <% end %>
     <tr>
       <th></th>
@@ -40,14 +40,13 @@
       <td class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " if current_relation %> <%= t(:re_from) if s %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) if s %></td>
     </tr>       
     <% traces_as_sink.drop(1).each do |current_relation| %>
-	<-- ToDo: Implement, Skip first element ! -->
-    <tr>
-      <th></th>
-      <td></td>
-      <th class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"></th>
-      <% s = ReArtifactProperties.find_by_id(current_relation.source_id)%> 
-      <td class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_from) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
-    </tr>
+		<tr>
+		  <th></th>
+		  <td></td>
+		  <th class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"></th>
+		  <% s = ReArtifactProperties.find_by_id(current_relation.source_id)%> 
+		  <td class="traces_from" data-artifactid="<%=@re_artifact_properties.id%>"><%= "#{rendered_relation_type(current_relation[:relation_type])} " %> <%= t(:re_from) %> <%= link_to(s.name,s,{:class => "icon #{s.artifact_type.underscore}",:rel => "/projects/#{@project.id.to_s}/requirements/filtered_json?artefakt_id=#{s.id.to_s}&visualization_type=graph&data=default"}) %></td>
+		</tr>
     <% end %>
     <tr>
       <th></th>
