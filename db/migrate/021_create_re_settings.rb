@@ -23,6 +23,8 @@ class CreateReSettings < ActiveRecord::Migration
       #print 'storing {' + rel.id.to_s + ' => ' + rel.relation_type.to_s + '} \n'
       stored_relations[rel.id] = rel.relation_type
     end
+	
+	#Known Problem: The default value may not be set. Check database when getting error on creation of artifacts.
     change_column(:re_artifact_relationships, :relation_type, :string, { :limit => 50, :null => false, :default => 'parentchild'})
     ReArtifactRelationship.reset_column_information
     #print 'relations: ' + stored_relations.inspect
