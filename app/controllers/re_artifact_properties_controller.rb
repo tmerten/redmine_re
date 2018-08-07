@@ -305,7 +305,11 @@ class ReArtifactPropertiesController < RedmineReController
   def update_related_issues params
     unless params[:issue_id].blank?
 
-      params[:issue_id].delete_if { |v| v == "" }
+      params[:issue_id].each do |v|
+	    if v == "" 
+  		  v.delete
+        end
+      end
       params[:issue_id].each do |iid|
         @re_artifact_properties.issues << Issue.find(iid)
       end
@@ -353,7 +357,7 @@ class ReArtifactPropertiesController < RedmineReController
       flash[:error] = t(:re_delete_project_artifact_error)  
     else    
       direct_children = @artifact_properties.children
-      position = @artifact_properties.position
+      position = @artifact_properties.attributes["position"]
       for child in direct_children
         logger.debug "################### #{child.to_yaml}"
         child.parent_relation.remove_from_list
@@ -362,7 +366,7 @@ class ReArtifactPropertiesController < RedmineReController
         position += 1
       end
      
-      @artifact_properties.destroy
+      @artifact_properties.delete
       flash[:notice] = t(:re_deleted_artifact_and_moved_children, :artifact => @artifact_properties.name, :parent => @parent.name)
     end
     
@@ -389,8 +393,16 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-    @relationships_incoming.delete_if { |x| x.relation_type.eql? "parentchild" }
-    @relationships_outgoing.delete_if { |x| x.relation_type.eql? "parentchild" }
+#	#@relationships_incoming.each do |rel|
+#		if rel.relation_type.eql? "parentchild"
+#			rel.delete
+#		end
+#	end
+#	@relationships_outgoing.each do |rel|
+#		if rel.relation_type.eql? "parentchild"
+#			rel.delete
+#		end
+#	end
   end
 
   def how_to_delete
@@ -402,8 +414,16 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@re_artifact_properties)
 
-    @relationships_incoming.delete_if { |x| x.relation_type.eql? "parentchild" }
-    @relationships_outgoing.delete_if { |x| x.relation_type.eql? "parentchild" }
+#	@relationships_incoming.each do |rel|
+#		if rel.relation_type.eql? "parentchild"
+#			rel.delete
+#		end
+#	end
+#	@relationships_outgoing.each do |rel|
+#		if rel.relation_type.eql? "parentchild"
+#			rel.delete
+#		end
+#	end
 
     initialize_tree_data
     
@@ -445,8 +465,17 @@ class ReArtifactPropertiesController < RedmineReController
 
     if artifact
       children = artifact.gather_children
-      parents.delete_if { |p| children.include? p }
-      parents.delete_if { |p| p == artifact }
+	  parents do |p|
+	    if children.include? p
+		  p.delete
+	  end
+	  end
+	  parents do |p|
+		if p == artifact 
+		  p.delete
+	    end
+	  end
+	  
     end
 
     list = '<ul>'
