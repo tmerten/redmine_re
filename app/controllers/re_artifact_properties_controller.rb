@@ -379,7 +379,7 @@ class ReArtifactPropertiesController < RedmineReController
     @children.each do |child|
       child.destroy
     end
-    @artifact_properties.destroy
+    #@artifact_properties.destroy
 
     flash[:notice] = t(:re_deleted_artifact_and_children, :artifact => @artifact_properties.name)
     redirect_to :controller => 'requirements', :action => 'index', :project_id => @project.id
@@ -393,37 +393,22 @@ class ReArtifactPropertiesController < RedmineReController
 
     @children = gather_children(@artifact_properties)
 
-#	#@relationships_incoming.each do |rel|
-#		if rel.relation_type.eql? "parentchild"
-#			rel.delete
-#		end
-#	end
-#	@relationships_outgoing.each do |rel|
-#		if rel.relation_type.eql? "parentchild"
-#			rel.delete
-#		end
-#	end
+	@relationships_incoming.each do |rel|
+		rel.delete
+	end
+	@relationships_outgoing.each do |rel|
+		rel.delete
+	end
   end
 
   def how_to_delete
     method = params[:mode]
     @re_artifact_properties = ReArtifactProperties.find(params[:id])
-    @relationships_incoming = @re_artifact_properties.relationships_as_sink
-    @relationships_outgoing = @re_artifact_properties.relationships_as_source
+    @relationships_incoming = @re_artifact_properties.traces_as_sink
+    @relationships_outgoing = @re_artifact_properties.traces_as_source
     @parent = @re_artifact_properties.parent
 
     @children = gather_children(@re_artifact_properties)
-
-#	@relationships_incoming.each do |rel|
-#		if rel.relation_type.eql? "parentchild"
-#			rel.delete
-#		end
-#	end
-#	@relationships_outgoing.each do |rel|
-#		if rel.relation_type.eql? "parentchild"
-#			rel.delete
-#		end
-#	end
 
     initialize_tree_data
     

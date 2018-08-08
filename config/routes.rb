@@ -21,7 +21,7 @@ RedmineApp::Application.routes.draw do
   # ReArtifactProperties as "artifact"
   resources :re_artifact_properties, :except => [:new, :index], :via => [:get, :post]
 
-  match 're_artifact_properties/:id/recursive_destroy' => 're_artifact_properties#recursive_destroy', :via => [:get, :post]
+  match 're_artifact_properties/:id/recursive_destroy' => 're_artifact_properties#recursive_destroy', :via => [:get, :post, :delete]
   match 're_artifact_properties/:id/how_to_delete' => 're_artifact_properties#how_to_delete', :via => [:get, :post]
   match 'projects/:project_id/requirements/remove/:artifactid/from_issue/:issueid' => 're_artifact_properties#remove_artifact_from_issue', :via => [:get, :post]
   match 'projects/:project_id/requirements/artifact/new/:artifact_type' => 're_artifact_properties#new', :via => [:get, :post]
