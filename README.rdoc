@@ -1,3 +1,7 @@
+= Deprecation Notice
+
+I thank all contributors, especially Dominic for their hard work on this project. Maintaining the project and keeping it up to date for future versions of redmine, is, however, a lot of work. If somebody feels like taking over the project and/or maintaning a branch, plese get back to me.
+
 = Redmine RE
 
 The Redmine RE plugin is a requirements engineering and requirements management plugin for the Redmine (http://redmine.org) project management software. The Redmine RE plugin's goal is to enable its users to create a requirements specification directly in Redmine. Users can create requirement artifacts view, store, edit and discuss these artifacts directly in Redmine.
